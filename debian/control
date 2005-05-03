@@ -1,0 +1,20 @@
+Source: ltsp
+Section: misc
+Priority: optional
+Maintainer: Matt Zimmerman <mdz@ubuntu.com>
+Standards-Version: 3.6.1
+
+Package: ltsp-server
+Recommends: ltsp-utils
+Architecture: all
+Description: Basic LTSP server environment
+
+Package: ltsp-server-standalone
+Depends: ltsp-server, dhcp3-server, tftpd-hpa, nfs-kernel-server
+Architecture: all
+Description: Complete LTSP server environment
+ 
+Package: ltsp-client
+Recommends: ubuntu-thin-client
+Architecture: all
+Description: LTSP client environment
