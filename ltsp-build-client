@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+
+ROOT="$1"
+DIST="$2"
+MIRROR="$3"
+
+debootstrap $ROOT $DIST $MIRROR
+cat <<EOF > $ROOT/etc/apt/sources.list
+deb $MIRROR $DIST main restricted
+EOF
+chroot $ROOT apt-get update
+cat <<EOF > $ROOT/etc/kernel-img.conf
+warn_initrd = No
+do_symlinks = yes
+relative_links = yes
+link_in_boot = yes
+do_bootloader = no
+EOF
+
+# XXX
+cat <<EOF > $ROOT/usr/sbin/mkinitrd
+#!/bin/sh
+
+path="$2"
+touch "$path"
+exit 0
+EOF
+
+chroot $ROOT apt-get -y install x-window-system linux-386 # ltsp-client
+
+exit 0
