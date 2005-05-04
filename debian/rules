@@ -10,7 +10,7 @@ build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
-	#$(MAKE)
+	$(MAKE) -C client/getltscfg
 
 	touch build-stamp
 
@@ -20,7 +20,7 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
-	#-$(MAKE) clean
+	-$(MAKE) -C client/getltscfg clean
 	#-$(MAKE) distclean
 
 	dh_clean
@@ -67,12 +67,12 @@ binary-indep: build install
 
 # Build architecture-dependent files here.
 binary-arch: build install
-#	dh_testdir -a
-#	dh_testroot -a
-#	dh_installchangelogs -a
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a
 #	dh_installdocs -a
 #	dh_installexamples -a
-#	dh_install -a
+	dh_install -a
 #	dh_installmenu -a
 #	dh_installdebconf -a	
 #	dh_installlogrotate -a
@@ -80,23 +80,23 @@ binary-arch: build install
 #	dh_installcatalogs -a
 #	dh_installpam -a
 #	dh_installmime -a
-#	dh_installinit -a
+	dh_installinit -a
 #	dh_installcron -a
 #	dh_installinfo -a
 #	dh_undocumented -a
 #	dh_installman -a
-#	dh_link -a
-#	dh_strip -a
-#	dh_compress -a
-#	dh_fixperms -a
+	dh_link -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
 #	dh_perl -a
 #	dh_python -a
 #	dh_makeshlibs -a
-#	dh_installdeb -a
-#	dh_shlibdeps -a
-#	dh_gencontrol -a
-#	dh_md5sums -a
-#	dh_builddeb -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install

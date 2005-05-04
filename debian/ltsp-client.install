@@ -4,3 +4,4 @@ client/start_telnet usr/lib/ltsp
 client/telnet_loop usr/lib/ltsp
 client/ltsp_functions usr/lib/ltsp
 client/screen.d etc/ltsp
+client/getltscfg/getltscfg usr/bin
