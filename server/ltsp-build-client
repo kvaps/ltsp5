@@ -2,11 +2,13 @@
 
 set -e
 
+export LC_ALL=C
+
 ROOT="$1"
 DIST="$2"
 MIRROR="$3"
 
-debootstrap $ROOT $DIST $MIRROR
+debootstrap $DIST $ROOT $MIRROR
 cat <<EOF > $ROOT/etc/apt/sources.list
 deb $MIRROR $DIST main restricted
 EOF
@@ -20,7 +22,7 @@ do_bootloader = no
 EOF
 
 # XXX
-cat <<EOF > $ROOT/usr/sbin/mkinitrd
+cat <<'EOF' > $ROOT/usr/sbin/mkinitrd
 #!/bin/sh
 
 path="$2"
@@ -28,6 +30,6 @@ touch "$path"
 exit 0
 EOF
 
-chroot $ROOT apt-get -y install x-window-system linux-386 # ltsp-client
+chroot $ROOT apt-get -y install x-window-system-core linux-386 # ltsp-client
 
 exit 0
