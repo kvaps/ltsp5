@@ -39,11 +39,18 @@ $DEFAULT_SERVER server
 EOF
 }
 
+setup_syslog() {
+    cat <<EOF > /etc/syslog.conf
+*.* @${SYSLOG_HOST}
+EOF
+}
+
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client services"
 
         create_hosts
+        setup_syslog
         enable_swap
         configure_x
 
