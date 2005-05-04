@@ -18,11 +18,7 @@ test -x $DAEMON || exit 0
 . /lib/lsb/init-functions
 . /usr/lib/ltsp/ltsp_functions
 
-# Read config file if it is present.
-#if [ -r /etc/default/$NAME ]
-#then
-#	. /etc/default/$NAME
-#fi
+eval `getltscfg -a`
 
 configure_x() {
     dpkg-reconfigure -fnoninteractive xserver-xorg
@@ -35,10 +31,19 @@ enable_swap() {
     swapon /dev/nbd0
 }
 
+create_hosts() {
+    hostname=$(hostname)
+    cat <<EOF > /etc/hosts
+127.0.0.1   localhost  $hostname
+$DEFAULT_SERVER server
+EOF
+}
+
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client services"
 
+        create_hosts
         enable_swap
         configure_x
 
