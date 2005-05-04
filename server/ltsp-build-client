@@ -33,5 +33,16 @@ EOF
 chroot $ROOT apt-get -y install x-window-system-core linux-386 # ltsp-client
 
 rm -f $ROOT/etc/hostname
+cat <<'EOF' > $ROOT/etc/hosts
+127.0.0.1 localhost
+EOF
+
+cat <<'EOF' > $ROOT/etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+EOF
 
 exit 0

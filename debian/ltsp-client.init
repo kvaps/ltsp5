@@ -31,10 +31,10 @@ enable_swap() {
     swapon /dev/nbd0
 }
 
-create_hosts() {
+configure_hosts() {
     hostname=$(hostname)
-    cat <<EOF > /etc/hosts
-127.0.0.1   localhost  $hostname
+    cat <<EOF >> /etc/hosts
+127.0.0.2 $hostname
 $DEFAULT_SERVER server
 EOF
 }
@@ -50,8 +50,8 @@ case "$1" in
   start)
         log_begin_msg "Starting LTSP client services"
 
-        create_hosts
         enable_swap
+        configure_hosts
         configure_syslog
         configure_x
 
