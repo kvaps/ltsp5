@@ -51,8 +51,8 @@ case "$1" in
         log_begin_msg "Starting LTSP client services"
 
         create_hosts
-        configure_syslog
         enable_swap
+        configure_syslog
         configure_x
 
         log_end_msg 0
