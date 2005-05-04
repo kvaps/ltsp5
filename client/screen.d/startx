@@ -1,0 +1,153 @@
+#!/bin/sh
+#
+# remote_x
+#
+# This script will launch the Xserver on the workstation with
+# a -qeary pointing back to the server.
+#
+PATH=/bin:$PATH; export PATH
+. /etc/ltsp_functions
+
+#
+# Get the lts.conf entries
+#
+eval `/bin/getltscfg -a`
+
+DEFAULT_SERVER=${SERVER:-"192.168.0.254"}
+XDM_SERVER=${XDM_SERVER:-${DEFAULT_SERVER}}
+reg_info XDM_SERVER
+
+TTY=`/usr/bin/basename \`/usr/bin/tty\``
+XFCFG=/tmp/XF86Config.${TTY}
+export TTY
+
+if [ $# -lt 1 ]; then
+    XF_ARGS=""
+else
+    XF_ARGS=$*
+fi
+
+################################################################################
+#
+# Setup the XF86Config file
+#
+
+XSERVER=${XSERVER:-"auto"}
+
+if [ "${XSERVER}" = "auto" ]; then
+    echo "Scanning for video card"
+    XSERVER=`/sbin/pci_scan /etc/vidlist`
+    if [ -z "${XSERVER}" ]; then
+        echo
+        echo "  WARNING: Auto probe of the video card failed !"
+        echo "           You should specify the proper X server in lts.conf"
+        echo "           Proceeding with the SLOW vesa server"
+        echo 
+        sleep 5s
+        XSERVER=vesa
+    fi
+fi
+reg_info XSERVER
+
+if [ "${XSERVER}" = "i810" ]; then
+    if [ ! -f /tmp/i810_loaded ]; then
+        modprobe agpgart
+        >/tmp/i810_loaded
+    fi
+fi
+
+if [ ! -z "${XF86CONFIG_FILE}" ]; then
+    reg_info XF86CONFIG_FILE
+    #
+    # If XF86CONFIG_FILE is defined in the lts.conf file, then
+    # it points to an XF86Config file that is pre-made for a workstation
+    #
+    if [ -f /etc/${XF86CONFIG_FILE} ]; then
+	cp /etc/${XF86CONFIG_FILE} ${XFCFG}
+    else
+        echo
+        echo "Error! - ${XF86CONFIG_FILE} - File not found!"
+        echo
+    fi
+else
+    #
+    # Build the XF86Config file from entries in the lts.conf file
+    # If it starts with 'XF86_', then we use XFree86 3.3.6.  Otherwise,
+    # we use XFree86 4.x
+    #
+    case ${XSERVER} in
+
+        XF86_*)  /etc/build_x3_cfg ${XSERVER} >${XFCFG}
+                 ;;
+
+        *)       /etc/build_x4_cfg ${XSERVER} >${XFCFG}
+                 ;;
+    esac
+fi
+
+################################################################################
+#
+# Figure out how to run the X server
+#
+ 
+case ${XSERVER} in
+
+    XF86_*)  XBINARY="${XSERVER}"
+             XOPTS=""
+             ;;
+
+    Xvesa)   XBINARY="Xvesa"
+             case "${X_MODE_0}" in
+                 1280x1024)   XOPTS="-shadow -mode 0x011A"
+                              ;;
+                 1024x768)    XOPTS="-shadow -mode 0x0117"
+                              ;;
+                 800x600)     XOPTS="-shadow -mode 0x0114"
+                              ;;
+                 640x480)     XOPTS="-shadow -mode 0x0111"
+                              ;;
+                 *)           XOPTS="-shadow -mode 0x0117"
+                              ;;
+             esac
+             ;;
+
+    *)       XBINARY="Xorg"
+             XOPTS=""
+             ;;
+esac
+#
+# Setup the DISP variable
+#
+export DISP=:$(expr ${TTY} - 1).0
+
+DISABLE_ACCESS_CONTROL=${DISABLE_ACCESS_CONTROL:-"N"}
+reg_info DISABLE_ACCESS_CONTROL
+if [ "${DISABLE_ACCESS_CONTROL}" = "Y" ]; then
+    ACC_CTRL="-ac"
+else
+    ACC_CTRL=""
+fi
+
+if [ "${XF_ARGS}" = "" ]; then
+    XF_ARGS="-query ${XDM_SERVER}"
+fi
+
+if [ -w /proc/progress ]; then
+    /usr/X11R6/bin/${XBINARY} ${ACC_CTRL}              \
+                              ${XF_ARGS}               \
+                              -xf86config ${XFCFG}     \
+                              vt${TTY} ${DISP} >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      echo -n -e "\n\rxserver failed, press <enter> to continue "
+      read CMD
+    fi
+else
+    /usr/X11R6/bin/${XBINARY} ${ACC_CTRL}              \
+                              ${XF_ARGS}               \
+                              -xf86config ${XFCFG}     \
+                              vt${TTY} ${DISP}
+    if [ $? -ne 0 ]; then
+      echo -n -e "\n\rxserver failed, press <enter> to continue "
+      read CMD
+    fi
+fi

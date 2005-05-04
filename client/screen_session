@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
+#
+# This software is licensed under the Gnu General Public License.
+# The full text of which can be found at http://www.LTSP.org/license.txt
+#
+
+SLEEP=300
+
+#
+# Suck in some common LTSP functions
+#
+. /etc/ltsp_functions
+
+#
+# Figure out the SCREEN_NUM. Sure, we could do it with
+# awk or some other fancy calculation, but you need to
+# remember that we are running in an NFS-root filesystem,
+# and we really want to avoid loading binaries like awk
+# or perl across the net.
+#
+TTY=`tty`
+case ${TTY} in
+    /dev/vc/1  | /dev/tty1  )  SCREEN_NUM="01";;
+    /dev/vc/2  | /dev/tty2  )  SCREEN_NUM="02";;
+    /dev/vc/3  | /dev/tty3  )  SCREEN_NUM="03";;
+    /dev/vc/4  | /dev/tty4  )  SCREEN_NUM="04";;
+    /dev/vc/5  | /dev/tty5  )  SCREEN_NUM="05";;
+    /dev/vc/6  | /dev/tty6  )  SCREEN_NUM="06";;
+    /dev/vc/7  | /dev/tty7  )  SCREEN_NUM="07";;
+    /dev/vc/8  | /dev/tty8  )  SCREEN_NUM="08";;
+    /dev/vc/9  | /dev/tty9  )  SCREEN_NUM="09";;
+    /dev/vc/10 | /dev/tty10 )  SCREEN_NUM="10";;
+    /dev/vc/11 | /dev/tty11 )  SCREEN_NUM="11";;
+    /dev/vc/12 | /dev/tty12 )  SCREEN_NUM="12";;
+esac
+
+export SCREEN_NUM
+
+SCREEN_CMD=`get_cfg SCREEN_${SCREEN_NUM} none`
+
+SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
+SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
+
+#
+# Check for a missing SCREEN_01 entry in lts.conf.
+# If it is missing, but they have a RUNLEVEL entry, then
+# this is likely a lts.conf file from LTSP-3.0 or older.
+# So, lets warn them about it, but then try to do the right thing.
+#
+if [ "${SCREEN_NUM}" -eq 1 ]; then
+  if [ "${SCREEN_SCRIPT}" = "none" ]; then
+    RUNLEVEL=`get_cfg RUNLEVEL none`
+    case "${RUNLEVEL}" in
+      3)      SCREEN_SCRIPT="shell"
+              SHOW_WARNING="Y"
+              ;;
+      none|5) SCREEN_SCRIPT="startx"
+              SHOW_WARNING="Y"
+              ;;
+      *)      SCREEN_SCRIPT="none"
+              SHOW_WARNING="Y"
+              ;;
+    esac
+    if [ "${SHOW_WARNING}" = "Y" ]; then
+      echo; echo
+      echo "Warning: SCREEN_01 not set in lts.conf"
+      echo "         Please have the administrator fix this!"
+      echo; echo
+      echo "defaulting to: ${SCREEN_SCRIPT}"
+      echo
+      sleep 5s
+    fi
+  fi
+fi
+
+if [ "${SCREEN_SCRIPT}" = "none" ]; then
+    sleep ${SLEEP}
+else
+    if [ -x /etc/screen.d/${SCREEN_SCRIPT} ]; then
+        #
+        # Go ahead and run the screen script
+        #
+        exec /etc/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+    else
+        logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+        echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+        sleep ${SLEEP}
+    fi
+fi

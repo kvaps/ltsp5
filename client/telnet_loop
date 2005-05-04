@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# Enter a loop, running telnet to the server.
+#
+
+if [ $# -ne 1 ]; then
+    echo "Usage:  $0 <hostname or ip addr>"
+    exit 1
+fi
+
+#
+# Set the terminal type, so that the remote host will
+# have a clue what kind of terminal you are using.
+#
+export TERM=linux               # Setup the terminal type
+
+#
+# Get this terminal name, to display on the top line of the screen
+#
+TTY=`/usr/bin/basename \`/usr/bin/tty\``
+[ "${TTY}" = "console" ] && TTY="tty1"    # Special case for first screen
+
+REMOTE=$1
+
+while :; do
+    #
+    # Clear the screen, to place cursor at the top
+    #
+    /usr/bin/clear
+
+    #
+    # Echo this message, telling user how to proceed.
+    #
+    echo -n "${TTY}, Press <enter> to establish a connection to the server..."
+    read CMD
+
+    #
+    # Clear the screen before launching telnet
+    #
+    /usr/bin/clear
+
+    #
+    # Launch the telnet program.
+    #
+    /usr/bin/telnet ${REMOTE}
+
+    #
+    # Brief pause, incase telnet had errors to report
+    #
+    /bin/sleep 2
+done

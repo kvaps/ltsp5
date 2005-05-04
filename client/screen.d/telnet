@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# Script for starting one or more telnet sessions
+#
+
+#
+# Get the lts.conf entries, and assign them to shell
+# variables.
+#
+eval `/bin/getltscfg -a`
+
+#
+# Get the IP address of the host to telnet into.
+# First look for 'TELNET_HOST', if not specified, then
+# look for 'SERVER'. If that isn't specified, then use
+# the default of '192.168.0.254'
+#
+
+if [ $# -ge 1 ]; then
+    TELNET_ARGS=$*
+else
+    DEFAULT_SERVER=${SERVER:-"192.168.0.254"}
+    TELNET_HOST=${TELNET_HOST:-${DEFAULT_SERVER}}
+    TELNET_ARGS="${TELNET_HOST}"
+fi
+
+export TERM=linux           # Setup the terminal type
+
+#
+# Get this terminal name, to display on the top line of the screen
+#
+TTY=`/usr/bin/basename \`/usr/bin/tty\``
+[ "${TTY}" = "console" ] && TTY="tty1"    # Special case for first screen
+
+#
+# Clear the screen, to place cursor at the top
+#
+/usr/bin/clear
+
+#
+# Echo this message, telling user how to proceed.
+#
+echo -n "Screen:${TTY} - Press <enter> to establish a connection to server..."
+read CMD
+
+#
+# Clear the screen before launching telnet
+#
+/usr/bin/clear
+
+#
+# Launch the telnet program.
+#
+/usr/bin/telnet ${TELNET_ARGS}
+#
+# Brief pause, in case telnet had errors to report
+#
+echo -n "Please wait..."
+/bin/sleep 1

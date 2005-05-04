@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#
+# Fire up a shell on this tty
+#
+
+echo "tty=" `tty`
+
+exec /bin/bash --login

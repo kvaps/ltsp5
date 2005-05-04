@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Script for starting one or more telnet sessions
+#
+
+. /etc/ltsp_functions
+
+#
+# Get the IP address of the host to telnet into.
+# First look for 'TELNET_HOST', if not specified, then
+# look for 'SERVER'. If that isn't specified, then use
+# the default of '192.168.0.254'
+#
+TELNET_HOST=`get_cfg TELNET_HOST`
+[ -z "${TELNET_HOST}" ] && TELNET_HOST=`get_cfg SERVER 192.168.0.254`
+
+#
+# See how many TELNET sessions to run for this workstation.
+# If not specified, use a default of 2 sessions.
+#
+TELNET_SESSIONS=`get_cfg TELNET_SESSIONS 2`
+
+SCREEN_NO=2
+while [ ${SCREEN_NO} -le ${TELNET_SESSIONS} ]; do
+    #
+    # Start a session
+    #
+    /bin/open -c ${SCREEN_NO} -- /bin/telnet_loop ${TELNET_HOST}
+
+    SCREEN_NO=`expr ${SCREEN_NO} + 1`
+done
+
+#
+# Now, run the telnet on the main screen
+#
+/bin/telnet_loop ${TELNET_HOST}
