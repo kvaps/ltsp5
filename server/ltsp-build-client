@@ -32,4 +32,6 @@ EOF
 
 chroot $ROOT apt-get -y install x-window-system-core linux-386 # ltsp-client
 
+rm -f $ROOT/etc/hostname
+
 exit 0
