@@ -1,0 +1,36 @@
+function get_cfg(){
+    #
+    # Usage:  get_cfg PARM [DEFAULT]
+    #
+    VALUE=`/bin/getltscfg $1`
+    if [ "$#" -gt 1 -a -z "${VALUE}" ]; then
+        echo $2
+    else
+        echo ${VALUE}
+    fi
+}
+
+function pr_warn(){
+    if [ -w /proc/progress ]; then
+        echo w >/proc/progress
+    fi
+}
+
+function pr_fail(){
+    if [ -w /proc/progress ]; then
+        echo f >/proc/progress
+    fi
+}
+
+function pr_set(){
+    if [ -w /proc/progress ]; then
+        echo $1 $2 >/proc/progress
+        SLEEP=${SLEEP:-0}
+        [ "${SLEEP}" -gt 0 ] && sleep ${SLEEP}
+    fi
+}
+
+function reg_info(){
+    VAR=$1
+    echo ${!VAR} >/tmp/info/${VAR}
+}

@@ -1,0 +1,6 @@
+client/screen_session usr/lib/ltsp
+client/start_printer usr/lib/ltsp
+client/start_telnet usr/lib/ltsp
+client/telnet_loop usr/lib/ltsp
+client/ltsp_functions usr/lib/ltsp
+client/screen.d etc/ltsp
