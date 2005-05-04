@@ -16,7 +16,7 @@ Architecture: all
 Description: Complete LTSP server environment
  
 Package: ltsp-client
-Depends: lsb-base
+Depends: lsb-base, nbd-client
 Recommends: ubuntu-thin-client
 Architecture: any
 Description: LTSP client environment

@@ -24,12 +24,23 @@ test -x $DAEMON || exit 0
 #	. /etc/default/$NAME
 #fi
 
+configure_x() {
+    dpkg-reconfigure -fnoninteractive xserver-xorg
+}
+
+enable_swap() {
+    modprobe nbd
+    while ! test -b /dev/nbd0; do sleep 1; done
+    nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 -swap
+    swapon /dev/nbd0
+}
+
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client services"
 
-        dpkg-reconfigure -fnoninteractive xserver-xorg
-        
+        enable_swap
+        configure_x
 
         log_end_msg 0
 	;;
