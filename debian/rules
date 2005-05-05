@@ -5,6 +5,10 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
+DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
+
+
 build: build-stamp
 build-stamp:
 	dh_testdir
@@ -92,5 +96,11 @@ binary-arch: build install
 	dh_md5sums -a
 	dh_builddeb -a
 
+arch-build:
+	rm -rf debian/arch-build
+	mkdir -p debian/arch-build/ltsp-$(DEBVER)
+	baz inventory -s | xargs cp -a --parents --target=debian/arch-build/ltsp-$(DEBVER)
+	(cd debian/arch-build/ltsp-$(DEBVER); $(DEB_BUILD_PROG))
+
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+.PHONY: build clean binary-indep binary-arch binary install arch-build
