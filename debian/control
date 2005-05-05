@@ -2,7 +2,7 @@ Source: ltsp
 Section: misc
 Priority: optional
 Maintainer: Matt Zimmerman <mdz@ubuntu.com>
-Build-Depends: flex, bison, libpopt-dev
+Build-Depends: debhelper, flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
