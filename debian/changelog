@@ -1,3 +1,9 @@
+ltsp (0.2) unstable; urgency=low
+
+  * Use dh_installinit --no-start for ltsp-client
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 31 May 2005 17:19:47 -0700
+
 ltsp (0.1) breezy; urgency=low
   
   * Initial release

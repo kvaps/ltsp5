@@ -1,3 +1,13 @@
+This package was created by Matt Zimmerman <mdz@ubuntu.com> in May of
+2005.
+
+Several components have been copied from the LTSP project's build
+environment (LBE) tree, and are copyrighted by Jim McQuillan
+<jam@ltsp.org>, and licensed under the GPL version 2.
+
+Other code has been written from scratch for this package, and carries
+the following copyright:
+
 Copyright (C) 2005 Canonical Ltd.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,5 +24,5 @@ Copyright (C) 2005 Canonical Ltd.
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-On Ubuntu systems, a copy of the GNU General Public License may be found in the
-file /usr/share/common-licenses/GPL.
+On Ubuntu systems, a copy of the GNU General Public License version 2
+may be found in the file /usr/share/common-licenses/GPL-2.
