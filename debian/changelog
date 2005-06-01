@@ -1,4 +1,4 @@
-ltsp (0.2) unstable; urgency=low
+ltsp (0.2) breezy; urgency=low
 
   * Use dh_installinit --no-start for ltsp-client
 
