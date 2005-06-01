@@ -11,7 +11,7 @@ Architecture: all
 Description: Basic LTSP server environment
 
 Package: ltsp-server-standalone
-Depends: ltsp-server, ltsp-utils, dhcp3-server, tftpd-hpa, nfs-kernel-server
+Depends: ltsp-server, ltsp-utils, dhcp3-server, tftpd-hpa, nfs-kernel-server, syslinux
 Architecture: all
 Description: Complete LTSP server environment
  

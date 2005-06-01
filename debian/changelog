@@ -1,3 +1,10 @@
+ltsp (0.3) breezy; urgency=low
+
+  * Add /var/lib/tftpboot/ltsp to ltsp-server
+  * Add ltsp-update-kernels script to ltsp-server
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 31 May 2005 18:58:06 -0700
+
 ltsp (0.2) breezy; urgency=low
 
   * Use dh_installinit --no-start for ltsp-client

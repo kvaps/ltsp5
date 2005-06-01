@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -e
+
+TFTPBOOT=/var/lib/tftpboot/ltsp
+PXECFG=$TFTPBOOT/pxelinux.cfg
+LTSPROOT=/opt/ltsp
+
+for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initramfs.cpio.gz*; do
+    cp -a -v "$file" $TFTPBOOT
+done
+
+cp /usr/lib/syslinux/pxelinux.0 $TFTPBOOT
+if [ ! -d $PXECFG ]; then
+    mkdir $PXECFG
+fi
+cat > $PXECFG/default <<EOF
+DEFAULT vmlinuz nfsroot=192.168.0.2:/opt/ltsp/i386 initrd=initramfs.cpio.gz
+EOF
+
+#for file in $TFTPBOOT/*; do
+#    found=""
+#    for master in $LTSPROOT/*/boot/$(basename "$file"); do
+#        if [ -e "$master" ]; then
+#            found=1
+#            break
+#        fi
+#    done
+#
+#    if [ -z "$found" ]; then
+#        rm -f "$file"
+#    fi
+#done
