@@ -12,6 +12,7 @@ XDM_SERVER=${XDM_SERVER:-${DEFAULT_SERVER}}
 reg_info XDM_SERVER
 
 TTY=$(basename $(tty))
+TTY=${TTY##tty}
 export TTY
 
 if [ $# -lt 1 ]; then
@@ -102,6 +103,7 @@ ubuntu_x_config() {
     fi
     preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
     dpkg-reconfigure -fnoninteractive xserver-xorg
+    XFCFG=/etc/X11/xorg.conf
 }
 
 if true; then
@@ -143,7 +145,7 @@ esac
 #
 # Setup the DISP variable
 #
-export DISP=:$(expr ${TTY##tty} - 1).0
+export DISP=:$(expr ${TTY} - 1).0
 
 DISABLE_ACCESS_CONTROL=${DISABLE_ACCESS_CONTROL:-"N"}
 reg_info DISABLE_ACCESS_CONTROL

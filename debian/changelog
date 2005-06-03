@@ -1,8 +1,9 @@
 ltsp (0.10) breezy; urgency=low
 
   * Background screen_session
+  * Fix startx to run on the appropriate terminal
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:28:23 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:35:29 -0700
 
 ltsp (0.9) breezy; urgency=low
 
