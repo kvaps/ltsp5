@@ -11,7 +11,7 @@ SLEEP=300
 #
 # Suck in some common LTSP functions
 #
-. /etc/ltsp_functions
+. /usr/lib/ltsp/ltsp_functions
 
 #
 # Figure out the SCREEN_NUM. Sure, we could do it with
