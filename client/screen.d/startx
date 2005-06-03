@@ -20,6 +20,9 @@ else
     XF_ARGS=$*
 fi
 
+# XXX
+PATH=$PATH:/usr/bin/X11
+
 ################################################################################
 #
 # Setup the XF86Config file
@@ -124,7 +127,7 @@ esac
 #
 # Setup the DISP variable
 #
-export DISP=:$(expr ${TTY} - 1).0
+export DISP=:$(expr ${TTY##tty} - 1).0
 
 DISABLE_ACCESS_CONTROL=${DISABLE_ACCESS_CONTROL:-"N"}
 reg_info DISABLE_ACCESS_CONTROL
