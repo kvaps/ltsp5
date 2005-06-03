@@ -20,11 +20,13 @@ test -x $DAEMON || exit 0
 
 eval `getltscfg -a`
 
-enable_swap() {
-    modprobe nbd
-    while ! test -b /dev/nbd0; do sleep 1; done
-    nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 -swap
-    swapon /dev/nbd0
+configure_swap() {
+    cat <<EOF > /etc/nbd-client
+NBD_DEVICE[0]=/dev/nbd0
+NBD_TYPE[0]=s
+NBD_HOST[0]=$SWAP_SERVER
+NBD_PORT[0]=$NBD_PORT
+EOF
 }
 
 configure_hosts() {
@@ -45,7 +47,7 @@ case "$1" in
   start)
         log_begin_msg "Setting up LTSP client"
 
-        enable_swap
+        configure_swap
         configure_hosts
         configure_syslog
 

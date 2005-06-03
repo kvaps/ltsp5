@@ -1,3 +1,10 @@
+ltsp (0.11) breezy; urgency=low
+
+  * Don't enable swap in ltsp-client-setup; just write out a config file
+    for nbd-client and let the nbd-client init script do it later
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:43:18 -0700
+
 ltsp (0.10) breezy; urgency=low
 
   * Background screen_session
