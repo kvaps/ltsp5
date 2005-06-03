@@ -38,7 +38,7 @@ EOF
 configure_syslog() {
     SYSLOG_HOST=${SYSLOG_HOST:-${DEFAULT_SERVER}}
     cat <<EOF > /etc/syslog.conf
-*.* @${SYSLOG_HOST}
+*.* @${SYSLOG_HOST-$SERVER}
 EOF
 }
 

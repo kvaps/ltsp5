@@ -1,6 +1,7 @@
 ltsp (0.8) breezy; urgency=low
 
   * Use SERVER, not DEFAULT_SERVER, in ltsp-client.init
+  * Default SYSLOG_HOST to the value of SERVER
 
  --
 
