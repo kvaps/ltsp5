@@ -84,7 +84,23 @@ ltsp_x_config() {
     fi
 }
 
+preseed() {
+    package="$1"
+    question="$2"
+    value="$3"
+
+    if [ -n "$value" ]; then
+        ret=$(echo "set $question $value" | debconf-communicate $package)
+        echo "preseed($question): return=$ret"
+    fi
+}
+
 ubuntu_x_config() {
+    if [ "$XSERVER" != "auto" ]; then
+        preseed xserver-xorg xserver-xorg/config/device/driver "$XSERVER"
+        preseed xserver-xorg xserver-xorg/xserver-xorg/autodetect_video_card "false"
+    fi
+    preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
     dpkg-reconfigure -fnoninteractive xserver-xorg
 }
 

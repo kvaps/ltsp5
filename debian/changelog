@@ -1,3 +1,10 @@
+ltsp (0.7) breezy; urgency=low
+
+  * Preseed XSERVER and XKBLAYOUT from lts.conf (doesn't work yet, needs
+    xserver-xorg changes)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:38:56 -0700
+
 ltsp (0.6) breezy; urgency=low
 
   * Fix hardcoded path in ltsp_functions
