@@ -20,10 +20,6 @@ test -x $DAEMON || exit 0
 
 eval `getltscfg -a`
 
-configure_x() {
-    dpkg-reconfigure -fnoninteractive xserver-xorg
-}
-
 enable_swap() {
     modprobe nbd
     while ! test -b /dev/nbd0; do sleep 1; done
@@ -53,7 +49,6 @@ case "$1" in
         enable_swap
         configure_hosts
         configure_syslog
-        configure_x
 
         log_end_msg 0
 	;;

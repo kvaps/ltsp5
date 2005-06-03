@@ -1,24 +1,17 @@
 #!/bin/sh
-#
-# remote_x
-#
-# This script will launch the Xserver on the workstation with
-# a -qeary pointing back to the server.
-#
-PATH=/bin:$PATH; export PATH
-. /etc/ltsp_functions
+
+. /usr/lib/ltsp/ltsp_functions
 
 #
 # Get the lts.conf entries
 #
-eval `/bin/getltscfg -a`
+eval `getltscfg -a`
 
 DEFAULT_SERVER=${SERVER:-"192.168.0.254"}
 XDM_SERVER=${XDM_SERVER:-${DEFAULT_SERVER}}
 reg_info XDM_SERVER
 
-TTY=`/usr/bin/basename \`/usr/bin/tty\``
-XFCFG=/tmp/XF86Config.${TTY}
+TTY=$(basename $(tty))
 export TTY
 
 if [ $# -lt 1 ]; then
@@ -32,57 +25,70 @@ fi
 # Setup the XF86Config file
 #
 
-XSERVER=${XSERVER:-"auto"}
+ltsp_x_config() {
+    XSERVER=${XSERVER:-"auto"}
 
-if [ "${XSERVER}" = "auto" ]; then
-    echo "Scanning for video card"
-    XSERVER=`/sbin/pci_scan /etc/vidlist`
-    if [ -z "${XSERVER}" ]; then
-        echo
-        echo "  WARNING: Auto probe of the video card failed !"
-        echo "           You should specify the proper X server in lts.conf"
-        echo "           Proceeding with the SLOW vesa server"
-        echo 
-        sleep 5s
-        XSERVER=vesa
+
+    if [ "${XSERVER}" = "auto" ]; then
+        echo "Scanning for video card"
+        XSERVER=`/sbin/pci_scan /etc/vidlist`
+        if [ -z "${XSERVER}" ]; then
+            echo
+            echo "  WARNING: Auto probe of the video card failed !"
+            echo "           You should specify the proper X server in lts.conf"
+            echo "           Proceeding with the SLOW vesa server"
+            echo 
+            sleep 5s
+            XSERVER=vesa
+        fi
     fi
-fi
-reg_info XSERVER
+    reg_info XSERVER
 
-if [ "${XSERVER}" = "i810" ]; then
-    if [ ! -f /tmp/i810_loaded ]; then
-        modprobe agpgart
-        >/tmp/i810_loaded
+    if [ "${XSERVER}" = "i810" ]; then
+        if [ ! -f /tmp/i810_loaded ]; then
+            modprobe agpgart
+            >/tmp/i810_loaded
+        fi
     fi
-fi
 
-if [ ! -z "${XF86CONFIG_FILE}" ]; then
-    reg_info XF86CONFIG_FILE
+    if [ ! -z "${XF86CONFIG_FILE}" ]; then
+        reg_info XF86CONFIG_FILE
     #
     # If XF86CONFIG_FILE is defined in the lts.conf file, then
     # it points to an XF86Config file that is pre-made for a workstation
     #
-    if [ -f /etc/${XF86CONFIG_FILE} ]; then
-	cp /etc/${XF86CONFIG_FILE} ${XFCFG}
+        if [ -f /etc/${XF86CONFIG_FILE} ]; then
+            cp /etc/${XF86CONFIG_FILE} ${XFCFG}
+        else
+            echo
+            echo "Error! - ${XF86CONFIG_FILE} - File not found!"
+            echo
+        fi
     else
-        echo
-        echo "Error! - ${XF86CONFIG_FILE} - File not found!"
-        echo
-    fi
-else
     #
     # Build the XF86Config file from entries in the lts.conf file
     # If it starts with 'XF86_', then we use XFree86 3.3.6.  Otherwise,
     # we use XFree86 4.x
     #
-    case ${XSERVER} in
+        case ${XSERVER} in
 
-        XF86_*)  /etc/build_x3_cfg ${XSERVER} >${XFCFG}
-                 ;;
+            XF86_*)  /etc/build_x3_cfg ${XSERVER} >${XFCFG}
+                ;;
 
-        *)       /etc/build_x4_cfg ${XSERVER} >${XFCFG}
-                 ;;
-    esac
+            *)       /etc/build_x4_cfg ${XSERVER} >${XFCFG}
+                ;;
+        esac
+    fi
+}
+
+ubuntu_x_config() {
+    dpkg-reconfigure -fnoninteractive xserver-xorg
+}
+
+if true; then
+    ubuntu_x_config
+else
+    ltsp_x_config
 fi
 
 ################################################################################
@@ -133,7 +139,7 @@ if [ "${XF_ARGS}" = "" ]; then
 fi
 
 if [ -w /proc/progress ]; then
-    /usr/X11R6/bin/${XBINARY} ${ACC_CTRL}              \
+    ${XBINARY} ${ACC_CTRL}              \
                               ${XF_ARGS}               \
                               -xf86config ${XFCFG}     \
                               vt${TTY} ${DISP} >/dev/null 2>&1
@@ -142,7 +148,7 @@ if [ -w /proc/progress ]; then
       read CMD
     fi
 else
-    /usr/X11R6/bin/${XBINARY} ${ACC_CTRL}              \
+    ${XBINARY} ${ACC_CTRL}              \
                               ${XF_ARGS}               \
                               -xf86config ${XFCFG}     \
                               vt${TTY} ${DISP}

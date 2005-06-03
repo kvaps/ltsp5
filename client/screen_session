@@ -78,11 +78,11 @@ fi
 if [ "${SCREEN_SCRIPT}" = "none" ]; then
     sleep ${SLEEP}
 else
-    if [ -x /etc/screen.d/${SCREEN_SCRIPT} ]; then
+    if [ -x /etc/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
         #
         # Go ahead and run the screen script
         #
-        exec /etc/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+        exec /etc/ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
     else
         logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
         echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"

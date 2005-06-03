@@ -1,3 +1,9 @@
+ltsp (0.4) breezy; urgency=low
+
+  * Move X configuration into screen.d/startx script
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:10:51 -0700
+
 ltsp (0.3) breezy; urgency=low
 
   * Add /var/lib/tftpboot/ltsp to ltsp-server
