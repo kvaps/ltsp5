@@ -1,3 +1,9 @@
+ltsp (0.8) breezy; urgency=low
+
+  * Use SERVER, not DEFAULT_SERVER, in ltsp-client.init
+
+ --
+
 ltsp (0.7) breezy; urgency=low
 
   * Preseed XSERVER and XKBLAYOUT from lts.conf (doesn't work yet, needs
