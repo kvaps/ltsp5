@@ -31,7 +31,7 @@ configure_hosts() {
     hostname=$(hostname)
     cat <<EOF >> /etc/hosts
 127.0.0.2 $hostname
-$DEFAULT_SERVER server
+$SERVER server
 EOF
 }
 
