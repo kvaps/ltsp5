@@ -1,3 +1,9 @@
+ltsp (0.5) breezy; urgency=low
+
+  * Fix path to ltsp_functions in screen_session
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:13:14 -0700
+
 ltsp (0.4) breezy; urgency=low
 
   * Move X configuration into screen.d/startx script
