@@ -21,12 +21,14 @@ test -x $DAEMON || exit 0
 eval `getltscfg -a`
 
 configure_swap() {
-    cat <<EOF > /etc/nbd-client
+    if [ -n "$SWAP_SERVER" -a -n "$NBD_PORT" ]; then
+        cat <<EOF > /etc/nbd-client
 NBD_DEVICE[0]=/dev/nbd0
 NBD_TYPE[0]=s
 NBD_HOST[0]=$SWAP_SERVER
 NBD_PORT[0]=$NBD_PORT
 EOF
+    fi
 }
 
 configure_hosts() {
