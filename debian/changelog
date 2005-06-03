@@ -1,3 +1,13 @@
+ltsp (0.9) breezy; urgency=low
+
+  * Split init script in two:
+    - ltsp-client-setup runs in runlevel S and performs configuration
+    - ltsp-client runs late in runlevel 2 and actually starts up the client
+  * No migration is done; if you're crazy enough to be trying this,
+    rebuild your client root)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:04:29 -0700
+
 ltsp (0.8) breezy; urgency=low
 
   * Use SERVER, not DEFAULT_SERVER, in ltsp-client.init

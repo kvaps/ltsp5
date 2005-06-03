@@ -8,8 +8,8 @@
 set -e
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DESC="LTSP client setup"
-NAME=ltsp-client-setup
+DESC="LTSP client"
+NAME=ltsp-client
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Gracefully exit if the package has been removed.
@@ -20,34 +20,15 @@ test -x $DAEMON || exit 0
 
 eval `getltscfg -a`
 
-enable_swap() {
-    modprobe nbd
-    while ! test -b /dev/nbd0; do sleep 1; done
-    nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 -swap
-    swapon /dev/nbd0
-}
-
-configure_hosts() {
-    hostname=$(hostname)
-    cat <<EOF >> /etc/hosts
-127.0.0.2 $hostname
-$SERVER server
-EOF
-}
-
-configure_syslog() {
-    cat <<EOF > /etc/syslog.conf
-*.* @${SYSLOG_HOST-$SERVER}
-EOF
-}
-
 case "$1" in
   start)
-        log_begin_msg "Setting up LTSP client"
+        log_begin_msg "Starting LTSP client services"
 
-        enable_swap
-        configure_hosts
-        configure_syslog
+        for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
+            num=${screen##SCREEN_}
+            start-stop-daemon --start -b --exec /usr/lib/ltsp/screen_session -- "$num"
+        done
+        
 
         log_end_msg 0
 	;;
