@@ -100,7 +100,7 @@ arch-build:
 	rm -rf debian/arch-build
 	mkdir -p debian/arch-build/ltsp-$(DEBVER)
 	baz inventory -s | xargs cp -a --parents --target=debian/arch-build/ltsp-$(DEBVER)
-	(cd debian/arch-build/ltsp-$(DEBVER); $(DEB_BUILD_PROG))
+	(cd debian/arch-build/ltsp-$(DEBVER); $(DEB_BUILD_PROG); dpkg-genchanges -S > ../ltsp_$(DEBVER)_source.changes)
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install arch-build
