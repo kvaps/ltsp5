@@ -47,7 +47,7 @@ EOF
 
 case "$1" in
   start)
-        log_begin_msg "Setting up LTSP client"
+        log_begin_msg "Setting up LTSP client..."
 
         configure_swap
         configure_hosts

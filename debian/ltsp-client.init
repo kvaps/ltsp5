@@ -22,7 +22,7 @@ eval `getltscfg -a`
 
 case "$1" in
   start)
-        log_begin_msg "Starting LTSP client services"
+        log_begin_msg "Starting LTSP client..."
 
         for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
             num=${screen##SCREEN_}

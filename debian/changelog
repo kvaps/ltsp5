@@ -1,8 +1,9 @@
 ltsp (0.13) breezy; urgency=low
 
   * Respect a custom X configuration in lts.conf (XF86CONFIG_FILE)
+  * Format init script output properly
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 15:25:17 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 15:28:38 -0700
 
 ltsp (0.12) breezy; urgency=low
 
