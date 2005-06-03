@@ -1,3 +1,10 @@
+ltsp (0.6) breezy; urgency=low
+
+  * Fix hardcoded path in ltsp_functions
+  * Fix bashisms in ltsp_functions
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:16:39 -0700
+
 ltsp (0.5) breezy; urgency=low
 
   * Fix path to ltsp_functions in screen_session
