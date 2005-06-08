@@ -1,4 +1,5 @@
 - Automate initramfs creation
+- Sort out SCREEN_xx stuff
 - Determine what xauth magic is necessary for the X server
 - Fix ldm to be able to run on a specified tty
 - Bandwidth consumption
