@@ -58,6 +58,7 @@ configure_fstab() {
 /dev/root       /       unionfs defaults        0       0
 tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0
 EOF
+}
 
 case "$1" in
   start)
