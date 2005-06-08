@@ -1,3 +1,9 @@
+ltsp (0.15) breezy; urgency=low
+
+  * Fix the arguments to the os.kill call in ldm
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  7 Jun 2005 22:24:42 -0700
+
 ltsp (0.14) breezy; urgency=low
 
   * Add localhost to /etc/hosts

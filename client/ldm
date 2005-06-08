@@ -37,7 +37,7 @@ class LDM:
             else:
                 print "Didn't get the right output from the greeter"
 
-            os.kill(signal.SIGTERM,server.pid)
+            os.kill(server.pid, signal.SIGTERM)
             os.waitpid(server.pid, 0)
 
     def spawn_session(self, display, username, password, session_manager):
