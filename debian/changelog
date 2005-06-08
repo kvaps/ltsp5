@@ -3,8 +3,9 @@ ltsp (0.17) breezy; urgency=low
   * Lock the root account in the client root
   * Redirect stdin, stdout and stderr in ldm
   * Add mousedev to /etc/modules in the client root
+  * Fix console number calculation in screen_session
 
- --
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 13:52:14 -0700
 
 ltsp (0.16) breezy; urgency=low
 

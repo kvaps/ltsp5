@@ -22,7 +22,7 @@ SLEEP=300
 #
 if [ -n "$1" ]; then
     SCREEN_NUM="$1"
-    TTY_NUM=$(printf "%d" "$SCREEN_NUM")
+    TTY_NUM=${SCREEN_NUM#0}
     TTY=/dev/tty$TTY_NUM
     exec <$TTY >$TTY 2>&1
 else
