@@ -9,10 +9,13 @@ DIST="$2"
 MIRROR="$3"
 
 debootstrap $DIST $ROOT $MIRROR
+
 cat <<EOF > $ROOT/etc/apt/sources.list
 deb $MIRROR $DIST main restricted
 EOF
+
 chroot $ROOT apt-get update
+
 cat <<EOF > $ROOT/etc/kernel-img.conf
 warn_initrd = No
 do_symlinks = yes
