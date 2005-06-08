@@ -1,0 +1,18 @@
+#!/bin/sh
+
+clients=/opt/ltsp/i386
+hostname=$(hostname)
+ips=$(getent hosts $hostname | grep -v 127.0.0.1 | cut -f1)
+output=$(tempfile)
+
+names="$hostname $ips"
+
+ssh-keyscan -t rsa,dsa $names > $output
+
+for client in $clients; do
+    cp $output $client/etc/ssh/ssh_known_hosts
+done
+
+rm -f $output
+
+exit 0

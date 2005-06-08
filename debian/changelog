@@ -1,3 +1,10 @@
+ltsp (0.16) breezy; urgency=low
+
+  * Add ltsp-update-sshkeys script to ltsp-server, for copying the
+    server's host keys into the client root
+
+ --
+
 ltsp (0.15) breezy; urgency=low
 
   * Fix the arguments to the os.kill call in ldm
