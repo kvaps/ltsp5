@@ -18,6 +18,13 @@ class LDM:
         self.server = get_config('SERVER')
 
     def run(self):
+        null = open('/dev/null', 'w')
+        logfile = open('/var/log/ldm.log', 'a')
+        
+        os.dup2(null.fileno(), sys.stdin.fileno())
+        os.dup2(logfile.fileno(), sys.stdout.fileno())
+        os.dup2(logfile.fileno(), sys.stderr.fileno())
+
         while True:
             display = ':0'
             server = subprocess.Popen(['Xorg', '-ac', '-noreset', display], stdout=sys.stdout, stderr=sys.stderr)
