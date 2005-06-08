@@ -5,3 +5,6 @@ client/telnet_loop usr/lib/ltsp
 client/ltsp_functions usr/lib/ltsp
 client/screen.d etc/ltsp
 client/getltscfg/getltscfg usr/bin
+client/ldm usr/sbin
+client/ldm-askpass usr/lib/ltsp
+client/greeters usr/lib/ltsp

@@ -2,8 +2,10 @@ ltsp (0.14) breezy; urgency=low
 
   * Add localhost to /etc/hosts
   * Create /etc/network/interfaces and /etc/fstab
+  * Implement a simple display manager for the client (ldm) and a simple
+    login dialog for use with non-XDMCP configurations
 
- --
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  7 Jun 2005 22:19:37 -0700
 
 ltsp (0.13) breezy; urgency=low
 

@@ -1,0 +1,43 @@
+#!/usr/bin/python
+
+import os
+import gtk
+import gtk.glade
+
+class GTKGreeter:
+    def run(self):
+        self.ok = False
+        try:
+            self.xml = gtk.glade.XML('/usr/lib/ltsp/greeters/greeter.glade')
+        except:
+            self.xml = gtk.glade.XML('greeter.glade')
+        self.xml.signal_autoconnect({ 'on_login_button_clicked' : self.clicked })
+        
+        gtk.main()
+        
+        if self.ok == True:
+            print self.username
+            print self.password
+            return True
+        return False
+
+    def clicked(self, widget):
+        window = self.xml.get_widget("window")
+        
+        username_widget = self.xml.get_widget("username_entry")
+        self.username = username_widget.get_text()
+        username_widget.set_text('')
+        
+        password_widget = self.xml.get_widget("password_entry")
+        self.password = password_widget.get_text()
+        password_widget.set_text('')
+        
+        language = None
+        session = None
+        self.ok = True
+
+        gtk.main_quit()
+
+if not GTKGreeter().run():
+    sys.exit(1)
+

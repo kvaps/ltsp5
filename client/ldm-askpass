@@ -1,0 +1,15 @@
+#!/bin/sh
+
+fd="$LDM_ASKPASS_FD"
+
+if [ -z "$fd" ]; then
+    echo "LDM_ASKPASS_FD not set" >&2
+    exit 1
+fi
+
+read password <&$fd
+cat <<EOF
+$password
+EOF
+
+exit 0
