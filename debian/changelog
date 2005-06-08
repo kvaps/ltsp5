@@ -1,6 +1,8 @@
 ltsp (0.17) breezy; urgency=low
 
   * Lock the root account in the client root
+  * Redirect stdin, stdout and stderr in ldm
+  * Add mousedev to /etc/modules in the client root
 
  --
 
