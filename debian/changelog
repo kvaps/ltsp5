@@ -1,6 +1,7 @@
 ltsp (0.14) breezy; urgency=low
 
   * Add localhost to /etc/hosts
+  * Create /etc/network/interfaces and /etc/fstab
 
  --
 

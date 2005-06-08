@@ -40,19 +40,34 @@ $SERVER server
 EOF
 }
 
+configure_network() {
+    cat <<EOF > /etc/network/interfaces
+auto lo
+iface lo inet loopback
+EOF
+}
+
 configure_syslog() {
     cat <<EOF > /etc/syslog.conf
 *.* @${SYSLOG_HOST-$SERVER}
 EOF
 }
 
+configure_fstab() {
+    cat <<EOF > /etc/fstab
+/dev/root       /       unionfs defaults        0       0
+tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0
+EOF
+
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
 
         configure_swap
+        configure_network
         configure_hosts
         configure_syslog
+        configure_fstab
 
         log_end_msg 0
 	;;
