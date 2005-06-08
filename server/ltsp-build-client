@@ -10,6 +10,8 @@ MIRROR="$3"
 
 debootstrap $DIST $ROOT $MIRROR
 
+chroot $ROOT passwd -l root
+
 cat <<EOF > $ROOT/etc/apt/sources.list
 deb $MIRROR $DIST main restricted
 EOF

@@ -1,3 +1,9 @@
+ltsp (0.17) breezy; urgency=low
+
+  * Lock the root account in the client root
+
+ --
+
 ltsp (0.16) breezy; urgency=low
 
   * Add ltsp-update-sshkeys script to ltsp-server, for copying the
