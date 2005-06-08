@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# XXX
+PATH=$PATH:/usr/bin/X11
+
+exec ldm

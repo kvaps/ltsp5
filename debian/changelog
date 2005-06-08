@@ -5,8 +5,11 @@ ltsp (0.16) breezy; urgency=low
   * Move screen.d to /usr/lib/ltsp
     - No migration is done; regenerate any existing client roots to remove
       the cruft
+  * Add new screen.d/ldm script, so SCREEN_xx = ldm now works
+    - Move X configuration into init.d/ltsp-client-setup, so that it only
+      happens once
 
- --
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 13:29:03 -0700
 
 ltsp (0.15) breezy; urgency=low
 

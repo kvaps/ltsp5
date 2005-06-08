@@ -60,6 +60,36 @@ tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0
 EOF
 }
 
+preseed() {
+    package="$1"
+    question="$2"
+    value="$3"
+
+    if [ -n "$value" ]; then
+        ret=$(echo "set $question $value" | debconf-communicate $package)
+        #echo "preseed($question): return=$ret"
+    fi
+}
+
+configure_x() {
+    if [ -n "$XF86CONFIG_FILE" ]; then
+        # User has specified a custom config
+        XFCFG="$XF86CONFIG_FILE"
+    else
+      # Handle overrides of specific parameters
+      if [ "$XSERVER" != "auto" ]; then
+        preseed xserver-xorg xserver-xorg/config/device/driver "$XSERVER"
+        preseed xserver-xorg xserver-xorg/xserver-xorg/autodetect_video_card "false"
+      fi
+      preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+
+      # Autoconfigure
+      dpkg-reconfigure -fnoninteractive xserver-xorg
+
+      XFCFG=/etc/X11/xorg.conf
+    fi
+}
+
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
@@ -69,6 +99,7 @@ case "$1" in
         configure_hosts
         configure_syslog
         configure_fstab
+	configure_x
 
         log_end_msg 0
 	;;

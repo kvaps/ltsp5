@@ -85,34 +85,8 @@ ltsp_x_config() {
     fi
 }
 
-preseed() {
-    package="$1"
-    question="$2"
-    value="$3"
-
-    if [ -n "$value" ]; then
-        ret=$(echo "set $question $value" | debconf-communicate $package)
-        echo "preseed($question): return=$ret"
-    fi
-}
-
 ubuntu_x_config() {
-    if [ -n "$XF86CONFIG_FILE" ]; then
-        # User has specified a custom config
-        XFCFG="$XF86CONFIG_FILE"
-    else
-      # Handle overrides of specific parameters
-      if [ "$XSERVER" != "auto" ]; then
-        preseed xserver-xorg xserver-xorg/config/device/driver "$XSERVER"
-        preseed xserver-xorg xserver-xorg/xserver-xorg/autodetect_video_card "false"
-      fi
-      preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
-
-      # Autoconfigure
-      dpkg-reconfigure -fnoninteractive xserver-xorg
-
-      XFCFG=/etc/X11/xorg.conf
-    fi
+    XFCFG=/etc/X11/xorg.conf
 }
 
 if true; then
