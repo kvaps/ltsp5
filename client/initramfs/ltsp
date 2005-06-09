@@ -1,0 +1,13 @@
+# Paramter: Where the root should be mounted
+mountroot ()
+{
+	ipconfig ${DEVICE}
+	. /tmp/net-${DEVICE}.conf
+	if [ "x${NFSROOT}" = "xauto" ]; then
+		NFSROOT=${ROOTSERVER}:${ROOTPATH}
+	fi
+	nfsmount -o ro ${NFSROOT} ${rootmnt}
+        mkdir /rwroot
+        mount -t tmpfs tmpfs /rwroot
+        mount -t unionfs -o dirs=/rwroot=rw:${rootmnt}=ro,delete=whiteout unionfs ${rootmnt}
+}

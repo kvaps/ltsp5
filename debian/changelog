@@ -1,8 +1,10 @@
 ltsp (0.21) breezy; urgency=low
 
   * ltsp-server Depends: debootstrap, Recommends: openssh-server
+  * Install /usr/share/initramfs-tools/scripts/ltsp, a short-term means of
+    building the initramfs
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  9 Jun 2005 15:49:55 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  9 Jun 2005 16:02:30 -0700
 
 ltsp (0.20) breezy; urgency=low
 

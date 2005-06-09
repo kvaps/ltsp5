@@ -8,3 +8,4 @@ client/getltscfg/getltscfg usr/bin
 client/ldm usr/sbin
 client/ldm-askpass usr/lib/ltsp
 client/greeters usr/lib/ltsp
+client/initramfs/ltsp usr/share/initramfs-tools/scripts
