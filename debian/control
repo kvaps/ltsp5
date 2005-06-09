@@ -6,7 +6,8 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
-Recommends: ltsp-utils
+Depends: debootstrap
+Recommends: openssh-server
 Architecture: all
 Description: Basic LTSP server environment
 
@@ -18,5 +19,7 @@ Description: Complete LTSP server environment
 Package: ltsp-client
 Depends: lsb-base, nbd-client
 Recommends: ubuntu-thin-client
+Conflicts: ltsp-utils
+Replaces: ltsp-utils
 Architecture: any
 Description: LTSP client environment
