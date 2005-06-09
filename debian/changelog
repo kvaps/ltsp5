@@ -1,3 +1,11 @@
+ltsp (0.19) breezy; urgency=low
+
+  * Pass an LTSP_CLIENT environment variable to the server when using ldm,
+    so that programs running in the session can behave differently on LTSP
+    logins
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 17:59:28 -0700
+
 ltsp (0.18) breezy; urgency=low
 
   * Update screen.d/ldm and ldm to behave like a normal screen.d client,
