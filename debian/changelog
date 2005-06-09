@@ -1,4 +1,4 @@
-ltsp (0.22) unstable; urgency=low
+ltsp (0.22) breezy; urgency=low
 
   * Install /usr/share/initramfs-tools/scripts/ltsp, a short-term means of
     building the initramfs
