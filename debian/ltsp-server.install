@@ -1,2 +1,3 @@
 server/ltsp-build-client usr/sbin
 server/ltsp-update-sshkeys usr/sbin
+server/ltsp-update-kernels usr/sbin
