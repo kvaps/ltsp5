@@ -3,4 +3,8 @@
 # XXX
 PATH=$PATH:/usr/bin/X11
 
-exec ldm
+tty=$(tty)
+ttynum=${tty#/dev/tty}
+displaynum=$(($ttynum - 1))
+
+exec ldm vt$ttynum :$displaynum

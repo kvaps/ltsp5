@@ -14,7 +14,9 @@ def get_config(name):
     return value
 
 class LDM:
-    def __init__(self):
+    def __init__(self, vt, display):
+        self.vt = vt
+        self.display = display
         self.server = get_config('SERVER')
 
     def run(self):
@@ -26,11 +28,10 @@ class LDM:
         os.dup2(logfile.fileno(), sys.stderr.fileno())
 
         while True:
-            display = ':0'
-            server = subprocess.Popen(['Xorg', '-ac', '-noreset', display], stdout=sys.stdout, stderr=sys.stderr)
+            server = subprocess.Popen(['Xorg', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
             
             env = os.environ.copy()
-            env['DISPLAY'] = ':0'
+            env['DISPLAY'] = self.display
             
             time.sleep(5)
             greeter = subprocess.Popen(['/usr/lib/ltsp/greeters/gtk'],
@@ -40,14 +41,14 @@ class LDM:
                 username = greeter_output[0][:-1]
                 password = greeter_output[1][:-1]
 
-                self.spawn_session(display, username, password, 'x-session-manager')
+                self.spawn_session(username, password, 'x-session-manager')
             else:
                 print "Didn't get the right output from the greeter"
 
             os.kill(server.pid, signal.SIGTERM)
             os.waitpid(server.pid, 0)
 
-    def spawn_session(self, display, username, password, session_manager):
+    def spawn_session(self, username, password, session_manager):
         pipe_read, pipe_write = os.pipe()
         pid = os.fork()
 
@@ -55,7 +56,7 @@ class LDM:
             os.close(pipe_write)
             sys.stdin.close()
             os.setsid()
-            os.environ['DISPLAY'] = display
+            os.environ['DISPLAY'] = self.display
             os.environ['LDM_ASKPASS_FD'] = str(pipe_read)
             os.environ['SSH_ASKPASS'] = '/usr/lib/ltsp/ldm-askpass'
             command = ['ssh', '-v',
@@ -71,5 +72,10 @@ class LDM:
         os.close(pipe_write)
         os.waitpid(pid, 0)
 
-ldm = LDM()
+if len(sys.argv) < 3:
+    sys.stderr.write('Usage: ldm <vt[1-N]> <:[0-N]>\n')
+    sys.exit(1)
+
+vt, display = sys.argv[1:]
+ldm = LDM(vt, display)
 ldm.run()

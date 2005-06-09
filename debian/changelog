@@ -1,3 +1,10 @@
+ltsp (0.18) breezy; urgency=low
+
+  * Update screen.d/ldm and ldm to behave like a normal screen.d client,
+    able to run on the current VT
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 17:09:41 -0700
+
 ltsp (0.17) breezy; urgency=low
 
   * Lock the root account in the client root
