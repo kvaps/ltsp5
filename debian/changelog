@@ -1,3 +1,10 @@
+ltsp (0.23) breezy; urgency=low
+
+  * Uncomment ltsp-client in the list of packages to install in the client
+    root, since it's now in the archive
+
+ --
+
 ltsp (0.22) breezy; urgency=low
 
   * Install /usr/share/initramfs-tools/scripts/ltsp, a short-term means of

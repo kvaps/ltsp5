@@ -4,9 +4,9 @@ set -e
 
 export LC_ALL=C
 
-ROOT="$1"
-DIST="$2"
-MIRROR="$3"
+ROOT=/opt/ltsp/$(uname -m)
+DIST="$1"
+MIRROR="$2"
 
 debootstrap $DIST $ROOT $MIRROR
 
@@ -36,7 +36,7 @@ touch "$path"
 exit 0
 EOF
 
-chroot $ROOT apt-get -y install x-window-system-core linux-386 # ltsp-client
+chroot $ROOT apt-get -y install x-window-system-core linux-386 ltsp-client
 
 rm -f $ROOT/etc/hostname
 cat <<'EOF' > $ROOT/etc/hosts
