@@ -8,6 +8,7 @@ Standards-Version: 3.6.1
 Package: ltsp-server
 Depends: debootstrap
 Recommends: openssh-server
+Suggests: dhcp3-server, tftpd-hpa, nfs-kernel-server, syslinux
 Architecture: all
 Description: Basic LTSP server environment
 
