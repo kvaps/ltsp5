@@ -84,6 +84,7 @@ configure_x() {
       preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
 
       # Autoconfigure
+      rm -f /etc/X11/xorg.conf
       dpkg-reconfigure -fnoninteractive xserver-xorg
 
       XFCFG=/etc/X11/xorg.conf
