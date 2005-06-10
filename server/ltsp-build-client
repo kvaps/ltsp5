@@ -4,9 +4,9 @@ set -e
 
 export LC_ALL=C
 
-ROOT=/opt/ltsp/$(uname -m)
-DIST="$1"
-MIRROR="$2"
+ROOT=/opt/ltsp/$(dpkg --print-architecture)
+DIST=breezy
+MIRROR=http://us.archive.ubuntu.com/ubuntu
 
 debootstrap $DIST $ROOT $MIRROR
 
@@ -14,7 +14,7 @@ chroot $ROOT passwd -l root
 echo mousedev | tee -a $ROOT/etc/modules
 
 cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR $DIST main restricted
+deb $MIRROR $DIST main restricted universe
 EOF
 
 chroot $ROOT apt-get update
@@ -27,7 +27,7 @@ link_in_boot = yes
 do_bootloader = no
 EOF
 
-# XXX
+# XXX goes away with new kernel-package/initramfs infrastructure
 cat <<'EOF' > $ROOT/usr/sbin/mkinitrd
 #!/bin/sh
 
@@ -36,7 +36,22 @@ touch "$path"
 exit 0
 EOF
 
-chroot $ROOT apt-get -y install x-window-system-core linux-386 ltsp-client
+export DEBIAN_FRONTEND=noninteractive
+chroot $ROOT apt-get -y install x-window-system-core ltsp-client
+chroot $ROOT apt-get -y install discover1 laptop-detect mdetect xresprobe
+
+chroot $ROOT apt-get -y install linux initramfs-tools
+
+# XXX should go away with new initramfs hooks
+chroot $ROOT sed -i -e 's/^BOOT=.*$/BOOT=ltsp/' /etc/mkinitramfs/initramfs.conf
+for module in unionfs af_packet nfs unix; do
+    if ! grep -qw $module $ROOT/etc/mkinitramfs/modules; then
+        echo $module >> $ROOT/etc/mkinitramfs/modules
+    fi
+done
+echo "1. Add your network driver to $ROOT/etc/mkinitramfs/modules"
+echo "2. sudo chroot /opt/ltsp/i386 mkinitramfs -v 2.6.12-1-386 -o /boot/initramfs.cpio.gz"
+echo "3. sudo ltsp-update-kernels"
 
 rm -f $ROOT/etc/hostname
 cat <<'EOF' > $ROOT/etc/hosts
@@ -49,6 +64,15 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet dhcp
+EOF
+
+hostname=$(hostname)
+cat <<EOF > $ROOT/etc/ltsp/lts.conf
+[DEFAULT]
+  SERVER = $hostname
+  SCREEN_07 = ldm
+  SCREEN_08 = startx
+#  SCREEN_09 = shell
 EOF
 
 exit 0

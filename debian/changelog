@@ -2,6 +2,8 @@ ltsp (0.23) breezy; urgency=low
 
   * Uncomment ltsp-client in the list of packages to install in the client
     root, since it's now in the archive
+  * Have ltsp-build-client automate more of the ad-hoc stuff that's
+    necessary to set up the client root right now (should go away later)
 
  --
 
