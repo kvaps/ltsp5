@@ -9,7 +9,7 @@ ltsp (0.23) breezy; urgency=low
     reconfiguring
   * ltsp-client Depends: openssh-client, python-gtk2, python-glade2
 
- --
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 10 Jun 2005 11:15:28 -0700
 
 ltsp (0.22) breezy; urgency=low
 
