@@ -4,6 +4,9 @@ ltsp (0.23) breezy; urgency=low
     root, since it's now in the archive
   * Have ltsp-build-client automate more of the ad-hoc stuff that's
     necessary to set up the client root right now (should go away later)
+  * Handle null XSERVER correctly in ltsp-client-setup
+  * Suppress xserver-xorg.config warning by deleting xorg.conf before
+    reconfiguring
 
  --
 

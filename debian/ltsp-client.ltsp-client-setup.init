@@ -77,9 +77,9 @@ configure_x() {
         XFCFG="$XF86CONFIG_FILE"
     else
       # Handle overrides of specific parameters
-      if [ "$XSERVER" != "auto" ]; then
+      if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
         preseed xserver-xorg xserver-xorg/config/device/driver "$XSERVER"
-        preseed xserver-xorg xserver-xorg/xserver-xorg/autodetect_video_card "false"
+        preseed xserver-xorg xserver-xorg/autodetect_video_card "false"
       fi
       preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
 
