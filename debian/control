@@ -18,7 +18,7 @@ Architecture: all
 Description: Complete LTSP server environment
  
 Package: ltsp-client
-Depends: lsb-base, nbd-client
+Depends: lsb-base, nbd-client, openssh-client, python-gtk2, python-glade2
 Recommends: ubuntu-thin-client
 Conflicts: ltsp-utils
 Replaces: ltsp-utils

@@ -7,6 +7,7 @@ ltsp (0.23) breezy; urgency=low
   * Handle null XSERVER correctly in ltsp-client-setup
   * Suppress xserver-xorg.config warning by deleting xorg.conf before
     reconfiguring
+  * ltsp-client Depends: openssh-client, python-gtk2, python-glade2
 
  --
 
