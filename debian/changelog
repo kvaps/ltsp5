@@ -1,3 +1,21 @@
+ltsp (0.24) breezy; urgency=low
+
+  * Integrate with the new initramfs-tools hook system, thanks to Jeff
+    Bailey
+    - Install /usr/share/initramfs-tools/modules.d/unionfs-cow
+    - Install /usr/share/initramfs-tools/scripts/init-bottom/unionfs-cow
+    - Depend on initramfs-tools (>= 0.7)
+    - Remove some of the initramfs hackery from ltsp-build-client
+    - Update ltsp-build-client for initramfs-tools 0.7 syntax
+    - Set ramdisk=/usr/sbin/mkinitramfs in ltsp-build-client
+  * Update ltsp-update-kernels to explicitly request a read-only NFS mount
+    (unionfs whiteout doesn't seem to work properly on a rw NFS mount
+    which is actually read-only on the server, which is what we get
+    otherwise)
+    - Depends on initramfs-tools (>= 0.8) in order for the above to have an effect
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 14 Jun 2005 13:45:01 -0700
+
 ltsp (0.23) breezy; urgency=low
 
   * Uncomment ltsp-client in the list of packages to install in the client

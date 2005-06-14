@@ -15,7 +15,7 @@ if [ ! -d $PXECFG ]; then
     mkdir $PXECFG
 fi
 cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz nfsroot=192.168.0.2:/opt/ltsp/i386 initrd=initramfs.cpio.gz
+DEFAULT vmlinuz nfsroot=192.168.0.2:/opt/ltsp/i386 ro initrd=initramfs.cpio.gz
 EOF
 
 #for file in $TFTPBOOT/*; do

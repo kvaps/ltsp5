@@ -25,6 +25,7 @@ do_symlinks = yes
 relative_links = yes
 link_in_boot = yes
 do_bootloader = no
+ramdisk=/usr/sbin/mkinitramfs
 EOF
 
 # XXX goes away with new kernel-package/initramfs infrastructure
@@ -40,17 +41,10 @@ export DEBIAN_FRONTEND=noninteractive
 chroot $ROOT apt-get -y install x-window-system-core ltsp-client
 chroot $ROOT apt-get -y install discover1 laptop-detect mdetect xresprobe
 
-chroot $ROOT apt-get -y install linux initramfs-tools
+chroot $ROOT apt-get -y install linux
 
-# XXX should go away with new initramfs hooks
-chroot $ROOT sed -i -e 's/^BOOT=.*$/BOOT=ltsp/' /etc/mkinitramfs/initramfs.conf
-for module in unionfs af_packet nfs unix; do
-    if ! grep -qw $module $ROOT/etc/mkinitramfs/modules; then
-        echo $module >> $ROOT/etc/mkinitramfs/modules
-    fi
-done
 echo "1. Add your network driver to $ROOT/etc/mkinitramfs/modules"
-echo "2. sudo chroot /opt/ltsp/i386 mkinitramfs -v 2.6.12-1-386 -o /boot/initramfs.cpio.gz"
+echo "2. sudo chroot /opt/ltsp/i386 mkinitramfs -o /boot/initramfs.cpio.gz 2.6.12-1-386 "
 echo "3. sudo ltsp-update-kernels"
 
 rm -f $ROOT/etc/hostname
