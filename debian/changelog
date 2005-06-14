@@ -1,3 +1,9 @@
+ltsp (0.25) breezy; urgency=low
+
+  * Enhance ltsp-server to automagically manage the NFS export of /opt/ltsp
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 14 Jun 2005 14:37:56 -0700
+
 ltsp (0.24) breezy; urgency=low
 
   * Integrate with the new initramfs-tools hook system, thanks to Jeff

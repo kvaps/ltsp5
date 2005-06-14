@@ -6,14 +6,14 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
-Depends: debootstrap
+Depends: debootstrap, nfs-kernel-server
 Recommends: openssh-server
-Suggests: dhcp3-server, tftpd-hpa, nfs-kernel-server, syslinux
+Suggests: dhcp3-server, tftpd-hpa, syslinux
 Architecture: all
 Description: Basic LTSP server environment
 
 Package: ltsp-server-standalone
-Depends: ltsp-server, ltsp-utils, dhcp3-server, tftpd-hpa, nfs-kernel-server, syslinux
+Depends: ltsp-server, ltsp-utils, dhcp3-server, tftpd-hpa, syslinux
 Architecture: all
 Description: Complete LTSP server environment
  
