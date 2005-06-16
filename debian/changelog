@@ -1,3 +1,10 @@
+ltsp (0.26) breezy; urgency=low
+
+  * If no SERVER parameter is specified, infer it from the nfsroot= boot
+    parameter
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:09:07 -0700
+
 ltsp (0.25) breezy; urgency=low
 
   * Enhance ltsp-server to automagically manage the NFS export of /opt/ltsp
