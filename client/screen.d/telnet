@@ -7,7 +7,7 @@
 # Get the lts.conf entries, and assign them to shell
 # variables.
 #
-eval `/bin/getltscfg -a`
+. /usr/lib/ltsp/ltsp_config
 
 #
 # Get the IP address of the host to telnet into.
@@ -19,8 +19,7 @@ eval `/bin/getltscfg -a`
 if [ $# -ge 1 ]; then
     TELNET_ARGS=$*
 else
-    DEFAULT_SERVER=${SERVER:-"192.168.0.254"}
-    TELNET_HOST=${TELNET_HOST:-${DEFAULT_SERVER}}
+    TELNET_HOST=${TELNET_HOST:-${SERVER}}
     TELNET_ARGS="${TELNET_HOST}"
 fi
 

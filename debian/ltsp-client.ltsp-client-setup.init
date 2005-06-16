@@ -17,21 +17,18 @@ test -x $DAEMON || exit 0
 
 . /lib/lsb/init-functions
 . /usr/lib/ltsp/ltsp_functions
-
-load_configuration() {
-    eval `getltscfg -a`
-
-    if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
-        nfs_server=$(sed -e 's/^.*nfsroot=\([^:]*\):.*$/\1/' /proc/cmdline)
-        SERVER="$nfs_server"
-        export SERVER
-    fi
-}
+. /usr/lib/ltsp/ltsp_config
 
 load_modules() {
     for module in $(env | awk -F= '$1 ~ /^MODULE_/ { print $2 }'); do
         modprobe $module
     done
+}
+
+configure_console() {
+    if [ -n "$CONSOLE_KEYMAP" ]; then
+        install-keymap "$CONSOLE_KEYMAP"
+    fi
 }
 
 configure_swap() {
@@ -115,8 +112,8 @@ case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
 
-        load_configuration
         load_modules
+        configure_console
         configure_swap
         configure_network
         configure_resolver

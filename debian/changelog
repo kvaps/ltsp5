@@ -1,3 +1,13 @@
+ltsp (0.28) breezy; urgency=low
+
+  * Add Ubuntu-specific CONSOLE_KEYMAP parameter to lts.conf, to configure
+    the keymap used on the console
+  * Create /usr/lib/ltsp/ltsp_config which loads configuration from
+    lts.conf and also handles selecting defaults for parameters not
+    present in lts.conf
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 16:00:45 -0700
+
 ltsp (0.27) breezy; urgency=low
 
   * Don't unlink /etc/X11/xorg.conf before reconfiguring; xserver-xorg

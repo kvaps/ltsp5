@@ -1,0 +1,12 @@
+
+eval `getltscfg -a`
+
+if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
+    nfs_server=$(sed -e 's/^.*nfsroot=\([^:]*\):.*$/\1/' /proc/cmdline)
+    if [ -n "$nfs_server" ]; then
+        SERVER="$nfs_server"
+    else
+        SERVER="192.168.0.254"
+        export SERVER
+    fi
+fi

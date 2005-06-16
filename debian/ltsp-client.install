@@ -3,6 +3,7 @@ client/start_printer usr/lib/ltsp
 client/start_telnet usr/lib/ltsp
 client/telnet_loop usr/lib/ltsp
 client/ltsp_functions usr/lib/ltsp
+client/ltsp_config usr/lib/ltsp
 client/screen.d usr/lib/ltsp
 client/getltscfg/getltscfg usr/bin
 client/ldm usr/sbin

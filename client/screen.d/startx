@@ -5,10 +5,9 @@
 #
 # Get the lts.conf entries
 #
-eval `getltscfg -a`
+. /usr/lib/ltsp/ltsp_config
 
-DEFAULT_SERVER=${SERVER:-"192.168.0.254"}
-XDM_SERVER=${XDM_SERVER:-${DEFAULT_SERVER}}
+XDM_SERVER=${XDM_SERVER:-${SERVER}}
 reg_info XDM_SERVER
 
 TTY=$(basename $(tty))
