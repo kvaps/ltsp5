@@ -4,6 +4,7 @@ SERVER
 SYSLOG_HOST
 SCREEN_01 thru SCREEN_12
 MODULE_01 thru MODULE_10
+CONSOLE_KEYMAP
 
 Implemented but untested
 ------------------------
