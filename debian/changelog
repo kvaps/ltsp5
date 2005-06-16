@@ -1,3 +1,10 @@
+ltsp (0.27) breezy; urgency=low
+
+  * Don't unlink /etc/X11/xorg.conf before reconfiguring; xserver-xorg
+    seems to hate it now
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:42:15 -0700
+
 ltsp (0.26) breezy; urgency=low
 
   * If no SERVER parameter is specified, infer it from the nfsroot= boot
