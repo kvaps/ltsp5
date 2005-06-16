@@ -4,6 +4,7 @@ ltsp (0.26) breezy; urgency=low
     parameter
   * Implement more lts.conf parameters:
     - SEARCH_DOMAIN and DNS_SERVER (only honored if both are specified)
+    - MODULE_*
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:28:50 -0700
 

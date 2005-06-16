@@ -28,6 +28,12 @@ load_configuration() {
     fi
 }
 
+load_modules() {
+    for module in $(env | awk -F= '$1 ~ /^MODULE_/ { print $2 }'); do
+        modprobe $module
+    done
+}
+
 configure_swap() {
     if [ -n "$SWAP_SERVER" -a -n "$NBD_PORT" ]; then
         cat <<EOF > /etc/nbd-client
@@ -111,6 +117,7 @@ case "$1" in
         log_begin_msg "Setting up LTSP client..."
 
         load_configuration
+        load_modules
         configure_swap
         configure_network
         configure_resolver
