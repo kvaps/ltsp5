@@ -39,13 +39,20 @@ EOF
     fi
 }
 
-configure_hosts() {
+configure_resolver() {
     hostname=$(hostname)
     cat <<EOF >> /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
 $SERVER server
 EOF
+
+    if [ -n "$DNS_SERVER" -a -n "$SEARCH_DOMAIN" ]; then
+        cat <<EOF > /etc/resolv.conf
+search $SEARCH_DOMAIN
+nameserver $DNS_SERVER
+EOF
+    fi
 }
 
 configure_network() {
@@ -106,7 +113,7 @@ case "$1" in
         load_configuration
         configure_swap
         configure_network
-        configure_hosts
+        configure_resolver
         configure_syslog
         configure_fstab
 	configure_x

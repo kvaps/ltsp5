@@ -2,8 +2,10 @@ ltsp (0.26) breezy; urgency=low
 
   * If no SERVER parameter is specified, infer it from the nfsroot= boot
     parameter
+  * Implement more lts.conf parameters:
+    - SEARCH_DOMAIN and DNS_SERVER (only honored if both are specified)
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:09:07 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:28:50 -0700
 
 ltsp (0.25) breezy; urgency=low
 
