@@ -1,3 +1,17 @@
+ltsp (0.31) breezy; urgency=low
+
+  * Update for (and depend on) initramfs-tools 0.11
+    - [ltsp-build-client] Allow the initramfs to be generated
+      automatically via the kernel-package hook
+    - [ltsp-build-client] Call ltsp-update-kernels
+    - [ltsp-build-client] No need to instruct the user to specify their
+      NIC driver and regenerate the initramfs, since it will be
+      automagically detected now
+    - [ltsp-update-kernels] Copy initrd.img* in ltsp-update-kernels,
+      since kernel-package uses the same names for initramfs
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 13:35:28 -0700
+
 ltsp (0.30) breezy; urgency=low
 
   * Make XF86CONFIG_FILE more likely to succeed

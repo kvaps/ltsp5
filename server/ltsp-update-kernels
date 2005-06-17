@@ -6,7 +6,7 @@ TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
 LTSPROOT=/opt/ltsp
 
-for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initramfs.cpio.gz*; do
+for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initrd.img*; do
     cp -a -v "$file" $TFTPBOOT
 done
 

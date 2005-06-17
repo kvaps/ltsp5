@@ -42,10 +42,7 @@ chroot $ROOT apt-get -y install x-window-system-core ltsp-client
 chroot $ROOT apt-get -y install discover1 laptop-detect mdetect xresprobe
 
 chroot $ROOT apt-get -y install linux
-
-echo "1. Add your network driver to $ROOT/etc/mkinitramfs/modules"
-echo "2. sudo chroot /opt/ltsp/i386 mkinitramfs -o /boot/initramfs.cpio.gz 2.6.12-1-386 "
-echo "3. sudo ltsp-update-kernels"
+ltsp-update-kernels
 
 rm -f $ROOT/etc/hostname
 cat <<'EOF' > $ROOT/etc/hosts
