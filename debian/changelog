@@ -1,3 +1,9 @@
+ltsp (0.30) breezy; urgency=low
+
+  * Make XF86CONFIG_FILE more likely to succeed
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 10:02:08 -0700
+
 ltsp (0.29) breezy; urgency=low
 
   * Have ldm inherit the configuration from its environment rather than

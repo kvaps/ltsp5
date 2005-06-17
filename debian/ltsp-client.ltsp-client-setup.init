@@ -92,7 +92,7 @@ preseed() {
 configure_x() {
     if [ -n "$XF86CONFIG_FILE" ]; then
         # User has specified a custom config
-        XFCFG="$XF86CONFIG_FILE"
+        cp "$XF86CONFIG_FILE" /etc/X11/xorg.conf
     else
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
@@ -103,8 +103,6 @@ configure_x() {
 
       # Autoconfigure
       dpkg-reconfigure -fnoninteractive xserver-xorg
-
-      XFCFG=/etc/X11/xorg.conf
     fi
 }
 
