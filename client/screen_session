@@ -8,10 +8,8 @@
 
 SLEEP=300
 
-#
-# Suck in some common LTSP functions
-#
-. /usr/lib/ltsp/ltsp_functions
+# Load LTSP configuration
+. /usr/lib/ltsp/ltsp_config
 
 #
 # Figure out the SCREEN_NUM. Sure, we could do it with
@@ -45,7 +43,8 @@ fi
 
 export SCREEN_NUM
 
-SCREEN_CMD=`get_cfg SCREEN_${SCREEN_NUM} none`
+SCREEN_VAR=SCREEN_${SCREEN_NUM}
+eval SCREEN_CMD=\$$SCREEN_VAR
 
 SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
 SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
@@ -58,7 +57,6 @@ SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 #
 if [ "${SCREEN_NUM}" -eq 1 ]; then
   if [ "${SCREEN_SCRIPT}" = "none" ]; then
-    RUNLEVEL=`get_cfg RUNLEVEL none`
     case "${RUNLEVEL}" in
       3)      SCREEN_SCRIPT="shell"
               SHOW_WARNING="Y"

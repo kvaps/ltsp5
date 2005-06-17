@@ -2,8 +2,10 @@ ltsp (0.29) breezy; urgency=low
 
   * Have ldm inherit the configuration from its environment rather than
     calling getltscfg, to get ldm working without a SERVER variable
+  * If no SCREEN_* parameters are specified, start ldm on tty7
+  * Clients should now be functional out of the box with no lts.conf
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 18:10:16 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 18:19:01 -0700
 
 ltsp (0.28) breezy; urgency=low
 

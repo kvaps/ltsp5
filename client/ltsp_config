@@ -1,6 +1,9 @@
 
-eval `getltscfg -a`
+if [ -f /etc/ltsp/lts.conf ]; then
+    eval `getltscfg -a`
+fi
 
+# Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     nfs_server=$(sed -e 's/^.*nfsroot=\([^:]*\):.*$/\1/' /proc/cmdline)
     if [ -n "$nfs_server" ]; then
@@ -9,4 +12,10 @@ if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
         SERVER="192.168.0.254"
     fi
     export SERVER
+fi
+
+# Ensure a default screen
+if ! env | grep -q '^SCREEN_'; then
+    SCREEN_07=ldm
+    export SCREEN_07
 fi

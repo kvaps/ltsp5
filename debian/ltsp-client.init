@@ -17,8 +17,7 @@ test -x $DAEMON || exit 0
 
 . /lib/lsb/init-functions
 . /usr/lib/ltsp/ltsp_functions
-
-eval `getltscfg -a`
+. /usr/lib/ltsp/ltsp_config
 
 case "$1" in
   start)
