@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /usr/lib/ltsp/ltsp_config
+
 # XXX
 PATH=$PATH:/usr/bin/X11
 

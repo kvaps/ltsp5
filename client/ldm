@@ -8,11 +8,7 @@ import signal
 import socket
 
 def get_config(name):
-    getltscfg = subprocess.Popen(['getltscfg', name], stdout=subprocess.PIPE)
-    value = getltscfg.stdout.read()
-    if len(value) > 0 and value[-1] == '\n':
-        value = value[:-1]
-    return value
+    return os.environ[name]
 
 class LDM:
     def __init__(self, vt, display):

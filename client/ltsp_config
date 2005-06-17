@@ -7,6 +7,6 @@ if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
         SERVER="$nfs_server"
     else
         SERVER="192.168.0.254"
-        export SERVER
     fi
+    export SERVER
 fi

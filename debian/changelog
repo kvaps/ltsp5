@@ -1,3 +1,10 @@
+ltsp (0.29) breezy; urgency=low
+
+  * Have ldm inherit the configuration from its environment rather than
+    calling getltscfg, to get ldm working without a SERVER variable
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 18:10:16 -0700
+
 ltsp (0.28) breezy; urgency=low
 
   * Add Ubuntu-specific CONSOLE_KEYMAP parameter to lts.conf, to configure
