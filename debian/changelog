@@ -1,8 +1,10 @@
 ltsp (0.32) breezy; urgency=low
 
   * Simplify ltsp-build-client and remove bashisms
+  * Stop hardcoding stuff in ltsp-update-kernels
+  * Adjust ltsp-update-kernels for the initrd.img naming scheme
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 17:20:40 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 17:27:29 -0700
 
 ltsp (0.31) breezy; urgency=low
 
