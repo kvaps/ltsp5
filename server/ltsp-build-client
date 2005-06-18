@@ -15,7 +15,7 @@ chroot $ROOT passwd -l root
 echo mousedev >> $ROOT/etc/modules
 
 cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR $DIST main restricted universe
+deb $MIRROR $DIST main restricted
 EOF
 
 chroot $ROOT apt-get update
