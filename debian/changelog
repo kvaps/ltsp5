@@ -1,3 +1,9 @@
+ltsp (0.32) breezy; urgency=low
+
+  * Simplify ltsp-build-client and remove bashisms
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 17:20:40 -0700
+
 ltsp (0.31) breezy; urgency=low
 
   * Update for (and depend on) initramfs-tools 0.11
