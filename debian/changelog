@@ -1,3 +1,15 @@
+ltsp (0.34) breezy; urgency=low
+
+  * Simplify dependencies
+    - ltsp-server depends: tftpd-hpa, syslinux.  All ltsp-servers will be
+       the tftp servers; this is quite likely to be the most common
+       deployment, given the integration with the client kernels
+    - ltsp-server-standalone drops the same dependencies, as it
+      depends on ltsp-server
+    - ltsp-server no longer Recommends these packages
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 23:36:23 -0700
+
 ltsp (0.33) breezy; urgency=low
 
   * In the name of documentation compatibility (and since we're unlikely
