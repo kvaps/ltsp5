@@ -69,7 +69,7 @@ binary-arch: build install
 	dh_testroot -a
 	dh_installchangelogs -a
 	dh_installdocs -a
-#	dh_installexamples -a
+	dh_installexamples -a
 	dh_install -a
 #	dh_installmenu -a
 #	dh_installdebconf -a	
