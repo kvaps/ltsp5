@@ -31,7 +31,9 @@ EOF
 
 DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
-chroot $ROOT apt-get -y install x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe linux
+chroot $ROOT apt-get -y install x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe
+sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+chroot $ROOT apt-get -y install linux
 
 ltsp-update-kernels
 

@@ -15,7 +15,7 @@ cp /usr/lib/syslinux/pxelinux.0 $TFTPBOOT
 if [ ! -d $PXECFG ]; then
     mkdir $PXECFG
 fi
-cat > $PXECFG/default <<"EOF"
+cat > $PXECFG/default <<EOF
 DEFAULT vmlinuz nfsroot=$SERVER:$LTSPROOT/i386 ro initrd=initrd.img
 EOF
 
