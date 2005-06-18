@@ -62,7 +62,7 @@ char sMACAddr[64];
 
 int	fDumpAll;
 
-static char *sConfigFile = "/etc/ltsp/lts.conf";
+static char *sConfigFile = "/etc/lts.conf";
 static char *sHostName   = "";
 
 #define MAX_FILE_INCLUDES 10

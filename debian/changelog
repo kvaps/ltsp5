@@ -1,3 +1,12 @@
+ltsp (0.33) breezy; urgency=low
+
+  * In the name of documentation compatibility (and since we're unlikely
+    to have multiple config files), use the traditional path of
+    /etc/lts.conf
+  * Ship an example /etc/lts.conf
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 18:00:04 -0700
+
 ltsp (0.32) breezy; urgency=low
 
   * Simplify ltsp-build-client and remove bashisms
