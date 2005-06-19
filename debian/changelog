@@ -1,3 +1,11 @@
+ltsp (0.36) breezy; urgency=low
+
+  * Pass the LTSP_CLIENT environment variable via the ssh command, rather
+    than ssh environment variable passing, since the latter requires
+    server-side configuration
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Sun, 19 Jun 2005 11:45:37 -0700
+
 ltsp (0.35) breezy; urgency=low
 
   * Add dhcpd.conf example
