@@ -2,7 +2,7 @@
 
 clients=/opt/ltsp/i386
 hostname=$(hostname)
-ips=$(getent hosts $hostname | grep -v 127.0.0.1 | cut -f1)
+ips=$(getent hosts $hostname | awk '$0 !~ /127.0.0.1/ { print $1 }')
 output=$(tempfile)
 
 names="$hostname $ips"
