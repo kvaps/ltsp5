@@ -4,6 +4,7 @@ ltsp (0.36) breezy; urgency=low
     than ssh environment variable passing, since the latter requires
     server-side configuration
   * Fix ltsp-update-sshkeys to exclude localhost properly
+  * Call ltsp-update-sshkeys from ltsp-build-client
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Sun, 19 Jun 2005 11:46:23 -0700
 
