@@ -1,3 +1,4 @@
+- Resolve ssh logout issue
 - Sort out SCREEN_xx stuff
   - Respawn
 - Determine what xauth magic is necessary for the X server
