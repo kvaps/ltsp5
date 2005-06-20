@@ -1,3 +1,12 @@
+ltsp (0.37) breezy; urgency=low
+
+  * Update TODO, lts-parameters.txt
+  * Cosmetic improvements to ltsp-build-client
+  * Implement NETWORK_COMPRESSION parameter, which activates compression
+    of network traffic (ssh only (for now?))
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 20 Jun 2005 14:04:59 -0700
+
 ltsp (0.36) breezy; urgency=low
 
   * Pass the LTSP_CLIENT environment variable via the ssh command, rather

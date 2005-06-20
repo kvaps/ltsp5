@@ -56,16 +56,26 @@ class LDM:
             os.environ['DISPLAY'] = self.display
             os.environ['LDM_ASKPASS_FD'] = str(pipe_read)
             os.environ['SSH_ASKPASS'] = '/usr/lib/ltsp/ldm-askpass'
-            
-            command = ['ssh', '-v',
+
+            ssh_opts = ['-v',
                        '-X',
                        '-o', 'SendEnv LTSP_CLIENT',
-                       '%s@%s' % (username,self.server),
-                       'env',
-                       'LTSP_CLIENT="%s"' % (socket.gethostname()),
-                       session_manager]
+                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
 
-            os.execvp(command[0], command)
+            ssh_auth = ['%s@%s' % (username,self.server)]
+
+            ssh_remote_command = ['env', 
+                                  'LTSP_CLIENT="%s"' % (socket.gethostname()),
+                                  session_manager]
+
+            if 'NETWORK_COMPRESSION' in os.environ:
+                ssh_opts.append('-C')
+            
+            command = ['ssh'] + ssh_opts + ssh_auth + ssh_remote_command
+            print "ssh command line:", command
+            sys.stdout.flush()
+
+            os.execvp('ssh', command)
             sys.exit(1)
 
         os.close(pipe_read)
