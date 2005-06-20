@@ -5,7 +5,6 @@
   - Throttle screensaver
   - Logout fade?
   - Background image?
-  - optional ssh compression
 - Server autoconfiguration
   - dhcp3-server
   - nbd-server?
