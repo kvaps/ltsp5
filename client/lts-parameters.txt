@@ -18,6 +18,7 @@ XSERVER
 XF86CONFIG_FILE
 X_HORZSYNC
 X_VERTREFRESH
+XkbModel
 
 Not yet implemented
 -------------------
@@ -52,7 +53,6 @@ NIS_SERVER
 XkbTypes
 XkbCompat
 XkbSymbols
-XkbModel
 PRINTER_*_DEVICE
 PRINTER_*_TYPE
 PRINTER_*_PORT

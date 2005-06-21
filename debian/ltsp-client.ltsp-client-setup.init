@@ -106,6 +106,7 @@ configure_x() {
       fi
         
       preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+      preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/model "$XKBMODEL"
 
       # Autoconfigure
       dpkg-reconfigure -fnoninteractive xserver-xorg

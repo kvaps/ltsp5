@@ -2,8 +2,9 @@ ltsp (0.38) breezy; urgency=low
 
   * Implement X_HORZSYNC and X_VERTREFRESH parameters (won't work until
     xserver-xorg bug #12072 is fixed)
+  * Implement XKBMODEL (won't work until xserver-xorg bug #12073 is fixed)
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 21 Jun 2005 12:25:26 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 21 Jun 2005 12:33:38 -0700
 
 ltsp (0.37) breezy; urgency=low
 
