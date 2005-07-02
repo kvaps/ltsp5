@@ -13,4 +13,6 @@
   - dhcp3-server
     - dhcp3-server-ltsp?
   - nbd-server?
+- installer hooks
+  - choose ltsp-server vs. ltsp-server-standalone based on DHCP result?
 - nbd swap testing
