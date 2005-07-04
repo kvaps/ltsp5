@@ -8,6 +8,9 @@ CONSOLE_KEYMAP
 XKBLAYOUT
 NETWORK_COMPRESSION
 XSERVER
+X_HORZSYNC
+X_VERTREFRESH
+XKBMODEL
 
 Implemented but untested
 ------------------------
@@ -16,9 +19,6 @@ DNS_SERVER
 SEARCH_DOMAIN
 XDM_SERVER
 XF86CONFIG_FILE
-X_HORZSYNC
-X_VERTREFRESH
-XkbModel
 
 Not yet implemented
 -------------------

@@ -1,3 +1,10 @@
+ltsp (0.41) breezy; urgency=low
+
+  * Don't create /etc/network/interfaces in ltsp-build-client.  It's
+    overwritten by init.d/ltsp-client-setup, and so this only caused confusion
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 08:19:50 -0700
+
 ltsp (0.40) breezy; urgency=low
 
   * Get monitor refresh/sync overrides working by preseeding
