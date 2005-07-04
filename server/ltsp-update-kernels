@@ -5,7 +5,6 @@ set -e
 TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
 LTSPROOT=/opt/ltsp
-SERVER=$(getent hosts $(hostname) | awk '{ ip = $1 } END { print ip }')
 
 for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initrd.img*; do
     cp -a -v "$file" $TFTPBOOT
@@ -16,7 +15,7 @@ if [ ! -d $PXECFG ]; then
     mkdir $PXECFG
 fi
 cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz nfsroot=$SERVER:$LTSPROOT/i386 ro initrd=initrd.img
+DEFAULT vmlinuz ro initrd=initrd.img
 EOF
 
 #for file in $TFTPBOOT/*; do
