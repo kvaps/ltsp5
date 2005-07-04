@@ -59,7 +59,6 @@ class LDM:
 
             ssh_opts = ['-v',
                        '-X',
-                       '-o', 'SendEnv LTSP_CLIENT',
                         '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
 
             ssh_auth = ['%s@%s' % (username,self.server)]
