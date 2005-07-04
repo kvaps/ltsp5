@@ -35,8 +35,6 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	$(MAKE) -C client/lp_server install DESTDIR=$(CURDIR)/debian/ltsp-client
-
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
