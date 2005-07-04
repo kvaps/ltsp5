@@ -1,3 +1,10 @@
+ltsp (0.40) breezy; urgency=low
+
+  * Get monitor refresh/sync overrides working by preseeding
+    xserver-xorg/config/monitor/selection-method
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 07:59:56 -0700
+
 ltsp (0.39) breezy; urgency=low
 
   * Set the debconf 'seen' flag to true when preseeding from ltsp-client-setup
