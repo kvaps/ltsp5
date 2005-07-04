@@ -14,6 +14,8 @@ build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
+	cd client/lp_server && ./configure --prefix=/usr
+	$(MAKE) -C client/lp_server
 
 	touch build-stamp
 
@@ -23,6 +25,7 @@ clean:
 	rm -f build-stamp
 
 	-$(MAKE) -C client/getltscfg clean
+	-$(MAKE) -C client/lp_server clean
 
 	dh_clean
 
@@ -31,6 +34,8 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+
+	$(MAKE) -C client/lp_server install DESTDIR=$(CURDIR)/debian/ltsp-client
 
 # Build architecture-independent files here.
 binary-indep: build install

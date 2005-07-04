@@ -1,0 +1,95 @@
+#**************************************************************************
+#* LPRng IFHP Filter
+#* Copyright 1994-1997 Patrick Powell, San Diego, CA <papowell@sdsu.edu>
+#*
+#* Based on the CTI printer filters.
+#*  See COPYRIGHT for details.
+#*
+#* $Id: Makefile.in,v 1.1 2004/07/08 05:03:36 jam Exp $
+#
+
+
+prefix=@prefix@
+# where the filters are installed:
+INSTDIR=$(DESTDIR)${prefix}/lib/filters
+# where the fonts are installed (this path should agree
+# with the one in FONTPATH).
+FONTDIR=$(DESTDIR)${prefix}/lib/filters/fonts
+
+SRC=@srcdir@
+# shell to use
+SHELL=@SHELL@
+
+#
+# the compiler optimisation/debugging flags you wish to use.
+# what C compiler to use.
+#
+CC=@CC@
+# add additional definitions here
+
+# use FLAGS for additional flags
+CFLAGS:= @CFLAGS@ @DEFS@ -I.. -I${SRC} $(CFLAGS)
+LDFLAGS:= @LDFLAGS@
+
+# libraries you will need (found by config), add more to end
+LIBS=@LIBS@
+
+INSTALLCMD=@INSTALL@
+SHELL = @SHELL@
+
+@SET_MAKE@
+RANLIB=@RANLIB@
+
+######### - no changes by configure after here #############
+
+VPATH=.. ${SRC}/.
+
+#if you want quiet operation, i.e. - only serious messages logged,
+# uncomment out the following line
+
+# commands made by this script
+COMMANDS= lp_server
+
+all: ${COMMANDS}
+
+.PHONY: all clean install lorder
+
+#
+# Object - Source  dependencies
+#
+OBJS = lp_server.o stty.o log.o snprintf.o
+$(OBJS): common.h
+
+
+lp_server:	$(OBJS)
+	${CC} ${LDFLAGS} $(OBJS) -o $@ ${LIBS}
+
+#
+# Installation of commands
+#
+install: all
+	-mkdir -p $(INSTDIR)
+	for i in $(COMMANDS) ; do \
+		$(INSTALLCMD) -m 755 $$i $(INSTDIR); \
+	done ;
+	cd $(INSTDIR); rm -f ofhp; ln -s ifhp ofhp
+
+#
+# Miscellaneous
+#
+
+clean:
+	-rm -f $(COMMANDS) *.o *.a core ? pfu tags
+
+ci: 
+	if test ! -d RCS ; then mkdir RCS; fi;
+	for i in \
+		*.[ch] Makefile* \
+		accounting.sh_init banner.sh_init ellipse.ps psbanner.sh_init \
+		testbanner testif testnostat testnw testof \
+		; do \
+		if [ -f $$i ]; then ci $(CI) -l -mUpdate -t-Initial $$i; fi; \
+	done;
+
+distclean:
+	-rm -f Makefile Makefile.bsd

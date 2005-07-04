@@ -2,6 +2,7 @@ ltsp (0.41) breezy; urgency=low
 
   * Don't create /etc/network/interfaces in ltsp-build-client.  It's
     overwritten by init.d/ltsp-client-setup, and so this only caused confusion
+  * Import, build and install lp_server as part of ltsp-client
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 08:19:50 -0700
 
