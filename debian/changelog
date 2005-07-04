@@ -1,3 +1,9 @@
+ltsp (0.39) breezy; urgency=low
+
+  * Set the debconf 'seen' flag to true when preseeding from ltsp-client-setup
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 30 Jun 2005 12:22:49 -0700
+
 ltsp (0.38) breezy; urgency=low
 
   * Implement X_HORZSYNC and X_VERTREFRESH parameters (won't work until

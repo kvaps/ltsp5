@@ -84,8 +84,7 @@ preseed() {
     value="$3"
 
     if [ -n "$value" ]; then
-        ret=$(echo "set $question $value" | debconf-communicate $package)
-        #echo "preseed($question): return=$ret"
+        echo -e "set $question $value\nfset $question seen true" | debconf-communicate $package
     fi
 }
 
