@@ -25,7 +25,7 @@ clean:
 	rm -f build-stamp
 
 	-$(MAKE) -C client/getltscfg clean
-	-$(MAKE) -C client/lp_server clean
+	-$(MAKE) -C client/lp_server distclean
 
 	dh_clean
 
