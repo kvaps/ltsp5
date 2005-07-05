@@ -10,7 +10,7 @@ names="$hostname $ips"
 ssh-keyscan -t rsa,dsa $names > $output
 
 for client in $clients; do
-    cp $output $client/etc/ssh/ssh_known_hosts
+    install -m 644 $output $client/etc/ssh/ssh_known_hosts
 done
 
 rm -f $output
