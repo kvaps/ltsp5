@@ -1,3 +1,9 @@
+ltsp (0.43) breezy; urgency=low
+
+  * Start the X server with the -br option
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  5 Jul 2005 04:38:32 -0700
+
 ltsp (0.42) breezy; urgency=low
 
   * Don't use lp_server's install target; just install the lp_server binary

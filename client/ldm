@@ -25,7 +25,7 @@ class LDM:
         os.dup2(logfile.fileno(), sys.stderr.fileno())
 
         while True:
-            server = subprocess.Popen(['Xorg', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
+            server = subprocess.Popen(['Xorg', '-br', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
             
             env = os.environ.copy()
             env['DISPLAY'] = self.display
