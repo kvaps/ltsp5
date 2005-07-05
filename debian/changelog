@@ -3,6 +3,8 @@ ltsp (0.42) breezy; urgency=low
   * Don't use lp_server's install target; just install the lp_server binary
     (matching existing LBE approach)
   * Remove confusing, unnecessary -o SendEnv from ssh command line
+  * Set world-readable permissions on /etc/ssh/ssh_known_hosts
+  * Associate ssh keys with all interface addresses
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 09:19:41 -0700
 
