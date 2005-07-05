@@ -1,14 +1,8 @@
-- Resolve server IP address issue (localhost.localdomain)
-- Ensure that ssh host key is associated by IP as well as hostname
 - Resolve ssh logout issue
   - lookup (or have ssh provide) the PID of the process to kill
 - Sort out SCREEN_xx stuff
   - Respawn
 - Determine what xauth magic is necessary for the X server
-- Bandwidth consumption
-  - Throttle screensaver
-  - Logout fade?
-  - Background image?
 - Server autoconfiguration
   - dhcp3-server
     - dhcp3-server-ltsp?
@@ -16,3 +10,7 @@
 - installer hooks
   - choose ltsp-server vs. ltsp-server-standalone based on DHCP result?
 - nbd swap testing
+- Bandwidth consumption
+  - Throttle screensaver
+  - Logout fade?
+  - Background image?
