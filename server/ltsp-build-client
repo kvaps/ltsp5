@@ -49,3 +49,5 @@ ltsp-update-kernels
 ltsp-update-sshkeys
 
 rm -f $ROOT/etc/hostname
+
+chroot $ROOT apt-get clean
