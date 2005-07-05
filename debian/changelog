@@ -2,6 +2,7 @@ ltsp (0.43) breezy; urgency=low
 
   * Start the X server with the -br option
   * Run apt-get clean after building the chroot
+  * Install /etc/ltsp/dhcpd.conf in ltsp-server-standalone
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  5 Jul 2005 04:38:32 -0700
 
