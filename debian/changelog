@@ -3,8 +3,10 @@ ltsp (0.43) breezy; urgency=low
   * Start the X server with the -br option
   * Run apt-get clean after building the chroot
   * Install /etc/ltsp/dhcpd.conf in ltsp-server-standalone
+  * Kill the sshd child process after x-session-manager exits, to avoid
+    hanging when the user logs out (due to X clients still being connected)
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  5 Jul 2005 04:38:32 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  6 Jul 2005 08:51:13 -0700
 
 ltsp (0.42) breezy; urgency=low
 

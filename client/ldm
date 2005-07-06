@@ -65,7 +65,9 @@ class LDM:
 
             ssh_remote_command = ['env', 
                                   'LTSP_CLIENT="%s"' % (socket.gethostname()),
-                                  session_manager]
+                                  session_manager,
+                                  ';',
+                                  'kill -1 $PPID']
 
             if 'NETWORK_COMPRESSION' in os.environ:
                 ssh_opts.append('-C')
