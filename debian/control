@@ -11,11 +11,17 @@ Recommends: openssh-server
 Suggests: dhcp3-server
 Architecture: all
 Description: Basic LTSP server environment
+ The scripts needed to generate the client environment on a server.
+ This is the basic environment depending on external a DHCP server to
+ point the clients to the LTSP server.
 
 Package: ltsp-server-standalone
 Depends: ltsp-server, ltsp-utils, dhcp3-server
 Architecture: all
 Description: Complete LTSP server environment
+ The scripts needed to generate the client environment on a server.
+ This is the complete environment including a DHCP server to bootstrap
+ the clients.
  
 Package: ltsp-client
 Depends: lsb-base, nbd-client, openssh-client, python-gtk2, python-glade2, initramfs-tools (>= 0.11)
@@ -24,3 +30,4 @@ Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: any
 Description: LTSP client environment
+ The scripts needed to configure and boot an LTSP client.
