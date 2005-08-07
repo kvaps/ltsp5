@@ -131,6 +131,8 @@ LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
 
 rm -f $ROOT/etc/hostname
+touch $ROOT/etc/hostname
+touch $ROOT/etc/hosts
 
 chroot $ROOT apt-get clean
 
