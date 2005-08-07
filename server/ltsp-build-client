@@ -123,11 +123,11 @@ link_in_boot = yes
 do_bootloader = no
 EOF
 
-if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d /usr/share/doc/initramfs-tools ]; then
+if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
   # configuring for initramfs-tools
   echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
   sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
-elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d /usr/share/doc/initrd-netboot-tools ]; then
+elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
   # configuring for initrd-netboot-tools
   sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
 else
