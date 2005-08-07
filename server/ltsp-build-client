@@ -45,8 +45,8 @@ sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
 # Install the kernel
 chroot $ROOT apt-get -y install linux
 
-ltsp-update-kernels
-ltsp-update-sshkeys
+LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
+clients="$ROOT" ltsp-update-sshkeys
 
 rm -f $ROOT/etc/hostname
 
