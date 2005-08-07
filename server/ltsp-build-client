@@ -55,13 +55,13 @@ test -z "$DIST" && DIST=sarge
 case $DIST in
   breezy) 
     test -z "$COMPONENTS" && COMPONENTS="main restricted"
-    test -z "$MIRROR" && MIRROR="http://us.archive.ubuntu.com/ubuntu $DIST $COMPONENTS"
+    test -z "$MIRROR" && MIRROR="http://us.archive.ubuntu.com/ubuntu"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
     test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
     ;;
 esac
 test -z "$COMPONENTS" && COMPONENTS="main"
-test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian $DIST $COMPONENTS"
+test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
 
