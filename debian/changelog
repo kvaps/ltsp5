@@ -1,3 +1,75 @@
+ltsp (0.43-0+vagrant.5) experimental; urgency=low
+
+  * ltsp-build-client:
+    - really exit on unknown options
+    - typo
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 16:42:53 -0600
+
+ltsp (0.43-0+vagrant.4) experimental; urgency=low
+
+  * ltsp-build-client: 
+    - add --help option
+    - exit with unknown options
+  * favor atftpd over tftpd-hpa
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 16:14:19 -0600
+
+ltsp (0.43-0+vagrant.3) experimental; urgency=low
+
+  * mount /proc in the chroot before installing additional packages
+  * ltsp-update-kernels, ltsp-update-sshkeys:
+    - grab LTSPROOT info from environment variables, when possible.
+  * ltsp-build-client:
+    - pass ltsp-update-kernels and ltsp-update-sshkeys variables
+    - really install udhcpc, devfsd and udev by default
+    - do "apt-get dist-upgrade" after updating the package lists
+    - create empty /etc/hostname and /etc/hosts files
+  * more bindfiles in ltsp-client-setup: syslog.conf, fstab, nbd-client
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 14:49:44 -0600
+
+ltsp (0.43-0+vagrant.2) experimental; urgency=low
+
+  * additional values in /etc/default/ltsp-client-setup:
+    - examples for: tmpfs_dir, tmpfs_size, rw_dirs, copy_dirs, bindfiles
+    - bindfiles: added /etc/hostname, /etc/hosts, /etc/network/interfaces
+  * ltsp-build-client: install udhcpc, devfsd and udev by default
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 12:40:26 -0600
+
+ltsp (0.43-0+vagrant.1) experimental; urgency=low
+
+  * add /etc/default/ltsp-client-setup
+    - use_bind_mounts=true
+  * ltsp-build-client: bugfix configuring mkinitrd.conf
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 11:33:40 -0600
+
+ltsp (0.43-0+vagrant.0) experimental; urgency=low
+
+  * ltsp-build-client: 
+    - bugfixes in sources.list generation
+    - drop laptop-detect from packages to be installed by default
+    
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 10:59:21 -0600
+
+ltsp (0.43-0+vagrant) experimental; urgency=low
+
+  * rebuild for debian sarge
+  * allow initrd-netboot-tools as alternative to initramfs-tools 
+  * allow ssh as alternative to openssh-client and openssh-server
+  * warn about modifying /etc/exports instead of modifying directly
+  * provide tmpfs+bindmount alternative to unionfs
+  * ltsp-build-client:
+    - commandline options to set variables
+    - variable defaults for debian sarge
+    - file urls for MIRROR
+  * add patch to provide long descriptions (Petter Reinholdtsen)
+  * suggest sdm/sdm-terminal as a lightweight alternative to ldm
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 09:48:08 -0600
+
 ltsp (0.43) breezy; urgency=low
 
   * Start the X server with the -br option
