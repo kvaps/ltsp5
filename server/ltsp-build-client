@@ -105,10 +105,10 @@ chroot $ROOT apt-get update
 DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
 
-chroot $ROOT apt-get -y dist-upgrade
-
 # some packages require proc to be mounted
 chroot $ROOT mount -t proc proc /proc && umounts="$umounts /proc"
+
+chroot $ROOT apt-get -y dist-upgrade
 
 # Install remaining packages
 chroot $ROOT apt-get -y install $EARLY_PACKAGES
