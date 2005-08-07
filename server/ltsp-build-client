@@ -86,6 +86,11 @@ echo mousedev >> $ROOT/etc/modules
 
 for mirror in "$MIRROR" "$EXTRA_MIRROR" ; do
   echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+  case $mirror in
+    file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      mkdir -p $ROOT/$dir
+      mount --bind $dir $ROOT/$dir
+      umounts="$umounts $ROOT/$dir"
+  esac  
 done
 
 chroot $ROOT apt-get update
@@ -124,3 +129,8 @@ clients="$ROOT" ltsp-update-sshkeys
 rm -f $ROOT/etc/hostname
 
 chroot $ROOT apt-get clean
+
+# umount bind mounts
+for dir in $umounts ; do
+  umount $dir
+done
