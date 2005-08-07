@@ -5,9 +5,21 @@ set -e
 LC_ALL=C
 export LC_ALL
 
-ROOT=/opt/ltsp/$(dpkg --print-architecture)
-DIST=breezy
-MIRROR=http://us.archive.ubuntu.com/ubuntu
+# set defaults
+test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
+test -z "$DIST" && DIST=sarge
+case $DIST in
+  breezy) 
+    test -z "$COMPONENTS" && COMPONENTS="main restricted"
+    test -z "$MIRROR" && MIRROR="http://us.archive.ubuntu.com/ubuntu"
+    test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
+    test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
+    ;;
+esac
+test -z "$COMPONENTS" && COMPONENTS="main"
+test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
+test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
 
 # Install base packages
 debootstrap $DIST $ROOT $MIRROR
@@ -19,7 +31,7 @@ chroot $ROOT passwd -l root
 echo mousedev >> $ROOT/etc/modules
 
 cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR $DIST main restricted
+deb $MIRROR $DIST $COMPONENTS
 EOF
 
 chroot $ROOT apt-get update
@@ -29,7 +41,7 @@ DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
 
 # Install remaining packages
-chroot $ROOT apt-get -y install x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe
+chroot $ROOT apt-get -y install $EARLY_PACKAGES
 
 # Setup for kernel install
 cat <<EOF > $ROOT/etc/kernel-img.conf
@@ -49,8 +61,8 @@ elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ]; then
   sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
 fi
 
-# Install the kernel
-chroot $ROOT apt-get -y install linux
+# Install additional packages, such as the the kernel
+chroot $ROOT apt-get -y install $LATE_PACKAGES
 
 LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
