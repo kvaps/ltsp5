@@ -18,6 +18,7 @@ test -x $DAEMON || exit 0
 . /lib/lsb/init-functions
 . /usr/lib/ltsp/ltsp_functions
 . /usr/lib/ltsp/ltsp_config
+test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
 
 load_modules() {
     for module in $(env | awk -F= '$1 ~ /^MODULE_/ { print $2 }'); do
