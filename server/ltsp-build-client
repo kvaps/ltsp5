@@ -5,19 +5,63 @@ set -e
 LC_ALL=C
 export LC_ALL
 
+# TODO: source configuration file
+get_help() {
+cat << EOF
+ --root <rootpath>  default root path: /opt/ltsp/ARCH
+ --dist <dist>  debian distribution: sarge
+ --components "<component1 component2>"  debian components: main
+ --mirror  "<mirror> [<dist> <components>]" mirror url: http://http.us.debian.org/debian
+ --early-packages "<package1 package2>" list of initial packages to install
+ --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
+ --help  display this help
+EOF
+}
+
+# process commandline arguments
+while [ -n "$1" ]; do
+  case $1 in
+    --root) ROOT="$2" 
+      test -n "$1" && shift
+      ;;
+    --dist) DIST="$2" 
+      test -n "$1" && shift
+      ;;
+    --components) COMPONENTS="$2"
+      test -n "$1" && shift
+      ;;
+    --mirror) MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --early-packages) EARLY_PACKAGES="$2" 
+      test -n "$1" && shift
+      ;;
+    --late-packages) LATE_PACKAGES="$2" 
+      test -n "$1" && shift
+      ;;
+    --help) get_help
+      ;;
+    *) echo "ERROR: unknown option: $1"
+      get_help 
+      exit 1
+      ;;
+  esac
+  test -n "$1" && shift
+done
+
 # set defaults
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
 test -z "$DIST" && DIST=sarge
 case $DIST in
   breezy) 
     test -z "$COMPONENTS" && COMPONENTS="main restricted"
-    test -z "$MIRROR" && MIRROR="http://us.archive.ubuntu.com/ubuntu"
+    test -z "$MIRROR" && MIRROR="http://us.archive.ubuntu.com/ubuntu $DIST $COMPONENTS"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
     test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
     ;;
 esac
 test -z "$COMPONENTS" && COMPONENTS="main"
-test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
+test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian $DIST $COMPONENTS"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
 
