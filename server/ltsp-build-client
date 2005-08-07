@@ -23,6 +23,7 @@ deb $MIRROR $DIST main restricted
 EOF
 
 chroot $ROOT apt-get update
+chroot $ROOT apt-get -y dist-upgrade
 
 DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
