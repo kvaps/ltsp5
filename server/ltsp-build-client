@@ -12,6 +12,7 @@ cat << EOF
  --dist <dist>  debian distribution: sarge
  --components "<component1 component2>"  debian components: main
  --mirror  "<mirror> [<dist> <components>]" mirror url: http://http.us.debian.org/debian
+ --extra-mirror "<mirror> <dist> <components>" additional mirror
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --help  display this help
@@ -31,6 +32,9 @@ while [ -n "$1" ]; do
       test -n "$1" && shift
       ;;
     --mirror) MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --extra-mirror) EXTRA_MIRROR="$2"
       test -n "$1" && shift
       ;;
     --early-packages) EARLY_PACKAGES="$2" 
@@ -80,9 +84,9 @@ chroot $ROOT passwd -l root
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
-cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR
-EOF
+for mirror in "$MIRROR" "$EXTRA_MIRROR" ; do
+  echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+done
 
 chroot $ROOT apt-get update
 chroot $ROOT apt-get -y dist-upgrade
