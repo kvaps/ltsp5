@@ -24,7 +24,7 @@ Description: Complete LTSP server environment
  the clients.
  
 Package: ltsp-client
-Depends: lsb-base, nbd-client, openssh-client | ssh, python-gtk2, python-glade2, python, initramfs-tools (>= 0.11) | initrd-netboot-tools
+Depends: lsb-base, nbd-client, openssh-client | ssh, python-gtk2, python-glade2, python, initramfs-tools (>= 0.11) | initrd-netboot-tools, initramfs-tools | udhcpc
 Suggests: kernel-image-netbootable, sdm-terminal
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
