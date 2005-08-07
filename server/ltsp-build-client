@@ -84,6 +84,7 @@ chroot $ROOT passwd -l root
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
+test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR" "$EXTRA_MIRROR" ; do
   echo "deb $mirror" >> $ROOT/etc/apt/sources.list
   case $mirror in
