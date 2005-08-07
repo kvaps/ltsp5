@@ -108,6 +108,7 @@ export DEBIAN_FRONTEND
 # some packages require proc to be mounted
 chroot $ROOT mount -t proc proc /proc && umounts="$umounts /proc"
 
+# get package updates for base system
 chroot $ROOT apt-get -y dist-upgrade
 
 # Install remaining packages
