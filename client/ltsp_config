@@ -5,7 +5,7 @@ fi
 
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
-    nfs_server=$(sed -e 's/^.*nfsroot=\([^:]*\):.*$/\1/' /proc/cmdline)
+    nfs_server=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
     if [ -n "$nfs_server" ]; then
         SERVER="$nfs_server"
     else
