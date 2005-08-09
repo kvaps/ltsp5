@@ -3,6 +3,7 @@ ltsp (0.44) breezy; urgency=low
   * Merge changes from Vagrant Cascadian's branch
     [vagrant@freegeek.org--2005/ltsp--fixes--0]
     - patch-2	Support for tmpfs+bind mount alternative to unionfs
+      - Default to use_bind_mounts=false for now
     - patch-3	Improved descriptions
     - patch-4	Improved descriptions
     - patch-5	allow ssh as alternative to openssh-server and openssh-client
