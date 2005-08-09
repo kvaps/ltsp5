@@ -1,3 +1,10 @@
+ltsp (0.43-0+vagrant.7) experimental; urgency=low
+
+  * ltsp-build-client: bugfix: exit when --help is specified 
+  * ltsp-client: attempt to configure xserver-xorg and xserver-xfree86
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  8 Aug 2005 20:11:11 -0600
+
 ltsp (0.43-0+vagrant.6) experimental; urgency=low
 
   * ltsp-build-client:
