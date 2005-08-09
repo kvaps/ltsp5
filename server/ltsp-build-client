@@ -37,10 +37,16 @@ do_symlinks = yes
 relative_links = yes
 link_in_boot = yes
 do_bootloader = no
-ramdisk=/usr/sbin/mkinitramfs
 EOF
 
-sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ]; then
+  # configuring for initramfs-tools
+  echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
+  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ]; then
+  # configuring for initrd-netboot-tools
+  sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
+fi
 
 # Install the kernel
 chroot $ROOT apt-get -y install linux
