@@ -92,8 +92,8 @@ preseed() {
 configure_x() {
     if [ -z "$xserver_package" ]; then
       # set default xserver
-      if [ -d /usr/share/doc/$xserver_package/ ]; then
-        xserver_package="$xserver_package"
+      if [ -d /usr/share/doc/xserver-org/ ]; then
+        xserver_package="xserver-xorg"
       elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
         xserver_package="xserver-xfree86"
       else
