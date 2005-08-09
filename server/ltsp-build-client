@@ -44,6 +44,7 @@ while [ -n "$1" ]; do
       test -n "$1" && shift
       ;;
     --help) get_help
+      exit 0
       ;;
     *) echo "ERROR: unknown option: $1"
       get_help 
