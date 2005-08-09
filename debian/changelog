@@ -13,6 +13,7 @@ ltsp (0.44) breezy; urgency=low
     - patch-11 use /etc/default/ltsp-client-setup to get defaults for init script
       - Install this using debhelper instead
       - Use /var/run/ltsp rather than /var/state/... for FHS compliance
+    - patch-12	Debian-specific TODO
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  8 Aug 2005 17:48:30 -0700
 
