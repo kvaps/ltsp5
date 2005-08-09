@@ -90,27 +90,43 @@ preseed() {
 }
 
 configure_x() {
+    if [ -z "$xserver_package" ]; then
+      # set default xserver
+      if [ -d /usr/share/doc/$xserver_package/ ]; then
+        xserver_package="$xserver_package"
+      elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
+        xserver_package="xserver-xfree86"
+      else
+        echo "WARNING: no known xserver detected"
+        return
+      fi
+    fi
+    # set default configuration file
+    case $xserver_package in
+      xserver-xfree86) xserver_config="/etc/X11/XF86Config-4" ;;
+      xserver-xorg) xserver_config="/etc/X11/xorg.conf" ;;
+    esac
     if [ -n "$XF86CONFIG_FILE" ]; then
         # User has specified a custom config
-        cp "$XF86CONFIG_FILE" /etc/X11/xorg.conf
+        cp "$XF86CONFIG_FILE" "$xserver_config"
     else
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
-        preseed xserver-xorg xserver-xorg/autodetect_video_card "false"
-        preseed xserver-xorg xserver-xorg/config/device/driver "$XSERVER"
+        preseed $xserver_package $xserver_package/autodetect_video_card "false"
+        preseed $xserver_package $xserver_package/config/device/driver "$XSERVER"
       fi
       if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
-        preseed xserver-xorg xserver-xorg/autodetect_monitor "false"
-        preseed xserver-xorg xserver-xorg/config/monitor/selection-method "Advanced"
-        preseed xserver-xorg xserver-xorg/config/monitor/vert-refresh "$X_VERTREFRESH"
-        preseed xserver-xorg xserver-xorg/config/monitor/horiz-sync "$X_HORZSYNC"
+        preseed $xserver_package $xserver_package/autodetect_monitor "false"
+        preseed $xserver_package $xserver_package/config/monitor/selection-method "Advanced"
+        preseed $xserver_package $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
+        preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
         
-      preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/layout "$XKBLAYOUT"
-      preseed xserver-xorg xserver-xorg/config/inputdevice/keyboard/model "$XKBMODEL"
+      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
 
       # Autoconfigure
-      dpkg-reconfigure -fnoninteractive xserver-xorg
+      dpkg-reconfigure -fnoninteractive $xserver_package
     fi
 }
 
