@@ -1,3 +1,17 @@
+ltsp (0.43-0+vagrant.6) experimental; urgency=low
+
+  * ltsp-build-client:
+    - dist-upgrade after setting debian frontend to noninteractive
+    - unmount /proc in the chroot when installation finishes
+    - add dist and components to extra mirror
+    - improve check for initramfs-tools/initrd-netboot-tools
+  * ltsp-update-sshkeys: Avoid hardcoding i386 (Petter Reinholdtsen)
+  * ltsp-client:
+    - depend on udhcpc if initramfs-tools not installed
+    - ldm: work with devfs/2.4 and udev/2.6 (Petter Reinholdtsen)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  8 Aug 2005 18:40:53 -0600
+
 ltsp (0.43-0+vagrant.5) experimental; urgency=low
 
   * ltsp-build-client:
