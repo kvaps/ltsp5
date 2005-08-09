@@ -1,3 +1,10 @@
+ltsp (0.46) breezy; urgency=low
+
+  * Use echo rather than a here document to write fstab, to work around a
+    unionfs bug where here documents in bash are currently broken
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  9 Aug 2005 12:18:01 -0700
+
 ltsp (0.45) breezy; urgency=low
 
   * New, spiffier ldm glade file from Oliver Grawert

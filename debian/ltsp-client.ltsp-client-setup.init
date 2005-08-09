@@ -73,10 +73,8 @@ EOF
 }
 
 configure_fstab() {
-    cat <<EOF > /etc/fstab
-/dev/root       /       unionfs defaults        0       0
-tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0
-EOF
+  echo "/dev/root       /       unionfs defaults        0       0" > /etc/fstab
+  echo "tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
 }
 
 preseed() {
