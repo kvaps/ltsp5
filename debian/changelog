@@ -14,6 +14,7 @@ ltsp (0.44) breezy; urgency=low
       - Install this using debhelper instead
       - Use /var/run/ltsp rather than /var/state/... for FHS compliance
     - patch-12	Debian-specific TODO
+    - patch-13	Support for sdm
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  8 Aug 2005 17:48:30 -0700
 
