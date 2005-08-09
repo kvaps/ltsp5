@@ -7,6 +7,8 @@ ltsp (0.44) breezy; urgency=low
     - patch-4	Improved descriptions
     - patch-5	allow ssh as alternative to openssh-server and openssh-client
       for sarge compatibility
+    - patch-8	Copyright file updates
+    - patch-9	Explicit python dependency
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  8 Aug 2005 17:48:30 -0700
 
