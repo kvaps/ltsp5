@@ -9,6 +9,10 @@ ltsp (0.44) breezy; urgency=low
       for sarge compatibility
     - patch-8	Copyright file updates
     - patch-9	Explicit python dependency
+    - patch-10	support initrd-netboot-tools as alternative to initramfs-tools
+    - patch-11 use /etc/default/ltsp-client-setup to get defaults for init script
+      - Install this using debhelper instead
+      - Use /var/run/ltsp rather than /var/state/... for FHS compliance
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  8 Aug 2005 17:48:30 -0700
 
