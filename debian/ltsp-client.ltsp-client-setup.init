@@ -113,10 +113,51 @@ configure_x() {
     fi
 }
 
+bind_mounts () {
+  # set defaults
+  test -z "$tmpfs_dir" && tmpfs_dir=/var/state/ltsp
+  test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
+  test -z "$copy_dirs" && copy_dirs=""
+  test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
+  mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
+  # preserve directory structure
+  for d in $rw_dirs ; do
+    if [ -d "$d" ]; then
+      cd $tmpfs_dir
+      tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
+      mount --bind $tmpfs_dir/$d $d
+    else
+      echo "WARNING: $d does not exist"
+    fi
+  done  
+  # copy contents into tmpfs
+  for d in $copy_dirs ; do
+    if [ -d "$d" ]; then
+      cd $tmpfs_dir
+      tar -cpf - $d 2> /dev/null | tar xpf -
+      mount --bind $tmpfs_dir/$d $d
+    else
+      echo "WARNING: $d does not exist"
+    fi
+  done
+  # mount one file on top of another
+  for f in $bindfiles ; do
+    if [ -e "$f" ]; then
+      mkdir -p "$(dirname $tmpfs_dir/$f)"
+      cp $f $tmpfs_dir/$f
+      mount --bind $tmpfs_dir/$f $f
+    else
+      echo "WARNING: $f does not exist"
+    fi
+  done
+}
+
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
-
+        if [ "true" = "$use_bind_mounts" ]; then
+          bind_mounts
+        fi
         load_modules
         configure_console
         configure_swap
