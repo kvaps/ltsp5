@@ -1,3 +1,11 @@
+ltsp (0.44) breezy; urgency=low
+
+  * Merge changes from Vagrant Cascadian's branch
+    [vagrant@freegeek.org--2005/ltsp--fixes--0]
+    - patch-2	support for tmpfs+bind mount alternative to unionfs
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  8 Aug 2005 17:48:30 -0700
+
 ltsp (0.43-0+vagrant.7) experimental; urgency=low
 
   * ltsp-build-client: bugfix: exit when --help is specified 
