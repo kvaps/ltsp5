@@ -1,11 +1,9 @@
-- Resolve ssh logout issue
-  - lookup (or have ssh provide) the PID of the process to kill
 - Sort out SCREEN_xx stuff
   - Respawn
 - Determine what xauth magic is necessary for the X server
+  - Use xinit?
 - Server autoconfiguration
   - dhcp3-server
-    - dhcp3-server-ltsp?
   - nbd-server?
 - installer hooks
   - choose ltsp-server vs. ltsp-server-standalone based on DHCP result?
