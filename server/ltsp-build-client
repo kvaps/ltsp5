@@ -5,9 +5,9 @@ set -e
 LC_ALL=C
 export LC_ALL
 
-ROOT=/opt/ltsp/$(dpkg --print-architecture)
-DIST=breezy
-MIRROR=http://us.archive.ubuntu.com/ubuntu
+test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
+test -z "$DIST" && DIST=breezy
+test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 
 # Install base packages
 debootstrap $DIST $ROOT $MIRROR
