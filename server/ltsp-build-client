@@ -8,6 +8,7 @@ export LC_ALL
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
 test -z "$DIST" && DIST=breezy
 test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
+test -z "$COMPONENTS" && COMPONENTS="main restricted"
 
 # Install base packages
 debootstrap $DIST $ROOT $MIRROR
@@ -19,7 +20,7 @@ chroot $ROOT passwd -l root
 echo mousedev >> $ROOT/etc/modules
 
 cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR $DIST main restricted
+deb $MIRROR $DIST $COMPONENTS
 EOF
 
 chroot $ROOT apt-get update
