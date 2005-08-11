@@ -7,6 +7,18 @@ export LC_ALL
 
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
 test -z "$DIST" && DIST=breezy
+
+# set defaults based on dist
+case $DIST in
+  sarge) 
+    test -z "$COMPONENTS" && COMPONENTS="main"
+    test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
+    test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
+    test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
+    ;;
+esac
+
+# set defaults
 test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
