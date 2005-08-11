@@ -5,6 +5,51 @@ set -e
 LC_ALL=C
 export LC_ALL
 
+# TODO: source configuration file
+get_help() {
+cat << EOF
+ --root <rootpath>  default root path
+ --dist <dist>  debian distribution
+ --components "<component1 component2>"  archive components
+ --mirror  <mirror>  archive mirror url
+ --early-packages "<package1 package2>" list of initial packages to install
+ --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
+ --help  display this help
+EOF
+}
+
+# process commandline arguments
+while [ -n "$1" ]; do
+  case $1 in
+    --root) ROOT="$2"
+      test -n "$1" && shift
+      ;;
+    --dist) DIST="$2"
+      test -n "$1" && shift
+      ;;
+    --components) COMPONENTS="$2"
+      test -n "$1" && shift
+      ;;
+    --mirror) MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --early-packages) EARLY_PACKAGES="$2"
+      test -n "$1" && shift
+      ;;
+    --late-packages) LATE_PACKAGES="$2"
+      test -n "$1" && shift
+      ;;
+    --help) get_help
+      exit 0
+      ;;
+    *) echo "ERROR: unknown option: $1"
+      get_help
+      exit 1
+      ;;
+  esac
+  test -n "$1" && shift
+done
+
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
 test -z "$DIST" && DIST=breezy
 
