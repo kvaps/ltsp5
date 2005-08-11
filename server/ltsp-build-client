@@ -12,6 +12,7 @@ cat << EOF
  --dist <dist>  debian distribution
  --components "<component1 component2>"  archive components
  --mirror  <mirror>  archive mirror url
+ --extra-mirror "<mirror> <dist> <components>" additional mirror
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --help  display this help
@@ -31,6 +32,9 @@ while [ -n "$1" ]; do
       test -n "$1" && shift
       ;;
     --mirror) MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --extra-mirror) EXTRA_MIRROR="$2"
       test -n "$1" && shift
       ;;
     --early-packages) EARLY_PACKAGES="$2"
@@ -78,9 +82,9 @@ chroot $ROOT passwd -l root
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
-cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR $DIST $COMPONENTS
-EOF
+for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" ; do
+  echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+done
 
 chroot $ROOT apt-get update
 
