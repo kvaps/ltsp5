@@ -96,9 +96,11 @@ for mirror in "$MIRROR" "$EXTRA_MIRROR" ; do
   if [ -n "$mirror" ]; then
     echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
-      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      mkdir -p $ROOT/$dir
+      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+        mkdir -p $ROOT/$dir
         mount --bind $dir $ROOT/$dir
         umounts="$umounts $ROOT/$dir"
+        ;;
     esac  
   fi
 done
