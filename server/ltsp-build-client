@@ -76,7 +76,7 @@ if [ -z "$(echo $MIRROR | awk '{print $2}')" ]; then
   echo "$MIRROR"
 fi
 
-if [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
+if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
   echo "NOTE: adding default dist and components to extra mirror:"
   EXTRA_MIRROR="$EXTRA_MIRROR $DIST $COMPONENTS"
   echo "$EXTRA_MIRROR"
@@ -93,12 +93,14 @@ echo mousedev >> $ROOT/etc/modules
 
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR" "$EXTRA_MIRROR" ; do
-  echo "deb $mirror" >> $ROOT/etc/apt/sources.list
-  case $mirror in
-    file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      mkdir -p $ROOT/$dir
-      mount --bind $dir $ROOT/$dir
-      umounts="$umounts $ROOT/$dir"
-  esac  
+  if [ -n "$mirror" ]; then
+    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+    case $mirror in
+      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      mkdir -p $ROOT/$dir
+        mount --bind $dir $ROOT/$dir
+        umounts="$umounts $ROOT/$dir"
+    esac  
+  fi
 done
 
 chroot $ROOT apt-get update
