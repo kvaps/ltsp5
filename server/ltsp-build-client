@@ -73,7 +73,7 @@ test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
 
-if [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
+if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
   echo "NOTE: adding default dist and components to extra mirror:"
   EXTRA_MIRROR="$EXTRA_MIRROR $DIST $COMPONENTS"
   echo "$EXTRA_MIRROR"
@@ -89,12 +89,16 @@ chroot $ROOT passwd -l root
 echo mousedev >> $ROOT/etc/modules
 
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" ; do
-  echo "deb $mirror" >> $ROOT/etc/apt/sources.list
-  case $mirror in
-    file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      mkdir -p $ROOT/$dir
-      mount --bind $dir $ROOT/$dir
-      umounts="$umounts $ROOT/$dir"
-  esac  
+  if [ -n "$mirror" ]; then
+    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+    case $mirror in
+      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+        mkdir -p $ROOT/$dir
+        mount --bind $dir $ROOT/$dir
+        umounts="$umounts $ROOT/$dir"
+        ;;
+    esac  
+  fi
 done
 
 chroot $ROOT apt-get update
