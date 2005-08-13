@@ -1,3 +1,12 @@
+ltsp (0.45-0+vagrant.1) experimental; urgency=low
+
+  * ltsp-client:
+    - default to using tmpfs + bind mounts
+    - bugfix: handle xserver configuration when using tmpfs+bind mounts
+    - use xdebconfigurator if present 
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 13 Aug 2005 15:40:09 -0600
+
 ltsp (0.45-0+vagrant.0) experimental; urgency=low
 
   * new "upstream" version from ubuntu
