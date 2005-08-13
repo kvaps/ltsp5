@@ -1,398 +1,98 @@
-ltsp (0.46) breezy; urgency=low
+ltsp (0.45-0+vagrant.0) experimental; urgency=low
 
-  * Use echo rather than a here document to write fstab, and mount tmpfs
-    on /tmp early, to work around a unionfs bug where here documents in
-    bash are currently broken
+  * new upstream
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  9 Aug 2005 12:18:01 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 13 Aug 2005 11:59:56 -0600
 
-ltsp (0.45) breezy; urgency=low
+ltsp (0.43-0+vagrant.7) experimental; urgency=low
 
-  * New, spiffier ldm glade file from Oliver Grawert
-  * Be smarter about guessing the server IP when it isn't specified
+  * ltsp-build-client: bugfix: exit when --help is specified 
+  * ltsp-client: attempt to configure xserver-xorg and xserver-xfree86
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  9 Aug 2005 10:10:32 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  8 Aug 2005 20:11:11 -0600
 
-ltsp (0.44) breezy; urgency=low
+ltsp (0.43-0+vagrant.6) experimental; urgency=low
 
-  * Merge changes from Vagrant Cascadian's branch
-    [vagrant@freegeek.org--2005/ltsp--fixes--0]
-    - patch-2	Support for tmpfs+bind mount alternative to unionfs
-      - Default to use_bind_mounts=false for now
-    - patch-3	Improved descriptions
-    - patch-4	Improved descriptions
-    - patch-5	allow ssh as alternative to openssh-server and openssh-client
-      for sarge compatibility
-    - patch-8	Copyright file updates
-    - patch-9	Explicit python dependency
-    - patch-10	support initrd-netboot-tools as alternative to initramfs-tools
-    - patch-11 use /etc/default/ltsp-client-setup to get defaults for init script
-      - Install this using debhelper instead
-      - Use /var/run/ltsp rather than /var/state/... for FHS compliance
-    - patch-12	Debian-specific TODO
-    - patch-13	Support for sdm
+  * ltsp-build-client:
+    - dist-upgrade after setting debian frontend to noninteractive
+    - unmount /proc in the chroot when installation finishes
+    - add dist and components to extra mirror
+    - improve check for initramfs-tools/initrd-netboot-tools
+  * ltsp-update-sshkeys: Avoid hardcoding i386 (Petter Reinholdtsen)
+  * ltsp-client:
+    - depend on udhcpc if initramfs-tools not installed
+    - ldm: work with devfs/2.4 and udev/2.6 (Petter Reinholdtsen)
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  8 Aug 2005 17:48:30 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  8 Aug 2005 18:40:53 -0600
 
-ltsp (0.43) breezy; urgency=low
+ltsp (0.43-0+vagrant.5) experimental; urgency=low
 
-  * Start the X server with the -br option
-  * Run apt-get clean after building the chroot
-  * Install /etc/ltsp/dhcpd.conf in ltsp-server-standalone
-  * Kill the sshd child process after x-session-manager exits, to avoid
-    hanging when the user logs out (due to X clients still being connected)
+  * ltsp-build-client:
+    - really exit on unknown options
+    - typo
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  6 Jul 2005 08:51:13 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 16:42:53 -0600
 
-ltsp (0.42) breezy; urgency=low
+ltsp (0.43-0+vagrant.4) experimental; urgency=low
 
-  * Don't use lp_server's install target; just install the lp_server binary
-    (matching existing LBE approach)
-  * Remove confusing, unnecessary -o SendEnv from ssh command line
-  * Set world-readable permissions on /etc/ssh/ssh_known_hosts
-  * Associate ssh keys with all interface addresses
+  * ltsp-build-client: 
+    - add --help option
+    - exit with unknown options
+  * favor atftpd over tftpd-hpa
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 09:19:41 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 16:14:19 -0600
 
-ltsp (0.41) breezy; urgency=low
+ltsp (0.43-0+vagrant.3) experimental; urgency=low
 
-  * Don't create /etc/network/interfaces in ltsp-build-client.  It's
-    overwritten by init.d/ltsp-client-setup, and so this only caused confusion
-  * Import, build and install lp_server as part of ltsp-client
-  * Don't pass an nfsroot= option via pxelinux; we'll use DHCP to pass this
-    information
+  * mount /proc in the chroot before installing additional packages
+  * ltsp-update-kernels, ltsp-update-sshkeys:
+    - grab LTSPROOT info from environment variables, when possible.
+  * ltsp-build-client:
+    - pass ltsp-update-kernels and ltsp-update-sshkeys variables
+    - really install udhcpc, devfsd and udev by default
+    - do "apt-get dist-upgrade" after updating the package lists
+    - create empty /etc/hostname and /etc/hosts files
+  * more bindfiles in ltsp-client-setup: syslog.conf, fstab, nbd-client
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 08:19:50 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 14:49:44 -0600
 
-ltsp (0.40) breezy; urgency=low
+ltsp (0.43-0+vagrant.2) experimental; urgency=low
 
-  * Get monitor refresh/sync overrides working by preseeding
-    xserver-xorg/config/monitor/selection-method
+  * additional values in /etc/default/ltsp-client-setup:
+    - examples for: tmpfs_dir, tmpfs_size, rw_dirs, copy_dirs, bindfiles
+    - bindfiles: added /etc/hostname, /etc/hosts, /etc/network/interfaces
+  * ltsp-build-client: install udhcpc, devfsd and udev by default
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  4 Jul 2005 07:59:56 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 12:40:26 -0600
 
-ltsp (0.39) breezy; urgency=low
+ltsp (0.43-0+vagrant.1) experimental; urgency=low
 
-  * Set the debconf 'seen' flag to true when preseeding from ltsp-client-setup
+  * add /etc/default/ltsp-client-setup
+    - use_bind_mounts=true
+  * ltsp-build-client: bugfix configuring mkinitrd.conf
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 30 Jun 2005 12:22:49 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 11:33:40 -0600
 
-ltsp (0.38) breezy; urgency=low
+ltsp (0.43-0+vagrant.0) experimental; urgency=low
 
-  * Implement X_HORZSYNC and X_VERTREFRESH parameters (won't work until
-    xserver-xorg bug #12072 is fixed)
-  * Implement XKBMODEL (won't work until xserver-xorg bug #12073 is fixed)
+  * ltsp-build-client: 
+    - bugfixes in sources.list generation
+    - drop laptop-detect from packages to be installed by default
+    
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 10:59:21 -0600
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 21 Jun 2005 12:33:38 -0700
+ltsp (0.43-0+vagrant) experimental; urgency=low
 
-ltsp (0.37) breezy; urgency=low
+  * rebuild for debian sarge
+  * allow initrd-netboot-tools as alternative to initramfs-tools 
+  * allow ssh as alternative to openssh-client and openssh-server
+  * warn about modifying /etc/exports instead of modifying directly
+  * provide tmpfs+bindmount alternative to unionfs
+  * ltsp-build-client:
+    - commandline options to set variables
+    - variable defaults for debian sarge
+    - file urls for MIRROR
+  * add patch to provide long descriptions (Petter Reinholdtsen)
+  * suggest sdm/sdm-terminal as a lightweight alternative to ldm
 
-  * Update TODO, lts-parameters.txt
-  * Cosmetic improvements to ltsp-build-client
-  * Implement NETWORK_COMPRESSION parameter, which activates compression
-    of network traffic (ssh only (for now?))
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 20 Jun 2005 14:04:59 -0700
-
-ltsp (0.36) breezy; urgency=low
-
-  * Pass the LTSP_CLIENT environment variable via the ssh command, rather
-    than ssh environment variable passing, since the latter requires
-    server-side configuration
-  * Fix ltsp-update-sshkeys to exclude localhost properly
-  * Call ltsp-update-sshkeys from ltsp-build-client
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Sun, 19 Jun 2005 11:46:23 -0700
-
-ltsp (0.35) breezy; urgency=low
-
-  * Add dhcpd.conf example
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 23:43:02 -0700
-
-ltsp (0.34) breezy; urgency=low
-
-  * Simplify dependencies
-    - ltsp-server depends: tftpd-hpa, syslinux.  All ltsp-servers will be
-       the tftp servers; this is quite likely to be the most common
-       deployment, given the integration with the client kernels
-    - ltsp-server-standalone drops the same dependencies, as it
-      depends on ltsp-server
-    - ltsp-server no longer Recommends these packages
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 23:36:23 -0700
-
-ltsp (0.33) breezy; urgency=low
-
-  * In the name of documentation compatibility (and since we're unlikely
-    to have multiple config files), use the traditional path of
-    /etc/lts.conf
-  * Ship an example /etc/lts.conf
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 18:00:04 -0700
-
-ltsp (0.32) breezy; urgency=low
-
-  * Simplify ltsp-build-client and remove bashisms
-  * Stop hardcoding stuff in ltsp-update-kernels
-  * Adjust ltsp-update-kernels for the initrd.img naming scheme
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 17:27:29 -0700
-
-ltsp (0.31) breezy; urgency=low
-
-  * Update for (and depend on) initramfs-tools 0.11
-    - [ltsp-build-client] Allow the initramfs to be generated
-      automatically via the kernel-package hook
-    - [ltsp-build-client] Call ltsp-update-kernels
-    - [ltsp-build-client] No need to instruct the user to specify their
-      NIC driver and regenerate the initramfs, since it will be
-      automagically detected now
-    - [ltsp-update-kernels] Copy initrd.img* in ltsp-update-kernels,
-      since kernel-package uses the same names for initramfs
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 13:35:28 -0700
-
-ltsp (0.30) breezy; urgency=low
-
-  * Make XF86CONFIG_FILE more likely to succeed
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 17 Jun 2005 10:02:08 -0700
-
-ltsp (0.29) breezy; urgency=low
-
-  * Have ldm inherit the configuration from its environment rather than
-    calling getltscfg, to get ldm working without a SERVER variable
-  * If no SCREEN_* parameters are specified, start ldm on tty7
-  * Clients should now be functional out of the box with no lts.conf
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 18:19:01 -0700
-
-ltsp (0.28) breezy; urgency=low
-
-  * Add Ubuntu-specific CONSOLE_KEYMAP parameter to lts.conf, to configure
-    the keymap used on the console
-  * Create /usr/lib/ltsp/ltsp_config which loads configuration from
-    lts.conf and also handles selecting defaults for parameters not
-    present in lts.conf
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 16:00:45 -0700
-
-ltsp (0.27) breezy; urgency=low
-
-  * Don't unlink /etc/X11/xorg.conf before reconfiguring; xserver-xorg
-    seems to hate it now
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:42:15 -0700
-
-ltsp (0.26) breezy; urgency=low
-
-  * If no SERVER parameter is specified, infer it from the nfsroot= boot
-    parameter
-  * Implement more lts.conf parameters:
-    - SEARCH_DOMAIN and DNS_SERVER (only honored if both are specified)
-    - MODULE_*
-  * Add client/lts-parameters.txt to indicate the status of implementing
-    the various lts.conf parameters
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 16 Jun 2005 15:39:41 -0700
-
-ltsp (0.25) breezy; urgency=low
-
-  * Enhance ltsp-server to automagically manage the NFS export of /opt/ltsp
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 14 Jun 2005 14:37:56 -0700
-
-ltsp (0.24) breezy; urgency=low
-
-  * Integrate with the new initramfs-tools hook system, thanks to Jeff
-    Bailey
-    - Install /usr/share/initramfs-tools/modules.d/unionfs-cow
-    - Install /usr/share/initramfs-tools/scripts/init-bottom/unionfs-cow
-    - Depend on initramfs-tools (>= 0.7)
-    - Remove some of the initramfs hackery from ltsp-build-client
-    - Update ltsp-build-client for initramfs-tools 0.7 syntax
-    - Set ramdisk=/usr/sbin/mkinitramfs in ltsp-build-client
-  * Update ltsp-update-kernels to explicitly request a read-only NFS mount
-    (unionfs whiteout doesn't seem to work properly on a rw NFS mount
-    which is actually read-only on the server, which is what we get
-    otherwise)
-    - Depends on initramfs-tools (>= 0.8) in order for the above to have an effect
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 14 Jun 2005 13:45:01 -0700
-
-ltsp (0.23) breezy; urgency=low
-
-  * Uncomment ltsp-client in the list of packages to install in the client
-    root, since it's now in the archive
-  * Have ltsp-build-client automate more of the ad-hoc stuff that's
-    necessary to set up the client root right now (should go away later)
-  * Handle null XSERVER correctly in ltsp-client-setup
-  * Suppress xserver-xorg.config warning by deleting xorg.conf before
-    reconfiguring
-  * ltsp-client Depends: openssh-client, python-gtk2, python-glade2
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 10 Jun 2005 11:15:28 -0700
-
-ltsp (0.22) breezy; urgency=low
-
-  * Install /usr/share/initramfs-tools/scripts/ltsp, a short-term means of
-    building the initramfs
-  * Create /opt/ltsp in ltsp-server
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  9 Jun 2005 16:04:39 -0700
-
-ltsp (0.21) breezy; urgency=low
-
-  * ltsp-server Depends: debootstrap, Recommends: openssh-server
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  9 Jun 2005 16:03:19 -0700
-
-ltsp (0.20) breezy; urgency=low
-
-  * Install ltsp-update-kernels
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  9 Jun 2005 15:35:38 -0700
-
-ltsp (0.19) breezy; urgency=low
-
-  * Pass an LTSP_CLIENT environment variable to the server when using ldm,
-    so that programs running in the session can behave differently on LTSP
-    logins
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 17:59:28 -0700
-
-ltsp (0.18) breezy; urgency=low
-
-  * Update screen.d/ldm and ldm to behave like a normal screen.d client,
-    able to run on the current VT
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 17:09:41 -0700
-
-ltsp (0.17) breezy; urgency=low
-
-  * Lock the root account in the client root
-  * Redirect stdin, stdout and stderr in ldm
-  * Add mousedev to /etc/modules in the client root
-  * Fix console number calculation in screen_session
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 13:52:14 -0700
-
-ltsp (0.16) breezy; urgency=low
-
-  * Add ltsp-update-sshkeys script to ltsp-server, for copying the
-    server's host keys into the client root
-  * Move screen.d to /usr/lib/ltsp
-    - No migration is done; regenerate any existing client roots to remove
-      the cruft
-  * Add new screen.d/ldm script, so SCREEN_xx = ldm now works
-    - Move X configuration into init.d/ltsp-client-setup, so that it only
-      happens once
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  8 Jun 2005 13:29:03 -0700
-
-ltsp (0.15) breezy; urgency=low
-
-  * Fix the arguments to the os.kill call in ldm
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  7 Jun 2005 22:24:42 -0700
-
-ltsp (0.14) breezy; urgency=low
-
-  * Add localhost to /etc/hosts
-  * Create /etc/network/interfaces and /etc/fstab
-  * Implement a simple display manager for the client (ldm) and a simple
-    login dialog for use with non-XDMCP configurations
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  7 Jun 2005 22:19:37 -0700
-
-ltsp (0.13) breezy; urgency=low
-
-  * Respect a custom X configuration in lts.conf (XF86CONFIG_FILE)
-  * Format init script output properly
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 15:28:38 -0700
-
-ltsp (0.12) breezy; urgency=low
-
-  * Continue gracefully if no swap server is specified
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:47:48 -0700
-
-ltsp (0.11) breezy; urgency=low
-
-  * Don't enable swap in ltsp-client-setup; just write out a config file
-    for nbd-client and let the nbd-client init script do it later
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:43:18 -0700
-
-ltsp (0.10) breezy; urgency=low
-
-  * Background screen_session
-  * Fix startx to run on the appropriate terminal
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:35:29 -0700
-
-ltsp (0.9) breezy; urgency=low
-
-  * Split init script in two:
-    - ltsp-client-setup runs in runlevel S and performs configuration
-    - ltsp-client runs late in runlevel 2 and actually starts up the client
-  * No migration is done; if you're crazy enough to be trying this,
-    rebuild your client root)
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 13:04:29 -0700
-
-ltsp (0.8) breezy; urgency=low
-
-  * Use SERVER, not DEFAULT_SERVER, in ltsp-client.init
-  * Default SYSLOG_HOST to the value of SERVER
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 12:01:25 -0700
-
-ltsp (0.7) breezy; urgency=low
-
-  * Preseed XSERVER and XKBLAYOUT from lts.conf (doesn't work yet, needs
-    xserver-xorg changes)
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:38:56 -0700
-
-ltsp (0.6) breezy; urgency=low
-
-  * Fix hardcoded path in ltsp_functions
-  * Fix bashisms in ltsp_functions
-  * Change lts.conf path to /etc/ltsp/lts.conf in getltscfg
-  * Get startx script working
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:26:11 -0700
-
-ltsp (0.5) breezy; urgency=low
-
-  * Fix path to ltsp_functions in screen_session
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:13:14 -0700
-
-ltsp (0.4) breezy; urgency=low
-
-  * Move X configuration into screen.d/startx script
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  3 Jun 2005 11:10:51 -0700
-
-ltsp (0.3) breezy; urgency=low
-
-  * Add /var/lib/tftpboot/ltsp to ltsp-server
-  * Add ltsp-update-kernels script to ltsp-server
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 31 May 2005 18:58:06 -0700
-
-ltsp (0.2) breezy; urgency=low
-
-  * Use dh_installinit --no-start for ltsp-client
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue, 31 May 2005 17:19:47 -0700
-
-ltsp (0.1) breezy; urgency=low
-  
-  * Initial release
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Tue,  3 May 2005 15:26:59 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  5 Aug 2005 09:48:08 -0600
