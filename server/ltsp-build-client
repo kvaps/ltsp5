@@ -143,8 +143,8 @@ fi
 # Install additional packages, such as the kernel
 chroot $ROOT apt-get -y install $LATE_PACKAGES
 
-ltsp-update-kernels
-ltsp-update-sshkeys
+LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
+clients="$ROOT" ltsp-update-sshkeys
 
 rm -f $ROOT/etc/hostname
 
