@@ -1,3 +1,11 @@
 support for sdm as a lightweight alternative to "ldm"
 
 separate packages for lp_server and ldm (others?)
+
+FHS compliant directory for tmpfs_dir
+
+tmpfs+bind mounts:
+  reduce boot-time error messages
+  handle /etc/mtab sanely
+
+exclude certain debootstrap packages
