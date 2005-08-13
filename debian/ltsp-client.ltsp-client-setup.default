@@ -1,7 +1,7 @@
 # /etc/default/ltsp-client-setup
 
 # use tmpfs + bind mounts for writeable filesystems
-use_bind_mounts="false"
+use_bind_mounts="true"
 
 # tmpfs directory mounted when using tmpfs/bind
 tmpfs_dir=/var/state/ltsp
