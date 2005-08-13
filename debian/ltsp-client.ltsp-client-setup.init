@@ -125,7 +125,16 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
 
       # Autoconfigure
-      DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical dpkg-reconfigure $xserver_package
+      if [ -n "$(which xdebconfigurator)" ]; then
+        xdebconfigurator
+        for f in xorg.conf XF86Config-4 XF86Config ; do
+          if [ -f $tmpfs_dir/etc/X11/$f ]; then
+            dexconf -o $tmpfs_dir/etc/X11/$f
+          fi
+        done
+      else
+        DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical dpkg-reconfigure $xserver_package
+      fi
     fi
 }
 
