@@ -1,8 +1,17 @@
 ltsp (0.45-0+vagrant.0) experimental; urgency=low
 
-  * new upstream
+  * new "upstream" version from ubuntu
+  * ltsp-client:
+    - bugfix: configure xserver-xorg or xserver-xfree86
+    - drop dependency on udhcpc when initramfs is not installed
+  * ltsp-build-client:
+    - set defaults back to breezy
+    - use configuration file with sarge defaults
+    - properly handle empty EXTRA_MIRROR
+    - properly handle file urls
+    - unmount /proc in the chroot
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 13 Aug 2005 11:59:56 -0600
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 13 Aug 2005 13:57:29 -0600
 
 ltsp (0.43-0+vagrant.7) experimental; urgency=low
 
