@@ -18,6 +18,7 @@ cat << EOF
  --extra-mirror "<mirror> <dist> <components>" additional mirror
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
+ --serial-console  enable serial console
  --help  display this help
 EOF
 }
@@ -48,6 +49,8 @@ while [ -n "$1" ]; do
       ;;
     --help) get_help
       exit 0
+      ;;
+    --serial-console) use_serial_console="true"
       ;;
     *) echo "ERROR: unknown option: $1"
       get_help
@@ -152,6 +155,12 @@ touch $ROOT/etc/hostname
 touch $ROOT/etc/hosts
 
 chroot $ROOT apt-get clean
+
+# enable serial console
+if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]; then
+  echo "Enabling serial console..."
+  echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
+fi
 
 # umount bind mounts
 for dir in $umounts ; do
