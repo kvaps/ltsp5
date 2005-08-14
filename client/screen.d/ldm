@@ -6,7 +6,14 @@
 PATH=$PATH:/usr/bin/X11
 
 tty=$(tty)
-ttynum=${tty#/dev/tty}
+case "$tty" in
+  /dev/tty*) # with udev (2.6 kernel)
+      ttynum=${tty#/dev/tty}
+      ;;
+  /dev/vc/*) # with devfs (2.4 kernel)
+      ttynum=${tty#/dev/vc/}
+      ;;
+esac
 displaynum=$(($ttynum - 1))
 
 exec ldm vt$ttynum :$displaynum

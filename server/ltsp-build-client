@@ -5,12 +5,95 @@ set -e
 LC_ALL=C
 export LC_ALL
 
+if [ -f /etc/ltsp/ltsp-build-client.conf ]; then
+  . /etc/ltsp/ltsp-build-client.conf
+fi
+
+get_help() {
+cat << EOF
+ --root <rootpath>  default root path
+ --dist <dist>  debian distribution
+ --components "<component1 component2>"  archive components
+ --mirror  <mirror>  archive mirror url
+ --extra-mirror "<mirror> <dist> <components>" additional mirror
+ --security-mirror "<mirror> <dist> <components>" security mirror
+ --early-packages "<package1 package2>" list of initial packages to install
+ --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
+ --serial-console  enable serial console
+ --help  display this help
+EOF
+}
+
+# process commandline arguments
+while [ -n "$1" ]; do
+  case $1 in
+    --root) ROOT="$2"
+      test -n "$1" && shift
+      ;;
+    --dist) DIST="$2"
+      test -n "$1" && shift
+      ;;
+    --components) COMPONENTS="$2"
+      test -n "$1" && shift
+      ;;
+    --mirror) MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --extra-mirror) EXTRA_MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --security-mirror) SECURITY_MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --early-packages) EARLY_PACKAGES="$2"
+      test -n "$1" && shift
+      ;;
+    --late-packages) LATE_PACKAGES="$2"
+      test -n "$1" && shift
+      ;;
+    --help) get_help
+      exit 0
+      ;;
+    --serial-console) use_serial_console="true"
+      ;;
+    *) echo "ERROR: unknown option: $1"
+      get_help
+      exit 1
+      ;;
+  esac
+  test -n "$1" && shift
+done
+
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
 test -z "$DIST" && DIST=breezy
+
+# set defaults based on dist
+case $DIST in
+  sarge) 
+    test -z "$COMPONENTS" && COMPONENTS="main"
+    test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
+    test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
+    test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
+    ;;
+esac
+
+# set defaults
 test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
+
+if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
+  echo "NOTE: adding default dist and components to extra mirror:"
+  EXTRA_MIRROR="$EXTRA_MIRROR $DIST $COMPONENTS"
+  echo "$EXTRA_MIRROR"
+fi
+
+if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
+  echo "NOTE: adding default dist and components to security mirror:"
+  SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
+  echo "$SECURITY_MIRROR"
+fi
 
 # Install base packages
 debootstrap $DIST $ROOT $MIRROR
@@ -21,14 +104,29 @@ chroot $ROOT passwd -l root
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
-cat <<EOF > $ROOT/etc/apt/sources.list
-deb $MIRROR $DIST $COMPONENTS
-EOF
+for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
+  if [ -n "$mirror" ]; then
+    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+    case $mirror in
+      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+        mkdir -p $ROOT/$dir
+        mount --bind $dir $ROOT/$dir
+        umounts="$umounts $ROOT/$dir"
+        ;;
+    esac  
+  fi
+done
 
 chroot $ROOT apt-get update
 
 DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
+
+# some packages require proc to be mounted
+chroot $ROOT mount -t proc proc /proc && umounts="$umounts $ROOT/proc"
+
+# get package updates for base system
+chroot $ROOT apt-get -y dist-upgrade
 
 # Install remaining packages
 chroot $ROOT apt-get -y install $EARLY_PACKAGES
@@ -64,3 +162,14 @@ ltsp-update-sshkeys
 rm -f $ROOT/etc/hostname
 
 chroot $ROOT apt-get clean
+
+# enable serial console
+if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]; then
+  echo "Enabling serial console..."
+  echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
+fi
+
+# umount bind mounts
+for dir in $umounts ; do
+  umount $dir
+done
