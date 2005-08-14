@@ -123,6 +123,9 @@ configure_x() {
         
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
+      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
+      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
+      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
 
       # Autoconfigure
       if [ -n "$(which xdebconfigurator)" ]; then
