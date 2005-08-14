@@ -42,6 +42,9 @@ while [ -n "$1" ]; do
     --extra-mirror) EXTRA_MIRROR="$2"
       test -n "$1" && shift
       ;;
+    --exlude) EXCLUDE="$2"
+      test -n "$1" && shift
+      ;;
     --security-mirror) SECURITY_MIRROR="$2"
       test -n "$1" && shift
       ;;
@@ -74,6 +77,7 @@ case $DIST in
     test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
     test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
+    test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
     ;;
 esac
 
@@ -95,8 +99,12 @@ if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}'
   echo "$SECURITY_MIRROR"
 fi
 
+if [ -n "$EXCLUDE" ] ; then
+    DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
+fi
+
 # Install base packages
-debootstrap $DIST $ROOT $MIRROR
+debootstrap $DEBOOTSTRAPOPTS $DIST $ROOT $MIRROR
 
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
