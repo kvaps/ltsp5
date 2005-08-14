@@ -16,6 +16,7 @@ cat << EOF
  --components "<component1 component2>"  archive components
  --mirror  <mirror>  archive mirror url
  --extra-mirror "<mirror> <dist> <components>" additional mirror
+ --security-mirror "<mirror> <dist> <components>" additional mirror
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
@@ -39,6 +40,9 @@ while [ -n "$1" ]; do
       test -n "$1" && shift
       ;;
     --extra-mirror) EXTRA_MIRROR="$2"
+      test -n "$1" && shift
+      ;;
+    --security-mirror) SECURITY_MIRROR="$2"
       test -n "$1" && shift
       ;;
     --early-packages) EARLY_PACKAGES="$2"
@@ -85,6 +89,12 @@ if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; 
   echo "$EXTRA_MIRROR"
 fi
 
+if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
+  echo "NOTE: adding default dist and components to security mirror:"
+  SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
+  echo "$SECURITY_MIRROR"
+fi
+
 # Install base packages
 debootstrap $DIST $ROOT $MIRROR
 
@@ -95,7 +105,7 @@ chroot $ROOT passwd -l root
 echo mousedev >> $ROOT/etc/modules
 
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
-for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" ; do
+for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR" ; do
   if [ -n "$mirror" ]; then
     echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
