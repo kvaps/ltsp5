@@ -16,7 +16,7 @@ cat << EOF
  --components "<component1 component2>"  archive components
  --mirror  <mirror>  archive mirror url
  --extra-mirror "<mirror> <dist> <components>" additional mirror
- --security-mirror "<mirror> <dist> <components>" additional mirror
+ --security-mirror "<mirror> <dist> <components>" security mirror
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --help  display this help
