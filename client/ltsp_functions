@@ -32,5 +32,6 @@ pr_set(){
 
 reg_info(){
     VAR=$1
+    [ -d /tmp/info ] || mkdir /tmp/info
     echo ${!VAR} >/tmp/info/${VAR}
 }
