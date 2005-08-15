@@ -1,3 +1,9 @@
+ltsp (0.48) breezy; urgency=low
+
+  * Further improvements to the gtk ldm greeter from Oliver Grawert
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 10:47:50 -0700
+
 ltsp (0.47) breezy; urgency=low
 
   * Merge patches from Vagrant Cascadian's ltsp--ubuntufixes--0 branch:

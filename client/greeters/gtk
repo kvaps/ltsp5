@@ -3,16 +3,28 @@
 import os
 import gtk
 import gtk.glade
+from gtk import RcStyle
 
 class GTKGreeter:
     def run(self):
         self.ok = False
+
+	# set theme engine 
+	try:
+            gtk.rc_add_default_file ('/usr/share/themes/Clearlooks/gtk-2.0/gtkrc')
+	except:
+            gtk.rc_add_default_file ('/usr/lib/ltsp/greeters/gtkrc')
+
+	# set cursor
+	self.rootwin = gtk.gdk.get_default_root_window()
+	self.rootwin.set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+
         try:
             self.xml = gtk.glade.XML('/usr/lib/ltsp/greeters/greeter.glade')
         except:
             self.xml = gtk.glade.XML('greeter.glade')
         self.xml.signal_autoconnect({ 'on_login_button_clicked' : self.clicked })
-        
+
         gtk.main()
         
         if self.ok == True:
@@ -24,6 +36,8 @@ class GTKGreeter:
     def clicked(self, widget):
         window = self.xml.get_widget("window")
         
+	self.rootwin.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+
         username_widget = self.xml.get_widget("username_entry")
         self.username = username_widget.get_text()
         username_widget.set_text('')
