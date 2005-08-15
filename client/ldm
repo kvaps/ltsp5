@@ -15,6 +15,12 @@ class LDM:
         self.vt = vt
         self.display = display
         self.server = get_config('SERVER')
+        if cmp('Y', get_config('USE_XFS')):
+            self.use_xfs = True
+            xfs_server = get_config('XFS_SERVER')
+            if not xfs_server:
+                xfs_server = self.server
+            self.fontpath = "tcp/%s:7100" % xfs_server
 
     def run(self):
         null = open('/dev/null', 'w')
@@ -25,7 +31,10 @@ class LDM:
         os.dup2(logfile.fileno(), sys.stderr.fileno())
 
         while True:
-            server = subprocess.Popen(['Xorg', '-br', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
+            if self.use_xfs:
+                server = subprocess.Popen(['Xorg', '-fp', self.fontpath, '-br', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
+            else:
+                server = subprocess.Popen(['Xorg', '-br', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
             
             env = os.environ.copy()
             env['DISPLAY'] = self.display
