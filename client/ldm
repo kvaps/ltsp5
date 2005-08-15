@@ -15,6 +15,8 @@ class LDM:
         self.vt = vt
         self.display = display
         self.server = get_config('SERVER')
+        self.use_xfs = False
+
         if get_config('USE_XFS').lower() == 'y':
             self.use_xfs = True
             xfs_server = get_config('XFS_SERVER') or self.server
