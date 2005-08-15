@@ -1,6 +1,7 @@
 ltsp (0.48) breezy; urgency=low
 
   * Further improvements to the gtk ldm greeter from Oliver Grawert
+  * ltsp-client Depends: gtk2-engines-clearlooks for the gtk greeter
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 10:47:50 -0700
 
