@@ -84,7 +84,7 @@ test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client di
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
 
 if [ -d $ROOT ] ; then
-    echo "NOTE: Root directory $ROOT exist.  This might lead to problems."
+    echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
 fi
 
 if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
