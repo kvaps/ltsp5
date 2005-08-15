@@ -17,6 +17,7 @@ cat << EOF
  --mirror  <mirror>  archive mirror url
  --extra-mirror "<mirror> <dist> <components>" additional mirror
  --security-mirror "<mirror> <dist> <components>" security mirror
+ --exclude "package1,package2,package3"  exclude packages from base system
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
@@ -42,7 +43,7 @@ while [ -n "$1" ]; do
     --extra-mirror) EXTRA_MIRROR="$2"
       test -n "$1" && shift
       ;;
-    --exlude) EXCLUDE="$2"
+    --exclude) EXCLUDE="$2"
       test -n "$1" && shift
       ;;
     --security-mirror) SECURITY_MIRROR="$2"
