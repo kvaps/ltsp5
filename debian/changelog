@@ -1,3 +1,57 @@
+ltsp (0.47) breezy; urgency=low
+
+  * Merge patches from Vagrant Cascadian's ltsp--ubuntufixes--0 branch:
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--base-0
+        tag of matt.zimmerman@canonical.com/ltsp--main--0--patch-155
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-1
+        only set default for ROOT, DIST and MIRROR if not already set
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-2
+        turn archive components into COMPONENTS variable
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-3
+        add EARLY_PACKAGES and LATE_PACKAGES variables
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-4
+        merge improved check for initrd-netboot-tools/initramfs-tools from vagrant@freegeek.org--2005/ltsp--fixes--0
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-5
+        merge improved check for initrd-netboot-tools/initramfs-tools from vagrant@freegeek.org--2005/ltsp--fixes--0
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-6
+        merge vagrant@freegeek.org--2005/ltsp--fixes--0--patch-21
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-7
+        avoid hard-coded i386 in client directory
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-8
+        merged from pere@hungry.com--2005/ltsp--fixes--0: support udev/devfs for ldm
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-9
+        merege from vagrant@freegeek.org--2005/ltsp--fixes--0: support both xserver-xorg and xserver-xfree86 for sarge compatibility
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-10
+        merege from vagrant@freegeek.org--2005/ltsp--fixes--0: change defaults if DIST is sarge
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-11
+        merege from vagrant@freegeek.org--2005/ltsp--fixes--0: add commandline options
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-12
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: add variable and commandline to add extra mirror
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-13
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: dist-upgrade before installing additional packages
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-14
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: mount /proc before dist-upgrade
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-15
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: support file:/// urls
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-16
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: add /proc to umounts
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-17
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: add DIST and COMPONENTS to EXTRA_MIRROR if not present
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-18
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: bugfixes: properly handle emtpy EXTRA_MIRROR and file urls
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-19
+        merge from vagrant@freegeek.org--2005/ltsp--fixes--0: source configuration file
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-20
+        merge changes from vagrant@freegeek.org--2005/ltsp--debian--0: add security mirror option
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-21
+        merge changes from vagrant@freegeek.org--2005/ltsp--debian--0: correct help for security mirror
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-22
+        merge changes from vagrant@freegeek.org--2005/ltsp--debian--0: option to enable serial console
+    vagrant@freegeek.org--2005/ltsp--ubuntufixes--0--patch-23
+        remove debian-specific TODO file
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Sun, 14 Aug 2005 10:47:08 -0700
+
 ltsp (0.46) breezy; urgency=low
 
   * Use echo rather than a here document to write fstab, and mount tmpfs
