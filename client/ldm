@@ -34,7 +34,7 @@ class LDM:
             if self.use_xfs:
                 server_opts += ['-fp', self.fontpath]
 
-            server_command = ['Xorg'] + server_opts + [self.vt, self.display]
+            server_command = ['X'] + server_opts + [self.vt, self.display]
             server = subprocess.Popen(server_command, stdout=sys.stdout, stderr=sys.stderr)
             
             env = os.environ.copy()
