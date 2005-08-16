@@ -85,7 +85,16 @@ ltsp_x_config() {
 }
 
 ubuntu_x_config() {
-    XFCFG=/etc/X11/xorg.conf
+    # set default xserver, use same selection method as in
+    # ltsp-client.ltsp-client-setup.init
+    if [ -d /usr/share/doc/xserver-org/ ]; then
+	XFCFG=/etc/X11/xorg.conf
+    elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
+	XFCFG=/etc/X11/XF86Config-4
+    else
+        echo "WARNING: no known xserver detected"
+        return
+    fi
 }
 
 if true; then
@@ -120,7 +129,7 @@ case ${XSERVER} in
              esac
              ;;
 
-    *)       XBINARY="Xorg"
+    *)       XBINARY="X"
              XOPTS=""
              ;;
 esac

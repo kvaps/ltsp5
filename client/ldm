@@ -17,7 +17,7 @@ class LDM:
         self.server = get_config('SERVER')
         self.use_xfs = False
 
-        if get_config('USE_XFS').lower() == 'y':
+        if 'USE_XFS' in os.environ and get_config('USE_XFS').lower() == 'y':
             self.use_xfs = True
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
