@@ -85,16 +85,7 @@ ltsp_x_config() {
 }
 
 ubuntu_x_config() {
-    # set default xserver, use same selection method as in
-    # ltsp-client.ltsp-client-setup.init
-    if [ -d /usr/share/doc/xserver-org/ ]; then
-	XFCFG=/etc/X11/xorg.conf
-    elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
-	XFCFG=/etc/X11/XF86Config-4
-    else
-        echo "WARNING: no known xserver detected"
-        return
-    fi
+    XFCFG=/etc/X11/xorg.conf
 }
 
 if true; then
@@ -129,7 +120,7 @@ case ${XSERVER} in
              esac
              ;;
 
-    *)       XBINARY="X"
+    *)       XBINARY="Xorg"
              XOPTS=""
              ;;
 esac
@@ -148,15 +139,6 @@ fi
 
 if [ "${XF_ARGS}" = "" ]; then
     XF_ARGS="-query ${XDM_SERVER}"
-fi
-
-# Do this here instead of updating the configuration file, until
-# Debian bug #323262 is fixed.
-if [ Y = "${USE_XFS}" ] ; then
-    if [ -z "${XFS_SERVER}" ] ; then
-	XFS_SERVER="${SERVER}"
-    fi
-    XF_ARGS="-fp tcp/${XFS_SERVER}:7100"
 fi
 
 if [ -w /proc/progress ]; then

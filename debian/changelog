@@ -1,25 +1,3 @@
-ltsp (0.49) breezy; urgency=low
-
-  * Merge more patches:
-    - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-1
-      Add support for remaining X keyboard options.
-    - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-2
-      Give warning if root directory already exist. [ltsp-build-client]
-    - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-4
-      Add support for excluding packages, and avoid lots on debian/sarge.
-    - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-6
-      Merge vagrant@freegeek.org--2005/ltsp--debian--0--patch-26, fixing
-      typo in exclude support.
-    - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-7
-      Add support for USE_XFS and XFS_SERVER.
-    - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-9
-      Make sure /tmp/info/ is created before trying to use it on the client.
-  * Small style/cleanup fixes to XFS support
-  * Use X rather than Xorg as the name of the server
-  * Fix typo in ltsp-build-client warning
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
-
 ltsp (0.48) breezy; urgency=low
 
   * Further improvements to the gtk ldm greeter from Oliver Grawert

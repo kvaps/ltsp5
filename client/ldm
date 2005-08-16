@@ -10,20 +10,11 @@ import socket
 def get_config(name):
     return os.environ[name]
 
-def get_config_bool(name):
-    val = os.environ[name]
-    return (val and val.lower() == 'y')
-
 class LDM:
     def __init__(self, vt, display):
         self.vt = vt
         self.display = display
         self.server = get_config('SERVER')
-        self.use_xfs = get_config_bool('USE_XFS')
-
-        if self.use_xfs:
-            xfs_server = get_config('XFS_SERVER') or self.server
-            self.fontpath = "tcp/%s:7100" % xfs_server
 
     def run(self):
         null = open('/dev/null', 'w')
@@ -34,13 +25,7 @@ class LDM:
         os.dup2(logfile.fileno(), sys.stderr.fileno())
 
         while True:
-            server_opts = ['-br', '-ac', '-noreset']
-            
-            if self.use_xfs:
-                server_opts += ['-fp', self.fontpath]
-
-            server_command = ['X'] + server_opts + [self.vt, self.display]
-            server = subprocess.Popen(server_command, stdout=sys.stdout, stderr=sys.stderr)
+            server = subprocess.Popen(['Xorg', '-br', '-ac', '-noreset', self.vt, self.display], stdout=sys.stdout, stderr=sys.stderr)
             
             env = os.environ.copy()
             env['DISPLAY'] = self.display

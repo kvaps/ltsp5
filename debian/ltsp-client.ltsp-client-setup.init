@@ -91,7 +91,7 @@ preseed() {
 configure_x() {
     if [ -z "$xserver_package" ]; then
       # set default xserver
-      if [ -d /usr/share/doc/xserver-xorg/ ]; then
+      if [ -d /usr/share/doc/xserver-org/ ]; then
         xserver_package="xserver-xorg"
       elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
         xserver_package="xserver-xfree86"
@@ -120,22 +120,9 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
-
-      # This require fontserver preseeding to work (Debian bug
-      # #323262).  Using code in screen.d/startx and screen.d/ldm
-      # until it does.
-      #if [ Y = "${USE_XFS}" ] ; then
-      #  if [ -z "${XFS_SERVER}" ] ; then
-      #    XFS_SERVER="${SERVER}"
-      #  fi
-      #  preseed $xserver_package $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
-      #fi
-
+        
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
 
       # Autoconfigure
       dpkg-reconfigure -fnoninteractive $xserver_package
