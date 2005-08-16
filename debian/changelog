@@ -8,6 +8,9 @@ ltsp (0.49-1) UNRELEASED; urgency=low
     if it is installed.
   * Avoid packages cron and logrotate on sarge.  No need to rotate logs.
   * Make screen.d/sdm as executable.
+  * Change ltsp-client depend from 'python' to 'python (>= 2.4) | python2.4',
+    and change '#!/usr/bin/python' to '#!/usr/bin/python2.4' in script to work
+    on debian.
 
  -- Petter Reinholdtsen <pere@debian.org>  Tue, 16 Aug 2005 11:57:41 +0200
 
