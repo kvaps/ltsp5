@@ -7,6 +7,7 @@ ltsp (0.49-1) UNRELEASED; urgency=low
   * Get screen.d/startx working in debian/sarge by using xfree86
     if it is installed.
   * Avoid packages cron and logrotate on sarge.  No need to rotate logs.
+  * Make screen.d/sdm as executable.
 
  -- Petter Reinholdtsen <pere@debian.org>  Tue, 16 Aug 2005 11:57:41 +0200
 
