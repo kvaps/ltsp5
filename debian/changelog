@@ -11,6 +11,10 @@ ltsp (0.49-1) UNRELEASED; urgency=low
   * Change ltsp-client depend from 'python' to 'python (>= 2.4) | python2.4',
     and change '#!/usr/bin/python' to '#!/usr/bin/python2.4' in script to work
     on debian.
+  * Prefer atftpd over tftpd-hpa, as atftpd support debconf preseeding.
+  * Move bind-mount directory from /var/run/ltsp/ to
+    /var/lib/ltsp-client-setup to avoid problems with /var/run/ being
+    emptied.
 
  -- Petter Reinholdtsen <pere@debian.org>  Tue, 16 Aug 2005 11:57:41 +0200
 
