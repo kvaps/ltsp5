@@ -1,8 +1,9 @@
-ltsp (0.49-1) UNRELEASED; urgency=low
+ltsp (0.48debian1) unstable; urgency=low
 
   * Initial upload into debian. (Closes: #163000, #205876, #276689)
-  * Set myself maintainer and set Vagrant Cascadian as an uploader for
-    the Debian version.
+  * Based on arch source repository from ubuntu.
+  * Set myself maintainer and set Vagrant Cascadian and Matt Zimmerman
+    as uploaders for the Debian version.
   * Make sure ldm do not crash when USE_XFS isn't set.
   * Get screen.d/startx working in debian/sarge by using xfree86
     if it is installed.
