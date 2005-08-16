@@ -4,7 +4,7 @@
 use_bind_mounts="false"
 
 # tmpfs directory mounted when using tmpfs/bind
-tmpfs_dir=/var/run/ltsp
+tmpfs_dir=/var/lib/ltsp-client-setup
 
 # size of tmpfs mount
 tmpfs_size=10m
