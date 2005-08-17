@@ -18,9 +18,9 @@ set -e
 
 case "$1" in
     remove)
-        if grep -q '^# Automatically added by ltsp-server' /etc/exports; then
-            sed -i -e '/^# Automatically added by ltsp-server/,+1d' /etc/exports
-        fi
+        #if grep -q '^# Automatically added by ltsp-server' /etc/exports; then
+        #    sed -i -e '/^# Automatically added by ltsp-server/,+1d' /etc/exports
+        #fi
         ;;
     upgrade|failed-upgrade|abort-install|abort-upgrade|disappear|purge)
         ;;

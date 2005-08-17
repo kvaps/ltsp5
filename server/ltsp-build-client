@@ -117,7 +117,8 @@ chroot $ROOT passwd -l root
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
-for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
+test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
+for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR" ; do
   if [ -n "$mirror" ]; then
     echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
@@ -169,10 +170,12 @@ fi
 # Install additional packages, such as the kernel
 chroot $ROOT apt-get -y install $LATE_PACKAGES
 
-ltsp-update-kernels
-ltsp-update-sshkeys
+LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
+clients="$ROOT" ltsp-update-sshkeys
 
 rm -f $ROOT/etc/hostname
+touch $ROOT/etc/hostname
+touch $ROOT/etc/hosts
 
 chroot $ROOT apt-get clean
 

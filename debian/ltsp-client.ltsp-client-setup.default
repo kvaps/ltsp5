@@ -1,7 +1,7 @@
 # /etc/default/ltsp-client-setup
 
 # use tmpfs + bind mounts for writeable filesystems
-use_bind_mounts="false"
+use_bind_mounts="true"
 
 # tmpfs directory mounted when using tmpfs/bind
 tmpfs_dir=/var/lib/ltsp-client-setup
@@ -12,7 +12,7 @@ tmpfs_size=10m
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
 rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool
-/var/tmp /tmp /var/lib/discover"
+/var/tmp /tmp /var/lib/discover /var/cache/debconf"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied

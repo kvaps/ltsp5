@@ -1,0 +1,15 @@
+support for sdm as a lightweight alternative to "ldm"
+
+separate packages for lp_server and ldm (others?)
+
+tmpfs+bind mounts:
+  FHS compliant directory for tmpfs_dir
+  reduce boot-time error messages
+  handle /etc/mtab sanely
+
+exclude certain debootstrap packages
+
+build using cdbs?
+
+ensure python2.4 works for sarge:
+  python2.4-gtk2 and python2.4-glade2 do not exist in sarge.

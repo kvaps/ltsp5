@@ -4,7 +4,7 @@ set -e
 
 TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
-LTSPROOT=/opt/ltsp
+test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
 
 for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initrd.img*; do
     cp -a -v "$file" $TFTPBOOT
