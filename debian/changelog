@@ -1,3 +1,10 @@
+ltsp (0.48debian3) UNRELEASED; urgency=low
+
+  * Add suggests to lessdisks for ltsp-server, to point people in need
+    of a thin client solution to the alternative.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed, 17 Aug 2005 15:15:05 +0200
+
 ltsp (0.48debian2) unstable; urgency=low
 
   * Enable bind-mount by default on the client.
