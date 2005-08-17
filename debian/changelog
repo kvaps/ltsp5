@@ -12,6 +12,7 @@ ltsp (0.48debian2) UNRELEASED; urgency=low
   * Update ltsp-build-client and surrounding script to accept
     configuration.
   * Add debian/TODO.Debian.
+  * Install xdebconfigurator and sdm on the debian clients.
 
  -- Petter Reinholdtsen <pere@debian.org>  Tue, 16 Aug 2005 11:57:41 +0200
 
