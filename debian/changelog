@@ -1,3 +1,20 @@
+ltsp (0.48debian2) UNRELEASED; urgency=low
+
+  * Enable bind-mount by default on the client.
+  * Make sure /var/cache/debconf is bind-mounted.
+  * Make sure /etc/hostname and /etc/hosts are created in the chroot,
+    to allow bind-mounting to work on them.
+  * Use xdebconfigurator to configure X if it is installed.
+  * Do not update /etc/exports when installing and removing
+    ltsp-server, as it is a conffile in debian.
+  * Add server configuration file ltsp-build-client.conf adjusted for
+    Debian.
+  * Update ltsp-build-client and surrounding script to accept
+    configuration.
+  * Add debian/TODO.Debian.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Tue, 16 Aug 2005 11:57:41 +0200
+
 ltsp (0.48debian1) unstable; urgency=low
 
   * Initial upload into debian. (Closes: #163000, #205876, #276689)
