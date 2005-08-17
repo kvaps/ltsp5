@@ -2,9 +2,9 @@ ltsp (0.48debian3) UNRELEASED; urgency=low
 
   * Add suggests to lessdisks for ltsp-server, to point people in need
     of a thin client solution to the alternative.
-  * Make sure greeter/gtk uses /usr/bin/python and not
-    /usr/bin/python2.4, as it work with the former as the latter
-    is missing the required libraries.
+  * Change greeter/gtk to use the woring /usr/bin/python instead of
+    /usr/bin/python2.4, as the latter is missing the required
+    libraries in sarge.
   * Correct ltsp-client depend from 'sdm' to 'sdm-terminal'.
   * Fix typo in screen.d/startx, looking for 'xserver-org' instead of
     the correct 'xserver-xorg'
