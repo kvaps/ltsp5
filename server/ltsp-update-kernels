@@ -69,10 +69,6 @@ else
     echo "Skipping openfirmware images.  Install the mkvmlinuz package if you need them."
 fi
 
-if [ -f /usr/lib/yaboot/yaboot ]; then
-    echo "I'd like to provide yaboot support, but I don't know how yet."
-fi
-
 #for file in $TFTPBOOT/*; do
 #    found=""
 #    for master in $LTSPROOT/*/boot/$(basename "$file"); do
