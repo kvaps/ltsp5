@@ -1,4 +1,4 @@
-ltsp (0.48debian3) UNRELEASED; urgency=low
+ltsp (0.48debian3) unstable; urgency=low
 
   * Add suggests to lessdisks for ltsp-server, to point people in need
     of a thin client solution to the alternative.
@@ -8,8 +8,9 @@ ltsp (0.48debian3) UNRELEASED; urgency=low
   * Correct ltsp-client depend from 'sdm' to 'sdm-terminal'.
   * Fix typo in screen.d/startx, looking for 'xserver-org' instead of
     the correct 'xserver-xorg'
+  * Merged with ubuntu bazaar repository.
 
- -- Petter Reinholdtsen <pere@debian.org>  Wed, 17 Aug 2005 15:15:05 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Thu, 18 Aug 2005 09:48:13 +0200
 
 ltsp (LATEST) breezy; urgency=low
 
