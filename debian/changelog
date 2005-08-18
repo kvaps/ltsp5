@@ -1,3 +1,9 @@
+ltsp (0.48debian4) UNRELEASED; urgency=low
+
+  * Add xdialog to the chroot to get sdm-terminal interactive logins working.
+
+ -- Petter Reinholdtsen <pere@(none)>  Thu, 18 Aug 2005 11:22:25 +0200
+
 ltsp (0.48debian3) unstable; urgency=low
 
   * Add suggests to lessdisks for ltsp-server, to point people in need
