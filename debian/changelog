@@ -1,3 +1,9 @@
+ltsp (0.51) breezy; urgency=low
+
+  * Only require one of syslinux, mknbi or yaboot
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 18 Aug 2005 09:36:50 -0700
+
 ltsp (0.50) breezy; urgency=low
 
   * Enhance ltsp-update-kernels to create etherboot NBI images
