@@ -1,3 +1,10 @@
+ltsp (0.50) breezy; urgency=low
+
+  * Enhance ltsp-update-kernels to create etherboot NBI images
+  * ltsp-server Depends: mknbi
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed, 17 Aug 2005 19:38:04 -0700
+
 ltsp (0.49) breezy; urgency=low
 
   * Fix xserver-xorg test in ltsp-client-setup
