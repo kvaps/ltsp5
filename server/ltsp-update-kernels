@@ -10,32 +10,44 @@ for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initrd.img*; do
     cp -a -v "$file" $TFTPBOOT
 done
 
-cp /usr/lib/syslinux/pxelinux.0 $TFTPBOOT
-if [ ! -d $PXECFG ]; then
-    mkdir $PXECFG
-fi
-cat > $PXECFG/default <<EOF
+if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
+    cp /usr/lib/syslinux/pxelinux.0 $TFTPBOOT
+    if [ ! -d $PXECFG ]; then
+        mkdir $PXECFG
+    fi
+    cat > $PXECFG/default <<EOF
 DEFAULT vmlinuz ro initrd=initrd.img
 EOF
+else
+    echo "Skipping PXE images.  Install the syslinux package if you need them."
+fi
 
-for kernel in $TFTPBOOT/vmlinuz*; do
-    basename=$(basename "$kernel")
+if which mkelf-linux >/dev/null; then
+    for kernel in $TFTPBOOT/vmlinuz*; do
+        basename=$(basename "$kernel")
 
-    if [ "$basename" = "vmlinuz" ]; then
-        initrd=$TFTPBOOT/initrd.img
-        nbi=$TFTPBOOT/nbi.img
-    else
-        version=${basename##vmlinuz-}
-        initrd=$TFTPBOOT/initrd.img-$version
-        nbi=$TFTPBOOT/nbi.img-$version
-    fi
+        if [ "$basename" = "vmlinuz" ]; then
+            initrd=$TFTPBOOT/initrd.img
+            nbi=$TFTPBOOT/nbi.img
+        else
+            version=${basename##vmlinuz-}
+            initrd=$TFTPBOOT/initrd.img-$version
+            nbi=$TFTPBOOT/nbi.img-$version
+        fi
 
-    if [ -f "$initrd" ]; then
-        mkelf-linux -o $nbi $kernel $initrd
-    else
-        mkelf-linux -o $nbi $kernel
-    fi
-done
+        if [ -f "$initrd" ]; then
+            mkelf-linux -o $nbi $kernel $initrd
+        else
+            mkelf-linux -o $nbi $kernel
+        fi
+    done
+else
+    echo "Skipping etherboot images.  Install the mknbi package if you need them."
+fi
+
+if [ -f /usr/lib/yaboot/yaboot ]; then
+    echo "I'd like to provide yaboot support, but I don't know how yet."
+fi
 
 #for file in $TFTPBOOT/*; do
 #    found=""
