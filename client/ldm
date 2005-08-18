@@ -10,15 +10,18 @@ import socket
 def get_config(name):
     return os.environ[name]
 
+def get_config_bool(name):
+    val = os.environ.get(name)
+    return (val and val.lower() == 'y')
+
 class LDM:
     def __init__(self, vt, display):
         self.vt = vt
         self.display = display
         self.server = get_config('SERVER')
-        self.use_xfs = False
+        self.use_xfs = get_config_bool('USE_XFS')
 
-        if get_config('USE_XFS').lower() == 'y':
-            self.use_xfs = True
+        if self.use_xfs:
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
 

@@ -8,7 +8,7 @@ Standards-Version: 3.6.1
 Package: ltsp-server
 Depends: debootstrap, nfs-kernel-server, tftpd-hpa, syslinux
 Recommends: openssh-server | ssh
-Suggests: dhcp3-server, sdm
+Suggests: dhcp3-server, sdm, lessdisks
 Architecture: all
 Description: Basic LTSP server environment
  The scripts needed to generate the client environment on a server.
