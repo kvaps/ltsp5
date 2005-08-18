@@ -18,6 +18,25 @@ cat > $PXECFG/default <<EOF
 DEFAULT vmlinuz ro initrd=initrd.img
 EOF
 
+for kernel in $TFTPBOOT/vmlinuz*; do
+    basename=$(basename "$kernel")
+
+    if [ "$basename" = "vmlinuz" ]; then
+        initrd=$TFTPBOOT/initrd.img
+        nbi=$TFTPBOOT/nbi.img
+    else
+        version=${basename##vmlinuz-}
+        initrd=$TFTPBOOT/initrd.img-$version
+        nbi=$TFTPBOOT/nbi.img-$version
+    fi
+
+    if [ -f "$initrd" ]; then
+        mkelf-linux -o $nbi $kernel $initrd
+    else
+        mkelf-linux -o $nbi $kernel
+    fi
+done
+
 #for file in $TFTPBOOT/*; do
 #    found=""
 #    for master in $LTSPROOT/*/boot/$(basename "$file"); do

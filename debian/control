@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
-Depends: debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | not+i386
+Depends: debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | not+i386, mknbi
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm, lessdisks
 Architecture: all
