@@ -78,7 +78,7 @@ case $DIST in
     test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
     test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
-    test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
+    test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
     ;;
 esac
 
