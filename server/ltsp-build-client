@@ -159,7 +159,7 @@ chroot $ROOT apt-get -y install $LATE_PACKAGES
 ltsp-update-kernels
 ltsp-update-sshkeys
 
-rm -f $ROOT/etc/hostname
+echo "ltsp" > $ROOT/etc/hostname
 
 chroot $ROOT apt-get clean
 
