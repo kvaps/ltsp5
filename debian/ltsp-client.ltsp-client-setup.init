@@ -160,7 +160,7 @@ bind_mounts () {
     fi
   done  
   # copy contents into tmpfs
-  for d in $copy_dirs ; do
+  for d in $copy_dirs $temp_copy_dirs; do
     if [ -d "$d" ]; then
       cd $tmpfs_dir
       tar -cpf - $d 2> /dev/null | tar xpf -
@@ -181,6 +181,13 @@ bind_mounts () {
   done
 }
 
+bind_unmounts() {
+  for dir in $temp_copy_dirs; do
+    umount $dir
+    rm -rf $tmpfs_dir/${dir#/}
+  done
+}
+
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
@@ -195,6 +202,10 @@ case "$1" in
         configure_syslog || true
         configure_fstab || true
 	configure_x || true
+
+	if [ "$use_bind_mounts" = "true" ]; then
+          bind_unmounts
+        fi
 
         log_end_msg 0
 	;;
