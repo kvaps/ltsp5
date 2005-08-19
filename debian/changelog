@@ -12,8 +12,10 @@ ltsp (0.52) breezy; urgency=low
   * Set default hostname to "ltsp"
   * Ensure that /etc/hosts exists, so that we can bind-mount it
   * Add /etc/hotplug/.run to rw_dirs
+  * Replace use_bind_mounts variable with root_write_method, default to
+    bind_mounts (also support "unionfs")
 
- -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 19 Aug 2005 16:51:23 -0700
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 19 Aug 2005 16:58:11 -0700
 
 ltsp (0.51) breezy; urgency=low
 
