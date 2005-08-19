@@ -131,7 +131,7 @@ configure_x() {
 
 bind_mounts () {
   # set defaults
-  test -z "$tmpfs_dir" && tmpfs_dir=/var/state/ltsp
+  test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
   test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
   test -z "$copy_dirs" && copy_dirs=""
   test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
