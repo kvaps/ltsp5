@@ -87,7 +87,7 @@ ltsp_x_config() {
 ubuntu_x_config() {
     # set default xserver, use same selection method as in
     # ltsp-client.ltsp-client-setup.init
-    if [ -d /usr/share/doc/xserver-org/ ]; then
+    if [ -d /usr/share/doc/xserver-xorg/ ]; then
 	XFCFG=/etc/X11/xorg.conf
     elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
 	XFCFG=/etc/X11/XF86Config-4
