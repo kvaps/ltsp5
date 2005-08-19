@@ -28,7 +28,7 @@ load_modules() {
 
 configure_console() {
     if [ -n "$CONSOLE_KEYMAP" ]; then
-        install-keymap "$CONSOLE_KEYMAP"
+        loadkeys "$CONSOLE_KEYMAP"
     fi
 }
 
@@ -187,14 +187,14 @@ case "$1" in
         if [ "true" = "$use_bind_mounts" ]; then
           bind_mounts
         fi
-        load_modules
-        configure_console
-        configure_swap
-        configure_network
-        configure_resolver
-        configure_syslog
-        configure_fstab
-	configure_x
+        load_modules || true
+        configure_console || true
+        configure_swap || true
+        configure_network || true
+        configure_resolver || true
+        configure_syslog || true
+        configure_fstab || true
+	configure_x || true
 
         log_end_msg 0
 	;;

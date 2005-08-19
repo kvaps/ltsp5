@@ -11,12 +11,11 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool
-/var/tmp /tmp /var/lib/discover"
+rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs=""
+copy_dirs="/etc/X11 /var/lib/xfree86 /var/cache/debconf"
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4 /etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
+bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
