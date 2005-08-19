@@ -28,7 +28,7 @@ load_modules() {
 
 configure_console() {
     if [ -n "$CONSOLE_KEYMAP" ]; then
-        install-keymap "$CONSOLE_KEYMAP"
+        loadkeys "$CONSOLE_KEYMAP"
     fi
 }
 
