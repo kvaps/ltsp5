@@ -178,7 +178,7 @@ bind_unmounts() {
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
-        if [ "true" = "$use_bind_mounts" ]; then
+        if [ "$root_write_method" = "bind_mounts" ]; then
           bind_mounts
         fi
         load_modules || true
@@ -190,7 +190,7 @@ case "$1" in
         configure_fstab || true
 	configure_x || true
 
-	if [ "$use_bind_mounts" = "true" ]; then
+	if [ "$root_write_method" = "bind_mounts" ]; then
           bind_unmounts
         fi
 
