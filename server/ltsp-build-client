@@ -160,6 +160,7 @@ ltsp-update-kernels
 ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
+touch $ROOT/etc/hosts
 
 chroot $ROOT apt-get clean
 
