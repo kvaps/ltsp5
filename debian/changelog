@@ -2,18 +2,22 @@ ltsp (0.51debian1) UNRELEASED; urgency=low
 
   * Add xdialog to the chroot to get sdm-terminal interactive logins
     working.
-  * Split off ldm into separate package, as it is useful on its own,
+  * Install openbsd-inetd instead of netkit-inetd to avoid starting
+    inetd when no services are enabled.  Saves some memory on the
+    client.
+  * Split off ldm into a separate package, as it is useful on its own,
     and also can be replaced with sdm-terminal.
   * Add LDM_REMOTECMD option to ldm to customize what to run on the
     remote host instead of x-session-manager.
   * Add support for X_COLOR_DEPTH, X_MOUSE_DEVICE, X_MOUSE_PROTOCOL
     and X_MOUSE_EMULATE3BTN in lts.conf.
-  * Make sure ldm work when USE_XFS is set and XFS_SERVER is empty.
+  * Fix ldm get_config() to handle non-existing environment variables,
+    to make sure ldm work when USE_XFS is set and XFS_SERVER is empty.
   * Create /etc/ssh/sshd_not_to_be_run on the client to avoid starting
     sshd on debian/sarge based clients.
   * Drop suggests to lessdisks for ltsp-server.  It is better to add
     info on lessdisks in the documentation.
-  * Merged with ubuntu bazaar repository.
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
 
  -- Petter Reinholdtsen <pere@debian.org>  Thu, 18 Aug 2005 11:22:25 +0200
 

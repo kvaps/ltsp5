@@ -109,6 +109,10 @@ configure_x() {
         # User has specified a custom config
         cp "$XF86CONFIG_FILE" "$xserver_config"
     else
+      # Autoconfigure
+      if [ -n "$(which xdebconfigurator)" ]; then
+        xdebconfigurator
+      fi
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
         preseed $xserver_package $xserver_package/autodetect_video_card "false"
@@ -143,21 +147,7 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
 
       # Autoconfigure
-      if [ -n "$(which xdebconfigurator)" ]; then
-        xdebconfigurator
-        for f in xorg.conf XF86Config-4 XF86Config ; do
-          cfg="/etc/X11/$f"
-          if [ "true" = "$use_bind_mounts" ]; then
-            cfg="$tmpfs_dir/$cfg"
-          fi
-          if [ -f "$cfg" ]; then
-            dexconf -o "$cfg"
-            # FIXME: make appropriate X symlink
-          fi
-        done
-      else
-        DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical dpkg-reconfigure $xserver_package
-      fi
+      dpkg-reconfigure -fnoninteractive $xserver_package
     fi
 }
 
