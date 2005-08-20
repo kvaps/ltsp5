@@ -17,6 +17,10 @@ ltsp (0.51debian1) UNRELEASED; urgency=low
     sshd on debian/sarge based clients.
   * Drop suggests to lessdisks for ltsp-server.  It is better to add
     info on lessdisks in the documentation.
+  * Added support for netbooting alphas (aboot).
+  * Change X config generation system for bind mount to reduce memory
+    usage.  Call dexconf directly and do not copy /etc/X11/ and
+    /var/lib/xfree86 into the ram disk.
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
 
  -- Petter Reinholdtsen <pere@debian.org>  Thu, 18 Aug 2005 11:22:25 +0200
