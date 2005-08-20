@@ -33,7 +33,7 @@ Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
 
 Package: ldm
-Depends: openssh-client | ssh, python, python-gtk2, python-glade2,gtk2-engines-clearlooks
+Depends: openssh-client | ssh, python, python-gtk2, python-glade2,gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
 Architecture: any
 Description: LTSP display manager
  X desktop manager asking for username and password, and setting up X
