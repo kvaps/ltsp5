@@ -1,4 +1,4 @@
-ltsp (0.51debian1) UNRELEASED; urgency=low
+ltsp (0.52debian1) unstable; urgency=low
 
   * Add xdialog to the chroot to get sdm-terminal interactive logins
     working.
@@ -21,9 +21,15 @@ ltsp (0.51debian1) UNRELEASED; urgency=low
   * Change X config generation system for bind mount to reduce memory
     usage.  Call dexconf directly and do not copy /etc/X11/ and
     /var/lib/xfree86 into the ram disk.
+  * Remove /var/log/ksymoops/ on the client to save ram disk space.
+  * Symlink /etc/mtab on the client to /proc/mounts to save memory.
+  * Do not install ed and nvi on the client.  Enough with one editor,
+    and nano is easier for first-timers.
+  * Include subprocess.py in the ldm package, to avoid dependency on
+    python2.4 (in addition to python (2.3), and thus use less memory.
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
 
- -- Petter Reinholdtsen <pere@debian.org>  Thu, 18 Aug 2005 11:22:25 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Sat, 20 Aug 2005 15:21:25 +0200
 
 ltsp (LATEST) breezy; urgency=low
 
