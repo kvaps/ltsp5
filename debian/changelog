@@ -20,6 +20,19 @@ ltsp (LATEST) breezy; urgency=low
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
 
+ltsp (0.52) breezy; urgency=low
+
+  * Use loadkeys rather than install-keymap, to avoid involving debconf
+  * Don't allow failures within config steps in ltsp-client-setup to cause
+    an overall failure
+  * Make default bind mounts more liberal; didn't work for me with only these
+  * Merge bindmount fixes [vagrantc]
+  * Mark sdm executable [vagrantc]
+  * Implement temp_copy_dirs, to copy directories during setup but free
+    them afterward to save memory
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 19 Aug 2005 16:19:37 -0700
+
 ltsp (0.51) breezy; urgency=low
 
   * Only require one of syslinux, mknbi or yaboot
