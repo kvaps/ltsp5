@@ -1,0 +1,25 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs()
+{
+        echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+. /etc/default/ltsp-client-setup
+
+if [ "$root_write_method" = "unionfs" ]; then
+    force_load unionfs
+    manual_add_modules unionfs # XXX should not be necessary once initramfs-tools is fixed
+    install -D /usr/share/ltsp-client/unionfs_cow ${DESTDIR}/scripts/init-bottom/unionfs_cow
+fi

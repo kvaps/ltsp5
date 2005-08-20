@@ -1,7 +1,9 @@
 # /etc/default/ltsp-client-setup
 
-# use tmpfs + bind mounts for writeable filesystems
-use_bind_mounts="false"
+# bind_mounts or unionfs
+# NOTE: if you change this parameter, you must regenerate the initramfs
+# e.g., dpkg-reconfigure linux-image-<version>
+root_write_method="bind_mounts"
 
 # tmpfs directory mounted when using tmpfs/bind
 tmpfs_dir=/var/lib/ltsp-client-setup
