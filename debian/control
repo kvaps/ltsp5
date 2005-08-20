@@ -8,7 +8,7 @@ Standards-Version: 3.6.1
 Package: ltsp-server
 Depends: debootstrap, nfs-kernel-server, tftpd-hpa, syslinux | mknbi | mkvmlinuz 
 Recommends: openssh-server | ssh
-Suggests: dhcp3-server, sdm, lessdisks
+Suggests: dhcp3-server, sdm
 Architecture: all
 Description: Basic LTSP server environment
  The scripts needed to generate the client environment on a server.
@@ -24,11 +24,17 @@ Description: Complete LTSP server environment
  the clients.
  
 Package: ltsp-client
-Depends: lsb-base, nbd-client, openssh-client | ssh, python, python-gtk2, python-glade2, initramfs-tools (>= 0.11) | initrd-netboot-tools, gtk2-engines-clearlooks
+Depends: lsb-base, nbd-client, ldm | sdm-terminal, initramfs-tools (>= 0.11) | initrd-netboot-tools
 Recommends: ubuntu-thin-client
-Suggests: sdm-terminal
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: any
 Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
+
+Package: ldm
+Depends: openssh-client | ssh, python, python-gtk2, python-glade2,gtk2-engines-clearlooks
+Architecture: any
+Description: LTSP display manager
+ X desktop manager asking for username and password, and setting up X
+ tunneling to a server to run the X clients.

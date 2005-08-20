@@ -121,6 +121,11 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
 
+      preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+      preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
+      preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
+      preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+
       # This require fontserver preseeding to work (Debian bug
       # #323262).  Using code in screen.d/startx and screen.d/ldm
       # until it does.
@@ -145,9 +150,9 @@ configure_x() {
 bind_mounts () {
   # set defaults
   test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
-  test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
+  test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover /var/cache/debconf"
   test -z "$copy_dirs" && copy_dirs=""
-  test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
+  test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4 /etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
   mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
   # preserve directory structure
   for d in $rw_dirs ; do

@@ -1,3 +1,4 @@
 #!/bin/sh
+# Depend on the sdm-terminal package
 
 exec /usr/sbin/sdm
