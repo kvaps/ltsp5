@@ -8,7 +8,7 @@ import signal
 import socket
 
 def get_config(name):
-    return os.environ[name]
+    return os.environ.get(name)
 
 def get_config_bool(name):
     val = os.environ.get(name)
@@ -20,6 +20,7 @@ class LDM:
         self.display = display
         self.server = get_config('SERVER')
         self.use_xfs = get_config_bool('USE_XFS')
+        self.remotecmd = get_config('LDM_REMOTECMD') or 'x-session-manager'
 
         if self.use_xfs:
             xfs_server = get_config('XFS_SERVER') or self.server
@@ -53,7 +54,7 @@ class LDM:
                 username = greeter_output[0][:-1]
                 password = greeter_output[1][:-1]
 
-                self.spawn_session(username, password, 'x-session-manager')
+                self.spawn_session(username, password, self.remotecmd)
             else:
                 print "Didn't get the right output from the greeter"
 

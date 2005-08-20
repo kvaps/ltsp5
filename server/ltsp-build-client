@@ -177,6 +177,10 @@ rm -f $ROOT/etc/hostname
 touch $ROOT/etc/hostname
 touch $ROOT/etc/hosts
 
+# Make sure sshd is not started in debian/sarge, where the 'ssh'
+# package include both client and server binaries.
+touch $ROOT/etc/ssh/sshd_not_to_be_run
+
 chroot $ROOT apt-get clean
 
 # enable serial console

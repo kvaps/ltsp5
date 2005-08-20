@@ -1,4 +1,5 @@
 #!/bin/sh
+# Depend on the ldm package
 
 . /usr/lib/ltsp/ltsp_config
 
