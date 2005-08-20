@@ -147,7 +147,12 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
 
       # Autoconfigure
-      dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
+      if [ "$root_write_method" = "bind_mounts" ]; then
+        # Using dexconf instead of reconfigure save memory ?
+        dexconf -o $xserver_config
+      else
+        dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
+      fi
     fi
 }
 
