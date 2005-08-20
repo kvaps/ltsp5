@@ -17,7 +17,7 @@ rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs="/etc/X11 /var/lib/xfree86 /var/cache/debconf"
+copy_dirs="/etc/X11 /var/lib/xfree86"
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
