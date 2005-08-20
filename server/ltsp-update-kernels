@@ -85,7 +85,7 @@ if which netabootwrap >/dev/null; then
         if [ -f "$initrd" ]; then
             netabootwrap -t $nbi -k $kernel -i $initrd
         else
-            mkvmlinuz -t $nbi -k $kernel
+            netabootwrap -t $nbi -k $kernel
         fi
     done
 else
