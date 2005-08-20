@@ -1,7 +1,9 @@
 # /etc/default/ltsp-client-setup
 
-# use tmpfs + bind mounts for writeable filesystems
-use_bind_mounts="true"
+# bind_mounts or unionfs
+# NOTE: if you change this parameter, you must regenerate the initramfs
+# e.g., dpkg-reconfigure linux-image-<version>
+root_write_method="bind_mounts"
 
 # tmpfs directory mounted when using tmpfs/bind
 tmpfs_dir=/var/lib/ltsp-client-setup
@@ -11,12 +13,15 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool
-/var/tmp /tmp /var/lib/discover /var/cache/debconf"
+rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/hotplug/.run"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs=""
+copy_dirs="/etc/X11 /var/lib/xfree86"
+
+# tmpfs/bind directories that are mounted and copied, but then unmounted after
+# ltsp-client-setup finishes
+temp_copy_dirs="/var/cache/debconf"
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4 /etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
+bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
