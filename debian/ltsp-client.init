@@ -1,9 +1,17 @@
 #! /bin/sh
 #
-# ltsp-client	Script for LTSP client initialization
-#
 # Author:	Matt Zimmerman <mdz@ubuntu.com>
 #
+### BEGIN INIT INFO
+# Provides:          ltsp-client
+# Required-Start:    ltsp-client-setup $network $syslog
+# Required-Stop:     ltsp-client-setup $network $syslog
+# Should-Start:      xdebconfigurator
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
+# Short-Description: Script for LTSP client initialization
+# Description:
+### END INIT INFO
 
 set -e
 
