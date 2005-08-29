@@ -7,12 +7,11 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
-Depends: debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot
+Depends: debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, netkit-inetd, syslinux | mknbi | mkvmlinuz | aboot
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm
 Architecture: all
 Description: Basic LTSP server environment
- The scripts needed to generate the client environment on a server.
  This is the basic environment depending on external a DHCP server to
  point the clients to the LTSP server.
 
@@ -20,7 +19,6 @@ Package: ltsp-server-standalone
 Depends: ltsp-server, ltsp-utils, dhcp3-server
 Architecture: all
 Description: Complete LTSP server environment
- The scripts needed to generate the client environment on a server.
  This is the complete environment including a DHCP server to bootstrap
  the clients.
  

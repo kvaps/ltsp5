@@ -1,9 +1,16 @@
 #! /bin/sh
 #
-# ltsp-client	Script for LTSP client initialization
-#
 # Author:	Matt Zimmerman <mdz@ubuntu.com>
 #
+### BEGIN INIT INFO
+# Provides:          ltsp-client-setup
+# Required-Start:    mountvirtfs $local_fs
+# Required-Stop:     mountvirtfs $local_fs
+# Default-Start:     S 1 2 3 4 5
+# Default-Stop:      0 6
+# Short-Description: Script for LTSP client initialization
+# Description:
+### END INIT INFO
 
 set -e
 
