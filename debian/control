@@ -33,7 +33,7 @@ Description: LTSP client environment
 
 Package: ldm
 Depends: openssh-client | ssh, python, python-gtk2, python-glade2,gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
-Architecture: any
+Architecture: all
 Description: LTSP display manager
  X desktop manager asking for username and password, and setting up X
  tunneling to a server to run the X clients.
