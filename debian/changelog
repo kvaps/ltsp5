@@ -1,3 +1,9 @@
+ltsp (0.54) breezy; urgency=low
+
+  * Use /etc/X11/Xsession rather than x-session-manager
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  7 Sep 2005 11:59:01 -0700
+
 ltsp (0.53) breezy; urgency=low
 
   * Add missing dependency on netkit-inetd to ltsp-server, so that tftpd-hpa

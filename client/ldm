@@ -38,7 +38,7 @@ class LDM:
                 username = greeter_output[0][:-1]
                 password = greeter_output[1][:-1]
 
-                self.spawn_session(username, password, 'x-session-manager')
+                self.spawn_session(username, password, '/etc/X11/Xsession')
             else:
                 print "Didn't get the right output from the greeter"
 
