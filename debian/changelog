@@ -1,3 +1,9 @@
+ltsp (0.56) breezy; urgency=low
+
+  * Bump version to supersede 0.55 (changes were incorporated)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  9 Sep 2005 10:23:20 -0700
+
 ltsp (0.54) breezy; urgency=low
 
   * Use /etc/X11/Xsession rather than x-session-manager
