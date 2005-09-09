@@ -1,6 +1,8 @@
 ltsp (0.54) breezy; urgency=low
 
   * Use /etc/X11/Xsession rather than x-session-manager
+  * Restart nfs-kernel-server and dhcp3-server on installation to effect
+    changes immediately
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  7 Sep 2005 11:59:01 -0700
 
