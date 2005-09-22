@@ -1,12 +1,7 @@
-ltsp (0.57) breezy; urgency=low
-
-  * Don't install mdetect in ltsp-build-client; it's no longer used by X.org
-
- -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 22 Sep 2005 10:29:59 -0700
-
 ltsp (0.56) breezy; urgency=low
 
   * Bump version to supersede 0.55 (changes were incorporated)
+  * Don't install mdetect in ltsp-build-client; it's no longer used by X.org
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  9 Sep 2005 10:23:20 -0700
 
