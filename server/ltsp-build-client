@@ -80,7 +80,7 @@ esac
 # set defaults
 test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
 
 if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
