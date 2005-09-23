@@ -161,6 +161,9 @@ ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
 touch $ROOT/etc/hosts
+if [ -e /etc/console/boottime.kmap.gz ]; then
+  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
+fi
 
 chroot $ROOT apt-get clean
 

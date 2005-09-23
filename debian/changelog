@@ -1,3 +1,9 @@
+ltsp (0.57) breezy; urgency=low
+
+  * Copy the server keymap as the client default
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 23 Sep 2005 10:01:44 -0700
+
 ltsp (0.56) breezy; urgency=low
 
   * Bump version to supersede 0.55 (changes were incorporated)
