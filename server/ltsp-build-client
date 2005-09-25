@@ -73,7 +73,7 @@ test -z "$DIST" && DIST=breezy
 
 # set defaults based on dist
 case $DIST in
-  sarge) 
+  sarge|etch|sid) 
     test -z "$COMPONENTS" && COMPONENTS="main"
     test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
@@ -98,6 +98,12 @@ if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; 
   echo "$EXTRA_MIRROR"
 fi
 
+# No security support for sid
+if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR"; then
+  echo "NOTE: disabling security APT source for sid.  It does not exist."
+  SECURITY_MIRROR=""
+fi
+
 if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
   echo "NOTE: adding default dist and components to security mirror:"
   SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
@@ -106,6 +112,11 @@ fi
 
 if [ -n "$EXCLUDE" ] ; then
     DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
+fi
+
+# If debootstrap support dependency resolving, use it
+if grep -q resolve-deps /usr/sbin/debootstrap ; then
+    DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --resolve-deps"
 fi
 
 # Install base packages

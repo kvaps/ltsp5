@@ -155,7 +155,7 @@ configure_x() {
 
       # Autoconfigure
       if [ "$root_write_method" = "bind_mounts" ]; then
-        # Using dexconf instead of reconfigure save memory ?
+        # Using dexconf instead of reconfigure to save memory ?
         dexconf -o $xserver_config
       else
         dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
