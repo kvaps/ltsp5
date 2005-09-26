@@ -177,14 +177,14 @@ void Do_stty( int fd, char *Stty_command )
 	char buf[512];
 	char *bp, *ep, *arg;
 
-	log(4,"Do_stty: using SGTTYB, fd %d", fd );
+	logmsg(4,"Do_stty: using SGTTYB, fd %d", fd );
 	if( ioctl( fd, TIOCGETP, &mode) < 0
 		|| ioctl( fd, TIOCGETC, &termctrl) < 0
 		|| ioctl( fd, TIOCLGET, &localmode) < 0
 		|| ioctl( fd, TIOCGLTC, &linectrl) < 0 ){
 		logerr_die(0, "cannot get tty parameters");
 	}
-	log(4,"stty: before mode 0x%x, lmode 0x%x, speed 0x%x",
+	logmsg(4,"stty: before mode 0x%x, lmode 0x%x, speed 0x%x",
 			 mode.sg_flags, localmode, mode.sg_ispeed);
 	if( Baud_rate ){
 		for( i = 0; bauds[i].baud && Baud_rate != bauds[i].baud; i++);
@@ -222,7 +222,7 @@ void Do_stty( int fd, char *Stty_command )
 
 		for( i = 0; modes[i].string && strcasecmp( modes[i].string, arg); i++);
 		if( modes[i].string ){
-			log(4,"stty: modes %s, mc 0x%x ms 0x%x lc 0x%x ls 0x%x",
+			logmsg(4,"stty: modes %s, mc 0x%x ms 0x%x lc 0x%x ls 0x%x",
 					 modes[i].string, modes[i].reset, modes[i].set,
 					 modes[i].lreset, modes[i].lset);
 			mode.sg_flags &= ~modes[i].reset;
@@ -251,32 +251,32 @@ void Do_stty( int fd, char *Stty_command )
 			} else {
 				*special[i].cp = bp[0];
 			}
-			log(4,"stty: special %s %s", arg, bp);
+			logmsg(4,"stty: special %s %s", arg, bp);
 			continue;
 		}
 		for( i = 0; bauds[i].string && strcasecmp( bauds[i].string, arg); i++);
 		if( bauds[i].string) {
-			log(4,"stty: speed %s", arg);
+			logmsg(4,"stty: speed %s", arg);
 			mode.sg_ispeed = mode.sg_ospeed = bauds[i].speed;
 			continue;
 		}
 		if( !strcasecmp( "new", arg)) {
-			log(4,"stty: ldisc %s", arg);
+			logmsg(4,"stty: ldisc %s", arg);
 			linedisc = NTTYDISC;
 			if( ioctl( fd, TIOCSETD, &linedisc) < 0)
 				logerr_die(0, "stty: TIOCSETD ioctl failed");
 			continue;
 		}
 		if( !strcasecmp( "old", arg)) {
-			log(4,"stty: ldisc %s", arg);
+			logmsg(4,"stty: ldisc %s", arg);
 			linedisc = 0;
 			if( ioctl( fd, TIOCSETD, &linedisc) < 0)
 				logerr_die(0, "stty: TIOCSETD ioctl failed");
 			continue;
 		}
-		log(2,"stty: unknown mode: %s", arg);
+		logmsg(2,"stty: unknown mode: %s", arg);
 	}
-	log(4,"stty: after mode 0x%x, lmode 0x%x, speed 0x%x",
+	logmsg(4,"stty: after mode 0x%x, lmode 0x%x, speed 0x%x",
 			 mode.sg_flags, localmode, mode.sg_ispeed);
 	if( ioctl( fd, TIOCSETN, &mode) < 0
 		|| ioctl( fd, TIOCSETC, &termctrl) < 0
@@ -524,11 +524,11 @@ void Do_stty( int fd, char *Stty_command )
 	int i;
 	char buf[512], *ep, *arg;
 
-	log(4,"Do_stty: using TERMIO, fd %d", fd );
+	logmsg(4,"Do_stty: using TERMIO, fd %d", fd );
 	if( ioctl( fd, TCGETA, &tio) < 0) {
 		logerr_die(0, "cannot get tty parameters");
 	}
-	log(4,"stty: before imode 0x%x, omode 0x%x, cmode 0x%x, lmode 0x%x",
+	logmsg(4,"stty: before imode 0x%x, omode 0x%x, cmode 0x%x, lmode 0x%x",
 			 tio.c_iflag, tio.c_oflag, tio.c_cflag, tio.c_lflag);
 
 	if( Baud_rate ){
@@ -557,7 +557,7 @@ void Do_stty( int fd, char *Stty_command )
 		for( i = 0; tmodes[i].string && strcasecmp( tmodes[i].string, arg); i++);
 
 		if( tmodes[i].string) {
-			log(4,"stty: modes %s, ic 0x%x is 0x%x oc 0x%x os 0x%x cc 0x%x cs 0x%x lc 0x%x ls 0x%x",
+			logmsg(4,"stty: modes %s, ic 0x%x is 0x%x oc 0x%x os 0x%x cc 0x%x cs 0x%x lc 0x%x ls 0x%x",
 					 tmodes[i].string, tmodes[i].ireset, tmodes[i].iset,
 					 tmodes[i].oreset, tmodes[i].oset, tmodes[i].creset, tmodes[i].cset,
 					 tmodes[i].lreset, tmodes[i].lset);
@@ -574,12 +574,12 @@ void Do_stty( int fd, char *Stty_command )
 		}
 		for( i = 0; bauds[i].string && strcasecmp( bauds[i].string, arg); i++);
 		if( bauds[i].string) {
-			log(4,"stty: speed %s", arg);
+			logmsg(4,"stty: speed %s", arg);
 			tio.c_cflag &= ~CBAUD;
 			tio.c_cflag |= bauds[i].speed;
 			continue;
 		}
-		log(2,"unknown mode: %s", arg);
+		logmsg(2,"unknown mode: %s", arg);
 	}
 
 #if 0
@@ -587,12 +587,12 @@ void Do_stty( int fd, char *Stty_command )
 		/* VMIN & VTIME: suggested by Michael Joosten
 		 * only do this if ICANON is off -- Martin Forssen
 		 */
-		log(4,"setting port to read/write with unbuffered reads");
+		logmsg(4,"setting port to read/write with unbuffered reads");
 		tio.c_cc[VMIN] = 1;
 		tio.c_cc[VTIME] = 0;
 	}
 #endif
-	log(4,"stty: before imode 0x%x, omode 0x%x, cmode 0x%x, lmode 0x%x",
+	logmsg(4,"stty: before imode 0x%x, omode 0x%x, cmode 0x%x, lmode 0x%x",
 			 tio.c_iflag, tio.c_oflag, tio.c_cflag, tio.c_lflag);
 	if( ioctl( fd, TCSETA, &tio) < 0) {
 		logerr_die(0, "cannot set tty parameters");
@@ -851,7 +851,7 @@ static struct special {
 
 	{ "stop", &(t_dat.c_cc[VSTOP]) },
 	{ "start", &(t_dat.c_cc[VSTART]) },
-	{ 0 }
+	{ 0, 0 }
 };
 
 void Do_stty( int fd, char *Stty_command )
@@ -860,11 +860,11 @@ void Do_stty( int fd, char *Stty_command )
 	char buf[512];
 	char *bp, *ep, *arg;
 
-	log(4,"Do_stty: using TERMIOS, fd %d", fd );
+	logmsg(4,"Do_stty: using TERMIOS, fd %d", fd );
 	if( tcgetattr( fd, &t_dat) < 0 ){
 		logerr_die(0,"cannot get tty parameters");
 	}
-	log(4,"stty: before iflag 0x%x, oflag 0x%x, cflag 0x%x lflag 0x%x",
+	logmsg(4,"stty: before iflag 0x%x, oflag 0x%x, cflag 0x%x lflag 0x%x",
 			 t_dat.c_iflag, t_dat.c_oflag, t_dat.c_cflag, t_dat.c_lflag);
 	if( Baud_rate ){
 		for( i = 0; bauds[i].baud && Baud_rate != bauds[i].baud; i++);
@@ -872,20 +872,20 @@ void Do_stty( int fd, char *Stty_command )
 			errorcode = JABORT;
 			fatal(  "illegal baud rate %d\n", Baud_rate );
 		}
-		log(4,"stty: before baudrate : cflag 0x%x",t_dat.c_cflag);
+		logmsg(4,"stty: before baudrate : cflag 0x%x",t_dat.c_cflag);
 
 #ifdef HAVE_CFSETISPEED
-		log(4,"Do_stty: using cfsetispeed/cfsetospeed");
+		logmsg(4,"Do_stty: using cfsetispeed/cfsetospeed");
 		/* POSIX baudrate manipulation */
 		cfsetispeed( &t_dat, bauds[i].speed);
 		cfsetospeed( &t_dat, bauds[i].speed);
 #else
-		log(4,"Do_stty: setting tdat.c_cflag");
+		logmsg(4,"Do_stty: setting tdat.c_cflag");
 		t_dat.c_cflag &= ~CBAUD;
 		t_dat.c_cflag |= bauds[i].speed;
 #endif
 
-		log(4,"stty: after baudrate : cflag 0x%x",t_dat.c_cflag);
+		logmsg(4,"stty: after baudrate : cflag 0x%x",t_dat.c_cflag);
 	}
 #if 0
 	/* OBSOLETE */
@@ -916,13 +916,13 @@ void Do_stty( int fd, char *Stty_command )
 
 		if( bauds[i].string ){
 #ifdef HAVE_CFSETISPEED
-			log(4,"Do_stty: using cfsetispeed/cfsetospeed, speed %s, spd %d",
+			logmsg(4,"Do_stty: using cfsetispeed/cfsetospeed, speed %s, spd %d",
 				arg, bauds[i].speed );
 			/* POSIX baudrate manipulation */
 			cfsetispeed( &t_dat, bauds[i].speed);
 			cfsetospeed( &t_dat, bauds[i].speed);
 #else
-			log(4,"Do_stty: setting tdat.c_cflag");
+			logmsg(4,"Do_stty: setting tdat.c_cflag");
 			t_dat.c_cflag &= ~CBAUD;
 			t_dat.c_cflag |= bauds[i].speed;
 #endif
@@ -930,7 +930,7 @@ void Do_stty( int fd, char *Stty_command )
 		}
 		for( i = 0; c_i_dat[i].name && strcasecmp( c_i_dat[i].name, arg); i++);
 		if( c_i_dat[i].name ){
-			log(4,"stty: c_iflag %s, ms 0x%x mc 0x%x",
+			logmsg(4,"stty: c_iflag %s, ms 0x%x mc 0x%x",
 					 c_i_dat[i].name, c_i_dat[i].or_dat, c_i_dat[i].and_dat);
 			t_dat.c_iflag &= ~(c_i_dat[i].and_dat);
 			t_dat.c_iflag |= c_i_dat[i].or_dat;
@@ -938,7 +938,7 @@ void Do_stty( int fd, char *Stty_command )
 		}
 		for( i = 0; c_o_dat[i].name && strcasecmp( c_o_dat[i].name, arg); i++);
 		if( c_o_dat[i].name ){
-			log(4,"stty: c_oflag %s, ms 0x%x mc 0x%x",
+			logmsg(4,"stty: c_oflag %s, ms 0x%x mc 0x%x",
 					 c_o_dat[i].name, c_o_dat[i].or_dat, c_o_dat[i].and_dat);
 			t_dat.c_oflag &= ~(c_o_dat[i].and_dat);
 			t_dat.c_oflag |= c_o_dat[i].or_dat;
@@ -946,7 +946,7 @@ void Do_stty( int fd, char *Stty_command )
 		}
 		for( i = 0; c_c_dat[i].name && strcasecmp( c_c_dat[i].name, arg); i++);
 		if( c_c_dat[i].name ){
-			log(4,"stty: c_cflag %s, ms 0x%x mc 0x%x",
+			logmsg(4,"stty: c_cflag %s, ms 0x%x mc 0x%x",
 					 c_c_dat[i].name, c_c_dat[i].or_dat, c_c_dat[i].and_dat);
 			t_dat.c_cflag &= ~(c_c_dat[i].and_dat);
 			t_dat.c_cflag |= c_c_dat[i].or_dat;
@@ -954,7 +954,7 @@ void Do_stty( int fd, char *Stty_command )
 		}
 		for( i = 0; c_l_dat[i].name && strcasecmp( c_l_dat[i].name, arg); i++);
 		if( c_l_dat[i].name ){
-			log(4,"stty: c_lflag %s, ms 0x%x mc 0x%x",
+			logmsg(4,"stty: c_lflag %s, ms 0x%x mc 0x%x",
 					 c_l_dat[i].name, c_l_dat[i].or_dat, c_l_dat[i].and_dat);
 			t_dat.c_lflag &= ~(c_l_dat[i].and_dat);
 			t_dat.c_lflag |= c_l_dat[i].or_dat;
@@ -980,19 +980,19 @@ void Do_stty( int fd, char *Stty_command )
 			} else {
 				*special[i].cp = bp[0];
 			}
-			log(4,"stty: special %s %s", arg, bp);
+			logmsg(4,"stty: special %s %s", arg, bp);
 			continue;
 		}
-		log(2,"unknown mode: %s", arg);
+		logmsg(2,"unknown mode: %s", arg);
 	}
 
 	if( (t_dat.c_lflag & ICANON) == 0 ){
 		/* only do this if ICANON is off -- Martin Forssen */
-		log(4,"setting port to read/write with unbuffered reads( MIN=1, TIME=0)");
+		logmsg(4,"setting port to read/write with unbuffered reads( MIN=1, TIME=0)");
 		t_dat.c_cc[VMIN] = 1;
 		t_dat.c_cc[VTIME] = 0;
 	}
-	log(4,"stty: after iflag 0x%x, oflag 0x%x, cflag 0x%x lflag 0x%x",
+	logmsg(4,"stty: after iflag 0x%x, oflag 0x%x, cflag 0x%x lflag 0x%x",
 			 t_dat.c_iflag, t_dat.c_oflag, t_dat.c_cflag, t_dat.c_lflag);
 
 	if( tcsetattr( fd, TCSANOW, &t_dat) < 0 ){

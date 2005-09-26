@@ -1,16 +1,20 @@
-ltsp (0.53debian1) unstable; urgency=low
+ltsp (0.56debian1) UNRELEASED; urgency=low
 
-  * Add copyright info for the subprocess.py file lifted
-    from python 2.4.
-  * Make ldm depend on 'xserver-xorg | xserver-xfree86 | xserver'
-    as it tries to start an X server.
-  * Update documentation to list TELNET_HOST as an implemented but not
-    tested option, as the code to use it is present in the telnet script.
-  * Add LSB initscripts headers to document the dependencies
-    needed to start ltsp.
+  * Use --resolve-deps argument for debootstrap if it is supported.
+  * Fix compile warnings in lp_server.
+  * Correct ldm package to be architecture all, not any.
+  * Improve ldm package description. (Closes: #325652)
+  * Debian/sid do not have security APT source.  Disable security-mirror
+    when building a sid based client.
+  * Use the same configuration for sarge, etch and sid when building the
+    client chroot.
+  * Update TODO.Debian to reflect remaining todo items.  ldm is now a
+    separate package, mtab is handled correctly, debootstrap will exclude
+    several unused packages, sdm is working and ldm is working with
+    the python version in sarge.
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
 
- -- Petter Reinholdtsen <pere@debian.org>  Sat, 27 Aug 2005 15:44:28 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Tue, 13 Sep 2005 13:17:06 +0200
 
 ltsp (LATEST) breezy; urgency=low
 
@@ -33,6 +37,34 @@ ltsp (LATEST) breezy; urgency=low
   * Fix typo in ltsp-build-client warning
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
+
+ltsp (0.56) breezy; urgency=low
+
+  * Bump version to supersede 0.55 (changes were incorporated)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  9 Sep 2005 10:23:20 -0700
+
+ltsp (0.54) breezy; urgency=low
+
+  * Use /etc/X11/Xsession rather than x-session-manager
+  * Restart nfs-kernel-server and dhcp3-server on installation to effect
+    changes immediately
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  7 Sep 2005 11:59:01 -0700
+
+ltsp (0.53debian1) unstable; urgency=low
+
+  * Add copyright info for the subprocess.py file lifted
+    from python 2.4.
+  * Make ldm depend on 'xserver-xorg | xserver-xfree86 | xserver'
+    as it tries to start an X server.
+  * Update documentation to list TELNET_HOST as an implemented but not
+    tested option, as the code to use it is present in the telnet script.
+  * Add LSB initscripts headers to document the dependencies
+    needed to start ltsp.
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sat, 27 Aug 2005 15:44:28 +0200
 
 ltsp (0.53) breezy; urgency=low
 
