@@ -150,6 +150,19 @@ export DEBIAN_FRONTEND
 # some packages require proc to be mounted
 chroot $ROOT mount -t proc proc /proc && umounts="$umounts $ROOT/proc"
 
+preseed() {
+    ROOT="$1"
+    package="$2"
+    question="$3"
+    type="$4"
+    value="$5"
+    echo $package $question $type $value | chroot $ROOT debconf-set-selections
+}
+
+# Workaround for bug #328090 (in shadow or adduser, I suspect)
+preseed $ROOT passwd passwd/make-user boolean false
+chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd
+
 # get package updates for base system
 chroot $ROOT apt-get -y dist-upgrade
 

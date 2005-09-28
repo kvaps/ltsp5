@@ -1,4 +1,4 @@
-ltsp (0.56debian1) UNRELEASED; urgency=low
+ltsp (0.56debian1) unstable; urgency=low
 
   * Use --resolve-deps argument for debootstrap if it is supported.
   * Fix compile warnings in lp_server.
@@ -12,9 +12,12 @@ ltsp (0.56debian1) UNRELEASED; urgency=low
     separate package, mtab is handled correctly, debootstrap will exclude
     several unused packages, sdm is working and ldm is working with
     the python version in sarge.
+  * Add workaround for bug #328090, by preseeding passwd in the chroot
+    to not create a local user, and then reconfigure it to generate
+    /etc/shadow.
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
 
- -- Petter Reinholdtsen <pere@debian.org>  Tue, 13 Sep 2005 13:17:06 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Tue, 27 Sep 2005 23:07:51 +0200
 
 ltsp (LATEST) breezy; urgency=low
 
