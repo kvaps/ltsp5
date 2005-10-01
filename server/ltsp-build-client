@@ -99,7 +99,7 @@ if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; 
 fi
 
 # No security support for sid
-if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR"; then
+if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR" ]; then
   echo "NOTE: disabling security APT source for sid.  It does not exist."
   SECURITY_MIRROR=""
 fi
