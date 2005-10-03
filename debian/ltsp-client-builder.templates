@@ -1,0 +1,15 @@
+Template: ltsp-client-builder/run
+Type: boolean
+Default: true
+_Description: Set up an LTSP chroot environment?
+ This will set up an LTSP chroot environment on the machine, to act as
+ a thin client server.
+
+Template: debian-installer/ltsp-client-builder/title
+Type: text
+# Item in the main menu to select this package
+_Description: Build LTSP chroot
+
+Template: ltsp-client-builder/progress
+Type: text
+_Description: Building LTSP chroot...

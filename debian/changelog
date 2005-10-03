@@ -1,3 +1,22 @@
+ltsp (0.56debian3) UNRELEASED; urgency=low
+
+  * Add new package ltsp-client-builder (udeb), to make it possible
+    to install LTSP automatically during installation.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Fri, 30 Sep 2005 19:06:33 +0200
+
+ltsp (0.56debian2) unstable; urgency=low
+
+  * Fix typo in sid security apt source handling.
+  * Change default dist from sarge to etch.  Should make this more
+    dynamic, but this change should get ltsp-server working out of
+    the box. (Closes: #327253)
+  * Merge patch from ubuntun breezy bazaar branch:
+    - Copy the server keymap as the client default
+  * Update address of FSF in debian/copyright.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Fri, 30 Sep 2005 09:32:09 +0200
+
 ltsp (0.56debian1) unstable; urgency=low
 
   * Use --resolve-deps argument for debootstrap if it is supported.
