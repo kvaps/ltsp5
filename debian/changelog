@@ -1,3 +1,10 @@
+ltsp (0.58) breezy; urgency=low
+
+  * Don't allow a broken dhcpd.conf to abort the ltsp-server-standalone
+    postinst
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  6 Oct 2005 13:12:08 -0700
+
 ltsp (0.57) breezy; urgency=low
 
   * Copy the server keymap as the client default
