@@ -24,6 +24,7 @@ Description: Complete LTSP server environment
  
 Package: ltsp-client
 Depends: lsb-base, nbd-client, ldm | sdm-terminal, initramfs-tools (>= 0.11) | initrd-netboot-tools
+Recommends: xdebconfigurator
 Suggests: kernel-image-netbootable
 Conflicts: ltsp-utils
 Replaces: ltsp-utils

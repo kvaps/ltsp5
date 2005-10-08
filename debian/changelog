@@ -2,8 +2,11 @@ ltsp (0.56debian3) UNRELEASED; urgency=low
 
   * Add new package ltsp-client-builder (udeb), to make it possible
     to install LTSP automatically during installation.
+  * Do not install sdm on the client by default.
+  * Let ltsp-client recommend xdebconfigurator to document the
+    fact that it is used if when present.
 
- -- Petter Reinholdtsen <pere@debian.org>  Fri, 30 Sep 2005 19:06:33 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Fri, 07 Oct 2005 18:32:33 +0200
 
 ltsp (0.56debian2) unstable; urgency=low
 
