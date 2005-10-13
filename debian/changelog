@@ -1,10 +1,20 @@
 ltsp (0.56debian3) UNRELEASED; urgency=low
 
-  * Add new package ltsp-client-builder (udeb), to make it possible
-    to install LTSP automatically during installation.
+  * Add new package ltsp-client-builder (udeb), to make it
+    possible to install LTSP automatically during installation.
   * Do not install sdm on the client by default.
   * Let ltsp-client recommend xdebconfigurator to document the
     fact that it is used if when present.
+  * Update /etc/exports when the client environment is built,
+    not when the ltsp-server package is installed.
+  * Make sure the ltsp-build-client script do not hang when
+    installing packages reading from stdin.
+  * Let ltsp-server depend on iproute, to find the 'ip'
+    command used by ltsp-update-sshkeys.
+  * Improve the error message when /var/lib/tftpboot/ltsp is missing.
+    (Closes: #331229)
+  * Add support for preseeding the creation of an LTSP client
+    environment.
 
  -- Petter Reinholdtsen <pere@debian.org>  Fri, 07 Oct 2005 18:32:33 +0200
 

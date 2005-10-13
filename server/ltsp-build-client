@@ -167,7 +167,7 @@ chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd
 chroot $ROOT apt-get -y dist-upgrade
 
 # Install remaining packages
-chroot $ROOT apt-get -y install $EARLY_PACKAGES
+chroot $ROOT apt-get -y install $EARLY_PACKAGES </dev/null
 
 # Setup for kernel install
 cat <<EOF > $ROOT/etc/kernel-img.conf
@@ -192,7 +192,7 @@ else
 fi
 
 # Install additional packages, such as the kernel
-chroot $ROOT apt-get -y install $LATE_PACKAGES
+chroot $ROOT apt-get -y install $LATE_PACKAGES </dev/null
 
 LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
@@ -227,3 +227,12 @@ fi
 for dir in $umounts ; do
   umount $dir
 done
+
+# Export LTSP chroot using NFS to the LTSP client network
+if ! grep -q '^/opt/ltsp' /etc/exports ; then
+            cat <<EOF >> /etc/exports
+# Automatically added by ltsp-server
+/opt/ltsp       *(ro,no_root_squash,async)
+EOF
+            invoke-rc.d nfs-kernel-server reload
+fi
