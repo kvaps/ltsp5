@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
-Depends: debootstrap, iproute, nfs-kernel-server, atftpd | tftpd-hpa, netkit-inetd, syslinux | mknbi | mkvmlinuz | aboot
+Depends: ${misc:Depends}, debootstrap, iproute, nfs-kernel-server, atftpd | tftpd-hpa, netkit-inetd, syslinux | mknbi | mkvmlinuz | aboot
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm
 Architecture: all
@@ -53,7 +53,7 @@ Section: debian-installer
 Priority: standard
 XC-Package-Type: udeb
 Architecture: all
-Depends: ${shlibs:Depends}, base-installer
+Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer
 XB-Installer-Menu-Item: 68
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 

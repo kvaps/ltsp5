@@ -1,22 +1,31 @@
-ltsp (0.56debian3) UNRELEASED; urgency=low
+ltsp (0.56debian4) unstable; urgency=low
+
+  * Add 'ip=dhcp root=/dev/nfs' as default kernel flags in the PXE
+    boot, to get the PXE booting to work out of the box.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sat, 15 Oct 2005 20:14:59 +0200
+
+ltsp (0.56debian3) unstable; urgency=low
 
   * Add new package ltsp-client-builder (udeb), to make it
     possible to install LTSP automatically during installation.
   * Do not install sdm on the client by default.
-  * Let ltsp-client recommend xdebconfigurator to document the
-    fact that it is used if when present.
-  * Update /etc/exports when the client environment is built,
-    not when the ltsp-server package is installed.
-  * Make sure the ltsp-build-client script do not hang when
-    installing packages reading from stdin.
-  * Let ltsp-server depend on iproute, to find the 'ip'
-    command used by ltsp-update-sshkeys.
-  * Improve the error message when /var/lib/tftpboot/ltsp is missing.
-    (Closes: #331229)
-  * Add support for preseeding the creation of an LTSP client
-    environment.
+  * Let ltsp-client recommend xdebconfigurator to
+    document the fact that it is used if when present.
+  * Update /etc/exports when the client environment is
+    built, not when the ltsp-server package is installed.
+  * Make sure the ltsp-build-client script do not hang
+    when installing packages reading from stdin.
+  * Let ltsp-server depend on iproute, to find the
+    'ip' command used by ltsp-update-sshkeys.
+  * Improve the error message when /var/lib/tftpboot/ltsp
+    is missing.  (Closes: #331229)
+  * Add support for preseeding the creation of
+    an LTSP client environment.
+  * Make ltsp-server and ltsp-client-builder depend on
+    ${misc:Depends}, to get a dependency on debconf.
 
- -- Petter Reinholdtsen <pere@debian.org>  Fri, 07 Oct 2005 18:32:33 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Wed, 12 Oct 2005 23:49:05 +0200
 
 ltsp (0.56debian2) unstable; urgency=low
 
