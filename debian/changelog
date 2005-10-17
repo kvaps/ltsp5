@@ -20,9 +20,23 @@ ltsp (LATEST) breezy; urgency=low
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
 
+ltsp (0.58) breezy; urgency=low
+
+  * Don't allow a broken dhcpd.conf to abort the ltsp-server-standalone
+    postinst
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  6 Oct 2005 13:12:08 -0700
+
+ltsp (0.57) breezy; urgency=low
+
+  * Copy the server keymap as the client default
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 23 Sep 2005 10:01:44 -0700
+
 ltsp (0.56) breezy; urgency=low
 
   * Bump version to supersede 0.55 (changes were incorporated)
+  * Don't install mdetect in ltsp-build-client; it's no longer used by X.org
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  9 Sep 2005 10:23:20 -0700
 
