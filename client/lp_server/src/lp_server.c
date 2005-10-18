@@ -72,20 +72,20 @@ int main( int argc, char *argv[] )
 	sock = tcp_open( port );
 	if( sock < 0 ) exit(1);
 
-	if( debug ) log(1,"socket %d", sock );
+	if( debug ) logmsg(1,"socket %d", sock );
 
 	while(1) {
 		/* accept a connection */
 		if( dev >= 0 ) close(dev); dev = -1;
-		if( debug ) log( 1, "waiting" );
+		if( debug ) logmsg( 1, "waiting" );
 		n = sizeof(sin);
 		conn = accept( sock,(void *) &sin, &n );
-		if(debug) log(1,"conn %d", conn );
+		if(debug) logmsg(1,"conn %d", conn );
 		if( conn == -1 && errno != EINTR ){
 			logerr_die(1, "accept failed" );
 		}
 		if( restrict && Check_restriction(restrict, &sin) ){
-			if( debug ) log( 1, "reject %s", inet_ntoa( sin.sin_addr ) );
+			if( debug ) logmsg( 1, "reject %s", inet_ntoa( sin.sin_addr ) );
 			close( conn );
 			continue;
 		}
@@ -98,7 +98,7 @@ int main( int argc, char *argv[] )
 		if( dev == -1 ){
 			logerr_die(1, "open of %s failed", device );
 		}
-		if(debug) log(1,"dev %d", dev );
+		if(debug) logmsg(1,"dev %d", dev );
 		mask = fcntl( dev, F_GETFL, 0 );
 		if( mask == -1 ){
 			logerr_die(1,"fcntl F_GETFL of '%s' failed", device);
@@ -121,7 +121,7 @@ int main( int argc, char *argv[] )
 			
 			FD_SET( conn, &readfds );
 			if( !write_only ) {
-				if(debug) log(1, "read/write mode FD_SET");
+				if(debug) logmsg(1, "read/write mode FD_SET");
 				FD_SET( dev, &readfds );
 			}
 			
@@ -134,7 +134,7 @@ int main( int argc, char *argv[] )
 			maxfd++;
 			
 			n = select( maxfd, &readfds, ( fd_set * ) 0, ( fd_set * ) 0, 0 );
-			if(debug) log(1, "select returned %d", n);
+			if(debug) logmsg(1, "select returned %d", n);
 
 			if( n == -1 ) {
 				logerr_die(1, "an error occured with the select statement");
@@ -144,19 +144,19 @@ int main( int argc, char *argv[] )
 				/* data on socket */
 				if( (n = read( conn, buffer, sizeof( buffer ))) <= 0)
 					break;
-				if(debug) log(1,"read %d bytes from socket", n);
+				if(debug) logmsg(1,"read %d bytes from socket", n);
 				
 				n = write( dev, buffer, n );
-				if(debug) log(1, "wrote %d bytes to device", n);
+				if(debug) logmsg(1, "wrote %d bytes to device", n);
 			}
 			
 			if( !write_only ) {
 				if( FD_ISSET( dev, &readfds ) ) {
 					/* data on device */
 					n = read( dev, buffer, sizeof( buffer ));
-					if(debug) log(1,"read %d bytes from device", n);
+					if(debug) logmsg(1,"read %d bytes from device", n);
 					n = write( conn, buffer, n );
-					if(debug) log(1, "wrote %d bytes to socket", n);
+					if(debug) logmsg(1, "wrote %d bytes to socket", n);
 				}
 			}
 		}			
@@ -187,7 +187,7 @@ int tcp_open( char *portname )
 		fprintf( stderr, "tcp_open: bad port number '%s'\n",portname );
 		return( -1 );
 	}
-	if( debug ) log(1, "port %d", port );
+	if( debug ) logmsg(1, "port %d", port );
 	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = INADDR_ANY;
 	sin.sin_port = htons( port );
@@ -268,7 +268,7 @@ int Check_restriction(char *restrict, struct sockaddr_in *sin)
 	unsigned long n, m, a;
 
 	a = ntohl( sin->sin_addr.s_addr );
-	if( debug ) log(1,"remote 0x%x", a );
+	if( debug ) logmsg(1,"remote 0x%x", a );
 	b = strdup( restrict );
 	for( s = b; s; s = end ){
 		end = strchr( s, ',' );
@@ -286,21 +286,21 @@ int Check_restriction(char *restrict, struct sockaddr_in *sin)
 		} else {
 			n = inet_addr( s );
 		}
-		if( n == -1 ){
-			log(1,"bad addr format '%s'", s );
+		if( n == (unsigned long)-1 ){
+			logmsg(1,"bad addr format '%s'", s );
 			return(1);
 		}
 		m = -1;
 		if( mask ){
 			m = atoi( mask );
 			if( m == 0 || m > 32 ){
-				log(1,"bad mask format '%s'", mask );
+				logmsg(1,"bad mask format '%s'", mask );
 			}
 			m =  ~((1 << (32-m)) - 1);
 		}
-		if( debug ) log( 1, "checking 0x%x, mask 0x%x", n, m );
+		if( debug ) logmsg( 1, "checking 0x%x, mask 0x%x", n, m );
 		n = (n ^ a) & m;
-		if( debug ) log( 1, "result 0x%x", n );
+		if( debug ) logmsg( 1, "result 0x%x", n );
 		if( n == 0 ) return( 0 );
 	}
 	return( 1 );

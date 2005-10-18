@@ -159,7 +159,8 @@ bind_mounts () {
   test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
   test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover /var/cache/debconf"
   test -z "$copy_dirs" && copy_dirs=""
-  test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4 /etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
+  test -z "$temp_copy_dirs" && temp_copy_dirs="/var/cache/debconf"
+  test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
   mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
   # preserve directory structure
   for d in $rw_dirs ; do

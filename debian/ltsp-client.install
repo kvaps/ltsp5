@@ -6,9 +6,6 @@ client/ltsp_functions usr/lib/ltsp
 client/ltsp_config usr/lib/ltsp
 client/screen.d usr/lib/ltsp
 client/getltscfg/getltscfg usr/bin
-client/ldm usr/sbin
-client/ldm-askpass usr/lib/ltsp
-client/greeters usr/lib/ltsp
-client/initramfs/init-bottom/unionfs_cow usr/share/ltsp-client
-client/initramfs/hooks/ltsp_client /usr/share/initramfs-tools/hooks
+client/initramfs/init-bottom/unionfs_cow usr/share/initramfs-tools/scripts/init-bottom
+client/initramfs/modules.d/unionfs_cow usr/share/initramfs-tools/modules.d
 client/lp_server/src/lp_server usr/lib/ltsp
