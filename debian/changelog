@@ -20,6 +20,41 @@ ltsp (LATEST) breezy; urgency=low
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
 
+ltsp (0.58) breezy; urgency=low
+
+  * Don't allow a broken dhcpd.conf to abort the ltsp-server-standalone
+    postinst
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  6 Oct 2005 13:12:08 -0700
+
+ltsp (0.57) breezy; urgency=low
+
+  * Copy the server keymap as the client default
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 23 Sep 2005 10:01:44 -0700
+
+ltsp (0.56) breezy; urgency=low
+
+  * Bump version to supersede 0.55 (changes were incorporated)
+  * Don't install mdetect in ltsp-build-client; it's no longer used by X.org
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  9 Sep 2005 10:23:20 -0700
+
+ltsp (0.54) breezy; urgency=low
+
+  * Use /etc/X11/Xsession rather than x-session-manager
+  * Restart nfs-kernel-server and dhcp3-server on installation to effect
+    changes immediately
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Wed,  7 Sep 2005 11:59:01 -0700
+
+ltsp (0.53) breezy; urgency=low
+
+  * Add missing dependency on netkit-inetd to ltsp-server, so that tftpd-hpa
+    works out of the box
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu, 25 Aug 2005 09:28:02 -0700
+
 ltsp (0.52) breezy; urgency=low
 
   * Use loadkeys rather than install-keymap, to avoid involving debconf
