@@ -50,7 +50,7 @@ Description: LTSP display manager
 
 Package: ltsp-client-builder
 Section: debian-installer
-Priority: standard
+Priority: optional
 XC-Package-Type: udeb
 Architecture: all
 Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer

@@ -2,6 +2,9 @@
 
 set -e
 
+# Make sure the copied files are readable by all
+umask 022
+
 TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
 test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp

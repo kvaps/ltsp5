@@ -1,3 +1,16 @@
+ltsp (0.56debian5) unstable; urgency=low
+
+  * Make sure ltsp-server-standalone installs properly even
+    when dhcp3-server init.d script fail to restart.
+  * Use umask 022 when creating netboot kernel, to make sure the files
+    are accessable over tftp.
+  * Add code to umount mounted directories when the client build fail.
+  * Provide a diverted start-stop-daemon and a policy-rc.d, while
+    building he client, to avoid starting daemons during the build.
+  * Make the udeb an optional, not standard priority package.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Mon, 17 Oct 2005 09:13:20 +0200
+
 ltsp (0.56debian4) unstable; urgency=low
 
   * Add 'ip=dhcp root=/dev/nfs' as default kernel flags in the PXE
