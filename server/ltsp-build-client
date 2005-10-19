@@ -127,7 +127,7 @@ esac
 # set defaults
 test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect mdetect xresprobe"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
 
 if [ -d $ROOT ] ; then
@@ -152,6 +152,18 @@ if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}'
   echo "$SECURITY_MIRROR"
 fi
 
+# Workaround for bug #334506, tell debootstrap to not choke on
+# non-existing package.
+if [ etch = "$DIST" ] ; then
+    EXCLUDE="$EXCLUDE,libsigc++-1.2-5c102"
+fi
+
+# Workaround for bug #334521, make sure apt find gpg, and add the
+# archive key below.
+if [ etch = "$DIST" ] ; then
+    DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=gnupg"
+fi
+
 if [ -n "$EXCLUDE" ] ; then
     DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
 fi
@@ -163,6 +175,11 @@ fi
 
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS $DIST $ROOT $MIRROR
+
+# Add APT key, workaround for bug #334521.  Require gnupg to be installed
+if [ etch = "$DIST" ] ; then
+    chroot $ROOT apt-key add /usr/share/apt/debian-archive.gpg
+fi
 
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
@@ -245,6 +262,11 @@ clients="$ROOT" ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
 touch $ROOT/etc/hosts
+
+# Pass default X keyboard config from server to the client
+debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
+  chroot $target debconf-set-selections
+
 if [ -e /etc/console/boottime.kmap.gz ]; then
   cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
 fi

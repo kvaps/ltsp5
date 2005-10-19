@@ -1,3 +1,27 @@
+ltsp (0.58debian1) UNRELEASED; urgency=low
+
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
+  * Add workarounds for bugs #334506 and #334521 in debootstrap, by
+    excluding libsigc++-1.2-5c102 on etch, and adding the mirror
+    signature key to apt. (Closes: #334511)
+  * Pass X keyboard layout and other settings from server (debconf values)
+    to the client.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Mon, 17 Oct 2005 09:13:20 +0200
+
+ltsp (0.58) breezy; urgency=low
+
+  * Don't allow a broken dhcpd.conf to abort the ltsp-server-standalone
+    postinst
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Thu,  6 Oct 2005 13:12:08 -0700
+
+ltsp (0.57) breezy; urgency=low
+
+  * Copy the server keymap as the client default
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 23 Sep 2005 10:01:44 -0700
+
 ltsp (0.56debian5) unstable; urgency=low
 
   * Make sure ltsp-server-standalone installs properly even
@@ -98,6 +122,7 @@ ltsp (LATEST) breezy; urgency=low
 ltsp (0.56) breezy; urgency=low
 
   * Bump version to supersede 0.55 (changes were incorporated)
+  * Don't install mdetect in ltsp-build-client; it's no longer used by X.org
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Fri,  9 Sep 2005 10:23:20 -0700
 
