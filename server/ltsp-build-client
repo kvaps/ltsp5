@@ -220,9 +220,6 @@ ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
 touch $ROOT/etc/hosts
-if [ -e /etc/console/boottime.kmap.gz ]; then
-  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
-fi
 
 # Pass default X keyboard config from server to the client
 debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
