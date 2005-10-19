@@ -224,6 +224,14 @@ if [ -e /etc/console/boottime.kmap.gz ]; then
   cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
 fi
 
+# Pass default X keyboard config from server to the client
+debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
+  chroot $target debconf-set-selections
+
+if [ -e /etc/console/boottime.kmap.gz ]; then
+  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
+fi
+
 # Avoid the need to update mtab.  Save memory on ramdisk
 rm $ROOT/etc/mtab
 ln -s /proc/mounts $ROOT/etc/mtab
