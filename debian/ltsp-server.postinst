@@ -33,7 +33,7 @@ case "$1" in
 esac
 
 if [ true = "$BUILD_LTSP_CLIENT" ] ; then
-    if [ -d /opt/ltsp/i386 ] ; then
+    if [ -d "/opt/ltsp/$(dpkg --print-architecture)" ] ; then
         msg "warning: LTSP client environment already exist.  Not generating."
     else
         if ltsp-build-client >/var/log/ltsp-server-build.log 2>&1 </dev/null ; then
