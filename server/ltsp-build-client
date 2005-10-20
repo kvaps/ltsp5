@@ -265,7 +265,7 @@ touch $ROOT/etc/hosts
 
 # Pass default X keyboard config from server to the client
 debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
-  chroot $target debconf-set-selections
+  chroot $ROOT debconf-set-selections
 
 if [ -e /etc/console/boottime.kmap.gz ]; then
   cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
