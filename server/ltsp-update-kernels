@@ -44,9 +44,9 @@ if which mkelf-linux >/dev/null; then
         fi
 
         if [ -f "$initrd" ]; then
-            mkelf-linux -o $nbi $kernel $initrd
+            mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
         else
-            mkelf-linux -o $nbi $kernel
+            mkelf-linux --ip=dhcp -o $nbi $kernel
         fi
     done
 else
