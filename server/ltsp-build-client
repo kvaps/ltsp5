@@ -152,18 +152,6 @@ if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}'
   echo "$SECURITY_MIRROR"
 fi
 
-# Workaround for bug #334506, tell debootstrap to not choke on
-# non-existing package.
-if [ etch = "$DIST" ] ; then
-    EXCLUDE="$EXCLUDE,libsigc++-1.2-5c102"
-fi
-
-# Workaround for bug #334521, make sure apt find gpg, and add the
-# archive key below.
-if [ etch = "$DIST" ] ; then
-    DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=gnupg"
-fi
-
 if [ -n "$EXCLUDE" ] ; then
     DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
 fi
@@ -175,11 +163,6 @@ fi
 
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS $DIST $ROOT $MIRROR
-
-# Add APT key, workaround for bug #334521.  Require gnupg to be installed
-if [ etch = "$DIST" ] ; then
-    chroot $ROOT apt-key add /usr/share/apt/debian-archive.gpg
-fi
 
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root

@@ -1,11 +1,12 @@
 ltsp (0.58debian1) UNRELEASED; urgency=low
 
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
-  * Add workarounds for bugs #334506 and #334521 in debootstrap, by
-    excluding libsigc++-1.2-5c102 on etch, and adding the mirror
-    signature key to apt. (Closes: #334511)
   * Pass X keyboard layout and other settings from server (debconf values)
     to the client.
+  * Drop special handling of mkvmlinuz- it is already handled in kernel
+    post-install scripts.  Patch from Vagrant Cascadian.
+  * Fix typos in alpha network booting support.  Patch from
+    Vagrant Cascadian.
 
  -- Petter Reinholdtsen <pere@debian.org>  Mon, 17 Oct 2005 09:13:20 +0200
 
