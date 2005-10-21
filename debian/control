@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.1
 
 Package: ltsp-server
-Depends: ${misc:Depends}, debootstrap, iproute, nfs-kernel-server, atftpd | tftpd-hpa, netkit-inetd, syslinux | mknbi | mkvmlinuz | aboot
+Depends: ${misc:Depends}, debootstrap, iproute, nfs-kernel-server, atftpd | tftpd-hpa, netkit-inetd, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm
 Architecture: all
