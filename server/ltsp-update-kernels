@@ -85,29 +85,6 @@ else
     echo "Skipping netabootwrap images.  Install the aboot package if you need them."
 fi
 
-if which netabootwrap >/dev/null; then
-    for kernel in $TFTPBOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
-
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=$TFTPBOOT/initrd.img
-            nbi=$TFTPBOOT/nbi.img
-        else
-            version=${basename##vmlinuz-}
-            initrd=$TFTPBOOT/initrd.img-$version
-            nbi=$TFTPBOOT/nbi.img-$version
-        fi
-        # TODO: work around for debian bug #270801
-        if [ -f "$initrd" ]; then
-            netabootwrap -t $nbi -k $kernel -i $initrd
-        else
-            netabootwrap -t $nbi -k $kernel
-        fi
-    done
-else
-    echo "Skipping netabootwrap images.  Install the aboot package if you need them."
-fi
-
 #for file in $TFTPBOOT/*; do
 #    found=""
 #    for master in $LTSPROOT/*/boot/$(basename "$file"); do
