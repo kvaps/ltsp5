@@ -1,3 +1,14 @@
+ltsp (0.58debian2) UNRELEASED; urgency=low
+
+  [ Vagrant Cascadian ]
+  * Add ltsp-server dependency on debconf-utils, as
+    ltsp-build-client uses debconf-get-selections.
+  * Add ltsp-server dependency on openssh-client (or ssh), as
+    ltsp-update-sshkeys uses ssh-keyscan.
+  * Make dynamic editing of /etc/exports optional.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sat, 22 Oct 2005 16:17:06 +0200
+
 ltsp (0.58debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
