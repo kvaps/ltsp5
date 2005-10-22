@@ -115,7 +115,7 @@ test -z "$DIST" && DIST=breezy
 
 # set defaults based on dist
 case $DIST in
-  sarge) 
+  sarge|etch|sid) 
     test -z "$COMPONENTS" && COMPONENTS="main"
     test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
