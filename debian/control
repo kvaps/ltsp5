@@ -45,3 +45,14 @@ Description: LTSP display manager
  .
  It was written to work with the LTSP project, but should work without
  LTSP as well.
+
+Package: ltsp-client-builder
+Section: debian-installer
+Priority: standard
+XC-Package-Type: udeb
+Architecture: all
+Depends: ${shlibs:Depends}, base-installer
+XB-Installer-Menu-Item: 68
+Description: Build an LTSP environment in the installer target
+ This udeb bootstraps the LTSP client chroot in the installer target 
+ while the cdrom is still mounted.

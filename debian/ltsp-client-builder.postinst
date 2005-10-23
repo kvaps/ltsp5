@@ -1,0 +1,45 @@
+#! /bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+log () {
+    logger -t ltsp-client-builder "$@"
+}
+
+# check if we have a valid CD-ROM mounted
+if [ ! -f /cdrom/.disk/info ]; then
+    log "no CD-ROM found ! Not installing ltsp chroot"
+    exit 0
+fi
+
+# get the ok from the user to build the ltsp chroot
+db_input medium ltsp-client-builder/run || [ $? -eq 30 ]
+if ! db_go; then
+    exit 10 # back up to menu
+fi
+
+db_get ltsp-client-builder/run
+if [ "$RET" = false ]; then
+    log "user requested no ltsp chroot"
+    exit 0
+fi
+    
+# if everything is fine, run ltsp-build-client on the target disk
+
+db_progress START 0 2 ltsp-client-builder/progress
+
+apt-install ltsp-server
+
+db_progress STEP 1
+
+env -u DEBIAN_HAS_FRONTEND -u DEBIAN_FRONTEND \
+	-u DEBCONF_REDIR -u DEBCONF_OLD_FD_BASE \
+	chroot /target /usr/sbin/ltsp-build-client --mirror file:///cdrom \
+	>> /var/log/messages 2>&1
+
+db_progress STEP 1
+
+db_progress STOP
+
+exit 0
