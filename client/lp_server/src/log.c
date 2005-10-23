@@ -62,9 +62,9 @@ static void logbackend()
 
 /* VARARGS2 */
 #ifdef HAVE_STDARGS
-void log (int lvl, char *msg,...)
+void logmsg (int lvl, char *msg,...)
 #else
-void log (va_alist) va_dcl
+void logmsg (va_alist) va_dcl
 #endif
 {
 #ifndef HAVE_STDARGS

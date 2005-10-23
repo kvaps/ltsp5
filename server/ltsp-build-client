@@ -178,6 +178,10 @@ if [ -e /etc/console/boottime.kmap.gz ]; then
   cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
 fi
 
+# Avoid the need to update mtab.  Save memory on ramdisk
+rm $ROOT/etc/mtab
+ln -s /proc/mounts $ROOT/etc/mtab
+
 chroot $ROOT apt-get clean
 
 # enable serial console

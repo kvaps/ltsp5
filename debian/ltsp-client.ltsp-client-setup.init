@@ -1,9 +1,16 @@
 #! /bin/sh
 #
-# ltsp-client	Script for LTSP client initialization
-#
 # Author:	Matt Zimmerman <mdz@ubuntu.com>
 #
+### BEGIN INIT INFO
+# Provides:          ltsp-client-setup
+# Required-Start:    mountvirtfs $local_fs
+# Required-Stop:     mountvirtfs $local_fs
+# Default-Start:     S 1 2 3 4 5
+# Default-Stop:      0 6
+# Short-Description: Script for LTSP client initialization
+# Description:
+### END INIT INFO
 
 set -e
 
@@ -121,7 +128,10 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
 
-      preseed $xserver_package  $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+      preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+      preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
+      preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
+      preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
 
       # This require fontserver preseeding to work (Debian bug
       # #323262).  Using code in screen.d/startx and screen.d/ldm
@@ -149,6 +159,7 @@ bind_mounts () {
   test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
   test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
   test -z "$copy_dirs" && copy_dirs=""
+  test -z "$temp_copy_dirs" && temp_copy_dirs="/var/cache/debconf"
   test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
   mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
   # preserve directory structure

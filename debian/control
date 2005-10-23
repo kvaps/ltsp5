@@ -29,10 +29,19 @@ Replaces: ltsp-utils
 Architecture: any
 Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
+ .
+ DO NOT install this package on a regular machine, it is intended only
+ for installation inside a LTSP client filesystem.
 
 Package: ldm
 Depends: openssh-client | ssh, python, python-gtk2, python-glade2,gtk2-engines-clearlooks
-Architecture: any
+Architecture: all
 Description: LTSP display manager
- X desktop manager asking for username and password, and setting up X
- tunneling to a server to run the X clients.
+ ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike
+ those it wraps the X11 traffic within an ssh tunnel to provide a
+ secure login mechanism for remote X sessions.  ldm provides access
+ only through SSH, not locally. It is technically possible to use ldm
+ to connect to the same host, but probably a waste of CPU power.
+ .
+ It was written to work with the LTSP project, but should work without
+ LTSP as well.

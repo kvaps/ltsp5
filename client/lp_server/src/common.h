@@ -41,14 +41,14 @@
 #endif
 
 #if defined(HAVE_STDARGS)
-void log _PARMS__( (int kind, char *msg,...) );
+void logmsg _PARMS__( (int kind, char *msg,...) );
 void fatal _PARMS__( ( char *msg,...) );
 void logerr _PARMS__( (int kind, char *msg,...) );
 void logerr_die _PARMS__( (int kind, char *msg,...) );
 int plp_snprintf (char *str, size_t count, const char *fmt, ...);
 int vplp_snprintf (char *str, size_t count, const char *fmt, va_list arg);
 #else
-void log _PARMS__( (void) );
+void logmsg _PARMS__( (void) );
 void fatal _PARMS__( (void) );
 void logerr _PARMS__( (void) );
 void logerr_die _PARMS__( (void) );
