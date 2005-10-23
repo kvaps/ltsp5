@@ -121,6 +121,8 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
 
+      preseed $xserver_package  $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+
       # This require fontserver preseeding to work (Debian bug
       # #323262).  Using code in screen.d/startx and screen.d/ldm
       # until it does.
