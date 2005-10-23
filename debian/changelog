@@ -17,6 +17,7 @@ ltsp (LATEST) breezy; urgency=low
   * Small style/cleanup fixes to XFS support
   * Use X rather than Xorg as the name of the server
   * Fix typo in ltsp-build-client warning
+  * Remove dependency on ltsp-utils; violates the principle of least surprise
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
 
