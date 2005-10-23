@@ -7,6 +7,12 @@ ltsp (0.58debian2) UNRELEASED; urgency=low
     ltsp-update-sshkeys uses ssh-keyscan.
   * Make dynamic editing of /etc/exports optional.
 
+  [ Petter Reinholdtsen ]
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
+    - Remove dependency on ltsp-utils; violates the
+      principle of least surprise.
+    - Removed TODO file.
+
  -- Petter Reinholdtsen <pere@debian.org>  Sat, 22 Oct 2005 16:17:06 +0200
 
 ltsp (0.58debian1) unstable; urgency=low
