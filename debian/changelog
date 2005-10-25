@@ -1,4 +1,4 @@
-ltsp (0.58debian2) UNRELEASED; urgency=low
+ltsp (0.58debian2) unstable; urgency=low
 
   [ Vagrant Cascadian ]
   * Add ltsp-server dependency on debconf-utils, as
@@ -12,8 +12,10 @@ ltsp (0.58debian2) UNRELEASED; urgency=low
     - Remove dependency on ltsp-utils; violates the
       principle of least surprise.
     - Removed TODO file.
+  * Make it possible to run the client without xdebconfigurator, by
+    only using dexconf when xdebconfigurator was available.
 
- -- Petter Reinholdtsen <pere@debian.org>  Sat, 22 Oct 2005 16:17:06 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Mon, 24 Oct 2005 22:02:34 +0200
 
 ltsp (0.58debian1) unstable; urgency=low
 
