@@ -1,4 +1,4 @@
-ltsp (0.58debian3) UNRELEASED; urgency=low
+ltsp (0.58debian3) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
   * Generate simple fstab on the client, to quiet down fsck during boot.
@@ -8,7 +8,7 @@ ltsp (0.58debian3) UNRELEASED; urgency=low
   [ Vagrant Cascadian ]
   * Handle "" commandline parameters.  (Closes: #335870)
 
- -- Petter Reinholdtsen <pere@debian.org>  Tue,  1 Nov 2005 10:02:04 +0100
+ -- Petter Reinholdtsen <pere@debian.org>  Tue,  1 Nov 2005 20:24:31 +0100
 
 ltsp (0.58debian2) unstable; urgency=low
 
