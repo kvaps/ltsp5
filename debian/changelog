@@ -1,3 +1,15 @@
+ltsp (0.58debian3) UNRELEASED; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Generate simple fstab on the client, to quiet down fsck during boot.
+  * Adjust bind-mount config to get X configuration working also when
+    xdebconfigurator is not used.
+
+  [ Vagrant Cascadian ]
+  * Handle "" commandline parameters.  (Closes: #335870)
+
+ -- Petter Reinholdtsen <pere@debian.org>  Tue,  1 Nov 2005 10:02:04 +0100
+
 ltsp (0.58debian2) unstable; urgency=low
 
   [ Vagrant Cascadian ]
