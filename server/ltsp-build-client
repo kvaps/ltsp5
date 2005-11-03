@@ -233,6 +233,9 @@ fi
 rm $ROOT/etc/mtab
 ln -s /proc/mounts $ROOT/etc/mtab
 
+# Quiet down fsck during boot
+echo "proc /proc proc defaults 0 0" > $ROOT/etc/fstab
+
 chroot $ROOT apt-get clean
 
 # enable serial console
