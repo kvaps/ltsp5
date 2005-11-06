@@ -21,6 +21,8 @@ cat << EOF
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
+ --disable-rootpass  disable root password in the chroot
+ --prompt-rootpass  prompt for root password
  --help  display this help
  --apt-keys "<key1 key2>" keys to add to the apt keyring
 EOF
@@ -106,6 +108,8 @@ while [ "$#" -gt "0" ]; do
       ;;
     --serial-console) use_serial_console="true"
       ;;
+    --disable-rootpass) ROOTPASS="disable" ;;
+    --prompt-rootpass) ROOTPASS="prompt" ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -168,8 +172,14 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS $DIST $ROOT $MIRROR
 
-# Root password is empty by default, lock it
-chroot $ROOT passwd -l root
+test -z "$ROOTPASS" && ROOTPASS="disable"
+if [ "$ROOTPASS" = "disable" ]; then
+  # Root password is empty by default, lock it
+  chroot $ROOT passwd -l root
+elif [ "$ROOTPASS" = "prompt" ]; then
+  # prompt for root password
+  chroot $ROOT passwd root
+fi
 
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
