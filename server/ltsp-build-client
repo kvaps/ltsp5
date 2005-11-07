@@ -23,6 +23,7 @@ cat << EOF
  --serial-console  enable serial console
  --disable-rootpass  disable root password in the chroot
  --prompt-rootpass  prompt for root password
+ --debconf-seeds  load debconf pre-seeding files in the chroot
  --help  display this help
  --apt-keys "<key1 key2>" keys to add to the apt keyring
 EOF
@@ -110,6 +111,9 @@ while [ "$#" -gt "0" ]; do
       ;;
     --disable-rootpass) ROOTPASS="disable" ;;
     --prompt-rootpass) ROOTPASS="prompt" ;;
+    --debconf-seeds) DEBCONF_SEEDS="$2"
+      test "$#" -gt "0" && shift
+      ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -179,6 +183,13 @@ if [ "$ROOTPASS" = "disable" ]; then
 elif [ "$ROOTPASS" = "prompt" ]; then
   # prompt for root password
   chroot $ROOT passwd root
+fi
+
+if [ -n "$DEBCONF_SEEDS" ]; then
+  # load debconf preseeding files
+  for seed in $DEBCONF_SEEDS; do
+    cat $seed | chroot $ROOT debconf-set-selections
+  done
 fi
 
 # Always load mousedev
