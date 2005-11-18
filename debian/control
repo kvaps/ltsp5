@@ -51,7 +51,7 @@ Section: debian-installer
 Priority: standard
 XC-Package-Type: udeb
 Architecture: all
-Depends: ${shlibs:Depends}, base-installer
+Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer
 XB-Installer-Menu-Item: 68
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 
