@@ -25,6 +25,48 @@ cat << EOF
 EOF
 }
 
+# Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
+# running init scripts during installation
+make_policyrcd() {
+    cat > $ROOT/usr/sbin/policy-rc.d <<EOF
+#!/bin/sh
+exit 101
+EOF
+    chmod a+rx $ROOT/usr/sbin/policy-rc.d
+}
+remove_policyrcd() {
+    rm -f $ROOT/usr/sbin/policy-rc.d
+}
+
+# This way to make start-stop-daemon do not work on upgrades, when
+# start-stop-daemon is replaced with a new version.  I tried to use
+# dpkg-divert to solve this, but am not sure I got it right. [pere
+# 2004-07-29]
+make_dummy_start_stop_daemon() {
+    cat > $ROOT/sbin/start-stop-daemon.dummy <<EOF
+#!/bin/sh
+echo 1>&2
+echo 'Warning: Fake start-stop-daemon called, doing nothing.' 1>&2
+exit 0
+EOF
+    chmod a+rx $ROOT/sbin/start-stop-daemon.dummy
+    chroot $ROOT dpkg-divert --add --local --rename /sbin/start-stop-daemon
+    ln -s start-stop-daemon.dummy $ROOT/sbin/start-stop-daemon
+}
+remove_dummy_start_stop_daemon() {
+    rm $ROOT/sbin/start-stop-daemon
+    chroot $ROOT dpkg-divert --remove --local --rename /sbin/start-stop-daemon
+}
+on_exit() {
+    remove_dummy_start_stop_daemon
+    remove_policyrcd
+
+    # umount bind mounts
+    for dir in $umounts ; do
+	umount $dir
+    done
+}
+
 # process commandline arguments
 while [ -n "$1" ]; do
   case $1 in
@@ -130,6 +172,10 @@ for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   fi
 done
 
+trap on_exit EXIT
+make_policyrcd
+make_dummy_start_stop_daemon
+
 chroot $ROOT apt-get update
 
 DEBIAN_FRONTEND=noninteractive
@@ -189,11 +235,6 @@ if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]
   echo "Enabling serial console..."
   echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
 fi
-
-# umount bind mounts
-for dir in $umounts ; do
-  umount $dir
-done
 
 # Export LTSP chroot using NFS to the LTSP client network
 if ! grep -q '^/opt/ltsp' /etc/exports ; then
