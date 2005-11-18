@@ -3,10 +3,10 @@ Section: misc
 Priority: optional
 Maintainer: Matt Zimmerman <mdz@ubuntu.com>
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package: ltsp-server
-Depends: debootstrap, iproute, nfs-kernel-server, tftpd-hpa, netkit-inetd, syslinux | mknbi | mkvmlinuz, openssh-client | ssh
+Depends: debootstrap, nfs-kernel-server, tftpd-hpa, syslinux | mknbi | mkvmlinuz, openssh-client | ssh, netkit-inetd, iproute, debconf-utils
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm
 Architecture: all

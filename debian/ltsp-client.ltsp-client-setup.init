@@ -134,14 +134,15 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
 
       # This require fontserver preseeding to work (Debian bug
-      # #323262).  Using code in screen.d/startx and screen.d/ldm
-      # until it does.
-      #if [ Y = "${USE_XFS}" ] ; then
-      #  if [ -z "${XFS_SERVER}" ] ; then
-      #    XFS_SERVER="${SERVER}"
-      #  fi
-      #  preseed $xserver_package $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
-      #fi
+      # #323262, fixed in xorg-x11 version 6.8.99.901.dfsg.1-1).
+      # Also done using code in screen.d/startx and screen.d/ldm until
+      # the xorg-x11 version make it into unstable and testing.
+      if [ Y = "${USE_XFS}" ] ; then
+        if [ -z "${XFS_SERVER}" ] ; then
+          XFS_SERVER="${SERVER}"
+        fi
+        preseed $xserver_package $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
+      fi
 
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"

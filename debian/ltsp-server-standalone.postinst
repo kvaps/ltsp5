@@ -15,7 +15,6 @@ case "$1" in
     configure)
         if [ -e /etc/init.d/dhcp3-server ]; then
 	
-            # Accept problems without making this package uninstallable
             invoke-rc.d dhcp3-server force-reload || true
         fi
         ;;
