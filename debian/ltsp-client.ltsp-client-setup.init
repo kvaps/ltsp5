@@ -150,7 +150,7 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
 
       # Autoconfigure
-      dpkg-reconfigure -fnoninteractive $xserver_package
+      dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
     fi
 }
 

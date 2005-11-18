@@ -53,8 +53,16 @@ else
     echo "Skipping etherboot images.  Install the mknbi package if you need them."
 fi
 
-# TODO merge the mkelf-linux and mkvmlinuz code
 if which mkvmlinuz >/dev/null; then
+  # mkvmlinuz already happens on powerpc as part of the kernel install-
+  # so do nothing.
+  true
+else
+    echo "Skipping openfirmware images.  Install the mkvmlinuz package if you need them."
+fi
+
+# TODO merge the mkelf-linux and netabootwrap code
+if which netabootwrap >/dev/null; then
     for kernel in $TFTPBOOT/vmlinuz*; do
         basename=$(basename "$kernel")
 
@@ -66,15 +74,15 @@ if which mkvmlinuz >/dev/null; then
             initrd=$TFTPBOOT/initrd.img-$version
             nbi=$TFTPBOOT/nbi.img-$version
         fi
-
+        # TODO: work around for debian bug #270801
         if [ -f "$initrd" ]; then
-            mkvmlinuz -o $nbi -k $kernel -i $initrd
+            netabootwrap -t $nbi -k $kernel -i $initrd
         else
-            mkvmlinuz -o $nbi -k $kernel
+            netabootwrap -t $nbi -k $kernel
         fi
     done
 else
-    echo "Skipping openfirmware images.  Install the mkvmlinuz package if you need them."
+    echo "Skipping netabootwrap images.  Install the aboot package if you need them."
 fi
 
 #for file in $TFTPBOOT/*; do
