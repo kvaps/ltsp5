@@ -1,6 +1,6 @@
 ltsp (LATEST) breezy; urgency=low
 
-  * Merge more patches:
+  * Merge all of Petter's ubuntufixes branch up to patch-77
     - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-1
       Add support for remaining X keyboard options.
     - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-2
@@ -14,6 +14,129 @@ ltsp (LATEST) breezy; urgency=low
       Add support for USE_XFS and XFS_SERVER.
     - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-9
       Make sure /tmp/info/ is created before trying to use it on the client.
+    - patch-10
+      Changelog for previous patch.
+    - patch-11
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0 up to patch-175.
+    - patch-12
+      Get screen.d/startx working in debian/sarge by using xfree86 if it is installed.
+    - patch-13
+      Avoid packages cron and logrotate on sarge.  No need to rotate logs.
+    - patch-14
+      Fix ldm startup script to not fail when USE_XFS is unset.
+    - patch-15
+      Add a suggests to lessdisks for ltsp-server, to allow users looking at ltsp to know about the alternative.
+    - patch-16
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0.
+    - patch-17
+      Merge matt.zimmerman@canonical.com/ltsp--main--0 (up to patch-180).
+    - patch-18
+      Merge with vagrant@freegeek.org--2005/ltsp--ubuntufixes--0, fixing typo, sdm permissions and the bind_mount path.
+    - patch-19
+      Merge matt.zimmerman@canonical.com/ltsp--main--0 (up to patch-181).
+    - patch-20
+      Implement support for the X_COLOR_DEPTH option.  Untested.
+    - patch-21
+      New option LDM_REMOTECMD to control command executed on remote host when ldm login is performed.
+    - patch-22
+      Document dependency of the sdm option.
+    - patch-23
+      Move ldm into separate package, as it is useful on its own.
+    - patch-24
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0 up to patch-41.
+    - patch-25
+      Use os.environ.get() also in get_config(), to avoid crashing when XFS_SERVER is unset.
+    - patch-26
+      Remove redundant space.
+    - patch-27
+      Implement the mouse options currently supported by dexconf, X_MOUSE_DEVICE, X_MOUSE_PROTOCOL and X_MOUSE_EMULATE3BTN.
+    - patch-28
+      Drop suggest on lessdisks.  It make more sense to mention it in the documentation.
+    - patch-29
+      Need to bind more files and directories on debian.
+    - patch-30
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0 up to patch-191.
+    - patch-31
+      Unto previous fixes.  Matt seem to prefer updating the config file instead.
+    - patch-32
+      Mention temp_copy_dirs block initializing variables.
+    - patch-33
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0 up to patch-191.
+    - patch-34
+      Avoid listing /var/cache/debconf both in copy_dirs and temp_copy_dirs.  Only needed in temp_copy_dirs.
+    - patch-35
+      Merge matt.zimmerman@canonical.com/ltsp--main--0 (up to patch-195).
+    - patch-36
+      Symlink /etc/mtab to /proc/mounts to save memory.
+    - patch-37
+      Option TELNET_HOST is actually supported (but not tested) when the telnet screen type is used.
+    - patch-38
+      Add LSB init.d dependency info to init.d scripts.
+    - patch-39
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0 up to patch-196.
+    - patch-40
+      Rename function log() to logmsg(), to avoid name conflict with the function in <math.h>.
+    - patch-41
+      Initialize struct member to avoid compile warning.
+    - patch-42
+      Avoid comparing signed and unsigned values by casting the signed value to unsigned.
+    - patch-43
+      The ldm package work on all archs.
+    - patch-44
+      Improve ldm package description.
+    - patch-45
+      Typo.
+    - patch-46
+      Merge with matt.zimmerman@canonical.com/ltsp--main--0 (up to patch-197).
+    - patch-47
+      Extend ltsp-client package descripton to make it clear that this package should only be installed in the ltsp client chroot.
+    - patch-48
+      Update the address of FSF in the copyright file.
+    - patch-49
+      Merge ltsp-client-builder udeb into LTSP build tree.
+    - patch-50
+      Add norwegian bokm\uffffl translation.
+    - patch-51
+      Update /etc/exports when the client environment is built, not when the ltsp-server package is installed.
+    - patch-52
+      Make sure the ltsp-build-client script do not hang when installing packages reading from stdin.
+    - patch-53
+      Let ltsp-server depend on iproute, to find the 'ip' command used by ltsp-update-sshkeys.
+    - patch-54
+      Improve the error message when /var/lib/tftpboot/ltsp is missing.  Closes debian bug #331229.
+    - patch-55
+      Make sure to exit if /var/lib/tftpboot/ltsp is missing.
+    - patch-56
+      Udeb uses debconf, and should depend on ${misc:Depends}.
+    - patch-57
+      Make sure ltsp-server-standalone installs properly even when dhcp3-server init.d script fail to restart.
+    - patch-58
+      Set umask to 022 before copying files into tftpboot/, to make sure the files are readable for the client.
+    - patch-59
+      Make sure to umount when the build fail.
+    - patch-60
+      Try to avoid starting daemons in the chroot during creation.
+    - patch-61
+      Merge matt.zimmerman@canonical.com/ltsp--main--0 up to patch-198.
+    - patch-62
+      Preseed X keyboard settings based on the servers settings.
+    - patch-63
+      Merge a few patches from vagrant, to update ldm dependencies and architacture.
+    - patch-64
+      Merge already included ldm patch from vagrant.
+    - patch-65
+      Undu changes to install patch for initramfs scripts.  Not sure why these changes happened.
+    - patch-66
+      Typo.
+    - patch-67
+      Merge from vagrant@freegeek.org--2005/ltsp--ubuntufixes--0 to patch-61.
+    - patch-68
+      Use same rule sets for sarge, etch and sid.
+    - patch-69
+      Add dependency on debconf-utils, as ltsp-build-client uses debconf-get-selections
+    - patch-70
+      Add dependency on openssh-client (or ssh), as ltsp-update-sshkeys uses ssh-keyscan.
+
   * Small style/cleanup fixes to XFS support
   * Use X rather than Xorg as the name of the server
   * Fix typo in ltsp-build-client warning
