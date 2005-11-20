@@ -1,3 +1,21 @@
+ltsp (0.58debian4) UNRELEASED; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Updated standards-version from 2.6.1 to 2.6.2.
+  * Enable fontserver preseeding, as bug #323262 is fixed in dexconf
+    from xorg-x11 version 6.8.99.901.dfsg.1-1) in experimental, to
+    make it easier to test it when the new dexconf make it to unstable
+    and testing.
+  * Add French debconf translation by Jean-Marc Chaton.  (Closes: #337044)
+  * Add Czech debconf translation by Miroslav Kure.  (Closes: #338842)
+
+  [ Vagrant Cascadian ]
+  * Change ltsp-server priority from optional to extra as it depend on
+    some packages with extra priority (debootstrap and tftp servers).
+  * New command line argument --apt-keys to load more GPG keys into APT.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Thu,  3 Nov 2005 00:40:49 +0100
+
 ltsp (0.58debian3) unstable; urgency=low
 
   [ Petter Reinholdtsen ]

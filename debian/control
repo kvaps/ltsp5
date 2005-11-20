@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Petter Reinholdtsen <pere@debian.org>
 Uploaders: Vagrant Cascadian <vagrant@freegeek.org>, Matt Zimmerman <mdz@debian.org>
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package: ltsp-server
 Priority: extra
