@@ -3,7 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: Matt Zimmerman <mdz@ubuntu.com>
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package: ltsp-server
 Depends: debootstrap, nfs-kernel-server, tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh, netkit-inetd, iproute, debconf-utils
