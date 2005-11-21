@@ -57,6 +57,7 @@ configure_resolver() {
 127.0.0.2 $hostname
 $SERVER server
 EOF
+    echo $hostname > /etc/hostname
 
     if [ -n "$DNS_SERVER" -a -n "$SEARCH_DOMAIN" ]; then
         cat <<EOF > /etc/resolv.conf
@@ -132,6 +133,11 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
       preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
       preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+
+      X_MODE = $( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
+      if [ -n "$X_MODE" ]; then
+	  preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
+      fi
 
       # This require fontserver preseeding to work (Debian bug
       # #323262, fixed in xorg-x11 version 6.8.99.901.dfsg.1-1).
@@ -210,9 +216,9 @@ case "$1" in
         fi
         load_modules || true
         configure_console || true
-        configure_swap || true
         configure_network || true
         configure_resolver || true
+        configure_swap || true
         configure_syslog || true
         configure_fstab || true
 	configure_x || true

@@ -1,3 +1,14 @@
+ltsp (0.58oss1) unstable; urgency=low
+
+  [ Otavio Salvador ]
+  * Pass X arguments when using USE_XFS option;
+  * Set hostname on client to allow host specific configuration;
+  * Fix configuration order of client to ensure that we have networking
+    setup before to try swaping;
+  * Fix client building to allow nbd-client to work on-the-fly;
+
+ -- Otavio Salvador <otavio@debian.org>  Mon, 21 Nov 2005 18:23:02 -0200
+
 ltsp (LATEST) breezy; urgency=low
 
   * Merge all of Petter's ubuntufixes branch up to patch-77
