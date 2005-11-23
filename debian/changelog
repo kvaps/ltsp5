@@ -1,4 +1,4 @@
-ltsp (LATEST) breezy; urgency=low
+ltsp (0.59) dapper; urgency=low
 
   * Merge all of Petter's ubuntufixes branch up to patch-77
     - pere@hungry.com--2005/ltsp--ubuntufixes--0--patch-1
@@ -141,7 +141,13 @@ ltsp (LATEST) breezy; urgency=low
   * Use X rather than Xorg as the name of the server
   * Fix typo in ltsp-build-client warning
   * Remove dependency on ltsp-utils; violates the principle of least surprise
-
+  * [ Otavio Salvador ]
+    - Pass X arguments when using USE_XFS option;
+    - Set hostname on client to allow host specific configuration;
+    - Fix configuration order of client to ensure that we have networking
+      setup before to try swaping;
+    - Fix client building to allow nbd-client to work on-the-fly;
+  
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
 
 ltsp (0.58) breezy; urgency=low
