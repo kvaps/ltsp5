@@ -68,34 +68,34 @@ on_exit() {
 }
 
 # process commandline arguments
-while [ -n "$1" ]; do
+while [ "$#" -gt "0" ]; do
   case $1 in
     --root) ROOT="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --dist) DIST="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --components) COMPONENTS="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --mirror) MIRROR="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --extra-mirror) EXTRA_MIRROR="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --exclude) EXCLUDE="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --security-mirror) SECURITY_MIRROR="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --early-packages) EARLY_PACKAGES="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --late-packages) LATE_PACKAGES="$2"
-      test -n "$1" && shift
+      test "$#" -gt "0" && shift
       ;;
     --help) get_help
       exit 0
@@ -107,7 +107,7 @@ while [ -n "$1" ]; do
       exit 1
       ;;
   esac
-  test -n "$1" && shift
+  test "$#" -gt "0" && shift
 done
 
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
