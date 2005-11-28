@@ -37,97 +37,55 @@ class GTKGreeter:
 	    except:
 		self.wTree = gtk.glade.XML('greeter.glade')
 
-	    # set cursor
-	    self.rootwin = gtk.gdk.get_default_root_window()
-	    self.rootwin.set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
+	    # care for look and feel
+	    self.set_cursor()
+	    self.theme_engine()
+	    self.draw_login_window()
 
-	    # draw the window with canvas
-            canvas = self.wTree.get_widget("canvas")
-            self.win = self.wTree.get_widget("window")
-	    self.root = canvas.root().add(gnomecanvas.CanvasGroup)
+	    # configurable options
+	    # self.draw_buttons() # session and lang, should be wrapped by a config option
+	    self.draw_bottom_bar(False) # set to True if you want a clock
 
-	    # get screensize
-	    width, height = gtk.gdk.get_default_root_window().get_size()
-	    orig_width = width
-	    width = int(float(width+(width*0.04))) # lets overlap a bit :)
-	    self.diff = (width-orig_width)/2 	   # to make sure the canvas
-	    					   # has no grey border
+	    self.win.show_all()
 
-	    # Theme Engine with sane fallback values 
-	    # for potentially broken themes
-	    try:
-	        # get the background pixmap and scale it to screenwidth
-	        bg = gtk.gdk.pixbuf_new_from_file(themedir+'/background.png')
-		# read colors from theme file
-		colors = open('/usr/share/ldm/themes/default/colors')
-		colorlist = colors.readlines()
+	    # the entry field has focus by default
+	    self.entry.grab_focus()
 
-		# parse colorlist
-		for color in colorlist:
-			if string.find(color, "=") > 0 and not color.startswith('#'):
-				val = color.split(' ')[2].rstrip().strip('"')
-				if color.startswith('frame_color'):
-					frame_color = val				
-				elif color.startswith('foreground'):
-					self.foreground_color = val
-				elif color.startswith('clockforeground'):
-					self.clockforeground_color = val
-				elif color.startswith('loginwin_color'):
-					loginwin_color = val
-		# put background color up
-		self.root.add(gnomecanvas.CanvasRect, x1 = -(width/2),
-		     	      y1 = -(height/2), x2 = (width/2),
-		              y2 = (height/2)+self.diff, fill_color = "#ffffde")
-	        # put the image on the canvas
-	        self.root.add(gnomecanvas.CanvasPixbuf, pixbuf = bg,
-	                      x = -(bg.get_width()/2), 
-			      y = -(bg.get_height()/2+40), anchor = "nw")
-	    except:
-		# fallback if no theme is available
-		frame_color = "#000000"
-		self.foreground_color = "#101010"
-		self.clockforeground_color = "#ffffff"
-		loginwin_color = "#606060"
+	    gtk.main()
 
-		self.root.add(gnomecanvas.CanvasRect, x1 = -(width/2),
-		     	      y1 = -(height/2), x2 = (width/2),
-		              y2 = (height/2)+self.diff, fill_color = "#303030")
-		self.root.add(gnomecanvas.CanvasText,
-		     	      markup = '<span size="36000"><b>No Theme Found !</b></span>\n'+
-			      '<span size="10000">      Make sure the theme directorys in /usr/share/ldm/themes exist.\n'+
-			      '      /usr/share/ldm/themes/default must be a symlink to the\n'+
-			      '      directory containing the default theme. Please contact your\n'+
-			      '      administrator to fix the ldm installation on the LTSP server.</span>',
-		              fill_color = "#606060", x = self.diff, y = -50)
+	    if self.ok == True:
+		print self.text[0]
+		print self.text[1]
+		#print self.session
+		#print self.language
+		return True
+	    return False
 
+	def draw_login_window(self):
 	    # get the username/password entry from the glade tree
             self.entry = self.wTree.get_widget("entry")
             self.entry.unparent()
 	    self.entry.connect("activate", lambda w: self.switch_entry(self.flag))
 
-	    # make sure the window sits correctly on the root
-	    self.win.set_size_request((width), (height))
-	    self.win.set_decorated(False)
-
-	    # draw the login window
-	    sq_width=250
-	    sq_height=80
-	    sub_height=40
-	    self.root.add(gnomecanvas.CanvasRect, x1 = -(sq_width/2)+self.diff, 
-	    		  y1 = +(sq_height), x2 = +(sq_width/2)+self.diff,
-	                  y2 = +(sq_height*2), fill_color = loginwin_color)
+	    self.sq_width=250
+	    self.sq_height=80
+	    self.sub_height=40
+	    self.root.add(gnomecanvas.CanvasRect, x1 = -(self.sq_width/2)+self.diff, 
+	    		  y1 = +(self.sq_height), x2 = +(self.sq_width/2)+self.diff,
+	                  y2 = +(self.sq_height*2), fill_color = self.loginwin_color)
 	    self.username = self.root.add(gnomecanvas.CanvasText,
 	                  markup = '<span size="10000"><b>Username:</b></span>', 
 			  fill_color = self.foreground_color, x = -33+self.diff, y = 100)
 	    # entry with small frame
 	    self.root.add(gnomecanvas.CanvasRect, x1 = -71+self.diff, 
 	    		  y1 = 114, x2 = 71+self.diff,
-	                  y2 = 138, fill_color = frame_color)
+	                  y2 = 138, fill_color = self.frame_color)
 	    self.root.add(gnomecanvas.CanvasWidget, x = -70+self.diff, y = 115, 
 	     		  widget = self.entry,
 	                  width = 140, height = 22)
 	    self.entry.hide()
 
+	def draw_buttons(self):
 	    # get the buttons for lang and session selector from the glade tree
             lang_butt = self.wTree.get_widget("lang_button")
 	    lang_butt.unparent()
@@ -139,18 +97,28 @@ class GTKGreeter:
 	    lang_butt.connect("clicked", lambda w: self.select_language())
 
 	    # draw the lang and session selector
-	    self.root.add(gnomecanvas.CanvasRect, x1 = -(sq_width/2)+self.diff, 
-	    		  y1 = +(sub_height)+125, x2 = +(sq_width/2)+self.diff,
-	                  y2 = +(sub_height*2)+125, fill_color = loginwin_color)
-	    self.root.add(gnomecanvas.CanvasWidget, x = -(sq_width/2)+5+self.diff, y = +(sub_height)+130, 
+	    self.root.add(gnomecanvas.CanvasRect, x1 = -(self.sq_width/2)+self.diff, 
+	    		  y1 = +(self.sub_height)+125, x2 = +(self.sq_width/2)+self.diff,
+	                  y2 = +(self.sub_height*2)+125, fill_color = self.loginwin_color)
+	    self.root.add(gnomecanvas.CanvasWidget, x = -(self.sq_width/2)+5+self.diff, y = +(self.sub_height)+130, 
 	     		  widget = lang_butt,
 	                  width = 110, height = 32)
-    	    self.root.add(gnomecanvas.CanvasWidget, x = -(sq_width/2)+135+self.diff, y = +(sub_height)+130, 
+    	    self.root.add(gnomecanvas.CanvasWidget, x = -(self.sq_width/2)+135+self.diff, y = +(self.sub_height)+130, 
 	     		  widget = sess_butt,
 	                  width = 110, height = 32)
+	    
+	    # get some additional glade entrys for session and lang selector
+            self.sess_box = self.wTree.get_widget("sess_vbox")
+	    self.sess_box.unparent()
 
+            self.lang_box = self.wTree.get_widget("lang_vbox")
+	    self.lang_box.unparent()
+
+	def draw_bottom_bar(self, show_timer):
 	    # draw the bottom bar, sysname and timer
 	    sysname = os.uname()
+	    timew = 0 
+	    timeh = 0
 	    
 	    # get the labels from the glade tree
             self.sysname = self.wTree.get_widget("host_label")
@@ -160,54 +128,98 @@ class GTKGreeter:
 
 	    self.sysname.set_markup('<span size="12000" color="'+self.clockforeground_color+
 	    			    '"><b>'+str(sysname[1])+' //</b></span>')
-	    self.timelabel.set_markup(strftime('<span size="12000" color="'+self.clockforeground_color+
+
+	    # show timer if wanted
+	    if show_timer == True:
+	    	    timew, timeh = self.timelabel.size_request()
+		    self.timelabel.set_markup(strftime('<span size="12000" color="'+self.clockforeground_color+
 	        		    '">%a %b %d, <b>%H:%M</b></span>', localtime()))
+	    	    self.timer = self.root.add(gnomecanvas.CanvasWidget, x = ((self.orig_width/2)-timew), y = (self.height/2)+timeh,
+	    	                  widget = self.timelabel, 
+	    	                  width = timew, height = timeh)
+	    	    # refresh the clock all 30 sec
+	    	    gobject.timeout_add(30000, lambda: self.update_time())
+
 	    # get label sizes for drawing
 	    namew, nameh = self.sysname.size_request()
-	    timew, timeh = self.timelabel.size_request()
 
-	    self.root.add(gnomecanvas.CanvasRect, x1 = -(width/2), 
-	    		  y1 = (height/2)+10, x2 = width,
-			  y2 = height, fill_color = self.foreground_color)
-	    self.root.add(gnomecanvas.CanvasWidget, x = ((orig_width/2)-namew-timew-10), y = (height/2)+nameh,
+	    self.root.add(gnomecanvas.CanvasRect, x1 = -(self.width/2), 
+	    		  y1 = (self.height/2)+10, x2 = self.width,
+			  y2 = self.height, fill_color = self.foreground_color)
+	    self.root.add(gnomecanvas.CanvasWidget, x = ((self.orig_width/2)-namew-timew-10), y = (self.height/2)+nameh,
 	                  widget = self.sysname, 
 	                  width = namew, height = nameh)
-	    self.timer = self.root.add(gnomecanvas.CanvasWidget, x = ((orig_width/2)-timew), y = (height/2)+timeh,
-	                  widget = self.timelabel, 
-	                  width = timew, height = timeh)
 
-	    # refresh the clock all 30 sec
-	    gobject.timeout_add(30000, lambda: self.update_time())
+	def theme_engine(self):
+	    # draw the window with canvas
+            canvas = self.wTree.get_widget("canvas")
+            self.win = self.wTree.get_widget("window")
+	    self.root = canvas.root().add(gnomecanvas.CanvasGroup)
 
-	    # delay the widget drawing until background is rendered
-	    #gobject.timeout_add(1300, lambda: show_all())
+	    # get screensize
+	    width, self.height = gtk.gdk.get_default_root_window().get_size()
+	    self.orig_width = width
+	    self.width = int(float(width+(width*0.04))) # lets overlap a bit :)
+	    self.diff = (self.width-self.orig_width)/2 	# to make sure the canvas
+	    					   	# has no grey border
 
-	    self.win.show_all()
+	    # Theme Engine with sane fallback values 
+	    # for potentially broken themes
+	    try:
+	        # get the background pixmap and scale it to screenwidth
+	        bg = gtk.gdk.pixbuf_new_from_file(themedir+'/background.png')
+		# read colors from theme file
+		colors = open(themedir+'/colors')
+		colorlist = colors.readlines()
 
-	    def show_all():
-	    	self.win.show_all()
-		return False
+		# parse colorlist
+		for color in colorlist:
+			if string.find(color, "=") > 0 and not color.startswith('#'):
+				val = color.split(' ')[2].rstrip().strip('"')
+				if color.startswith('frame_color'):
+					self.frame_color = val				
+				elif color.startswith('foreground'):
+					self.foreground_color = val
+				elif color.startswith('background'):
+					self.background_color = val
+				elif color.startswith('clockforeground'):
+					self.clockforeground_color = val
+				elif color.startswith('loginwin_color'):
+					self.loginwin_color = val
+		# put background color up
+		self.root.add(gnomecanvas.CanvasRect, x1 = -(self.width/2),
+		     	      y1 = -(self.height/2), x2 = (self.width/2),
+		              y2 = (self.height/2)+self.diff, fill_color = self.background_color)
+	        # put the image on the canvas
+	        self.root.add(gnomecanvas.CanvasPixbuf, pixbuf = bg,
+	                      x = -(bg.get_width()/2), 
+			      y = -(bg.get_height()/2+40), anchor = "nw")
+	    except:
+		# fallback if no theme is available
+		self.frame_color = "#000000"
+		self.foreground_color = "#101010"
+		self.clockforeground_color = "#ffffff"
+		self.loginwin_color = "#606060"
 
-	    # entry has focus by default
-	    self.entry.grab_focus()
-	    
-	    # get some additional glade entrys for session and lang selector
-            self.sess_box = self.wTree.get_widget("sess_vbox")
-	    self.sess_box.unparent()
+		self.root.add(gnomecanvas.CanvasRect, x1 = -(self.width/2),
+		     	      y1 = -(self.height/2), x2 = (self.width/2),
+		              y2 = (self.height/2)+self.diff, fill_color = "#303030")
+		self.root.add(gnomecanvas.CanvasText,
+		     	      markup = '<span size="36000"><b>No Theme Found !</b></span>\n'+
+			      '<span size="10000">      Make sure the theme directorys in /usr/share/ldm/themes exist.\n'+
+			      '      /usr/share/ldm/themes/default must be a symlink to the\n'+
+			      '      directory containing the default theme. Please contact your\n'+
+			      '      administrator to fix the ldm installation on the LTSP server.</span>',
+		              fill_color = "#606060", x = self.diff, y = -50)
 
-            self.lang_box = self.wTree.get_widget("lang_vbox")
-	    self.lang_box.unparent()
+	    # make sure the window sits correctly on the root
+	    self.win.set_size_request((self.width), (self.height))
+	    self.win.set_decorated(False)
 
-
-	    gtk.main()
-
-	    if self.ok == True:
-		print self.text[0]
-		print self.text[1]
-		#print self.session
-		#print self.language
-		return True
-	    return False
+	def set_cursor(self):
+	    # set cursor
+	    self.rootwin = gtk.gdk.get_default_root_window()
+	    self.rootwin.set_cursor(gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
 
 	def update_time(self):
 	    # refresh the date/time string
