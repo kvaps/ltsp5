@@ -21,6 +21,7 @@ cat << EOF
  --early-packages "<package1 package2>" list of initial packages to install
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
+ --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
  --help  display this help
 EOF
 }
@@ -97,6 +98,51 @@ while [ "$#" -gt "0" ]; do
     --late-packages) LATE_PACKAGES="$2"
       test "$#" -gt "0" && shift
       ;;
+    --arch) ARCH_OPT="$2"
+      test "$#" -gt "0" && shift
+      case $ARCH_OPT in
+        i386)
+	  case $(dpkg --print-architecture) in
+	    amd64)
+	        ROOT=/opt/ltsp/i386
+	        ARCH=i386
+	        ;;
+	    ia64)
+	        ROOT=/opt/ltsp/i386
+	        ARCH=i386
+	        ;;
+	    i386)
+	        ROOT=/opt/ltsp/i386
+	        ARCH=i386
+	        ;;
+	    *)
+	        echo "ERROR: --arch i386 called on unsupported arch: "$(dpkg --print-architecture)
+	        exit 1
+	        ;;
+	  esac
+	  ;;
+	powerpc)
+	  case $(dpkg --print-architecture) in
+            ppc64)
+ 	       ROOT=/opt/ltsp/powerpc
+ 	       ARCH=powerpc
+ 	       ;;
+ 	    powerpc)
+ 	       ROOT=/opt/ltsp/powerpc
+ 	       ARCH=powerpc
+ 	       ;;
+ 	    *)
+ 	       echo "ERROR: --arch powerpc called on unsupported arch: "$(dpkg --print-architecture)
+ 	       exit 1
+ 	       ;;
+          esac
+          ;;
+        *)
+	  echo "ERROR: unsupported --arch argument: "$ARCH_OPT
+	  exit 1
+	  ;;
+      esac	  
+      ;;
     --help) get_help
       exit 0
       ;;
@@ -110,6 +156,7 @@ while [ "$#" -gt "0" ]; do
   test "$#" -gt "0" && shift
 done
 
+test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
 test -z "$DIST" && DIST=breezy
 
@@ -151,7 +198,7 @@ if [ -n "$EXCLUDE" ] ; then
 fi
 
 # Install base packages
-debootstrap $DEBOOTSTRAPOPTS $DIST $ROOT $MIRROR
+debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
