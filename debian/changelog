@@ -1,3 +1,10 @@
+ltsp (0.60) dapper; urgency=low
+
+  * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/multiarch/ (ogra)
+  * Use find rather than ls for enumerating architectures (mdz)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon,  5 Dec 2005 20:47:43 -0800
+
 ltsp (0.59) dapper; urgency=low
 
   * Merge all of Petter's ubuntufixes branch up to patch-77
