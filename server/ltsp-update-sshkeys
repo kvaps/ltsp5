@@ -1,6 +1,6 @@
 #!/bin/sh
 
-clients=`ls -1p /opt/ltsp | fgrep / | sed 's/\///'`
+clients=$(find /opt/ltsp -mindepth 1 -maxdepth 1 -type d -printf '%f\n')
 hostname=$(hostname)
 ips=$(getent hosts $hostname | awk '$0 !~ /127.0.0.1/ { print $1 }')
 ips=$(ip -o addr show | awk '$3 == "inet" && $4 !~ /^127\./ { print $4 }' | sed -e 's,/[0-9][0-9]*\>,,g')
