@@ -19,7 +19,6 @@ class GTKGreeter:
 	def run(self):
 	    self.ok = False
 	    self.flag = 0
-	    self.text = []
 
 	    # set default gtk theme
 	    try:
@@ -54,8 +53,8 @@ class GTKGreeter:
 	    gtk.main()
 
 	    if self.ok == True:
-		print self.text[0]
-		print self.text[1]
+		print self.username
+		print self.password
 		#print self.session
 		#print self.language
 		return True
@@ -73,7 +72,7 @@ class GTKGreeter:
 	    self.root.add(gnomecanvas.CanvasRect, x1 = -(self.sq_width/2)+self.diff, 
 	    		  y1 = +(self.sq_height), x2 = +(self.sq_width/2)+self.diff,
 	                  y2 = +(self.sq_height*2), fill_color = self.loginwin_color)
-	    self.username = self.root.add(gnomecanvas.CanvasText,
+	    self.entrylabel = self.root.add(gnomecanvas.CanvasText,
 	                  markup = '<span size="10000"><b>Username:</b></span>', 
 			  fill_color = self.foreground_color, x = -33+self.diff, y = 100)
 	    # entry with small frame
@@ -230,18 +229,20 @@ class GTKGreeter:
 	def switch_entry(self, flag):
 	    # switch between username and password entry, make sure neither of them is empty
 	    # and exit after the password was entered.
-	    self.text.append(self.entry.get_text())
 	    if len(self.entry.get_text()) == 0:
 		    return
-	    self.username.destroy()
-	    self.entry.set_text('')
+	    self.entrylabel.destroy()
 	    if flag > 0:
+	    	    self.password = self.entry.get_text()
 		    session = self.session[1]
 		    language = self.language[1]
 		    self.rootwin.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 		    self.ok = True
 		    gtk.main_quit()
-	    self.username = self.root.add(gnomecanvas.CanvasText,
+	    else:
+	    	    self.username = self.entry.get_text()
+	    self.entry.set_text('')
+	    self.entrylabel = self.root.add(gnomecanvas.CanvasText,
 	                  markup = '<span size="10000"><b>Password:</b></span>', 
 			  fill_color = self.foreground_color, x = -33+self.diff, y = 100)
 	    self.entry.set_visibility(False)
