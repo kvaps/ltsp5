@@ -1,3 +1,9 @@
+ltsp (0.62) dapper; urgency=low
+
+  * Default DIST to dapper (ogra)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 12 Dec 2005 08:55:02 -0800
+
 ltsp (0.61) dapper; urgency=low
 
   * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/ldm/ (ogra)
