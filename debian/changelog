@@ -1,3 +1,9 @@
+ltsp (0.61) dapper; urgency=low
+
+  * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/ldm/ (ogra)
+
+ -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 12 Dec 2005 08:32:06 -0800
+
 ltsp (0.60) dapper; urgency=low
 
   * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/multiarch/ (ogra)
