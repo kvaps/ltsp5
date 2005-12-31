@@ -156,7 +156,7 @@ if [ Y = "${USE_XFS}" ] ; then
     if [ -z "${XFS_SERVER}" ] ; then
 	XFS_SERVER="${SERVER}"
     fi
-    XF_ARGS="-fp tcp/${XFS_SERVER}:7100"
+    XF_ARGS="$XF_ARGS -fp tcp/${XFS_SERVER}:7100"
 fi
 
 if [ -w /proc/progress ]; then
