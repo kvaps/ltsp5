@@ -103,16 +103,7 @@ while [ "$#" -gt "0" ]; do
       case $ARCH_OPT in
         i386)
 	  case $(dpkg --print-architecture) in
-	    amd64)
-	        ROOT=/opt/ltsp/i386
-	        ARCH=i386
-	        ;;
-	    ia64)
-	        ROOT=/opt/ltsp/i386
-	        ARCH=i386
-	        ;;
-	    i386)
-	        ROOT=/opt/ltsp/i386
+	    amd64|ia64|i386)
 	        ARCH=i386
 	        ;;
 	    *)
@@ -123,12 +114,7 @@ while [ "$#" -gt "0" ]; do
 	  ;;
 	powerpc)
 	  case $(dpkg --print-architecture) in
-            ppc64)
- 	       ROOT=/opt/ltsp/powerpc
- 	       ARCH=powerpc
- 	       ;;
- 	    powerpc)
- 	       ROOT=/opt/ltsp/powerpc
+            ppc64|powerpc)
  	       ARCH=powerpc
  	       ;;
  	    *)
