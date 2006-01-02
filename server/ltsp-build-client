@@ -157,7 +157,7 @@ while [ "$#" -gt "0" ]; do
 done
 
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
-test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
+test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
 
 # set defaults based on dist
