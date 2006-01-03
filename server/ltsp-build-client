@@ -23,6 +23,7 @@ cat << EOF
  --serial-console  enable serial console
  --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
  --help  display this help
+ --apt-keys "<key1 key2>" keys to add to the apt keyring
 EOF
 }
 
@@ -96,6 +97,9 @@ while [ "$#" -gt "0" ]; do
       test "$#" -gt "0" && shift
       ;;
     --late-packages) LATE_PACKAGES="$2"
+      test "$#" -gt "0" && shift
+      ;;
+    --apt-keys) APT_KEYS="$2"
       test "$#" -gt "0" && shift
       ;;
     --arch) ARCH_OPT="$2"
@@ -208,6 +212,11 @@ done
 trap on_exit EXIT
 make_policyrcd
 make_dummy_start_stop_daemon
+
+# add keys to the apt keyring
+for key in $APT_KEYS ; do
+  cat $key | chroot $ROOT apt-key add -
+done
 
 chroot $ROOT apt-get update
 
