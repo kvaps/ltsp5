@@ -22,6 +22,7 @@ cat << EOF
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
  --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
+ --debconf-seeds  load debconf pre-seeding files in the chroot
  --help  display this help
  --apt-keys "<key1 key2>" keys to add to the apt keyring
 EOF
@@ -138,6 +139,9 @@ while [ "$#" -gt "0" ]; do
       ;;
     --serial-console) use_serial_console="true"
       ;;
+    --debconf-seeds) DEBCONF_SEEDS="$2"
+      test "$#" -gt "0" && shift
+      ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -192,6 +196,13 @@ debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
+
+if [ -n "$DEBCONF_SEEDS" ]; then
+  # load debconf preseeding files
+  for seed in $DEBCONF_SEEDS; do
+    cat $seed | chroot $ROOT debconf-set-selections
+  done
+fi
 
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
