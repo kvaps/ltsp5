@@ -1,3 +1,9 @@
+ltsp (0.63) dapper; urgency=low
+
+  * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/sound/ (ogra)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 10 Jan 2006 18:28:05 +0100
+
 ltsp (0.62) dapper; urgency=low
 
   * Default DIST to dapper (ogra)
