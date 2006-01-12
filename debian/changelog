@@ -10,6 +10,7 @@ ltsp (0.63) UNRELEASED; urgency=low
     - commandline option to add keys into chroot's apt keyring
     - simplify --arch handling (use default for ROOT)
     - change default for ROOT to use ARCH
+    - preseed handling code for passwd
 
  -- Otavio Salvador <otavio@debian.org>  Thu, 12 Jan 2006 20:10:46 -0200
 
@@ -204,6 +205,18 @@ ltsp (0.58debian4) unstable; urgency=low
   * New command line argument --apt-keys to load more GPG keys into APT.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sat, 19 Nov 2005 15:42:07 +0100
+
+ltsp (0.58debian3) unstable; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Generate simple fstab on the client, to quiet down fsck during boot.
+  * Adjust bind-mount config to get X configuration working also when
+    xdebconfigurator is not used.
+
+  [ Vagrant Cascadian ]
+  * Handle "" commandline parameters.  (Closes: #335870)
+
+ -- Petter Reinholdtsen <pere@debian.org>  Tue,  1 Nov 2005 20:24:31 +0100
 
 ltsp (0.58debian3) unstable; urgency=low
 

@@ -23,8 +23,10 @@ cat << EOF
  --serial-console  enable serial console
  --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
  --debconf-seeds  load debconf pre-seeding files in the chroot
- --help  display this help
+ --disable-rootpass  disable root password in the chroot
+ --prompt-rootpass  prompt for root password
  --apt-keys "<key1 key2>" keys to add to the apt keyring
+ --help  display this help
 EOF
 }
 
@@ -179,10 +181,9 @@ while [ "$#" -gt "0" ]; do
       exit 0
       ;;
     --serial-console) use_serial_console="true"
-      ;;
+    --disable-rootpass) ROOTPASS="disable" ;;
+    --prompt-rootpass) ROOTPASS="prompt" ;;
     --debconf-seeds) DEBCONF_SEEDS="$2"
-      test "$#" -gt "0" && shift
-      ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -241,8 +242,21 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
-# Root password is empty by default, lock it
-chroot $ROOT passwd -l root
+test -z "$ROOTPASS" && ROOTPASS="disable"
+if [ "$ROOTPASS" = "disable" ]; then
+  # Root password is empty by default, lock it
+  chroot $ROOT passwd -l root
+elif [ "$ROOTPASS" = "prompt" ]; then
+  # prompt for root password
+  chroot $ROOT passwd root
+fi
+
+if [ -n "$DEBCONF_SEEDS" ]; then
+  # load debconf preseeding files
+  for seed in $DEBCONF_SEEDS; do
+    cat $seed | chroot $ROOT debconf-set-selections
+  done
+fi
 
 if [ -n "$DEBCONF_SEEDS" ]; then
   # load debconf preseeding files
