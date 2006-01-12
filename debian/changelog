@@ -1,3 +1,18 @@
+ltsp (0.63) UNRELEASED; urgency=low
+
+  [ Otavio Salvador ]
+  * Merge source from Petter Reinholdtsen to support Debian as host. All
+    changes are logged bellow with versions having debian on it.
+  * Merge following Vagrant Cascadian changes:
+    - allow x-display-manager as alternative to ldm or sdm, for use on thick clients
+    - implement RCFILE
+    - commandline option to support debconf pre-seeding in the chroot
+    - commandline option to add keys into chroot's apt keyring
+    - simplify --arch handling (use default for ROOT)
+    - change default for ROOT to use ARCH
+
+ -- Otavio Salvador <otavio@debian.org>  Thu, 12 Jan 2006 20:10:46 -0200
+
 ltsp (0.62) dapper; urgency=low
 
   * Default DIST to dapper (ogra)
