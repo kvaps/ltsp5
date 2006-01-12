@@ -156,8 +156,16 @@ configure_x() {
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
       preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
 
-      # Autoconfigure
-      dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
+      # Autoconfigure using dexconf when using xdebconfigurator, or X
+      # package postinst if not.  Using dexconf directly might save
+      # some memory on the client.
+      if [ -n "$(which xdebconfigurator)" ] &&
+         [ "$root_write_method" = "bind_mounts" ]; then
+        # Using dexconf instead of reconfigure to save memory ?
+        dexconf -o $xserver_config
+      else
+        dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
+      fi
     fi
 }
 

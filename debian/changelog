@@ -169,6 +169,76 @@ ltsp (0.59) dapper; urgency=low
   
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 15 Aug 2005 16:10:44 -0700
 
+ltsp (0.58debian4) unstable; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Updated standards-version from 2.6.1 to 2.6.2.
+  * Enable fontserver preseeding, as bug #323262 is fixed in dexconf
+    from xorg-x11 version 6.8.99.901.dfsg.1-1) in experimental, to
+    make it easier to test it when the new dexconf make it to unstable
+    and testing.
+  * Add French debconf translation by Jean-Marc Chaton.  (Closes: #337044)
+  * Add Czech debconf translation by Miroslav Kure.  (Closes: #338842)
+  * Disable DELAYLOGIN and EDITMOTD, to avoid warning because / is
+    read-only.
+  * Make /var/lib/nfs writable, to allow nfs-common (rpc.statd) to start.
+
+  [ Vagrant Cascadian ]
+  * Change ltsp-server priority from optional to extra as it depend on
+    some packages with extra priority (debootstrap and tftp servers).
+  * New command line argument --apt-keys to load more GPG keys into APT.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sat, 19 Nov 2005 15:42:07 +0100
+
+ltsp (0.58debian3) unstable; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Generate simple fstab on the client, to quiet down fsck during boot.
+  * Adjust bind-mount config to get X configuration working also when
+    xdebconfigurator is not used.
+
+  [ Vagrant Cascadian ]
+  * Handle "" commandline parameters.  (Closes: #335870)
+
+ -- Petter Reinholdtsen <pere@debian.org>  Tue,  1 Nov 2005 20:24:31 +0100
+
+ltsp (0.58debian2) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * Add ltsp-server dependency on debconf-utils, as
+    ltsp-build-client uses debconf-get-selections.
+  * Add ltsp-server dependency on openssh-client (or ssh), as
+    ltsp-update-sshkeys uses ssh-keyscan.
+  * Make dynamic editing of /etc/exports optional.
+
+  [ Petter Reinholdtsen ]
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
+    - Remove dependency on ltsp-utils; violates the
+      principle of least surprise.
+    - Removed TODO file.
+  * Make it possible to run the client without xdebconfigurator, by
+    only using dexconf when xdebconfigurator was available.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Mon, 24 Oct 2005 22:02:34 +0200
+
+ltsp (0.58debian1) unstable; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
+  * Pass X keyboard layout and other settings from server
+    (debconf values) to the client.
+  * Remove workaround forbug #328090.  No longer present in etch.
+
+  [ Vagrant Cascadian ]
+  * Drop special handling of mkvmlinuz- it is already handled
+    in kernel post-install scripts.
+  * Fix typos in alpha network booting support.
+  * Pass "--ip=dhcp" to mkelf-linux.  (Closes: #334524)
+  * Check for appropriate architecture when building
+    ltsp client from postinst.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Fri, 21 Oct 2005 10:54:31 +0200
+
 ltsp (0.58) breezy; urgency=low
 
   * Don't allow a broken dhcpd.conf to abort the ltsp-server-standalone
@@ -181,6 +251,81 @@ ltsp (0.57) breezy; urgency=low
   * Copy the server keymap as the client default
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Fri, 23 Sep 2005 10:01:44 -0700
+
+ltsp (0.56debian5) unstable; urgency=low
+
+  * Make sure ltsp-server-standalone installs properly even
+    when dhcp3-server init.d script fail to restart.
+  * Use umask 022 when creating netboot kernel, to make sure the files
+    are accessable over tftp.
+  * Add code to umount mounted directories when the client build fail.
+  * Provide a diverted start-stop-daemon and a policy-rc.d, while
+    building he client, to avoid starting daemons during the build.
+  * Make the udeb an optional, not standard priority package.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Mon, 17 Oct 2005 09:13:20 +0200
+
+ltsp (0.56debian4) unstable; urgency=low
+
+  * Add 'ip=dhcp root=/dev/nfs' as default kernel flags in the PXE
+    boot, to get the PXE booting to work out of the box.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sat, 15 Oct 2005 20:14:59 +0200
+
+ltsp (0.56debian3) unstable; urgency=low
+
+  * Add new package ltsp-client-builder (udeb), to make it
+    possible to install LTSP automatically during installation.
+  * Do not install sdm on the client by default.
+  * Let ltsp-client recommend xdebconfigurator to
+    document the fact that it is used if when present.
+  * Update /etc/exports when the client environment is
+    built, not when the ltsp-server package is installed.
+  * Make sure the ltsp-build-client script do not hang
+    when installing packages reading from stdin.
+  * Let ltsp-server depend on iproute, to find the
+    'ip' command used by ltsp-update-sshkeys.
+  * Improve the error message when /var/lib/tftpboot/ltsp
+    is missing.  (Closes: #331229)
+  * Add support for preseeding the creation of
+    an LTSP client environment.
+  * Make ltsp-server and ltsp-client-builder depend on
+    ${misc:Depends}, to get a dependency on debconf.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed, 12 Oct 2005 23:49:05 +0200
+
+ltsp (0.56debian2) unstable; urgency=low
+
+  * Fix typo in sid security apt source handling.
+  * Change default dist from sarge to etch.  Should make this more
+    dynamic, but this change should get ltsp-server working out of
+    the box. (Closes: #327253)
+  * Merge patch from ubuntun breezy bazaar branch:
+    - Copy the server keymap as the client default
+  * Update address of FSF in debian/copyright.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Fri, 30 Sep 2005 09:32:09 +0200
+
+ltsp (0.56debian1) unstable; urgency=low
+
+  * Use --resolve-deps argument for debootstrap if it is supported.
+  * Fix compile warnings in lp_server.
+  * Correct ldm package to be architecture all, not any.
+  * Improve ldm package description. (Closes: #325652)
+  * Debian/sid do not have security APT source.  Disable security-mirror
+    when building a sid based client.
+  * Use the same configuration for sarge, etch and sid when building the
+    client chroot.
+  * Update TODO.Debian to reflect remaining todo items.  ldm is now a
+    separate package, mtab is handled correctly, debootstrap will exclude
+    several unused packages, sdm is working and ldm is working with
+    the python version in sarge.
+  * Add workaround for bug #328090, by preseeding passwd in the chroot
+    to not create a local user, and then reconfigure it to generate
+    /etc/shadow.
+  * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
+
+ -- Petter Reinholdtsen <pere@debian.org>  Tue, 27 Sep 2005 23:07:51 +0200
 
 ltsp (0.56) breezy; urgency=low
 
