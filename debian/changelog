@@ -1,4 +1,4 @@
-ltsp (0.64debian1) unstable; urgency=low
+ltsp (0.64debian0.pere.1) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
   * Merge source from Petter Reinholdtsen to support Debian as host. All
