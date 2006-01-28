@@ -176,14 +176,15 @@ while [ "$#" -gt "0" ]; do
 	  echo "ERROR: unsupported --arch argument: "$ARCH_OPT
 	  exit 1
 	  ;;
-      esac	  
+      esac
+      ;;
     --help) get_help
       exit 0
       ;;
-    --serial-console) use_serial_console="true"
+    --serial-console) use_serial_console="true" ;;
     --disable-rootpass) ROOTPASS="disable" ;;
     --prompt-rootpass) ROOTPASS="prompt" ;;
-    --debconf-seeds) DEBCONF_SEEDS="$2"
+    --debconf-seeds) DEBCONF_SEEDS="$2" ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
