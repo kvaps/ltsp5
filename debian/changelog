@@ -1,3 +1,11 @@
+ltsp (0.64) dapper; urgency=low
+
+  * Merge sources.list fix to not append but replace the file 
+    in the client chroot to make networkless installs work.
+    http://people.ubuntu.com/~ogra/bzr-archive/ltsp/fixes/
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 13 Jan 2006 14:09:19 +0100
+
 ltsp (0.63) dapper; urgency=low
 
   * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/sound/ (ogra)
