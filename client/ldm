@@ -6,6 +6,8 @@ import subprocess
 import time
 import signal
 import socket
+import struct
+import fcntl
 
 def get_config(name):
     return os.environ.get(name)
@@ -14,6 +16,14 @@ def get_config_bool(name):
     val = os.environ.get(name)
     return (val and val.lower() == 'y')
 
+def get_ip(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
+
 class LDM:
     def __init__(self, vt, display):
         self.vt = vt
@@ -21,6 +31,7 @@ class LDM:
         self.server = get_config('SERVER')
         self.use_xfs = get_config_bool('USE_XFS')
         self.remotecmd = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'
+	self.ip = get_ip('eth0')
 
         if self.use_xfs:
             xfs_server = get_config('XFS_SERVER') or self.server
@@ -87,6 +98,7 @@ class LDM:
 
             ssh_remote_command = ['env', 
                                   'LTSP_CLIENT="%s"' % (socket.gethostname()),
+				  'esddsp', '-m','--server=%s:16001' % (self.ip),
                                   session_manager,
                                   ';',
                                   'kill -1 $PPID']
