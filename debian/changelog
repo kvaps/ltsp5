@@ -12,6 +12,10 @@ ltsp (0.64debian1) unstable; urgency=low
     - change default for ROOT to use ARCH
     - preseed handling code for passwd
 
+  [ Petter Reinholdtsen ]
+  * Implement proper xauth handling, to speed up the client
+    login.  (Closes: #350311)
+
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 00:02:16 +0100
 
 ltsp (0.64) dapper; urgency=low
