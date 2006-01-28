@@ -13,6 +13,12 @@ if [ ! -d $TFTPBOOT ] ; then
     echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
     exit 1
 fi
+test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
+
+if [ ! -d $TFTPBOOT ] ; then
+    echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
+    exit 1
+fi
 
 for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initrd.img*; do
     cp -a -v "$file" $TFTPBOOT
@@ -24,7 +30,7 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
         mkdir $PXECFG
     fi
     cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img quiet splash
+DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
 EOF
 else
     echo "Skipping PXE images.  Install the syslinux package if you need them."
@@ -44,9 +50,9 @@ if which mkelf-linux >/dev/null; then
         fi
 
         if [ -f "$initrd" ]; then
-            mkelf-linux -o $nbi $kernel $initrd
+            mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
         else
-            mkelf-linux -o $nbi $kernel
+            mkelf-linux --ip=dhcp -o $nbi $kernel
         fi
     done
 else

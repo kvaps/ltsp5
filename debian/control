@@ -6,7 +6,8 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.2
 
 Package: ltsp-server
-Depends: debootstrap, nfs-kernel-server, tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
+Priority: extra
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm
 Architecture: all
@@ -22,8 +23,8 @@ Description: Complete LTSP server environment
  the clients.
  
 Package: ltsp-client
-Depends: lsb-base, nbd-client, ldm | sdm-terminal, initramfs-tools (>= 0.11) | initrd-netboot-tools, esound
-Recommends: ubuntu-thin-client
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, esound
+Recommends: ubuntu-thin-client, xdebconfigurator
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: any
@@ -48,7 +49,7 @@ Description: LTSP display manager
 
 Package: ltsp-client-builder
 Section: debian-installer
-Priority: standard
+Priority: optional
 XC-Package-Type: udeb
 Architecture: all
 Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer

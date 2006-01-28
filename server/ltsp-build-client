@@ -22,8 +22,54 @@ cat << EOF
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
  --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
+ --debconf-seeds  load debconf pre-seeding files in the chroot
+ --disable-rootpass  disable root password in the chroot
+ --prompt-rootpass  prompt for root password
+ --apt-keys "<key1 key2>" keys to add to the apt keyring
  --help  display this help
 EOF
+}
+
+# Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
+# running init scripts during installation
+make_policyrcd() {
+    cat > $ROOT/usr/sbin/policy-rc.d <<EOF
+#!/bin/sh
+exit 101
+EOF
+    chmod a+rx $ROOT/usr/sbin/policy-rc.d
+}
+remove_policyrcd() {
+    rm -f $ROOT/usr/sbin/policy-rc.d
+}
+
+# This way to make start-stop-daemon do not work on upgrades, when
+# start-stop-daemon is replaced with a new version.  I tried to use
+# dpkg-divert to solve this, but am not sure I got it right. [pere
+# 2004-07-29]
+make_dummy_start_stop_daemon() {
+    cat > $ROOT/sbin/start-stop-daemon.dummy <<EOF
+#!/bin/sh
+echo 1>&2
+echo 'Warning: Fake start-stop-daemon called, doing nothing.' 1>&2
+exit 0
+EOF
+    chmod a+rx $ROOT/sbin/start-stop-daemon.dummy
+    chroot $ROOT dpkg-divert --add --local --rename /sbin/start-stop-daemon
+    ln -s start-stop-daemon.dummy $ROOT/sbin/start-stop-daemon
+}
+remove_dummy_start_stop_daemon() {
+    rm $ROOT/sbin/start-stop-daemon
+    chroot $ROOT dpkg-divert --remove --local --rename /sbin/start-stop-daemon
+}
+on_exit() {
+    remove_dummy_start_stop_daemon
+    remove_policyrcd
+
+    # umount bind mounts
+    for dir in $umounts ; do
+	umount $dir
+    done
 }
 
 # Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
@@ -98,21 +144,15 @@ while [ "$#" -gt "0" ]; do
     --late-packages) LATE_PACKAGES="$2"
       test "$#" -gt "0" && shift
       ;;
+    --apt-keys) APT_KEYS="$2"
+      test "$#" -gt "0" && shift
+      ;;
     --arch) ARCH_OPT="$2"
       test "$#" -gt "0" && shift
       case $ARCH_OPT in
         i386)
 	  case $(dpkg --print-architecture) in
-	    amd64)
-	        ROOT=/opt/ltsp/i386
-	        ARCH=i386
-	        ;;
-	    ia64)
-	        ROOT=/opt/ltsp/i386
-	        ARCH=i386
-	        ;;
-	    i386)
-	        ROOT=/opt/ltsp/i386
+	    amd64|ia64|i386)
 	        ARCH=i386
 	        ;;
 	    *)
@@ -123,12 +163,7 @@ while [ "$#" -gt "0" ]; do
 	  ;;
 	powerpc)
 	  case $(dpkg --print-architecture) in
-            ppc64)
- 	       ROOT=/opt/ltsp/powerpc
- 	       ARCH=powerpc
- 	       ;;
- 	    powerpc)
- 	       ROOT=/opt/ltsp/powerpc
+            ppc64|powerpc)
  	       ARCH=powerpc
  	       ;;
  	    *)
@@ -142,12 +177,13 @@ while [ "$#" -gt "0" ]; do
 	  exit 1
 	  ;;
       esac	  
-      ;;
     --help) get_help
       exit 0
       ;;
     --serial-console) use_serial_console="true"
-      ;;
+    --disable-rootpass) ROOTPASS="disable" ;;
+    --prompt-rootpass) ROOTPASS="prompt" ;;
+    --debconf-seeds) DEBCONF_SEEDS="$2"
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -157,7 +193,7 @@ while [ "$#" -gt "0" ]; do
 done
 
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
-test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
+test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
 
 # set defaults based on dist
@@ -187,6 +223,12 @@ if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; 
   echo "$EXTRA_MIRROR"
 fi
 
+# No security support for sid
+if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR"; then
+  echo "NOTE: disabling security APT source for sid.  It does not exist."
+  SECURITY_MIRROR=""
+fi
+
 if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
   echo "NOTE: adding default dist and components to security mirror:"
   SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
@@ -200,8 +242,28 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
-# Root password is empty by default, lock it
-chroot $ROOT passwd -l root
+test -z "$ROOTPASS" && ROOTPASS="disable"
+if [ "$ROOTPASS" = "disable" ]; then
+  # Root password is empty by default, lock it
+  chroot $ROOT passwd -l root
+elif [ "$ROOTPASS" = "prompt" ]; then
+  # prompt for root password
+  chroot $ROOT passwd root
+fi
+
+if [ -n "$DEBCONF_SEEDS" ]; then
+  # load debconf preseeding files
+  for seed in $DEBCONF_SEEDS; do
+    cat $seed | chroot $ROOT debconf-set-selections
+  done
+fi
+
+if [ -n "$DEBCONF_SEEDS" ]; then
+  # load debconf preseeding files
+  for seed in $DEBCONF_SEEDS; do
+    cat $seed | chroot $ROOT debconf-set-selections
+  done
+fi
 
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
@@ -223,6 +285,11 @@ trap on_exit EXIT
 make_policyrcd
 make_dummy_start_stop_daemon
 
+# add keys to the apt keyring
+for key in $APT_KEYS ; do
+  cat $key | chroot $ROOT apt-key add -
+done
+
 chroot $ROOT apt-get update
 
 DEBIAN_FRONTEND=noninteractive
@@ -230,6 +297,19 @@ export DEBIAN_FRONTEND
 
 # some packages require proc to be mounted
 chroot $ROOT mount -t proc proc /proc && umounts="$umounts $ROOT/proc"
+
+preseed() {
+    ROOT="$1"
+    package="$2"
+    question="$3"
+    type="$4"
+    value="$5"
+    echo $package $question $type $value | chroot $ROOT debconf-set-selections
+}
+
+# Workaround for bug #328090 (in shadow or adduser, I suspect)
+preseed $ROOT passwd passwd/make-user boolean false
+chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd
 
 # get package updates for base system
 chroot $ROOT apt-get -y dist-upgrade
@@ -259,14 +339,26 @@ else
   echo "manual configuration may be required"
 fi
 
+# Disable DELAYLOGIN and EDITMOTD, to avoid warning because / is read-only.
+sed -i -e 's/^DELAYLOGIN=.*$/DELAYLOGIN=no/' $ROOT/etc/default/rcS
+sed -i -e 's/^EDITMOTD=.*$/EDITMOTD=no/' $ROOT/etc/default/rcS
+
 # Install additional packages, such as the kernel
 chroot $ROOT apt-get -y install $LATE_PACKAGES </dev/null
 
-ltsp-update-kernels
-ltsp-update-sshkeys
+LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
+clients="$ROOT" ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
 touch $ROOT/etc/hosts
+
+# Pass default X keyboard config from server to the client
+debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
+  chroot $ROOT debconf-set-selections
+
+if [ -e /etc/console/boottime.kmap.gz ]; then
+  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
+fi
 
 touch $ROOT/etc/nbd-client
 
@@ -295,9 +387,23 @@ fi
 
 # Export LTSP chroot using NFS to the LTSP client network
 if ! grep -q '^/opt/ltsp' /etc/exports ; then
+  test -z "$overwrite_exports" && overwrite_exports="true"
+  if [ "$overwrite_exports" = "true" ]; then
             cat <<EOF >> /etc/exports
 # Automatically added by ltsp-server
 /opt/ltsp       *(ro,no_root_squash,async)
 EOF
             invoke-rc.d nfs-kernel-server reload
+  else
+    cat <<EOF
+WARNING: no entry for /opt/ltsp in /etc/exports,
+you may want to add the following line to /etc/exports:
+
+/opt/ltsp       *(ro,no_root_squash,async)
+
+and then run the command:
+
+invoke-rc.d nfs-kernel-server reload
+EOF
+  fi
 fi
