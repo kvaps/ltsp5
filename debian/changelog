@@ -19,6 +19,8 @@ ltsp (0.64debian0.pere.1) UNRELEASED; urgency=low
     python versions before 2.4.
   * Reinsert rule to include /etc/ltsp/ltsp-build-client.conf in
     ltsp-server package.
+  * Reinsert code to use xdebconfigurator on the client if it is
+    installed.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 00:02:16 +0100
 
