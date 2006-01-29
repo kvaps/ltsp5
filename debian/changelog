@@ -27,6 +27,7 @@ ltsp (0.64debian0.pere.2) UNRELEASED; urgency=low
   * Change ldm depend from python-gnome2 to 'python2.3-gnome2 |
     python-gnome2', to try to get the gnomecanvas python module
     available on sarge.
+  * New ldm theme Debian-Edu, and made it the default.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 00:02:16 +0100
 
