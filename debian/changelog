@@ -4,7 +4,8 @@ ltsp (0.64debian0.pere.2) UNRELEASED; urgency=low
   * Merge source from Petter Reinholdtsen to support Debian as host. All
     changes are logged bellow with versions having debian on it.
   * Merge following Vagrant Cascadian changes:
-    - allow x-display-manager as alternative to ldm or sdm, for use on thick clients
+    - allow x-display-manager as alternative to ldm or sdm, for use on
+      thick clients
     - implement RCFILE
     - commandline option to support debconf pre-seeding in the chroot
     - commandline option to add keys into chroot's apt keyring
