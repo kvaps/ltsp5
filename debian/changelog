@@ -1,4 +1,4 @@
-ltsp (0.64debian0.pere.2) UNRELEASED; urgency=low
+ltsp (0.64debian0.pere.3) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
   * Merge source from Petter Reinholdtsen to support Debian as host. All
@@ -26,10 +26,11 @@ ltsp (0.64debian0.pere.2) UNRELEASED; urgency=low
     bind-mounted as we use xdebconfigurator to save space.
   * Change ldm depend from python-gnome2 to 'python2.3-gnome2 |
     python-gnome2', to try to get the gnomecanvas python module
-    available on sarge.
+    available on sarge, and use gnome.convas instead of gnomecanvas
+    for compatibility reasons.
   * New ldm theme Debian-Edu, and made it the default.
 
- -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 00:02:16 +0100
+ -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
 
 ltsp (0.64) dapper; urgency=low
 
