@@ -17,6 +17,8 @@ ltsp (0.64debian0.pere.1) UNRELEASED; urgency=low
     login.  (Closes: #350311)
   * Reinsert subprocess.py in the ldm package, to get it working with
     python versions before 2.4.
+  * Reinsert rule to include /etc/ltsp/ltsp-build-client.conf in
+    ltsp-server package.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 00:02:16 +0100
 
