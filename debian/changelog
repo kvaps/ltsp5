@@ -21,6 +21,8 @@ ltsp (0.64debian0.pere.1) UNRELEASED; urgency=low
     ltsp-server package.
   * Reinsert code to use xdebconfigurator on the client if it is
     installed.
+  * Make sure /etc/X11 and /var/lib/xfree86 isn't copied and
+    bind-mounted as we use xdebconfigurator to save space.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 00:02:16 +0100
 

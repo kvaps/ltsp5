@@ -13,11 +13,11 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/hotplug/.run /var/lib/nfs"
+rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/hotplug/.run /var/lib/nfs /var/lib/urandom"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs="/etc/X11 /var/lib/xfree86"
+copy_dirs=""
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
