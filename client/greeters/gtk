@@ -7,7 +7,10 @@ import string
 import gtk
 import gobject
 import gtk.glade
-import gnomecanvas 
+try:
+  import gnomecanvas 
+except:
+  import gnome.canvas as gnomecanvas
 from gtk import RcStyle
 from time import localtime, strftime
 
