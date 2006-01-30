@@ -117,6 +117,10 @@ configure_x() {
         # User has specified a custom config
         cp "$XF86CONFIG_FILE" "$xserver_config"
     else
+      # Autoconfigure
+      if [ -n "$(which xdebconfigurator)" ]; then
+        xdebconfigurator
+      fi
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
         preseed $xserver_package $xserver_package/autodetect_video_card "false"
