@@ -27,9 +27,17 @@ test -x $DAEMON || exit 0
 . /usr/lib/ltsp/ltsp_functions
 . /usr/lib/ltsp/ltsp_config
 
+start_sound() {
+    if [ -n "$SOUND" ]; then
+        /usr/bin/esd -nobeeps -public -tcp &
+    fi
+}
+
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client..."
+
+        start_sound || true
 
         for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
             num=${screen##SCREEN_}
