@@ -203,9 +203,6 @@ debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
 
-# Always load mousedev
-echo mousedev >> $ROOT/etc/modules
-
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   if [ -n "$mirror" ]; then
     echo "deb $mirror" > $ROOT/etc/apt/sources.list
