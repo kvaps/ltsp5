@@ -1,3 +1,15 @@
+ltsp (0.65) dapper; urgency=low
+
+  * merged fix (drop esddsp from ldm) from 
+    http://people.ubuntu.com/~ogra/bzr-archive/ltsp/sound/'
+  * changed the MODULES= line in ltsp-build-client from "none" to 
+    "netboot" to make use of the new initramfs feature (thanks adam)
+  * changed the default mirror to archive.ubuntu.com in ltsp-build-client
+  * drop adding of mousedev to /etc/modules in ltsp-build-client, 
+    its built into the kernel now
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  1 Feb 2006 20:34:39 +0100
+
 ltsp (0.64) dapper; urgency=low
 
   * Merge sources.list fix to not append but replace the file 
