@@ -136,9 +136,11 @@ configure_x() {
       fi
 
       preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
-      preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
-      preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
-      preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+
+      if [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && [ i386 = $(dpkg --print-architecture) ] && \
+        [ -n "$X_MOUSE_PROTOCOL" ]; then
+        inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+      fi
 
       X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
       if [ -n "$X_MODE" ]; then
