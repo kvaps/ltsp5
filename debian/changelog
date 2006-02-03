@@ -1,6 +1,6 @@
 ltsp (0.66) dapper; urgency=low
 
-  * fix typo in the X_MODE codein ltsp-client-setup
+  * fix typo in the X_MODE code in ltsp-client-setup
   * add proper serial mouse support to ltsp-client-setup
   * make ltsp-client depend on inputattach for serial mouse support
 
