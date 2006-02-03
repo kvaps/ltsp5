@@ -24,7 +24,7 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
         mkdir $PXECFG
     fi
     cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img
+DEFAULT vmlinuz ro initrd=initrd.img quiet splash
 EOF
 else
     echo "Skipping PXE images.  Install the syslinux package if you need them."

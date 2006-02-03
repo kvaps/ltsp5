@@ -158,7 +158,7 @@ done
 
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
-test -z "$DIST" && DIST=breezy
+test -z "$DIST" && DIST=dapper
 
 # set defaults based on dist
 case $DIST in
@@ -208,7 +208,7 @@ echo mousedev >> $ROOT/etc/modules
 
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   if [ -n "$mirror" ]; then
-    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+    echo "deb $mirror" > $ROOT/etc/apt/sources.list
     case $mirror in
       file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
         mkdir -p $ROOT/$dir
