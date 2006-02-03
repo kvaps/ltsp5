@@ -219,6 +219,7 @@ bind_unmounts() {
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
+	type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 120" || true
         if [ "$root_write_method" = "bind_mounts" ]; then
           bind_mounts
         fi
