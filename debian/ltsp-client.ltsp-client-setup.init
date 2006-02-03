@@ -135,7 +135,9 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
 
-      preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+      if [ -n "$X_COLOR_DEPTH" ]; then
+        preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+      fi
 
       if [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && [ i386 = $(dpkg --print-architecture) ] && \
         [ -n "$X_MOUSE_PROTOCOL" ]; then
