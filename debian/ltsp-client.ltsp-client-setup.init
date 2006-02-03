@@ -165,11 +165,23 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
       fi
 
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+      # Make sure xkb values only get preseeded if the variables are actually set
+      # (saves boottime to not call debconf-communicate on every empty value)
+      if [ -n "$XKBLAYOUT" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+      fi
+      if [ -n "$XKBMODEL" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
+      fi
+      if [ -n "$XKBRULES" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
+      fi
+      if [ -n "$XKBOPTIONS" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
+      fi
+      if [ -n "$XKBVARIANT" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+      fi
 
       # Autoconfigure
       dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
