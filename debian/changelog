@@ -1,3 +1,21 @@
+ltsp (0.67) dapper; urgency=low
+
+  * finally add usplash dependency to ltsp-client
+  * make dependency on inputattach arch specific, it exists only 
+    on i386
+  * merge rev 226-228 from
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/
+    (simplifies ARCH and ROOT handling)
+  * cleanly wrap the xkb options to not run debconf communicate for 
+    empty values
+  * re-add preseeding option for 3 button mouse emulation and wrap it 
+    properly to not be executed if not set
+  * only run preseeding of defaul color depth if there is really a 
+    value set in lts.conf
+  * timeout defaults for usplash to the ltsp-client-setup initscript 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  3 Feb 2006 17:09:11 +0100
+
 ltsp (0.66) dapper; urgency=low
 
   * fix typo in the X_MODE code in ltsp-client-setup
