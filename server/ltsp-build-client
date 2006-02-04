@@ -176,15 +176,18 @@ while [ "$#" -gt "0" ]; do
 	  echo "ERROR: unsupported --arch argument: "$ARCH_OPT
 	  exit 1
 	  ;;
-      esac
+      esac	  
       ;;
     --help) get_help
       exit 0
       ;;
-    --serial-console) use_serial_console="true" ;;
+    --serial-console) use_serial_console="true"
+      ;;
     --disable-rootpass) ROOTPASS="disable" ;;
     --prompt-rootpass) ROOTPASS="prompt" ;;
-    --debconf-seeds) DEBCONF_SEEDS="$2" ;;
+    --debconf-seeds) DEBCONF_SEEDS="$2"
+      test "$#" -gt "0" && shift
+      ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -225,7 +228,7 @@ if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; 
 fi
 
 # No security support for sid
-if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR"; then
+if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR" ]; then
   echo "NOTE: disabling security APT source for sid.  It does not exist."
   SECURITY_MIRROR=""
 fi
@@ -269,6 +272,8 @@ fi
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
+# move sources.list aside
+test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   if [ -n "$mirror" ]; then
     echo "deb $mirror" > $ROOT/etc/apt/sources.list

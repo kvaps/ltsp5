@@ -7,13 +7,12 @@ umask 022
 
 TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
-LTSPROOT=/opt/ltsp
+test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
 
 if [ ! -d $TFTPBOOT ] ; then
     echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
     exit 1
 fi
-test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
 
 if [ ! -d $TFTPBOOT ] ; then
     echo "error: Directory $TFTPBOOT is missing.  Unable to continue"

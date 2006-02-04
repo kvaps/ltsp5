@@ -119,9 +119,8 @@ configure_x() {
     else
       # Autoconfigure
       if [ -n "$(which xdebconfigurator)" ]; then
-	  xdebconfigurator
+        xdebconfigurator
       fi
-
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
         preseed $xserver_package $xserver_package/autodetect_video_card "false"
