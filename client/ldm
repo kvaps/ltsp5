@@ -97,9 +97,9 @@ class LDM:
 
             ssh_auth = ['%s@%s' % (username,self.server)]
 
-            ssh_remote_command = ['env', 
+            ssh_remote_command = ['env',
                                   'LTSP_CLIENT="%s"' % (socket.gethostname()),
-				  'esddsp', '-m','--server=%s:16001' % (self.ip),
+                                  'ESPEAKER=%s:16001' % (self.ip),
                                   session_manager,
                                   ';',
                                   'kill -1 $PPID']

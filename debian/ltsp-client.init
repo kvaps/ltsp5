@@ -29,7 +29,7 @@ test -x $DAEMON || exit 0
 
 start_sound() {
     if [ -n "$SOUND" ]; then
-        /usr/bin/esd -nobeeps -public -tcp &
+	/usr/bin/esd -nobeeps -public -tcp &
     fi
 }
 
