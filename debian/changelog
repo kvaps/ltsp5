@@ -1,3 +1,10 @@
+ltsp (0.68) dapper; urgency=low
+
+  * inputattach available on all arches, fixing the dependency of
+  	ltsp-client to reflect that
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  6 Feb 2006 19:49:58 +0100
+
 ltsp (0.67) dapper; urgency=low
 
   * finally add usplash dependency to ltsp-client
