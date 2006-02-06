@@ -22,7 +22,7 @@ Description: Complete LTSP server environment
  the clients.
  
 Package: ltsp-client
-Depends: lsb-base, nbd-client, ldm | sdm-terminal, initramfs-tools (>= 0.11) | initrd-netboot-tools, esound, inputattach [i386], usplash
+Depends: lsb-base, nbd-client, ldm | sdm-terminal, initramfs-tools (>= 0.11) | initrd-netboot-tools, esound, inputattach, usplash
 Recommends: ubuntu-thin-client
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
