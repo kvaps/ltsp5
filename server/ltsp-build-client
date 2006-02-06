@@ -27,6 +27,7 @@ cat << EOF
  --disable-rootpass  disable root password in the chroot
  --prompt-rootpass  prompt for root password
  --apt-keys "<key1 key2>" keys to add to the apt keyring
+ --apt-get-opts "<option1 option2>" additional options to pass to apt-get
  --help  display this help
 EOF
 }
@@ -151,6 +152,9 @@ while [ "$#" -gt "0" ]; do
     --apt-keys) APT_KEYS="$2"
       test "$#" -gt "0" && shift
       ;;
+    --apt-get-opts) APT_GET_OPTS="$2"
+      test "$#" -gt "0" && shift
+      ;;
     --arch) ARCH_OPT="$2"
       test "$#" -gt "0" && shift
       case $ARCH_OPT in
@@ -203,6 +207,7 @@ done
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
+test -z "$APT_GET_OPTS" && APT_GET_OPTS="-y"
 
 # set defaults based on dist
 case $DIST in
@@ -345,10 +350,10 @@ preseed $ROOT passwd passwd/make-user boolean false
 chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd
 
 # get package updates for base system
-chroot $ROOT apt-get -y dist-upgrade
+chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
 
 # Install remaining packages
-chroot $ROOT apt-get -y install $EARLY_PACKAGES </dev/null
+chroot $ROOT apt-get $APT_GET_OPTS install $EARLY_PACKAGES </dev/null
 
 # Setup for kernel install
 cat <<EOF > $ROOT/etc/kernel-img.conf
@@ -377,7 +382,7 @@ sed -i -e 's/^DELAYLOGIN=.*$/DELAYLOGIN=no/' $ROOT/etc/default/rcS
 sed -i -e 's/^EDITMOTD=.*$/EDITMOTD=no/' $ROOT/etc/default/rcS
 
 # Install additional packages, such as the kernel
-chroot $ROOT apt-get -y install $LATE_PACKAGES </dev/null
+chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES </dev/null
 
 LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
