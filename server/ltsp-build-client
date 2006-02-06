@@ -262,13 +262,6 @@ if [ -n "$DEBCONF_SEEDS" ]; then
   done
 fi
 
-if [ -n "$DEBCONF_SEEDS" ]; then
-  # load debconf preseeding files
-  for seed in $DEBCONF_SEEDS; do
-    cat $seed | chroot $ROOT debconf-set-selections
-  done
-fi
-
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
 
