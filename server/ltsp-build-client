@@ -221,12 +221,6 @@ if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
 fi
 
-if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
-  echo "NOTE: adding default dist and components to extra mirror:"
-  EXTRA_MIRROR="$EXTRA_MIRROR $DIST $COMPONENTS"
-  echo "$EXTRA_MIRROR"
-fi
-
 # No security support for sid
 if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR" ]; then
   echo "NOTE: disabling security APT source for sid.  It does not exist."
@@ -267,8 +261,19 @@ echo mousedev >> $ROOT/etc/modules
 
 # move sources.list aside
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
-for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
+
+add_mirror() {
+  # add a mirror to the chroot's sources.list
+  mirror="$1"
+  type="$2"
   if [ -n "$mirror" ]; then
+    if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
+      if [ "$type" = "security" ]; then
+        mirror="$mirror $DIST/updates $COMPONENTS"
+      else
+        mirror="$mirror $DIST $COMPONENTS"
+      fi
+    fi
     echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
       file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
@@ -278,7 +283,30 @@ for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
         ;;
     esac  
   fi
-done
+}
+
+add_multiple_mirrors() {
+  # fed a list of comma-separated mirrors, add them to sources.list
+  mirror_list="$1"
+  if [ -z "$(echo $mirror_list | grep ,)" ] ; then
+    # only one mirror specified
+    add_mirror "$mirror_list"
+  else
+    # TODO: support an arbitrary number of mirrors
+    for number in 1 2 3 4 5 6 7 8 9 ; do
+      mirror="$(echo "$mirror_list" | cut -d , -f $number)"
+      if [ -n "$mirror" ]; then
+          add_mirror "$mirror"
+      fi
+    done
+  fi
+}
+
+add_mirror "$MIRROR" 
+
+add_multiple_mirrors "$EXTRA_MIRROR"
+
+add_mirror "$SECURITY_MIRROR" security
 
 trap on_exit EXIT
 make_policyrcd
