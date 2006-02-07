@@ -193,7 +193,7 @@ chroot $ROOT passwd -l root
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   if [ -n "$mirror" ]; then
-    echo "deb $mirror" > $ROOT/etc/apt/sources.list
+    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
       file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
         mkdir -p $ROOT/$dir
