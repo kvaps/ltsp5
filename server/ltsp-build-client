@@ -5,7 +5,10 @@ set -e
 LC_ALL=C
 export LC_ALL
 
-if [ -f /etc/ltsp/ltsp-build-client.conf ]; then
+if [ "--config" = "$1" ] && [ -n "$2" ]; then
+  . "$2"
+  test "$#" -gt 1 && shift 2
+elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
   . /etc/ltsp/ltsp-build-client.conf
 fi
 
@@ -28,6 +31,7 @@ cat << EOF
  --prompt-rootpass  prompt for root password
  --apt-keys "<key1 key2>" keys to add to the apt keyring
  --apt-get-opts "<option1 option2>" additional options to pass to apt-get
+ --config "<filename>" specify configuration file. must be first argument.
  --help  display this help
 EOF
 }
@@ -195,6 +199,10 @@ while [ "$#" -gt "0" ]; do
     --prompt-rootpass) ROOTPASS="prompt" ;;
     --debconf-seeds) DEBCONF_SEEDS="$2"
       test "$#" -gt "0" && shift
+      ;;
+    --config) echo "ERROR: --config must be passed as the first argument."
+      get_help
+      exit 1
       ;;
     *) echo "ERROR: unknown option: $1"
       get_help
