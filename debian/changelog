@@ -1,3 +1,10 @@
+ltsp (0.69) dapper; urgency=low
+
+  * brown paperback upload ...actually append the repositorys to
+    sources.list instead of replacing it
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  7 Feb 2006 21:26:02 +0100
+
 ltsp (0.68) dapper; urgency=low
 
   * inputattach available on all arches, fixing the dependency of
