@@ -2,8 +2,10 @@ ltsp (0.68) dapper; urgency=low
 
   * inputattach available on all arches, fixing the dependency of
   	ltsp-client to reflect that
+  * merge revision 231-233 from pkg-ltsp.alioth... to make sources.list
+  	handling optionally work for --extra and --security mirror addition
 
- -- Oliver Grawert <ogra@ubuntu.com>  Mon,  6 Feb 2006 19:49:58 +0100
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  7 Feb 2006 21:12:06 +0100
 
 ltsp (0.67) dapper; urgency=low
 
