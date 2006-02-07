@@ -189,6 +189,8 @@ debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
 
+# move sources.list aside
+test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   if [ -n "$mirror" ]; then
     echo "deb $mirror" > $ROOT/etc/apt/sources.list
