@@ -1,3 +1,16 @@
+ltsp (0.70) dapper; urgency=low
+
+  * merge http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/ 
+    patch 235, (netbooting only in initramfs-tools not in
+    initrd-netboot-tools and make debian happy)
+  * add x-display-manager as optional dependency to ltsp-client, make
+    ltsp-client fall back to sdm and then to startx if ldm isnt installed
+    (vagrant patch 232 and 233)
+  * remove esound, inputattach, usplash as hard dependencys for ltsp-client
+    and move them to EARLY_PACKAGES in ltsp-build-client to make debian happy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  8 Feb 2006 15:28:12 +0100
+
 ltsp (0.69) dapper; urgency=low
 
   * brown paperback upload ...actually append the repositorys to
