@@ -146,6 +146,15 @@ test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
 
+case $ARCH in
+	i386)
+	KERNEL_ARCH=386
+	;;
+	*)
+	KERNEL_ARCH=$ARCH
+	;;
+esac
+
 # set defaults based on dist
 case $DIST in
   sarge|etch|sid) 
@@ -161,7 +170,7 @@ esac
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe, esound, inputattach, usplash"
-test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
+test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
