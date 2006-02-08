@@ -1,4 +1,4 @@
-ltsp (0.64debian0.pere.4) UNRELEASED; urgency=low
+ltsp (0.64debian0.pere.5) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
   * Merge source from Petter Reinholdtsen to support Debian as host. All
@@ -33,6 +33,7 @@ ltsp (0.64debian0.pere.4) UNRELEASED; urgency=low
   * Moved code to start esd from init.d/ltsp-client-setup to
     init.d/ltsp-client to make sure it starts after kernel modules for
     sound devices are loaded.
+  * Add support for nasd sound system.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
 
