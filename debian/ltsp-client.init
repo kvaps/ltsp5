@@ -42,6 +42,11 @@ start_sound() {
             esd)
                 /usr/bin/esd -nobeeps -public -tcp &
                 ;;
+            nasd)
+                /usr/bin/nasd -aa &
+                # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
+                #aumix-minimal -v100 -w100 -c90 -m10
+                ;;
             *)
                 warn "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
                 ;;

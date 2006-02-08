@@ -101,6 +101,12 @@ class LDM:
                     #   esddsp', '-m','--server=%s:16001' % (self.ip)
                     espeakerport = 16001
                     sound_cmd = ['ESPEAKER=%s:%d' % (self.ip, espeakerport)]
+                elif self.sound_daemon == 'nasd':
+                    print "info: Enabling nasd sound support."
+                    # Could use the audiooss package to set LD_PRELOAD.
+                    # Not enabled by default to avoid problems with
+                    # firefox.
+                    sound_cmd = ['AUDIOSERVER=%s:0' % (self.ip)]
                 else:
                     print "error: Unsupported sound daemon: '%s'" % \
                           (self.sound_daemon)
