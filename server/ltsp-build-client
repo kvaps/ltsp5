@@ -103,16 +103,7 @@ while [ "$#" -gt "0" ]; do
       case $ARCH_OPT in
         i386)
 	  case $(dpkg --print-architecture) in
-	    amd64)
-	        ROOT=/opt/ltsp/i386
-	        ARCH=i386
-	        ;;
-	    ia64)
-	        ROOT=/opt/ltsp/i386
-	        ARCH=i386
-	        ;;
-	    i386)
-	        ROOT=/opt/ltsp/i386
+	    amd64|ia64|i386)
 	        ARCH=i386
 	        ;;
 	    *)
@@ -123,12 +114,7 @@ while [ "$#" -gt "0" ]; do
 	  ;;
 	powerpc)
 	  case $(dpkg --print-architecture) in
-            ppc64)
- 	       ROOT=/opt/ltsp/powerpc
- 	       ARCH=powerpc
- 	       ;;
- 	    powerpc)
- 	       ROOT=/opt/ltsp/powerpc
+            ppc64|powerpc)
  	       ARCH=powerpc
  	       ;;
  	    *)
@@ -157,8 +143,17 @@ while [ "$#" -gt "0" ]; do
 done
 
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
-test -z "$ROOT" && ROOT=/opt/ltsp/$(dpkg --print-architecture)
+test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
+
+case $ARCH in
+	i386)
+	KERNEL_ARCH=386
+	;;
+	*)
+	KERNEL_ARCH=$ARCH
+	;;
+esac
 
 # set defaults based on dist
 case $DIST in
@@ -172,10 +167,10 @@ case $DIST in
 esac
 
 # set defaults
-test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
+test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
-test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
+test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
@@ -203,12 +198,11 @@ debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
 
-# Always load mousedev
-echo mousedev >> $ROOT/etc/modules
-
+# move sources.list aside
+test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
   if [ -n "$mirror" ]; then
-    echo "deb $mirror" > $ROOT/etc/apt/sources.list
+    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
       file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
         mkdir -p $ROOT/$dir
@@ -249,7 +243,7 @@ EOF
 if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
   # configuring for initramfs-tools
   echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
-  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
 elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
   # configuring for initrd-netboot-tools
   sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf

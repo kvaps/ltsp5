@@ -16,6 +16,14 @@ fi
 
 # Ensure a default screen
 if ! env | grep -q '^SCREEN_'; then
-    SCREEN_07=ldm
-    export SCREEN_07
+    if [ -x /usr/sbin/ldm ]; then
+      SCREEN_07=ldm
+      export SCREEN_07
+    elif [ -x /usr/sbin/sdm ]; then
+      SCREEN_07=sdm
+      export SCREEN_07
+    else
+      SCREEN_07=startx
+      export SCREEN_07
+    fi
 fi
