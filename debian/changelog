@@ -1,3 +1,12 @@
+ltsp (0.71) dapper; urgency=low
+
+  * fix the kernel handling for different architectures, only install
+    linux-image-$(architecture), not the restricted modules 
+    (low memory spec and multiarch support)
+  * fix typos in EARLY_PACKAGES
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  8 Feb 2006 16:54:03 +0100
+
 ltsp (0.70) dapper; urgency=low
 
   * merge http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/ 
