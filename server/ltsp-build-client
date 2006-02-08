@@ -234,10 +234,10 @@ EOF
 if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
   # configuring for initramfs-tools
   echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
-  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
 elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
   # configuring for initrd-netboot-tools
-  sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitrd/mkinitrd.conf
+  sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
 else
   echo "WARNING: no known network boot methods found..."
   echo "tried initramfs-tools and initrd-netboot-tools"
