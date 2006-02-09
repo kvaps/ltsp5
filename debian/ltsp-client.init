@@ -39,7 +39,7 @@ start_sound() {
 	    warn "Sound requested but /dev/dsp is missing.  Continuing."
 	fi
 	case "$SOUND_DAEMON" in
-            esd)
+            esd|'') # The default when no value is set
                 /usr/bin/esd -nobeeps -public -tcp &
                 ;;
             nasd)
