@@ -30,8 +30,9 @@ pr_set(){
     fi
 }
 
+# Store variable.  Where is this info used? [pere 2006-02-12]
 reg_info(){
     VAR=$1
     [ -d /tmp/info ] || mkdir /tmp/info
-    echo ${!VAR} >/tmp/info/${VAR}
+    eval "echo \$${VAR}" >/tmp/info/${VAR}
 }
