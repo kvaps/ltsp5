@@ -200,6 +200,15 @@ test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
 
+case $ARCH in
+	i386)
+	KERNEL_ARCH=386
+	;;
+	*)
+	KERNEL_ARCH=$ARCH
+	;;
+esac
+
 # set defaults based on dist
 case $DIST in
   sarge|etch|sid) 
@@ -212,10 +221,10 @@ case $DIST in
 esac
 
 # set defaults
-test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
+test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
-test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
+test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
@@ -328,7 +337,7 @@ EOF
 if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
   # configuring for initramfs-tools
   echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
-  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
 elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
   # configuring for initrd-netboot-tools
   sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
