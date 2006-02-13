@@ -73,7 +73,7 @@ class LDM:
             os.waitpid(xauth.pid, 0)
 
             greeter = subprocess.Popen(['/usr/lib/ltsp/greeters/gtk'],
-                                       stdout=subprocess.PIPE, stderr=sys.stderr)
+                                       stdout=subprocess.PIPE, stderr=sys.stderr, env=env)
             greeter_output = greeter.stdout.readlines()
             if len(greeter_output) == 2:
                 username = greeter_output[0][:-1]
