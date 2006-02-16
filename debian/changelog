@@ -1,3 +1,13 @@
+ltsp (0.72) dapper; urgency=low
+
+  * fix bashism in ltsp_functions patch 236 from
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+  * cleaning up of startup links in rcS.d and rc2.d based on whitelist
+    variables (RC2_WHITELIST RCS_WHITELIST), thin-client-faster-startup
+    implemented :)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 16 Feb 2006 11:37:12 +0100
+
 ltsp (0.71) dapper; urgency=low
 
   * fix the kernel handling for different architectures, only install
