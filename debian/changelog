@@ -1,3 +1,10 @@
+ltsp (0.74) dapper; urgency=low
+
+  * add powerpc support to ltsp-update-kernels, make it handle vmlinux images,
+    handle yaboot copying and create yaboot.conf in tftproot
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 01:58:11 +0100
+
 ltsp (0.73) dapper; urgency=low
 
   * fix KERNEL_ARCH for amd64, must be amd64-generic not just amd64 
