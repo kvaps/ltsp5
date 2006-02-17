@@ -1,3 +1,9 @@
+ltsp (0.73) dapper; urgency=low
+
+  * fix KERNEL_ARCH for amd64, must be amd64-generic not just amd64 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 01:29:43 +0100
+
 ltsp (0.72) dapper; urgency=low
 
   * fix bashism in ltsp_functions patch 236 from
