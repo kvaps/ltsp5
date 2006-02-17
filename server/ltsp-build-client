@@ -150,6 +150,9 @@ case $ARCH in
 	i386)
 	KERNEL_ARCH=386
 	;;
+	amd64)
+	KERNEL_ARCH=amd64-generic
+	;;
 	*)
 	KERNEL_ARCH=$ARCH
 	;;
