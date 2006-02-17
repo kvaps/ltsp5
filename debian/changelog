@@ -1,3 +1,11 @@
+ltsp (0.75) dapper; urgency=low
+
+  * revert the x-display-manager dependency in ltsp-client, it breaks
+    CD rom installs and the systme ends in gdm being installed, 
+    needs further sorting if we want to keep x-display-manager there
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 21:43:16 +0100
+
 ltsp (0.74) dapper; urgency=low
 
   * add powerpc support to ltsp-update-kernels, make it handle vmlinux images,
