@@ -267,11 +267,14 @@ if [ -z "$LATE_PACKAGES" ]; then
     esac
     ;;
     alpha)
-    if [ "$DIST" = "sarge" ]; then
+    case $DIST in
+      sarge)
       KERNEL_ARCH="generic"
-    else
+      ;;
+      *)
       KERNEL_ARCH="alpha-generic"
-    fi
+      ;;
+    esac
     ;;
     *)
     KERNEL_ARCH="$ARCH"
