@@ -223,7 +223,6 @@ case $DIST in
     test -z "$COMPONENTS" && COMPONENTS="main"
     test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
-    test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
     test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
     ;;
 esac
@@ -232,7 +231,54 @@ esac
 test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
-test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux"
+if [ -z "$LATE_PACKAGES" ]; then
+  test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
+  case $DIST in
+    sarge)
+    KERNEL_BASE="kernel-image"
+    ;;
+    *)
+    KERNEL_BASE="linux-image"
+    ;;
+  esac
+  case $ARCH in
+    i386)
+    case $DIST in
+      sid|etch)
+      # they now only support 486+
+      KERNEL_ARCH="486"
+      ;;
+      *) 
+      KERNEL_ARCH="386"
+      ;;
+    esac
+    ;;
+    amd64)
+    KERNEL_ARCH="amd64-generic"
+    ;;
+    sparc) 
+    case $(uname -m) in
+      sparc32)
+      KERNEL_ARCH="sparc32"
+      ;;
+      sparc64)
+      KERNEL_ARCH="sparc64"
+      ;;
+    esac
+    ;;
+    alpha)
+    if [ "$DIST" = "sarge" ]; then
+      KERNEL_ARCH="generic"
+    else
+      KERNEL_ARCH="alpha-generic"
+    fi
+    ;;
+    *)
+    KERNEL_ARCH="$ARCH"
+    ;;
+  esac
+  LATE_PACKAGES="$KERNEL_BASE-$KERNEL_VERSION-$KERNEL_ARCH"
+fi
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
