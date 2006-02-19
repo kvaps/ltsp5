@@ -232,9 +232,9 @@ test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
 if [ -z "$LATE_PACKAGES" ]; then
-  test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
   case $DIST in
     sarge)
+    test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
     KERNEL_BASE="kernel-image"
     ;;
     *)
@@ -277,7 +277,8 @@ if [ -z "$LATE_PACKAGES" ]; then
     KERNEL_ARCH="$ARCH"
     ;;
   esac
-  LATE_PACKAGES="$KERNEL_BASE-$KERNEL_VERSION-$KERNEL_ARCH"
+  test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
+  LATE_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
 fi
 
 if [ -d $ROOT ] ; then
