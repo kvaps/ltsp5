@@ -150,6 +150,9 @@ case $ARCH in
 	i386)
 	KERNEL_ARCH=386
 	;;
+	amd64)
+	KERNEL_ARCH=amd64-generic
+	;;
 	*)
 	KERNEL_ARCH=$ARCH
 	;;
@@ -171,6 +174,8 @@ test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
+test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
+test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin stop-bootlogd"
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
@@ -286,6 +291,33 @@ if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]
   echo "Enabling serial console..."
   echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
 fi
+
+# Clean up Startup links in rcS.d based on whitelist
+RCS_DIR=$(ls $ROOT/etc/rcS.d/)
+
+# Remove whitelisted entrys from list
+for match in $RCS_WHITELIST; do
+	RCS_DIR=$(echo $RCS_DIR|sed s/S[0-9]*$match//g)
+done
+echo 'Cleaning up startup links in rcS.d ...'
+for link in $RCS_DIR; do
+	newlink=$(echo $link|sed s/S/K/g)
+	if [ README != $link ]; then
+		mv $ROOT/etc/rcS.d/$link $ROOT/etc/rcS.d/$newlink 2>&1 >/dev/null
+	fi
+done
+
+# Clean up startup links in rc2.d based on whitelist
+RC2_DIR=$(ls $ROOT/etc/rc2.d/)
+
+# Remove whitelisted entrys from list
+for match in $RC2_WHITELIST; do
+	RC2_DIR=$(echo $RC2_DIR|sed s/S[0-9]*$match//g)
+done
+echo 'Cleaning up startup links in rc2.d ...'
+for link in $RC2_DIR; do
+	rm $ROOT/etc/rc2.d/$link 2>&1 >/dev/null
+done
 
 # Export LTSP chroot using NFS to the LTSP client network
 if ! grep -q '^/opt/ltsp' /etc/exports ; then
