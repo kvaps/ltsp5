@@ -257,14 +257,7 @@ if [ -z "$LATE_PACKAGES" ]; then
     KERNEL_ARCH="amd64-generic"
     ;;
     sparc) 
-    case $(uname -m) in
-      sparc32)
-      KERNEL_ARCH="sparc32"
-      ;;
-      sparc64)
-      KERNEL_ARCH="sparc64"
-      ;;
-    esac
+    KERNEL_ARCH="$(uname -m)"
     ;;
     alpha)
     case $DIST in
