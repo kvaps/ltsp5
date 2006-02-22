@@ -1,3 +1,10 @@
+ltsp (0.76) dapper; urgency=low
+
+  * fix ltsp-client -> ldm relationship, add ldm to EARLY_PACKAGES, add
+    x-display-manager back to ltsp-client dependencys 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 22 Feb 2006 20:45:26 +0100
+
 ltsp (0.75) dapper; urgency=low
 
   * revert the x-display-manager dependency in ltsp-client, it breaks
