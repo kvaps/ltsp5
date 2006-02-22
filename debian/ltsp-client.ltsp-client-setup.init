@@ -140,10 +140,20 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
       fi
 
-      # Mouse preseeding options
-      if [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && [ i386 = $(dpkg --print-architecture) ] && \
-        [ -n "$X_MOUSE_PROTOCOL" ]; then
-        inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+      # Mouse preseeding options.  Use inputattach if available
+      if type inputattach >/dev/null 2>/dev/null ; then
+        if [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && \
+	   [ i386 = $(dpkg --print-architecture) ] && \
+           [ -n "$X_MOUSE_PROTOCOL" ]; then
+          inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+        fi
+      else
+        if [ -n "$X_MOUSE_DEVICE" ]; then 
+          preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
+        fi
+        if [ -n "$X_MOUSE_PROTOCOL" ]; then 
+          preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
+        fi
       fi
       if [ -n "$X_MOUSE_EMULATE3BTN" ]; then
         preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
