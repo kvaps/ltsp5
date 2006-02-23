@@ -1,3 +1,10 @@
+ltsp (0.79) dapper; urgency=low
+
+  * add shutdown icons to the themes for ldm
+  * add shutdown function to ldm to easily shut down the clients 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 16:37:41 +0100
+
 ltsp (0.78) dapper; urgency=low
 
   * merge -r228..229
