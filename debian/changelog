@@ -1,3 +1,12 @@
+ltsp (0.80) dapper; urgency=low
+
+  * merge -r234..235 from 
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/, 
+    xauth handling for ldm
+  * add proper python tempfile handling to the xauth code
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 17:28:03 +0100
+
 ltsp (0.79) dapper; urgency=low
 
   * add shutdown icons to the themes for ldm
