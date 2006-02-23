@@ -40,6 +40,9 @@ class LDM:
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
 
+        # Save xauth info on some writable tmpfs directory.
+        self.authfile = '/tmp/Xauthority'
+
     def run(self):
         null = open('/dev/null', 'w')
         logfile = open('/var/log/ldm.log', 'a')
@@ -54,13 +57,20 @@ class LDM:
             if self.use_xfs:
                 server_opts += ['-fp', self.fontpath]
 
-            server_command = ['X'] + server_opts + [self.vt, self.display]
+            server_command = ['X', '-auth', self.authfile] + server_opts + [self.vt, self.display]
             server = subprocess.Popen(server_command, stdout=sys.stdout, stderr=sys.stderr)
             
             env = os.environ.copy()
             env['DISPLAY'] = self.display
+            env['XAUTHORITY'] = self.authfile
             
             time.sleep(5)
+
+            # Generate an X authority key in ~/.Xauthority
+            xauth_command = ['xauth', '-f', self.authfile, 'generate', self.display]
+            xauth = subprocess.Popen(xauth_command, stdout=sys.stdout, stderr=sys.stderr, env=env)
+            os.waitpid(xauth.pid, 0)
+
             greeter = subprocess.Popen(['/usr/lib/ltsp/greeters/gtk'],
                                        stdout=subprocess.PIPE, stderr=sys.stderr, env=env)
             greeter_output = greeter.stdout.readlines()
@@ -84,6 +94,7 @@ class LDM:
             sys.stdin.close()
             os.setsid()
             os.environ['DISPLAY'] = self.display
+            os.environ['XAUTHORITY'] = self.authfile
             os.environ['LDM_ASKPASS_FD'] = str(pipe_read)
             os.environ['SSH_ASKPASS'] = '/usr/lib/ltsp/ldm-askpass'
 
