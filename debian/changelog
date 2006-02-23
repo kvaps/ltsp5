@@ -1,3 +1,19 @@
+ltsp (0.78) dapper; urgency=low
+
+  * merge -r228..229
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    option for ltsp-build-client to add additional keys to the apt keyring
+    in the chroot
+  * merge -r229..230
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    adds option to load debconf pre-seeding files in the chroot
+    to ltsp-build-client
+  * merge -r230..231
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    RCFILE handling 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 02:46:18 +0100
+
 ltsp (0.77) dapper; urgency=low
 
   * added alternative handling to ldm for easier theme selection
