@@ -127,10 +127,18 @@ class LDM:
                 print "info: Not enabling sound support."
                 sound_cmd = []
 
-            ssh_remote_command = ['env',
-                                  'LTSP_CLIENT="%s"' % (socket.gethostname()),
-                                  ] + sound_cmd + [
-                                  session_manager,
+            # Make sure to run a login shell, to get /etc/profile executed
+            # and the full PATH content set.  Use bash to make sure the
+            # shell used support the --login argument.
+            ssh_remote_command = ['/bin/bash',
+                                  '--login',
+                                  '-c',
+                                  " ".join( ['\'',
+                                    'env',
+                                    'LTSP_CLIENT="%s"' % (socket.gethostname()),
+                                    ] + sound_cmd + [
+                                    session_manager,
+                                    '\''] ),
                                   ';',
                                   'kill -1 $PPID']
 
