@@ -1,3 +1,9 @@
+ltsp (0.81) dapper; urgency=low
+
+  * clean up duplicate esd startup that slipped through in a bzr merge ...
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 24 Feb 2006 23:20:24 +0100
+
 ltsp (0.80) dapper; urgency=low
 
   * merge -r234..235 from 
