@@ -44,9 +44,6 @@ class LDM:
         # Save xauth info some writable tmpfs file.
         self.authfile = tempfile.mktemp()
 
-        # Save xauth info on some writable tmpfs directory.
-        self.authfile = '/tmp/Xauthority'
-
     def run(self):
         null = open('/dev/null', 'w')
         logfile = open('/var/log/ldm.log', 'a')
