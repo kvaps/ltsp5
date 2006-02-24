@@ -80,12 +80,6 @@ configure_syslog() {
 EOF
 }
 
-configure_sound() {
-    if [ -n "$SOUND" ]; then
-        /usr/bin/esd -nobeeps -public -tcp &
-    fi
-}
-
 configure_fstab() {
   echo "/dev/root       /       unionfs defaults        0       0" > /etc/fstab
   echo "tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
