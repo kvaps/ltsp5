@@ -22,7 +22,7 @@ Description: Complete LTSP server environment
  the clients.
  
 Package: ltsp-client
-Depends: lsb-base, nbd-client, ldm | sdm | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools
 Recommends: ubuntu-thin-client
 Suggests: nas
 Conflicts: ltsp-utils
