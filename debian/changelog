@@ -1,3 +1,59 @@
+ltsp (0.80) dapper; urgency=low
+
+  * merge -r234..235 from 
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/, 
+    xauth handling for ldm
+  * add proper python tempfile handling to the xauth code
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 17:28:03 +0100
+
+ltsp (0.79) dapper; urgency=low
+
+  * add shutdown icons to the themes for ldm
+  * add shutdown function to ldm to easily shut down the clients 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 16:37:41 +0100
+
+ltsp (0.78) dapper; urgency=low
+
+  * merge -r228..229
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    option for ltsp-build-client to add additional keys to the apt keyring
+    in the chroot
+  * merge -r229..230
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    adds option to load debconf pre-seeding files in the chroot
+    to ltsp-build-client
+  * merge -r230..231
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    RCFILE handling 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 02:46:18 +0100
+
+ltsp (0.77) dapper; urgency=low
+
+  * added alternative handling to ldm for easier theme selection
+  * merged revision 225-228 from
+    http://developer.skolelinux.no/~pere/bzr-archives/pere-sound/, 
+    adds nasd support and several code improvements (manually removed 
+    the syslog code this patch adds from the initfunction)
+  * merged
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+    rev 237 from petter (Fall pack to mouse preseeding if inputattach is
+    missing.)
+  * merged
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+    233 (handling of older gnomecanvas version for ldm)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 01:25:36 +0100
+
+ltsp (0.76) dapper; urgency=low
+
+  * fix ltsp-client -> ldm relationship, add ldm to EARLY_PACKAGES, add
+    x-display-manager back to ltsp-client dependencys 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 22 Feb 2006 20:45:26 +0100
+
 ltsp (0.75) dapper; urgency=low
 
   * revert the x-display-manager dependency in ltsp-client, it breaks

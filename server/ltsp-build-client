@@ -22,7 +22,9 @@ cat << EOF
  --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
  --serial-console  enable serial console
  --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
+ --debconf-seeds  load debconf pre-seeding files in the chroot
  --help  display this help
+ --apt-keys "<key1 key2>" keys to add to the apt keyring
 EOF
 }
 
@@ -98,6 +100,9 @@ while [ "$#" -gt "0" ]; do
     --late-packages) LATE_PACKAGES="$2"
       test "$#" -gt "0" && shift
       ;;
+    --apt-keys) APT_KEYS="$2"
+      test "$#" -gt "0" && shift
+      ;;
     --arch) ARCH_OPT="$2"
       test "$#" -gt "0" && shift
       case $ARCH_OPT in
@@ -133,6 +138,9 @@ while [ "$#" -gt "0" ]; do
       exit 0
       ;;
     --serial-console) use_serial_console="true"
+      ;;
+    --debconf-seeds) DEBCONF_SEEDS="$2"
+      test "$#" -gt "0" && shift
       ;;
     *) echo "ERROR: unknown option: $1"
       get_help
@@ -172,7 +180,7 @@ esac
 # set defaults
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
 test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin stop-bootlogd"
@@ -203,6 +211,13 @@ debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 # Root password is empty by default, lock it
 chroot $ROOT passwd -l root
 
+if [ -n "$DEBCONF_SEEDS" ]; then
+  # load debconf preseeding files
+  for seed in $DEBCONF_SEEDS; do
+    cat $seed | chroot $ROOT debconf-set-selections
+  done
+fi
+
 # move sources.list aside
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
@@ -221,6 +236,11 @@ done
 trap on_exit EXIT
 make_policyrcd
 make_dummy_start_stop_daemon
+
+# add keys to the apt keyring
+for key in $APT_KEYS ; do
+  cat $key | chroot $ROOT apt-key add -
+done
 
 chroot $ROOT apt-get update
 

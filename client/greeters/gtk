@@ -47,6 +47,7 @@ class GTKGreeter:
 	    # configurable options
 	    # self.draw_buttons() # session and lang, should be wrapped by a config option
 	    self.draw_bottom_bar(False) # set to True if you want a clock
+	    self.draw_shutdown_button()
 
 	    self.win.show_all()
 
@@ -115,6 +116,25 @@ class GTKGreeter:
 
             self.lang_box = self.wTree.get_widget("lang_vbox")
 	    self.lang_box.unparent()
+
+	def draw_shutdown_button(self):
+	    poweroff = gtk.Button('')
+	    poweroff.connect("clicked", lambda w: self.shutdown())
+	    try:
+	        bg = gtk.gdk.pixbuf_new_from_file(themedir+'/shutdown.png')
+	        img = gtk.Image()
+	        img.set_from_pixbuf(bg)
+	        poweroff.set_image(img)
+	        poweroff.set_relief('GTK_RELIEF_NONE')
+	    except:
+	        poweroff.set_label('I/O')
+
+	    self.root.add(gnomecanvas.CanvasWidget, x = -((self.width/2)-50), y = (self.height/2)+8,
+                          widget = poweroff,
+                          width = 46, height = 46)
+
+	def shutdown(self):
+	    os.system('poweroff -fp')
 
 	def draw_bottom_bar(self, show_timer):
 	    # draw the bottom bar, sysname and timer
