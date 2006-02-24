@@ -36,8 +36,8 @@ msgid ""
 "This will set up an LTSP chroot environment on the machine, to act as a thin "
 "client server."
 msgstr ""
-"Tímto vytvoříte na počítači, který bude sloužit jako server pro tenké x"
-"klienty, chrootované prostředí pro LTSP."
+"Tímto vytvoříte na počítači, který bude sloužit jako server pro tenké "
+"xklienty, chrootované prostředí pro LTSP."
 
 #. Type: text
 #. Description

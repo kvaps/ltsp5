@@ -228,9 +228,9 @@ case $DIST in
 esac
 
 # set defaults
-test -z "$MIRROR" && MIRROR=http://us.archive.ubuntu.com/ubuntu
+test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
 if [ -z "$LATE_PACKAGES" ]; then
   case $DIST in
     sarge)
@@ -419,6 +419,10 @@ if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initr
   # configuring for initramfs-tools
   echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
   sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+  if [ -n "$(grep netboot $ROOT/usr/sbin/mkinitramfs)" ]; then
+    # only use netboot related modules
+    sed -i -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
+  fi
 elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
   # configuring for initrd-netboot-tools
   sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
@@ -440,14 +444,6 @@ clients="$ROOT" ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
 touch $ROOT/etc/hosts
-
-# Pass default X keyboard config from server to the client
-debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
-  chroot $ROOT debconf-set-selections
-
-if [ -e /etc/console/boottime.kmap.gz ]; then
-  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
-fi
 
 touch $ROOT/etc/nbd-client
 
