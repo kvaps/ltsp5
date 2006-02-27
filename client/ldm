@@ -9,6 +9,7 @@ import signal
 import socket
 import struct
 import fcntl
+import tempfile
 
 def get_config(name):
     return os.environ.get(name)
@@ -41,8 +42,8 @@ class LDM:
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
 
-        # Save xauth info on some writable tmpfs directory.
-        self.authfile = '/tmp/Xauthority'
+        # Save xauth info some writable tmpfs file.
+        self.authfile = tempfile.mktemp()
 
     def run(self):
         null = open('/dev/null', 'w')
