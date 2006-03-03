@@ -5,7 +5,10 @@ set -e
 LC_ALL=C
 export LC_ALL
 
-if [ -f /etc/ltsp/ltsp-build-client.conf ]; then
+if [ "--config" = "$1" ] && [ -n "$2" ]; then
+  . "$2"
+  test "$#" -gt 1 && shift 2
+elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
   . /etc/ltsp/ltsp-build-client.conf
 fi
 
@@ -15,6 +18,7 @@ cat << EOF
  --dist <dist>  debian distribution
  --components "<component1 component2>"  archive components
  --mirror  <mirror>  archive mirror url
+ --early-mirror "<mirror> <dist> <components>" additional mirror
  --extra-mirror "<mirror> <dist> <components>" additional mirror
  --security-mirror "<mirror> <dist> <components>" security mirror
  --exclude "package1,package2,package3"  exclude packages from base system
@@ -26,6 +30,8 @@ cat << EOF
  --disable-rootpass  disable root password in the chroot
  --prompt-rootpass  prompt for root password
  --apt-keys "<key1 key2>" keys to add to the apt keyring
+ --apt-get-opts "<option1 option2>" additional options to pass to apt-get
+ --config "<filename>" specify configuration file. must be first argument.
  --help  display this help
 EOF
 }
@@ -129,6 +135,9 @@ while [ "$#" -gt "0" ]; do
     --mirror) MIRROR="$2"
       test "$#" -gt "0" && shift
       ;;
+    --early-mirror) EARLY_MIRROR="$2"
+      test "$#" -gt "0" && shift
+      ;;
     --extra-mirror) EXTRA_MIRROR="$2"
       test "$#" -gt "0" && shift
       ;;
@@ -145,6 +154,9 @@ while [ "$#" -gt "0" ]; do
       test "$#" -gt "0" && shift
       ;;
     --apt-keys) APT_KEYS="$2"
+      test "$#" -gt "0" && shift
+      ;;
+    --apt-get-opts) APT_GET_OPTS="$2"
       test "$#" -gt "0" && shift
       ;;
     --arch) ARCH_OPT="$2"
@@ -188,6 +200,10 @@ while [ "$#" -gt "0" ]; do
     --debconf-seeds) DEBCONF_SEEDS="$2"
       test "$#" -gt "0" && shift
       ;;
+    --config) echo "ERROR: --config must be passed as the first argument."
+      get_help
+      exit 1
+      ;;
     *) echo "ERROR: unknown option: $1"
       get_help
       exit 1
@@ -199,15 +215,7 @@ done
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
-
-case $ARCH in
-	i386)
-	KERNEL_ARCH=386
-	;;
-	*)
-	KERNEL_ARCH=$ARCH
-	;;
-esac
+test -z "$APT_GET_OPTS" && APT_GET_OPTS="-y"
 
 # set defaults based on dist
 case $DIST in
@@ -215,7 +223,6 @@ case $DIST in
     test -z "$COMPONENTS" && COMPONENTS="main"
     test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
     test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
-    test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
     test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
     ;;
 esac
@@ -224,16 +231,54 @@ esac
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
-test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
+if [ -z "$LATE_PACKAGES" ]; then
+  case $DIST in
+    sarge)
+    test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
+    KERNEL_BASE="kernel-image"
+    ;;
+    *)
+    KERNEL_BASE="linux-image"
+    ;;
+  esac
+  case $ARCH in
+    i386)
+    case $DIST in
+      sid|etch)
+      # they now only support 486+
+      KERNEL_ARCH="486"
+      ;;
+      *) 
+      KERNEL_ARCH="386"
+      ;;
+    esac
+    ;;
+    amd64)
+    KERNEL_ARCH="amd64-generic"
+    ;;
+    sparc) 
+    KERNEL_ARCH="$(uname -m)"
+    ;;
+    alpha)
+    case $DIST in
+      sarge)
+      KERNEL_ARCH="generic"
+      ;;
+      *)
+      KERNEL_ARCH="alpha-generic"
+      ;;
+    esac
+    ;;
+    *)
+    KERNEL_ARCH="$ARCH"
+    ;;
+  esac
+  test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
+  LATE_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
+fi
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
-fi
-
-if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
-  echo "NOTE: adding default dist and components to extra mirror:"
-  EXTRA_MIRROR="$EXTRA_MIRROR $DIST $COMPONENTS"
-  echo "$EXTRA_MIRROR"
 fi
 
 # No security support for sid
@@ -276,8 +321,19 @@ echo mousedev >> $ROOT/etc/modules
 
 # move sources.list aside
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
-for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
+
+add_mirror() {
+  # add a mirror to the chroot's sources.list
+  mirror="$1"
+  type="$2"
   if [ -n "$mirror" ]; then
+    if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
+      if [ "$type" = "security" ]; then
+        mirror="$mirror $DIST/updates $COMPONENTS"
+      else
+        mirror="$mirror $DIST $COMPONENTS"
+      fi
+    fi
     echo "deb $mirror" >> $ROOT/etc/apt/sources.list
     case $mirror in
       file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
@@ -287,7 +343,32 @@ for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
         ;;
     esac  
   fi
-done
+}
+
+add_multiple_mirrors() {
+  # fed a list of comma-separated mirrors, add them to sources.list
+  mirror_list="$1"
+  if [ -z "$(echo $mirror_list | grep ,)" ] ; then
+    # only one mirror specified
+    add_mirror "$mirror_list"
+  else
+    # TODO: support an arbitrary number of mirrors
+    for number in 1 2 3 4 5 6 7 8 9 ; do
+      mirror="$(echo "$mirror_list" | cut -d , -f $number)"
+      if [ -n "$mirror" ]; then
+          add_mirror "$mirror"
+      fi
+    done
+  fi
+}
+
+add_multiple_mirrors "$EARLY_MIRROR"
+
+add_mirror "$MIRROR" 
+
+add_multiple_mirrors "$EXTRA_MIRROR"
+
+add_mirror "$SECURITY_MIRROR" security
 
 trap on_exit EXIT
 make_policyrcd
@@ -320,10 +401,10 @@ preseed $ROOT passwd passwd/make-user boolean false
 chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd
 
 # get package updates for base system
-chroot $ROOT apt-get -y dist-upgrade
+chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
 
 # Install remaining packages
-chroot $ROOT apt-get -y install $EARLY_PACKAGES </dev/null
+chroot $ROOT apt-get $APT_GET_OPTS install $EARLY_PACKAGES </dev/null
 
 # Setup for kernel install
 cat <<EOF > $ROOT/etc/kernel-img.conf
@@ -337,7 +418,11 @@ EOF
 if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
   # configuring for initramfs-tools
   echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
-  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
+  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+  if [ -n "$(grep netboot $ROOT/usr/sbin/mkinitramfs)" ]; then
+    # only use netboot related modules
+    sed -i -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
+  fi
 elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
   # configuring for initrd-netboot-tools
   sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
@@ -352,7 +437,7 @@ sed -i -e 's/^DELAYLOGIN=.*$/DELAYLOGIN=no/' $ROOT/etc/default/rcS
 sed -i -e 's/^EDITMOTD=.*$/EDITMOTD=no/' $ROOT/etc/default/rcS
 
 # Install additional packages, such as the kernel
-chroot $ROOT apt-get -y install $LATE_PACKAGES </dev/null
+chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES </dev/null
 
 LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
