@@ -78,6 +78,36 @@ on_exit() {
     done
 }
 
+rc_cleanup() {
+    LEVEL=$1; shift
+
+    if [ $(echo $LEVEL| grep [2-5]) ]; then
+        suffix="2 3 4 5"
+        echo "Cleaning up startup links in init levels: $suffix ..."
+    else
+        suffix=$LEVEL
+        echo "Cleaning up startup links in rc$suffix.d ..."
+    fi
+
+    RC_DIR=$(ls $ROOT/etc/rc$LEVEL.d/)
+
+    for match in $@; do
+        RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
+    done
+
+    for link in $RC_DIR; do
+        if [ ! $(echo $link|grep ^K) ]; then
+            name=$(echo $link|sed s/^[S,K,0-9]*//g)
+            printf -v seq_number %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g)
+
+            if [ ! README = $name ]; then
+                chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
+                chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
+            fi
+        fi
+    done
+}
+
 # Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
 # running init scripts during installation
 make_policyrcd() {
@@ -272,7 +302,7 @@ if [ -z "$LATE_PACKAGES" ]; then
   test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
   LATE_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
 fi
-test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh x11-common xorg-common xfree86-common"
+test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
 
 if [ -d $ROOT ] ; then
@@ -470,28 +500,6 @@ if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]
   echo "Enabling serial console..."
   echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
 fi
-
-rc_cleanup() {
-    LEVEL=$1; shift
-
-    echo "Cleaning up startup links in rc$LEVEL.d ..."
-
-    # Clean up Startup links in rcS.d based on whitelist
-    RC_DIR=$(ls $ROOT/etc/rc$LEVEL.d/)
-
-    # Remove whitelisted entrys from list
-    for match in $@; do
-	echo "  Leaving $match behind."
-	RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
-    done
-    for link in $RC_DIR; do
-	newlink=$(echo $link|sed s/S/K/g)
-	if [ README != $link ]; then
-	        echo "  Moving $link away."
-		mv "$ROOT/etc/rc$LEVEL.d/$link" "$ROOT/etc/rc$LEVEL.d/$newlink" 2>&1 >/dev/null
-	fi
-    done
-}
 
 rc_cleanup S $RCS_WHITELIST
 rc_cleanup 2 $RC2_WHITELIST

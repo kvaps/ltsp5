@@ -1,4 +1,4 @@
-ltsp (0.81debian0.pere.2) UNRELEASED; urgency=low
+ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
 
   [ Vagrant Cascadian ]
   * New ldm theme Debian.
@@ -36,6 +36,21 @@ ltsp (0.81debian0.pere.2) UNRELEASED; urgency=low
     all debian specific config into file in /usr/share/.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sat,  4 Mar 2006 15:32:11 +0100
+
+ltsp (0.82) dapper; urgency=low
+
+  * move rc_cleanup function to the set of other functions at the top of
+    ltsp-build-client, make it use update-rc.d and be less noisy
+  * merge rev. 243-245 from
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/,
+    bugfix to handle init.d scripts which are substrings of other scripts,
+    like udev and udev-mtab. change init.d cleaning to avoid code
+    duplication.
+  * merge
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/ rev.
+    238, fix sdm dependency of ltsp-client
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sat,  4 Mar 2006 22:05:29 +0100
 
 ltsp (0.81) dapper; urgency=low
 
