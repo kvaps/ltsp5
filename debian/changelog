@@ -35,7 +35,7 @@ ltsp (0.81debian0.pere.2) UNRELEASED; urgency=low
     package defaults from /usr/share/ as well as /etc/.  Moved
     all debian specific config into file in /usr/share/.
 
- -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
+ -- Petter Reinholdtsen <pere@debian.org>  Sat,  4 Mar 2006 15:32:11 +0100
 
 ltsp (0.81) dapper; urgency=low
 
