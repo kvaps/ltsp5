@@ -321,6 +321,8 @@ fi
 
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
+# always load psmouse too (for 2.6 kernels)
+echo psmouse >> $ROOT/etc/modules
 
 # move sources.list aside
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
