@@ -1,4 +1,4 @@
 server/ltsp-build-client usr/sbin
-server/ltsp-build-client.conf etc/ltsp
+server/ltsp-build-client.conf usr/share/ltsp
 server/ltsp-update-sshkeys usr/sbin
 server/ltsp-update-kernels usr/sbin
