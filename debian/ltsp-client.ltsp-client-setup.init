@@ -155,7 +155,7 @@ configure_x() {
 
       X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
       if [ -n "$X_MODE" ]; then
-	  preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
+	    preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
       fi
 
       # This require fontserver preseeding to work (Debian bug
