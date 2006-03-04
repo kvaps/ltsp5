@@ -1,21 +1,15 @@
-ltsp (0.71debian0.pere.2) UNRELEASED; urgency=low
+ltsp (0.81debian0.pere.1) UNRELEASED; urgency=low
 
-  [ Otavio Salvador ]
-  * Merge source from Petter Reinholdtsen to support Debian as host. All
-    changes are logged bellow with versions having debian on it.
-  * Merge following Vagrant Cascadian changes:
-    - allow x-display-manager as alternative to ldm or sdm, for use on
-      thick clients
-    - implement RCFILE
-    - commandline option to support debconf pre-seeding in the chroot
-    - commandline option to add keys into chroot's apt keyring
-    - simplify --arch handling (use default for ROOT)
-    - change default for ROOT to use ARCH
-    - preseed handling code for passwd
+  [ Vagrant Cascadian ]
+  * New ldm theme Debian.
+  * Simplify --arch handling (use default for ROOT).
+  * Change default for ROOT to use ARCH.
+  * Preseed handling code for passwd.
 
   [ Petter Reinholdtsen ]
-  * Implement proper xauth handling, to speed up the client
-    login.  (Closes: #350311)
+  * New release from Ubuntu.
+    - Implements proper xauth handling, speeding up the client login.
+      (Closes: #350311)
   * Reinsert subprocess.py in the ldm package, to get it working with
     python versions before 2.4.
   * Reinsert rule to include /etc/ltsp/ltsp-build-client.conf in
@@ -29,14 +23,14 @@ ltsp (0.71debian0.pere.2) UNRELEASED; urgency=low
     available on sarge, and use gnome.convas instead of gnomecanvas
     for compatibility reasons.
   * New ldm theme Debian-Edu, and made it the default.
-  * Moved code to start esd from init.d/ltsp-client-setup to
-    init.d/ltsp-client to make sure it starts after kernel modules for
-    sound devices are loaded.
+  * Report to syslog if there are problems with starting the sound
+    system.
+  * Try harder to set hostname on the client to avoid it ending up as
+    '(none)'.
   * Make sure to 'kill -HUP' esd before a new user connect to it, to get
     it to accept new connections.
-  * Make sure the user get a login shel when logging in over ssh to the
-    server.
-  * Add support for nasd sound system.
+  * Make sure the user get a login shel; environment when logging in
+    over ssh to the server.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
 
