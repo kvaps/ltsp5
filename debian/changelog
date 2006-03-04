@@ -29,7 +29,7 @@ ltsp (0.81debian0.pere.1) UNRELEASED; urgency=low
     '(none)'.
   * Make sure to 'kill -HUP' esd before a new user connect to it, to get
     it to accept new connections.
-  * Make sure the user get a login shel; environment when logging in
+  * Make sure the user get a login shell environment when logging in
     over ssh to the server.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
