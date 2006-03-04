@@ -312,32 +312,30 @@ if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]
   echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
 fi
 
-# Clean up Startup links in rcS.d based on whitelist
-RCS_DIR=$(ls $ROOT/etc/rcS.d/)
+rc_cleanup() {
+    LEVEL=$1; shift
 
-# Remove whitelisted entrys from list
-for match in $RCS_WHITELIST; do
-	RCS_DIR=$(echo $RCS_DIR|sed s/S[0-9]*$match$//g)
-done
-echo 'Cleaning up startup links in rcS.d ...'
-for link in $RCS_DIR; do
+    echo "Cleaning up startup links in rc$LEVEL.d ..."
+
+    # Clean up Startup links in rcS.d based on whitelist
+    RC_DIR=$(ls $ROOT/etc/rc$LEVEL.d/)
+
+    # Remove whitelisted entrys from list
+    for match in $@; do
+	echo "  Leaving $match behind."
+	RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
+    done
+    for link in $RC_DIR; do
 	newlink=$(echo $link|sed s/S/K/g)
 	if [ README != $link ]; then
-		mv $ROOT/etc/rcS.d/$link $ROOT/etc/rcS.d/$newlink 2>&1 >/dev/null
+	        echo "  Moving $link away."
+		mv "$ROOT/etc/rc$LEVEL.d/$link" "$ROOT/etc/rc$LEVEL.d/$newlink" 2>&1 >/dev/null
 	fi
-done
+    done
+}
 
-# Clean up startup links in rc2.d based on whitelist
-RC2_DIR=$(ls $ROOT/etc/rc2.d/)
-
-# Remove whitelisted entrys from list
-for match in $RC2_WHITELIST; do
-	RC2_DIR=$(echo $RC2_DIR|sed s/S[0-9]*$match$//g)
-done
-echo 'Cleaning up startup links in rc2.d ...'
-for link in $RC2_DIR; do
-	rm $ROOT/etc/rc2.d/$link 2>&1 >/dev/null
-done
+rc_cleanup S $RCS_WHITELIST
+rc_cleanup 2 $RC2_WHITELIST
 
 # Export LTSP chroot using NFS to the LTSP client network
 if ! grep -q '^/opt/ltsp' /etc/exports ; then
