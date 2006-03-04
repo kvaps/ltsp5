@@ -16,8 +16,8 @@ ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
     ltsp-server package.
   * Reinsert code to use xdebconfigurator on the client if it is
     installed.
-  * Make sure /etc/X11 and /var/lib/xfree86 isn't copied and
-    bind-mounted as we use xdebconfigurator to save space.
+  * To save space, make sure /etc/X11 and /var/lib/xfree86 isn't
+    copied and bind-mounted when we use xdebconfigurator.
   * Change ldm depend from python-gnome2 to 'python2.3-gnome2 |
     python-gnome2', to try to get the gnomecanvas python module
     available on sarge, and use gnome.convas instead of gnomecanvas
