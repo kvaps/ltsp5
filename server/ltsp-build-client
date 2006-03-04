@@ -272,7 +272,7 @@ if [ -z "$LATE_PACKAGES" ]; then
   test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
   LATE_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
 fi
-test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common xfree86-common"
+test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh x11-common xorg-common xfree86-common"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
 
 if [ -d $ROOT ] ; then
