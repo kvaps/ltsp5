@@ -317,7 +317,7 @@ RCS_DIR=$(ls $ROOT/etc/rcS.d/)
 
 # Remove whitelisted entrys from list
 for match in $RCS_WHITELIST; do
-	RCS_DIR=$(echo $RCS_DIR|sed s/S[0-9]*$match//g)
+	RCS_DIR=$(echo $RCS_DIR|sed s/S[0-9]*$match$//g)
 done
 echo 'Cleaning up startup links in rcS.d ...'
 for link in $RCS_DIR; do
@@ -332,7 +332,7 @@ RC2_DIR=$(ls $ROOT/etc/rc2.d/)
 
 # Remove whitelisted entrys from list
 for match in $RC2_WHITELIST; do
-	RC2_DIR=$(echo $RC2_DIR|sed s/S[0-9]*$match//g)
+	RC2_DIR=$(echo $RC2_DIR|sed s/S[0-9]*$match$//g)
 done
 echo 'Cleaning up startup links in rc2.d ...'
 for link in $RC2_DIR; do
