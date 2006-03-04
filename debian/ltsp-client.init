@@ -30,22 +30,22 @@ test -x $DAEMON || exit 0
 start_sound() {
     if [ -n "$SOUND" ]; then
         # Detect and report a common problem with thin clients
-	if [ ! -f /dev/dsp ] ; then
-	    echo "Sound requested but /dev/dsp is missing.  Continuing."
-	fi
-	case "$SOUND_DAEMON" in
-            esd|'') # The default when no value is set
-                /usr/bin/esd -nobeeps -public -tcp &
-                ;;
-            nasd)
-                /usr/bin/nasd -aa &
-                # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
-                #aumix-minimal -v100 -w100 -c90 -m10
-                ;;
-            *)
-                echo "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
-                ;;
-        esac
+		if [ ! -f /dev/dsp ] ; then
+		    echo "Sound requested but /dev/dsp is missing.  Continuing."
+		fi
+		case "$SOUND_DAEMON" in
+    	        esd|'') # The default when no value is set
+    	            /usr/bin/esd -nobeeps -public -tcp &
+    	            ;;
+    	        nasd)
+    	            /usr/bin/nasd -aa &
+    	            # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
+    	            #aumix-minimal -v100 -w100 -c90 -m10
+    	            ;;
+    	        *)
+    	            echo "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
+    	            ;;
+    	esac
     fi
 }
 
