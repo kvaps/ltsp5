@@ -40,6 +40,99 @@ ltsp (0.71debian0.pere.2) UNRELEASED; urgency=low
 
  -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
 
+ltsp (0.81) dapper; urgency=low
+
+  * clean up duplicate esd startup that slipped through in a bzr merge ...
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 24 Feb 2006 23:20:24 +0100
+
+ltsp (0.80) dapper; urgency=low
+
+  * merge -r234..235 from 
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/, 
+    xauth handling for ldm
+  * add proper python tempfile handling to the xauth code
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 17:28:03 +0100
+
+ltsp (0.79) dapper; urgency=low
+
+  * add shutdown icons to the themes for ldm
+  * add shutdown function to ldm to easily shut down the clients 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 16:37:41 +0100
+
+ltsp (0.78) dapper; urgency=low
+
+  * merge -r228..229
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    option for ltsp-build-client to add additional keys to the apt keyring
+    in the chroot
+  * merge -r229..230
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    adds option to load debconf pre-seeding files in the chroot
+    to ltsp-build-client
+  * merge -r230..231
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    RCFILE handling 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 02:46:18 +0100
+
+ltsp (0.77) dapper; urgency=low
+
+  * added alternative handling to ldm for easier theme selection
+  * merged revision 225-228 from
+    http://developer.skolelinux.no/~pere/bzr-archives/pere-sound/, 
+    adds nasd support and several code improvements (manually removed 
+    the syslog code this patch adds from the initfunction)
+  * merged
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+    rev 237 from petter (Fall pack to mouse preseeding if inputattach is
+    missing.)
+  * merged
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+    233 (handling of older gnomecanvas version for ldm)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 01:25:36 +0100
+
+ltsp (0.76) dapper; urgency=low
+
+  * fix ltsp-client -> ldm relationship, add ldm to EARLY_PACKAGES, add
+    x-display-manager back to ltsp-client dependencys 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 22 Feb 2006 20:45:26 +0100
+
+ltsp (0.75) dapper; urgency=low
+
+  * revert the x-display-manager dependency in ltsp-client, it breaks
+    CD rom installs and the systme ends in gdm being installed, 
+    needs further sorting if we want to keep x-display-manager there
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 21:43:16 +0100
+
+ltsp (0.74) dapper; urgency=low
+
+  * add powerpc support to ltsp-update-kernels, make it handle vmlinux images,
+    handle yaboot copying and create yaboot.conf in tftproot
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 01:58:11 +0100
+
+ltsp (0.73) dapper; urgency=low
+
+  * fix KERNEL_ARCH for amd64, must be amd64-generic not just amd64 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 01:29:43 +0100
+
+ltsp (0.72) dapper; urgency=low
+
+  * fix bashism in ltsp_functions patch 236 from
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+  * cleaning up of startup links in rcS.d and rc2.d based on whitelist
+    variables (RC2_WHITELIST RCS_WHITELIST), thin-client-faster-startup
+    implemented :)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 16 Feb 2006 11:37:12 +0100
+
 ltsp (0.71) dapper; urgency=low
 
   * fix the kernel handling for different architectures, only install
