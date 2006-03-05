@@ -426,11 +426,6 @@ preseed() {
     echo $package $question $type $value | chroot $ROOT debconf-set-selections
 }
 
-# Workaround for bug #328090 (in shadow or adduser, I suspect).
-# Adding '|| true' to work around bug #355268.
-preseed $ROOT passwd passwd/make-user boolean false
-chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd || true
-
 # get package updates for base system
 chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
 

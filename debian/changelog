@@ -32,6 +32,7 @@ ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
     all debian specific config into file in /usr/share/.
   * Always load kernel module psmouse on the client, to make sure the
     source work with 2.6 kernels in sarge.
+  * Remove workaround for bug #328090, again.
 
   [ Vagrant Cascadian ]
   * New ldm theme Debian.
@@ -488,7 +489,7 @@ ltsp (0.58debian1) unstable; urgency=low
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
   * Pass X keyboard layout and other settings from server
     (debconf values) to the client.
-  * Remove workaround forbug #328090.  No longer present in etch.
+  * Remove workaround for bug #328090.  No longer present in etch.
 
   [ Vagrant Cascadian ]
   * Drop special handling of mkvmlinuz- it is already handled
