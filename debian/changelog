@@ -1,4 +1,4 @@
-ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
+ltsp (0.82debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
   * New release 0.82 from Ubuntu.
@@ -47,6 +47,9 @@ ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
     the people involved (Matt Zimmerman, Carlos Laviola, Michael Vogt,
     Oliver Grawert, Petter Reinholdtsen, Gustavo Franco, Vagrant
     Cascadian, Otavio Salvador) uploaders.
+
+  * Released from bzr repository at
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-main/
 
  -- Petter Reinholdtsen <pere@debian.org>  Sat,  4 Mar 2006 15:32:11 +0100
 
