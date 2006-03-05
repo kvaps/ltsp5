@@ -1,13 +1,5 @@
 ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
 
-  [ Vagrant Cascadian ]
-  * New ldm theme Debian.
-  * Simplify --arch handling (use default for ROOT).
-  * Change default for ROOT to use ARCH.
-  * Preseed handling code for passwd.
-  * Rewrote how the kernel package is selcted, making it adjust for
-    different environments. (Closes: #335852, #345130)
-
   [ Petter Reinholdtsen ]
   * New release 0.82 from Ubuntu.
     - Implements proper xauth handling, speeding up the client login.
@@ -40,6 +32,20 @@ ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
     all debian specific config into file in /usr/share/.
   * Always load kernel module psmouse on the client, to make sure the
     source work with 2.6 kernels in sarge.
+
+  [ Vagrant Cascadian ]
+  * New ldm theme Debian.
+  * Simplify --arch handling (use default for ROOT).
+  * Change default for ROOT to use ARCH.
+  * Preseed handling code for passwd.
+  * Rewrote how the kernel package is selcted, making it adjust for
+    different environments. (Closes: #335852, #345130)
+
+  [ Otavio Salvador ]
+  * Change maintainer to the alioth project mailing list, and make all
+    the people involved (Matt Zimmerman, Carlos Laviola, Michael Vogt,
+    Oliver Grawert, Petter Reinholdtsen, Gustavo Franco, Vagrant
+    Cascadian, Otavio Salvador) uploaders.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sat,  4 Mar 2006 15:32:11 +0100
 
