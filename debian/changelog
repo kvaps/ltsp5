@@ -5,11 +5,15 @@ ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
   * Simplify --arch handling (use default for ROOT).
   * Change default for ROOT to use ARCH.
   * Preseed handling code for passwd.
+  * Rewrote how the kernel package is selcted, making it adjust for
+    different environments. (Closes: #335852, #345130)
 
   [ Petter Reinholdtsen ]
-  * New release from Ubuntu.
+  * New release 0.82 from Ubuntu.
     - Implements proper xauth handling, speeding up the client login.
       (Closes: #350311)
+    - Avoids bashism in ltsp_functions, and thus work with dash as
+      /bin/sh. (Closes: #346530)
   * Reinsert subprocess.py in the ldm package, to get it working with
     python versions before 2.4.
   * Reinsert rule to include /etc/ltsp/ltsp-build-client.conf in
@@ -34,6 +38,8 @@ ltsp (0.82debian0.pere.1) UNRELEASED; urgency=low
   * Implemented multilevel configuration for ltsp-build-client, reading
     package defaults from /usr/share/ as well as /etc/.  Moved
     all debian specific config into file in /usr/share/.
+  * Always load kernel module psmouse on the client, to make sure the
+    source work with 2.6 kernels in sarge.
 
  -- Petter Reinholdtsen <pere@debian.org>  Sat,  4 Mar 2006 15:32:11 +0100
 
