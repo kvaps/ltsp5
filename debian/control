@@ -1,15 +1,16 @@
 Source: ltsp
 Section: misc
 Priority: optional
-Maintainer: Matt Zimmerman <mdz@ubuntu.com>
+Maintainer: LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
+Uploaders: Matt Zimmerman <mdz@debian.org>, Carlos Laviola <claviola@debian.org>, Michael Vogt <mvo@debian.org>, Oliver Grawert <ogra@ubuntu.com>, Petter Reinholdtsen <pere@debian.org>, Gustavo Franco <stratus@debian.org>, Vagrant Cascadian <vagrant@freegeek.org>, Otavio Salvador <otavio@debian.org>
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.2
 
 Package: ltsp-server
 Priority: extra
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh, netkit-inetd, iproute, debconf-utils
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
 Recommends: openssh-server | ssh
-Suggests: dhcp3-server, sdm
+Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
 Description: Basic LTSP server environment
  This is the basic environment depending on external a DHCP server to
@@ -25,6 +26,7 @@ Description: Complete LTSP server environment
 Package: ltsp-client
 Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools
 Recommends: ubuntu-thin-client, xdebconfigurator
+Suggests: nas
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: any
@@ -35,7 +37,7 @@ Description: LTSP client environment
  for installation inside a LTSP client filesystem.
 
 Package: ldm
-Depends: openssh-client | ssh, python, python-gtk2, python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
+Depends: openssh-client | ssh, python, python-gtk2, python2.3-gnome2 | python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
 Architecture: all
 Description: LTSP display manager
  ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike

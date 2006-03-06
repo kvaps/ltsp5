@@ -52,4 +52,3 @@ msgstr "Bygg LTSP chroot"
 #: ../ltsp-client-builder.templates:15
 msgid "Building LTSP chroot..."
 msgstr "Bygger LTSP chroot..."
-

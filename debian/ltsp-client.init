@@ -27,9 +27,38 @@ test -x $DAEMON || exit 0
 . /usr/lib/ltsp/ltsp_functions
 . /usr/lib/ltsp/ltsp_config
 
+warn() {
+    msg="$1"
+    logger -p user.warning -t ltsp-client  "warning: $msg"
+}
+
+start_sound() {
+    if [ -n "$SOUND" ]; then
+        # Detect and report a common problem with thin clients
+	if [ ! -f /dev/dsp ] ; then
+	    warn "Sound requested but /dev/dsp is missing.  Continuing."
+	fi
+	case "$SOUND_DAEMON" in
+            esd|'') # The default when no value is set
+                /usr/bin/esd -nobeeps -public -tcp &
+                ;;
+            nasd)
+                /usr/bin/nasd -aa &
+                # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
+                #aumix-minimal -v100 -w100 -c90 -m10
+                ;;
+            *)
+                warn "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
+                ;;
+        esac
+    fi
+}
+
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client..."
+
+        start_sound || true
 
         for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
             num=${screen##SCREEN_}

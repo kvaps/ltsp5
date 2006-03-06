@@ -1,0 +1,17 @@
+#! /bin/sh
+set -e
+
+#DEBHELPER#
+
+case "$1" in
+  remove|deconfigure|failed-upgrade)
+    update-alternatives --remove ldm-theme \
+	/usr/share/ldm/themes/Ubuntu
+    update-alternatives --remove ldm-theme \
+	/usr/share/ldm/themes/Edubuntu
+    update-alternatives --remove ldm-theme \
+	/usr/share/ldm/themes/Debian
+    update-alternatives --remove ldm-theme \
+	/usr/share/ldm/themes/Debian-Edu
+  ;;
+esac

@@ -9,7 +9,7 @@ msgstr ""
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. Type: boolean
 #. Description
@@ -24,7 +24,8 @@ msgid ""
 "This will set up an LTSP chroot environment on the machine, to act as a thin "
 "client server."
 msgstr ""
-"Si vous choisissez cette option, un environnement fermé d'exécution sera établi pour que la machine fonctionne en serveur de client léger LTSP."
+"Si vous choisissez cette option, un environnement fermé d'exécution sera "
+"établi pour que la machine fonctionne en serveur de client léger LTSP."
 
 #. Type: text
 #. Description
@@ -38,4 +39,3 @@ msgstr "Construction du « chroot » LTSP"
 #: ../ltsp-client-builder.templates:15
 msgid "Building LTSP chroot..."
 msgstr "Construction de l'environnement fermé d'exécution LTSP en cours ..."
-

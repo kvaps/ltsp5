@@ -52,6 +52,9 @@ EOF
 
 configure_resolver() {
     hostname=$(hostname)
+    if [ "(none)" = "$hostname" ] ; then
+        /etc/init.d/hostname.sh start
+    fi
     cat <<EOF >> /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
@@ -146,12 +149,31 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
       fi
 
-      preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
-      preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
-      preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
-      preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+      # Color depth preseeding
+      if [ -n "$X_COLOR_DEPTH" ]; then
+        preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+      fi
 
-      X_MODE = $( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
+      # Mouse preseeding options.  Use inputattach if available
+      if type inputattach >/dev/null 2>/dev/null ; then
+        if [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && \
+	   [ i386 = $(dpkg --print-architecture) ] && \
+           [ -n "$X_MOUSE_PROTOCOL" ]; then
+          inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+        fi
+      else
+        if [ -n "$X_MOUSE_DEVICE" ]; then 
+          preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
+        fi
+        if [ -n "$X_MOUSE_PROTOCOL" ]; then 
+          preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
+        fi
+      fi
+      if [ -n "$X_MOUSE_EMULATE3BTN" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+      fi
+
+      X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
       if [ -n "$X_MODE" ]; then
 	  preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
       fi
@@ -167,11 +189,23 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
       fi
 
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
-      preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+      # Make sure xkb values only get preseeded if the variables are actually set
+      # (saves boottime to not call debconf-communicate on every empty value)
+      if [ -n "$XKBLAYOUT" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+      fi
+      if [ -n "$XKBMODEL" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
+      fi
+      if [ -n "$XKBRULES" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
+      fi
+      if [ -n "$XKBOPTIONS" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
+      fi
+      if [ -n "$XKBVARIANT" ]; then
+        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+      fi
 
       # Autoconfigure using dexconf when using xdebconfigurator, or X
       # package postinst if not.  Using dexconf directly might save
@@ -244,6 +278,7 @@ run_rcfiles() {
 case "$1" in
   start)
         log_begin_msg "Setting up LTSP client..."
+	type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 120" || true
         if [ "$root_write_method" = "bind_mounts" ]; then
           bind_mounts
         fi

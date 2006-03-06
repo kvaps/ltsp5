@@ -14,11 +14,6 @@ if [ ! -d $TFTPBOOT ] ; then
     exit 1
 fi
 
-if [ ! -d $TFTPBOOT ] ; then
-    echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
-    exit 1
-fi
-
 for file in $LTSPROOT/*/boot/vmlinuz* $LTSPROOT/*/boot/initrd.img*; do
     cp -a -v "$file" $TFTPBOOT
 done

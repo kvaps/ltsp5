@@ -1,10 +1,11 @@
-ltsp (0.63) UNRELEASED; urgency=low
+ltsp (0.71debian0.pere.1) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
   * Merge source from Petter Reinholdtsen to support Debian as host. All
     changes are logged bellow with versions having debian on it.
   * Merge following Vagrant Cascadian changes:
-    - allow x-display-manager as alternative to ldm or sdm, for use on thick clients
+    - allow x-display-manager as alternative to ldm or sdm, for use on
+      thick clients
     - implement RCFILE
     - commandline option to support debconf pre-seeding in the chroot
     - commandline option to add keys into chroot's apt keyring
@@ -12,7 +13,118 @@ ltsp (0.63) UNRELEASED; urgency=low
     - change default for ROOT to use ARCH
     - preseed handling code for passwd
 
- -- Otavio Salvador <otavio@debian.org>  Thu, 12 Jan 2006 20:10:46 -0200
+  [ Petter Reinholdtsen ]
+  * Implement proper xauth handling, to speed up the client
+    login.  (Closes: #350311)
+  * Reinsert subprocess.py in the ldm package, to get it working with
+    python versions before 2.4.
+  * Reinsert rule to include /etc/ltsp/ltsp-build-client.conf in
+    ltsp-server package.
+  * Reinsert code to use xdebconfigurator on the client if it is
+    installed.
+  * Make sure /etc/X11 and /var/lib/xfree86 isn't copied and
+    bind-mounted as we use xdebconfigurator to save space.
+  * Change ldm depend from python-gnome2 to 'python2.3-gnome2 |
+    python-gnome2', to try to get the gnomecanvas python module
+    available on sarge, and use gnome.convas instead of gnomecanvas
+    for compatibility reasons.
+  * New ldm theme Debian-Edu, and made it the default.
+  * Moved code to start esd from init.d/ltsp-client-setup to
+    init.d/ltsp-client to make sure it starts after kernel modules for
+    sound devices are loaded.
+  * Add support for nasd sound system.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
+
+ltsp (0.71) dapper; urgency=low
+
+  * fix the kernel handling for different architectures, only install
+    linux-image-$(architecture), not the restricted modules 
+    (low memory spec and multiarch support)
+  * fix typos in EARLY_PACKAGES
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  8 Feb 2006 16:54:03 +0100
+
+ltsp (0.70) dapper; urgency=low
+
+  * merge http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/ 
+    patch 235, (netbooting only in initramfs-tools not in
+    initrd-netboot-tools and make debian happy)
+  * add x-display-manager as optional dependency to ltsp-client, make
+    ltsp-client fall back to sdm and then to startx if ldm isnt installed
+    (vagrant patch 232 and 233)
+  * remove esound, inputattach, usplash as hard dependencys for ltsp-client
+    and move them to EARLY_PACKAGES in ltsp-build-client to make debian happy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  8 Feb 2006 15:28:12 +0100
+
+ltsp (0.69) dapper; urgency=low
+
+  * brown paperback upload ...actually append the repositorys to
+    sources.list instead of replacing it
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  7 Feb 2006 21:26:02 +0100
+
+ltsp (0.68) dapper; urgency=low
+
+  * inputattach available on all arches, fixing the dependency of
+  	ltsp-client to reflect that
+  * merge revision 231-233 from pkg-ltsp.alioth... to make sources.list
+  	handling optionally work for --extra and --security mirror addition
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  7 Feb 2006 21:12:06 +0100
+
+ltsp (0.67) dapper; urgency=low
+
+  * finally add usplash dependency to ltsp-client
+  * make dependency on inputattach arch specific, it exists only 
+    on i386
+  * merge rev 226-228 from
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/
+    (simplifies ARCH and ROOT handling)
+  * cleanly wrap the xkb options to not run debconf communicate for 
+    empty values
+  * re-add preseeding option for 3 button mouse emulation and wrap it 
+    properly to not be executed if not set
+  * only run preseeding of defaul color depth if there is really a 
+    value set in lts.conf
+  * timeout defaults for usplash to the ltsp-client-setup initscript 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  3 Feb 2006 17:09:11 +0100
+
+ltsp (0.66) dapper; urgency=low
+
+  * fix typo in the X_MODE code in ltsp-client-setup
+  * add proper serial mouse support to ltsp-client-setup
+  * make ltsp-client depend on inputattach for serial mouse support
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  2 Feb 2006 22:59:30 +0100
+
+ltsp (0.65) dapper; urgency=low
+
+  * merged fix (drop esddsp from ldm) from 
+    http://people.ubuntu.com/~ogra/bzr-archive/ltsp/sound/'
+  * changed the MODULES= line in ltsp-build-client from "none" to 
+    "netboot" to make use of the new initramfs feature (thanks adam)
+  * changed the default mirror to archive.ubuntu.com in ltsp-build-client
+  * drop adding of mousedev to /etc/modules in ltsp-build-client, 
+    its built into the kernel now
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  1 Feb 2006 20:34:39 +0100
+
+ltsp (0.64) dapper; urgency=low
+
+  * Merge sources.list fix to not append but replace the file 
+    in the client chroot to make networkless installs work.
+    http://people.ubuntu.com/~ogra/bzr-archive/ltsp/fixes/
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 13 Jan 2006 14:09:19 +0100
+
+ltsp (0.63) dapper; urgency=low
+
+  * Merge http://people.ubuntu.com/~ogra/bzr-archive/ltsp/sound/ (ogra)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 10 Jan 2006 18:28:05 +0100
 
 ltsp (0.62) dapper; urgency=low
 
