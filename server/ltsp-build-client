@@ -527,3 +527,5 @@ invoke-rc.d nfs-kernel-server reload
 EOF
   fi
 fi
+
+echo "ltsp client installation completed successfully"
