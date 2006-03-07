@@ -328,6 +328,15 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
+# if the host uses resolvconf, /etc/resolv.conf is a symlink and the
+# copy in the client environment will point into nowhere.  Avoid this
+# by copying the content instead of the symlink
+if [ -L $ROOT/etc/resolv.conf ] ; then
+    rm $ROOT/etc/resolv.conf
+    cat /etc/resolv.conf > $ROOT/etc/resolv.conf
+    chmod 644 $ROOT/etc/resolv.conf
+fi
+
 test -z "$ROOTPASS" && ROOTPASS="disable"
 if [ "$ROOTPASS" = "disable" ]; then
   # Root password is empty by default, lock it
