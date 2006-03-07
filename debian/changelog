@@ -1,3 +1,9 @@
+ltsp (0.82debian2) UNRELEASED; urgency=low
+
+  [ Gustavo Franco ]
+  * works around xdebconfigurator 1.15 bug, replacing unknown 
+    video driver with vesa.
+
 ltsp (0.82debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
