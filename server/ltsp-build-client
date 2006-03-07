@@ -344,3 +344,5 @@ if ! grep -q '^/opt/ltsp' /etc/exports ; then
 EOF
             invoke-rc.d nfs-kernel-server reload
 fi
+
+echo "ltsp client installation completed successfully"
