@@ -81,22 +81,18 @@ rc_cleanup() {
         echo "Cleaning up startup links in rc$suffix.d ..."
     fi
 
-    RC_DIR=$(ls $ROOT/etc/rc$LEVEL.d/)
+    RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
 
     for match in $@; do
         RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
     done
 
     for link in $RC_DIR; do
-        if [ ! $(echo $link|grep ^K) ]; then
-            name=$(echo $link|sed s/^[S,K,0-9]*//g)
-            printf -v seq_number %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g)
+	name=$(echo $link|sed s/^S[0-9]*//g)
+	printf -v seq_number %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g)
 
-            if [ ! README = $name ]; then
-                chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
-                chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
-            fi
-        fi
+	chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
+	chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
     done
 }
 
