@@ -24,7 +24,7 @@ case "$1" in
 		ldm-theme /usr/share/ldm/themes/Edubuntu 35
  	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Debian-Edu 30
+		ldm-theme /usr/share/ldm/themes/Debian-Edu 50
        ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

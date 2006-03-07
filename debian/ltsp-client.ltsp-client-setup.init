@@ -54,13 +54,14 @@ configure_resolver() {
     hostname=$(hostname)
     if [ "(none)" = "$hostname" ] ; then
         /etc/init.d/hostname.sh start
+    else
+        echo $hostname > /etc/hostname
     fi
     cat <<EOF >> /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
 $SERVER server
 EOF
-    echo $hostname > /etc/hostname
 
     if [ -n "$DNS_SERVER" -a -n "$SEARCH_DOMAIN" ]; then
         cat <<EOF > /etc/resolv.conf
