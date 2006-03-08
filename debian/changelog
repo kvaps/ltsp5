@@ -14,6 +14,9 @@ ltsp (0.82debian2) UNRELEASED; urgency=low
   * Print 'ltsp client installation completed successfully' at the end
     of the client build, to make it easier to see the difference between
     an interrupted build and a successful one.
+  * Stop making /var/lib/urandom/ writable on the client.  It is no
+    longer needed to avoid error messages during boot as the urandom init.d
+    script isn't executed any more.
 
  -- Petter Reinholdtsen <pere@debian.org>  Wed,  8 Mar 2006 14:09:16 +0100
 
