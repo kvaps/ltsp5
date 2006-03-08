@@ -100,13 +100,6 @@ preseed() {
     fi
 }
 
-get_debconf_value() {
-    package="$1"
-    question="$2"
-
-    eval $3=`echo "get $question" | debconf-communicate $package | cut -d " " -f2`
-}
-
 configure_x() {
     if [ -z "$xserver_package" ]; then
       # set default xserver
@@ -131,12 +124,6 @@ configure_x() {
       # Autoconfigure
       if [ -n "$(which xdebconfigurator)" ]; then
         xdebconfigurator
-      fi
-      # Handle overrides of specific parameters
-      # Fix unknown value returned by xdebconfigurator for some video cards models.
-      get_debconf_value $xserver_package $xserver_package/config/device/driver return_video
-      if [ "$return_video" = "unknown" ]; then
-         preseed $xserver_package $xserver_package/config/device/driver "vesa"
       fi
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
