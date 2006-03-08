@@ -1,3 +1,12 @@
+ltsp (0.82debian2) UNRELEASED; urgency=low
+
+  [ Gustavo Franco ]
+  * Works around xdebconfigurator 1.15 bug, replacing unknown 
+    video driver with vesa.
+  * Add Portuguese Brazilian debconf translation.
+  * Add ltsp-client depends on hwinfo. Latest xdebconfigurator
+    (in sid) already contains that but not the one in sarge.
+  
 ltsp (0.82debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
