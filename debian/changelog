@@ -7,7 +7,7 @@ ltsp (0.82debian2) UNRELEASED; urgency=low
   * Drop openbsd-inetd from list of packages to installed.  It is no longer
     needed with the new rc.d cleaning making sure inetd isn't started.
   * Fix rc.d cleanup code to avoid bashism and make it more robust against
-    packages leaving symlinks in rc2.d/ when they are removed.
+    packages leaving dangling symlinks in rc2.d/ when they are removed.
   * Make sure to copy the content of resolv.conf if the copied file
     end up being a symlink.  Avoids problem when resolvconf is used
     on the server.
