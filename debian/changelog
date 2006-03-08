@@ -4,17 +4,19 @@ ltsp (0.82debian2) UNRELEASED; urgency=low
   * Add Portuguese Brazilian debconf translation.
 
   [ Petter Reinholdtsen ]
-  * Drop openbsd-inetd from list of packages to installed.  It is no longer
+  * Drop openbsd-inetd from list of packages to install.  It is no longer
     needed with the new rc.d cleaning making sure inetd isn't started.
   * Fix rc.d cleanup code to avoid bashism and make it more robust against
     packages leaving dangling symlinks in rc2.d/ when they are removed.
-  * Make sure to copy the content of resolv.conf if the copied file
-    end up being a symlink.  Avoids problem when resolvconf is used
-    on the server.
+  * Make sure to copy the content of resolv.conf if the file copied by
+    debootstrap end up being a symlink.  Avoids problem when resolvconf
+    is used on the server.
   * Print 'ltsp client installation completed successfully' at the end
     of the client build, to make it easier to see the difference between
     an interrupted build and a successful one.
-  
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed,  8 Mar 2006 14:09:16 +0100
+
 ltsp (0.82debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
