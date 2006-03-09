@@ -1,3 +1,13 @@
+ltsp (0.83) dapper; urgency=low
+
+  * fix typo in ltsp-server description
+  * fix indentation in ltsp-client.init
+  * fix indentation error in X_MODE code of ltsp-client-setup
+  * remove the unused configure_sound call in the ltsp-client-setup init script,
+    thats handled in ltsp-client since some time
+  
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 08:59:31 +0100
+
 ltsp (0.82) dapper; urgency=low
 
   * move rc_cleanup function to the set of other functions at the top of
