@@ -81,22 +81,19 @@ rc_cleanup() {
         echo "Cleaning up startup links in rc$suffix.d ..."
     fi
 
-    RC_DIR=$(ls $ROOT/etc/rc$LEVEL.d/)
+    RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
 
     for match in $@; do
         RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
     done
 
     for link in $RC_DIR; do
-        if [ ! $(echo $link|grep ^K) ]; then
-            name=$(echo $link|sed s/^[S,K,0-9]*//g)
-            printf -v seq_number %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g)
-
-            if [ ! README = $name ]; then
-                chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
-                chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
-            fi
-        fi
+	name=$(echo $link|sed s/^S[0-9]*//g)
+	seq_number=$(printf %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g))
+	if [ -f $ROOT/etc/init.d/$name ] ; then
+	    chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
+	    chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
+	fi
     done
 }
 
@@ -180,6 +177,12 @@ while [ "$#" -gt "0" ]; do
   test "$#" -gt "0" && shift
 done
 
+# Load package defaults for the variables that are still unset
+if [ -f /usr/share/ltsp/ltsp-build-client.conf ]; then
+    . /usr/share/ltsp/ltsp-build-client.conf ]
+fi
+
+# set defaults
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
 test -z "$DIST" && DIST=dapper
@@ -196,24 +199,12 @@ case $ARCH in
 	;;
 esac
 
-# set defaults based on dist
-case $DIST in
-  sarge|etch|sid) 
-    test -z "$COMPONENTS" && COMPONENTS="main"
-    test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
-    test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
-    test -z "$LATE_PACKAGES" && LATE_PACKAGES="kernel-image-netbootable"
-    test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
-    ;;
-esac
-
-# set defaults
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
-test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
-test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin stop-bootlogd"
+test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common"
+test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
@@ -353,3 +344,5 @@ if ! grep -q '^/opt/ltsp' /etc/exports ; then
 EOF
             invoke-rc.d nfs-kernel-server reload
 fi
+
+echo "ltsp client installation completed successfully"
