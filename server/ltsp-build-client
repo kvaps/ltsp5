@@ -11,7 +11,7 @@ fi
 
 get_help() {
 cat << EOF
- --root <rootpath>  default root path
+ --base <basedir>  default base install directory
  --dist <dist>  debian distribution
  --components "<component1 component2>"  archive components
  --mirror  <mirror>  archive mirror url
@@ -100,7 +100,7 @@ rc_cleanup() {
 # process commandline arguments
 while [ "$#" -gt "0" ]; do
   case $1 in
-    --root) ROOT="$2"
+    --base) BASE="$2"
       test "$#" -gt "0" && shift
       ;;
     --dist) DIST="$2"
@@ -184,7 +184,7 @@ fi
 
 # set defaults
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
-test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
+test -z "$BASE" && BASE=/opt/ltsp
 test -z "$DIST" && DIST=dapper
 
 case $ARCH in
@@ -205,6 +205,9 @@ test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client di
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
 test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
+
+# define the root for the install
+ROOT=$BASE/$ARCH
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
@@ -337,10 +340,10 @@ rc_cleanup S $RCS_WHITELIST
 rc_cleanup 2 $RC2_WHITELIST
 
 # Export LTSP chroot using NFS to the LTSP client network
-if ! grep -q '^/opt/ltsp' /etc/exports ; then
+if ! grep -q "^$BASE" /etc/exports ; then
             cat <<EOF >> /etc/exports
 # Automatically added by ltsp-server
-/opt/ltsp       *(ro,no_root_squash,async)
+$BASE       *(ro,no_root_squash,async)
 EOF
             invoke-rc.d nfs-kernel-server reload
 fi
