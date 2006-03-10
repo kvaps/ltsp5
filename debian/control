@@ -13,7 +13,7 @@ Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
 Description: Basic LTSP server environment
- This is the basic environment depending on external a DHCP server to
+ This is the basic environment depending on an external DHCP server to
  point the clients to the LTSP server.
 
 Package: ltsp-server-standalone
