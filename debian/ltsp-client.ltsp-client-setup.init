@@ -54,13 +54,14 @@ configure_resolver() {
     hostname=$(hostname)
     if [ "(none)" = "$hostname" ] ; then
         /etc/init.d/hostname.sh start
+    else
+        echo $hostname > /etc/hostname
     fi
     cat <<EOF >> /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
 $SERVER server
 EOF
-    echo $hostname > /etc/hostname
 
     if [ -n "$DNS_SERVER" -a -n "$SEARCH_DOMAIN" ]; then
         cat <<EOF > /etc/resolv.conf
@@ -162,7 +163,7 @@ configure_x() {
 
       X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
       if [ -n "$X_MODE" ]; then
-	  preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
+	    preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
       fi
 
       # This require fontserver preseeding to work (Debian bug

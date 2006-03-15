@@ -1,8 +1,8 @@
 Source: ltsp
 Section: misc
 Priority: optional
-Maintainer: Petter Reinholdtsen <pere@debian.org>
-Uploaders: Vagrant Cascadian <vagrant@freegeek.org>, Matt Zimmerman <mdz@debian.org>
+Maintainer: LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
+Uploaders: Matt Zimmerman <mdz@debian.org>, Carlos Laviola <claviola@debian.org>, Michael Vogt <mvo@debian.org>, Oliver Grawert <ogra@ubuntu.com>, Petter Reinholdtsen <pere@debian.org>, Gustavo Franco <stratus@debian.org>, Vagrant Cascadian <vagrant@freegeek.org>, Otavio Salvador <otavio@debian.org>
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.6.2
 
@@ -13,7 +13,7 @@ Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
 Description: Basic LTSP server environment
- This is the basic environment depending on external a DHCP server to
+ This is the basic environment depending on an external DHCP server to
  point the clients to the LTSP server.
 
 Package: ltsp-server-standalone

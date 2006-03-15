@@ -1,44 +1,197 @@
-ltsp (0.71debian0.pere.2) UNRELEASED; urgency=low
+ltsp (0.83) dapper; urgency=low
 
-  [ Otavio Salvador ]
-  * Merge source from Petter Reinholdtsen to support Debian as host. All
-    changes are logged bellow with versions having debian on it.
-  * Merge following Vagrant Cascadian changes:
-    - allow x-display-manager as alternative to ldm or sdm, for use on
-      thick clients
-    - implement RCFILE
-    - commandline option to support debconf pre-seeding in the chroot
-    - commandline option to add keys into chroot's apt keyring
-    - simplify --arch handling (use default for ROOT)
-    - change default for ROOT to use ARCH
-    - preseed handling code for passwd
+  * fix typo in ltsp-server description
+  * fix indentation in ltsp-client.init
+  * fix indentation error in X_MODE code of ltsp-client-setup
+  * remove the unused configure_sound call in the ltsp-client-setup init script,
+    thats handled in ltsp-client since some time
+  
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 08:59:31 +0100
+
+ltsp (0.82debian2) unstable; urgency=low
+
+  [ Gustavo Franco ]
+  * Add Portuguese Brazilian debconf translation.
 
   [ Petter Reinholdtsen ]
-  * Implement proper xauth handling, to speed up the client
-    login.  (Closes: #350311)
+  * Drop openbsd-inetd from list of packages to install.  It is no longer
+    needed with the new rc.d cleaning making sure inetd isn't started.
+  * Fix rc.d cleanup code to avoid bashism and make it more robust against
+    packages leaving dangling symlinks in rc2.d/ when they are removed.
+  * Make sure to copy the content of resolv.conf if the file copied by
+    debootstrap end up being a symlink.  Avoids problem when resolvconf
+    is used on the server.
+  * Print 'ltsp client installation completed successfully' at the end
+    of the client build, to make it easier to see the difference between
+    an interrupted build and a successful one.
+  * Stop making /var/lib/urandom/ writable on the client.  It is no
+    longer needed to avoid error messages during boot as the urandom init.d
+    script isn't executed any more.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed,  8 Mar 2006 15:13:08 +0100
+
+ltsp (0.82debian1) unstable; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * New release 0.82 from Ubuntu.
+    - Implements proper xauth handling, speeding up the client login.
+      (Closes: #350311)
+    - Avoids bashism in ltsp_functions, and thus work with dash as
+      /bin/sh. (Closes: #346530)
   * Reinsert subprocess.py in the ldm package, to get it working with
     python versions before 2.4.
   * Reinsert rule to include /etc/ltsp/ltsp-build-client.conf in
     ltsp-server package.
   * Reinsert code to use xdebconfigurator on the client if it is
     installed.
-  * Make sure /etc/X11 and /var/lib/xfree86 isn't copied and
-    bind-mounted as we use xdebconfigurator to save space.
+  * To save space, make sure /etc/X11 and /var/lib/xfree86 isn't
+    copied and bind-mounted when we use xdebconfigurator.
   * Change ldm depend from python-gnome2 to 'python2.3-gnome2 |
     python-gnome2', to try to get the gnomecanvas python module
     available on sarge, and use gnome.convas instead of gnomecanvas
     for compatibility reasons.
   * New ldm theme Debian-Edu, and made it the default.
-  * Moved code to start esd from init.d/ltsp-client-setup to
-    init.d/ltsp-client to make sure it starts after kernel modules for
-    sound devices are loaded.
+  * Report to syslog if there are problems with starting the sound
+    system.
+  * Try harder to set hostname on the client to avoid it ending up as
+    '(none)'.
   * Make sure to 'kill -HUP' esd before a new user connect to it, to get
     it to accept new connections.
-  * Make sure the user get a login shel when logging in over ssh to the
-    server.
-  * Add support for nasd sound system.
+  * Make sure the user get a login shell environment when logging in
+    over ssh to the server.
+  * Implemented multilevel configuration for ltsp-build-client, reading
+    package defaults from /usr/share/ as well as /etc/.  Moved
+    all debian specific config into file in /usr/share/.
+  * Always load kernel module psmouse on the client, to make sure the
+    source work with 2.6 kernels in sarge.
+  * Remove workaround for bug #328090, again.
 
- -- Petter Reinholdtsen <pere@debian.org>  Sun, 29 Jan 2006 16:56:19 +0100
+  [ Vagrant Cascadian ]
+  * New ldm theme Debian.
+  * Simplify --arch handling (use default for ROOT).
+  * Change default for ROOT to use ARCH.
+  * Preseed handling code for passwd.
+  * Rewrote how the kernel package is selcted, making it adjust for
+    different environments. (Closes: #335852, #345130)
+
+  [ Otavio Salvador ]
+  * Change maintainer to the alioth project mailing list, and make all
+    the people involved (Matt Zimmerman, Carlos Laviola, Michael Vogt,
+    Oliver Grawert, Petter Reinholdtsen, Gustavo Franco, Vagrant
+    Cascadian, Otavio Salvador) uploaders.
+
+  * Released from bzr repository at
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-main/
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sat,  4 Mar 2006 15:32:11 +0100
+
+ltsp (0.82) dapper; urgency=low
+
+  * move rc_cleanup function to the set of other functions at the top of
+    ltsp-build-client, make it use update-rc.d and be less noisy
+  * merge rev. 243-245 from
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/,
+    bugfix to handle init.d scripts which are substrings of other scripts,
+    like udev and udev-mtab. change init.d cleaning to avoid code
+    duplication.
+  * merge
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/ rev.
+    238, fix sdm dependency of ltsp-client
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sat,  4 Mar 2006 22:05:29 +0100
+
+ltsp (0.81) dapper; urgency=low
+
+  * clean up duplicate esd startup that slipped through in a bzr merge ...
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 24 Feb 2006 23:20:24 +0100
+
+ltsp (0.80) dapper; urgency=low
+
+  * merge -r234..235 from 
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/, 
+    xauth handling for ldm
+  * add proper python tempfile handling to the xauth code
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 17:28:03 +0100
+
+ltsp (0.79) dapper; urgency=low
+
+  * add shutdown icons to the themes for ldm
+  * add shutdown function to ldm to easily shut down the clients 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 16:37:41 +0100
+
+ltsp (0.78) dapper; urgency=low
+
+  * merge -r228..229
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    option for ltsp-build-client to add additional keys to the apt keyring
+    in the chroot
+  * merge -r229..230
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    adds option to load debconf pre-seeding files in the chroot
+    to ltsp-build-client
+  * merge -r230..231
+    http://llama.freegeek.org/~vagrant/bzr-archives/ltsp/ubuntufixes/,
+    RCFILE handling 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 02:46:18 +0100
+
+ltsp (0.77) dapper; urgency=low
+
+  * added alternative handling to ldm for easier theme selection
+  * merged revision 225-228 from
+    http://developer.skolelinux.no/~pere/bzr-archives/pere-sound/, 
+    adds nasd support and several code improvements (manually removed 
+    the syslog code this patch adds from the initfunction)
+  * merged
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+    rev 237 from petter (Fall pack to mouse preseeding if inputattach is
+    missing.)
+  * merged
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+    233 (handling of older gnomecanvas version for ldm)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 23 Feb 2006 01:25:36 +0100
+
+ltsp (0.76) dapper; urgency=low
+
+  * fix ltsp-client -> ldm relationship, add ldm to EARLY_PACKAGES, add
+    x-display-manager back to ltsp-client dependencys 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 22 Feb 2006 20:45:26 +0100
+
+ltsp (0.75) dapper; urgency=low
+
+  * revert the x-display-manager dependency in ltsp-client, it breaks
+    CD rom installs and the systme ends in gdm being installed, 
+    needs further sorting if we want to keep x-display-manager there
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 21:43:16 +0100
+
+ltsp (0.74) dapper; urgency=low
+
+  * add powerpc support to ltsp-update-kernels, make it handle vmlinux images,
+    handle yaboot copying and create yaboot.conf in tftproot
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 01:58:11 +0100
+
+ltsp (0.73) dapper; urgency=low
+
+  * fix KERNEL_ARCH for amd64, must be amd64-generic not just amd64 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 17 Feb 2006 01:29:43 +0100
+
+ltsp (0.72) dapper; urgency=low
+
+  * fix bashism in ltsp_functions patch 236 from
+    http://developer.skolelinux.no/~pere/bzr-archives/ltsp-ubuntufixes/
+  * cleaning up of startup links in rcS.d and rc2.d based on whitelist
+    variables (RC2_WHITELIST RCS_WHITELIST), thin-client-faster-startup
+    implemented :)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 16 Feb 2006 11:37:12 +0100
 
 ltsp (0.71) dapper; urgency=low
 
@@ -371,7 +524,7 @@ ltsp (0.58debian1) unstable; urgency=low
   * Merged with ubuntu bazaar repository (ltsp--main--0 branch).
   * Pass X keyboard layout and other settings from server
     (debconf values) to the client.
-  * Remove workaround forbug #328090.  No longer present in etch.
+  * Remove workaround for bug #328090.  No longer present in etch.
 
   [ Vagrant Cascadian ]
   * Drop special handling of mkvmlinuz- it is already handled
