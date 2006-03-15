@@ -14,6 +14,7 @@ XKBMODEL
 X_MODE_0 through X_MODE_2
 USE_XFS
 RCFILE_01 thru RCFILE_10
+SOUND
 
 Implemented but untested
 ------------------------
@@ -31,6 +32,7 @@ X_MOUSE_DEVICE
 X_MOUSE_PROTOCOL
 X_MOUSE_EMULATE3BTN
 TELNET_HOST
+SOUND_DAEMON
 
 Not yet implemented
 -------------------
@@ -38,7 +40,6 @@ NFS_SERVER
 USE_NFS_SWAP
 SWAPFILE_SIZE
 RAMDISK_SIZE
-SOUND
 X_MODE_0 through X_MODE_2
 X_MOUSE_RESOLUTION
 X_BUTTONS

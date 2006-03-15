@@ -14,7 +14,7 @@ fi
 
 get_help() {
 cat << EOF
- --root <rootpath>  default root path
+ --base <basedir>  default base install directory
  --dist <dist>  debian distribution
  --components "<component1 component2>"  archive components
  --mirror  <mirror>  archive mirror url
@@ -78,6 +78,33 @@ on_exit() {
     done
 }
 
+rc_cleanup() {
+    LEVEL=$1; shift
+
+    if [ $(echo $LEVEL| grep [2-5]) ]; then
+        suffix="2 3 4 5"
+        echo "Cleaning up startup links in init levels: $suffix ..."
+    else
+        suffix=$LEVEL
+        echo "Cleaning up startup links in rc$suffix.d ..."
+    fi
+
+    RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
+
+    for match in $@; do
+        RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
+    done
+
+    for link in $RC_DIR; do
+	name=$(echo $link|sed s/^S[0-9]*//g)
+	seq_number=$(printf %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g))
+	if [ -f $ROOT/etc/init.d/$name ] ; then
+	    chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
+	    chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
+	fi
+    done
+}
+
 # Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
 # running init scripts during installation
 make_policyrcd() {
@@ -123,7 +150,7 @@ on_exit() {
 # process commandline arguments
 while [ "$#" -gt "0" ]; do
   case $1 in
-    --root) ROOT="$2"
+    --base) BASE="$2"
       test "$#" -gt "0" && shift
       ;;
     --dist) DIST="$2"
@@ -212,25 +239,21 @@ while [ "$#" -gt "0" ]; do
   test "$#" -gt "0" && shift
 done
 
+# Load package defaults for the variables that are still unset
+if [ -f /usr/share/ltsp/ltsp-build-client.conf ]; then
+    . /usr/share/ltsp/ltsp-build-client.conf
+fi
+
+# set defaults
 test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
-test -z "$ROOT" && ROOT=/opt/ltsp/$ARCH
+test -z "$BASE" && BASE=/opt/ltsp
 test -z "$DIST" && DIST=dapper
 test -z "$APT_GET_OPTS" && APT_GET_OPTS="-y"
 
-# set defaults based on dist
-case $DIST in
-  sarge|etch|sid) 
-    test -z "$COMPONENTS" && COMPONENTS="main"
-    test -z "$MIRROR" && MIRROR="http://http.us.debian.org/debian"
-    test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev devfsd"
-    test -z "$EXCLUDE" && EXCLUDE="libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"
-    ;;
-esac
-
-# set defaults
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
+
 if [ -z "$LATE_PACKAGES" ]; then
   case $DIST in
     sarge)
@@ -276,6 +299,11 @@ if [ -z "$LATE_PACKAGES" ]; then
   test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
   LATE_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
 fi
+test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common"
+test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
+
+# define the root for the install
+ROOT=$BASE/$ARCH
 
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
@@ -300,6 +328,15 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
+# if the host uses resolvconf, /etc/resolv.conf is a symlink and the
+# copy in the client environment will point into nowhere.  Avoid this
+# by copying the content instead of the symlink
+if [ -L $ROOT/etc/resolv.conf ] ; then
+    rm $ROOT/etc/resolv.conf
+    cat /etc/resolv.conf > $ROOT/etc/resolv.conf
+    chmod 644 $ROOT/etc/resolv.conf
+fi
+
 test -z "$ROOTPASS" && ROOTPASS="disable"
 if [ "$ROOTPASS" = "disable" ]; then
   # Root password is empty by default, lock it
@@ -318,6 +355,8 @@ fi
 
 # Always load mousedev
 echo mousedev >> $ROOT/etc/modules
+# always load psmouse too (for 2.6 kernels)
+echo psmouse >> $ROOT/etc/modules
 
 # move sources.list aside
 test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
@@ -396,10 +435,6 @@ preseed() {
     echo $package $question $type $value | chroot $ROOT debconf-set-selections
 }
 
-# Workaround for bug #328090 (in shadow or adduser, I suspect)
-preseed $ROOT passwd passwd/make-user boolean false
-chroot $ROOT dpkg-reconfigure  -fnoninteractive -pcritical passwd
-
 # get package updates for base system
 chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
 
@@ -470,13 +505,16 @@ if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]
   echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
 fi
 
+rc_cleanup S $RCS_WHITELIST
+rc_cleanup 2 $RC2_WHITELIST
+
 # Export LTSP chroot using NFS to the LTSP client network
-if ! grep -q '^/opt/ltsp' /etc/exports ; then
+if ! grep -q "^$BASE" /etc/exports ; then
   test -z "$overwrite_exports" && overwrite_exports="true"
   if [ "$overwrite_exports" = "true" ]; then
             cat <<EOF >> /etc/exports
 # Automatically added by ltsp-server
-/opt/ltsp       *(ro,no_root_squash,async)
+$BASE       *(ro,no_root_squash,async)
 EOF
             invoke-rc.d nfs-kernel-server reload
   else
@@ -492,3 +530,5 @@ invoke-rc.d nfs-kernel-server reload
 EOF
   fi
 fi
+
+echo "ltsp client installation completed successfully"
