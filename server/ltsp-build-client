@@ -241,7 +241,7 @@ done
 
 # Load package defaults for the variables that are still unset
 if [ -f /usr/share/ltsp/ltsp-build-client.conf ]; then
-    . /usr/share/ltsp/ltsp-build-client.conf ]
+    . /usr/share/ltsp/ltsp-build-client.conf
 fi
 
 # set defaults
