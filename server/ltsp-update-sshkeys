@@ -5,10 +5,16 @@ hostname=$(hostname)
 ips=$(getent hosts $hostname | awk '$0 !~ /127.0.0.1/ { print $1 }')
 ips=$(ip -o addr show | awk '$3 == "inet" && $4 !~ /^127\./ { print $4 }' | sed -e 's,/[0-9][0-9]*\>,,g')
 output=$(tempfile)
+enc="dsa rsa"
 
 names="$hostname $ips"
 
-ssh-keyscan -t rsa,dsa $names > $output
+for name in $names; do
+    for encryption in $enc; do
+        echo $(echo $name $(cat /etc/ssh/ssh_host_${encryption}_key.pub|awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $output
+        echo "# Creating ${encryption}-hostkey for $name"
+    done
+done
 
 for client in $clients; do
     install -m 644 $output /opt/ltsp/$client/etc/ssh/ssh_known_hosts
