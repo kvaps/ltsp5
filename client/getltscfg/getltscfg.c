@@ -7,6 +7,7 @@
 #include  <errno.h>
 #include  <string.h>
 #include  <popt.h>
+#include  <assert.h>
 #include  <sys/utsname.h>
 #include  <sys/socket.h>
 #include  <sys/ioctl.h>
@@ -300,7 +301,7 @@ void GetAddrs()
 	    goto out;
 	}
 
-	if(ifc.ifc_len == sizeof(struct ifreq) * numreqs){
+	if(ifc.ifc_len == (int)sizeof(struct ifreq) * numreqs){
 	    // assume it overflowed and try again
 	    numreqs += 10;
 	    continue;
@@ -519,6 +520,7 @@ int main( int argc, const char **argv )
 
 void usage(int argc, const char **argv) {
 
+    assert(argc > 0);
     fprintf(stderr, "\nUsage: %s  [options] [keyword]\n", argv[0]);
     fprintf(stderr, "\n  Options:    [{-c|--configfile} <configfile>]\n");
     fprintf(stderr, "              [{-n|--hostname} <hostname>]\n");
