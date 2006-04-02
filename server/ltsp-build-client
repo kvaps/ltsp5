@@ -68,6 +68,12 @@ on_exit() {
     for dir in $umounts ; do
 	umount $dir
     done
+
+    if [ true = "$run_successfull" ] ; then
+	echo "info: LTSP client installation completed successfully"
+    else
+	echo "error: LTSP client installation ended abnormally"
+    fi
 }
 
 rc_cleanup() {
@@ -348,4 +354,6 @@ EOF
             invoke-rc.d nfs-kernel-server reload
 fi
 
-echo "ltsp client installation completed successfully"
+run_successfull=true # report success to on_exit()
+
+exit 0
