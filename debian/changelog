@@ -10,8 +10,10 @@ ltsp (0.83debian1) UNRELEASED; urgency=low
     | mknbi | mkvmlinuz | aboot' into build-depends for the same
     reason.  No use pretending to work on archs where LTSP do not work
     yet.
+  * Keep init.d scripts ifupdown and networking to make sure the
+    loopback device is enabled.  (Closes: #358584)
 
- -- Petter Reinholdtsen <pere@debian.org>  Wed,  8 Mar 2006 15:13:08 +0100
+ -- Petter Reinholdtsen <pere@debian.org>  Sun,  2 Apr 2006 09:39:36 +0200
 
 ltsp (0.83) dapper; urgency=low
 
@@ -21,7 +23,7 @@ ltsp (0.83) dapper; urgency=low
   * remove the unused configure_sound call in the ltsp-client-setup init script,
     thats handled in ltsp-client since some time
   * fixed ssh_known_hosts creation to not depend on ssh-keyscan
-  
+
  -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 08:59:31 +0100
 
 ltsp (0.82debian2) unstable; urgency=low
