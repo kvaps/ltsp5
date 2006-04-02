@@ -12,8 +12,10 @@ ltsp (0.83debian1) UNRELEASED; urgency=low
     yet.
   * Keep init.d scripts ifupdown and networking to make sure the
     loopback device is enabled.  (Closes: #358584)
+  * Increase warning level when compiling getltscfg, and fix a few
+    compiler warnings discovered this way.
 
- -- Petter Reinholdtsen <pere@debian.org>  Sun,  2 Apr 2006 09:39:36 +0200
+ -- Petter Reinholdtsen <pere@debian.org>  Sun,  2 Apr 2006 09:55:21 +0200
 
 ltsp (0.83) dapper; urgency=low
 
