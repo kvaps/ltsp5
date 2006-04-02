@@ -1,3 +1,11 @@
+ltsp (0.83debian1) UNRELEASED; urgency=low
+
+  * New upstream release from ubuntu.
+  * Make ltsp-build-client report error or success at the of its
+    run. (Closes: #360411)
+
+ -- Petter Reinholdtsen <pere@debian.org>  Wed,  8 Mar 2006 15:13:08 +0100
+
 ltsp (0.83) dapper; urgency=low
 
   * fix typo in ltsp-server description
