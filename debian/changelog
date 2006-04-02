@@ -5,9 +5,15 @@ ltsp (0.83) dapper; urgency=low
   * fix indentation error in X_MODE code of ltsp-client-setup
   * remove the unused configure_sound call in the ltsp-client-setup init script,
     thats handled in ltsp-client since some time
+<<<<<<< TREE
   * fixed ssh_known_hosts creation to not depend on ssh-keyscan 
 
  -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 18:57:42 +0100
+=======
+  * fixed ssh_known_hosts creation to not depend on ssh-keyscan
+  
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 08:59:31 +0100
+>>>>>>> MERGE-SOURCE
 
 ltsp (0.82) dapper; urgency=low
 

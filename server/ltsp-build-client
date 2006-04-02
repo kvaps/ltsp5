@@ -68,6 +68,12 @@ on_exit() {
     for dir in $umounts ; do
 	umount $dir
     done
+
+    if [ true = "$run_successfull" ] ; then
+	echo "info: LTSP client installation completed successfully"
+    else
+	echo "error: LTSP client installation ended abnormally"
+    fi
 }
 
 rc_cleanup() {
@@ -203,7 +209,7 @@ test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
 test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
-test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common"
+test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
 
 # define the root for the install
@@ -348,4 +354,6 @@ EOF
             invoke-rc.d nfs-kernel-server reload
 fi
 
-echo "ltsp client installation completed successfully"
+run_successfull=true # report success to on_exit()
+
+exit 0
