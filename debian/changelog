@@ -3,6 +3,13 @@ ltsp (0.83debian1) UNRELEASED; urgency=low
   * New upstream release from ubuntu.
   * Make ltsp-build-client report error or success at the of its
     run. (Closes: #360411)
+  * Copy ltsp-client depend 'initramfs-tools (>= 0.11) |
+    initrd-netboot-tools' into build-depends, to reduce the chance of
+    building on platforms where vital parts of the boot framework is
+    missing.  Copied ltsp-server depends 'atftpd | tftpd-hpa, syslinux
+    | mknbi | mkvmlinuz | aboot' into build-depends for the same
+    reason.  No use pretending to work on archs where LTSP do not work
+    yet.
 
  -- Petter Reinholdtsen <pere@debian.org>  Wed,  8 Mar 2006 15:13:08 +0100
 
