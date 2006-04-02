@@ -26,7 +26,7 @@ ltsp (0.83) dapper; urgency=low
     thats handled in ltsp-client since some time
   * fixed ssh_known_hosts creation to not depend on ssh-keyscan
 
- -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 08:59:31 +0100
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 18:57:42 +0100
 
 ltsp (0.82debian2) unstable; urgency=low
 
