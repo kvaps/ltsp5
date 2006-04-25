@@ -272,7 +272,7 @@ for key in $APT_KEYS ; do
   cat $key | chroot $ROOT apt-key add -
 done
 
-chroot $ROOT apt-get update
+chroot $ROOT apt-get -o Acquire::gpgv::Options::=--ignore-time-conflict update
 
 DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
