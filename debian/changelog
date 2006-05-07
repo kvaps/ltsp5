@@ -1,3 +1,22 @@
+ltsp (0.83debian1) UNRELEASED; urgency=low
+
+  * New upstream release from ubuntu.
+  * Make ltsp-build-client report error or success at the end of its
+    run. (Closes: #360411)
+  * Copy ltsp-client depend 'initramfs-tools (>= 0.11) |
+    initrd-netboot-tools' into build-depends, to reduce the chance of
+    building on platforms where vital parts of the boot framework is
+    missing.  Copied ltsp-server depends 'atftpd | tftpd-hpa, syslinux
+    | mknbi | mkvmlinuz | aboot' into build-depends for the same
+    reason.  No use pretending to work on archs where LTSP do not work
+    yet.
+  * Keep init.d scripts ifupdown and networking to make sure the
+    loopback device is enabled.  (Closes: #358584)
+  * Increase warning level when compiling getltscfg, and fix a few
+    compiler warnings discovered this way.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sun,  2 Apr 2006 09:55:21 +0200
+
 ltsp (0.83) dapper; urgency=low
 
   * fix typo in ltsp-server description
@@ -5,8 +24,9 @@ ltsp (0.83) dapper; urgency=low
   * fix indentation error in X_MODE code of ltsp-client-setup
   * remove the unused configure_sound call in the ltsp-client-setup init script,
     thats handled in ltsp-client since some time
-  
- -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 08:59:31 +0100
+  * fixed ssh_known_hosts creation to not depend on ssh-keyscan
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  9 Mar 2006 18:57:42 +0100
 
 ltsp (0.82debian2) unstable; urgency=low
 
