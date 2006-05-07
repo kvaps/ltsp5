@@ -135,6 +135,7 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/monitor/selection-method "Advanced"
         preseed $xserver_package $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
+        preseed $xserver_package $xserver_package/config/monitor/use_sync_ranges "true"
       fi
 
       # Color depth preseeding
