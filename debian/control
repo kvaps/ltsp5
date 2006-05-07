@@ -3,12 +3,12 @@ Section: misc
 Priority: optional
 Maintainer: LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
 Uploaders: Matt Zimmerman <mdz@debian.org>, Carlos Laviola <claviola@debian.org>, Michael Vogt <mvo@debian.org>, Oliver Grawert <ogra@ubuntu.com>, Petter Reinholdtsen <pere@debian.org>, Gustavo Franco <stratus@debian.org>, Vagrant Cascadian <vagrant@freegeek.org>, Otavio Salvador <otavio@debian.org>
-Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, initramfs-tools (>= 0.11) | initrd-netboot-tools, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot
+Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, initramfs-tools (>= 0.11) | initrd-netboot-tools, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot | sparc-utils
 Standards-Version: 3.6.2
 
 Package: ltsp-server
 Priority: extra
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, atftpd | tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot | sparc-utils, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
