@@ -1,9 +1,12 @@
 ltsp (0.85) dapper; urgency=low
 
-  * make ldm stop usplash before we start it, to prevent switching to 
+  * make ldm stop usplash before we start it, to prevent switching to
     tty1 (closes malone #39294)
+  * make the SOUND variable really use boolean values (True/False), not
+    "y" to keep consistency with ltsp.org docs
+  * applied Pete Savages manpages for the adminscripts to ltsp-server 
 
- -- Oliver Grawert <ogra@ubuntu.com>  Mon,  8 May 2006 19:07:53 +0200
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  8 May 2006 19:34:55 +0200
 
 ltsp (0.84) dapper; urgency=low
 
