@@ -1,0 +1,3 @@
+debian/doc/ltsp-build-client.8
+debian/doc/ltsp-update-kernels.8
+debian/doc/ltsp-update-sshkeys.8
