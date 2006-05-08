@@ -1,0 +1,6 @@
+. debian-based/base-configuration
+
+test -z "$DIST" && DIST=dapper
+test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
+test -z "$COMPONENTS" && COMPONENTS="main restricted"
+test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"

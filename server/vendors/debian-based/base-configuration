@@ -1,0 +1,2 @@
+test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
+test -z "$APT_GET_OPTS" && APT_GET_OPTS="-y"

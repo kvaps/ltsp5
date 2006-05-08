@@ -36,6 +36,13 @@ cat << EOF
 EOF
 }
 
+# Print if using debug.
+debug() {
+    if [ -n "$DEBUG" ]; then
+	echo "debug: $@" > /dev/stderr
+    fi
+}
+
 # Use it to mount thing on chroot and those will be automaticaly
 # unmounted when exit.
 #
@@ -47,6 +54,29 @@ chroot_mount() {
     if mount $3 $1 $ROOT/$2; then
 	CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT/$2"
     fi
+}
+
+# Load a bunch of files from a specific directory.
+#
+# Params:
+# $1 - where to look for the files to be loaded
+load_modules() {
+    DIR=$1
+    for file in $(run-parts --list $DIR); do
+	debug "Loading file $file..."
+	. $file
+    done
+}
+
+# Load the vendor specific modules.
+#
+# Params:
+# $1 - category
+load_vendor_modules() {
+    MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp/}
+    VENDOR_BASE=$MODULES_BASE/vendors/Debian #FIXME!
+    
+    load_modules $VENDOR_BASE/$1
 }
 
 on_exit() {
@@ -181,66 +211,9 @@ while [ "$#" -gt "0" ]; do
   test "$#" -gt "0" && shift
 done
 
-# Load package defaults for the variables that are still unset
-if [ -f /usr/share/ltsp/ltsp-build-client.conf ]; then
-    . /usr/share/ltsp/ltsp-build-client.conf
-fi
-
 # set defaults
-test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
 test -z "$BASE" && BASE=/opt/ltsp
-test -z "$DIST" && DIST=dapper
-test -z "$APT_GET_OPTS" && APT_GET_OPTS="-y"
 
-test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
-test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
-
-if [ -z "$LATE_PACKAGES" ]; then
-  case $DIST in
-    sarge)
-    test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
-    KERNEL_BASE="kernel-image"
-    ;;
-    *)
-    KERNEL_BASE="linux-image"
-    ;;
-  esac
-  case $ARCH in
-    i386)
-    case $DIST in
-      sid|etch)
-      # they now only support 486+
-      KERNEL_ARCH="486"
-      ;;
-      *) 
-      KERNEL_ARCH="386"
-      ;;
-    esac
-    ;;
-    amd64)
-    KERNEL_ARCH="amd64-generic"
-    ;;
-    sparc) 
-    KERNEL_ARCH="$(uname -m)"
-    ;;
-    alpha)
-    case $DIST in
-      sarge)
-      KERNEL_ARCH="generic"
-      ;;
-      *)
-      KERNEL_ARCH="alpha-generic"
-      ;;
-    esac
-    ;;
-    *)
-    KERNEL_ARCH="$ARCH"
-    ;;
-  esac
-  test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
-  LATE_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
-fi
 test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
 
@@ -251,17 +224,7 @@ if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
 fi
 
-# No security support for sid
-if [ sid = "$DIST" ] && [ -n "$SECURITY_MIRROR" ]; then
-  echo "NOTE: disabling security APT source for sid.  It does not exist."
-  SECURITY_MIRROR=""
-fi
-
-if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
-  echo "NOTE: adding default dist and components to security mirror:"
-  SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
-  echo "$SECURITY_MIRROR"
-fi
+load_vendor_modules "before-install"
 
 if [ -n "$EXCLUDE" ] ; then
     DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
@@ -270,20 +233,7 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
-# Install start-stop-daemon wrapper
-chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
-                         --divert /sbin/start-stop-daemon \
-                                  /sbin/start-stop-daemon.real
-cp /usr/share/ltsp/scripts/start-stop-daemon $ROOT/sbin/
-
-# Install policy-rc.d wrapper
-cp /usr/share/ltsp/scripts/policy-rc.d.ltsp  $ROOT/usr/sbin/
-update-alternatives --install /usr/sbin/policy-rc.d policy-rc.d \
-                              /usr/bin/policy-rc.d.ltsp 100
-
-# Export LTSP_HANDLE_DAEMONS to avoid running daemons while creating
-# the chroot.
-export LTSP_HANDLE_DAEMONS="false"
+load_vendor_modules "after-install"
 
 # if the host uses resolvconf, /etc/resolv.conf is a symlink and the
 # copy in the client environment will point into nowhere.  Avoid this
