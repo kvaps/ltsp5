@@ -1,3 +1,10 @@
+ltsp (0.85) dapper; urgency=low
+
+  * make ldm stop usplash before we start it, to prevent switching to 
+    tty1 (closes malone #39294)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  8 May 2006 19:07:53 +0200
+
 ltsp (0.84) dapper; urgency=low
 
   * Make ltsp-server Depends: | silo for sparc.
