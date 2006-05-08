@@ -36,42 +36,7 @@ cat << EOF
 EOF
 }
 
-# Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
-# running init scripts during installation
-make_policyrcd() {
-    cat > $ROOT/usr/sbin/policy-rc.d <<EOF
-#!/bin/sh
-exit 101
-EOF
-    chmod a+rx $ROOT/usr/sbin/policy-rc.d
-}
-remove_policyrcd() {
-    rm -f $ROOT/usr/sbin/policy-rc.d
-}
-
-# This way to make start-stop-daemon do not work on upgrades, when
-# start-stop-daemon is replaced with a new version.  I tried to use
-# dpkg-divert to solve this, but am not sure I got it right. [pere
-# 2004-07-29]
-make_dummy_start_stop_daemon() {
-    cat > $ROOT/sbin/start-stop-daemon.dummy <<EOF
-#!/bin/sh
-echo 1>&2
-echo 'Warning: Fake start-stop-daemon called, doing nothing.' 1>&2
-exit 0
-EOF
-    chmod a+rx $ROOT/sbin/start-stop-daemon.dummy
-    chroot $ROOT dpkg-divert --add --local --rename /sbin/start-stop-daemon
-    ln -s start-stop-daemon.dummy $ROOT/sbin/start-stop-daemon
-}
-remove_dummy_start_stop_daemon() {
-    rm $ROOT/sbin/start-stop-daemon
-    chroot $ROOT dpkg-divert --remove --local --rename /sbin/start-stop-daemon
-}
 on_exit() {
-    remove_dummy_start_stop_daemon
-    remove_policyrcd
-
     # umount bind mounts
     for dir in $umounts ; do
 	umount $dir
@@ -108,48 +73,6 @@ rc_cleanup() {
 	    chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
 	    chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
 	fi
-    done
-}
-
-# Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
-# running init scripts during installation
-make_policyrcd() {
-    cat > $ROOT/usr/sbin/policy-rc.d <<EOF
-#!/bin/sh
-exit 101
-EOF
-    chmod a+rx $ROOT/usr/sbin/policy-rc.d
-}
-remove_policyrcd() {
-    rm -f $ROOT/usr/sbin/policy-rc.d
-}
-
-# This way to make start-stop-daemon do not work on upgrades, when
-# start-stop-daemon is replaced with a new version.  I tried to use
-# dpkg-divert to solve this, but am not sure I got it right. [pere
-# 2004-07-29]
-make_dummy_start_stop_daemon() {
-    cat > $ROOT/sbin/start-stop-daemon.dummy <<EOF
-#!/bin/sh
-echo 1>&2
-echo 'Warning: Fake start-stop-daemon called, doing nothing.' 1>&2
-exit 0
-EOF
-    chmod a+rx $ROOT/sbin/start-stop-daemon.dummy
-    chroot $ROOT dpkg-divert --add --local --rename /sbin/start-stop-daemon
-    ln -s start-stop-daemon.dummy $ROOT/sbin/start-stop-daemon
-}
-remove_dummy_start_stop_daemon() {
-    rm $ROOT/sbin/start-stop-daemon
-    chroot $ROOT dpkg-divert --remove --local --rename /sbin/start-stop-daemon
-}
-on_exit() {
-    remove_dummy_start_stop_daemon
-    remove_policyrcd
-
-    # umount bind mounts
-    for dir in $umounts ; do
-	umount $dir
     done
 }
 
@@ -334,6 +257,21 @@ fi
 # Install base packages
 debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
+# Install start-stop-daemon wrapper
+chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
+                         --divert /sbin/start-stop-daemon \
+                                  /sbin/start-stop-daemon.real
+cp /usr/share/ltsp/scripts/start-stop-daemon $ROOT/sbin/
+
+# Install policy-rc.d wrapper
+cp /usr/share/ltsp/scripts/policy-rc.d.ltsp  $ROOT/usr/sbin/
+update-alternatives --install /usr/sbin/policy-rc.d policy-rc.d \
+                              /usr/bin/policy-rc.d.ltsp 100
+
+# Export LTSP_HANDLE_DAEMONS to avoid running daemons while creating
+# the chroot.
+export LTSP_HANDLE_DAEMONS="false"
+
 # if the host uses resolvconf, /etc/resolv.conf is a symlink and the
 # copy in the client environment will point into nowhere.  Avoid this
 # by copying the content instead of the symlink
@@ -416,8 +354,6 @@ add_multiple_mirrors "$EXTRA_MIRROR"
 add_mirror "$SECURITY_MIRROR" security
 
 trap on_exit EXIT
-make_policyrcd
-make_dummy_start_stop_daemon
 
 # add keys to the apt keyring
 for key in $APT_KEYS ; do

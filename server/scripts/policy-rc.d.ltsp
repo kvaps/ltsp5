@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# LTSP Wrapper to avoid running daemons while performing maintainence.
+#
+
+if [ "$LTSP_HANDLE_DAEMONS" = "false" ]; then
+    exit 101
+fi
