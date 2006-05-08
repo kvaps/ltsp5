@@ -1,3 +1,11 @@
+ltsp (0.84) dapper; urgency=low
+
+  * Make ltsp-server Depends: | silo for sparc.
+    This will make the overall ltsp installable for developers.
+    It does *NOT* mean it works (yet).
+
+ -- Fabio M. Di Nitto <fabbione@ubuntu.com>  Thu, 23 Mar 2006 06:15:16 +0100
+
 ltsp (0.83) dapper; urgency=low
 
   * fix typo in ltsp-server description
