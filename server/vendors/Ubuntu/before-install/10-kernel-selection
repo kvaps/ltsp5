@@ -1,11 +1,8 @@
 if [ -z "$LATE_PACKAGES" ]; then
   case $ARCH in
     i386)
-    case $DIST in
-      # they now only support 486+
-      KERNEL_ARCH="486"
-      ;;
-    esac
+    # they now only support 486+
+    KERNEL_ARCH="486"
     ;;
     amd64)
     KERNEL_ARCH="amd64-generic"
