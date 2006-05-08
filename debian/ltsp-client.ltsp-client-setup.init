@@ -130,12 +130,17 @@ configure_x() {
         preseed $xserver_package $xserver_package/autodetect_video_card "false"
         preseed $xserver_package $xserver_package/config/device/driver "$XSERVER"
       fi
+      X_USE_SYNC_RANGES=${X_USE_SYNC_RANGES:-Y}
       if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
         preseed $xserver_package $xserver_package/autodetect_monitor "false"
         preseed $xserver_package $xserver_package/config/monitor/selection-method "Advanced"
         preseed $xserver_package $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
         preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
-        preseed $xserver_package $xserver_package/config/monitor/use_sync_ranges "true"
+	if [ Y = "$X_USE_SYNC_RANGES" ]; then
+            preseed $xserver_package $xserver_package/config/monitor/use_sync_ranges "true"
+	else
+	    preseed $xserver_package $xserver_package/config/monitor/use_sync_ranges "false"
+	fi
       fi
 
       # Color depth preseeding
