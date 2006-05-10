@@ -1,1 +1,1 @@
-. debian-based/daemon-handling
+. $VENDORS_BASE/debian-based/daemon-handling
