@@ -5,7 +5,7 @@ set -e
 LC_ALL=C
 export LC_ALL
 
-MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp/} # our modules place
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 VENDORS_BASE=$MODULES_BASE/vendors
 
 if [ "--config" = "$1" ] && [ -n "$2" ]; then
