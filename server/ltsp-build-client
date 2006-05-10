@@ -207,6 +207,9 @@ LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
 load_vendor_modules "after-install"
 
+# We need proc mounted to install some packages
+chroot_mount proc /proc "-t proc"
+
 # Copy resolv.conf dereferecing it
 cp -L /etc/resolv.conf $ROOT/etc/resolv.conf
 chmod 644 $ROOT/etc/resolv.conf
@@ -290,13 +293,6 @@ for key in $APT_KEYS ; do
   cat $key | chroot $ROOT apt-key add -
 done
 
-chroot $ROOT apt-get update
-
-export DEBIAN_FRONTEND=noninteractive
-
-# some packages require proc to be mounted
-chroot_mount proc /proc "-t proc"
-
 preseed() {
     ROOT="$1"
     package="$2"
@@ -306,7 +302,9 @@ preseed() {
     echo $package $question $type $value | chroot $ROOT debconf-set-selections
 }
 
-# get package updates for base system
+# Update base system
+export DEBIAN_FRONTEND=noninteractive
+chroot $ROOT apt-get update
 LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
 
 # Install remaining packages
