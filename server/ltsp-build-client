@@ -403,6 +403,6 @@ fi
 
 load_vendor_modules "finalization"
 
-run_successfull=true # report success to on_exit()
+run_successfull=${run_successfull:-true} # report success to on_exit()
 
 exit 0
