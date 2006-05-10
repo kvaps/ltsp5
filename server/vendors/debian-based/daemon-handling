@@ -1,7 +1,7 @@
 # Install start-stop-daemon wrapper
 chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
-                         --divert /sbin/start-stop-daemon \
-                                  /sbin/start-stop-daemon.real
+                         --divert /sbin/start-stop-daemon.real \
+                                  /sbin/start-stop-daemon
 cp /usr/share/ltsp/scripts/start-stop-daemon $ROOT/sbin/
 
 # Install policy-rc.d wrapper
