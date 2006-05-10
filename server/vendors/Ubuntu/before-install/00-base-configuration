@@ -1,4 +1,4 @@
-. debian-based/base-configuration
+. $VENDORS_BASE/debian-based/base-configuration
 
 test -z "$DIST" && DIST=dapper
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
