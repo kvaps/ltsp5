@@ -4,3 +4,5 @@ test -z "$DIST" && DIST=dapper
 test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
 test -z "$COMPONENTS" && COMPONENTS="main restricted"
 test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
+RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"}
+RC2_WHITELIST=${RC2_WHITELIST:-"ltsp-client nbd-client usplash rmnologin"}

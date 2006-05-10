@@ -1,0 +1,4 @@
+. $VENDORS_BASE/debian-based/runlevel-cleanup
+
+rc_cleanup S $RCS_WHITELIST
+rc_cleanup 2 $RC2_WHITELIST

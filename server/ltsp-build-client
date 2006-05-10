@@ -95,33 +95,6 @@ on_exit() {
     fi
 }
 
-rc_cleanup() {
-    LEVEL=$1; shift
-
-    if [ $(echo $LEVEL| grep [2-5]) ]; then
-        suffix="2 3 4 5"
-        echo "Cleaning up startup links in init levels: $suffix ..."
-    else
-        suffix=$LEVEL
-        echo "Cleaning up startup links in rc$suffix.d ..."
-    fi
-
-    RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
-
-    for match in $@; do
-        RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
-    done
-
-    for link in $RC_DIR; do
-	name=$(echo $link|sed s/^S[0-9]*//g)
-	seq_number=$(printf %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g))
-	if [ -f $ROOT/etc/init.d/$name ] ; then
-	    chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
-	    chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
-	fi
-    done
-}
-
 # process commandline arguments
 while [ "$#" -gt "0" ]; do
   case $1 in
@@ -219,9 +192,6 @@ done
 
 # set defaults
 BASE=${BASE:-/opt/ltsp}
-
-RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"}
-RC2_WHITELIST=${RC2_WHITELIST:-"ltsp-client nbd-client usplash rmnologin"}
 
 load_vendor_modules "before-install"
 
@@ -417,9 +387,6 @@ if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]
   echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
 fi
 
-rc_cleanup S $RCS_WHITELIST
-rc_cleanup 2 $RC2_WHITELIST
-
 # Export LTSP chroot using NFS to the LTSP client network
 if ! grep -q "^$BASE" /etc/exports ; then
   test -z "$overwrite_exports" && overwrite_exports="true"
@@ -442,6 +409,8 @@ invoke-rc.d nfs-kernel-server reload
 EOF
   fi
 fi
+
+load_vendor_modules "finalization"
 
 run_successfull=true # report success to on_exit()
 
