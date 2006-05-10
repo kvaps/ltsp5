@@ -79,7 +79,7 @@ load_modules() {
 # Params:
 # $1 - category
 load_vendor_modules() {
-    load_modules $VENDORS_BASE/Debian/$1
+    load_modules $VENDORS_BASE/$(lsb_release -i | sed 's,.*:\t,,g')/$1
 }
 
 on_exit() {
