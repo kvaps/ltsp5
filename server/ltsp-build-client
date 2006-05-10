@@ -218,19 +218,19 @@ while [ "$#" -gt "0" ]; do
 done
 
 # set defaults
-test -z "$BASE" && BASE=/opt/ltsp
+BASE=${BASE:-/opt/ltsp}
 
-test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"
-test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
-
-if [ -d $ROOT ] ; then
-    echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
-fi
+RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"}
+RC2_WHITELIST=${RC2_WHITELIST:-"ltsp-client nbd-client usplash rmnologin"}
 
 load_vendor_modules "before-install"
 
 # define the root for the install
 ROOT=$BASE/$ARCH
+
+if [ -d $ROOT ] ; then
+    echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
+fi
 
 if [ -n "$EXCLUDE" ] ; then
     DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
@@ -250,7 +250,7 @@ if [ -L $ROOT/etc/resolv.conf ] ; then
     chmod 644 $ROOT/etc/resolv.conf
 fi
 
-test -z "$ROOTPASS" && ROOTPASS="disable"
+ROOTPASS=${ROOTPASS:-"disable"}
 if [ "$ROOTPASS" = "disable" ]; then
   # Root password is empty by default, lock it
   chroot $ROOT passwd -l root
@@ -272,7 +272,8 @@ echo mousedev >> $ROOT/etc/modules
 echo psmouse >> $ROOT/etc/modules
 
 # move sources.list aside
-test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
+test -f $ROOT/etc/apt/sources.list && \
+  mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
 
 add_mirror() {
   # add a mirror to the chroot's sources.list
@@ -330,8 +331,7 @@ done
 
 chroot $ROOT apt-get update
 
-DEBIAN_FRONTEND=noninteractive
-export DEBIAN_FRONTEND
+export DEBIAN_FRONTEND=noninteractive
 
 # some packages require proc to be mounted
 chroot_mount proc /proc "-t proc"
@@ -392,9 +392,7 @@ LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
 
 echo "ltsp" > $ROOT/etc/hostname
-touch $ROOT/etc/hosts
-
-touch $ROOT/etc/nbd-client
+touch $ROOT/etc/hosts $ROOT/etc/nbd-client
 
 # Pass default X keyboard config from server to the client
 debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
