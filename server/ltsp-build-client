@@ -207,14 +207,9 @@ LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
 load_vendor_modules "after-install"
 
-# if the host uses resolvconf, /etc/resolv.conf is a symlink and the
-# copy in the client environment will point into nowhere.  Avoid this
-# by copying the content instead of the symlink
-if [ -L $ROOT/etc/resolv.conf ] ; then
-    rm $ROOT/etc/resolv.conf
-    cat /etc/resolv.conf > $ROOT/etc/resolv.conf
-    chmod 644 $ROOT/etc/resolv.conf
-fi
+# Copy resolv.conf dereferecing it
+cp -L /etc/resolv.conf $ROOT/etc/resolv.conf
+chmod 644 $ROOT/etc/resolv.conf
 
 ROOTPASS=${ROOTPASS:-"disable"}
 if [ "$ROOTPASS" = "disable" ]; then
