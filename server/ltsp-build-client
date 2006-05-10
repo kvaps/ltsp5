@@ -2,19 +2,10 @@
 
 set -e
 
-LC_ALL=C
-export LC_ALL
-
+BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
-VENDORS_BASE=$MODULES_BASE/vendors
-KMODULES=${KMODULES:-"mousedev psmouse"}
-
-if [ "--config" = "$1" ] && [ -n "$2" ]; then
-  . "$2"
-  test "$#" -gt 1 && shift 2
-elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
-  . /etc/ltsp/ltsp-build-client.conf
-fi
+VENDORS_BASE=$MODULES_BASE/vendors            # base vendor repository
+KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
 
 get_help() {
 cat << EOF
@@ -83,8 +74,8 @@ load_vendor_modules() {
     load_modules $VENDORS_BASE/$(lsb_release -i | sed 's,.*:\t,,g')/$1
 }
 
+# Clean up the chroot and exit.
 on_exit() {
-    # umount bind mounts
     for dir in $CHROOT_MOUNTED ; do
 	umount $dir
     done
@@ -95,6 +86,13 @@ on_exit() {
 	echo "error: LTSP client installation ended abnormally"
     fi
 }
+
+if [ "--config" = "$1" ] && [ -n "$2" ]; then
+  . "$2"
+  test "$#" -gt 1 && shift 2
+elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
+  . /etc/ltsp/ltsp-build-client.conf
+fi
 
 # process commandline arguments
 while [ "$#" -gt "0" ]; do
@@ -191,15 +189,12 @@ while [ "$#" -gt "0" ]; do
   test "$#" -gt "0" && shift
 done
 
-# set defaults
-BASE=${BASE:-/opt/ltsp}
-
 load_vendor_modules "before-install"
 
 # define the root for the install
 ROOT=$BASE/$ARCH
 
-if [ -d $ROOT ] ; then
+if [ -d "$ROOT" ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
 fi
 
@@ -208,7 +203,7 @@ if [ -n "$EXCLUDE" ] ; then
 fi
 
 # Install base packages
-debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
 
 load_vendor_modules "after-install"
 
@@ -317,10 +312,10 @@ preseed() {
 }
 
 # get package updates for base system
-chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
+LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
 
 # Install remaining packages
-chroot $ROOT apt-get $APT_GET_OPTS install $EARLY_PACKAGES </dev/null
+LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $EARLY_PACKAGES </dev/null
 
 # Setup for kernel install
 cat <<EOF > $ROOT/etc/kernel-img.conf
@@ -357,7 +352,7 @@ sed -i -e 's/^DELAYLOGIN=.*$/DELAYLOGIN=no/' $ROOT/etc/default/rcS
 sed -i -e 's/^EDITMOTD=.*$/EDITMOTD=no/' $ROOT/etc/default/rcS
 
 # Install additional packages, such as the kernel
-chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES </dev/null
+LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES </dev/null
 
 LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
 clients="$ROOT" ltsp-update-sshkeys
@@ -399,10 +394,10 @@ EOF
             invoke-rc.d nfs-kernel-server reload
   else
     cat <<EOF
-WARNING: no entry for /opt/ltsp in /etc/exports,
+WARNING: no entry for $BASE in /etc/exports,
 you may want to add the following line to /etc/exports:
 
-/opt/ltsp       *(ro,no_root_squash,async)
+$BASE       *(ro,no_root_squash,async)
 
 and then run the command:
 
