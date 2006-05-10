@@ -198,12 +198,7 @@ if [ -d "$ROOT" ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
 fi
 
-if [ -n "$EXCLUDE" ] ; then
-    DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
-fi
-
-# Install base packages
-LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+load_vendor_modules "install"
 
 load_vendor_modules "after-install"
 
