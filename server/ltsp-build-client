@@ -40,6 +40,9 @@ EOF
 }
 
 # Print if using debug.
+#
+# Params:
+# $* - message to be print
 debug() {
     if [ -n "$DEBUG" ]; then
 	echo "debug: $@" > /dev/stderr
@@ -217,14 +220,14 @@ test -z "$BASE" && BASE=/opt/ltsp
 test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"
 test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
 
-# define the root for the install
-ROOT=$BASE/$ARCH
-
 if [ -d $ROOT ] ; then
     echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
 fi
 
 load_vendor_modules "before-install"
+
+# define the root for the install
+ROOT=$BASE/$ARCH
 
 if [ -n "$EXCLUDE" ] ; then
     DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
