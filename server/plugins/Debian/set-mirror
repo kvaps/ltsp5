@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "mirror" "Set the mirror location" "advanced" "true"
+        add_option "mirror" "Set the mirror location" "regular" "true"
         ;;
     configure)
         if [ -n "$option_mirror_value" ]; then
