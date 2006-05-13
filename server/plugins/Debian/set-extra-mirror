@@ -1,0 +1,10 @@
+case "$MODE" in
+    commandline)
+	    add_option "extra-mirror" "add a mirror, with lower priority than the default mirror" "advanced" "true"
+	    ;;
+    configure)
+	    if [ -n "$option_extra_mirror_value" ]; then
+		EXTRA_MIRROR=$option_extra_mirror_value
+	    fi
+	    ;;
+esac
