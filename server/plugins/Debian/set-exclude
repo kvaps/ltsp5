@@ -1,10 +1,10 @@
 case "$MODE" in
     commandline)
-            add_option "exclude" "exclude packages from the initial chroot" "advanced" "true"
-            ;;
+        add_option "exclude" "exclude packages from the initial chroot" "advanced" "true"
+        ;;
     configure)
-            if [ -n "$option_exclude_value" ]; then
-                EXCLUDE="$option_exclude_value"
-            fi
-            ;;
+        if [ -n "$option_exclude_value" ]; then
+            EXCLUDE="$option_exclude_value"
+        fi
+        ;;
 esac
