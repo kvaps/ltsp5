@@ -3,8 +3,7 @@
 set -e
 
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
-#MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
-MODULES_BASE=$(pwd)
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 VENDORS_BASE=$MODULES_BASE/vendors            # base vendor repository
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
