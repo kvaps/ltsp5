@@ -3,32 +3,48 @@
 set -e
 
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
-MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
+#MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
+MODULES_BASE=$(pwd)
 VENDORS_BASE=$MODULES_BASE/vendors            # base vendor repository
+PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
 
-get_help() {
-cat << EOF
- --base <basedir>  default base install directory
- --dist <dist>  debian distribution
- --components "<component1 component2>"  archive components
- --mirror  <mirror>  archive mirror url
- --early-mirror "<mirror> <dist> <components>" additional mirror
- --extra-mirror "<mirror> <dist> <components>" additional mirror
- --security-mirror "<mirror> <dist> <components>" security mirror
- --exclude "package1,package2,package3"  exclude packages from base system
- --early-packages "<package1 package2>" list of initial packages to install
- --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
- --serial-console  enable serial console
- --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
- --debconf-seeds  load debconf pre-seeding files in the chroot
- --disable-rootpass  disable root password in the chroot
- --prompt-rootpass  prompt for root password
- --apt-keys "<key1 key2>" keys to add to the apt keyring
- --apt-get-opts "<option1 option2>" additional options to pass to apt-get
- --config "<filename>" specify configuration file. must be first argument.
- --help  display this help
-EOF
+# Global variables
+HELP_MESSAGE=""
+ADVANCED_HELP_MESSAGE=""
+
+
+##################################
+### Methods to be called by plugins
+##################################
+
+# Add an option for commandline parser
+#
+# Params:
+# $1 - param name
+# $2 - help message
+# $3 - regular|advanced
+# $4 - has a value? (true or false)
+add_option () {
+    PARAMS="$PARAMS,$1"
+    case $4 in
+	true)
+	    eval "opt_with_param_$1"=true
+	    PARAMS="$PARAMS:"
+	    ;;
+	false)
+	    ;;
+	*)
+	    echo "API ERROR: you need to provide true or false."
+	    ;;
+    esac
+
+    MESSAGE=$(printf "   --%-15s %s" "$1" "$2")
+    if [ $3 = regular ]; then
+	HELP_MESSAGE="$HELP_MESSAGE $MESSAGE\n"
+    else
+	ADVANCED_HELP_MESSAGE="$ADVANCED_HELP_MESSAGE $MESSAGE\n"
+    fi
 }
 
 # Print if using debug.
@@ -37,7 +53,7 @@ EOF
 # $* - message to be print
 debug() {
     if [ -n "$DEBUG" ]; then
-	echo "debug: $@" > /dev/stderr
+	echo "DEBUG: $@" > /dev/stderr
     fi
 }
 
@@ -54,6 +70,10 @@ chroot_mount() {
     fi
 }
 
+####################################
+### End of plugins public methods
+####################################
+
 # Load a bunch of files from a specific directory.
 #
 # Params:
@@ -61,7 +81,7 @@ chroot_mount() {
 load_modules() {
     DIR=$1
     for file in $(run-parts --list $DIR); do
-	debug "Loading file $file..."
+	debug "  - Loading file $file..."
 	. $file
     done
 }
@@ -71,7 +91,42 @@ load_modules() {
 # Params:
 # $1 - category
 load_vendor_modules() {
+    debug "Loading vendor modules for HOOK=$1:"
     load_modules $VENDORS_BASE/$(lsb_release -i | sed 's,.*:\t,,g')/$1
+}
+
+# Load our plugins.
+#
+# Params:
+# $1 - mode (configure|run)
+load_plugins() {
+    set -- "$@"
+    MODE=$1
+    VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
+    case $VENDOR in
+	Ubuntu)
+	    VENDOR=Debian
+	    ;;
+	*)
+	    ;;
+    esac
+    debug "Loading plugins in MODE=$MODE:"
+    load_modules $PLUGINS_BASE/common
+    if [ -d $PLUGINS_BASE/$VENDOR ]; then 
+	load_modules $PLUGINS_BASE/$VENDOR
+    fi
+}
+
+usage() {
+    echo "LTSP Build Client usage:"
+    echo
+    echo "  ltsp-build-client <options>"
+    echo
+    echo -n "  Regular options:"
+    echo -e "$HELP_MESSAGE" | sort
+    echo
+    echo -n "  Advanced options:"
+    echo -e "$ADVANCED_HELP_MESSAGE" | sort
 }
 
 # Clean up the chroot and exit.
@@ -87,315 +142,49 @@ on_exit() {
     fi
 }
 
+PARAMS="config:,help"
+load_plugins 'commandline'
+
+if ! TEMP=`getopt -o '' --long $PARAMS -n "$0" -- "$@"`; then
+    usage >&2; exit 1; 
+fi
+
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
 if [ "--config" = "$1" ] && [ -n "$2" ]; then
-  . "$2"
-  test "$#" -gt 1 && shift 2
+    . "$2"
+    test "$#" -gt 1 && shift 2
 elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
-  . /etc/ltsp/ltsp-build-client.conf
+    . /etc/ltsp/ltsp-build-client.conf
 fi
 
-# process commandline arguments
-while [ "$#" -gt "0" ]; do
-  case $1 in
-    --debug) DEBUG=true
-      shift
-      ;;
-    --base) BASE="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --dist) DIST="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --components) COMPONENTS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --mirror) MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --early-mirror) EARLY_MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --extra-mirror) EXTRA_MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --exclude) EXCLUDE="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --security-mirror) SECURITY_MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --early-packages) EARLY_PACKAGES="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --late-packages) LATE_PACKAGES="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --apt-keys) APT_KEYS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --apt-get-opts) APT_GET_OPTS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --arch) ARCH_OPT="$2"
-      test "$#" -gt "0" && shift
-      case $ARCH_OPT in
-        i386)
-	  case $(dpkg --print-architecture) in
-	    amd64|ia64|i386)
-	        ARCH=i386
-	        ;;
-	    *)
-	        echo "ERROR: --arch i386 called on unsupported arch: "$(dpkg --print-architecture)
-	        exit 1
-	        ;;
-	  esac
-	  ;;
-	powerpc)
-	  case $(dpkg --print-architecture) in
-            ppc64|powerpc)
- 	       ARCH=powerpc
- 	       ;;
- 	    *)
- 	       echo "ERROR: --arch powerpc called on unsupported arch: "$(dpkg --print-architecture)
- 	       exit 1
- 	       ;;
-          esac
-          ;;
-        *)
-	  echo "ERROR: unsupported --arch argument: "$ARCH_OPT
-	  exit 1
-	  ;;
-      esac	  
-      ;;
-    --help) get_help
-      exit 0
-      ;;
-    --serial-console) use_serial_console="true"
-      ;;
-    --disable-rootpass) ROOTPASS="disable" ;;
-    --prompt-rootpass) ROOTPASS="prompt" ;;
-    --debconf-seeds) DEBCONF_SEEDS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --config) echo "ERROR: --config must be passed as the first argument."
-      get_help
-      exit 1
-      ;;
-    *) echo "ERROR: unknown option: $1"
-      get_help
-      exit 1
-      ;;
-  esac
-  test "$#" -gt "0" && shift
-done
-
-load_vendor_modules "before-install"
-
-# define the root for the install
-ROOT=$BASE/$ARCH
-
-if [ -d "$ROOT" ] ; then
-    echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
-fi
-
-load_vendor_modules "install"
-
-load_vendor_modules "after-install"
-
-# We need proc mounted to install some packages
-chroot_mount proc /proc "-t proc"
-
-# Copy resolv.conf dereferecing it
-cp -L /etc/resolv.conf $ROOT/etc/resolv.conf
-chmod 644 $ROOT/etc/resolv.conf
-
-ROOTPASS=${ROOTPASS:-"disable"}
-if [ "$ROOTPASS" = "disable" ]; then
-  # Root password is empty by default, lock it
-  chroot $ROOT passwd -l root
-elif [ "$ROOTPASS" = "prompt" ]; then
-  # prompt for root password
-  chroot $ROOT passwd root
-fi
-
-if [ -n "$DEBCONF_SEEDS" ]; then
-  # load debconf preseeding files
-  for seed in $DEBCONF_SEEDS; do
-    cat $seed | chroot $ROOT debconf-set-selections
-  done
-fi
-
-# Load needed kernel modules
-for module in $KMODULES; do
-    echo $module >> $ROOT/etc/modules
-done
-
-# move sources.list aside
-test -f $ROOT/etc/apt/sources.list && \
-  mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
-
-add_mirror() {
-  # add a mirror to the chroot's sources.list
-  mirror="$1"
-  type="$2"
-  if [ -n "$mirror" ]; then
-    if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
-      if [ "$type" = "security" ]; then
-        mirror="$mirror $DIST/updates $COMPONENTS"
-      else
-        mirror="$mirror $DIST $COMPONENTS"
-      fi
+while [ ! -z "$1" ] && [ "$1" != "--" ]; do
+    OPTION=option_$(echo ${1:2} | tr "-" "_")_value # remove -- from variable name
+    shift
+    NAME="opt_with_param_$OPTION"
+    if [ "${!NAME}" = true ]; then
+	eval $OPTION=$1
+	shift
+    else
+	eval $OPTION=true
     fi
-    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
-    case $mirror in
-      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
-        mkdir -p $ROOT/$dir
-        chroot_mount $dir $dir --bind
-        ;;
-    esac  
-  fi
-}
+done
 
-add_multiple_mirrors() {
-  # fed a list of comma-separated mirrors, add them to sources.list
-  mirror_list="$1"
-  if [ -z "$(echo $mirror_list | grep ,)" ] ; then
-    # only one mirror specified
-    add_mirror "$mirror_list"
-  else
-    # TODO: support an arbitrary number of mirrors
-    for number in 1 2 3 4 5 6 7 8 9 ; do
-      mirror="$(echo "$mirror_list" | cut -d , -f $number)"
-      if [ -n "$mirror" ]; then
-          add_mirror "$mirror"
-      fi
-    done
-  fi
-}
-
-add_multiple_mirrors "$EARLY_MIRROR"
-
-add_mirror "$MIRROR" 
-
-add_multiple_mirrors "$EXTRA_MIRROR"
-
-add_mirror "$SECURITY_MIRROR" security
+if [ -n "$option_help_value" ]; then
+    usage
+    exit 0
+fi
 
 trap on_exit EXIT
 
-# add keys to the apt keyring
-for key in $APT_KEYS ; do
-  cat $key | chroot $ROOT apt-key add -
+load_plugins "configure"
+
+for hook in before-install install after-install finalization; do
+    load_plugins "$hook"
+    load_vendor_modules "$hook"
 done
 
-preseed() {
-    ROOT="$1"
-    package="$2"
-    question="$3"
-    type="$4"
-    value="$5"
-    echo $package $question $type $value | chroot $ROOT debconf-set-selections
-}
-
-# Update base system
-export DEBIAN_FRONTEND=noninteractive
-chroot $ROOT apt-get update
-LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS dist-upgrade
-
-# Install remaining packages
-LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $EARLY_PACKAGES </dev/null
-
-# Setup for kernel install
-cat <<EOF > $ROOT/etc/kernel-img.conf
-warn_initrd = No
-do_symlinks = yes
-relative_links = yes
-link_in_boot = yes
-do_bootloader = no
-EOF
-
-if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
-  # configuring for initramfs-tools
-  echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
-  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
-  if [ -n "$(grep netboot $ROOT/usr/sbin/mkinitramfs)" ]; then
-    # only use netboot related modules
-    sed -i -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
-  fi
-  if [ -f $ROOT/usr/share/initramfs-tools/scripts/nfs ]; then
-      sed -i 's/NFSOPTS="-o retrans=10"/NFSOPTS="-o retrans=10,nolock"/g;
-              s/nfsmount /mount /g' $ROOT/usr/share/initramfs-tools/scripts/nfs
-  fi
-elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
-  # configuring for initrd-netboot-tools
-  sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
-else
-  echo "WARNING: no known network boot methods found..."
-  echo "tried initramfs-tools and initrd-netboot-tools"
-  echo "manual configuration may be required"
-fi
-
-# Disable DELAYLOGIN and EDITMOTD, to avoid warning because / is read-only.
-sed -i -e 's/^DELAYLOGIN=.*$/DELAYLOGIN=no/' $ROOT/etc/default/rcS
-sed -i -e 's/^EDITMOTD=.*$/EDITMOTD=no/' $ROOT/etc/default/rcS
-
-# Install additional packages, such as the kernel
-LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES </dev/null
-
-LTSPROOT="$(dirname $ROOT)" ltsp-update-kernels
-clients="$ROOT" ltsp-update-sshkeys
-
-echo "ltsp" > $ROOT/etc/hostname
-touch $ROOT/etc/hosts $ROOT/etc/nbd-client
-
-# Pass default X keyboard config from server to the client
-debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
-  chroot $ROOT debconf-set-selections
-
-if [ -e /etc/console/boottime.kmap.gz ]; then
-  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
-fi
-
-# Avoid the need to update mtab.  Save memory on ramdisk
-rm $ROOT/etc/mtab
-ln -s /proc/mounts $ROOT/etc/mtab
-
-# Quiet down fsck during boot
-echo "proc /proc proc defaults 0 0" > $ROOT/etc/fstab
-
-chroot $ROOT apt-get clean
-
-# enable serial console
-if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]; then
-  echo "Enabling serial console..."
-  echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
-fi
-
-# Export LTSP chroot using NFS to the LTSP client network
-if ! grep -q "^$BASE" /etc/exports ; then
-  test -z "$overwrite_exports" && overwrite_exports="true"
-  if [ "$overwrite_exports" = "true" ]; then
-            cat <<EOF >> /etc/exports
-# Automatically added by ltsp-server
-$BASE       *(ro,no_root_squash,async)
-EOF
-            invoke-rc.d nfs-kernel-server reload
-  else
-    cat <<EOF
-WARNING: no entry for $BASE in /etc/exports,
-you may want to add the following line to /etc/exports:
-
-$BASE       *(ro,no_root_squash,async)
-
-and then run the command:
-
-invoke-rc.d nfs-kernel-server reload
-EOF
-  fi
-fi
-
-load_vendor_modules "finalization"
-
-run_successfull=${run_successfull:-true} # report success to on_exit()
+run_successfull=true # report success to on_exit()
 
 exit 0
