@@ -26,13 +26,14 @@ ADVANCED_HELP_MESSAGE=""
 # $3 - regular|advanced
 # $4 - has a value? (true or false)
 add_option () {
-    PARAMS="$PARAMS,$1"
     case $4 in
 	true)
-	    eval "opt_with_param_$(echo $1 | tr '-' '_')"=true
-	    PARAMS="$PARAMS:"
+	    NAME="opt_with_param_$(echo $1 | tr '-' '_')"
+	    eval "$NAME"=true
+	    PARAMS="$PARAMS,$1:"
 	    ;;
 	false)
+	    PARAMS="$PARAMS,$1"
 	    ;;
 	*)
 	    echo "API ERROR: you need to provide true or false."
@@ -160,14 +161,15 @@ elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
 fi
 
 while [ ! -z "$1" ] && [ "$1" != "--" ]; do
-    OPTION=option_$(echo ${1:2} | tr "-" "_")_value # remove -- from variable name
+    OPTION=$(echo ${1:2} | tr "-" "_") # remove -- from variable name
     shift
     NAME="opt_with_param_$OPTION"
+    VARIABLE=option_${OPTION}_value
     if [ "${!NAME}" = true ]; then
-	eval $OPTION=$1
+	eval $VARIABLE=$1
 	shift
     else
-	eval $OPTION=true
+	eval $VARIABLE=true
     fi
 done
 
