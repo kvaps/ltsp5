@@ -26,24 +26,24 @@ ADVANCED_HELP_MESSAGE=""
 # $4 - has a value? (true or false)
 add_option () {
     case $4 in
-	true)
-	    NAME="opt_with_param_$(echo $1 | tr '-' '_')"
-	    eval "$NAME"=true
-	    PARAMS="$PARAMS,$1:"
-	    ;;
-	false)
-	    PARAMS="$PARAMS,$1"
-	    ;;
-	*)
-	    echo "API ERROR: you need to provide true or false."
-	    ;;
+    true)
+        NAME="opt_with_param_$(echo $1 | tr '-' '_')"
+        eval "$NAME"=true
+        PARAMS="$PARAMS,$1:"
+        ;;
+    false)
+        PARAMS="$PARAMS,$1"
+        ;;
+    *)
+        echo "API ERROR: you need to provide true or false."
+        ;;
     esac
 
     MESSAGE=$(printf "   --%-15s %s" "$1" "$2")
     if [ $3 = regular ]; then
-	HELP_MESSAGE="$HELP_MESSAGE $MESSAGE\n"
+        HELP_MESSAGE="$HELP_MESSAGE $MESSAGE\n"
     else
-	ADVANCED_HELP_MESSAGE="$ADVANCED_HELP_MESSAGE $MESSAGE\n"
+        ADVANCED_HELP_MESSAGE="$ADVANCED_HELP_MESSAGE $MESSAGE\n"
     fi
 }
 
@@ -53,7 +53,7 @@ add_option () {
 # $* - message to be print
 debug() {
     if [ -n "$DEBUG" ]; then
-	echo "DEBUG: $@" > /dev/stderr
+        echo "DEBUG: $@" > /dev/stderr
     fi
 }
 
@@ -81,8 +81,8 @@ chroot_mount() {
 load_modules() {
     DIR=$1
     for file in $(run-parts --list $DIR); do
-	debug "  - Loading file $file..."
-	. $file
+        debug "  - Loading file $file..."
+        . $file
     done
 }
 
@@ -104,16 +104,16 @@ load_plugins() {
     MODE=$1
     VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
     case $VENDOR in
-	Ubuntu)
-	    VENDOR=Debian
-	    ;;
-	*)
-	    ;;
+    Ubuntu)
+        VENDOR=Debian
+        ;;
+    *)
+        ;;
     esac
     debug "Loading plugins in MODE=$MODE:"
     load_modules $PLUGINS_BASE/common
     if [ -d $PLUGINS_BASE/$VENDOR ]; then 
-	load_modules $PLUGINS_BASE/$VENDOR
+        load_modules $PLUGINS_BASE/$VENDOR
     fi
 }
 
@@ -132,13 +132,13 @@ usage() {
 # Clean up the chroot and exit.
 on_exit() {
     for dir in $CHROOT_MOUNTED ; do
-	umount $dir
+        umount $dir
     done
 
     if [ true = "$run_successfull" ] ; then
-	echo "info: LTSP client installation completed successfully"
+        echo "info: LTSP client installation completed successfully"
     else
-	echo "error: LTSP client installation ended abnormally"
+        echo "error: LTSP client installation ended abnormally"
     fi
 }
 
