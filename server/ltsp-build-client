@@ -29,7 +29,7 @@ add_option () {
     PARAMS="$PARAMS,$1"
     case $4 in
 	true)
-	    eval "opt_with_param_$1"=true
+	    eval "opt_with_param_$(echo $1 | tr '-' '_')"=true
 	    PARAMS="$PARAMS:"
 	    ;;
 	false)
