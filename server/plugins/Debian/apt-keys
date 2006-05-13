@@ -6,5 +6,10 @@ case "$MODE" in
             if [ -n "$option_apt_keys_value" ]; then
                 APT_KEYS="$option_apt_keys_value"
             fi
+    after-install)
+            # add keys to the apt keyring
+            for key in $APT_KEYS ; do
+                cat $key | chroot $ROOT apt-key add -
+            done
             ;;
 esac
