@@ -1,0 +1,38 @@
+case "$MODE" in
+    commandline)
+        add_option "arch" "set the target architecture" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_arch_value" ]; then
+            ARCH_OPT="$option_arch_value"
+            case $ARCH_OPT in
+                i386)
+                    case $(dpkg --print-architecture) in
+                        amd64|ia64|i386)
+                            ARCH=i386
+                            ;;
+                        *)
+                            echo "ERROR: --arch i386 called on unsupported arch: "$(dpkg --print-architecture)
+                            exit 1
+                            ;;
+                    esac
+                    ;;
+                powerpc)
+                    case $(dpkg --print-architecture) in
+                        ppc64|powerpc)
+                            ARCH=powerpc
+                            ;;
+                        *)
+                            echo "ERROR: --arch powerpc called on unsupported arch: "$(dpkg --print-architecture)
+                            exit 1
+                            ;;
+                    esac
+                    ;;
+                *)
+                    echo "ERROR: unsupported --arch argument: "$ARCH_OPT
+                    exit 1
+                    ;;
+            esac      
+        fi
+        ;;
+esac
