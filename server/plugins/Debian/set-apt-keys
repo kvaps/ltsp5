@@ -1,0 +1,10 @@
+case "$MODE" in
+    commandline)
+	    add_option "apt-keys" "include the listed keys in the apt keyring" "advanced" "true"
+	    ;;
+    configure)
+	    if [ -n "$option_apt_keys_value" ]; then
+		APT_KEYS=$option_apt_keys_value
+	    fi
+	    ;;
+esac
