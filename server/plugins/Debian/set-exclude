@@ -4,7 +4,7 @@ case "$MODE" in
             ;;
     configure)
             if [ -n "$option_exclude_value" ]; then
-                EXCLUDE=$option_exclude_value
+                EXCLUDE="$option_exclude_value"
             fi
             ;;
 esac

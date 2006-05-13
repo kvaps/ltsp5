@@ -166,10 +166,10 @@ while [ ! -z "$1" ] && [ "$1" != "--" ]; do
     NAME="opt_with_param_$OPTION"
     VARIABLE=option_${OPTION}_value
     if [ "${!NAME}" = true ]; then
-	eval $VARIABLE=$1
-	shift
+        eval $VARIABLE=\"$1\"
+        shift
     else
-	eval $VARIABLE=true
+        eval $VARIABLE=true
     fi
 done
 

@@ -4,7 +4,7 @@ case "$MODE" in
             ;;
     configure)
             if [ -n "$option_mirror_value" ]; then
-                MIRROR=$option_mirror_value
+                MIRROR="$option_mirror_value"
             fi
             ;;
 esac

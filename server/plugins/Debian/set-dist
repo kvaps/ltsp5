@@ -4,7 +4,7 @@ case "$MODE" in
             ;;
     configure)
             if [ -n "$option_dist_value" ]; then
-                DIST=$option_dist_value
+                DIST="$option_dist_value"
             fi
             ;;
 esac

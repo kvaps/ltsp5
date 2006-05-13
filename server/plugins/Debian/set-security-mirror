@@ -4,7 +4,7 @@ case "$MODE" in
         ;;
     configure)
         if [ -n "$option_security_mirror_value" ]; then
-            SECURITY_MIRROR=$option_security_mirror_value
+            SECURITY_MIRROR="$option_security_mirror_value"
         fi
         ;;
 esac
