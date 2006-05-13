@@ -1,10 +1,10 @@
 case "$MODE" in
     commandline)
-	    add_option "mirror" "Set the mirror location" "advanced" "true"
-	    ;;
+            add_option "mirror" "Set the mirror location" "advanced" "true"
+            ;;
     configure)
-	    if [ -n "$option_mirror_value" ]; then
-		MIRROR=$option_mirror_value
-	    fi
-	    ;;
+            if [ -n "$option_mirror_value" ]; then
+                MIRROR=$option_mirror_value
+            fi
+            ;;
 esac

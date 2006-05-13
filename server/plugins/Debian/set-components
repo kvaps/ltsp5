@@ -1,10 +1,10 @@
 case "$MODE" in
     commandline)
-	    add_option "components" "Set the components to be used in mirror" "advanced" "true"
-	    ;;
+            add_option "components" "Set the components to be used in mirror" "advanced" "true"
+            ;;
     configure)
-	    if [ -n "$option_components_value" ]; then
-		COMPONENTS=$option_components_value
-	    fi
-	    ;;
+            if [ -n "$option_components_value" ]; then
+                COMPONENTS=$option_components_value
+            fi
+            ;;
 esac
