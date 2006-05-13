@@ -173,7 +173,6 @@ while [ ! -z "$1" ] && [ "$1" != "--" ]; do
     fi
 done
 
-echo $PARAMS
 if [ -n "$option_help_value" ]; then
     usage
     exit 0
