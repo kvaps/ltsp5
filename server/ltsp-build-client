@@ -117,6 +117,7 @@ load_plugins() {
     fi
 }
 
+add_option "help" "Display this help message" "regular" "false"
 usage() {
     echo "LTSP Build Client usage:"
     echo
