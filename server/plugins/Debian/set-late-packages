@@ -7,4 +7,7 @@ case "$MODE" in
             LATE_PACKAGES="$option_late_packages_value"
         fi
         ;;
+    finalization)
+        LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES
+        ;;
 esac
