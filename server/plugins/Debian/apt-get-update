@@ -1,0 +1,5 @@
+case "$MODE" in
+    after-install)
+        LC_ALL=C chroot $ROOT apt-get update
+        ;;
+esac
