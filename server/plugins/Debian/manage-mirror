@@ -1,0 +1,66 @@
+case "$MODE" in
+    commandline)
+        add_option "mirror" "Set the mirror location" "regular" "true"
+        add_option "early-mirror" "add a mirror, which takes priority over the default mirror" "advanced" "true"
+        add_option "extra-mirror" "add a mirror, with lower priority than the default mirror" "advanced" "true"
+        add_option "security-mirror" "add a security mirror" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_mirror_value" ]; then
+            MIRROR="$option_mirror_value"
+        fi
+        if [ -n "$option_early_mirror_value" ]; then
+            EARLY_MIRROR="$option_early_mirror_value"
+        fi
+        if [ -n "$option_extra_mirror_value" ]; then
+            EXTRA_MIRROR="$option_extra_mirror_value"
+        fi
+        if [ -n "$option_security_mirror_value" ]; then
+            SECURITY_MIRROR="$option_security_mirror_value"
+        fi
+        ;;
+    after-install)
+        add_mirror() {
+            # add a mirror to the chroot's sources.list
+	        mirror="$1"
+	        type="$2"
+	        if [ -n "$mirror" ]; then
+		        if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
+			        if [ "$type" = "security" ]; then
+				        mirror="$mirror $DIST/updates $COMPONENTS"
+			        else
+				        mirror="$mirror $DIST $COMPONENTS"
+			        fi
+		        fi
+		        echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+		        case $mirror in
+			        file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+				        mkdir -p $ROOT/$dir
+				        chroot_mount $dir $dir --bind
+				        ;;
+		        esac  
+	        fi
+        }
+        
+        add_multiple_mirrors() {
+            # feed a list of comma-separated mirrors, add them to sources.list
+            mirror_list="$1"
+            if [ -z "$(echo $mirror_list | grep ,)" ] ; then
+                # only one mirror specified
+                add_mirror "$mirror_list"
+            else
+                # TODO: support an arbitrary number of mirrors
+                for number in 1 2 3 4 5 6 7 8 9 ; do
+                    mirror="$(echo "$mirror_list" | cut -d , -f $number)"
+                    if [ -n "$mirror" ]; then
+                        add_mirror "$mirror"
+                    fi
+                done
+            fi
+        }
+
+        add_multiple_mirrors "$EARLY_MIRROR"
+        add_mirror "$MIRROR" 
+        add_multiple_mirrors "$EXTRA_MIRROR"
+        add_mirror "$SECURITY_MIRROR" security
+esac
