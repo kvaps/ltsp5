@@ -1,0 +1,5 @@
+case "$MODE" in
+    before-install)
+    	ROOT=$BASE/$ARCH
+	;;
+esac
