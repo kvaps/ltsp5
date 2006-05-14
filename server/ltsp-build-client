@@ -272,7 +272,8 @@ for key in $APT_KEYS ; do
   cat $key | chroot $ROOT apt-key add -
 done
 
-chroot $ROOT apt-get -o Acquire::gpgv::Options::=--ignore-time-conflict update
+APT_EXTRA_OPTS="-o Acquire::gpgv::Options::=--ignore-time-conflict"
+chroot $ROOT apt-get $APT_EXTRA_OPTS update
 
 DEBIAN_FRONTEND=noninteractive
 export DEBIAN_FRONTEND
@@ -281,10 +282,10 @@ export DEBIAN_FRONTEND
 chroot $ROOT mount -t proc proc /proc && umounts="$umounts $ROOT/proc"
 
 # get package updates for base system
-chroot $ROOT apt-get -y dist-upgrade
+chroot $ROOT apt-get $APT_EXTRA_OPTS -y dist-upgrade
 
 # Install remaining packages
-chroot $ROOT apt-get -y install $EARLY_PACKAGES </dev/null
+chroot $ROOT apt-get $APT_EXTRA_OPTS -y install $EARLY_PACKAGES </dev/null
 
 # Setup for kernel install
 cat <<EOF > $ROOT/etc/kernel-img.conf
@@ -309,7 +310,7 @@ else
 fi
 
 # Install additional packages, such as the kernel
-chroot $ROOT apt-get -y install $LATE_PACKAGES </dev/null
+chroot $ROOT apt-get $APT_EXTRA_OPTS -y install $LATE_PACKAGES </dev/null
 
 ltsp-update-kernels
 ltsp-update-sshkeys

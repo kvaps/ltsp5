@@ -1,3 +1,29 @@
+ltsp (0.86) dapper; urgency=low
+
+  * add --ignore-time-conflict to the apt/gpgv options in 
+    ltsp-build-client to not break on systems with totally broken clock 
+    settings (closes malone #41088)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  9 May 2006 16:54:20 +0200
+
+ltsp (0.85) dapper; urgency=low
+
+  * make ldm stop usplash before we start it, to prevent switching to
+    tty1 (closes malone #39294)
+  * make the SOUND variable really use boolean values (True/False), not
+    "y" to keep consistency with ltsp.org docs
+  * applied Pete Savages manpages for the adminscripts to ltsp-server 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  8 May 2006 19:34:55 +0200
+
+ltsp (0.84) dapper; urgency=low
+
+  * Make ltsp-server Depends: | silo for sparc.
+    This will make the overall ltsp installable for developers.
+    It does *NOT* mean it works (yet).
+
+ -- Fabio M. Di Nitto <fabbione@ubuntu.com>  Thu, 23 Mar 2006 06:15:16 +0100
+
 ltsp (0.83) dapper; urgency=low
 
   * fix typo in ltsp-server description
