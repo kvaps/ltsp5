@@ -33,6 +33,8 @@ case "$MODE" in
                     exit 1
                     ;;
             esac      
+        else
+            ARCH=$(dpkg --print-architecture)
         fi
         ;;
 esac
