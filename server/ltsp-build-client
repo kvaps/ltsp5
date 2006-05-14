@@ -104,11 +104,11 @@ load_plugins() {
     MODE=$1
     VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
     case $VENDOR in
-    Ubuntu)
-        VENDOR=Debian
-        ;;
-    *)
-        ;;
+        Ubuntu)
+            VENDOR=Debian
+            ;;
+        *)
+            ;;
     esac
     debug "Loading plugins in MODE=$MODE:"
     load_modules $PLUGINS_BASE/common
