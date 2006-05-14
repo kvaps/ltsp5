@@ -7,4 +7,7 @@ case "$MODE" in
             EARLY_PACKAGES="$option_early_packages_value"
         fi
         ;;
+    after-install)
+        LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $EARLY_PACKAGES
+        ;;
 esac
