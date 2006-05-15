@@ -1,2 +1,0 @@
-ARCH=${ARCH:-$(dpkg --print-architecture)}
-APT_GET_OPTS=${APT_GET_OPTS:-"-y"}

@@ -1,0 +1,20 @@
+case "$MODE" in
+    before-install)
+	case $ARCH in
+	    i386)
+                # they now only support 486+
+		KERNEL_ARCH="486"
+		;;
+	    amd64)
+		KERNEL_ARCH="amd64-generic"
+		;;
+	    sparc) 
+		KERNEL_ARCH="$(uname -m)"
+		;;
+	    *)
+		KERNEL_ARCH="$ARCH"
+		;;
+	esac
+	LATE_PACKAGES="$LATE_PACKAGES linux-image-$KERNEL_ARCH"
+	;;
+esac

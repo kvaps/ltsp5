@@ -1,8 +1,0 @@
-if [ "$NOSECURITY" != true ]; then
-    SECURITY_MIRROR=${SECURITY_MIRROR:-"http://security.debian.org/"}
-    if [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
-	echo "NOTE: adding default dist and components to security mirror:"
-	SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
-	echo "$SECURITY_MIRROR"
-    fi
-fi
