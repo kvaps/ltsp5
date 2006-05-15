@@ -1,0 +1,21 @@
+case "$MODE" in
+    finalization)
+        if [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/mkinitramfs/initramfs.conf" ]; then
+            # configuring for initramfs-tools
+            echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
+            sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
+            if [ -n "$(grep netboot $ROOT/usr/sbin/mkinitramfs)" ]; then
+                # only use netboot related modules
+                sed -i -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
+            fi
+            if [ -f $ROOT/usr/share/initramfs-tools/scripts/nfs ]; then
+                sed -i 's/NFSOPTS="-o retrans=10"/NFSOPTS="-o retrans=10,nolock"/g;
+                        s/nfsmount /mount /g' $ROOT/usr/share/initramfs-tools/scripts/nfs
+            fi
+        elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/sbin/mkinitrd ]; then
+            # configuring for initrd-netboot-tools
+            sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' \ 
+                $ROOT/etc/mkinitrd/mkinitrd.conf
+        fi
+        ;;
+esac
