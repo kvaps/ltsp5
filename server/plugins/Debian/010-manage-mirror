@@ -59,6 +59,11 @@ case "$MODE" in
             fi
         }
 
+        sources_list="$ROOT/etc/apt/sources.list"
+        if [ -f "$sources_list" ]; then
+            debug "    - moving aside sources.list"
+            mv -vf "$sources_list" "$sources_list".old
+        fi
         add_multiple_mirrors "$EARLY_MIRROR"
         add_mirror "$MIRROR" 
         add_multiple_mirrors "$EXTRA_MIRROR"
