@@ -39,7 +39,7 @@ add_option () {
         ;;
     esac
 
-    MESSAGE=$(printf "   --%-15s %s" "$1" "$2")
+    MESSAGE=$(printf "   --%-24s %s" "$1" "$2")
     if [ $3 = regular ]; then
         HELP_MESSAGE="$HELP_MESSAGE $MESSAGE\n"
     else
