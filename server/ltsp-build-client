@@ -6,11 +6,12 @@ BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 VENDORS_BASE=$MODULES_BASE/vendors            # base vendor repository
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
+
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
 
-# Global variables
-HELP_MESSAGE=""
-ADVANCED_HELP_MESSAGE=""
+PARAMS="config:"                              # store commandline params for getopt
+HELP_MESSAGE=""                               # store regular help messages
+ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 
 
 ##################################
@@ -117,7 +118,10 @@ load_plugins() {
     fi
 }
 
+# Add commandline option to handle --help
 add_option "help" "Display this help message" "regular" "false"
+
+# Print usage information.
 usage() {
     echo "LTSP Build Client usage:"
     echo
@@ -143,14 +147,12 @@ on_exit() {
     fi
 }
 
-PARAMS="config:"
 load_plugins 'commandline'
 
+# Parse the commandline options
 if ! TEMP=`getopt -o '' --long $PARAMS -n "$0" -- "$@"`; then
     usage >&2; exit 1; 
 fi
-
-# Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
 
 if [ "--config" = "$1" ] && [ -n "$2" ]; then
