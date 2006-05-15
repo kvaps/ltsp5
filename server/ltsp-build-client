@@ -4,7 +4,6 @@ set -e
 
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
-VENDORS_BASE=$MODULES_BASE/vendors            # base vendor repository
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
@@ -87,15 +86,6 @@ load_modules() {
     done
 }
 
-# Load the vendor specific modules.
-#
-# Params:
-# $1 - category
-load_vendor_modules() {
-    debug "Loading vendor modules for HOOK=$1:"
-    load_modules $VENDORS_BASE/$(lsb_release -i | sed 's,.*:\t,,g')/$1
-}
-
 # Load our plugins.
 #
 # Params:
@@ -104,13 +94,6 @@ load_plugins() {
     set -- "$@"
     MODE=$1
     VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
-    case $VENDOR in
-        Ubuntu)
-            VENDOR=Debian
-            ;;
-        *)
-            ;;
-    esac
     debug "Loading plugins in MODE=$MODE:"
     load_modules $PLUGINS_BASE/common
     if [ -d $PLUGINS_BASE/$VENDOR ]; then 
@@ -182,11 +165,8 @@ fi
 
 trap on_exit EXIT
 
-load_plugins "configure"
-
-for hook in before-install install after-install finalization; do
+for hook in configure before-install install after-install finalization; do
     load_plugins "$hook"
-    load_vendor_modules "$hook"
 done
 
 run_successfull=true # report success to on_exit()
