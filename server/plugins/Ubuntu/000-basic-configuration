@@ -1,5 +1,5 @@
 case "$MODE" in
-    before-install)
+    configure)
         ARCH=$(dpkg --print-architecture)
         APT_GET_OPTS="-y"
 
