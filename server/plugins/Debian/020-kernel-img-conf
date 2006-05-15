@@ -4,7 +4,7 @@ case "$MODE" in
         ;;
     after-install)
         # Setup for kernel install
-        for opt in KERNEL_IMG_OPTS; do
+        for opt in $KERNEL_IMG_OPTS; do
             echo $opt > "$ROOT/etc/kernel-img.conf"
         done
         ;;
