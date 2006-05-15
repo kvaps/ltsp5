@@ -2,5 +2,4 @@ server/ltsp-build-client usr/sbin
 server/ltsp-update-sshkeys usr/sbin
 server/ltsp-update-kernels usr/sbin
 server/scripts/* usr/share/ltsp/scripts/
-server/vendors/	 usr/share/ltsp/
 server/plugins/ usr/share/ltsp/
