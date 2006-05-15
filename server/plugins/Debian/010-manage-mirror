@@ -22,24 +22,24 @@ case "$MODE" in
     after-install)
         add_mirror() {
             # add a mirror to the chroot's sources.list
-	        mirror="$1"
-	        type="$2"
-	        if [ -n "$mirror" ]; then
-		        if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
-			        if [ "$type" = "security" ]; then
-				        mirror="$mirror $DIST/updates $COMPONENTS"
-			        else
-				        mirror="$mirror $DIST $COMPONENTS"
-			        fi
-		        fi
-		        echo "deb $mirror" >> $ROOT/etc/apt/sources.list
-		        case $mirror in
-			        file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
-				        mkdir -p $ROOT/$dir
-				        chroot_mount $dir $dir --bind
-				        ;;
-		        esac  
-	        fi
+            mirror="$1"
+            type="$2"
+            if [ -n "$mirror" ]; then
+                if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
+                    if [ "$type" = "security" ]; then
+                        mirror="$mirror $DIST/updates $COMPONENTS"
+                    else
+                        mirror="$mirror $DIST $COMPONENTS"
+                    fi
+                fi
+                echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+                case $mirror in
+                    file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+                        mkdir -p $ROOT/$dir
+                        chroot_mount $dir $dir --bind
+                        ;;
+                esac  
+            fi
         }
         
         add_multiple_mirrors() {
