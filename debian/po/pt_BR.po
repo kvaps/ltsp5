@@ -15,11 +15,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-09 17:45+0100\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2006-05-15 02:49-0400\n"
 "PO-Revision-Date: 2006-03-07 10:46-0300\n"
-"Last-Translator: Gustavo Franco <stratus@debian.org>\n"
-"Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian.org>\n"
+"Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
+"Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
+"org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,8 +38,8 @@ msgid ""
 "This will set up an LTSP chroot environment on the machine, to act as a thin "
 "client server."
 msgstr ""
-"Isto irá criar um chroot LTSP na máquina, para atuar como um servidor "
-"de clientes finos."
+"Isto irÃ¡ criar um chroot LTSP na mÃ¡quina, para atuar como um servidor de "
+"clientes finos."
 
 #. Type: text
 #. Description
@@ -52,3 +53,26 @@ msgstr "Construir chroot LTSP"
 #: ../ltsp-client-builder.templates:15
 msgid "Building LTSP chroot..."
 msgstr "Construindo chroot LTSP..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client.templates:3
+msgid "Installation aborted "
+msgstr "Instalacao abortada"
+
+#. Type: note
+#. Description
+#: ../ltsp-client.templates:3
+msgid ""
+"ltsp-client cannot be installed in a regular machine. This package provides  "
+"the basic structure for a LTSP terminal."
+msgstr ""
+"ltsp-client não pode ser instalado numa máquina regular. Este pacote provê  "
+"a estrutura básica para um terminal LTSP."
+
+#. Type: note
+#. Description
+#: ../ltsp-client.templates:3
+msgid "Please read the package description to understand what it means."
+msgstr ""
+"Por favor leia a descrição do pacote para entendermelhor o que isso significa."

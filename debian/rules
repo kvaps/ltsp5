@@ -17,6 +17,7 @@ build-stamp:
 	cd client/lp_server && ./configure --prefix=/usr
 	$(MAKE) -C client/lp_server
 
+	debconf-updatepo
 	touch build-stamp
 
 clean:
@@ -63,6 +64,7 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installexamples -a
 	dh_install -a
+	dh_installdebconf -a
 	dh_installinit -a --no-start
 	dh_installinit -pltsp-client --name=ltsp-client-setup --no-start -u"start 32 S ."
 	dh_link -a
