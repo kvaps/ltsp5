@@ -14,8 +14,8 @@ case "$MODE" in
             fi
         elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -x $ROOT/usr/sbin/mkinitrd ]; then
             # configuring for initrd-netboot-tools
-            sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' \ 
-                $ROOT/etc/mkinitrd/mkinitrd.conf
+            sed -i -e 's/^ROOT=.*$/ROOT=""/' \
+                -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
         fi
         ;;
 esac
