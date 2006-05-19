@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "accept-unsigned-packages" "allow unsigned packages during install." "advanced" "false"
+        add_option "accept-unsigned-packages" $"allow unsigned packages during install." "advanced" "false"
         ;;
     configure)
         if [ -n "$option_accept_unsigned_packages_value" ]; then

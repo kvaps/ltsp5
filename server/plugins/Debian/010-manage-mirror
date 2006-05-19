@@ -1,9 +1,9 @@
 case "$MODE" in
     commandline)
-        add_option "mirror" "Set the mirror location" "regular" "true"
-        add_option "early-mirror" "add a mirror, which takes priority over the default mirror" "advanced" "true"
-        add_option "extra-mirror" "add a mirror, with lower priority than the default mirror" "advanced" "true"
-        add_option "security-mirror" "add a security mirror" "advanced" "true"
+        add_option "mirror" $"Set the mirror location" "regular" "true"
+        add_option "early-mirror" $"add a mirror, which takes priority over the default mirror" "advanced" "true"
+        add_option "extra-mirror" $"add a mirror, with lower priority than the default mirror" "advanced" "true"
+        add_option "security-mirror" $"add a security mirror" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_mirror_value" ]; then
