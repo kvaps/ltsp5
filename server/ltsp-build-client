@@ -2,7 +2,7 @@
 
 set -e
 
-TEXTDOMAIN="ltsp-server"                      # gettext domain
+TEXTDOMAIN="ltsp"                             # gettext domain
 
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
