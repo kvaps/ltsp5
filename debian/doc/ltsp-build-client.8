@@ -1,0 +1,84 @@
+.TH "ltsp-build-client" "8" 
+.SH "NAME" 
+ltsp-build-client \(em Builds an LTSP client system for use with the LTSP server 
+.SH "SYNOPSIS" 
+.PP 
+\fBltsp-build-client\fR [\-\-root ]  [\-\-dist ]  [\-\-components ]  [\-\-mirror ]  [\-\-extra-mirror ]  [\-\-security-mirror ]  [\-\-exclude ]  [\-\-early-packages ]  [\-\-late-packages ]  [\-\-serial-console ]  [\-\-arch ]  [\-\-debconf-seeds ]  [\-\-apt-keys ]  [\-\-help ]  
+.SH "DESCRIPTION" 
+.PP 
+\fBltsp-build-client\fR uses the ubuntu archive mirrors in order to 
+build an ltsp client for use with the ltsp server.  This chroot installation  
+can be modified in a number of ways as outlined in the OPTIONS section.  A 
+configuration file is held in \fB/etc/ltsp/ltsp-build-client.conf\fP, these options 
+can be overridden using the command line options. 
+Visit http://www.ltsp.org for more information  
+.SH "OPTIONS" 
+.IP "\fB\-\-root\fP \fIrootpath\fR" 10 
+Sets the default path for the ltsp chroot to be installed into,  
+default /opt/ltsp/\fBARCH\fP    
+.IP "\fB\-\-dist\fP \fIdistribution\fR" 10 
+Distribution : Sets the distribution to use when downloading from the  
+Ubuntu archives, default dapper 
+ 
+.IP "\fB\-\-components\fP \fIcomponents\fR" 10 
+Allows a list of archive components to be chosen for download,  
+default main restricted 
+ 
+.IP "\fB\-\-mirror\fP \fImirror_url\fR" 10 
+Allows a local Ubuntu mirror to be chosen for a faster download, urls  
+like file://cdrom can also be specified here. 
+default http://archive.ubuntu.com/ubuntu 
+ 
+.IP "\fB\-\-extra-mirror\fP \fImirror_url dist components\fR" 10 
+Sets the inclusion of an extra mirror if downloading pacakges from 
+an alternative location.  This option can also have dist and component 
+variables associated as demonstrated above. If no dist and components  
+are specified the defaults are used.  Urls like file://cdrom can also  
+be specified here. 
+ 
+.IP "\fB\-\-security-mirror\fP \fImirror_url dist components\fR" 10 
+Sets the inclusion of a security mirror.  This option can also have  
+dist and component variables associated as demonstrated above. 
+If no dist and components are specified the defaults are used. 
+Urls like file://cdrom can also be specified here. 
+ 
+.IP "\fB\-\-exclude\fP \fIpackage1 package2\fR" 10 
+Includes a list of packages to be excluded from installation into the 
+build. 
+.IP "\fB\-\-early-packages\fP \fIpackage1 package2\fR" 10 
+Includes a list of packages to be installed before the bulk of packages. 
+ 
+.IP "\fB\-\-late-packages\fP \fIpackage1 package2\fR" 10 
+Includes a list of packages to be installed after the bulk of packages and 
+configuration tweaks such as kernel. 
+ 
+.IP "\fB\-\-serial-console\fP" 10 
+Enables the default serial console on the new ltsp-build. 
+ 
+.IP "\fB\-\-arch\fP \fIi386 | powerpc\fR" 10 
+Builds an i386 chroot on an amd64 or a powerpc chroot on a ppc64.   
+An error will be presented if the arch chosen is unsupported. 
+ 
+.IP "\fB\-\-debconf-seeds\fP" 10 
+Loads the debconf pre-seeding files into the new chroot environment 
+ 
+.IP "\fB\-\-apt-keys\fP \fIkey1 key2\fR" 10 
+Specifies keys to add to the apt keyring 
+ 
+.IP "\fB\-\-help\fP" 10 
+Displays the ltsp-build-client help message 
+ 
+.SH "SEE ALSO" 
+.PP 
+\fBltsp-update-sshkeys\fP\fB(8)\fP, 
+\fBltsp-update-kernels\fP\fB(8)\fP. 
+.SH "AVAILABILITY" 
+.PP 
+\fBltsp-build-client\fR is part of \fBltsp\fP package 
+and the latest versions are available in source form from 
+\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR. 
+.SH "MAN PAGE AUTHOR" 
+.PP 
+Peter Savage \- silentk \- cbx33 
+debug@silentkeystroke.co.uk 
+.\" created by instant / docbook-to-man, Fri 21 Apr 2006, 06:18 

@@ -56,6 +56,10 @@ start_sound() {
 
 case "$1" in
   start)
+  		# if usplash is runing, make sure to stop it now
+  		if pidof usplash > /dev/null; then
+			/etc/init.d/usplash stop
+		fi
         log_begin_msg "Starting LTSP client..."
 
         start_sound || true

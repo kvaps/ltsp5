@@ -1,6 +1,6 @@
 Template: ltsp-client-builder/run
 Type: boolean
-Default: true
+Default: false
 _Description: Set up an LTSP chroot environment?
  This will set up an LTSP chroot environment on the machine, to act as
  a thin client server.
