@@ -16,6 +16,11 @@ ltsp (0.87debian1) UNRELEASED; urgency=low
   * Increase warning level when compiling getltscfg, and fix a few
     compiler warnings discovered this way.
   
+  [ Vagrant Cascadian and Otavio Salvador at Debcamp6 ]
+  * Rewrote all ltsp-build-client application to use a plugin system and
+    also be plugable enough to reduze the amount of diversion between
+    Debian and Ubuntu.
+
   [ Otavio Salvador ]
   * Sync with Oliver's dapper branch.
 
