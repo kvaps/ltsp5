@@ -18,7 +18,7 @@ ltsp (0.87debian1) UNRELEASED; urgency=low
   
   [ Vagrant Cascadian and Otavio Salvador at Debcamp6 ]
   * Rewrote all ltsp-build-client application to use a plugin system and
-    also be plugable enough to reduze the amount of diversion between
+    also be pluggable enough to reduce the amount of the diff between
     Debian and Ubuntu.
 
   [ Otavio Salvador ]
