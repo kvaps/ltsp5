@@ -30,6 +30,8 @@ ltsp (0.87debian1) UNRELEASED; urgency=low
   * Don't include /opt/ltsp in package. In this way, we avoid a lintian
     warning.
   * Bump Standards-Version to 3.7.2 (no changes).
+  * Add possibility to specify a configuration file in commandline and
+    also read the systemwide one if it's not provided.
 
  -- Otavio Salvador <otavio@debian.org>  Wed, 31 May 2006 15:48:06 -0300
 
