@@ -24,6 +24,7 @@ ltsp (0.87debian1) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Sync with Oliver's dapper branch.
   * Add 030-exports in common plugins letting it disabled by default.
+    (Closes: #360408, #360407)
   * Set OVERRIDE_EXPORTS to true in Ubuntu since it's the current
     behaviour in their package.
 
