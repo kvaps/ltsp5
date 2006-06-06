@@ -6,6 +6,8 @@ ltsp (0.87debian2) UNRELEASED; urgency=low
   * Fix Permission Denied error due a error in unionfs mount command in
     initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
     debugging it. (Closes: #360249)
+  * We don't need to set initramfs-tools as default since it's since
+    Debian kernel 2.6.15.
 
  -- Otavio Salvador <otavio@debian.org>  Tue,  6 Jun 2006 01:51:25 -0300
 

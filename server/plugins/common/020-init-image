@@ -2,7 +2,6 @@ case "$MODE" in
     finalization)
         if [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/mkinitramfs/initramfs.conf" ]; then
             # configuring for initramfs-tools
-            echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
             sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
             if [ -n "$(grep netboot $ROOT/usr/sbin/mkinitramfs)" ]; then
                 # only use netboot related modules
