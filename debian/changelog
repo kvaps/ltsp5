@@ -2,6 +2,7 @@ ltsp (0.87debian2) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
   * Make LTSP messages translatable.
+  * Minimal fixes for indentation of ltsp-client-setup init script.
 
  -- Otavio Salvador <otavio@debian.org>  Tue,  6 Jun 2006 01:51:25 -0300
 
