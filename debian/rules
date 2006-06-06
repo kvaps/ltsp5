@@ -13,11 +13,17 @@ build: build-stamp
 build-stamp:
 	dh_testdir
 
-	# Build pot file for our scripts
-	bash --dump-po-strings server/ltsp-build-client > po/ltsp.pot
-	for po in po/*; do \
-		msgmerge -o $po po/ltsp.pot; \
-	do
+    # Build pot file for our scripts
+	FILES=""
+	for f in server/ltsp-build-client server/plugins/*/*; do \
+		FILES="$$FILES $$f"; \
+	done; \
+	xgettext --language=Shell -o po/ltsp.pot $$FILES
+
+	(cd po; \
+	for f in *.po; do \
+		msgmerge -U $$f ltsp.pot; \
+	done)
 
 	$(MAKE) -C client/getltscfg
 	cd client/lp_server && ./configure --prefix=/usr
