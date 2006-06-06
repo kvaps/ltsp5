@@ -1,4 +1,4 @@
-ltsp (0.87debian1) UNRELEASED; urgency=low
+ltsp (0.87debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
   * New upstream release from ubuntu.
@@ -33,7 +33,7 @@ ltsp (0.87debian1) UNRELEASED; urgency=low
   * Add possibility to specify a configuration file in commandline and
     also read the systemwide one if it's not provided.
 
- -- Otavio Salvador <otavio@debian.org>  Wed, 31 May 2006 15:48:06 -0300
+ -- Otavio Salvador <otavio@debian.org>  Mon,  5 Jun 2006 23:13:12 -0300
 
 ltsp (0.87) dapper; urgency=low
 
