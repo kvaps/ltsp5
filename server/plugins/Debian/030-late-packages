@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "late-packages" $"list of packages to install as part of the final installation." "advanced" "true"
+        add_option "late-packages" `eval_gettext "list of packages to install as part of the final installation."` "advanced" "true"
         ;;
     configure)
         if [ -n "$option_late_packages_value" ]; then

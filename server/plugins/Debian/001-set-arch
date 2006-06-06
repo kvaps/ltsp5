@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "arch" $"set the target architecture" "advanced" "true"
+        add_option "arch" `eval_gettext "set the target architecture"` "advanced" "true"
         ;;
     configure)
         if [ -n "$option_arch_value" ]; then
