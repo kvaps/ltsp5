@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "prompt-rootpass" "prompt to set the root password, defaults to disabled" "advanced" "false"
+        add_option "prompt-rootpass" `eval_gettext "prompt to set the root password, defaults to disabled"` "advanced" "false"
         ;;
     configure)
         if [ -n "$option_promt_rootpass_value" ]; then

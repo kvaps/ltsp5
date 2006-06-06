@@ -2,6 +2,8 @@
 
 set -e
 
+TEXTDOMAIN="ltsp"                             # gettext domain
+
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
@@ -35,7 +37,7 @@ add_option () {
         PARAMS="$PARAMS,$1"
         ;;
     *)
-        echo "API ERROR: you need to provide true or false."
+        eval_gettext "API ERROR: you need to provide true or false."
         ;;
     esac
 
@@ -102,18 +104,18 @@ load_plugins() {
 }
 
 # Add commandline option to handle --help
-add_option "help" "Display this help message" "regular" "false"
+add_option "help" `eval_gettext "Display this help message"` "regular" "false"
 
 # Print usage information.
 usage() {
-    echo "LTSP Build Client usage:"
+    echo `eval_gettext "LTSP Build Client usage:"`
     echo
     echo "  ltsp-build-client <options>"
     echo
-    echo -n "  Regular options:"
+    echo -n `eval_gettext "  Regular options:"`
     echo -e "$HELP_MESSAGE" | sort
     echo
-    echo -n "  Advanced options:"
+    echo -n `eval_gettext "  Advanced options:"`
     echo -e "$ADVANCED_HELP_MESSAGE" | sort
 }
 
@@ -124,9 +126,9 @@ on_exit() {
     done
 
     if [ true = "$run_successfull" ] ; then
-        echo "info: LTSP client installation completed successfully"
+        eval_gettext "info: LTSP client installation completed successfully"
     else
-        echo "error: LTSP client installation ended abnormally"
+        eval_gettext "error: LTSP client installation ended abnormally"
     fi
 }
 
