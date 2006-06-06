@@ -3,6 +3,9 @@ ltsp (0.87debian2) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Make LTSP messages translatable.
   * Minimal fixes for indentation of ltsp-client-setup init script.
+  * Fix Permission Denied error due a error in unionfs mount command in
+    initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
+    debugging it. (Closes: #360249)
 
  -- Otavio Salvador <otavio@debian.org>  Tue,  6 Jun 2006 01:51:25 -0300
 
