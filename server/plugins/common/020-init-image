@@ -1,20 +1,22 @@
 case "$MODE" in
     finalization)
         if [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/mkinitramfs/initramfs.conf" ]; then
-            # configuring for initramfs-tools
-            sed -i -e 's/^BOOT=.*$/BOOT=nfs/' $ROOT/etc/mkinitramfs/initramfs.conf
-            if [ -n "$(grep netboot $ROOT/usr/sbin/mkinitramfs)" ]; then
-                # only use netboot related modules
-                sed -i -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
-            fi
+            # We need to set the boot method since LTSP supports NBI
+            # booting too and in this specific case we cannot pass
+            # boot params. Due space limitations we set to use just
+            # netboot related modules in initramfs.
+            sed -e 's/^BOOT=.*$/BOOT=nfs/' \
+                -e 's/MODULES=.*$/MODULES=netboot/' -i $ROOT/etc/mkinitramfs/initramfs.conf
+
+            # Workaround a bug in initramfs-tools nfsmount
             if [ -f $ROOT/usr/share/initramfs-tools/scripts/nfs ]; then
-                sed -i 's/NFSOPTS="-o retrans=10"/NFSOPTS="-o retrans=10,nolock"/g;
-                        s/nfsmount /mount /g' $ROOT/usr/share/initramfs-tools/scripts/nfs
+                sed -e 's/NFSOPTS="-o retrans=10"/NFSOPTS="-o retrans=10,nolock"/' \
+                    -e 's/nfsmount /mount /' -i $ROOT/usr/share/initramfs-tools/scripts/nfs
             fi
         elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -x $ROOT/usr/sbin/mkinitrd ]; then
             # configuring for initrd-netboot-tools
-            sed -i -e 's/^ROOT=.*$/ROOT=""/' \
-                -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
+            sed -e 's/^ROOT=.*$/ROOT=""/' \
+                -e 's/^MODULES=.*$/MODULES=none/' -i $ROOT/etc/mkinitrd/mkinitrd.conf
         fi
         ;;
 esac
