@@ -1,14 +1,14 @@
-# pkg-ltsp potfile.
-# Copyright (C) 2006 LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
-# This file is distributed under the same license as the ltsp package.
-# Otavio Salvador <otavio@debian.org>, 2006.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-06 01:45-0300\n"
+"POT-Creation-Date: 2006-06-08 16:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,41 @@ msgstr ""
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
 
+#: server/plugins/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr ""
+
+#: server/plugins/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr ""
+
+#: server/plugins/common/001-set-arch:20 server/plugins/common/001-set-arch:31
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr ""
+
+#: server/plugins/common/001-set-arch:37
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+
+#: server/plugins/common/001-set-arch:38
+#, sh-format
+msgid "       supported values are: %s"
+msgstr ""
+
+#: server/plugins/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr ""
+
+#: server/plugins/common/030-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr ""
+
 #: server/plugins/Debian/001-apt-keys:3 server/plugins/Ubuntu/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
@@ -60,11 +95,6 @@ msgstr ""
 #: server/plugins/Ubuntu/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install."
-msgstr ""
-
-#: server/plugins/Debian/001-set-arch:3 server/plugins/Ubuntu/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
 msgstr ""
 
 #: server/plugins/Debian/001-set-components:3
@@ -146,19 +176,4 @@ msgstr ""
 #: server/plugins/Ubuntu/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation."
-msgstr ""
-
-#: server/plugins/common/000-enable-debug:3
-#, sh-format
-msgid "Enable debug support"
-msgstr ""
-
-#: server/plugins/common/010-set-base:3
-#, sh-format
-msgid "Set the default base install directory"
-msgstr ""
-
-#: server/plugins/common/030-rootpass:3
-#, sh-format
-msgid "prompt to set the root password, defaults to disabled"
 msgstr ""

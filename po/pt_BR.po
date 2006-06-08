@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.82\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-06 01:45-0300\n"
+"POT-Creation-Date: 2006-06-08 16:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gustavo Franco <stratus@debian.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,41 @@ msgstr "info: instalação do cliente LTSP completada com sucesso"
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erro: instalação do cliente LTSP terminou de maneira anormal"
 
+#: server/plugins/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "Habilitar o suporte a depuração"
+
+#: server/plugins/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "define a arquitetura"
+
+#: server/plugins/common/001-set-arch:20 server/plugins/common/001-set-arch:31
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr ""
+
+#: server/plugins/common/001-set-arch:37
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+
+#: server/plugins/common/001-set-arch:38
+#, sh-format
+msgid "       supported values are: %s"
+msgstr ""
+
+#: server/plugins/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "Define o diretório de instalação do sistema básico"
+
+#: server/plugins/common/030-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr "questiona se deve definir a senha de root, o padrão é desabilita-la"
+
 #: server/plugins/Debian/001-apt-keys:3 server/plugins/Ubuntu/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
@@ -61,11 +96,6 @@ msgstr "inclui as chaves listadas no chaveiro do apt"
 #, sh-format
 msgid "allow unsigned packages during install."
 msgstr "permite pacotes não assinados durante a instalação."
-
-#: server/plugins/Debian/001-set-arch:3 server/plugins/Ubuntu/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
-msgstr "define a arquitetura"
 
 #: server/plugins/Debian/001-set-components:3
 #: server/plugins/Ubuntu/001-set-components:3
@@ -105,13 +135,15 @@ msgstr "Define o local do espelho"
 #: server/plugins/Ubuntu/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr "adiciona um espelho, que recebe uma prioridade maior que o espelho padrão"
+msgstr ""
+"adiciona um espelho, que recebe uma prioridade maior que o espelho padrão"
 
 #: server/plugins/Debian/010-manage-mirror:5
 #: server/plugins/Ubuntu/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr "adiciona um espelho, que recebe uma prioridade menor que o espelho padrão"
+msgstr ""
+"adiciona um espelho, que recebe uma prioridade menor que o espelho padrão"
 
 #: server/plugins/Debian/010-manage-mirror:6
 #: server/plugins/Ubuntu/010-manage-mirror:6
@@ -122,7 +154,8 @@ msgstr "adiciona um espelho de segurança"
 #: server/plugins/Debian/010-security-mirror:6
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr "NOTA: adicionando dist padrão e components para o espelho de segurança:"
+msgstr ""
+"NOTA: adicionando dist padrão e components para o espelho de segurança:"
 
 #: server/plugins/Debian/010-serial-console:3
 #: server/plugins/Ubuntu/010-serial-console:3
@@ -147,18 +180,3 @@ msgstr "define a lista de pacotes para instalar após o base-install completar."
 #, sh-format
 msgid "list of packages to install as part of the final installation."
 msgstr "lista de pacotes para instalar como parte final da instalação."
-
-#: server/plugins/common/000-enable-debug:3
-#, sh-format
-msgid "Enable debug support"
-msgstr "Habilitar o suporte a depuração"
-
-#: server/plugins/common/010-set-base:3
-#, sh-format
-msgid "Set the default base install directory"
-msgstr "Define o diretório de instalação do sistema básico"
-
-#: server/plugins/common/030-rootpass:3
-#, sh-format
-msgid "prompt to set the root password, defaults to disabled"
-msgstr "questiona se deve definir a senha de root, o padrão é desabilita-la"
