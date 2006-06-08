@@ -16,6 +16,9 @@ ltsp (0.87debian2) UNRELEASED; urgency=low
   [ Gustavo Franco ]
   * po/pt_BR.po:
     - Add po/ltsp.pot Portuguese Brazilian translation by myself.
+  
+  [ Otavio Salvador ]
+  * Move translation update routine to update-po rules target.
 
  -- Otavio Salvador <otavio@debian.org>  Tue,  6 Jun 2006 01:51:25 -0300
 
