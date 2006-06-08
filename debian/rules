@@ -25,6 +25,9 @@ update-po:
 		echo -n "$$f: "; msgfmt --statistics $$f; \
 	done)
 
+    # Debconf translation update
+	debconf-updatepo
+
 build: build-stamp update-po
 build-stamp:
 	dh_testdir
@@ -32,8 +35,6 @@ build-stamp:
 	$(MAKE) -C client/getltscfg
 	cd client/lp_server && ./configure --prefix=/usr
 	$(MAKE) -C client/lp_server
-
-	debconf-updatepo
 	touch build-stamp
 
 clean:
