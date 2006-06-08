@@ -17,4 +17,4 @@ esac
 
 mkdir /cow
 mount -t tmpfs tmpfs /cow
-mount -t unionfs -o delete=whiteout,dirs=/cow=rw:${rootmnt}=ro unionfs ${rootmnt}
+mount -t unionfs -o delete=whiteout,dirs=/cow=rw:${rootmnt}=nfsro unionfs ${rootmnt}

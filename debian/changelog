@@ -1,4 +1,21 @@
-ltsp (0.87debian1) UNRELEASED; urgency=low
+ltsp (0.87debian2) UNRELEASED; urgency=low
+
+  [ Otavio Salvador ]
+  * Make LTSP messages translatable.
+  * Minimal fixes for indentation of ltsp-client-setup init script.
+  * Fix Permission Denied error due a error in unionfs mount command in
+    initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
+    debugging it. (Closes: #360249)
+  * We don't need to set initramfs-tools as default since it's since
+    Debian kernel 2.6.15.
+  * Improved common/020-init-image including better code formating and
+    documentation.
+  * Converted set-arch modules to be a common one. For this dpkg use was
+    remove. Support for error messages translation was also added.
+
+ -- Otavio Salvador <otavio@debian.org>  Tue,  6 Jun 2006 01:51:25 -0300
+
+ltsp (0.87debian1) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
   * New upstream release from ubuntu.
@@ -23,8 +40,17 @@ ltsp (0.87debian1) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
   * Sync with Oliver's dapper branch.
+  * Add 030-exports in common plugins letting it disabled by default.
+    (Closes: #360408, #360407)
+  * Set OVERRIDE_EXPORTS to true in Ubuntu since it's the current
+    behaviour in their package.
+  * Don't include /opt/ltsp in package. In this way, we avoid a lintian
+    warning.
+  * Bump Standards-Version to 3.7.2 (no changes).
+  * Add possibility to specify a configuration file in commandline and
+    also read the systemwide one if it's not provided.
 
- -- Otavio Salvador <otavio@debian.org>  Wed, 31 May 2006 15:48:06 -0300
+ -- Otavio Salvador <otavio@debian.org>  Mon,  5 Jun 2006 23:13:12 -0300
 
 ltsp (0.87) dapper; urgency=low
 
