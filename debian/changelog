@@ -12,6 +12,7 @@ ltsp (0.87debian2) UNRELEASED; urgency=low
     documentation.
   * Converted set-arch modules to be a common one. For this dpkg use was
     remove. Support for error messages translation was also added.
+  * Fix code style in common/010-set-base.
  
   [ Gustavo Franco ]
   * po/pt_BR.po:
