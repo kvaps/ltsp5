@@ -1,4 +1,12 @@
-ltsp (0.87debian2) UNRELEASED; urgency=low
+ltsp (0.88) edgy; urgency=low
+
+  * merged debian modularization into our upstream branch
+  * merged debian translations
+  * first upload to edgy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 22 Jun 2006 10:09:02 +0200
+
+ltsp (0.87debian2) unstable; urgency=low
 
   [ Otavio Salvador ]
   * Make LTSP messages translatable.
