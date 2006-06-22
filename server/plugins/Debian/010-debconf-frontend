@@ -1,0 +1,5 @@
+case "$MODE" in
+    configure)
+        export DEBIAN_FRONTEND=noninteractive
+        ;;
+esac

@@ -1,0 +1,19 @@
+case "$MODE" in
+    commandline)
+        add_option "prompt-rootpass" `eval_gettext "prompt to set the root password, defaults to disabled"` "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_promt_rootpass_value" ]; then
+            ROOTPASS=prompt
+        fi
+        ;;
+    after-install)
+        if [ "$ROOTPASS" = "prompt" ]; then
+            # prompt for root password
+            chroot $ROOT passwd root
+        else
+            # Root password is empty by default, lock it
+            chroot $ROOT passwd -l root
+        fi
+        ;;
+esac

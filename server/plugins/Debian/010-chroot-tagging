@@ -1,0 +1,5 @@
+case "$MODE" in
+    after-install)
+        touch $ROOT/etc/ltsp_chroot
+        ;;
+esac

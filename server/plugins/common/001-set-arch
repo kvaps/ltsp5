@@ -1,0 +1,43 @@
+case "$MODE" in
+    commandline)
+        add_option "arch" `eval_gettext "set the target architecture"` "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_arch_value" ]; then
+            ARCH_OPT="$option_arch_value"
+        else
+            ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/x86.*/i386/ -e s/ppc.*/powerpc/)
+        fi
+
+        # Validate the proposed architecture value.
+        case "$ARCH_OPT" in
+            i386)
+            case "$(uname -m)" in
+                x86_64|ia64|i386|i486|i586|i686)
+                ARCH=i386
+                ;;
+                *)
+                printf `eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`, i386 $(uname -m)
+                exit 1
+                ;;
+            esac
+            ;;
+            powerpc)
+            case "$(uname -m)" in
+                ppc64|powerpc)
+                ARCH=powerpc
+                ;;
+                *)
+                printf `eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`, powepc $(uname -m)
+                exit 1
+                ;;
+            esac
+            ;;
+            *)
+            printf `eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`, $ARCH_OPT
+			printf `eval_gettext "       supported values are: %s"`, "i386 powerpc"
+            exit 1
+            ;;
+        esac      
+        ;;
+esac

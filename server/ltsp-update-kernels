@@ -7,7 +7,7 @@ umask 022
 
 TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
-LTSPROOT=/opt/ltsp
+test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
 ARCH=$(dpkg --print-architecture)
 
 if [ ! -d $TFTPBOOT ] ; then
@@ -24,7 +24,7 @@ case $ARCH in
 	;;
 esac
 
-for file in $LTSPROOT/*/boot/$KERNEL* $LTSPROOT/*/boot/initrd.img*; do
+for file in $LTSPROOT/*/boot/$KERNEL* $LTSPROOT/*/boot/initrd.img* $LTSPROOT/*/boot/System.map*; do
     cp -a -v "$file" $TFTPBOOT
 done
 
@@ -34,7 +34,7 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
         mkdir $PXECFG
     fi
     cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img quiet splash
+DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
 EOF
 else
     echo "Skipping PXE images.  Install the syslinux package if you need them."
@@ -71,9 +71,9 @@ if which mkelf-linux >/dev/null; then
         fi
 
         if [ -f "$initrd" ]; then
-            mkelf-linux -o $nbi $kernel $initrd
+            mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
         else
-            mkelf-linux -o $nbi $kernel
+            mkelf-linux --ip=dhcp -o $nbi $kernel
         fi
     done
 else
@@ -110,6 +110,38 @@ if which netabootwrap >/dev/null; then
     done
 else
     echo "Skipping netabootwrap images.  Install the aboot package if you need them."
+fi
+
+if which elftoaout >/dev/null ; then
+    for kernel in $TFTPBOOT/vmlinuz*; do
+        basename=$(basename "$kernel")
+        SUB_ARCH=$(uname -m)
+	piggyback_cmd=""
+	case $SUB_ARCH in
+            sparc64) piggyback_cmd=piggyback64 ;;
+            sparc32) piggyback_cmd=piggyback32 ;;
+	esac
+        if [ "$basename" = "vmlinuz" ]; then
+            initrd=$TFTPBOOT/initrd.img
+	    sysmap=$TFTPBOOT/System.map
+            nbi=$TFTPBOOT/$SUB_ARCH.img
+        else
+            version=${basename##vmlinuz-}
+            initrd=$TFTPBOOT/initrd.img-$version
+	    sysmap=$TFTPBOOT/System.map-$version
+            nbi=$TFTPBOOT/$SUB_ARCH.img-$version
+        fi
+	# TODO: proper tempfile handline
+        gzip -cd $kernel > $nbi.tmp
+        elftoaout -o $nbi $nbi.tmp
+        if [ -f "$initrd" ]; then
+      	    $piggyback_cmd $nbi $sysmap $initrd
+        else
+      	    $piggyback_cmd $nbi $sysmap
+        fi
+    done
+else
+    echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
 fi
 
 #for file in $TFTPBOOT/*; do

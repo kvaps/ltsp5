@@ -1,0 +1,13 @@
+case "$MODE" in
+    before-install)
+        case "$DIST" in
+            sid)
+                echo `eval_gettext "NOTE: disabling security APT source for sid.  It does not exist."`
+                NOSECURITY=true
+                ;;
+            sarge)
+                EARLY_PACKAGES="$EARLY_PACKAGES devfsd"
+                ;;
+        esac
+        ;;
+esac

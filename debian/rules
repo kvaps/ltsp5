@@ -8,15 +8,33 @@
 DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
 DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
 
+update-po:
+    # Build pot file for our scripts
+	@FILES=""
+	@echo -n "Updating ltsp.pot... "; \
+	for f in server/ltsp-build-client server/plugins/*/*; do \
+		FILES="$$FILES $$f"; \
+	done; \
+	xgettext --language=Shell -o po/ltsp.pot $$FILES; \
+	echo done
 
-build: build-stamp
+	@echo "Merging old translations..."; \
+	(cd po; \
+	for f in *.po; do \
+		msgmerge -U $$f ltsp.pot; \
+		echo -n "$$f: "; msgfmt --statistics $$f; \
+	done)
+
+    # Debconf translation update
+	debconf-updatepo
+
+build: build-stamp update-po
 build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
 	cd client/lp_server && ./configure --prefix=/usr
 	$(MAKE) -C client/lp_server
-
 	touch build-stamp
 
 clean:
@@ -63,6 +81,7 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installexamples -a
 	dh_install -a
+	dh_installdebconf -a
 	dh_installinit -a --no-start
 	dh_installinit -pltsp-client --name=ltsp-client-setup --no-start -u"start 32 S ."
 	dh_link -a

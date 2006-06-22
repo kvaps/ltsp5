@@ -27,11 +27,16 @@ test -x $DAEMON || exit 0
 . /usr/lib/ltsp/ltsp_functions
 . /usr/lib/ltsp/ltsp_config
 
+warn() {
+    msg="$1"
+    logger -p user.warning -t ltsp-client  "warning: $msg"
+}
+
 start_sound() {
     if [ -n "$SOUND" ]; then
         # Detect and report a common problem with thin clients
 		if [ ! -f /dev/dsp ] ; then
-		    echo "Sound requested but /dev/dsp is missing.  Continuing."
+		    warn "Sound requested but /dev/dsp is missing.  Continuing."
 		fi
 		case "$SOUND_DAEMON" in
     	    esd|'') # The default when no value is set
@@ -43,7 +48,7 @@ start_sound() {
     	        #aumix-minimal -v100 -w100 -c90 -m10
     	        ;;
     	    *)
-    	        echo "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
+    	        warn "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
     	        ;;
     	esac
     fi

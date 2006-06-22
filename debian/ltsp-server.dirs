@@ -1,2 +1,2 @@
 var/lib/tftpboot/ltsp
-opt/ltsp
+usr/share/ltsp/scripts

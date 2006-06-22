@@ -2,3 +2,4 @@ client/ldm usr/sbin
 client/ldm-askpass usr/lib/ltsp
 client/greeters usr/lib/ltsp
 client/themes usr/share/ldm
+client/subprocess.py usr/lib/ltsp/python

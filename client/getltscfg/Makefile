@@ -7,7 +7,7 @@ LIBS=-lfl -lpopt
 ##LIBS=-lfl -ll -lpopt
 YFLAGS=-v -d
 LDFLAGS=-s
-CCFLAGS=-Wall $(CFLAGS)
+CCFLAGS=-W -Wall $(CFLAGS)
 
 getltscfg:	getltscfg.o		\
 		parser.tab.o		\

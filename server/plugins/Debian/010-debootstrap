@@ -1,0 +1,9 @@
+case "$MODE" in
+    install)
+        if [ -n "$EXCLUDE" ] ; then
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
+        fi
+        # Install base packages
+        LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+        ;;
+esac

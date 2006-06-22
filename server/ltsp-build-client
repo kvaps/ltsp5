@@ -2,358 +2,174 @@
 
 set -e
 
-LC_ALL=C
-export LC_ALL
+TEXTDOMAIN="ltsp"                             # gettext domain
 
-if [ -f /etc/ltsp/ltsp-build-client.conf ]; then
-  . /etc/ltsp/ltsp-build-client.conf
-fi
+BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
+PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 
-get_help() {
-cat << EOF
- --base <basedir>  default base install directory
- --dist <dist>  debian distribution
- --components "<component1 component2>"  archive components
- --mirror  <mirror>  archive mirror url
- --extra-mirror "<mirror> <dist> <components>" additional mirror
- --security-mirror "<mirror> <dist> <components>" security mirror
- --exclude "package1,package2,package3"  exclude packages from base system
- --early-packages "<package1 package2>" list of initial packages to install
- --late-packages  "<package1 package2>" list of additional packages to install, after configuration tweaks (such as kernel)
- --serial-console  enable serial console
- --arch "i386|powerpc" builds an i386 chroot on amd64 or a powerpc chroot on ppc64. Errors if called on unsupported arch.
- --debconf-seeds  load debconf pre-seeding files in the chroot
- --help  display this help
- --apt-keys "<key1 key2>" keys to add to the apt keyring
-EOF
+KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
+
+PARAMS="config:"                              # store commandline params for getopt
+HELP_MESSAGE=""                               # store regular help messages
+ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
+
+
+##################################
+### Methods to be called by plugins
+##################################
+
+# Add an option for commandline parser
+#
+# Params:
+# $1 - param name
+# $2 - help message
+# $3 - regular|advanced
+# $4 - has a value? (true or false)
+add_option () {
+    case $4 in
+    true)
+        NAME="opt_with_param_$(echo $1 | tr '-' '_')"
+        eval "$NAME"=true
+        PARAMS="$PARAMS,$1:"
+        ;;
+    false)
+        PARAMS="$PARAMS,$1"
+        ;;
+    *)
+        eval_gettext "API ERROR: you need to provide true or false."
+        ;;
+    esac
+
+    MESSAGE=$(printf "   --%-24s %s" "$1" "$2")
+    if [ $3 = regular ]; then
+        HELP_MESSAGE="$HELP_MESSAGE $MESSAGE\n"
+    else
+        ADVANCED_HELP_MESSAGE="$ADVANCED_HELP_MESSAGE $MESSAGE\n"
+    fi
 }
 
-# Create a policy-rc.d to stop maintainer scripts using invoke-rc.d from
-# running init scripts during installation
-make_policyrcd() {
-    cat > $ROOT/usr/sbin/policy-rc.d <<EOF
-#!/bin/sh
-exit 101
-EOF
-    chmod a+rx $ROOT/usr/sbin/policy-rc.d
-}
-remove_policyrcd() {
-    rm -f $ROOT/usr/sbin/policy-rc.d
+# Print if using debug.
+#
+# Params:
+# $* - message to be print
+debug() {
+    if [ -n "$DEBUG" ]; then
+        echo "DEBUG: $@" > /dev/stderr
+    fi
 }
 
-# This way to make start-stop-daemon do not work on upgrades, when
-# start-stop-daemon is replaced with a new version.  I tried to use
-# dpkg-divert to solve this, but am not sure I got it right. [pere
-# 2004-07-29]
-make_dummy_start_stop_daemon() {
-    cat > $ROOT/sbin/start-stop-daemon.dummy <<EOF
-#!/bin/sh
-echo 1>&2
-echo 'Warning: Fake start-stop-daemon called, doing nothing.' 1>&2
-exit 0
-EOF
-    chmod a+rx $ROOT/sbin/start-stop-daemon.dummy
-    chroot $ROOT dpkg-divert --add --local --rename /sbin/start-stop-daemon
-    ln -s start-stop-daemon.dummy $ROOT/sbin/start-stop-daemon
+# Use it to mount thing on chroot and those will be automaticaly
+# unmounted when exit.
+#
+# Params:
+# $1 - what to mount
+# $2 - where to mount (skip the chroot path)
+# $3 - mount extra params
+chroot_mount() {
+    if mount $3 $1 $ROOT/$2; then
+        CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT/$2"
+    fi
 }
-remove_dummy_start_stop_daemon() {
-    rm $ROOT/sbin/start-stop-daemon
-    chroot $ROOT dpkg-divert --remove --local --rename /sbin/start-stop-daemon
+
+####################################
+### End of plugins public methods
+####################################
+
+# Load a bunch of files from a specific directory.
+#
+# Params:
+# $1 - where to look for the files to be loaded
+load_modules() {
+    DIR=$1
+    for file in $(run-parts --list $DIR); do
+        debug "  - Loading file $file..."
+        . $file
+    done
 }
+
+# Load our plugins.
+#
+# Params:
+# $1 - mode (configure|run)
+load_plugins() {
+    set -- "$@"
+    MODE=$1
+    VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
+    debug "Loading plugins in MODE=$MODE:"
+    load_modules $PLUGINS_BASE/common
+    if [ -d $PLUGINS_BASE/$VENDOR ]; then 
+        load_modules $PLUGINS_BASE/$VENDOR
+    fi
+}
+
+# Add commandline option to handle --help
+add_option "help" `eval_gettext "Display this help message"` "regular" "false"
+
+# Print usage information.
+usage() {
+    echo `eval_gettext "LTSP Build Client usage:"`
+    echo
+    echo "  ltsp-build-client <options>"
+    echo
+    echo -n `eval_gettext "  Regular options:"`
+    echo -e "$HELP_MESSAGE" | sort
+    echo
+    echo -n `eval_gettext "  Advanced options:"`
+    echo -e "$ADVANCED_HELP_MESSAGE" | sort
+}
+
+# Clean up the chroot and exit.
 on_exit() {
-    remove_dummy_start_stop_daemon
-    remove_policyrcd
-
-    # umount bind mounts
-    for dir in $umounts ; do
-	umount $dir
+    for dir in $CHROOT_MOUNTED ; do
+        umount $dir
     done
 
     if [ true = "$run_successfull" ] ; then
-	echo "info: LTSP client installation completed successfully"
+        eval_gettext "info: LTSP client installation completed successfully"
     else
-	echo "error: LTSP client installation ended abnormally"
+        eval_gettext "error: LTSP client installation ended abnormally"
     fi
 }
 
-rc_cleanup() {
-    LEVEL=$1; shift
+load_plugins 'commandline'
 
-    if [ $(echo $LEVEL| grep [2-5]) ]; then
-        suffix="2 3 4 5"
-        echo "Cleaning up startup links in init levels: $suffix ..."
+# Parse the commandline options
+if ! TEMP=`getopt -o '' --long $PARAMS -n "$0" -- "$@"`; then
+    usage >&2; exit 1; 
+fi
+eval set -- "$TEMP"
+
+if [ "--config" = "$1" ] && [ -n "$2" ]; then
+    . "$2"
+    test "$#" -gt 1 && shift 2
+elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
+    . /etc/ltsp/ltsp-build-client.conf
+fi
+
+while [ ! -z "$1" ] && [ "$1" != "--" ]; do
+    OPTION=$(echo ${1:2} | tr "-" "_") # remove -- from variable name
+    shift
+    NAME="opt_with_param_$OPTION"
+    VARIABLE=option_${OPTION}_value
+    if [ "${!NAME}" = true ]; then
+        eval $VARIABLE=\"$1\"
+        shift
     else
-        suffix=$LEVEL
-        echo "Cleaning up startup links in rc$suffix.d ..."
+        eval $VARIABLE=true
     fi
-
-    RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
-
-    for match in $@; do
-        RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
-    done
-
-    for link in $RC_DIR; do
-	name=$(echo $link|sed s/^S[0-9]*//g)
-	seq_number=$(printf %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g))
-	if [ -f $ROOT/etc/init.d/$name ] ; then
-	    chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
-	    chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
-	fi
-    done
-}
-
-# process commandline arguments
-while [ "$#" -gt "0" ]; do
-  case $1 in
-    --base) BASE="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --dist) DIST="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --components) COMPONENTS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --mirror) MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --extra-mirror) EXTRA_MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --exclude) EXCLUDE="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --security-mirror) SECURITY_MIRROR="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --early-packages) EARLY_PACKAGES="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --late-packages) LATE_PACKAGES="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --apt-keys) APT_KEYS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    --arch) ARCH_OPT="$2"
-      test "$#" -gt "0" && shift
-      case $ARCH_OPT in
-        i386)
-	  case $(dpkg --print-architecture) in
-	    amd64|ia64|i386)
-	        ARCH=i386
-	        ;;
-	    *)
-	        echo "ERROR: --arch i386 called on unsupported arch: "$(dpkg --print-architecture)
-	        exit 1
-	        ;;
-	  esac
-	  ;;
-	powerpc)
-	  case $(dpkg --print-architecture) in
-            ppc64|powerpc)
- 	       ARCH=powerpc
- 	       ;;
- 	    *)
- 	       echo "ERROR: --arch powerpc called on unsupported arch: "$(dpkg --print-architecture)
- 	       exit 1
- 	       ;;
-          esac
-          ;;
-        *)
-	  echo "ERROR: unsupported --arch argument: "$ARCH_OPT
-	  exit 1
-	  ;;
-      esac	  
-      ;;
-    --help) get_help
-      exit 0
-      ;;
-    --serial-console) use_serial_console="true"
-      ;;
-    --debconf-seeds) DEBCONF_SEEDS="$2"
-      test "$#" -gt "0" && shift
-      ;;
-    *) echo "ERROR: unknown option: $1"
-      get_help
-      exit 1
-      ;;
-  esac
-  test "$#" -gt "0" && shift
 done
 
-# Load package defaults for the variables that are still unset
-if [ -f /usr/share/ltsp/ltsp-build-client.conf ]; then
-    . /usr/share/ltsp/ltsp-build-client.conf ]
+if [ -n "$option_help_value" ]; then
+    usage
+    exit 0
 fi
-
-# set defaults
-test -z "$ARCH" && ARCH=$(dpkg --print-architecture)
-test -z "$BASE" && BASE=/opt/ltsp
-test -z "$DIST" && DIST=dapper
-
-case $ARCH in
-	i386)
-	KERNEL_ARCH=386
-	;;
-	amd64)
-	KERNEL_ARCH=amd64-generic
-	;;
-	*)
-	KERNEL_ARCH=$ARCH
-	;;
-esac
-
-test -z "$MIRROR" && MIRROR=http://archive.ubuntu.com/ubuntu
-test -z "$COMPONENTS" && COMPONENTS="main restricted"
-test -z "$EARLY_PACKAGES" && EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
-test -z "$LATE_PACKAGES" && LATE_PACKAGES="linux-image-$KERNEL_ARCH"
-test -z "$RCS_WHITELIST" &&  RCS_WHITELIST="mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"
-test -z "$RC2_WHITELIST" && RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin"
-
-# define the root for the install
-ROOT=$BASE/$ARCH
-
-if [ -d $ROOT ] ; then
-    echo "NOTE: Root directory $ROOT already exists.  This might lead to problems."
-fi
-
-if [ -n "$EXTRA_MIRROR" ] && [ -z "$(echo $EXTRA_MIRROR | awk '{print $2}')" ]; then
-  echo "NOTE: adding default dist and components to extra mirror:"
-  EXTRA_MIRROR="$EXTRA_MIRROR $DIST $COMPONENTS"
-  echo "$EXTRA_MIRROR"
-fi
-
-if [ -n "$SECURITY_MIRROR" ] && [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
-  echo "NOTE: adding default dist and components to security mirror:"
-  SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
-  echo "$SECURITY_MIRROR"
-fi
-
-if [ -n "$EXCLUDE" ] ; then
-    DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
-fi
-
-# Install base packages
-debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
-
-# Root password is empty by default, lock it
-chroot $ROOT passwd -l root
-
-if [ -n "$DEBCONF_SEEDS" ]; then
-  # load debconf preseeding files
-  for seed in $DEBCONF_SEEDS; do
-    cat $seed | chroot $ROOT debconf-set-selections
-  done
-fi
-
-# move sources.list aside
-test -f $ROOT/etc/apt/sources.list && mv -vf $ROOT/etc/apt/sources.list $ROOT/etc/apt/sources.list.old
-for mirror in "$MIRROR $DIST $COMPONENTS" "$EXTRA_MIRROR" "$SECURITY_MIRROR"; do
-  if [ -n "$mirror" ]; then
-    echo "deb $mirror" >> $ROOT/etc/apt/sources.list
-    case $mirror in
-      file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
-        mkdir -p $ROOT/$dir
-        mount --bind $dir $ROOT/$dir
-        umounts="$umounts $ROOT/$dir"
-        ;;
-    esac  
-  fi
-done
 
 trap on_exit EXIT
-make_policyrcd
-make_dummy_start_stop_daemon
 
-# add keys to the apt keyring
-for key in $APT_KEYS ; do
-  cat $key | chroot $ROOT apt-key add -
+for hook in configure before-install install after-install finalization; do
+    load_plugins "$hook"
 done
-
-APT_EXTRA_OPTS="-o Acquire::gpgv::Options::=--ignore-time-conflict"
-chroot $ROOT apt-get $APT_EXTRA_OPTS update
-
-DEBIAN_FRONTEND=noninteractive
-export DEBIAN_FRONTEND
-
-# some packages require proc to be mounted
-chroot $ROOT mount -t proc proc /proc && umounts="$umounts $ROOT/proc"
-
-# get package updates for base system
-chroot $ROOT apt-get $APT_EXTRA_OPTS -y dist-upgrade
-
-# Install remaining packages
-chroot $ROOT apt-get $APT_EXTRA_OPTS -y install $EARLY_PACKAGES </dev/null
-
-# Setup for kernel install
-cat <<EOF > $ROOT/etc/kernel-img.conf
-warn_initrd = No
-do_symlinks = yes
-relative_links = yes
-link_in_boot = yes
-do_bootloader = no
-EOF
-
-if [ -f $ROOT/etc/mkinitramfs/initramfs.conf ] && [ -d $ROOT/usr/share/doc/initramfs-tools ]; then
-  # configuring for initramfs-tools
-  echo "ramdisk=/usr/sbin/mkinitramfs" >> $ROOT/etc/kernel-img.conf
-  sed -i -e 's/^BOOT=.*$/BOOT=nfs/' -e 's/MODULES=.*$/MODULES=netboot/' $ROOT/etc/mkinitramfs/initramfs.conf
-elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ]; then
-  # configuring for initrd-netboot-tools
-  sed -i -e 's/^ROOT=.*$/ROOT=""/' -e 's/^MODULES=.*$/MODULES=none/' $ROOT/etc/mkinitrd/mkinitrd.conf
-else
-  echo "WARNING: no known network boot methods found..."
-  echo "tried initramfs-tools and initrd-netboot-tools"
-  echo "manual configuration may be required"
-fi
-
-# Install additional packages, such as the kernel
-chroot $ROOT apt-get $APT_EXTRA_OPTS -y install $LATE_PACKAGES </dev/null
-
-ltsp-update-kernels
-ltsp-update-sshkeys
-
-echo "ltsp" > $ROOT/etc/hostname
-touch $ROOT/etc/hosts
-
-touch $ROOT/etc/nbd-client
-
-# Pass default X keyboard config from server to the client
-debconf-get-selections | egrep 'xserver-.+/config/inputdevice/keyboard' | \
-  chroot $ROOT debconf-set-selections
-
-if [ -e /etc/console/boottime.kmap.gz ]; then
-  cp /etc/console/boottime.kmap.gz $ROOT/etc/console/boottime.kmap.gz
-fi
-
-# Avoid the need to update mtab.  Save memory on ramdisk
-rm $ROOT/etc/mtab
-ln -s /proc/mounts $ROOT/etc/mtab
-
-# Quiet down fsck during boot
-echo "proc /proc proc defaults 0 0" > $ROOT/etc/fstab
-
-chroot $ROOT apt-get clean
-
-# enable serial console
-if [ "true" = "$use_serial_console" ] && [ -z "$(egrep ^T0 $ROOT/etc/inittab)" ]; then
-  echo "Enabling serial console..."
-  echo "T0:2345:respawn:/sbin/getty -L ttyS0 38400 screen" >> "$ROOT/etc/inittab"
-fi
-
-rc_cleanup S $RCS_WHITELIST
-rc_cleanup 2 $RC2_WHITELIST
-
-# Export LTSP chroot using NFS to the LTSP client network
-if ! grep -q "^$BASE" /etc/exports ; then
-            cat <<EOF >> /etc/exports
-# Automatically added by ltsp-server
-$BASE       *(ro,no_root_squash,async)
-EOF
-            invoke-rc.d nfs-kernel-server reload
-fi
 
 run_successfull=true # report success to on_exit()
 

@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+        LC_ALL=C chroot $ROOT apt-get update
+        export APT_GET_OPTS="$APT_GET_OPTS -o Acquire::gpgv::Options::=--ignore-time-conflict"
+        ;;
+esac
