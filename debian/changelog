@@ -23,8 +23,9 @@ ltsp (0.87debian2) UNRELEASED; urgency=low
   * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
     <chaton@debian.org> for the bug report and updated file. 
     (Closes: #374656)
+  * Add support to initramfs-tools >= 0.64.
 
- -- Otavio Salvador <otavio@debian.org>  Tue,  6 Jun 2006 01:51:25 -0300
+ -- Otavio Salvador <otavio@debian.org>  Fri, 23 Jun 2006 15:47:04 -0300
 
 ltsp (0.87debian1) unstable; urgency=low
 
