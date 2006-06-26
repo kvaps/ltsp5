@@ -7,6 +7,7 @@ ltsp (0.88) edgy; urgency=low
     at all.
   * added a touch $ROOT/etc/ltsp_chroot to the 020-rootpath plugin to make
     ltsp-client installable again.
+  * quieten down the rc_cleanup function to not spill locale errors
   * changed default distro to edgy
   * first upload to edgy
 
