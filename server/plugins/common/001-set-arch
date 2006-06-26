@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "arch" `eval_gettext "set the target architecture"` "advanced" "true"
+        add_option "arch" "`eval_gettext "set the target architecture"`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_arch_value" ]; then
@@ -17,25 +17,25 @@ case "$MODE" in
                 ARCH=i386
                 ;;
                 *)
-                printf `eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`, i386 $(uname -m)
+                printf "`eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`", i386 $(uname -m)
                 exit 1
                 ;;
             esac
             ;;
             powerpc)
             case "$(uname -m)" in
-                ppc64|powerpc)
+                ppc64|ppc)
                 ARCH=powerpc
                 ;;
                 *)
-                printf `eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`, powepc $(uname -m)
+                printf "`eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`", powerpc $(uname -m)
                 exit 1
                 ;;
             esac
             ;;
             *)
-            printf `eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`, $ARCH_OPT
-			printf `eval_gettext "       supported values are: %s"`, "i386 powerpc"
+            printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
+			printf "`eval_gettext "       supported values are: %s"`", "i386 powerpc"
             exit 1
             ;;
         esac      

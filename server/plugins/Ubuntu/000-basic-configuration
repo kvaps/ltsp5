@@ -3,7 +3,7 @@ case "$MODE" in
         ARCH=$(dpkg --print-architecture)
         APT_GET_OPTS="-y"
 
-	DIST=dapper
+	DIST=edgy
 	MIRROR=http://archive.ubuntu.com/ubuntu
 	COMPONENTS="main restricted"
 	EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
@@ -14,6 +14,6 @@ case "$MODE" in
     after-install|finalization)
 	# Our code to hanlding after-install and finalization is
 	# exactly the same of Debian so we include it here.
-	. ../Debian/000-basic-configuration
+	. $PLUGINS_BASE/Debian/000-basic-configuration
 	;;
 esac
