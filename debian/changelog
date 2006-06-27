@@ -1,3 +1,11 @@
+ltsp (0.88debian1) UNRELEASED; urgency=low
+
+  [ Otavio Salvador ]
+  * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
+    specific.
+
+ -- Otavio Salvador <otavio@debian.org>  Tue, 27 Jun 2006 10:02:31 -0300
+  
 ltsp (0.88) edgy; urgency=low
 
   * merged debian modularization into upstream branch
