@@ -3,6 +3,7 @@ ltsp (0.88debian1) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
     specific.
+    - Fix problem with gettext use. (Closes: #375601)
 
  -- Otavio Salvador <otavio@debian.org>  Tue, 27 Jun 2006 10:02:31 -0300
   
