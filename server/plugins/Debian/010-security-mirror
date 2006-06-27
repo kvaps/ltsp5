@@ -3,7 +3,7 @@ case "$MODE" in
         if [ "$NOSECURITY" != true ]; then
             SECURITY_MIRROR=${SECURITY_MIRROR:-"http://security.debian.org/"}
             if [ -z "$(echo $SECURITY_MIRROR | awk '{print $2}')" ]; then
-            echo `eval_gettext "NOTE: adding default dist and components to security mirror:"`
+            echo "`eval_gettext "NOTE: adding default dist and components to security mirror:"`"
             SECURITY_MIRROR="$SECURITY_MIRROR $DIST/updates $COMPONENTS"
             echo "$SECURITY_MIRROR"
             fi

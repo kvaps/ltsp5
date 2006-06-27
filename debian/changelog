@@ -1,3 +1,18 @@
+ltsp (0.88) edgy; urgency=low
+
+  * merged debian modularization into upstream branch
+  * merged debian translations
+  * fixed quoting of all strings 
+  * added a line that sources gettext.sh to ltsp-build-client to make it work
+    at all.
+  * added a touch $ROOT/etc/ltsp_chroot to the 020-rootpath plugin to make
+    ltsp-client installable again.
+  * quieten down the rc_cleanup function to not spill locale errors
+  * changed default distro to edgy
+  * first upload to edgy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 22 Jun 2006 10:09:02 +0200
+
 ltsp (0.87debian2) unstable; urgency=low
 
   [ Otavio Salvador ]

@@ -29,6 +29,7 @@ case "$MODE" in
         ;;
     finalization)
         rc_cleanup() {
+            LANG=C
             LEVEL=$1; shift
         
             if [ $(echo $LEVEL| grep [2-5]) ]; then

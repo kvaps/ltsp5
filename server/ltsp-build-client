@@ -14,6 +14,8 @@ PARAMS="config:"                              # store commandline params for get
 HELP_MESSAGE=""                               # store regular help messages
 ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 
+. gettext.sh
+
 
 ##################################
 ### Methods to be called by plugins
@@ -37,7 +39,7 @@ add_option () {
         PARAMS="$PARAMS,$1"
         ;;
     *)
-        eval_gettext "API ERROR: you need to provide true or false."
+        echo "`eval_gettext "API ERROR: you need to provide true or false."`"
         ;;
     esac
 
@@ -104,7 +106,7 @@ load_plugins() {
 }
 
 # Add commandline option to handle --help
-add_option "help" `eval_gettext "Display this help message"` "regular" "false"
+add_option "help" "`eval_gettext "Display this help message"`" "regular" "false"
 
 # Print usage information.
 usage() {
@@ -126,9 +128,9 @@ on_exit() {
     done
 
     if [ true = "$run_successfull" ] ; then
-        eval_gettext "info: LTSP client installation completed successfully"
+        echo "`eval_gettext "info: LTSP client installation completed successfully"`"
     else
-        eval_gettext "error: LTSP client installation ended abnormally"
+        echo "`eval_gettext "error: LTSP client installation ended abnormally"`"
     fi
 }
 

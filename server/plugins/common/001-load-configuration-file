@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "config" "Load a user specific configuration file" "advanced" "false"
+        add_option "config" "`eval_gettext "Load a user specific configuration file"`" "advanced" "false"
         ;;
     configure)
         CONFIG="/etc/ltsp/ltsp-build-client.conf"

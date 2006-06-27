@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "debconf-seeds" `eval_gettext "load debconf seeding in chroot the after install"` "advanced" "true"
+        add_option "debconf-seeds" "`eval_gettext "load debconf seeding in chroot the after install"`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_debconf_seeds_value" ]; then
