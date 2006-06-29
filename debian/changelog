@@ -4,6 +4,12 @@ ltsp (0.88debian1) UNRELEASED; urgency=low
   * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
     specific.
     - Fix problem with gettext use. (Closes: #375601)
+  
+  [ Tiago Bortoletto Vaz ]
+  * Add a correct i18n support for this package, using a specific Makefile
+    to handle gettext
+  * Fix ltsp-build-client script to get gettext message catalogs from locale
+    dir
 
  -- Otavio Salvador <otavio@debian.org>  Tue, 27 Jun 2006 10:02:31 -0300
   
