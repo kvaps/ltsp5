@@ -8,21 +8,14 @@
 DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
 DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
 
-update-po:
-
-    # Using po specific Makefile to build message catalogs
-	$(MAKE) -C po
-
-    # Debconf translation update
-	debconf-updatepo
-
-build: build-stamp update-po
+build: build-stamp
 build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
 	cd client/lp_server && ./configure --prefix=/usr
 	$(MAKE) -C client/lp_server
+	$(MAKE) -C po update-po
 	touch build-stamp
 
 clean:
@@ -34,7 +27,10 @@ clean:
 	-$(MAKE) -C client/lp_server distclean
     
     # Using po specific Makefile to clean message catalogs
-	$(MAKE) -C po update-po clean
+	$(MAKE) -C po clean
+
+    # Debconf translation update
+	debconf-updatepo
 
 	dh_clean
 
