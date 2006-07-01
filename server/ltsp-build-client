@@ -2,7 +2,8 @@
 
 set -e
 
-TEXTDOMAIN="ltsp"                             # gettext domain
+export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)
+export TEXTDOMAINDIR=/usr/share/locale        # locale dir for gettext codes
 
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place

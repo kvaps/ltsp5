@@ -5,7 +5,18 @@ ltsp (0.88debian1) UNRELEASED; urgency=low
     specific.
     - Fix problem with gettext use. (Closes: #375601)
 
- -- Otavio Salvador <otavio@debian.org>  Tue, 27 Jun 2006 10:02:31 -0300
+  [ Tiago Bortoletto Vaz ]
+  * Add a correct i18n support for this package, using a specific Makefile
+    to handle gettext
+  * Fix ltsp-build-client script to get gettext message catalogs from locale
+    dir
+
+  [ Otavio Salvador ]
+  * Simplified debian/rules a little more removing the useless update-po
+    target. Since all its logic was move to po/Makefile file we can make
+    things clear removing it from rules.
+
+ -- Otavio Salvador <otavio@debian.org>  Thu, 29 Jun 2006 03:07:24 -0300
   
 ltsp (0.88) edgy; urgency=low
 

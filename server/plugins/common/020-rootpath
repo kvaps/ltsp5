@@ -2,8 +2,7 @@ case "$MODE" in
     before-install)
         ROOT=$BASE/$ARCH
         if [ ! -d "$ROOT" ]; then
-            mkdir -p "$ROOT/etc"
-            touch $ROOT/etc/ltsp_chroot
+            mkdir -p "$ROOT"
         fi
         ;;
 esac
