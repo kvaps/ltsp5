@@ -3,7 +3,7 @@ case "$MODE" in
         ROOT=$BASE/$ARCH
         if [ ! -d "$ROOT" ]; then
             mkdir -p "$ROOT/etc"
-			touch $ROOT/etc/ltsp_chroot
+            touch $ROOT/etc/ltsp_chroot
         fi
         ;;
 esac
