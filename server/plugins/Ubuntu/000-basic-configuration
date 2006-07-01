@@ -2,18 +2,17 @@ case "$MODE" in
     configure)
         ARCH=$(dpkg --print-architecture)
         APT_GET_OPTS="-y"
-
-	DIST=edgy
-	MIRROR=http://archive.ubuntu.com/ubuntu
-	COMPONENTS="main restricted"
-	EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
-	RCS_WHITELIST="mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
-	RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin stop-bootlogd"
-	OVERRIDE_EXPORTS="true"
+        DIST=edgy
+        MIRROR=http://archive.ubuntu.com/ubuntu
+        COMPONENTS="main restricted"
+        EARLY_PACKAGES="x-window-system-core ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
+        RCS_WHITELIST="mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
+        RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin stop-bootlogd"
+        OVERRIDE_EXPORTS="true"
         ;;
     after-install|finalization)
-	# Our code to hanlding after-install and finalization is
-	# exactly the same of Debian so we include it here.
-	. $PLUGINS_BASE/Debian/000-basic-configuration
-	;;
+        # Our code to hanlding after-install and finalization is
+        # exactly the same of Debian so we include it here.
+        . $PLUGINS_BASE/Debian/000-basic-configuration
+        ;;
 esac
