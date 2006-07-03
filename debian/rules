@@ -8,33 +8,14 @@
 DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
 DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
 
-update-po:
-    # Build pot file for our scripts
-	@FILES=""
-	@echo -n "Updating ltsp.pot... "; \
-	for f in server/ltsp-build-client server/plugins/*/*; do \
-		FILES="$$FILES $$f"; \
-	done; \
-	xgettext --language=Shell -o po/ltsp.pot $$FILES; \
-	echo done
-
-	@echo "Merging old translations..."; \
-	(cd po; \
-	for f in *.po; do \
-		msgmerge -U $$f ltsp.pot; \
-		echo -n "$$f: "; msgfmt --statistics $$f; \
-	done)
-
-    # Debconf translation update
-	debconf-updatepo
-
-build: build-stamp update-po
+build: build-stamp
 build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
 	cd client/lp_server && ./configure --prefix=/usr
 	$(MAKE) -C client/lp_server
+	$(MAKE) -C po update-po
 	touch build-stamp
 
 clean:
@@ -44,6 +25,12 @@ clean:
 
 	-$(MAKE) -C client/getltscfg clean
 	-$(MAKE) -C client/lp_server distclean
+    
+    # Using po specific Makefile to clean message catalogs
+	$(MAKE) -C po clean
+
+    # Debconf translation update
+	debconf-updatepo
 
 	dh_clean
 
@@ -52,6 +39,9 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+
+    # Using po specific Makefile to install message catalogs
+	$(MAKE) -C po install DESTDIR=$(CURDIR)/debian/ltsp-server/
 
 # Build architecture-independent files here.
 binary-indep: build install
