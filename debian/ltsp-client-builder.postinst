@@ -33,8 +33,8 @@ apt-install ltsp-server
 
 db_progress STEP 1
 
-DEBIAN_PRIORITY=critical 
-in-target /target /usr/sbin/ltsp-build-client --mirror file:///cdrom
+DEBIAN_PRIORITY=critical
+in-target /usr/sbin/ltsp-build-client --mirror file:///cdrom
 
 db_progress STEP 1
 
