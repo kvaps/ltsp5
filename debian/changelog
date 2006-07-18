@@ -1,3 +1,19 @@
+ltsp (0.89) edgy; urgency=low
+
+  * merged fixes from mainline
+  [Oliver Grawert]
+    * fix wrong kernel selection on ubuntu
+    * switch ltsp-build-client temporary to /bin/bash until the
+      bashisms are fixed
+  [ Otavio Salvador ]
+    * 001-set-exclude, 001-set-dist: moved to server/plugins/common
+      since it's very agnostic and every vendor that use this system
+      will need to have a way to avoid a package inclusion.
+      Those symbolic links was also removed from Ubuntu
+      plugins repository.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 14 Jul 2006 21:13:46 +0200
+
 ltsp (0.88debian1) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
