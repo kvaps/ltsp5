@@ -1,3 +1,13 @@
+ltsp (0.92) edgy; urgency=low
+
+  * Add a /etc/network/if-up.d/ltsp-keys script to copy the sshkeys on every
+    interface start, make ltsp-update-sshkeys use logger for output, log to
+    syslog and add descriptive error messages, this avoids breakage if the
+    server IP was changed and makes sure the user doesnt need to run 
+    ltsp-update-sshkeys separately.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 20 Jul 2006 13:47:18 +0200
+
 ltsp (0.91) edgy; urgency=low
 
   *  fix all the syntax in the udeb to match latest d-i code and to not fail
