@@ -1,0 +1,9 @@
+#!/bin/sh
+# make sure the ssh keys for ldm are freshly copied to the 
+# ltsp client chroot so we avoid breakage if the IP changed
+
+[ "$IFACE" != "lo" ] || exit 0
+
+test -f /usr/sbin/ltsp-update-sshkeys || exit 0
+
+/usr/sbin/ltsp-update-sshkeys >/dev/null 2>&1 || true
