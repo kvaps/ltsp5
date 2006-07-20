@@ -14,7 +14,9 @@ case "$MODE" in
             # TODO: handle when PARTICIPATE is not set
             sed -i -e 's,PARTICIPATE=.*,PARTICIPATE="yes",g' $ROOT/etc/popularity-contest.conf
            
-            # TODO: install popularity-contest-ltsp into server's cron.weekly 
+            if [ ! -f /etc/cron.weekly/popularity-contest-ltsp ]; then
+                cp /usr/share/ltsp/scripts/popularity-contest-ltsp /etc/cron.weekly/
+            fi
         fi
         ;;
 esac
