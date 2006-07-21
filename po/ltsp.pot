@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-08 16:03-0300\n"
+"POT-Creation-Date: 2006-07-03 18:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,164 +16,158 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: server/ltsp-build-client:40
+#: ../server/ltsp-build-client:43
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr ""
 
-#: server/ltsp-build-client:107
+#: ../server/ltsp-build-client:110
 #, sh-format
 msgid "Display this help message"
 msgstr ""
 
-#: server/ltsp-build-client:111
+#: ../server/ltsp-build-client:114
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr ""
 
-#: server/ltsp-build-client:115
+#: ../server/ltsp-build-client:118
 #, sh-format
 msgid "  Regular options:"
 msgstr ""
 
-#: server/ltsp-build-client:118
+#: ../server/ltsp-build-client:121
 #, sh-format
 msgid "  Advanced options:"
 msgstr ""
 
-#: server/ltsp-build-client:129
+#: ../server/ltsp-build-client:132
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr ""
 
-#: server/ltsp-build-client:131
+#: ../server/ltsp-build-client:134
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
 
-#: server/plugins/common/000-enable-debug:3
-#, sh-format
-msgid "Enable debug support"
-msgstr ""
-
-#: server/plugins/common/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
-msgstr ""
-
-#: server/plugins/common/001-set-arch:20 server/plugins/common/001-set-arch:31
-#, sh-format
-msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr ""
-
-#: server/plugins/common/001-set-arch:37
-#, sh-format
-msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
-
-#: server/plugins/common/001-set-arch:38
-#, sh-format
-msgid "       supported values are: %s"
-msgstr ""
-
-#: server/plugins/common/010-set-base:3
-#, sh-format
-msgid "Set the default base install directory"
-msgstr ""
-
-#: server/plugins/common/030-rootpass:3
-#, sh-format
-msgid "prompt to set the root password, defaults to disabled"
-msgstr ""
-
-#: server/plugins/Debian/001-apt-keys:3 server/plugins/Ubuntu/001-apt-keys:3
+#: ../server/plugins/Debian/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
 msgstr ""
 
-#: server/plugins/Debian/001-set-accept-unsigned-packages:3
-#: server/plugins/Ubuntu/001-set-accept-unsigned-packages:3
+#: ../server/plugins/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install."
 msgstr ""
 
-#: server/plugins/Debian/001-set-components:3
-#: server/plugins/Ubuntu/001-set-components:3
+#: ../server/plugins/Debian/001-set-components:3
 #, sh-format
 msgid "Set the components to be used in mirror"
 msgstr ""
 
-#: server/plugins/Debian/001-set-dist:3 server/plugins/Ubuntu/001-set-dist:3
+#: ../server/plugins/Debian/010-debconf-seeds:3
 #, sh-format
-msgid "Set the distribution to be used for install"
+msgid "load debconf seeding in the chroot after install"
 msgstr ""
 
-#: server/plugins/Debian/001-set-exclude:3
-#: server/plugins/Ubuntu/001-set-exclude:3
-#, sh-format
-msgid "exclude packages from the initial chroot"
-msgstr ""
-
-#: server/plugins/Debian/010-debconf-seeds:3
-#: server/plugins/Ubuntu/010-debconf-seeds:3
-#, sh-format
-msgid "load debconf seeding in chroot the after install"
-msgstr ""
-
-#: server/plugins/Debian/010-distribution-specific:5
+#: ../server/plugins/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
 msgstr ""
 
-#: server/plugins/Debian/010-manage-mirror:3
-#: server/plugins/Ubuntu/010-manage-mirror:3
+#: ../server/plugins/Debian/010-manage-mirror:3
 #, sh-format
 msgid "Set the mirror location"
 msgstr ""
 
-#: server/plugins/Debian/010-manage-mirror:4
-#: server/plugins/Ubuntu/010-manage-mirror:4
+#: ../server/plugins/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
 
-#: server/plugins/Debian/010-manage-mirror:5
-#: server/plugins/Ubuntu/010-manage-mirror:5
+#: ../server/plugins/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr ""
 
-#: server/plugins/Debian/010-manage-mirror:6
-#: server/plugins/Ubuntu/010-manage-mirror:6
+#: ../server/plugins/Debian/010-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
 msgstr ""
 
-#: server/plugins/Debian/010-security-mirror:6
+#: ../server/plugins/Debian/010-security-mirror:6
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
 msgstr ""
 
-#: server/plugins/Debian/010-serial-console:3
-#: server/plugins/Ubuntu/010-serial-console:3
+#: ../server/plugins/Debian/010-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr ""
 
-#: server/plugins/Debian/010-serial-console:12
-#: server/plugins/Ubuntu/010-serial-console:12
+#: ../server/plugins/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr ""
 
-#: server/plugins/Debian/030-early-packages:3
-#: server/plugins/Ubuntu/030-early-packages:3
+#: ../server/plugins/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed."
 msgstr ""
 
-#: server/plugins/Debian/030-late-packages:3
-#: server/plugins/Ubuntu/030-late-packages:3
+#: ../server/plugins/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation."
+msgstr ""
+
+#: ../server/plugins/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr ""
+
+#: ../server/plugins/common/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:20
+#: ../server/plugins/common/001-set-arch:31
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:37
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:38
+#, sh-format
+msgid "       supported values are: %s"
+msgstr ""
+
+#: ../server/plugins/common/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr ""
+
+#: ../server/plugins/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr ""
+
+#: ../server/plugins/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr ""
+
+#: ../server/plugins/common/030-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
 msgstr ""

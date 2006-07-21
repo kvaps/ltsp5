@@ -1,6 +1,6 @@
 case "$MODE" in
     finalization)
-	    if [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/mkinitramfs/initramfs.conf" ]; then
+        if [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/mkinitramfs/initramfs.conf" ]; then
             INITRAMFSCONF="$ROOT/etc/mkinitramfs/initramfs.conf"
         elif [ -x "$ROOT/usr/sbin/mkinitramfs-tools" ] && [ -f "$ROOT/etc/mkinitramfs-tools/initramfs.conf" ]; then
             INITRAMFSCONF="$ROOT/etc/mkinitramfs-tools/initramfs.conf"

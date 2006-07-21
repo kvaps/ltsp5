@@ -35,7 +35,7 @@ case "$MODE" in
             ;;
             *)
             printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
-			printf "`eval_gettext "       supported values are: %s"`", "i386 powerpc"
+            printf "`eval_gettext "       supported values are: %s"`", "i386 powerpc"
             exit 1
             ;;
         esac      

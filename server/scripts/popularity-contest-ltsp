@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# install this in the server's cron.weekly to have the terminal chroot
+# filesystems submit popularity-contest data
+
+# it requipres installing popularity-contest in each chroot, preferrably
+# configured to use HTTP POST, introduced in popularity-contest 1.30, as this
+# avoids the need for working mail in the chroot environment.
+
+# change this if you have chroots in other locations
+LTSP_BASE="/opt/ltsp"
+
+for base in $LTSP_BASE ; do
+    if [ -d "$LTSP_BASE" ]; then
+        # find all the top-level directories in $LTSP_BASE
+        for dir in $(find $LTSP_BASE -maxdepth 1 -type d) ; do
+            # only do the following if popularity-contest is installed, 
+            # /bin/true exists and returns true (in case of architecture mis-match),
+            # and chroot is available
+            if [ -x $dir/etc/cron.weekly/popularity-contest ] && [ -x $dir/bin/true ] && [ $dir/bin/true ] && [ -n "$(which chroot)" ] ; then
+                chroot $dir /etc/cron.weekly/popularity-contest
+            fi
+        done
+    fi
+done

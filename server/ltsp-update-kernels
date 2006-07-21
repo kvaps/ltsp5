@@ -16,12 +16,12 @@ if [ ! -d $TFTPBOOT ] ; then
 fi
 
 case $ARCH in
-	powerpc)
-	KERNEL=vmlinux
-	;;
-	*)
-	KERNEL=vmlinuz
-	;;
+    powerpc)
+    KERNEL=vmlinux
+    ;;
+    *)
+    KERNEL=vmlinuz
+    ;;
 esac
 
 for file in $LTSPROOT/*/boot/$KERNEL* $LTSPROOT/*/boot/initrd.img* $LTSPROOT/*/boot/System.map*; do
@@ -41,9 +41,9 @@ else
 fi
 
 if [ -f /usr/lib/yaboot/yaboot ]; then
-	cp /usr/lib/yaboot/yaboot $TFTPBOOT
-	YABOOTCONFROOT=$(echo $TFTPBOOT|sed s/ltsp//g)
-	cat > $YABOOTCONFROOT/yaboot.conf <<EOF
+    cp /usr/lib/yaboot/yaboot $TFTPBOOT
+    YABOOTCONFROOT=$(echo $TFTPBOOT|sed s/ltsp//g)
+    cat > $YABOOTCONFROOT/yaboot.conf <<EOF
 timeout=0
 default=ltsp
 root=/dev/ram
@@ -54,7 +54,7 @@ image=/ltsp/vmlinux
         append="quiet splash"
 EOF
 else
-	echo "Not on powerpc, skipping yaboot installation."
+    echo "Not on powerpc, skipping yaboot installation."
 fi
 
 if which mkelf-linux >/dev/null; then
@@ -116,28 +116,28 @@ if which elftoaout >/dev/null ; then
     for kernel in $TFTPBOOT/vmlinuz*; do
         basename=$(basename "$kernel")
         SUB_ARCH=$(uname -m)
-	piggyback_cmd=""
-	case $SUB_ARCH in
+        piggyback_cmd=""
+        case $SUB_ARCH in
             sparc64) piggyback_cmd=piggyback64 ;;
             sparc32) piggyback_cmd=piggyback32 ;;
-	esac
+        esac
         if [ "$basename" = "vmlinuz" ]; then
             initrd=$TFTPBOOT/initrd.img
-	    sysmap=$TFTPBOOT/System.map
+            sysmap=$TFTPBOOT/System.map
             nbi=$TFTPBOOT/$SUB_ARCH.img
         else
             version=${basename##vmlinuz-}
             initrd=$TFTPBOOT/initrd.img-$version
-	    sysmap=$TFTPBOOT/System.map-$version
+            sysmap=$TFTPBOOT/System.map-$version
             nbi=$TFTPBOOT/$SUB_ARCH.img-$version
         fi
-	# TODO: proper tempfile handline
+        # TODO: proper tempfile handline
         gzip -cd $kernel > $nbi.tmp
         elftoaout -o $nbi $nbi.tmp
         if [ -f "$initrd" ]; then
-      	    $piggyback_cmd $nbi $sysmap $initrd
+            $piggyback_cmd $nbi $sysmap $initrd
         else
-      	    $piggyback_cmd $nbi $sysmap
+            $piggyback_cmd $nbi $sysmap
         fi
     done
 else

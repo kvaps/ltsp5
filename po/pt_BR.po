@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.82\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-08 16:03-0300\n"
+"POT-Creation-Date: 2006-07-03 18:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gustavo Franco <stratus@debian.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,167 +16,161 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: server/ltsp-build-client:40
+#: ../server/ltsp-build-client:43
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "Erro de API: você precisa informar verdadeiro ou falso."
 
-#: server/ltsp-build-client:107
+#: ../server/ltsp-build-client:110
 #, sh-format
 msgid "Display this help message"
 msgstr "Exibe essa mensagem de ajuda"
 
-#: server/ltsp-build-client:111
+#: ../server/ltsp-build-client:114
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "LTSP Build Client uso:"
 
-#: server/ltsp-build-client:115
+#: ../server/ltsp-build-client:118
 #, sh-format
 msgid "  Regular options:"
 msgstr " Opções comuns:"
 
-#: server/ltsp-build-client:118
+#: ../server/ltsp-build-client:121
 #, sh-format
 msgid "  Advanced options:"
 msgstr " Opções avançadas"
 
-#: server/ltsp-build-client:129
+#: ../server/ltsp-build-client:132
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "info: instalação do cliente LTSP completada com sucesso"
 
-#: server/ltsp-build-client:131
+#: ../server/ltsp-build-client:134
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erro: instalação do cliente LTSP terminou de maneira anormal"
 
-#: server/plugins/common/000-enable-debug:3
-#, sh-format
-msgid "Enable debug support"
-msgstr "Habilitar o suporte a depuração"
-
-#: server/plugins/common/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
-msgstr "define a arquitetura"
-
-#: server/plugins/common/001-set-arch:20 server/plugins/common/001-set-arch:31
-#, sh-format
-msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr ""
-
-#: server/plugins/common/001-set-arch:37
-#, sh-format
-msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
-
-#: server/plugins/common/001-set-arch:38
-#, sh-format
-msgid "       supported values are: %s"
-msgstr ""
-
-#: server/plugins/common/010-set-base:3
-#, sh-format
-msgid "Set the default base install directory"
-msgstr "Define o diretório de instalação do sistema básico"
-
-#: server/plugins/common/030-rootpass:3
-#, sh-format
-msgid "prompt to set the root password, defaults to disabled"
-msgstr "questiona se deve definir a senha de root, o padrão é desabilita-la"
-
-#: server/plugins/Debian/001-apt-keys:3 server/plugins/Ubuntu/001-apt-keys:3
+#: ../server/plugins/Debian/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
 msgstr "inclui as chaves listadas no chaveiro do apt"
 
-#: server/plugins/Debian/001-set-accept-unsigned-packages:3
-#: server/plugins/Ubuntu/001-set-accept-unsigned-packages:3
+#: ../server/plugins/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install."
 msgstr "permite pacotes não assinados durante a instalação."
 
-#: server/plugins/Debian/001-set-components:3
-#: server/plugins/Ubuntu/001-set-components:3
+#: ../server/plugins/Debian/001-set-components:3
 #, sh-format
 msgid "Set the components to be used in mirror"
 msgstr "Define os componentes a serem usados no espelho"
 
-#: server/plugins/Debian/001-set-dist:3 server/plugins/Ubuntu/001-set-dist:3
-#, sh-format
-msgid "Set the distribution to be used for install"
-msgstr "Define a distribuição a ser usada para instalação"
-
-#: server/plugins/Debian/001-set-exclude:3
-#: server/plugins/Ubuntu/001-set-exclude:3
-#, sh-format
-msgid "exclude packages from the initial chroot"
-msgstr "exclui pacotes do chroot inicial"
-
-#: server/plugins/Debian/010-debconf-seeds:3
-#: server/plugins/Ubuntu/010-debconf-seeds:3
-#, sh-format
-msgid "load debconf seeding in chroot the after install"
+#: ../server/plugins/Debian/010-debconf-seeds:3
+#, fuzzy, sh-format
+msgid "load debconf seeding in the chroot after install"
 msgstr "carrega seed debconf no chroot após a instalação"
 
-#: server/plugins/Debian/010-distribution-specific:5
+#: ../server/plugins/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
 msgstr "NOTA: desabilitando fonte APT de segurança para sid. Isto não existe."
 
-#: server/plugins/Debian/010-manage-mirror:3
-#: server/plugins/Ubuntu/010-manage-mirror:3
+#: ../server/plugins/Debian/010-manage-mirror:3
 #, sh-format
 msgid "Set the mirror location"
 msgstr "Define o local do espelho"
 
-#: server/plugins/Debian/010-manage-mirror:4
-#: server/plugins/Ubuntu/010-manage-mirror:4
+#: ../server/plugins/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
 "adiciona um espelho, que recebe uma prioridade maior que o espelho padrão"
 
-#: server/plugins/Debian/010-manage-mirror:5
-#: server/plugins/Ubuntu/010-manage-mirror:5
+#: ../server/plugins/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr ""
 "adiciona um espelho, que recebe uma prioridade menor que o espelho padrão"
 
-#: server/plugins/Debian/010-manage-mirror:6
-#: server/plugins/Ubuntu/010-manage-mirror:6
+#: ../server/plugins/Debian/010-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
 msgstr "adiciona um espelho de segurança"
 
-#: server/plugins/Debian/010-security-mirror:6
+#: ../server/plugins/Debian/010-security-mirror:6
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
 msgstr ""
 "NOTA: adicionando dist padrão e components para o espelho de segurança:"
 
-#: server/plugins/Debian/010-serial-console:3
-#: server/plugins/Ubuntu/010-serial-console:3
+#: ../server/plugins/Debian/010-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr "habilita console serial"
 
-#: server/plugins/Debian/010-serial-console:12
-#: server/plugins/Ubuntu/010-serial-console:12
+#: ../server/plugins/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr "Habilitando console serial..."
 
-#: server/plugins/Debian/030-early-packages:3
-#: server/plugins/Ubuntu/030-early-packages:3
+#: ../server/plugins/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed."
 msgstr "define a lista de pacotes para instalar após o base-install completar."
 
-#: server/plugins/Debian/030-late-packages:3
-#: server/plugins/Ubuntu/030-late-packages:3
+#: ../server/plugins/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation."
 msgstr "lista de pacotes para instalar como parte final da instalação."
+
+#: ../server/plugins/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "Habilitar o suporte a depuração"
+
+#: ../server/plugins/common/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "define a arquitetura"
+
+#: ../server/plugins/common/001-set-arch:20
+#: ../server/plugins/common/001-set-arch:31
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:37
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+
+#: ../server/plugins/common/001-set-arch:38
+#, sh-format
+msgid "       supported values are: %s"
+msgstr ""
+
+#: ../server/plugins/common/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "Define a distribuição a ser usada para instalação"
+
+#: ../server/plugins/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "exclui pacotes do chroot inicial"
+
+#: ../server/plugins/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "Define o diretório de instalação do sistema básico"
+
+#: ../server/plugins/common/030-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr "questiona se deve definir a senha de root, o padrão é desabilita-la"
