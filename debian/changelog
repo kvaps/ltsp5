@@ -1,3 +1,43 @@
+ltsp (0.92) edgy; urgency=low
+
+  * Add a /etc/network/if-up.d/ltsp-keys script to copy the sshkeys on every
+    interface start, make ltsp-update-sshkeys use logger for output, log to
+    syslog and add descriptive error messages, this avoids breakage if the
+    server IP was changed and makes sure the user doesnt need to run 
+    ltsp-update-sshkeys separately.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 20 Jul 2006 13:47:18 +0200
+
+ltsp (0.91) edgy; urgency=low
+
+  *  fix all the syntax in the udeb to match latest d-i code and to not fail
+     during install
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 18 Jul 2006 22:36:09 +0200
+
+ltsp (0.90) edgy; urgency=low
+
+  * added export TERM=linux to the top of ltsp-build-client to make the udeb
+    not die if a package calls a terminal directly in the chroot.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 18 Jul 2006 03:33:47 +0200
+
+ltsp (0.89) edgy; urgency=low
+
+  * merged fixes from mainline
+  [Oliver Grawert]
+    * fix wrong kernel selection on ubuntu
+    * switch ltsp-build-client temporary to /bin/bash until the
+      bashisms are fixed
+  [ Otavio Salvador ]
+    * 001-set-exclude, 001-set-dist: moved to server/plugins/common
+      since it's very agnostic and every vendor that use this system
+      will need to have a way to avoid a package inclusion.
+      Those symbolic links was also removed from Ubuntu
+      plugins repository.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 14 Jul 2006 21:13:46 +0200
+
 ltsp (0.88debian1) UNRELEASED; urgency=low
 
   [ Otavio Salvador ]
