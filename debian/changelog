@@ -1,3 +1,23 @@
+ltsp (0.92debian1) unstable; urgency=low
+
+  [ Otavio Salvador ]
+  * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
+    specific.
+    - Fix problem with gettext use. (Closes: #375601)
+
+  [ Tiago Bortoletto Vaz ]
+  * Add a correct i18n support for this package, using a specific Makefile
+    to handle gettext
+  * Fix ltsp-build-client script to get gettext message catalogs from locale
+    dir
+
+  [ Otavio Salvador ]
+  * Simplified debian/rules a little more removing the useless update-po
+    target. Since all its logic was move to po/Makefile file we can make
+    things clear removing it from rules.
+
+ -- Otavio Salvador <otavio@debian.org>  Sat, 22 Jul 2006 14:49:19 -0300
+
 ltsp (0.92) edgy; urgency=low
 
   * Add a /etc/network/if-up.d/ltsp-keys script to copy the sshkeys on every
@@ -38,26 +58,6 @@ ltsp (0.89) edgy; urgency=low
 
  -- Oliver Grawert <ogra@ubuntu.com>  Fri, 14 Jul 2006 21:13:46 +0200
 
-ltsp (0.88debian1) UNRELEASED; urgency=low
-
-  [ Otavio Salvador ]
-  * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
-    specific.
-    - Fix problem with gettext use. (Closes: #375601)
-
-  [ Tiago Bortoletto Vaz ]
-  * Add a correct i18n support for this package, using a specific Makefile
-    to handle gettext
-  * Fix ltsp-build-client script to get gettext message catalogs from locale
-    dir
-
-  [ Otavio Salvador ]
-  * Simplified debian/rules a little more removing the useless update-po
-    target. Since all its logic was move to po/Makefile file we can make
-    things clear removing it from rules.
-
- -- Otavio Salvador <otavio@debian.org>  Thu, 29 Jun 2006 03:07:24 -0300
-  
 ltsp (0.88) edgy; urgency=low
 
   * merged debian modularization into upstream branch
@@ -72,35 +72,6 @@ ltsp (0.88) edgy; urgency=low
   * first upload to edgy
 
  -- Oliver Grawert <ogra@ubuntu.com>  Thu, 22 Jun 2006 10:09:02 +0200
-
-ltsp (0.87debian2) unstable; urgency=low
-
-  [ Otavio Salvador ]
-  * Make LTSP messages translatable.
-  * Minimal fixes for indentation of ltsp-client-setup init script.
-  * Fix Permission Denied error due a error in unionfs mount command in
-    initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
-    debugging it. (Closes: #360249)
-  * We don't need to set initramfs-tools as default since it's since
-    Debian kernel 2.6.15.
-  * Improved common/020-init-image including better code formating and
-    documentation.
-  * Converted set-arch modules to be a common one. For this dpkg use was
-    remove. Support for error messages translation was also added.
- 
-  [ Gustavo Franco ]
-  * po/pt_BR.po:
-    - Add po/ltsp.pot Portuguese Brazilian translation by myself.
-  
-  [ Otavio Salvador ]
-  * Move translation update routine to update-po rules target.
-  * Fix code style in common/010-set-base.
-  * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
-    <chaton@debian.org> for the bug report and updated file. 
-    (Closes: #374656)
-  * Add support to initramfs-tools >= 0.64.
-
- -- Otavio Salvador <otavio@debian.org>  Fri, 23 Jun 2006 15:48:37 -0300
 
 ltsp (0.87debian1) unstable; urgency=low
 
