@@ -69,6 +69,9 @@ configure_resolver() {
 127.0.0.2 $hostname
 $SERVER server
 EOF
+    if [ -f /etc/hosts.ltsp ]; then
+        cat /etc/hosts.ltsp >> /etc/hosts
+    fi
 
     if [ -n "$DNS_SERVER" -a -n "$SEARCH_DOMAIN" ]; then
         cat <<EOF > /etc/resolv.conf
