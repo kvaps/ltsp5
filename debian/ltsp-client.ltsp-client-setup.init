@@ -48,6 +48,13 @@ NBD_HOST[0]=$SWAP_SERVER
 NBD_PORT[0]=$NBD_PORT
 EOF
     fi
+    if [ "$USE_LOCAL_SWAP" = "Y" ]; then
+        # Enable local swap partition if found on local disk
+        for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
+            mkswap $part
+            swapon $part
+        done
+    fi
 }
 
 configure_resolver() {
