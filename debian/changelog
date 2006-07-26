@@ -20,8 +20,9 @@ ltsp (0.92debian1) unstable; urgency=low
   * ltsp-build-client: added option to enable popularity-contest 
   * ldm: dependency gtk2-engines (>= 1:2.6.9-1) | gtk2-engines-clearlooks
     (Closes: #377408)
+  * ltsp-client-setup.init: USE_LOCAL_SWAP option (closes: #365578)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 24 Jul 2006 22:04:40 +0000
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed, 26 Jul 2006 17:33:13 +0000
 
 ltsp (0.92) edgy; urgency=low
 
