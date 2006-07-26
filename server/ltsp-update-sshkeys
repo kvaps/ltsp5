@@ -27,6 +27,10 @@ for name in $names; do
     done
 done
 
+if [ -f /etc/ltsp/ssh_known_hosts.extra ]; then
+    cat /etc/ltsp/ssh_known_hosts.extra >> $output
+fi
+
 for client in $clients; do
     install -m 644 $output $client/etc/ssh/ssh_known_hosts
 done
