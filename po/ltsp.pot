@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-03 18:23-0300\n"
+"POT-Creation-Date: 2006-07-27 00:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,37 +16,37 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../server/ltsp-build-client:43
+#: ../server/ltsp-build-client:44
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr ""
 
-#: ../server/ltsp-build-client:110
+#: ../server/ltsp-build-client:111
 #, sh-format
 msgid "Display this help message"
 msgstr ""
 
-#: ../server/ltsp-build-client:114
+#: ../server/ltsp-build-client:115
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr ""
 
-#: ../server/ltsp-build-client:118
+#: ../server/ltsp-build-client:119
 #, sh-format
 msgid "  Regular options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:121
+#: ../server/ltsp-build-client:122
 #, sh-format
 msgid "  Advanced options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:132
+#: ../server/ltsp-build-client:133
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr ""
 
-#: ../server/ltsp-build-client:134
+#: ../server/ltsp-build-client:135
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
@@ -119,6 +119,16 @@ msgstr ""
 #: ../server/plugins/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation."
+msgstr ""
+
+#: ../server/plugins/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr ""
+
+#: ../server/plugins/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
 msgstr ""
 
 #: ../server/plugins/common/000-enable-debug:3
