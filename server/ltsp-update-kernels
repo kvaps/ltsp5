@@ -19,8 +19,8 @@ for CHROOT in $ALL_CHROOTS ; do
     # check for compatible (i.e. chrootable) architecture
     if chroot $CHROOT /bin/true ; then
         # update kernels for the chroot
-        if [ -x "$CHROOT/usr/share/ltsp/update-kernels" ]; then
-            chroot "$CHROOT" /usr/share/ltsp/update-kernels
+        if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
+            chroot "$CHROOT" /usr/lib/ltsp/update-kernels
         fi
     fi
     # TODO: copy pxelinux and yaboot configuration, too.
