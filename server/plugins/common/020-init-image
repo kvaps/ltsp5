@@ -21,7 +21,7 @@ case "$MODE" in
                 sed -e 's/NFSOPTS="-o retrans=10"/NFSOPTS="-o retrans=10,nolock"/' \
                     -e 's/nfsmount /mount /' -i $ROOT/usr/share/initramfs-tools/scripts/nfs
             fi
-        elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -x $ROOT/usr/sbin/mkinitrd ]; then
+        elif [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -x $ROOT/usr/sbin/mkinitrd ] && [ -d /usr/share/doc/initrd-netboot-tools] ; then
             # configuring for initrd-netboot-tools
             sed -e 's/^ROOT=.*$/ROOT=""/' \
                 -e 's/^MODULES=.*$/MODULES=none/' -i $ROOT/etc/mkinitrd/mkinitrd.conf
