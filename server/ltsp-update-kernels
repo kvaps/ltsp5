@@ -5,7 +5,8 @@ set -e
 # Make sure the copied files are readable by all
 umask 022
 
-TFTPBOOT=/var/lib/tftpboot/ltsp
+TFTPDIR=/var/lib/tftpboot/
+TFTPBOOT=$TFTPDIR/ltsp
 test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
 
 if [ ! -d $TFTPBOOT ] ; then
@@ -23,8 +24,24 @@ for CHROOT in $ALL_CHROOTS ; do
             chroot "$CHROOT" /usr/lib/ltsp/update-kernels
         fi
     fi
-    # TODO: copy pxelinux and yaboot configuration, too.
-    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/System.map* ; do
+
+    EXTRA_FILES=""
+    if [ -f $CHROOT/boot/yaboot.conf ]; then
+        if [ -f $CHROOT/boot/yaboot ]; then
+            cp -a -v $CHROOT/boot/yaboot.conf $TFTPDIR
+            EXTRA_FILES="$CHROOT/boot/yaboot"
+        else
+            echo "WARNING: not configuring yaboot: $CHROOT/boot/yaboot not found"
+        fi
+    fi
+    if [ -f $CHROOT/boot/pxelinux.cfg/default ]; then 
+        if [ -f $CHROOT/boot/pxelinux.0 ]; then
+            EXTRA_FILES="$CHROOT/boot/pxelinux.0 $CHROOT/boot/pxelinux.cfg/default $EXTRA_FILES"
+        else
+            echo "WARNING: not configuring pxelinux: $CHROOT/boot/pxelinux.0 not found"
+        fi
+    fi
+    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/System.map* $EXTRA_FILES ; do
         cp -a -v "$file" $TFTPBOOT/$(basename $CHROOT)
     done
 done
