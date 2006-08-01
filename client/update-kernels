@@ -1,0 +1,123 @@
+#!/bin/sh -e
+
+# this script is run either chrooted on the server, or by a client with write
+# access to the NFS mount point. (much of this code was originally in
+# server/ltsp-update-kernels). --vagrant 20060801
+
+BOOT=/boot
+if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
+    PXECFG=$BOOT/pxelinux.cfg
+    cp /usr/lib/syslinux/pxelinux.0 $BOOT
+    if [ ! -d $PXECFG ]; then
+        mkdir $PXECFG
+    fi
+    cat > $PXECFG/default <<EOF
+DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
+EOF
+else
+    echo "Skipping PXE images.  Install the syslinux package if you need them."
+fi
+
+if [ -f /usr/lib/yaboot/yaboot ]; then
+    cp /usr/lib/yaboot/yaboot $BOOT
+    YABOOTCONFROOT=$(echo $BOOT|sed s/ltsp//g)
+    cat > $YABOOTCONFROOT/yaboot.conf <<EOF
+timeout=0
+default=ltsp
+root=/dev/ram
+
+image=/ltsp/vmlinux
+        label=ltsp
+        initrd=/ltsp/initrd.img
+        append="quiet splash"
+EOF
+else
+    echo "Not on powerpc, skipping yaboot installation."
+fi
+
+if which mkelf-linux >/dev/null; then
+    for kernel in $BOOT/vmlinuz*; do
+        basename=$(basename "$kernel")
+
+        if [ "$basename" = "vmlinuz" ]; then
+            initrd=$BOOT/initrd.img
+            nbi=$BOOT/nbi.img
+        else
+            version=${basename##vmlinuz-}
+            initrd=$BOOT/initrd.img-$version
+            nbi=$BOOT/nbi.img-$version
+        fi
+
+        if [ -f "$initrd" ]; then
+            mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
+        else
+            mkelf-linux --ip=dhcp -o $nbi $kernel
+        fi
+    done
+else
+    echo "Skipping etherboot images.  Install the mknbi package if you need them."
+fi
+
+if which mkvmlinuz >/dev/null; then
+  # mkvmlinuz already happens on powerpc as part of the kernel install-
+  # so do nothing.
+  true
+else
+    echo "Skipping openfirmware images.  Install the mkvmlinuz package if you need them."
+fi
+
+# TODO merge the mkelf-linux and netabootwrap code
+if which netabootwrap >/dev/null; then
+    for kernel in $BOOT/vmlinuz*; do
+        basename=$(basename "$kernel")
+
+        if [ "$basename" = "vmlinuz" ]; then
+            initrd=$BOOT/initrd.img
+            nbi=$BOOT/nbi.img
+        else
+            version=${basename##vmlinuz-}
+            initrd=$BOOT/initrd.img-$version
+            nbi=$BOOT/nbi.img-$version
+        fi
+        # TODO: work around for debian bug #270801
+        if [ -f "$initrd" ]; then
+            netabootwrap -t $nbi -k $kernel -i $initrd
+        else
+            netabootwrap -t $nbi -k $kernel
+        fi
+    done
+else
+    echo "Skipping netabootwrap images.  Install the aboot package if you need them."
+fi
+
+if which elftoaout >/dev/null ; then
+    for kernel in $BOOT/vmlinuz*; do
+        basename=$(basename "$kernel")
+        SUB_ARCH=$(uname -m)
+        piggyback_cmd=""
+        case $SUB_ARCH in
+            sparc64) piggyback_cmd=piggyback64 ;;
+            sparc32) piggyback_cmd=piggyback32 ;;
+        esac
+        if [ "$basename" = "vmlinuz" ]; then
+            initrd=$BOOT/initrd.img
+            sysmap=$BOOT/System.map
+            nbi=$BOOT/$SUB_ARCH.img
+        else
+            version=${basename##vmlinuz-}
+            initrd=$BOOT/initrd.img-$version
+            sysmap=$BOOT/System.map-$version
+            nbi=$BOOT/$SUB_ARCH.img-$version
+        fi
+        # TODO: proper tempfile handline
+        gzip -cd $kernel > $nbi.tmp
+        elftoaout -o $nbi $nbi.tmp
+        if [ -f "$initrd" ]; then
+            $piggyback_cmd $nbi $sysmap $initrd
+        else
+            $piggyback_cmd $nbi $sysmap
+        fi
+    done
+else
+    echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
+fi
