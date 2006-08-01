@@ -6,6 +6,9 @@ case "$MODE" in
             INITRAMFSCONF="$ROOT/etc/mkinitramfs-tools/initramfs.conf"
         elif [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/initramfs-tools/initramfs.conf" ]; then
             INITRAMFSCONF="$ROOT/etc/initramfs-tools/initramfs.conf"
+            if [ -d "$ROOT/etc/initramfs-tools/conf.d" ]; then
+                INITRAMFSCONF_DIR="$ROOT/etc/initramfs-tools/conf.d"
+            fi
         fi
 
         if [ -n "$INITRAMFSCONF" ]; then
@@ -13,8 +16,18 @@ case "$MODE" in
             # booting too and in this specific case we cannot pass
             # boot params. Due space limitations we set to use just
             # netboot related modules in initramfs.
-            sed -e 's/^BOOT=.*$/BOOT=nfs/' \
-                -e 's/MODULES=.*$/MODULES=netboot/' -i $INITRAMFSCONF
+            if [ -d "$INITRAMFSCONF_DIR" ]; then
+                if [ -f "$INITRAMFSCONF_DIR/ltsp" ]; then
+                    sed -e 's/^BOOT=.*$/BOOT=nfs/' \
+                        -e 's/MODULES=.*$/MODULES=netboot/' -i $INITRAMFSCONF_DIR/ltsp
+                else
+                    echo BOOT=nfs >> "$INITRAMFSCONF_DIR/ltsp"
+                    echo BOOT=netboot >> "$INITRAMFSCONF_DIR/ltsp"
+                fi
+            else
+                sed -e 's/^BOOT=.*$/BOOT=nfs/' \
+                    -e 's/MODULES=.*$/MODULES=netboot/' -i $INITRAMFSCONF
+            fi
 
             # Workaround a bug in initramfs-tools nfsmount
             if [ -f $ROOT/usr/share/initramfs-tools/scripts/nfs ]; then
