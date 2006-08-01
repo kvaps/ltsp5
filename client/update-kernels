@@ -20,8 +20,7 @@ fi
 
 if [ -f /usr/lib/yaboot/yaboot ]; then
     cp /usr/lib/yaboot/yaboot $BOOT
-    YABOOTCONFROOT=$(echo $BOOT|sed s/ltsp//g)
-    cat > $YABOOTCONFROOT/yaboot.conf <<EOF
+    cat > $BOOT/yaboot.conf <<EOF
 timeout=0
 default=ltsp
 root=/dev/ram
