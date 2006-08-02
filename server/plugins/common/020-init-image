@@ -22,7 +22,7 @@ case "$MODE" in
                         -e 's/MODULES=.*$/MODULES=netboot/' -i $INITRAMFSCONF_DIR/ltsp
                 else
                     echo BOOT=nfs >> "$INITRAMFSCONF_DIR/ltsp"
-                    echo BOOT=netboot >> "$INITRAMFSCONF_DIR/ltsp"
+                    echo MODULES=netboot >> "$INITRAMFSCONF_DIR/ltsp"
                 fi
             else
                 sed -e 's/^BOOT=.*$/BOOT=nfs/' \
