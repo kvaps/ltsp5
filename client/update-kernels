@@ -5,35 +5,6 @@
 # server/ltsp-update-kernels). --vagrant 20060801
 
 BOOT=/boot
-if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
-    PXECFG=$BOOT/pxelinux.cfg
-    cp /usr/lib/syslinux/pxelinux.0 $BOOT
-    if [ ! -d $PXECFG ]; then
-        mkdir $PXECFG
-    fi
-    cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
-EOF
-else
-    echo "Skipping PXE images.  Install the syslinux package if you need them."
-fi
-
-if [ -f /usr/lib/yaboot/yaboot ]; then
-    cp /usr/lib/yaboot/yaboot $BOOT
-    cat > $BOOT/yaboot.conf <<EOF
-timeout=0
-default=ltsp
-root=/dev/ram
-
-image=/ltsp/vmlinux
-        label=ltsp
-        initrd=/ltsp/initrd.img
-        append="quiet splash"
-EOF
-else
-    echo "Not on powerpc, skipping yaboot installation."
-fi
-
 if which mkelf-linux >/dev/null; then
     for kernel in $BOOT/vmlinuz*; do
         basename=$(basename "$kernel")

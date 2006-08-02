@@ -29,23 +29,36 @@ for CHROOT in $ALL_CHROOTS ; do
     CHROOT_NAME="$(basename $CHROOT)"
     TFTP_CHROOT="$TFTPBOOT/$CHROOT_NAME"
     mkdir -p $TFTP_CHROOT
-    if [ -f $CHROOT/boot/yaboot.conf ]; then
-        if [ -f $CHROOT/boot/yaboot ]; then
-            cp -a -v $CHROOT/boot/yaboot.conf $TFTPDIR
-            EXTRA_FILES="$CHROOT/boot/yaboot"
-        else
-            echo "WARNING: not configuring yaboot: $CHROOT/boot/yaboot not found"
+
+    if [ -f $CHROOT/usr/lib/yaboot/yaboot ]; then
+        cp -a -v $CHROOT/usr/lib/yaboot/yaboot $TFTPDIR
+        cat > $TFTPDIR/yaboot.conf <<EOF
+timeout=0
+default=ltsp
+root=/dev/ram
+
+image=/ltsp/$CHROOT_NAME/vmlinux
+        label=ltsp
+        initrd=/ltsp/$CHROOT_NAME/initrd.img
+        append="quiet splash"
+EOF
+    else
+        echo "Skipping yaboot configuration. install yaboot package if you need it."
+    fi    
+
+    if [ -f $CHROOT/usr/lib/syslinux/pxelinux.0 ]; then
+        PXECFG=$TFTP_CHROOT/pxelinux.cfg
+        cp $CHROOT/usr/lib/syslinux/pxelinux.0 $TFTP_CHROOT
+        if [ ! -d $PXECFG ]; then
+            mkdir $PXECFG
         fi
+        cat > $PXECFG/default <<EOF
+DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
+EOF
+    else
+        echo "Skipping PXE images.  Install the syslinux package if you need them."
     fi
-    if [ -f $CHROOT/boot/pxelinux.cfg/default ]; then 
-        if [ -f $CHROOT/boot/pxelinux.0 ]; then
-            mkdir -p $TFTP_CHROOT/pxelinux.cfg/
-            cp -a $CHROOT/boot/pxelinux.cfg/default $TFTP_CHROOT/pxelinux.cfg/
-            EXTRA_FILES="$CHROOT/boot/pxelinux.0"
-        else
-            echo "WARNING: not configuring pxelinux: $CHROOT/boot/pxelinux.0 not found"
-        fi
-    fi
+
     for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/System.map* $EXTRA_FILES ; do
         cp -a -v "$file" $TFTP_CHROOT
     done
