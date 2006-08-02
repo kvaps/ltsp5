@@ -41,7 +41,9 @@ for CHROOT in $ALL_CHROOTS ; do
             echo "WARNING: not configuring pxelinux: $CHROOT/boot/pxelinux.0 not found"
         fi
     fi
+    CHROOT_NAME="$(basename $CHROOT)"
+    mkdir -p $TFTPBOOT/$CHROOT_NAME
     for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/System.map* $EXTRA_FILES ; do
-        cp -a -v "$file" $TFTPBOOT/$(basename $CHROOT)
+        cp -a -v "$file" $TFTPBOOT/$CHROOT_NAME
     done
 done
