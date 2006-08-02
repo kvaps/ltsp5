@@ -39,7 +39,9 @@ for CHROOT in $ALL_CHROOTS ; do
     fi
     if [ -f $CHROOT/boot/pxelinux.cfg/default ]; then 
         if [ -f $CHROOT/boot/pxelinux.0 ]; then
-            EXTRA_FILES="$CHROOT/boot/pxelinux.0 $CHROOT/boot/pxelinux.cfg/default $EXTRA_FILES"
+            mkdir -p $TFTP_CHROOT/pxelinux.cfg/
+            cp -a $CHROOT/boot/pxelinux.cfg/default $TFTP_CHROOT/pxelinux.cfg/
+            EXTRA_FILES="$CHROOT/boot/pxelinux.0"
         else
             echo "WARNING: not configuring pxelinux: $CHROOT/boot/pxelinux.0 not found"
         fi
