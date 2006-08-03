@@ -21,7 +21,7 @@ case "$1" in
 		ldm-theme /usr/share/ldm/themes/Ubuntu 40
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Edubuntu 35
+		ldm-theme /usr/share/ldm/themes/Edubuntu 65
  	update-alternatives \
 		--install /usr/share/ldm/themes/default \
 		ldm-theme /usr/share/ldm/themes/Debian-Edu 50
