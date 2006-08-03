@@ -1,3 +1,25 @@
+ltsp (0.93) edgy; urgency=low
+
+  [ Oliver Grawert ]
+  * add vendor detection to ltsp-update-kernels to fix wrong kernel parameters
+    introduced by debian
+  * add mountkernfs.sh and mountdevsubfs.sh to RCS_WHITELIST, needed now to
+    make the boot work
+  * fix debian introduced breakage of the initramfs.conf setup in
+    server/plugins/common/020-init-image
+  * added DEBIAN_PRIORITY=critical to avoid debconf questions to
+    server/plugins/Ubuntu/000-basic-configuration and changed from
+    x-window-system-core to xorg
+  * change theme priority for ldm to show the edubuntu theme by default again
+  * add 010-mount-proc with added linking of /dev/fd to Ubuntu plugins, usplash
+    needs /dev/fd to be in place now
+
+  [ Vagrant Cascadian ]
+  * added commandline option to enable popularity-contest in the chroot
+  * whitespace corrections
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  3 Aug 2006 23:59:01 +0200
+
 ltsp (0.92) edgy; urgency=low
 
   * Add a /etc/network/if-up.d/ltsp-keys script to copy the sshkeys on every
