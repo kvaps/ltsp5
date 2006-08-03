@@ -4,6 +4,8 @@ case "$MODE" in
             INITRAMFSCONF="$ROOT/etc/mkinitramfs/initramfs.conf"
         elif [ -x "$ROOT/usr/sbin/mkinitramfs-tools" ] && [ -f "$ROOT/etc/mkinitramfs-tools/initramfs.conf" ]; then
             INITRAMFSCONF="$ROOT/etc/mkinitramfs-tools/initramfs.conf"
+        elif [ -x "$ROOT/usr/sbin/mkinitramfs" ] && [ -f "$ROOT/etc/initramfs-tools/initramfs.conf" ]; then
+            INITRAMFSCONF="$ROOT/etc/initramfs-tools/initramfs.conf"
         fi
 
         if [ -n "$INITRAMFSCONF" ]; then
