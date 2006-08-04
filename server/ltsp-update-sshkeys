@@ -11,7 +11,7 @@ names="$hostname $ips"
 
 logfile="/var/log/syslog"
 
-if [ -z $clients ]; then
+if [ -z "$clients" ]; then
 	logger -f $logfile -t ltsp "No client chroots found, please run ltsp-build-client"
 	exit 0
 fi
