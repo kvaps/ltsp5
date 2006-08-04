@@ -35,14 +35,14 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
         mkdir $PXECFG
     fi
     if [ $VENDOR = "Ubuntu" ]; then
-        cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img quiet splash
-EOF
+        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img quiet splash"
     else 
-	    cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
-EOF
+        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp"
     fi
+    cat > $PXECFG/default <<EOF
+$PXELINUX_CMDLINE
+EOF
+    
 else
     echo "Skipping PXE images.  Install the syslinux package if you need them."
 fi
