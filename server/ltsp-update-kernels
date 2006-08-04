@@ -34,10 +34,12 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
-    if [ $VENDOR = "Ubuntu" ]; then
-        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img quiet splash"
-    else 
-        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp"
+    if [ -z "$PXELINUX_CMDLINE" ]; then
+        if [ $VENDOR = "Ubuntu" ]; then
+            PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img quiet splash"
+        else 
+            PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp"
+        fi
     fi
     cat > $PXECFG/default <<EOF
 $PXELINUX_CMDLINE
