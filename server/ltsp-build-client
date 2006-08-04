@@ -6,9 +6,11 @@ export TERM=linux							  # make sure we're using a known terminal type
 export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)
 export TEXTDOMAINDIR=/usr/share/locale        # locale dir for gettext codes
 
+VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
+PLUGIN_DIRS="/etc/ltsp/plugins $PLUGINS_BASE/$VENDOR $PLUGINS_BASE/common"
 
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
 
@@ -92,6 +94,30 @@ load_modules() {
     done
 }
 
+load_plugin_modules() {
+    FILENAMES=""
+    NAMES=""
+    for dir in $PLUGIN_DIRS ; do
+        if [ -d "$dir" ]; then
+            FILENAMES="$FILENAMES $(run-parts --list $dir)"
+        fi
+    done
+    for file in $FILENAMES ; do
+        NAMES="$NAMES $(basename $file)"
+    done
+    NAMES="$(echo $NAMES | tr "\t " "\n" | sort -u)"
+    for name in $NAMES ; do
+        for dir in $PLUGIN_DIRS ; do
+            filename="$dir/$name"
+            if [ -f "$filename" ]; then 
+                debug "Loading plugin: $filename"
+                . "$filename"
+                break
+            fi
+        done
+    done
+}
+
 # Load our plugins.
 #
 # Params:
@@ -99,12 +125,8 @@ load_modules() {
 load_plugins() {
     set -- "$@"
     MODE=$1
-    VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
     debug "Loading plugins in MODE=$MODE:"
-    load_modules $PLUGINS_BASE/common
-    if [ -d $PLUGINS_BASE/$VENDOR ]; then 
-        load_modules $PLUGINS_BASE/$VENDOR
-    fi
+    load_plugin_modules
 }
 
 # Add commandline option to handle --help
