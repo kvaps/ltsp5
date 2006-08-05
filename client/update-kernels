@@ -28,14 +28,6 @@ else
     echo "Skipping etherboot images.  Install the mknbi package if you need them."
 fi
 
-if which mkvmlinuz >/dev/null; then
-  # mkvmlinuz already happens on powerpc as part of the kernel install-
-  # so do nothing.
-  true
-else
-    echo "Skipping openfirmware images.  Install the mkvmlinuz package if you need them."
-fi
-
 # TODO merge the mkelf-linux and netabootwrap code
 if which netabootwrap >/dev/null; then
     for kernel in $BOOT/vmlinuz*; do
