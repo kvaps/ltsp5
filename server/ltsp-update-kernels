@@ -8,7 +8,6 @@ umask 022
 TFTPBOOT=/var/lib/tftpboot/ltsp
 PXECFG=$TFTPBOOT/pxelinux.cfg
 test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
-ARCH=$(dpkg --print-architecture)
 VENDOR=$(lsb_release -i|awk '{ print $3 }')
 
 if [ ! -d $TFTPBOOT ] ; then
@@ -16,16 +15,7 @@ if [ ! -d $TFTPBOOT ] ; then
     exit 1
 fi
 
-case $ARCH in
-    powerpc)
-    KERNEL=vmlinux
-    ;;
-    *)
-    KERNEL=vmlinuz
-    ;;
-esac
-
-for file in $LTSPROOT/*/boot/$KERNEL* $LTSPROOT/*/boot/initrd.img* $LTSPROOT/*/boot/System.map*; do
+for file in $LTSPROOT/*/boot/vmlinu* $LTSPROOT/*/boot/initrd.img* $LTSPROOT/*/boot/System.map*; do
     cp -a -v "$file" $TFTPBOOT
 done
 
