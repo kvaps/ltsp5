@@ -59,7 +59,7 @@ EOF
         echo "Skipping PXE images.  Install the syslinux package if you need them."
     fi
 
-    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/System.map* $EXTRA_FILES ; do
+    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $EXTRA_FILES ; do
         cp -a -v "$file" $TFTP_CHROOT
     done
 done
