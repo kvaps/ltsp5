@@ -125,8 +125,6 @@ load_plugins() {
     done
 }
 
-}
-
 # Add commandline option to handle --help
 add_option "help" "`eval_gettext "Display this help message"`" "regular" "false"
 
