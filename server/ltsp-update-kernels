@@ -16,7 +16,9 @@ if [ ! -d $TFTPBOOT ] ; then
 fi
 
 for file in $LTSPROOT/*/boot/vmlinu* $LTSPROOT/*/boot/initrd.img* $LTSPROOT/*/boot/System.map*; do
-    cp -a -v "$file" $TFTPBOOT
+    if [ -f "$file" ]; then
+        cp -a -v "$file" $TFTPBOOT
+    fi
 done
 
 if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
