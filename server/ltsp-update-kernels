@@ -69,6 +69,8 @@ EOF
     fi
 
     for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/nbi*.img $EXTRA_FILES ; do
-        cp -a -v "$file" $TFTP_CHROOT
+        if [ -f "$file" ]; then
+            cp -a -v "$file" $TFTP_CHROOT
+        fi
     done
 done
