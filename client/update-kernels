@@ -64,12 +64,12 @@ if which elftoaout >/dev/null ; then
         if [ "$basename" = "vmlinuz" ]; then
             initrd=$BOOT/initrd.img
             sysmap=$BOOT/System.map
-            nbi=$BOOT/$SUB_ARCH.img
+            nbi=$BOOT/nbi.$SUB_ARCH.img
         else
             version=${basename##vmlinuz-}
             initrd=$BOOT/initrd.img-$version
             sysmap=$BOOT/System.map-$version
-            nbi=$BOOT/$SUB_ARCH.img-$version
+            nbi=$BOOT/nbi.$SUB_ARCH.img-$version
         fi
         # TODO: proper tempfile handline
         gzip -cd $kernel > $nbi.tmp
