@@ -94,7 +94,14 @@ load_modules() {
     done
 }
 
-load_plugin_modules() {
+# Load our plugins.
+#
+# Params:
+# $1 - mode (configure|run)
+load_plugins() {
+    set -- "$@"
+    MODE=$1
+    debug "Loading plugins in MODE=$MODE:"
     FILENAMES=""
     NAMES=""
     for dir in $PLUGIN_DIRS ; do
@@ -118,15 +125,6 @@ load_plugin_modules() {
     done
 }
 
-# Load our plugins.
-#
-# Params:
-# $1 - mode (configure|run)
-load_plugins() {
-    set -- "$@"
-    MODE=$1
-    debug "Loading plugins in MODE=$MODE:"
-    load_plugin_modules
 }
 
 # Add commandline option to handle --help
