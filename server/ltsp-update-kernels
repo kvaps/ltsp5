@@ -14,7 +14,8 @@ if [ ! -d $TFTPBOOT ] ; then
     exit 1
 fi
 
-ALL_CHROOTS="$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"
+ALL_CHROOTS="$@"
+ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
 
 for CHROOT in $ALL_CHROOTS ; do
     # check for compatible (i.e. chrootable) architecture
