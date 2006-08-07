@@ -10,28 +10,27 @@ if which mkelf-linux >/dev/null; then
         basename=$(basename "$kernel")
 
         if [ "$basename" = "vmlinuz" ]; then
-            initrd=$BOOT/initrd.img
-            nbi=$BOOT/nbi.img
+            initrd=initrd.img
+            nbi=nbi.img
         elif [ "$basename" = "vmlinuz.old" ]; then
-            initrd=$BOOT/initrd.img.old
-            nbi=$BOOT/nbi.img.old
+            initrd=initrd.img.old
+            nbi=nbi.img.old
         else
             version=${basename##vmlinuz-}
-            initrd=$BOOT/initrd.img-$version
-            nbi=$BOOT/nbi.img-$version
+            initrd=initrd.img-$version
+            nbi=nbi.img-$version
         fi
 
         if [ -L "$kernel" ]; then
-            realkernel="$(readlink $kernel)"
-            realbase="$(basename $realkernel)"
-            if [ -f "$realkernel" ]; then
-                version=${realbase##vmlinuz-}
-                ln -sf $nbi-$version $nbi
+            basename="$(readlink $kernel)"
+            if [ -f "$BOOT/$basename" ]; then
+                version=${basename##vmlinuz-}
+                ln -sf $nbi-$version $BOOT/$nbi
             fi
-        elif [ -f "$initrd" ]; then
-            mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
+        elif [ -f "$BOOT/$initrd" ]; then
+            mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel $BOOT/$initrd
         else
-            mkelf-linux --ip=dhcp -o $nbi $kernel
+            mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel
         fi
     done
 else
