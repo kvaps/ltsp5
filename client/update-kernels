@@ -21,7 +21,14 @@ if which mkelf-linux >/dev/null; then
             nbi=$BOOT/nbi.img-$version
         fi
 
-        if [ -f "$initrd" ]; then
+        if [ -L "$kernel" ]; then
+            realkernel="$(readlink $kernel)"
+            realbase="$(basename $realkernel)"
+            if [ -f "$realkernel" ]; then
+                version=${realbase##vmlinuz-}
+                ln -sf $nbi-$version $nbi
+            fi
+        elif [ -f "$initrd" ]; then
             mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
         else
             mkelf-linux --ip=dhcp -o $nbi $kernel
