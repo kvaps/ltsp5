@@ -12,6 +12,9 @@ if which mkelf-linux >/dev/null; then
         if [ "$basename" = "vmlinuz" ]; then
             initrd=$BOOT/initrd.img
             nbi=$BOOT/nbi.img
+        elif [ "$basename" = "vmlinuz.old" ]; then
+            initrd=$BOOT/initrd.img.old
+            nbi=$BOOT/nbi.img.old
         else
             version=${basename##vmlinuz-}
             initrd=$BOOT/initrd.img-$version
