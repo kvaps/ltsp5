@@ -66,7 +66,7 @@ $PXELINUX_CMDLINE
 EOF
  
     else
-        echo "Skipping PXE images.  Install the syslinux package if you need them."
+        echo "Skipping PXE configuration.  Install the syslinux package if you need it."
     fi
 
     for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/nbi*.img* $EXTRA_FILES ; do
