@@ -18,6 +18,14 @@ fi
 ALL_CHROOTS="$@"
 ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
 
+if [ -z "$BOOTPROMPT_OPTS" ]; then
+    if [ "$VENDOR" = "Ubuntu" ]; then
+        BOOTPROMPT_OPTS="quiet splash"
+    else 
+        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp"
+    fi
+fi
+
 for CHROOT in $ALL_CHROOTS ; do
     # check for compatible (i.e. chrootable) architecture
     if chroot $CHROOT /bin/true ; then
@@ -42,7 +50,7 @@ root=/dev/ram
 image=/ltsp/$CHROOT_NAME/vmlinux
         label=ltsp
         initrd=/ltsp/$CHROOT_NAME/initrd.img
-        append="quiet splash"
+        append="$BOOTPROMPT_OPTS"
 EOF
     else
         echo "Skipping yaboot configuration. install yaboot package if you need it."
@@ -55,11 +63,7 @@ EOF
             mkdir $PXECFG
         fi
         if [ -z "$PXELINUX_CMDLINE" ]; then
-            if [ $VENDOR = "Ubuntu" ]; then
-                PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img quiet splash"
-            else 
-                PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp"
-            fi
+            PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
         fi
         cat > $PXECFG/default <<EOF
 $PXELINUX_CMDLINE
