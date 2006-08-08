@@ -8,7 +8,7 @@ Standards-Version: 3.7.2
 
 Package: ltsp-server
 Priority: extra
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, atftpd | tftpd-hpa, syslinux | mknbi | yaboot | mkvmlinuz | aboot | sparc-utils, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, atftpd | tftpd-hpa, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
@@ -25,7 +25,7 @@ Description: Complete LTSP server environment
  
 Package: ltsp-client
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, syslinux [i386 amd64] | mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc] 
 Recommends: xdebconfigurator
 Suggests: nas
 Conflicts: ltsp-utils
