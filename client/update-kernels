@@ -5,61 +5,53 @@
 # server/ltsp-update-kernels). --vagrant 20060801
 
 BOOT=/boot
-if which mkelf-linux >/dev/null; then
-    for kernel in $BOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
+for kernel in $BOOT/vmlinu* ; do
+    basename=$(basename "$kernel")
 
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=initrd.img
-            nbi=nbi.img
-        elif [ "$basename" = "vmlinuz.old" ]; then
-            initrd=initrd.img.old
-            nbi=nbi.img.old
-        else
+    if [ "$basename" = "vmlinuz" ]; then
+        initrd=initrd.img
+        nbi=nbi.img
+    elif [ "$basename" = "vmlinuz.old" ]; then
+        initrd=initrd.img.old
+        nbi=nbi.img.old
+    else
+        version=${basename##vmlinuz-}
+        initrd=initrd.img-$version
+        nbi=nbi.img-$version
+    fi
+    if [ -L "$kernel" ]; then
+        basename="$(readlink $kernel)"
+        if [ -f "$BOOT/$basename" ]; then
             version=${basename##vmlinuz-}
-            initrd=initrd.img-$version
-            nbi=nbi.img-$version
+            ln -sf $nbi-$version $BOOT/$nbi
         fi
-
-        if [ -L "$kernel" ]; then
-            basename="$(readlink $kernel)"
-            if [ -f "$BOOT/$basename" ]; then
-                version=${basename##vmlinuz-}
-                ln -sf $nbi-$version $BOOT/$nbi
+    else
+        if which mkelf-linux >/dev/null; then
+            if [ -f "$BOOT/$initrd" ]; then
+                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel $BOOT/$initrd
+            else
+                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel
             fi
-        elif [ -f "$BOOT/$initrd" ]; then
-            mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel $BOOT/$initrd
         else
-            mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel
+            if [ -z "$mkelf_seen" ]; then
+                echo "Skipping etherboot images.  Install the mknbi package if you need them."
+                mkfelf_seen=true
+            fi
         fi
-    done
-else
-    echo "Skipping etherboot images.  Install the mknbi package if you need them."
-fi
-
-# TODO merge the mkelf-linux and netabootwrap code
-if which netabootwrap >/dev/null; then
-    for kernel in $BOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
-
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=$BOOT/initrd.img
-            nbi=$BOOT/nbi.img
+        if which netabootwrap >/dev/null; then
+            if [ -f "$BOOT/$initrd" ]; then
+                netabootwrap -t $BOOT/$nbi -k $kernel -i $BOOT/$initrd
+            else
+                netabootwrap -t $BOOT/$nbi -k $kernel
+            fi
         else
-            version=${basename##vmlinuz-}
-            initrd=$BOOT/initrd.img-$version
-            nbi=$BOOT/nbi.img-$version
+            if [ -z "$netabootwrap_seen" ]; then
+                echo "Skipping netabootwrap images.  Install the aboot package if you need them."
+                netabootwrap_seen=true
+            fi
         fi
-        # TODO: work around for debian bug #270801
-        if [ -f "$initrd" ]; then
-            netabootwrap -t $nbi -k $kernel -i $initrd
-        else
-            netabootwrap -t $nbi -k $kernel
-        fi
-    done
-else
-    echo "Skipping netabootwrap images.  Install the aboot package if you need them."
-fi
+    fi
+done
 
 if which elftoaout >/dev/null ; then
     for kernel in $BOOT/vmlinuz*; do
