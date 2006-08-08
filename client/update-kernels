@@ -5,6 +5,7 @@
 # server/ltsp-update-kernels). --vagrant 20060801
 
 BOOT=/boot
+SUB_ARCH=$(uname -m)
 for kernel in $BOOT/vmlinu* ; do
     basename=$(basename "$kernel")
     initrd=initrd.img
@@ -41,7 +42,14 @@ for kernel in $BOOT/vmlinu* ; do
                     version=${basename##vmlinux-}
                 ;;
             esac
-            ln -sf $nbi-$version $BOOT/$nbi
+            case $SUB_ARCH in
+                sparc*) 
+                    ln -sf $nbi-$version-$SUB_ARCH $BOOT/$nbi
+                ;;
+                *)
+                    ln -sf $nbi-$version $BOOT/$nbi
+                ;;
+            esac
         fi
     else
         if which mkelf-linux >/dev/null; then
@@ -68,37 +76,28 @@ for kernel in $BOOT/vmlinu* ; do
                 netabootwrap_seen=true
             fi
         fi
+        if which elftoaout >/dev/null ; then
+            piggyback_cmd=""
+            case $SUB_ARCH in
+                sparc64) piggyback_cmd=piggyback64 ;;
+                sparc32) piggyback_cmd=piggyback32 ;;
+            esac
+            sysmap=$BOOT/System.map-$version
+            nbi=$nbi-$SUB_ARCH
+
+            # TODO: proper tempfile handline
+            gzip -cd $kernel > $nbi.tmp
+            elftoaout -o $nbi $nbi.tmp
+            if [ -f "$initrd" ]; then
+                $piggyback_cmd $nbi $sysmap $initrd
+            else
+                $piggyback_cmd $nbi $sysmap
+            fi
+        else
+            if [ -z "$sparc_piggyback_seen" ]; then
+                echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
+                sparc_piggyback_seen=true
+            fi
+        fi
     fi
 done
-
-if which elftoaout >/dev/null ; then
-    for kernel in $BOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
-        SUB_ARCH=$(uname -m)
-        piggyback_cmd=""
-        case $SUB_ARCH in
-            sparc64) piggyback_cmd=piggyback64 ;;
-            sparc32) piggyback_cmd=piggyback32 ;;
-        esac
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=$BOOT/initrd.img
-            sysmap=$BOOT/System.map
-            nbi=$BOOT/nbi.$SUB_ARCH.img
-        else
-            version=${basename##vmlinuz-}
-            initrd=$BOOT/initrd.img-$version
-            sysmap=$BOOT/System.map-$version
-            nbi=$BOOT/nbi.$SUB_ARCH.img-$version
-        fi
-        # TODO: proper tempfile handline
-        gzip -cd $kernel > $nbi.tmp
-        elftoaout -o $nbi $nbi.tmp
-        if [ -f "$initrd" ]; then
-            $piggyback_cmd $nbi $sysmap $initrd
-        else
-            $piggyback_cmd $nbi $sysmap
-        fi
-    done
-else
-    echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
-fi
