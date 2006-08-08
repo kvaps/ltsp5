@@ -7,22 +7,40 @@
 BOOT=/boot
 for kernel in $BOOT/vmlinu* ; do
     basename=$(basename "$kernel")
+    initrd=initrd.img
+    nbi=nbi.img
 
-    if [ "$basename" = "vmlinuz" ]; then
-        initrd=initrd.img
-        nbi=nbi.img
-    elif [ "$basename" = "vmlinuz.old" ]; then
-        initrd=initrd.img.old
-        nbi=nbi.img.old
-    else
-        version=${basename##vmlinuz-}
-        initrd=initrd.img-$version
-        nbi=nbi.img-$version
-    fi
+    case $basename in
+        vmlinuz|vmlinux)
+            # USE DEFAULT
+        ;;
+        vmlinu*.old) 
+            initrd=$initrd.old
+            nbi=$nbi.old
+        ;;
+        vmlinuz*) 
+            version=${basename##vmlinuz-}
+            initrd=$initrd-$version
+            nbi=$nbi-$version
+        ;;
+        vmlinux*) 
+            version=${basename##vmlinux-}
+            initrd=$initrd-$version
+            nbi=$nbi-$version
+        ;;
+    esac
+
     if [ -L "$kernel" ]; then
         basename="$(readlink $kernel)"
         if [ -f "$BOOT/$basename" ]; then
-            version=${basename##vmlinuz-}
+            case $basename in
+                vmlinuz)
+                    version=${basename##vmlinuz-}
+                ;;
+                vmlinux)
+                    version=${basename##vmlinux-}
+                ;;
+            esac
             ln -sf $nbi-$version $BOOT/$nbi
         fi
     else
