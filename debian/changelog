@@ -36,8 +36,10 @@ ltsp (0.92debian1) unstable; urgency=low
   * ldm:
     - dependency gtk2-engines (>= 1:2.6.9-1) | gtk2-engines-clearlooks
     (Closes: #377408)
+    - remove private copy of subprocess.py (thanks stratus for verifying)
+    (Closes: #380859)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Tue,  8 Aug 2006 15:07:47 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Tue,  8 Aug 2006 17:07:51 -0400
 
 ltsp (0.92) edgy; urgency=low
 
