@@ -38,8 +38,10 @@ ltsp (0.92debian1) unstable; urgency=low
     (Closes: #377408)
     - remove private copy of subprocess.py (thanks stratus for verifying)
     (Closes: #380859)
+    - improved Debian theme
+    - set Debian theme as default (Closes: #360406)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Tue,  8 Aug 2006 17:07:51 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  9 Aug 2006 10:24:53 -0400
 
 ltsp (0.92) edgy; urgency=low
 
