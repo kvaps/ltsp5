@@ -15,7 +15,7 @@ case "$1" in
     configure)
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Debian 45
+		ldm-theme /usr/share/ldm/themes/Debian 55
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
 		ldm-theme /usr/share/ldm/themes/Ubuntu 40
