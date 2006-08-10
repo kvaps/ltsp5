@@ -40,10 +40,11 @@ ltsp (0.92debian1) unstable; urgency=low
     (Closes: #377408)
     - remove private copy of subprocess.py (thanks stratus for verifying)
     (Closes: #380859)
+    - depend on python2.4 (to get subprocess.py)
     - improved Debian theme
     - set Debian theme as default (Closes: #360406)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  9 Aug 2006 10:39:27 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 10 Aug 2006 13:39:52 -0400
 
 ltsp (0.92) edgy; urgency=low
 
