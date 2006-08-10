@@ -92,7 +92,7 @@ for kernel in $BOOT/vmlinu* ; do
                 $piggyback_cmd $BOOT/$nbi $sysmap $BOOT/$initrd
             else
                 $piggyback_cmd $BOOT/$nbi $sysmap
-            fI
+            fi
         else
             if [ -z "$sparc_piggyback_seen" ]; then
                 echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
