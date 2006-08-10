@@ -88,11 +88,11 @@ for kernel in $BOOT/vmlinu* ; do
             # TODO: proper tempfile handline
             gzip -cd $kernel > $nbi.tmp
             elftoaout -o $nbi $nbi.tmp
-            if [ -f "$initrd" ]; then
-                $piggyback_cmd $nbi $sysmap $initrd
+            if [ -f "$BOOT/$initrd" ]; then
+                $piggyback_cmd $BOOT/$nbi $sysmap $BOOT/$initrd
             else
-                $piggyback_cmd $nbi $sysmap
-            fi
+                $piggyback_cmd $BOOT/$nbi $sysmap
+            fI
         else
             if [ -z "$sparc_piggyback_seen" ]; then
                 echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
