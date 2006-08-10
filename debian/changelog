@@ -4,6 +4,9 @@ ltsp (0.92debian1) unstable; urgency=low
   * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
     specific.
     - Fix problem with gettext use. (Closes: #375601)
+  * Simplified debian/rules a little more removing the useless update-po
+    target. Since all its logic was move to po/Makefile file we can make
+    things clear removing it from rules.
 
   [ Tiago Bortoletto Vaz ]
   * Add a correct i18n support for this package, using a specific Makefile
@@ -11,20 +14,36 @@ ltsp (0.92debian1) unstable; urgency=low
   * Fix ltsp-build-client script to get gettext message catalogs from locale
     dir
 
-  [ Otavio Salvador ]
-  * Simplified debian/rules a little more removing the useless update-po
-    target. Since all its logic was move to po/Makefile file we can make
-    things clear removing it from rules.
-
   [ Vagrant Cascadian ]
-  * ltsp-build-client: added option to enable popularity-contest 
-  * ldm: dependency gtk2-engines (>= 1:2.6.9-1) | gtk2-engines-clearlooks
+  * ltsp-client:
+    - drop recommends on ubuntu-thin-client (Closes: #376898)
+    - USE_LOCAL_SWAP option (Closes: #365578)
+    - init scripts exit when package is not installed
+    - add /etc/hosts.ltsp to /etc/hosts on boot
+  * ltsp-server:
+    - include example dhcpd.conf (Closes: #360409)
+  * ltsp-update-kernels:
+    - improved support for multiple architectures or installations
+    - common and configurable boot prompt arguments for all boot methods
+    - moved part of network boot image generation into ltsp-client
+    - move network boot dependencies into ltsp-client
+    - symlink network boot images if kernel is a symlink
+  * ltsp-build-client:
+    - added option to enable popularity-contest
+    - plugins are now loaded alphanumerically
+    - vendors and admins can overrwite plugins
+    - use initramfs-tools hooks instead of tweaking configuration files
+  * ltsp-update-sshkeys:
+    - append ssh_known_hosts.extra into ltsp-chroot ssh_known_hosts file
+  * ldm:
+    - dependency gtk2-engines (>= 1:2.6.9-1) | gtk2-engines-clearlooks
     (Closes: #377408)
-  * ltsp-client-setup.init: USE_LOCAL_SWAP option (Closes: #365578)
-  * debian/control: ltsp-client: drop recommends on ubuntu-thin-client 
-    (Closes: #376898)
+    - remove private copy of subprocess.py (thanks stratus for verifying)
+    (Closes: #380859)
+    - improved Debian theme
+    - set Debian theme as default (Closes: #360406)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Wed, 26 Jul 2006 17:41:53 +0000
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  9 Aug 2006 10:39:27 -0400
 
 ltsp (0.92) edgy; urgency=low
 

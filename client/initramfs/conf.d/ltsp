@@ -1,0 +1,3 @@
+MODULES="netboot"
+BOOT="nfs"
+NFSOPTS="-o retrans=10,nolock"

@@ -35,10 +35,10 @@ for kernel in $BOOT/vmlinu* ; do
         basename="$(readlink $kernel)"
         if [ -f "$BOOT/$basename" ]; then
             case $basename in
-                vmlinuz)
+                vmlinuz*)
                     version=${basename##vmlinuz-}
                 ;;
-                vmlinux)
+                vmlinux*)
                     version=${basename##vmlinux-}
                 ;;
             esac
