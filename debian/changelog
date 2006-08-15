@@ -22,6 +22,7 @@ ltsp (0.92debian1) unstable; urgency=low
     - add /etc/hosts.ltsp to /etc/hosts on boot
   * ltsp-server:
     - include example dhcpd.conf (Closes: #360409)
+    - prefer openbsd-inetd to netkit-inetd (Closes: #382681) 
   * ltsp-update-kernels:
     - improved support for multiple architectures or installations
     - common and configurable boot prompt arguments for all boot methods
@@ -44,7 +45,7 @@ ltsp (0.92debian1) unstable; urgency=low
     - improved Debian theme
     - set Debian theme as default (Closes: #360406)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 10 Aug 2006 13:39:52 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 15 Aug 2006 11:35:23 -0400
 
 ltsp (0.92) edgy; urgency=low
 
