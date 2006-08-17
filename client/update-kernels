@@ -55,10 +55,10 @@ for kernel in $ALL_KERNELS ; do
             esac
             case $SUB_ARCH in
                 sparc*) 
-                    realnbi="$nbi-$version-$SUB_ARCH" 
+                    realnbi="nbi.img-$version-$SUB_ARCH" 
                 ;;
                 *)
-                    realnbi="$nbi-$version"
+                    realnbi="nbi.img-$version"
                 ;;
             esac
             if [ -f "$BOOT/$realnbi" ]; then
