@@ -55,12 +55,15 @@ for kernel in $ALL_KERNELS ; do
             esac
             case $SUB_ARCH in
                 sparc*) 
-                    ln -sf $nbi-$version-$SUB_ARCH $BOOT/$nbi
+                    realnbi="$nbi-$version-$SUB_ARCH" 
                 ;;
                 *)
-                    ln -sf $nbi-$version $BOOT/$nbi
+                    realnbi="$nbi-$version"
                 ;;
             esac
+            if [ -f "$realnbi" ]; then
+                ln -sf $realnbi $BOOT/$nbi
+            fi
         fi
     else
         if which mkelf-linux >/dev/null; then
