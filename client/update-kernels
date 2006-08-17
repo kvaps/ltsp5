@@ -6,7 +6,18 @@
 
 BOOT=/boot
 SUB_ARCH=$(uname -m)
-for kernel in $BOOT/vmlinu* ; do
+
+# allow specifying a specific kernel image to update, from kernel postinst
+if [ -f "$2" ]; then
+    ALL_KERNELS="$2"
+else
+    ALL_KERNELS="$(find $BOOT -type f -name 'vmlinu*')"
+fi
+
+# look for symlinks, too, and put them after the "real" kernels
+ALL_KERNELS="$ALL_KERNELS $(find $BOOT -type l -name 'vmlinu*')"
+
+for kernel in $ALL_KERNELS ; do
     basename=$(basename "$kernel")
     initrd=initrd.img
     nbi=nbi.img
