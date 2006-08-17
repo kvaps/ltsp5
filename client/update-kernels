@@ -61,8 +61,8 @@ for kernel in $ALL_KERNELS ; do
                     realnbi="$nbi-$version"
                 ;;
             esac
-            if [ -f "$realnbi" ]; then
-                ln -sf $realnbi $BOOT/$nbi
+            if [ -f "$BOOT/$realnbi" ]; then
+                ln -sf $BOOT/$realnbi $BOOT/$nbi
             fi
         fi
     else
