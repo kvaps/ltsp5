@@ -1,0 +1,2 @@
+/usr/lib/ltsp/update-kernels /etc/kernel/postinst.d/ltsp-update-kernels
+/usr/lib/ltsp/update-kernels /etc/kernel/postrm.d/ltsp-update-kernels
