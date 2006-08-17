@@ -1,4 +1,4 @@
-ltsp (0.92debian1) unstable; urgency=low
+ltsp (0.93debian1) unstable; urgency=low
 
   [ Otavio Salvador ]
   * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
@@ -47,6 +47,28 @@ ltsp (0.92debian1) unstable; urgency=low
     - set Debian theme as default (Closes: #360406)
 
  -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 17 Aug 2006 14:15:30 -0400
+
+ltsp (0.93) edgy; urgency=low
+
+  [ Oliver Grawert ]
+  * add vendor detection to ltsp-update-kernels to fix wrong kernel parameters
+    introduced by debian
+  * add mountkernfs.sh and mountdevsubfs.sh to RCS_WHITELIST, needed now to
+    make the boot work
+  * fix debian introduced breakage of the initramfs.conf setup in
+    server/plugins/common/020-init-image
+  * added DEBIAN_PRIORITY=critical to avoid debconf questions to
+    server/plugins/Ubuntu/000-basic-configuration and changed from
+    x-window-system-core to xorg
+  * change theme priority for ldm to show the edubuntu theme by default again
+  * add 010-mount-proc with added linking of /dev/fd to Ubuntu plugins, usplash
+    needs /dev/fd to be in place now
+
+  [ Vagrant Cascadian ]
+  * added commandline option to enable popularity-contest in the chroot
+  * whitespace corrections
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  3 Aug 2006 23:59:01 +0200
 
 ltsp (0.92) edgy; urgency=low
 
@@ -102,6 +124,35 @@ ltsp (0.88) edgy; urgency=low
   * first upload to edgy
 
  -- Oliver Grawert <ogra@ubuntu.com>  Thu, 22 Jun 2006 10:09:02 +0200
+
+ltsp (0.87debian2) unstable; urgency=low
+
+   [ Otavio Salvador ]
+   * Make LTSP messages translatable.
+   * Minimal fixes for indentation of ltsp-client-setup init script.
+   * Fix Permission Denied error due a error in unionfs mount command in
+     initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
+     debugging it. (Closes: #360249)
+   * We don't need to set initramfs-tools as default since it's since
+     Debian kernel 2.6.15.
+   * Improved common/020-init-image including better code formating and
+     documentation.
+   * Converted set-arch modules to be a common one. For this dpkg use was
+     remove. Support for error messages translation was also added.
+ 
+   [ Gustavo Franco ]
+   * po/pt_BR.po:
+     - Add po/ltsp.pot Portuguese Brazilian translation by myself.
+ 
+   [ Otavio Salvador ]
+   * Move translation update routine to update-po rules target.
+   * Fix code style in common/010-set-base.
+   * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
+     <chaton@debian.org> for the bug report and updated file.
+     (Closes: #374656)
+   * Add support to initramfs-tools >= 0.64.
+
+ -- Otavio Salvador <otavio@debian.org>  Fri, 23 Jun 2006 15:48:37 -0300
 
 ltsp (0.87debian1) unstable; urgency=low
 
