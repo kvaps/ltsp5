@@ -29,6 +29,7 @@ ltsp (0.92debian1) unstable; urgency=low
     - moved part of network boot image generation into ltsp-client
     - move network boot dependencies into ltsp-client
     - symlink network boot images if kernel is a symlink
+    - network boot images are generated on kernel install
   * ltsp-build-client:
     - added option to enable popularity-contest
     - plugins are now loaded alphanumerically
@@ -45,7 +46,7 @@ ltsp (0.92debian1) unstable; urgency=low
     - improved Debian theme
     - set Debian theme as default (Closes: #360406)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 15 Aug 2006 11:35:23 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 17 Aug 2006 14:15:30 -0400
 
 ltsp (0.92) edgy; urgency=low
 
