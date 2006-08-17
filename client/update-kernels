@@ -62,7 +62,7 @@ for kernel in $ALL_KERNELS ; do
                 ;;
             esac
             if [ -f "$BOOT/$realnbi" ]; then
-                ln -sf $BOOT/$realnbi $BOOT/$nbi
+                ln -sf $realnbi $BOOT/$nbi
             fi
         fi
     else
