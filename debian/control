@@ -1,13 +1,12 @@
 Source: ltsp
 Section: misc
-Priority: optional
+Priority: extra
 Maintainer: LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
 Uploaders: Matt Zimmerman <mdz@debian.org>, Carlos Laviola <claviola@debian.org>, Michael Vogt <mvo@debian.org>, Oliver Grawert <ogra@ubuntu.com>, Petter Reinholdtsen <pere@debian.org>, Gustavo Franco <stratus@debian.org>, Vagrant Cascadian <vagrant@freegeek.org>, Otavio Salvador <otavio@debian.org>
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.7.2
 
 Package: ltsp-server
-Priority: extra
 Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, atftpd | tftpd-hpa, openssh-client | ssh, openbsd-inetd | netkit-inetd, iproute, debconf-utils, esound-clients
 Recommends: openssh-server | ssh
 Suggests: dhcp3-server, sdm, audiooss
@@ -52,7 +51,6 @@ Description: LTSP display manager
 
 Package: ltsp-client-builder
 Section: debian-installer
-Priority: optional
 XC-Package-Type: udeb
 Architecture: all
 Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer
