@@ -1,3 +1,17 @@
+ltsp (0.93debian2) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * ltsp-server:
+    - depend on netbase instead of openbsd-inetd or netkit-inetd (patch from
+      Roger Leigh, Closes: #382681)
+    - use lsb_release to select default distribution to install
+  * ltsp-client:
+    - move initramfs-tools hooks from /etc/initramfs to /usr/share/initramfs,
+      which depends on initramfs-tools version 0.73e or greater
+    - use default NFSOPTS from initramfs-tools
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 20 Aug 2006 16:14:54 -0400
+
 ltsp (0.93debian1) unstable; urgency=low
 
   [ Otavio Salvador ]
