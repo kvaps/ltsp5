@@ -2,7 +2,7 @@ case "$MODE" in
     configure)
         ARCH=${ARCH:-"$(dpkg --print-architecture)"}
         APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
-        DIST=${DIST:-"etch"}
+        DIST=${DIST:-"$(lsb_release -s -c)"}
         MIRROR=${MIRROR:-"http://http.us.debian.org/debian"}
         COMPONENTS=${COMPONENTS:-"main"}
         EARLY_PACKAGES=${EARLY_PACKAGES:-"x-window-system-core ltsp-client discover1 mdetect xresprobe udhcpc udev xdebconfigurator esound ldm"}
