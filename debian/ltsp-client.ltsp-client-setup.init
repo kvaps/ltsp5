@@ -50,9 +50,25 @@ configure_swap() {
         modprobe nbd
         nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
     fi
+    if [ "$ENCRYPT_SWAP" = "Y" ]; then
+        if [ -x /sbin/cryptsetup ]; then
+            modprobe dm_crypt
+        else
+            echo "ERROR: ENCRYPT_SWAP=Y, but /sbin/cryptsetup not found. disabling swap."
+            swap_devices=""
+        fi
+    fi
+    num=0
     for device in $swap_devices ; do
-        mkswap $device
-        swapon $device
+        swap="$device"
+        if [ "$ENCRYPT_SWAP" = "Y" ]; then
+            if [ -x /sbin/cryptsetup ]; then
+                cryptsetup create swap$num $swap && swap="/dev/mapper/swap$num"
+                num=$(($num+1))
+            fi
+        fi
+        mkswap $swap
+        swapon $swap
     done
 }
 
