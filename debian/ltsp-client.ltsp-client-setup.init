@@ -63,7 +63,7 @@ configure_swap() {
         swap="$device"
         if [ "$ENCRYPT_SWAP" = "Y" ]; then
             if [ -x /sbin/cryptsetup ]; then
-                cryptsetup create swap$num $swap && swap="/dev/mapper/swap$num"
+                cryptsetup -d /dev/urandom create swap$num $swap && swap="/dev/mapper/swap$num"
                 num=$(($num+1))
             fi
         fi
