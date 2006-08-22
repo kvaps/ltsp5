@@ -1,3 +1,12 @@
+ltsp (0.94) edgy; urgency=low
+
+  * add local device support:
+    make sure LOCALDEV=True is set in lts.conf, the ltspfsd package 
+    is installed in the client chroot and the ltspfs package is installed
+    on the ltsp server (new created chroots will have ltspfsd by default)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 22 Aug 2006 19:09:59 +0200
+
 ltsp (0.93) edgy; urgency=low
 
   [ Oliver Grawert ]
