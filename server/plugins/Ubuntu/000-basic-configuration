@@ -5,7 +5,7 @@ case "$MODE" in
         DIST=edgy
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
-        EARLY_PACKAGES="xorg ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm"
+        EARLY_PACKAGES="xorg ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm ltspfsd"
         RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
         RC2_WHITELIST="ltsp-client nbd-client usplash rmnologin stop-bootlogd"
         OVERRIDE_EXPORTS="true"
