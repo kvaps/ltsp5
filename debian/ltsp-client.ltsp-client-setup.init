@@ -47,6 +47,7 @@ configure_swap() {
         done
     fi
     if [ -n "$SWAP_SERVER" ] && [ -n "$NBD_PORT" ]; then
+        modprobe nbd
         nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
     fi
     for device in $swap_devices ; do
