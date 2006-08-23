@@ -24,7 +24,7 @@ Description: Complete LTSP server environment
  
 Package: ltsp-client
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.73e) | initrd-netboot-tools, syslinux [i386 amd64] | mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc] 
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.73e) | initrd-netboot-tools, syslinux [i386 amd64] | mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release
 Recommends: xdebconfigurator, nbd-client, esound
 Suggests: nas
 Conflicts: ltsp-utils
