@@ -6,6 +6,54 @@
 
 BOOT=/boot
 SUB_ARCH=$(uname -m)
+VENDOR=$(lsb_release -i -s)
+
+if [ -z "$CHROOT_NAME" ]; then
+    # FIXME: replace with a common function
+    CHROOT_NAME="$(dpkg --print-installation-architecture)"
+fi
+
+if [ -z "$BOOTPROMPT_OPTS" ]; then
+    if [ "$VENDOR" = "Ubuntu" ]; then
+        BOOTPROMPT_OPTS="quiet splash"
+    else 
+        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp"
+    fi
+fi
+
+if [ -f /usr/lib/yaboot/yaboot ]; then
+    cp -a -v /usr/lib/yaboot/yaboot $BOOT
+    cat > $BOOT/yaboot.conf <<EOF
+timeout=0
+default=ltsp
+root=/dev/ram
+
+image=/ltsp/$CHROOT_NAME/vmlinux
+        label=ltsp
+        initrd=/ltsp/$CHROOT_NAME/initrd.img
+        append="$BOOTPROMPT_OPTS"
+EOF
+
+else
+    echo "Skipping yaboot configuration. install yaboot package if you need it."
+fi    
+
+if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
+PXECFG=$BOOT/pxelinux.cfg
+cp /usr/lib/syslinux/pxelinux.0 $BOOT
+    if [ ! -d $PXECFG ]; then
+        mkdir $PXECFG
+    fi
+    if [ -z "$PXELINUX_CMDLINE" ]; then
+        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
+    fi
+    cat > $PXECFG/default <<EOF
+$PXELINUX_CMDLINE
+EOF
+
+else
+    echo "Skipping PXE configuration.  Install the syslinux package if you need it."
+fi
 
 # allow specifying a specific kernel image to update, from kernel postinst
 if [ -f "$2" ]; then
