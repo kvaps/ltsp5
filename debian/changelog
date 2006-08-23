@@ -5,12 +5,20 @@ ltsp (0.93debian2) unstable; urgency=low
     - remove dependency on any inetd, as both atftpd and tftpd-hpa depend on
       netbase, which in turn depends on an inetd. (Closes: #382681)
     - use lsb_release to select default distribution to install
+    - add nbd-server to recommends
+    - example script to test with qemu
+    - bugfixes in initrd-netboot-tools tweaks
+    - only install udhcpc on sarge
   * ltsp-client:
     - move initramfs-tools hooks from /etc/initramfs to /usr/share/initramfs,
       which depends on initramfs-tools version 0.73e or greater
     - use default NFSOPTS from initramfs-tools
+    - add esound and nbd-client to recommends
+  * debian/control:
+    - build-depend on po-debconf
+    - change all package priorities to "extra"
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 21 Aug 2006 17:21:08 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed, 23 Aug 2006 18:32:25 -0400
 
 ltsp (0.93debian1) unstable; urgency=low
 
