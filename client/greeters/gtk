@@ -45,7 +45,7 @@ class GTKGreeter:
 	    self.draw_login_window()
 
 	    # configurable options
-	    # self.draw_buttons() # session and lang, should be wrapped by a config option
+	    self.draw_buttons() # session and lang, should be wrapped by a config option
 	    self.draw_bottom_bar(False) # set to True if you want a clock
 	    self.draw_shutdown_button()
 
