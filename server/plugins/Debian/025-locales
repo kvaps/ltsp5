@@ -1,0 +1,33 @@
+case $MODE in
+    commandline)
+        add_option "locale" "`eval_gettext "Set the default locale"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_locale_value" ]; then
+            LOCALE="$option_locale_value"
+        fi
+        ;;
+    after-install)
+        if [ -f /etc/locale.gen ]; then
+            cp /etc/locale.gen $ROOT/etc/
+        fi
+        if [ -f /etc/default/locale ]; then
+            cp /etc/default/locale $ROOT/etc/default
+        fi
+        if [ -n "$LOCALE" ]; then
+            export LANG=$(echo "$LOCALE" | awk '{print $1}')
+            echo "$LOCALE" >> $ROOT/etc/locale.gen
+            echo "LANG=$LANG" >> $ROOT/etc/default/locale
+            if [ "$DIST" = "sarge" ]; then
+                if [ -f /etc/environment ]; then
+                    cp /etc/environment $ROOT/etc/
+                fi
+                echo "LANG=$LANG" >> $ROOT/etc/environment
+            fi
+        fi
+
+        if [ -f $ROOT/etc/locale.gen ]; then
+            DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical LC_ALL=C chroot $ROOT apt-get install locales
+        fi
+        ;;
+esac
