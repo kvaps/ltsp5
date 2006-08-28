@@ -1,3 +1,10 @@
+ltsp (0.95) edgy; urgency=low
+
+  * enable the language and session buttons in ldm (non functional yet
+    for the ltsp-login-and-session-handling spec)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 24 Aug 2006 13:49:46 +0200
+
 ltsp (0.94) edgy; urgency=low
 
   * add local device support:
