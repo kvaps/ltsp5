@@ -43,10 +43,10 @@ class LDM:
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
 	
-        if self.use_localdev:
-            self.localdevcommand = " && ltspfsmounter all cleanup"
+        self.remotecmd = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'
 
-        self.remotecmd = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'+self.localdevcommand
+        if self.use_localdev:
+            self.remotecmd = self.remotecmd+' && ltspfsmounter all cleanup'
 
         # Save xauth info some writable tmpfs file.
         self.authfile = tempfile.mktemp()
@@ -108,7 +108,9 @@ class LDM:
 
             ssh_opts = ['-v',
                        '-X',
-                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
+                       '-M',
+                       '-S', '/tmp/.ltspfs-socket',
+                       '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
 
             ssh_auth = ['%s@%s' % (username,self.server)]
 

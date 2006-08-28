@@ -1,3 +1,9 @@
+ltsp (0.96) edgy; urgency=low
+
+  * make sure ldm always creates our localdev socket
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 28 Aug 2006 19:40:55 +0200
+
 ltsp (0.95) edgy; urgency=low
 
   * enable the language and session buttons in ldm (non functional yet
