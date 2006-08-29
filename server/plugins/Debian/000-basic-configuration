@@ -54,7 +54,11 @@ case "$MODE" in
                 fi
             done
         }
-        rc_cleanup S $RCS_WHITELIST
-        rc_cleanup 2 $RC2_WHITELIST
+        if [ -n "$RCS_WHITELIST" ]; then
+            rc_cleanup S $RCS_WHITELIST
+        fi
+        fi [ -n "$RC2_WHITELIST" ]; then
+            rc_cleanup 2 $RC2_WHITELIST
+        fi
         ;;
 esac
