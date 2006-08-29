@@ -32,7 +32,11 @@ if [ -f /etc/ltsp/ssh_known_hosts.extra ]; then
 fi
 
 for client in $clients; do
-    install -m 644 $output $client/etc/ssh/ssh_known_hosts
+    if [ -d $client/etc/ssh ]; then
+        install -m 644 $output $client/etc/ssh/ssh_known_hosts
+    else
+        echo "WARNING: $client/etc/ssh not found. skipping..."
+    fi
 done
 
 rm -f $output
