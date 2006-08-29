@@ -34,7 +34,7 @@ case "$MODE" in
             if [ $(echo $LEVEL| grep [2-5]) ]; then
                 suffix="2 3 4 5"
                 echo "Cleaning up startup links in init levels: $suffix ..."
-                else
+            else
                 suffix=$LEVEL
                 echo "Cleaning up startup links in rc$suffix.d ..."
             fi
