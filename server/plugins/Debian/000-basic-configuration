@@ -57,7 +57,7 @@ case "$MODE" in
         if [ -n "$RCS_WHITELIST" ]; then
             rc_cleanup S $RCS_WHITELIST
         fi
-        fi [ -n "$RC2_WHITELIST" ]; then
+        if [ -n "$RC2_WHITELIST" ]; then
             rc_cleanup 2 $RC2_WHITELIST
         fi
         ;;
