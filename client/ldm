@@ -32,8 +32,9 @@ class LDM:
         self.display = display
         self.server = get_config('SERVER')
         self.use_xfs = get_config_bool('USE_XFS')
-        self.remotecmd = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'
         self.use_sound = get_config_bool('SOUND')
+        self.use_localdev = get_config_bool('LOCALDEV')
+
         if self.use_sound:
             self.ip = get_ip('eth0')
             self.sound_daemon = get_config('SOUND_DAEMON') or 'esd'
@@ -41,6 +42,11 @@ class LDM:
         if self.use_xfs:
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
+	
+        self.remotecmd = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'
+
+        if self.use_localdev:
+            self.remotecmd = self.remotecmd+' && ltspfsmounter all cleanup'
 
         # Save xauth info some writable tmpfs file.
         self.authfile = tempfile.mktemp()
@@ -102,7 +108,9 @@ class LDM:
 
             ssh_opts = ['-v',
                        '-X',
-                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
+                       '-M',
+                       '-S', '/tmp/.ltspfs-socket',
+                       '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
 
             ssh_auth = ['%s@%s' % (username,self.server)]
 
@@ -110,7 +118,7 @@ class LDM:
                 if self.sound_daemon == 'esd':
                     print "info: Enabling esd sound support."
                     # Could start using esddsp, but it is not enabled
-		    # because it gave problems when using firefox.
+                    # because it gave problems when using firefox.
                     #   esddsp', '-m','--server=%s:16001' % (self.ip)
                     espeakerport = 16001
                     sound_cmd = ['ESPEAKER=%s:%d' % (self.ip, espeakerport)]
