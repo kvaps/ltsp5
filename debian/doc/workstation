@@ -1,0 +1,52 @@
+these instructions describe how to create a basic ltsp system where all the
+applications are running locally with an anonymous login, using gdm, for i386
+hardware.  non-anonymous login with ldap or some other authentiation mechanism
+with writeable home directories is definitely possible, but not described here.
+and of course, you could probably use kdm insead of gdm, with a few changes.
+
+install the ltsp-server package:
+
+apt-get install ltsp-server
+
+
+build the client environment:
+
+ltsp-build-client
+
+
+install a desktop environment:
+
+chroot /opt/ltsp/i386 tasksel install desktop
+(alternately: chroot /opt/ltsp/i386 apt-get install gdm <and other packages>)
+
+
+add an anonymous user for autologin:
+
+chroot /opt/ltsp/i386 adduser --disabled-password --gecos ,,, autologin
+
+(note: you may want to ensure a specific --uid and --gid, too)
+
+
+make /home and /var/lib/gdm writeable:
+
+echo 'copy_dirs="$copy_dirs /home"' >> /opt/ltsp/i386/etc/default/ltsp-client-setup
+echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> /opt/ltsp/i386/etc/default/ltsp-client-setup
+
+
+enable this stupid workaround that should someday not be needed:
+
+echo 'SCREEN_10=telnet' >> /opt/ltsp/i386/etc/lts.conf
+
+(change SCREEN_10 to a different number if something else is configured to run
+on tty10)
+
+
+to /opt/ltsp/i386/etc/gdm/gdm.conf, add the following lines in the daemon
+section, like so:
+
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=autologin
+TimedLoginEnable=true
+TimedLogin=autologin
+TimedLoginDelay=30
