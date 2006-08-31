@@ -1,3 +1,11 @@
+ltsp (0.97) edgy; urgency=low
+
+  * small fixes to the localdev support
+  * add plugins for running ltsp-update-{sshkeys,kernels} at the end of
+    the ltsp-build-client run
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 29 Aug 2006 17:53:01 +0200
+
 ltsp (0.96) edgy; urgency=low
 
   * make sure ldm always creates our localdev socket
