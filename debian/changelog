@@ -1,3 +1,10 @@
+ltsp (0.98) edgy; urgency=low
+
+  * move finalization plugins to the vendor dir with a more proper sequence
+    number, so they dont run to early
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 31 Aug 2006 10:54:25 +0200
+
 ltsp (0.97) edgy; urgency=low
 
   * small fixes to the localdev support
