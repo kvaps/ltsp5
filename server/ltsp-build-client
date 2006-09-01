@@ -22,7 +22,7 @@ ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 . gettext.sh
 
 # load plugin functions
-. /usr/share/ltsp/plugins/functions
+. $PLUGINS_BASE/functions
 
 ##################################
 ### Methods to be called by plugins
