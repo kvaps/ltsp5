@@ -20,6 +20,8 @@ ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 
 . gettext.sh
 
+# load plugin functions
+. /usr/share/ltsp/plugins/functions
 
 ##################################
 ### Methods to be called by plugins
@@ -91,37 +93,6 @@ load_modules() {
     for file in $(run-parts --list $DIR); do
         debug "  - Loading file $file..."
         . $file
-    done
-}
-
-# Load our plugins.
-#
-# Params:
-# $1 - mode (configure|run)
-load_plugins() {
-    set -- "$@"
-    MODE=$1
-    debug "Loading plugins in MODE=$MODE:"
-    FILENAMES=""
-    NAMES=""
-    for dir in $PLUGIN_DIRS ; do
-        if [ -d "$dir" ]; then
-            FILENAMES="$FILENAMES $(run-parts --list $dir)"
-        fi
-    done
-    for file in $FILENAMES ; do
-        NAMES="$NAMES $(basename $file)"
-    done
-    NAMES="$(echo $NAMES | tr "\t " "\n" | sort -u)"
-    for name in $NAMES ; do
-        for dir in $PLUGIN_DIRS ; do
-            filename="$dir/$name"
-            if [ -f "$filename" ]; then 
-                debug "Loading plugin: $filename"
-                . "$filename"
-                break
-            fi
-        done
     done
 }
 
