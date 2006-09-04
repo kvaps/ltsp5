@@ -4,21 +4,40 @@ ltsp (0.93debian2) unstable; urgency=low
   * ltsp-server:
     - remove dependency on any inetd, as both atftpd and tftpd-hpa depend on
       netbase, which in turn depends on an inetd. (Closes: #382681)
+    - prefer tftpd-hpa over atftpd, as it works out of the box
     - use lsb_release to select default distribution to install
     - add nbd-server to recommends
     - example script to test with qemu
     - bugfixes in initrd-netboot-tools tweaks
     - only install udhcpc on sarge
+    - only run rc whitelisting code if something is whitelisted
+    - ltsp-update-sshkeys:
+      + only update directories with an /etc/ssh directory
+    - bug reporting helper script to get package versions from chroot(s)
+    - basic documentation of:
+      + swap
+      + plugins
+      + anonymous workstation-style install
+    - updated ltsp-build-client manpage:
+      + removed ubuntu-centrism (Closes: #385885)
+      + removed obsolete and distro-specific options
+      + re-worded much of the text
   * ltsp-client:
     - move initramfs-tools hooks from /etc/initramfs to /usr/share/initramfs,
       which depends on initramfs-tools version 0.73e or greater
     - use default NFSOPTS from initramfs-tools
-    - add esound and nbd-client to recommends
+    - add esound to recommends
+    - bugfixes with /etc/hosts and /etc/hostname
+    - man page for getltscfg
+  * ldm:
+    - merge localdev support from ubuntu
+    - only enable ssh socket if localdev is configured
+    - manpage for ldm
   * debian/control:
     - build-depend on po-debconf
     - change all package priorities to "extra"
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Wed, 23 Aug 2006 18:32:25 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  4 Sep 2006 03:33:44 -0500
 
 ltsp (0.93debian1) unstable; urgency=low
 
