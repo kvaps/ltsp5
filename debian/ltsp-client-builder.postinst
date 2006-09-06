@@ -40,4 +40,57 @@ db_progress STEP 1
 
 db_progress STOP
 
+# configure a default interface for usage with LTSP
+NET=192.168.0
+DEFAULTROUTE_IFACE="$(route -n|grep ^0|sed -e 's/.* //')"
+IFACE_LIST="$(cat /proc/net/dev|sed -e 's/^ *//' -e 's/:.*//'|grep -Ev '(\||lo|sit)')"
+
+interfaces_entry() {
+	cat <<EOF >>/target/etc/network/interfaces
+iface $IFACE_LIST inet static
+    address $NET.254
+    netmask 255.255.255.0
+    network $NET.0
+    broadcast $NET.255
+EOF
+
+}
+
+# if we already have a matching interface, there is no need to go on
+if [ -n "$(ifconfig|grep $NET)" ];then 
+	exit 0
+fi
+
+# exclude the interface with the default route, we only want unconfigured ones
+IFACE_TMP=""
+for iface in $IFACE_LIST;do
+	if [ $iface != $DEFAULTROUTE_IFACE ]; then 
+		IFACE_TMP="${IFACE_TMP:+$IFACE_TMP }$iface"
+	fi
+done
+IFACE_LIST=$IFACE_TMP
+
+# check if we still have more than one possible interface.
+# if thats the case, show a selector with the detected ones
+if [ "$(echo ${IFACE_LIST}|wc -w)" -gt 1 ]; then 
+	db_subst ltsp-client-builder/dhcp-interface choices "$(echo "$IFACE_LIST" | sed 's/ /, /g')"
+
+	db_fset ltsp-client-builder/dhcp-interface seen false
+	db_input high ltsp-client-builder/dhcp-interface || true
+    db_go || true
+
+	db_get ltsp-client-builder/dhcp-interface || true
+	IFACE_LIST="$RET"
+
+	interfaces_entry
+elif [  -z "$IFACE_LIST" ];then
+	# we didnt get a proper interface, tell the user about it
+	db_fset ltsp-client-builder/dhcp-manual seen false   
+	db_input high ltsp-client-builder/dhcp-manual || true
+	db_go || true
+	exit 0
+else
+	interfaces_entry
+fi
+
 exit 0
