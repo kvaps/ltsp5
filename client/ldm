@@ -43,10 +43,6 @@ class LDM:
             xfs_server = get_config('XFS_SERVER') or self.server
             self.fontpath = "tcp/%s:7100" % xfs_server
 	
-        self.remotecmd = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'
-
-        if self.use_localdev:
-            self.remotecmd = self.remotecmd+' && ltspfsmounter all cleanup'
 
         # Save xauth info some writable tmpfs file.
         self.authfile = tempfile.mktemp()
@@ -75,25 +71,27 @@ class LDM:
             time.sleep(5)
 
             # Generate an X authority key in ~/.Xauthority
-            xauth_command = ['xauth', '-f', self.authfile, 'generate', self.display]
+            xauth_command = ['xauth', '-i', '-n', '-f', self.authfile, 'generate', self.display]
             xauth = subprocess.Popen(xauth_command, stdout=sys.stdout, stderr=sys.stderr, env=env)
             os.waitpid(xauth.pid, 0)
 
             greeter = subprocess.Popen(['/usr/lib/ltsp/greeters/gtk'],
                                        stdout=subprocess.PIPE, stderr=sys.stderr, env=env)
             greeter_output = greeter.stdout.readlines()
-            if len(greeter_output) == 2:
+            if len(greeter_output) == 4:
                 username = greeter_output[0][:-1]
                 password = greeter_output[1][:-1]
+                lang = greeter_output[2][:-1]
+                selected_session = greeter_output[3][:-1]
 
-                self.spawn_session(username, password, self.remotecmd)
+                self.spawn_session(username, password, lang, selected_session)
             else:
                 print "Didn't get the right output from the greeter"
 
             os.kill(server.pid, signal.SIGTERM)
             os.waitpid(server.pid, 0)
 
-    def spawn_session(self, username, password, session_manager):
+    def spawn_session(self, username, password, lang, selected_session):
         pipe_read, pipe_write = os.pipe()
         pid = os.fork()
 
@@ -143,6 +141,21 @@ class LDM:
                 print "info: Not enabling sound support."
                 sound_cmd = []
 
+            # select the right session command
+            session_manager = get_config('LDM_REMOTECMD') or '/etc/X11/Xsession'
+
+            if selected_session != 'None' and not get_config('LDM_REMOTECMD'):
+                session_manager = session_manager+' '+selected_session
+
+            # make sure we clean up after logout if localdev is used
+            if self.use_localdev:
+                session_manager = session_manager+' && ltspfsmounter all cleanup'
+
+            # set language
+            if lang != 'None':
+				lang_command = 'LC_ALL='+lang+'.UTF-8 LANGUAGE='+lang+'.UTF-8 LANG='+lang+'.UTF-8'
+            else:
+                lang_command = ''
             # Make sure to run a login shell, to get /etc/profile executed
             # and the full PATH content set.  Use bash to make sure the
             # shell used support the --login argument.
@@ -151,6 +164,7 @@ class LDM:
                                   '-c',
                                   " ".join( ['\'',
                                     'env',
+									lang_command,
                                     'LTSP_CLIENT="%s"' % (socket.gethostname()),
                                     ] + sound_cmd + [
                                     session_manager,
