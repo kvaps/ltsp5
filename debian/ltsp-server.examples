@@ -1,2 +1,2 @@
 server/dhcpd.conf
-server/qemu-ltsp
+server/doc/examples/*
