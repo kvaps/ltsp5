@@ -1,3 +1,11 @@
+ltsp (0.101) edgy; urgency=low
+
+  * update po files
+  * merge fixes for ldm lang/session handling from
+    http://llama.freegeek.org/~vagrant/bzr/ltsp/features/vagrant-lang-session/
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 00:56:13 +0200
+
 ltsp (0.100) edgy; urgency=low
 
   * merge ltsp-dhcpd-autogeneration (configure a default interface for ltsp
