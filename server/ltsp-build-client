@@ -10,7 +10,8 @@ VENDOR=$(lsb_release -i -s)
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
-PLUGIN_DIRS="/etc/ltsp/plugins $PLUGINS_BASE/$VENDOR $PLUGINS_BASE/common"
+SCRIPT=ltsp-build-client
+PLUGIN_DIRS="/etc/ltsp/plugins/$SCRIPT $PLUGINS_BASE/$SCRIPT/$VENDOR $PLUGINS_BASE/$SCRIPT/common"
 
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
 
@@ -20,6 +21,8 @@ ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 
 . gettext.sh
 
+# load plugin functions
+. $PLUGINS_BASE/functions
 
 ##################################
 ### Methods to be called by plugins
@@ -91,37 +94,6 @@ load_modules() {
     for file in $(run-parts --list $DIR); do
         debug "  - Loading file $file..."
         . $file
-    done
-}
-
-# Load our plugins.
-#
-# Params:
-# $1 - mode (configure|run)
-load_plugins() {
-    set -- "$@"
-    MODE=$1
-    debug "Loading plugins in MODE=$MODE:"
-    FILENAMES=""
-    NAMES=""
-    for dir in $PLUGIN_DIRS ; do
-        if [ -d "$dir" ]; then
-            FILENAMES="$FILENAMES $(run-parts --list $dir)"
-        fi
-    done
-    for file in $FILENAMES ; do
-        NAMES="$NAMES $(basename $file)"
-    done
-    NAMES="$(echo $NAMES | tr "\t " "\n" | sort -u)"
-    for name in $NAMES ; do
-        for dir in $PLUGIN_DIRS ; do
-            filename="$dir/$name"
-            if [ -f "$filename" ]; then 
-                debug "Loading plugin: $filename"
-                . "$filename"
-                break
-            fi
-        done
     done
 }
 
