@@ -11,7 +11,7 @@ if __name__ == "__main__":
     except OSError:
         print "ERROR"
         sys.exit(0)
-    langs = [lang[:-1].split('.')[0] for lang in lines.split(None)]
+    langs = lines.split(None)
     for lang in langs:
         print lang
     print
