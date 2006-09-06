@@ -16,11 +16,12 @@ if __name__ == "__main__":
         print lang
     print
     try:
+        lines=[]
         for alternative in ['x-session-manager','x-window-manager']:
-            lines = Popen(['update-alternatives', '--list', alternative ],
-                      stdin=p2.stdout, stdout=PIPE).communicate()[0]
+            lines.append(Popen(['update-alternatives', '--list', alternative ],
+                      stdin=p2.stdout, stdout=PIPE).communicate()[0])
     except OSError:
         print "ERROR"
         sys.exit(0)
-    for line in lines.split(None):
+    for line in lines:
         print line
