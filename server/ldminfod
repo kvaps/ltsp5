@@ -1,25 +1,30 @@
 #!/usr/bin/python
-import os
+import sys
 from subprocess import *
 if __name__ == "__main__":
     # Get list of valid locales from locale -a
     try:
-        p1 = Popen(['locale', '-a'], stdout=PIPE)
-        p2 = Popen(['grep', '-v', 'POSIX'], stdin=p1.stdout, stdout=PIPE)
-        lines = Popen(['grep', '-v', '^C$'], stdin=p2.stdout,
-                      stdout=PIPE).communicate()[0]
+        lines = Popen(['locale', '-a'], stdout=PIPE).communicate()[0]
+
     except OSError:
         print "ERROR"
-        os.exit(0)
-    langs = [lang[:-1].split('.')[0] for lang in lines.split(None)]
+        sys.exit(0)
+    langs = lines.split(None)
     for lang in langs:
-        print lang
+        lang=lang.rstrip()
+        if lang.endswith('.utf8'):
+            # locale returns .utf8 when we want .UTF-8
+            lang=lang.replace('.utf8','.UTF-8')
+        if lang != 'POSIX' and lang != 'C':
+            print lang
     print
     try:
-        lines = Popen(['update-alternatives', '--list', 'x-session-manager'],
-                      stdin=p2.stdout, stdout=PIPE).communicate()[0]
+        lines=[]
+        for alternative in ['x-session-manager','x-window-manager']:
+            lines.append(Popen(['/usr/sbin/update-alternatives', '--list', alternative ],
+                      stdout=PIPE).communicate()[0])
     except OSError:
         print "ERROR"
-        os.exit(0)
-    for line in lines.split(None):
+        sys.exit(0)
+    for line in lines:
         print line
