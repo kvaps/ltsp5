@@ -153,7 +153,7 @@ class LDM:
 
             # set language
             if lang != 'None':
-				lang_command = 'LC_ALL='+lang+'.UTF-8 LANGUAGE='+lang+'.UTF-8 LANG='+lang+'.UTF-8'
+				lang_command = 'LC_ALL='+lang+' LANGUAGE='+lang+' LANG='+lang
             else:
                 lang_command = ''
             # Make sure to run a login shell, to get /etc/profile executed
