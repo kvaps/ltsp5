@@ -1,0 +1,20 @@
+# example configuration for using dnsmasq as a dhcp server.  
+
+# install the dnsmasq package
+# copy this file to /etc/ltsp/dhcpd-dnsmasq
+# add the following line to /etc/dnsmasq.conf:
+# conf-file=/etc/ltsp/dhcpd-dnsmasq
+
+# ip ranges to hand out
+dhcp-range=192.168.1.100,192.168.1.250,1h
+
+# rootpath option
+dhcp-option=17,/opt/ltsp/i386
+
+# define common netboot types 
+dhcp-vendorclass=etherboot,Etherboot
+dhcp-vendorclass=pxe,PXEClient
+
+# Set the boot filename for BOOTP. 
+dhcp-boot=net:pxe,/ltsp/i386/pxeclient.0
+dhcp-boot=net:etherboot,/ltsp/i386/nbi.img
