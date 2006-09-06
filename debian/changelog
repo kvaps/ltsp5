@@ -1,3 +1,13 @@
+ltsp (0.99) edgy; urgency=low
+
+  * merged
+    http://people.ubuntu.com/~ogra/bzr-archive/ltsp/ldm-login-and-session-handling/,
+    implements login and session selection in ldm
+  * move the /etc/hosts plugin from Debian subdir to common plugins
+  * fix usplash breakage in ldm
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  6 Sep 2006 03:35:29 +0200
+
 ltsp (0.98) edgy; urgency=low
 
   * move finalization plugins to the vendor dir with a more proper sequence
