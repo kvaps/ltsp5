@@ -1,3 +1,10 @@
+ltsp (0.100) edgy; urgency=low
+
+  * merge ltsp-dhcpd-autogeneration (configure a default interface for ltsp
+    from the installer udeb) from ltsp-mainline
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 00:25:51 +0200
+
 ltsp (0.99) edgy; urgency=low
 
   * merged
