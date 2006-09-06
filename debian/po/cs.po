@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: mdz@ubuntu.com\n"
-"POT-Creation-Date: 2006-07-14 21:18+0200\n"
+"POT-Creation-Date: 2006-09-07 00:27+0200\n"
 "PO-Revision-Date: 2005-11-13 11:08+0100\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
@@ -51,6 +51,34 @@ msgstr "Vytvořit chroot pro LTSP"
 #: ../ltsp-client-builder.templates:3001
 msgid "Building LTSP chroot..."
 msgstr "Vytvářím chroot pro LTSP..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:4001
+msgid "No Interface for LTSP dhcpd configuration found"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:4001
+msgid ""
+"There are no free interfaces for usage with the LTSP Server. Please "
+"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
+"interface after the installation finished."
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid ""
+"Please select the interface you want to use for the thin client network."
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid "There were multiple spare interfaces found in this system."
+msgstr ""
 
 #. Type: note
 #. Description
