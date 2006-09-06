@@ -18,6 +18,7 @@ fi
 if ! env | grep -q '^SCREEN_'; then
     if [ -f /etc/X11/default-display-manager ] && [ -x "$(cat /etc/X11/default-display-manager)" ]; then
       # Do nothing, these daemons (xdm, gdm, kdm, wdm, etc.) should configure themselves.
+      true
     elif [ -x /usr/sbin/ldm ]; then
       SCREEN_07=ldm
       export SCREEN_07
