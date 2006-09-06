@@ -5,8 +5,7 @@ if __name__ == "__main__":
     # Get list of valid locales from locale -a
     try:
         p1 = Popen(['locale', '-a'], stdout=PIPE)
-        p2 = Popen(['grep', '-v', 'POSIX'], stdin=p1.stdout, stdout=PIPE)
-        lines = Popen(['grep', '-v', '^C$'], stdin=p2.stdout,
+        lines = Popen(['egrep', '-v', '^C$|^POSIX$'], stdin=p1.stdout,
                       stdout=PIPE).communicate()[0]
     except OSError:
         print "ERROR"
@@ -19,7 +18,7 @@ if __name__ == "__main__":
         lines=[]
         for alternative in ['x-session-manager','x-window-manager']:
             lines.append(Popen(['update-alternatives', '--list', alternative ],
-                      stdin=p2.stdout, stdout=PIPE).communicate()[0])
+                      stdout=PIPE).communicate()[0])
     except OSError:
         print "ERROR"
         sys.exit(0)
