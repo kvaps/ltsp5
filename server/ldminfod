@@ -16,7 +16,8 @@ if __name__ == "__main__":
         print lang
     print
     try:
-        lines = Popen(['update-alternatives', '--list', 'x-session-manager'],
+        for alternative in ['x-session-manager','x-window-manager']:
+            lines = Popen(['update-alternatives', '--list', alternative ],
                       stdin=p2.stdout, stdout=PIPE).communicate()[0]
     except OSError:
         print "ERROR"
