@@ -3,6 +3,7 @@ ltsp (0.102) edgy; urgency=low
   * added ldm-swapon, an automatic userspace swap script using the ssh tunnel
     to automatically create swapfiles for nbd-server/client. implements the 
     NBD_SWAP and SWAP_SIZE options for lts.conf
+  * adds dependency on nbd-server to the ltsp-server package
 
  -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 19:26:42 +0200
 

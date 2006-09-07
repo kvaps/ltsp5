@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: ltsp-server
 Priority: extra
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot | silo, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, syslinux | mknbi | mkvmlinuz | aboot | silo, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients, nbd-server
 Recommends: openssh-server | ssh, ltspfs
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
