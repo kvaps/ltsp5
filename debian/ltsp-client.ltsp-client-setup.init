@@ -70,6 +70,16 @@ EOF
     fi
 }
 
+configure_ldm_swap() {
+    if [ -n "$NBD_SWAP" ]; then
+        if [ -n $SWAP_SIZE ]; then
+		    ldm-swapon $SWAP_SIZE &
+        else
+            ldm-swapon &
+        fi
+    fi
+}
+
 configure_resolver() {
     hostname=$(hostname)
     if [ "(none)" = "$hostname" ] ; then
@@ -304,7 +314,8 @@ case "$1" in
         configure_console || true
         configure_network || true
         configure_resolver || true
-        configure_swap || true
+        #configure_swap || true
+        configure_ldm_swap || true
         configure_syslog || true
         configure_fstab || true
         run_rcfiles || true
