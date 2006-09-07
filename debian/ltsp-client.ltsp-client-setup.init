@@ -20,7 +20,7 @@ NAME=ltsp-client-setup
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Gracefully exit if the package has been removed.
-test -x $DAEMON || exit 0
+test -f /usr/lib/ltsp/ltsp_functions || exit 0
 
 . /lib/lsb/init-functions
 . /usr/lib/ltsp/ltsp_functions
@@ -68,6 +68,13 @@ NBD_HOST[0]=$SWAP_SERVER
 NBD_PORT[0]=$NBD_PORT
 EOF
     fi
+    if [ "$USE_LOCAL_SWAP" = "Y" ]; then
+        # Enable local swap partition if found on local disk
+        for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
+            mkswap $part
+            swapon $part
+        done
+    fi
 }
 
 configure_ldm_swap() {
@@ -87,7 +94,7 @@ configure_resolver() {
     else
         echo $hostname > /etc/hostname
     fi
-    cat <<EOF >> /etc/hosts
+    cat <<EOF > /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
 $SERVER server

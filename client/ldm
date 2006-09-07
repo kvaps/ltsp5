@@ -106,9 +106,12 @@ class LDM:
 
             ssh_opts = ['-v',
                        '-X',
-                       '-M',
-                       '-S', '/tmp/.ltspfs-socket',
                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
+
+            if self.use_localdev:
+                       localdev_ssh_opts=['-M',
+                          '-S', '/tmp/.ltspfs-socket']
+                       ssh_opts.extend(localdev_ssh_opts)
 
             ssh_auth = ['%s@%s' % (username,self.server)]
 

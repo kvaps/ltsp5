@@ -1,0 +1,43 @@
+there are a few options to enable swap in ltsp.
+
+(this assumes an ltsp dir of /opt/ltsp, and achitecture of i386, adjust to your
+configuration if necessary)
+
+
+using local swap partitions:
+
+add to /opt/ltsp/i386/etc/lts.conf:
+
+USE_LOCAL_SWAP=Y
+
+
+network swap using NBD:
+
+in /opt/ltsp/i386/etc/lts.conf:
+
+[Default]
+NBD_PORT=9210
+SWAP_SERVER=ip.of.swap.server
+
+
+apt-get install nbd-server
+
+in /etc/nbd-server:
+
+NBD_PORT[0]=9210
+NBD_FILE[0]=/opt/ltsp/swap/swapfile.%s
+NBD_SERVER_OPTS[0]=""
+
+invoke-rc.d nbd-server start
+
+
+create a file for each possible ip address that will attempt
+to connect to the server:
+
+# size in megabytes
+size=100
+your_ip_addresses="10.0.2.2 10.0.2.3 10.0.2.4"
+mkdir -p /opt/ltsp/swap/
+for a in $your_ip_addresse ; do
+  dd if=/dev/zero of=/opt/ltsp/swap/swapfile.$a bs=1024k count=$size
+done

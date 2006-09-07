@@ -1,0 +1,117 @@
+#!/bin/sh -e
+
+# this script is run either chrooted on the server, or by a client with write
+# access to the NFS mount point. (much of this code was originally in
+# server/ltsp-update-kernels). --vagrant 20060801
+
+BOOT=/boot
+SUB_ARCH=$(uname -m)
+
+# allow specifying a specific kernel image to update, from kernel postinst
+if [ -f "$2" ]; then
+    ALL_KERNELS="$2"
+else
+    ALL_KERNELS="$(find $BOOT -type f -name 'vmlinu*')"
+fi
+
+# look for symlinks, too, and put them after the "real" kernels
+ALL_KERNELS="$ALL_KERNELS $(find $BOOT -type l -name 'vmlinu*')"
+
+for kernel in $ALL_KERNELS ; do
+    basename=$(basename "$kernel")
+    initrd=initrd.img
+    nbi=nbi.img
+
+    case $basename in
+        vmlinuz|vmlinux)
+            # USE DEFAULT
+        ;;
+        vmlinu*.old) 
+            initrd=$initrd.old
+            nbi=$nbi.old
+        ;;
+        vmlinuz*) 
+            version=${basename##vmlinuz-}
+            initrd=$initrd-$version
+            nbi=$nbi-$version
+        ;;
+        vmlinux*) 
+            version=${basename##vmlinux-}
+            initrd=$initrd-$version
+            nbi=$nbi-$version
+        ;;
+    esac
+
+    if [ -L "$kernel" ]; then
+        basename="$(readlink $kernel)"
+        if [ -f "$BOOT/$basename" ]; then
+            case $basename in
+                vmlinuz*)
+                    version=${basename##vmlinuz-}
+                ;;
+                vmlinux*)
+                    version=${basename##vmlinux-}
+                ;;
+            esac
+            case $SUB_ARCH in
+                sparc*) 
+                    realnbi="nbi.img-$version-$SUB_ARCH" 
+                ;;
+                *)
+                    realnbi="nbi.img-$version"
+                ;;
+            esac
+            if [ -f "$BOOT/$realnbi" ]; then
+                ln -sf $realnbi $BOOT/$nbi
+            fi
+        fi
+    else
+        if which mkelf-linux >/dev/null; then
+            if [ -f "$BOOT/$initrd" ]; then
+                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel $BOOT/$initrd
+            else
+                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel
+            fi
+        else
+            if [ -z "$mkelf_seen" ]; then
+                echo "Skipping etherboot images.  Install the mknbi package if you need them."
+                mkfelf_seen=true
+            fi
+        fi
+        if which netabootwrap >/dev/null; then
+            if [ -f "$BOOT/$initrd" ]; then
+                netabootwrap -t $BOOT/$nbi -k $kernel -i $BOOT/$initrd
+            else
+                netabootwrap -t $BOOT/$nbi -k $kernel
+            fi
+        else
+            if [ -z "$netabootwrap_seen" ]; then
+                echo "Skipping netabootwrap images.  Install the aboot package if you need them."
+                netabootwrap_seen=true
+            fi
+        fi
+        if which elftoaout >/dev/null ; then
+            piggyback_cmd=""
+            case $SUB_ARCH in
+                sparc64) piggyback_cmd=piggyback64 ;;
+                sparc32) piggyback_cmd=piggyback32 ;;
+            esac
+            sysmap=$BOOT/System.map-$version
+            nbi=$nbi-$SUB_ARCH
+
+            # TODO: proper tempfile handline
+            gzip -cd $kernel > $nbi.tmp
+            elftoaout -o $nbi $nbi.tmp
+            if [ -f "$BOOT/$initrd" ]; then
+                $piggyback_cmd $BOOT/$nbi $sysmap $BOOT/$initrd
+            else
+                $piggyback_cmd $BOOT/$nbi $sysmap
+            fi
+        else
+            if [ -z "$sparc_piggyback_seen" ]; then
+                echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
+                sparc_piggyback_seen=true
+            fi
+        fi
+    fi
+done

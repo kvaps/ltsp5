@@ -1,0 +1,29 @@
+.TH "GETLTSCFG" "1" "20060929" "" ""
+.SH "NAME"
+getltscfg \- get LTSP configuration variables
+.SH "SYNOPSIS"
+\fIgetltscfg\fR [options] [keyword]
+.SH "DESCRIPTION"
+getltscfg gets the configuration values defined in /etc/lts.conf, and outputs those values in in a way meant to be evaluated in a shell script.
+
+.SH "OPTIONS"
+.TP 3n
+\-a, \-\-all
+output all keywords
+.TP 3n
+\-c, \-\-configfile
+use an alternate configuration file. default is
+\fI/etc/lts.conf\fR
+.TP 3n
+\-h, \-\-help
+displays help
+.TP 3n
+\-n, \-\-hostname
+look for configuratons specific to the given hostname
+.TP 3n
+\-v, \-\-verbose
+increase the verbosity
+.SH "RESOURCES"
+http://ltsp.org
+.SH "COPYING"
+copyrighted by Jim McQuillan <jam@ltsp.org>, and licensed under the GPL version 2.

@@ -1,3 +1,136 @@
+ltsp (0.103) edgy; urgency=low
+
+  * merge debian changes
+  * [Vagrant Cascadian] 
+    * add dependency on netbase (ldminfod uses inetd)
+    * merge support for locales
+    * add python dependency for ldminfod
+    * merge plugin modularization:
+    * load functions from $PLUGINS_BASE dir
+    * move ltsp-build-client plugins to it's own plugin directory.
+    * split load_plugins function into separate file
+    * don't force LC_ALL=C or LANG=C when happens after locales get configured
+    * initial plugin to configure locales in the installed chroot
+    * use true as a no-op.
+    * example to use dnsmasq as a dhcp server
+    * added server/doc/examples dir, move qemu-ltsp to examples
+    * if a viable x-display-manager is installed, don't default to ldm/sdm/startx
+    * versioned dependency on python >= 2.4 instead of python2.4
+    * added readme to explain how to build a client chroot, and what support is
+    * run sdm on the appropriate terminal
+    * mention --help to list all available options
+    * update ltsp-build-client man page
+    * removed unprintable character that was causing lintian warnings
+    * install manpage for ldm
+    * manpage for ldm
+    * tweak rules to insall manpages for ltsp-client, too.
+    * inlude plugins documentation ltsp-server package
+    * document the plugins system
+    * add documentation about swap and workstation-style installs
+    * install bug helpers
+    * bug reporting script to probe for installed packages in chroot(s)
+    * drop recommends on nbd-client, it's already a dependency.
+    * install getltscfg manpage
+    * manpage for getltscfg
+    * bugfix for whitelisting
+    * only add localdev ssh options if configured for localdev
+    * merge with mainline: localdev and language support in ldm, whitespace fixes
+    * whitespace correction
+    * only run the rc whitelisting code if there is something whitelisted
+    * only set "ips" variable once, using the "ip" command.
+    * only update ssh keys in chroots with an /etc/ssh directory
+    * overwrite /etc/hosts on boot, not just append to it
+    * bugfix: tweak /etc/hostname instead of /etc/hosts
+    * build-depend on po-debconf
+    * only install udhdpc on sarge
+    * add qemu-ltsp script to examples
+    * added wrapper script to test with qemu
+    * check for initrd-netboot-tools in the chroot
+    * increment version and mention recent changes
+    * use lsb_release to set default dist
+    * depend on initramfs-tools 0.73e, which implements conf.d handling correctly
+    * move initramfs-tools hook from /etc/initramfs-tools/conf.d/ 
+    * no need to set NFSOPTS anymore, default for initramfs-tools works
+    * set background color to white for debian theme
+    * mention change to update-kernels running on kernel install
+    * create relative symlink for nbi images
+    * versioned nbi does not include .old when linking nbi.img.old, 
+    * check for existing nbi image in $BOOT
+    * only make nbi symlink if real nbi file exists
+    * call update-client from kernel postinst/postrm hooks
+    * support updating a specific kernel
+    * mention openbsd-inetd preference and close debian bug #382681
+    * ldm really depends on python2.4 now
+    * merge sparc fixes to update-kernels
+    * bugfixes for sparc-utils handling
+    * use the lsb_release short form to set VENDOR (instead of extra call to awk)
+    * use the lsb_release short for to set VENDOR (instead of extra call to sed)
+    * include example dhcpd.conf
+    * debian theme changes
+    * improved background for debian theme
+    * check for vmlinux* and vmlinuz* for symlink versioning
+    * mark update-kernels as executable
+    * move 035-update-kernels back to common (works with new plugin ordering)
+    * move rootpass so it prompts for the password (if enabled) at the very end.
+    * merge new plugin ordering from vagrant-new-plugins
+    * merge load_plugin_modules into load_plugins
+    * change order of plugin loading to be alpha-numeric order
+    * merge sparc-utils code into common code block
+    * handle both vmlinuz and vmlinux
+    * merge mkelf-linux and netabootwrap code
+    * implement boot prompt options common to yaboot and pxelinux configuration
+    * improved text when pxe is not being configured.
+    * move $BOOT calls to other locations, simplify symlink handling
+    * properly handle symlinked kernels
+    * support vmlinuz.old for mkelf-linux
+    * also catch versioned nbi images
+    * add VENDOR variable used by PXELINUX_CMDLINE
+    * copy nbi images, too.
+    * sparc images now begin with nbi
+    * allow updating only a specified chroot
+    * no need to copy the System.map files
+    * removed mkvmlinuz from ltsp-client dependencies
+    * download pxelinux.0 from it's new location (i386 only)
+    * mknbi is not available on amd64
+    * move pxe and yaboot handling back into ltsp-update-kernels, but use binaries
+    * added TFTP_CHROOT variable to identify the chroot-specific tftp dir
+    * reduce warnings with find by properly ordering options and arguments
+    * create the chroot-specific tftp directory to ensure files can be copied into it.
+    * merge another initrd-netboot-tools bugfix
+    * merge initramfs-tools bugfix
+    * use architecture-specific dependencies
+    * allow yaboot to satisfy network boot dependency
+    * move dependencies for various network boot generators from ltsp-server
+    * attempt to support pxelinux and yaboot
+    * just install yaboot.conf to /boot (remove leftover code from ltsp-update-kernels)
+    * bugfix: update-kernels is installed into /usr/lib/ltsp
+    * code to actually update the images in the chroot (was in ltsp-update-kernels)
+    * dropped handling kernel update code on the server directly, instead call a
+    * update-kernels needs to be run after the kernel gets installed (Debian/030-late-packages)
+    * simplify handling of vmlinuz and vmlinux copying
+    * merge mount-proc into common plugins
+    * bugfix: put quotes around clients
+    * plugin to update the ssh keys
+    * added plugin to update the kernels
+    * only set PXELINUX_CMDLINE if not already set
+    * define PXELINUX_CMDLINE variable, and set for ubuntu
+    * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d 
+    * use initramfs-tools/conf.d if available
+    * bugfix: check for initrd-netboot-tools in the chroot
+    * allow yaboot to satisfy network boot generator dependency
+    * only set values if not already set
+    * update with enable-popcon text
+    * handle another combination of binary and configuration file for initramfs-tools
+    * add /etc/hosts.ltsp to /etc/hosts on boot if present
+    * merge code to ltsp-update-keys to add a static file of ssh_known_hosts entries
+    * add ssh_known_hosts.extra to chroot's ssh_known_hosts files
+    * add /etc/hosts.ltsp file to /etc/hosts if present
+    * the sparc code we have uses binaries from sparc-utils, not silo.
+    * document USE_LOCAL_SWAP
+    * USE_LOCAL_SWAP for swap on local disks (from patch by Petter Reinholdtsen)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  8 Sep 2006 01:19:55 +0200
+
 ltsp (0.102) edgy; urgency=low
 
   * added ldm-swapon, an automatic userspace swap script using the ssh tunnel
