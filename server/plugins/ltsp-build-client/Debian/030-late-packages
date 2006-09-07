@@ -8,6 +8,6 @@ case "$MODE" in
         fi
         ;;
     finalization)
-        LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES
+        chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES
         ;;
 esac
