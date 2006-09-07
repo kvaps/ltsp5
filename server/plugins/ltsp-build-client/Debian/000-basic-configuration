@@ -17,6 +17,11 @@ case "$MODE" in
                                           /sbin/start-stop-daemon
         cp /usr/share/ltsp/scripts/start-stop-daemon $ROOT/sbin/
 
+        # divert /etc/mtab and point it to /proc/mounts
+        chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
+                                 --divert /etc/mtab.real /etc/mtab
+        chroot $ROOT ln -s /proc/mounts /etc/mtab
+
         # Install policy-rc.d wrapper
         cp /usr/share/ltsp/scripts/policy-rc.d.ltsp  $ROOT/usr/sbin/
         chroot $ROOT update-alternatives --install /usr/sbin/policy-rc.d policy-rc.d \
