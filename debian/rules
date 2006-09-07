@@ -54,7 +54,7 @@ binary-indep: build install
 	dh_install -i -Xarch-ids
 	dh_installdebconf -i	
 	dh_installinit -i --no-start
-	dh_installman -pltsp-server
+	dh_installman -pltsp-server -pltsp-client -pldm
 	dh_link -i
 	dh_compress -i
 	dh_fixperms -i

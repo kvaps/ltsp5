@@ -1,0 +1,9 @@
+case "$MODE" in
+    finalization)
+        if [ -f $ROOT/etc/mkinitrd/mkinitrd.conf ] && [ -x $ROOT/usr/sbin/mkinitrd ] && [ -d $ROOT/usr/share/doc/initrd-netboot-tools ] ; then
+            # configuring for initrd-netboot-tools
+            sed -e 's/^ROOT=.*$/ROOT=""/' \
+                -e 's/^MODULES=.*$/MODULES=none/' -i $ROOT/etc/mkinitrd/mkinitrd.conf
+        fi
+        ;;
+esac

@@ -19,6 +19,6 @@
 
 frame_color = "#000000"
 foreground = "#523921"
-background = "#ffffde"
+background = "#ffffff"
 clockforeground = "#ffffff"
 loginwin_color = "#f7ebd6"

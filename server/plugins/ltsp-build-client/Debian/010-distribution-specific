@@ -6,7 +6,7 @@ case "$MODE" in
                 NOSECURITY=true
                 ;;
             sarge)
-                EARLY_PACKAGES="$EARLY_PACKAGES devfsd"
+                EARLY_PACKAGES="$EARLY_PACKAGES udhcpc devfsd"
                 ;;
         esac
         ;;

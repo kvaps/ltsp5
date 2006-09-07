@@ -1,0 +1,57 @@
+.\" Title: ldm
+.\" Author: 
+.\" Generator: DocBook XSL Stylesheets v1.70.1 <http://docbook.sf.net/>
+.\" Date: 08/31/2006
+.\" Manual: 
+.\" Source: 
+.\" 
+.\" disable hyphenation
+.\" .nh
+.\" disable justification (adjust text to left margin only)
+.\" .ad l
+.TH "LDM" "1" "08/31/2006" "" ""
+.SH "NAME"
+ldm \- a display manager for LTSP
+.SH "SYNOPSIS"
+\fIldm\fR <vt[1\-N]> <:[0\-N]>
+.SH "DESCRIPTION"
+ldm(1) starts an X server and presents the user with a login screen, similar to the gdm(1) login prompt. instead of using the XDMCP protocol, ldm(1) uses ssh(1) and X Forwarding to connect to remote servers.
+
+it was designed for the LTSP project, but could be used in a non\-ltsp environment as well.
+.SH "OPTIONS"
+<vt[1\-N]>
+    tty where ldm will run
+
+<:[0\-N]>
+    X display that ldm uses.
+.SH "RESOURCES"
+http://ltsp.org
+.SH "COPYING"
+Copyright \(co 2005 Canonical Ltd.
+
+.RS 3n
+.nf 
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+.fi 
+.RE
+
+.RS 3n
+.nf 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+.fi 
+.RE
+
+.RS 3n
+.nf 
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+02110\-1301 USA
+.fi 
+.RE

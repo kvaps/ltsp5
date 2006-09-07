@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -6,9 +6,12 @@ export TERM=linux							  # make sure we're using a known terminal type
 export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)
 export TEXTDOMAINDIR=/usr/share/locale        # locale dir for gettext codes
 
+VENDOR=$(lsb_release -i -s)
 BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
+SCRIPT=ltsp-build-client
+PLUGIN_DIRS="/etc/ltsp/plugins/$SCRIPT $PLUGINS_BASE/$SCRIPT/$VENDOR $PLUGINS_BASE/$SCRIPT/common"
 
 KMODULES=${KMODULES:-"mousedev psmouse"}      # kernel modules for automatic loading
 
@@ -18,6 +21,8 @@ ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 
 . gettext.sh
 
+# load plugin functions
+. $PLUGINS_BASE/functions
 
 ##################################
 ### Methods to be called by plugins
@@ -90,21 +95,6 @@ load_modules() {
         debug "  - Loading file $file..."
         . $file
     done
-}
-
-# Load our plugins.
-#
-# Params:
-# $1 - mode (configure|run)
-load_plugins() {
-    set -- "$@"
-    MODE=$1
-    VENDOR=$(lsb_release -i | sed 's,.*:\t,,g')
-    debug "Loading plugins in MODE=$MODE:"
-    load_modules $PLUGINS_BASE/common
-    if [ -d $PLUGINS_BASE/$VENDOR ]; then 
-        load_modules $PLUGINS_BASE/$VENDOR
-    fi
 }
 
 # Add commandline option to handle --help

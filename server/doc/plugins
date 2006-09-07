@@ -1,0 +1,34 @@
+the plugins system for ltsp-build-client:
+
+plugins are called by the "load_plugins" function. common plugins are located
+in /usr/share/ltsp/plugins/common, while vendor-specific plugins are defined in
+/usr/share/ltsp/plugins/VENDOR. if a vendor plugin has the same filename as a
+common plugin, it will override the common plugin. optionally, the admin can
+install or override common or vendor plugins in /etc/ltsp/plugins. there are
+several modes in which these plugins are called:
+
+commandline:
+
+builds the list of commandline arguments supported by the loaded plugins
+
+configure:
+
+sets variables for commandline options that are set
+
+before-install:
+
+before the initial chroot is built
+
+install:
+
+where the initial chroot is built (debootstrap, on debian systems)
+
+after-install:
+
+additional package installation(ltsp-client), tweaks, etc.
+
+finalization:
+
+the last steps needed, such as installing kernels, copying the kernels and
+network bootable images into the tftp dir, installing the server's ssh keys
+into the chroot, etc.

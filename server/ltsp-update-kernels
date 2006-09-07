@@ -5,162 +5,77 @@ set -e
 # Make sure the copied files are readable by all
 umask 022
 
-TFTPBOOT=/var/lib/tftpboot/ltsp
-PXECFG=$TFTPBOOT/pxelinux.cfg
+TFTPDIR=/var/lib/tftpboot/
+TFTPBOOT=$TFTPDIR/ltsp
 test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
-ARCH=$(dpkg --print-architecture)
-VENDOR=$(lsb_release -i|awk '{ print $3 }')
+VENDOR=$(lsb_release -i -s)
 
 if [ ! -d $TFTPBOOT ] ; then
     echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
     exit 1
 fi
 
-case $ARCH in
-    powerpc)
-    KERNEL=vmlinux
-    ;;
-    *)
-    KERNEL=vmlinuz
-    ;;
-esac
+ALL_CHROOTS="$@"
+ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
 
-for file in $LTSPROOT/*/boot/$KERNEL* $LTSPROOT/*/boot/initrd.img* $LTSPROOT/*/boot/System.map*; do
-    cp -a -v "$file" $TFTPBOOT
-done
-
-if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
-    cp /usr/lib/syslinux/pxelinux.0 $TFTPBOOT
-    if [ ! -d $PXECFG ]; then
-        mkdir $PXECFG
-    fi
-    if [ $VENDOR = "Ubuntu" ]; then
-        cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img quiet splash
-EOF
+if [ -z "$BOOTPROMPT_OPTS" ]; then
+    if [ "$VENDOR" = "Ubuntu" ]; then
+        BOOTPROMPT_OPTS="quiet splash"
     else 
-	    cat > $PXECFG/default <<EOF
-DEFAULT vmlinuz ro initrd=initrd.img root=/dev/nfs ip=dhcp
-EOF
+        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp"
     fi
-else
-    echo "Skipping PXE images.  Install the syslinux package if you need them."
 fi
 
-if [ -f /usr/lib/yaboot/yaboot ]; then
-    cp /usr/lib/yaboot/yaboot $TFTPBOOT
-    YABOOTCONFROOT=$(echo $TFTPBOOT|sed s/ltsp//g)
-    cat > $YABOOTCONFROOT/yaboot.conf <<EOF
+for CHROOT in $ALL_CHROOTS ; do
+    # check for compatible (i.e. chrootable) architecture
+    if chroot $CHROOT /bin/true ; then
+        # update kernels for the chroot
+        if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
+            chroot "$CHROOT" /usr/lib/ltsp/update-kernels
+        fi
+    fi
+
+    EXTRA_FILES=""
+    CHROOT_NAME="$(basename $CHROOT)"
+    TFTP_CHROOT="$TFTPBOOT/$CHROOT_NAME"
+    mkdir -p $TFTP_CHROOT
+
+    if [ -f $CHROOT/usr/lib/yaboot/yaboot ]; then
+        cp -a -v $CHROOT/usr/lib/yaboot/yaboot $TFTPDIR
+        cat > $TFTPDIR/yaboot.conf <<EOF
 timeout=0
 default=ltsp
 root=/dev/ram
 
-image=/ltsp/vmlinux
+image=/ltsp/$CHROOT_NAME/vmlinux
         label=ltsp
-        initrd=/ltsp/initrd.img
-        append="quiet splash"
+        initrd=/ltsp/$CHROOT_NAME/initrd.img
+        append="$BOOTPROMPT_OPTS"
 EOF
-else
-    echo "Not on powerpc, skipping yaboot installation."
-fi
+    else
+        echo "Skipping yaboot configuration. install yaboot package if you need it."
+    fi    
 
-if which mkelf-linux >/dev/null; then
-    for kernel in $TFTPBOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
-
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=$TFTPBOOT/initrd.img
-            nbi=$TFTPBOOT/nbi.img
-        else
-            version=${basename##vmlinuz-}
-            initrd=$TFTPBOOT/initrd.img-$version
-            nbi=$TFTPBOOT/nbi.img-$version
+    if [ -f $CHROOT/usr/lib/syslinux/pxelinux.0 ]; then
+        PXECFG=$TFTP_CHROOT/pxelinux.cfg
+        cp $CHROOT/usr/lib/syslinux/pxelinux.0 $TFTP_CHROOT
+        if [ ! -d $PXECFG ]; then
+            mkdir $PXECFG
         fi
-
-        if [ -f "$initrd" ]; then
-            mkelf-linux --ip=dhcp -o $nbi $kernel $initrd
-        else
-            mkelf-linux --ip=dhcp -o $nbi $kernel
+        if [ -z "$PXELINUX_CMDLINE" ]; then
+            PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
         fi
-    done
-else
-    echo "Skipping etherboot images.  Install the mknbi package if you need them."
-fi
+        cat > $PXECFG/default <<EOF
+$PXELINUX_CMDLINE
+EOF
+ 
+    else
+        echo "Skipping PXE configuration.  Install the syslinux package if you need it."
+    fi
 
-if which mkvmlinuz >/dev/null; then
-  # mkvmlinuz already happens on powerpc as part of the kernel install-
-  # so do nothing.
-  true
-else
-    echo "Skipping openfirmware images.  Install the mkvmlinuz package if you need them."
-fi
-
-# TODO merge the mkelf-linux and netabootwrap code
-if which netabootwrap >/dev/null; then
-    for kernel in $TFTPBOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
-
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=$TFTPBOOT/initrd.img
-            nbi=$TFTPBOOT/nbi.img
-        else
-            version=${basename##vmlinuz-}
-            initrd=$TFTPBOOT/initrd.img-$version
-            nbi=$TFTPBOOT/nbi.img-$version
-        fi
-        # TODO: work around for debian bug #270801
-        if [ -f "$initrd" ]; then
-            netabootwrap -t $nbi -k $kernel -i $initrd
-        else
-            netabootwrap -t $nbi -k $kernel
+    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/nbi*.img* $EXTRA_FILES ; do
+        if [ -f "$file" ]; then
+            cp -a -v "$file" $TFTP_CHROOT
         fi
     done
-else
-    echo "Skipping netabootwrap images.  Install the aboot package if you need them."
-fi
-
-if which elftoaout >/dev/null ; then
-    for kernel in $TFTPBOOT/vmlinuz*; do
-        basename=$(basename "$kernel")
-        SUB_ARCH=$(uname -m)
-        piggyback_cmd=""
-        case $SUB_ARCH in
-            sparc64) piggyback_cmd=piggyback64 ;;
-            sparc32) piggyback_cmd=piggyback32 ;;
-        esac
-        if [ "$basename" = "vmlinuz" ]; then
-            initrd=$TFTPBOOT/initrd.img
-            sysmap=$TFTPBOOT/System.map
-            nbi=$TFTPBOOT/$SUB_ARCH.img
-        else
-            version=${basename##vmlinuz-}
-            initrd=$TFTPBOOT/initrd.img-$version
-            sysmap=$TFTPBOOT/System.map-$version
-            nbi=$TFTPBOOT/$SUB_ARCH.img-$version
-        fi
-        # TODO: proper tempfile handline
-        gzip -cd $kernel > $nbi.tmp
-        elftoaout -o $nbi $nbi.tmp
-        if [ -f "$initrd" ]; then
-            $piggyback_cmd $nbi $sysmap $initrd
-        else
-            $piggyback_cmd $nbi $sysmap
-        fi
-    done
-else
-    echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
-fi
-
-#for file in $TFTPBOOT/*; do
-#    found=""
-#    for master in $LTSPROOT/*/boot/$(basename "$file"); do
-#        if [ -e "$master" ]; then
-#            found=1
-#            break
-#        fi
-#    done
-#
-#    if [ -z "$found" ]; then
-#        rm -f "$file"
-#    fi
-#done
+done

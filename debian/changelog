@@ -1,9 +1,64 @@
-ltsp (0.88debian1) UNRELEASED; urgency=low
+ltsp (0.99debian1) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * ltsp-server:
+    - versioned dependency on netbase (Closes: #382681)
+    - prefer tftpd-hpa over atftpd, as it works out of the box
+    - add nbd-server to recommends
+    - ltsp-build-client:
+      + bugfixes in initrd-netboot-tools tweaks
+      + only install udhcpc on sarge
+      + use lsb_release to select default distribution to install
+      + only run rc whitelisting code if something is whitelisted
+    - examples:
+      + script to test with qemu
+      + configuration to use dnsmasq as dhcp server
+    - ltsp-update-sshkeys:
+      + only update directories with an /etc/ssh directory
+    - bug reporting helper script to get package versions from chroot(s)
+    - added README.Debian explaining how to create the client chroot
+    - documentation:
+      + swap
+      + plugins
+      + anonymous workstation-style install
+    - updated ltsp-build-client manpage:
+      + removed ubuntu-centrism (Closes: #385885)
+      + removed obsolete and distro-specific options
+      + re-worded much of the text
+    - plugins:
+      + other scripts can make use of the plugins functions
+      + moved ltsp-build-client plugins to it's own namespace
+      + plugin to configure locales in the client chroot
+  * ltsp-client:
+    - move initramfs-tools hooks from /etc/initramfs to /usr/share/initramfs,
+      which depends on initramfs-tools version 0.73e or greater
+    - use default NFSOPTS from initramfs-tools
+    - add esound to recommends
+    - bugfixes with /etc/hosts and /etc/hostname
+    - man page for getltscfg
+    - fix sdm screen session to run on appropriate tty
+    - only default to running ldm if no x-display-manager is installed
+  * ldm:
+    - localdev support (merged from ubuntu)
+    - only enable ssh socket if localdev is configured
+    - manpage for ldm
+    - versioned dependency on python (>= 2.4)
+    - now supports language and session selection (merged from mainline)
+  * debian/control:
+    - build-depend on po-debconf
+    - change all package priorities to "extra"
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  6 Sep 2006 19:35:11 -0500
+
+ltsp (0.93debian1) unstable; urgency=low
 
   [ Otavio Salvador ]
   * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
     specific.
     - Fix problem with gettext use. (Closes: #375601)
+  * Simplified debian/rules a little more removing the useless update-po
+    target. Since all its logic was move to po/Makefile file we can make
+    things clear removing it from rules.
 
   [ Tiago Bortoletto Vaz ]
   * Add a correct i18n support for this package, using a specific Makefile
@@ -11,13 +66,102 @@ ltsp (0.88debian1) UNRELEASED; urgency=low
   * Fix ltsp-build-client script to get gettext message catalogs from locale
     dir
 
-  [ Otavio Salvador ]
-  * Simplified debian/rules a little more removing the useless update-po
-    target. Since all its logic was move to po/Makefile file we can make
-    things clear removing it from rules.
+  [ Vagrant Cascadian ]
+  * ltsp-client:
+    - drop recommends on ubuntu-thin-client (Closes: #376898)
+    - USE_LOCAL_SWAP option (Closes: #365578)
+    - init scripts exit when package is not installed
+    - add /etc/hosts.ltsp to /etc/hosts on boot
+  * ltsp-server:
+    - include example dhcpd.conf (Closes: #360409)
+    - prefer openbsd-inetd to netkit-inetd (Closes: #382681) 
+  * ltsp-update-kernels:
+    - improved support for multiple architectures or installations
+    - common and configurable boot prompt arguments for all boot methods
+    - moved part of network boot image generation into ltsp-client
+    - move network boot dependencies into ltsp-client
+    - symlink network boot images if kernel is a symlink
+    - network boot images are generated on kernel install
+  * ltsp-build-client:
+    - added option to enable popularity-contest
+    - plugins are now loaded alphanumerically
+    - vendors and admins can overrwite plugins
+    - use initramfs-tools hooks instead of tweaking configuration files
+  * ltsp-update-sshkeys:
+    - append ssh_known_hosts.extra into ltsp-chroot ssh_known_hosts file
+  * ldm:
+    - dependency gtk2-engines (>= 1:2.6.9-1) | gtk2-engines-clearlooks
+    (Closes: #377408)
+    - remove private copy of subprocess.py (thanks stratus for verifying)
+    (Closes: #380859)
+    - depend on python2.4 (to get subprocess.py)
+    - improved Debian theme
+    - set Debian theme as default (Closes: #360406)
 
- -- Otavio Salvador <otavio@debian.org>  Thu, 29 Jun 2006 03:07:24 -0300
-  
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 17 Aug 2006 14:15:30 -0400
+
+ltsp (0.93) edgy; urgency=low
+
+  [ Oliver Grawert ]
+  * add vendor detection to ltsp-update-kernels to fix wrong kernel parameters
+    introduced by debian
+  * add mountkernfs.sh and mountdevsubfs.sh to RCS_WHITELIST, needed now to
+    make the boot work
+  * fix debian introduced breakage of the initramfs.conf setup in
+    server/plugins/common/020-init-image
+  * added DEBIAN_PRIORITY=critical to avoid debconf questions to
+    server/plugins/Ubuntu/000-basic-configuration and changed from
+    x-window-system-core to xorg
+  * change theme priority for ldm to show the edubuntu theme by default again
+  * add 010-mount-proc with added linking of /dev/fd to Ubuntu plugins, usplash
+    needs /dev/fd to be in place now
+
+  [ Vagrant Cascadian ]
+  * added commandline option to enable popularity-contest in the chroot
+  * whitespace corrections
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  3 Aug 2006 23:59:01 +0200
+
+ltsp (0.92) edgy; urgency=low
+
+  * Add a /etc/network/if-up.d/ltsp-keys script to copy the sshkeys on every
+    interface start, make ltsp-update-sshkeys use logger for output, log to
+    syslog and add descriptive error messages, this avoids breakage if the
+    server IP was changed and makes sure the user doesnt need to run 
+    ltsp-update-sshkeys separately.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 20 Jul 2006 13:47:18 +0200
+
+ltsp (0.91) edgy; urgency=low
+
+  *  fix all the syntax in the udeb to match latest d-i code and to not fail
+     during install
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 18 Jul 2006 22:36:09 +0200
+
+ltsp (0.90) edgy; urgency=low
+
+  * added export TERM=linux to the top of ltsp-build-client to make the udeb
+    not die if a package calls a terminal directly in the chroot.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 18 Jul 2006 03:33:47 +0200
+
+ltsp (0.89) edgy; urgency=low
+
+  * merged fixes from mainline
+  [Oliver Grawert]
+    * fix wrong kernel selection on ubuntu
+    * switch ltsp-build-client temporary to /bin/bash until the
+      bashisms are fixed
+  [ Otavio Salvador ]
+    * 001-set-exclude, 001-set-dist: moved to server/plugins/common
+      since it's very agnostic and every vendor that use this system
+      will need to have a way to avoid a package inclusion.
+      Those symbolic links was also removed from Ubuntu
+      plugins repository.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 14 Jul 2006 21:13:46 +0200
+
 ltsp (0.88) edgy; urgency=low
 
   * merged debian modularization into upstream branch
@@ -35,30 +179,30 @@ ltsp (0.88) edgy; urgency=low
 
 ltsp (0.87debian2) unstable; urgency=low
 
-  [ Otavio Salvador ]
-  * Make LTSP messages translatable.
-  * Minimal fixes for indentation of ltsp-client-setup init script.
-  * Fix Permission Denied error due a error in unionfs mount command in
-    initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
-    debugging it. (Closes: #360249)
-  * We don't need to set initramfs-tools as default since it's since
-    Debian kernel 2.6.15.
-  * Improved common/020-init-image including better code formating and
-    documentation.
-  * Converted set-arch modules to be a common one. For this dpkg use was
-    remove. Support for error messages translation was also added.
+   [ Otavio Salvador ]
+   * Make LTSP messages translatable.
+   * Minimal fixes for indentation of ltsp-client-setup init script.
+   * Fix Permission Denied error due a error in unionfs mount command in
+     initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
+     debugging it. (Closes: #360249)
+   * We don't need to set initramfs-tools as default since it's since
+     Debian kernel 2.6.15.
+   * Improved common/020-init-image including better code formating and
+     documentation.
+   * Converted set-arch modules to be a common one. For this dpkg use was
+     remove. Support for error messages translation was also added.
  
-  [ Gustavo Franco ]
-  * po/pt_BR.po:
-    - Add po/ltsp.pot Portuguese Brazilian translation by myself.
-  
-  [ Otavio Salvador ]
-  * Move translation update routine to update-po rules target.
-  * Fix code style in common/010-set-base.
-  * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
-    <chaton@debian.org> for the bug report and updated file. 
-    (Closes: #374656)
-  * Add support to initramfs-tools >= 0.64.
+   [ Gustavo Franco ]
+   * po/pt_BR.po:
+     - Add po/ltsp.pot Portuguese Brazilian translation by myself.
+ 
+   [ Otavio Salvador ]
+   * Move translation update routine to update-po rules target.
+   * Fix code style in common/010-set-base.
+   * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
+     <chaton@debian.org> for the bug report and updated file.
+     (Closes: #374656)
+   * Add support to initramfs-tools >= 0.64.
 
  -- Otavio Salvador <otavio@debian.org>  Fri, 23 Jun 2006 15:48:37 -0300
 

@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
-"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-05-15 02:49-0400\n"
+"Report-Msgid-Bugs-To: mdz@ubuntu.com\n"
+"POT-Creation-Date: 2006-07-14 21:18+0200\n"
 "PO-Revision-Date: 2006-03-07 10:46-0300\n"
 "Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
 "Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
@@ -27,13 +27,13 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:4
+#: ../ltsp-client-builder.templates:1001
 msgid "Set up an LTSP chroot environment?"
 msgstr "Criar um chroot para o LTSP ?"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:4
+#: ../ltsp-client-builder.templates:1001
 msgid ""
 "This will set up an LTSP chroot environment on the machine, to act as a thin "
 "client server."
@@ -44,25 +44,25 @@ msgstr ""
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:11
+#: ../ltsp-client-builder.templates:2001
 msgid "Build LTSP chroot"
 msgstr "Construir chroot LTSP"
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:15
+#: ../ltsp-client-builder.templates:3001
 msgid "Building LTSP chroot..."
 msgstr "Construindo chroot LTSP..."
 
 #. Type: note
 #. Description
-#: ../ltsp-client.templates:3
+#: ../ltsp-client.templates:1001
 msgid "Installation aborted "
 msgstr "Instalacao abortada"
 
 #. Type: note
 #. Description
-#: ../ltsp-client.templates:3
+#: ../ltsp-client.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
@@ -72,7 +72,8 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../ltsp-client.templates:3
+#: ../ltsp-client.templates:1001
 msgid "Please read the package description to understand what it means."
 msgstr ""
-"Por favor leia a descrição do pacote para entendermelhor o que isso significa."
+"Por favor leia a descrição do pacote para entendermelhor o que isso "
+"significa."

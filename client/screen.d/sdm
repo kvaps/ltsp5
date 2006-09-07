@@ -1,4 +1,14 @@
 #!/bin/sh
 # Depend on the sdm-terminal package
 
-exec /usr/sbin/sdm
+tty=$(tty)
+case "$tty" in
+  /dev/tty*) # with udev (2.6 kernel)
+      ttynum=${tty#/dev/tty}
+      ;;
+  /dev/vc/*) # with devfs (2.4 kernel)
+      ttynum=${tty#/dev/vc/}
+      ;;
+esac
+
+exec /usr/sbin/sdm vt$ttynum
