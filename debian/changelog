@@ -1,20 +1,23 @@
-ltsp (0.93debian2) unstable; urgency=low
+ltsp (0.99debian1) unstable; urgency=low
 
   [ Vagrant Cascadian ]
   * ltsp-server:
-    - remove dependency on any inetd, as both atftpd and tftpd-hpa depend on
-      netbase, which in turn depends on an inetd. (Closes: #382681)
+    - versioned dependency on netbase (Closes: #382681)
     - prefer tftpd-hpa over atftpd, as it works out of the box
-    - use lsb_release to select default distribution to install
     - add nbd-server to recommends
-    - example script to test with qemu
-    - bugfixes in initrd-netboot-tools tweaks
-    - only install udhcpc on sarge
-    - only run rc whitelisting code if something is whitelisted
+    - ltsp-build-client:
+      + bugfixes in initrd-netboot-tools tweaks
+      + only install udhcpc on sarge
+      + use lsb_release to select default distribution to install
+      + only run rc whitelisting code if something is whitelisted
+    - examples:
+      + script to test with qemu
+      + configuration to use dnsmasq as dhcp server
     - ltsp-update-sshkeys:
       + only update directories with an /etc/ssh directory
     - bug reporting helper script to get package versions from chroot(s)
-    - basic documentation of:
+    - added README.Debian explaining how to create the client chroot
+    - documentation:
       + swap
       + plugins
       + anonymous workstation-style install
@@ -22,6 +25,10 @@ ltsp (0.93debian2) unstable; urgency=low
       + removed ubuntu-centrism (Closes: #385885)
       + removed obsolete and distro-specific options
       + re-worded much of the text
+    - plugins:
+      + other scripts can make use of the plugins functions
+      + moved ltsp-build-client plugins to it's own namespace
+      + plugin to configure locales in the client chroot
   * ltsp-client:
     - move initramfs-tools hooks from /etc/initramfs to /usr/share/initramfs,
       which depends on initramfs-tools version 0.73e or greater
@@ -29,15 +36,19 @@ ltsp (0.93debian2) unstable; urgency=low
     - add esound to recommends
     - bugfixes with /etc/hosts and /etc/hostname
     - man page for getltscfg
+    - fix sdm screen session to run on appropriate tty
+    - only default to running ldm if no x-display-manager is installed
   * ldm:
-    - merge localdev support from ubuntu
+    - localdev support (merged from ubuntu)
     - only enable ssh socket if localdev is configured
     - manpage for ldm
+    - versioned dependency on python (>= 2.4)
+    - now supports language and session selection (merged from mainline)
   * debian/control:
     - build-depend on po-debconf
     - change all package priorities to "extra"
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  4 Sep 2006 03:33:44 -0500
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  6 Sep 2006 19:35:11 -0500
 
 ltsp (0.93debian1) unstable; urgency=low
 
