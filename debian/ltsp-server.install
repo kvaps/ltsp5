@@ -1,6 +1,7 @@
 server/ltsp-build-client usr/sbin
 server/ltsp-update-sshkeys usr/sbin
 server/ltsp-update-kernels usr/sbin
+server/ldminfod	usr/sbin
 server/ltsp-keys etc/network/if-up.d
 server/scripts/* usr/share/ltsp/scripts/
 server/plugins/ usr/share/ltsp/
