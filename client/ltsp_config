@@ -16,7 +16,17 @@ fi
 
 # Ensure a default screen
 if ! env | grep -q '^SCREEN_'; then
-    if [ -f /etc/X11/default-display-manager ] && [ -x "$(cat /etc/X11/default-display-manager)" ]; then
+    if [ -f /etc/X11/default-display-manager ]; then
+        default_display_manager="$(cat /etc/X11/default-display-manager)"
+        if [ -x "$default_display_manager" ]; then
+            display_manager_configured=true
+        elif [ "$default_display_manager" = "/usr/bin/gdm" ] && [ -x /usr/sbin/gdm ]; then
+            # some versions of gdm set default-display-manager to /usr/bin/gdm,
+            # even if there is no /usr/bin/gdm, but start /usr/sbin/gdm.
+            display_manager_configured=true
+        fi
+    fi
+    if [ "$display_manager_configured" = "true" ]; then
       # Do nothing, these daemons (xdm, gdm, kdm, wdm, etc.) should configure themselves.
       true
     elif [ -x /usr/sbin/ldm ]; then
