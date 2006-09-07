@@ -81,6 +81,7 @@ configure_resolver() {
     hostname=$(hostname)
     if [ "(none)" = "$hostname" ] ; then
         /etc/init.d/hostname.sh start
+        hostname="$(hostname)"
     else
         echo $hostname > /etc/hostname
     fi
