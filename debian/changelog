@@ -1,7 +1,8 @@
 ltsp (0.103) edgy; urgency=low
 
   * merge debian changes
-  * [Vagrant Cascadian] 
+  * revert ldm changes to the ssh socket made by debian
+  * [Vagrant Cascadian]
     * add dependency on netbase (ldminfod uses inetd)
     * merge support for locales
     * add python dependency for ldminfod
@@ -49,12 +50,12 @@ ltsp (0.103) edgy; urgency=low
     * increment version and mention recent changes
     * use lsb_release to set default dist
     * depend on initramfs-tools 0.73e, which implements conf.d handling correctly
-    * move initramfs-tools hook from /etc/initramfs-tools/conf.d/ 
+    * move initramfs-tools hook from /etc/initramfs-tools/conf.d/
     * no need to set NFSOPTS anymore, default for initramfs-tools works
     * set background color to white for debian theme
     * mention change to update-kernels running on kernel install
     * create relative symlink for nbi images
-    * versioned nbi does not include .old when linking nbi.img.old, 
+    * versioned nbi does not include .old when linking nbi.img.old,
     * check for existing nbi image in $BOOT
     * only make nbi symlink if real nbi file exists
     * call update-client from kernel postinst/postrm hooks
@@ -114,7 +115,7 @@ ltsp (0.103) edgy; urgency=low
     * added plugin to update the kernels
     * only set PXELINUX_CMDLINE if not already set
     * define PXELINUX_CMDLINE variable, and set for ubuntu
-    * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d 
+    * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d
     * use initramfs-tools/conf.d if available
     * bugfix: check for initrd-netboot-tools in the chroot
     * allow yaboot to satisfy network boot generator dependency
@@ -129,7 +130,7 @@ ltsp (0.103) edgy; urgency=low
     * document USE_LOCAL_SWAP
     * USE_LOCAL_SWAP for swap on local disks (from patch by Petter Reinholdtsen)
 
- -- Oliver Grawert <ogra@ubuntu.com>  Fri,  8 Sep 2006 01:19:55 +0200
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  8 Sep 2006 01:27:06 +0200
 
 ltsp (0.102) edgy; urgency=low
 
