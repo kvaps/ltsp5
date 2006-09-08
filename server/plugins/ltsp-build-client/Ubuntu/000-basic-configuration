@@ -14,6 +14,6 @@ case "$MODE" in
     after-install|finalization)
         # Our code to hanlding after-install and finalization is
         # exactly the same of Debian so we include it here.
-        . $PLUGINS_BASE/Debian/000-basic-configuration
+        . $PLUGINS_BASE/$SCRIPT/Debian/000-basic-configuration
         ;;
 esac
