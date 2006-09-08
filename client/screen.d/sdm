@@ -11,4 +11,14 @@ case "$tty" in
       ;;
 esac
 
-exec /usr/sbin/sdm vt$ttynum
+name="ltsp$ttynum-sdm"
+logfile="/var/log/$name"
+command="/usr/sbin/sdm"
+opts="vt$ttynum"
+daemon=/usr/bin/daemon
+if [ -x "$daemon" ]; then
+  exec "$daemon" --name="$name" --respawn -O $logfile -E $logfile -l $logfile -- $command $opts
+else
+  # run undaemonized. password prompting may not work
+  exec $command $opts
+fi
