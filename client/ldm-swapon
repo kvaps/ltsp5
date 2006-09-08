@@ -13,9 +13,9 @@ while true; do
 		fi
 		
 		if [ -z "$(${SSH_COMMAND} netstat -anp 2>/dev/null|grep $PORT|grep -v TIME_WAIT)" ]; then
-		    ${SSH_COMMAND} dd if=/dev/zero of=${SWAPFILE} bs=1M count=${SIZE} >/dev/null 2>&1 
-		    ${SSH_COMMAND} mkswap ${SWAPFILE}  >/dev/null 2>&1
-		    ${SSH_COMMAND} nbd-server ${PORT} ${SWAPFILE} ${SIZE}m >/dev/null 2>&1
+		    ${SSH_COMMAND} "LC_ALL=C dd if=/dev/zero of=${SWAPFILE} bs=1M count=${SIZE} >/dev/null 2>&1"
+		    ${SSH_COMMAND} "mkswap ${SWAPFILE}  >/dev/null 2>&1"
+		    ${SSH_COMMAND} "nbd-server ${PORT} ${SWAPFILE} ${SIZE}m >/dev/null 2>&1"
 		fi
 		nbd-client server $PORT /dev/nbd0 >/dev/null 2>&1
 		swapon /dev/nbd0
