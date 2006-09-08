@@ -10,9 +10,15 @@ ltsp (0.99debian1) unstable; urgency=low
       + only install udhcpc on sarge
       + use lsb_release to select default distribution to install
       + only run rc whitelisting code if something is whitelisted
-    - examples:
-      + script to test with qemu
-      + configuration to use dnsmasq as dhcp server
+      + let dependency resolution install ldm
+      + commandline option to select and override kernel package
+      + fix typo in dpkg-divert for policy-rc.d script
+      + divert /etc/mtab and point /etc/mtab to /proc/mounts
+    - plugins:
+      + other scripts can make use of the plugins functions
+      + moved ltsp-build-client plugins to it's own namespace
+      + plugin to configure locales in the client chroot
+      + clean package cache when finished installing
     - ltsp-update-sshkeys:
       + only update directories with an /etc/ssh directory
     - bug reporting helper script to get package versions from chroot(s)
@@ -21,14 +27,13 @@ ltsp (0.99debian1) unstable; urgency=low
       + swap
       + plugins
       + anonymous workstation-style install
+    - examples:
+      + script to test with qemu
+      + configuration to use dnsmasq as dhcp server
     - updated ltsp-build-client manpage:
       + removed ubuntu-centrism (Closes: #385885)
       + removed obsolete and distro-specific options
       + re-worded much of the text
-    - plugins:
-      + other scripts can make use of the plugins functions
-      + moved ltsp-build-client plugins to it's own namespace
-      + plugin to configure locales in the client chroot
   * ltsp-client:
     - move initramfs-tools hooks from /etc/initramfs to /usr/share/initramfs,
       which depends on initramfs-tools version 0.73e or greater
@@ -37,7 +42,11 @@ ltsp (0.99debian1) unstable; urgency=low
     - bugfixes with /etc/hosts and /etc/hostname
     - man page for getltscfg
     - fix sdm screen session to run on appropriate tty
+    - use daemon to start sdm if present
     - only default to running ldm if no x-display-manager is installed
+    - update-kernels:
+      + be less verbose when called from /etc/kernel/post*.d/
+      + make mkelf-linux options a variable
   * ldm:
     - localdev support (merged from ubuntu)
     - only enable ssh socket if localdev is configured
@@ -48,7 +57,7 @@ ltsp (0.99debian1) unstable; urgency=low
     - build-depend on po-debconf
     - change all package priorities to "extra"
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  6 Sep 2006 19:35:11 -0500
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu,  7 Sep 2006 22:15:06 -0500
 
 ltsp (0.93debian1) unstable; urgency=low
 
