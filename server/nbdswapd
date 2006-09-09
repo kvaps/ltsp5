@@ -3,22 +3,29 @@
 # generates a swap file and configures nbd-server to export it
 # to stdout. should usually be run from an inetd.
 
+# default swapfile size (in MB)
+SIZE=32
+
+# default to running mkswap 
+RUN_MKSWAP=true
+
 if [ -f /etc/ltsp/nbdswapd.conf ]; then
     . /etc/ltsp/nbdswapd.conf
 fi
 
-# default swapfile size (in MB)
-SIZE="${SIZE:-32}"
-
-if [ -z "$tmp" ]; then
-    tmp=$(tempfile)
+if [ -z "$SWAP" ]; then
+    SWAP=$(tempfile)
 fi
 
 # generate the swap file
-dd if=/dev/zero of=$tmp bs=1024k count=$SIZE 2> /dev/null
+dd if=/dev/zero of=$SWAP bs=1024k count=$SIZE 2> /dev/null
+
+if [ "$RUN_MKSWAP" = "true" ]; then
+    /sbin/mkswap $SWAP > /dev/null 2>&1
+fi
 
 # start the swap server
-/bin/nbd-server 0 $tmp
+/bin/nbd-server 0 $SWAP
 
 # clean up the swap file
-rm -f $tmp
+rm -f $SWAP
