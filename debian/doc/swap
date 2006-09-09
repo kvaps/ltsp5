@@ -22,6 +22,13 @@ SWAP_SERVER=ip.of.swap.server
 
 apt-get install nbd-server
 
+update-inetd --group LTSP --add "9210 stream tcp nowait nobody /usr/sbin/tcpd /usr/sbin/nbdswapd"
+
+
+alternately, you can configure nbd-server the hard way:
+
+apt-get install nbd-server
+
 in /etc/nbd-server:
 
 NBD_PORT[0]=9210
@@ -36,7 +43,7 @@ to connect to the server:
 
 # size in megabytes
 size=100
-your_ip_addresses="10.0.2.2 10.0.2.3 10.0.2.4"
+your_ip_addresses="10.0.2.2 10.0.2.3 10.0.2.4 ..."
 mkdir -p /opt/ltsp/swap/
 for a in $your_ip_addresse ; do
   dd if=/dev/zero of=/opt/ltsp/swap/swapfile.$a bs=1024k count=$size
