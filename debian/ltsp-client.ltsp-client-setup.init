@@ -315,8 +315,7 @@ case "$1" in
         configure_console || true
         configure_network || true
         configure_resolver || true
-        #configure_swap || true
-        configure_ldm_swap || true
+        configure_swap || true
         configure_syslog || true
         configure_fstab || true
         run_rcfiles || true
