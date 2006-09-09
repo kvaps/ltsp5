@@ -6,3 +6,4 @@ server/ltsp-keys etc/network/if-up.d
 server/scripts/* usr/share/ltsp/scripts/
 server/plugins/ usr/share/ltsp/
 debian/bugs/ltsp-server/* usr/share/bug/ltsp-server/
+server/nbdswapd usr/sbin
