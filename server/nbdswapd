@@ -25,7 +25,7 @@ if [ "$RUN_MKSWAP" = "true" ]; then
 fi
 
 # start the swap server
-/bin/nbd-server 0 $SWAP
+/bin/nbd-server 0 $SWAP $NBD_SERVER_OPTS
 
 # clean up the swap file
 rm -f $SWAP
