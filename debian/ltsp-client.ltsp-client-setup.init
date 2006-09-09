@@ -60,29 +60,23 @@ configure_console() {
 }
 
 configure_swap() {
-    if [ -n "$SWAP_SERVER" -a -n "$NBD_PORT" ]; then
+	if [ -n "$NBD_SWAP" ];then
+        if [ -z "$SWAP_SERVER" -a -z "$NBD_PORT" ]; then
+	        SWAP_SERVER=server
+	        NBD_PORT=9572
+        fi
         cat <<EOF > /etc/nbd-client
 NBD_DEVICE[0]=/dev/nbd0
 NBD_TYPE[0]=s
 NBD_HOST[0]=$SWAP_SERVER
 NBD_PORT[0]=$NBD_PORT
 EOF
-    fi
-    if [ "$USE_LOCAL_SWAP" = "Y" ]; then
-        # Enable local swap partition if found on local disk
-        for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
-            mkswap $part
-            swapon $part
-        done
-    fi
-}
-
-configure_ldm_swap() {
-    if [ -n "$NBD_SWAP" ]; then
-        if [ -n $SWAP_SIZE ]; then
-		    ldm-swapon $SWAP_SIZE &
-        else
-            ldm-swapon &
+        if [ "$USE_LOCAL_SWAP" = "Y" ]; then
+            # Enable local swap partition if found on local disk
+            for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
+                mkswap $part
+                swapon $part
+            done
         fi
     fi
 }

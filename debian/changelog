@@ -1,8 +1,13 @@
+ltsp (0.105) edgy; urgency=low
+
+  * drop ldm-swapon in favor if vargrantc's new ndbswapd inetd wrapper
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sat,  9 Sep 2006 14:46:00 +0200
+
 ltsp (0.104) edgy; urgency=low
 
   * work around dd breakage with non C locales in ldm-swapon
-  * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d until
-    /usr/share/initramfs-tools/conf.d will be supported by our initramfs
+  * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d
   * fix Ubuntu/000-basic-configuration to look in the right dir for finalization
   * move the botloaders from ltsp-server to ltsp-client to make the new
     ltsp-update-kernels architecture happy
