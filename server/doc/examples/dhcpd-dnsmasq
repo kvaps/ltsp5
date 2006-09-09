@@ -16,5 +16,5 @@ dhcp-vendorclass=etherboot,Etherboot
 dhcp-vendorclass=pxe,PXEClient
 
 # Set the boot filename for BOOTP. 
-dhcp-boot=net:pxe,/ltsp/i386/pxeclient.0
+dhcp-boot=net:pxe,/ltsp/i386/pxelinux.0
 dhcp-boot=net:etherboot,/ltsp/i386/nbi.img
