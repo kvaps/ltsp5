@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# generates a swap file and configures nbd-server to export it
+# to stdout. should usually be run from an inetd.
+
+if [ -f /etc/ltsp/nbdswapd.conf ]; then
+    . /etc/ltsp/nbdswapd.conf
+fi
+
+# default swapfile size (in MB)
+SIZE="${SIZE:-32}"
+
+if [ -z "$tmp" ]; then
+    tmp=$(tempfile)
+fi
+
+# generate the swap file
+dd if=/dev/zero of=$tmp bs=1024k count=$SIZE 2> /dev/null
+
+# start the swap server
+/bin/nbd-server 0 $tmp
+
+# clean up the swap file
+rm -f $tmp
