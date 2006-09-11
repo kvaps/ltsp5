@@ -1,10 +1,14 @@
 ltsp (0.106) edgy; urgency=low
 
-  * make sure we call swapoff in ldm before shutdown to avoid idling nbd
-    connections
+  * make sure we disconnect /dev/nbd[n] in ldm before shutdown to avoid 
+    idling nbdswapd connections
   * mark the nbd device as swap device in ltsp-client-setup initscript
+  * add server/plugins/ltsp-build-client/Ubuntu/010-nbd-client to make sure
+    /etc/nbd-client is writeable before we bind mount it to a tmpfs
+  * add server/plugins/ltsp-build-client/Ubuntu/010-cleanup-consoles, 
+    to remove additional consoles from /etc/event.d to save memory
 
- -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Sep 2006 11:59:08 +0200
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Sep 2006 12:09:16 +0200
 
 ltsp (0.105) edgy; urgency=low
 
