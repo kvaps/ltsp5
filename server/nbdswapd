@@ -1,0 +1,6 @@
+#!/bin/sh
+SIZE=32
+tmp=$(tempfile)
+dd if=/dev/zero of=$tmp bs=1024k count=$SIZE 2> /dev/null
+/bin/nbd-server 0 $tmp
+rm -f $tmp

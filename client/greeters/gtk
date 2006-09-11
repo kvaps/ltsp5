@@ -137,6 +137,7 @@ class GTKGreeter:
                 width = 46, height = 46)
 
     def shutdown(self):
+        os.system('/etc/init.d/nbd-client stop')
         os.system('poweroff -fp')
 
     def draw_bottom_bar(self, show_timer):
