@@ -2,8 +2,9 @@ ltsp (0.106) edgy; urgency=low
 
   * make sure we call swapoff in ldm before shutdown to avoid idling nbd
     connections
+  * mark the nbd device as swap device in ltsp-client-setup initscript
 
- -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Sep 2006 11:56:57 +0200
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Sep 2006 11:59:08 +0200
 
 ltsp (0.105) edgy; urgency=low
 
