@@ -4,7 +4,7 @@ ltsp (0.106) edgy; urgency=low
     idling nbdswapd connections
   * mark the nbd device as swap device in ltsp-client-setup initscript
   * add server/plugins/ltsp-build-client/Ubuntu/010-nbd-client to make sure
-    /etc/nbd-client is writeable before we bind mount it to a tmpfs
+    /etc/nbd-client is there before we bind mount it to a tmpfs
   * add server/plugins/ltsp-build-client/Ubuntu/010-cleanup-consoles, 
     to remove additional consoles from /etc/event.d to save memory
 
