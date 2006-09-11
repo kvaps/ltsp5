@@ -1,3 +1,10 @@
+ltsp (0.106) edgy; urgency=low
+
+  * make sure we call swapoff in ldm before shutdown to avoid idling nbd
+    connections
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Sep 2006 11:56:57 +0200
+
 ltsp (0.105) edgy; urgency=low
 
   * drop ldm-swapon in favor if vargrantc's new ndbswapd inetd wrapper
