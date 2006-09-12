@@ -7,23 +7,29 @@ ltsp (0.99debian1) unstable; urgency=low
     - add nbd-server to recommends
     - nbdswapd creates and removes nbd-server swap files on demand
       (Closes: #367606)
+    - plugins:
+      + moved ltsp-build-client plugins to it's own namespace
+      + other scripts can make use of the plugins functions
     - ltsp-build-client:
       + bugfixes in initrd-netboot-tools tweaks
       + only install udhcpc on sarge
       + use lsb_release to select default distribution to install
       + only run rc whitelisting code if something is whitelisted
       + let dependency resolution install ldm
-      + commandline option to select and override kernel package
       + fix typo in dpkg-divert for policy-rc.d script
       + divert /etc/mtab and point /etc/mtab to /proc/mounts
-      + option to disable security mirror
-    - plugins:
-      + other scripts can make use of the plugins functions
-      + moved ltsp-build-client plugins to it's own namespace
-      + plugin to configure locales in the client chroot
+      + disable security mirror by setting to "none"
+      + option to name the chroot
+      + option to select and override kernel package
+      + configure locales in the client chroot
       + clean package cache when finished installing
+      + move handling of /etc/exports and root password later
+      + ensure /etc/nbd-client exists in the chroot
     - ltsp-update-sshkeys:
       + only update directories with an /etc/ssh directory
+    - ltsp-update-kernels:
+      + report which chroots are updated
+      + skip chroots without /bin/true
     - bug reporting helper script to get package versions from chroot(s)
     - added README.Debian explaining how to create the client chroot
     - documentation:
@@ -60,7 +66,7 @@ ltsp (0.99debian1) unstable; urgency=low
     - build-depend on po-debconf
     - change all package priorities to "extra"
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sat,  9 Sep 2006 00:30:27 -0500
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 12 Sep 2006 12:44:34 -0500
 
 ltsp (0.93debian1) unstable; urgency=low
 
