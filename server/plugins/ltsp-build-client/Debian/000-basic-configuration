@@ -20,7 +20,7 @@ case "$MODE" in
         # divert /etc/mtab and point it to /proc/mounts
         chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
                                  --divert /etc/mtab.real /etc/mtab
-        chroot $ROOT ln -s /proc/mounts /etc/mtab
+        chroot $ROOT ln -sf /proc/mounts /etc/mtab
 
         # Install policy-rc.d wrapper
         cp /usr/share/ltsp/scripts/policy-rc.d.ltsp  $ROOT/usr/sbin/
