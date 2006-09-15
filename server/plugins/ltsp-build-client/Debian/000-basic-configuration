@@ -10,25 +10,4 @@ case "$MODE" in
         RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"}
         RC2_WHITELIST=${RC2_WHITELIST:-"ltsp-client nbd-client usplash rmnologin"}
         ;;
-    after-install)
-        # Install start-stop-daemon wrapper
-        chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
-                                 --divert /sbin/start-stop-daemon.real \
-                                          /sbin/start-stop-daemon
-        cp /usr/share/ltsp/scripts/start-stop-daemon $ROOT/sbin/
-
-        # divert /etc/mtab and point it to /proc/mounts
-        chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
-                                 --divert /etc/mtab.real /etc/mtab
-        chroot $ROOT ln -sf /proc/mounts /etc/mtab
-
-        # Install policy-rc.d wrapper
-        cp /usr/share/ltsp/scripts/policy-rc.d.ltsp  $ROOT/usr/sbin/
-        chroot $ROOT update-alternatives --install /usr/sbin/policy-rc.d policy-rc.d \
-                                                   /usr/sbin/policy-rc.d.ltsp 100
-
-        # Export LTSP_HANDLE_DAEMONS to avoid running daemons while
-        # creating the chroot.
-        export LTSP_HANDLE_DAEMONS="false"
-        ;;
 esac
