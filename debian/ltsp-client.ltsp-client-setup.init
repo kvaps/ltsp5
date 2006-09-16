@@ -180,6 +180,9 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
       fi
 
+      # set compatbility for X_VIDEORAM with ltsp 4.x
+      X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
+
       # set video ram
       if [ -n "$X_VIDEO_RAM" ]; then
         preseed $xserver_package $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
