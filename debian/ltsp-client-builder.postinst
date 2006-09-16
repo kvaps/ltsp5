@@ -47,11 +47,14 @@ IFACE_LIST="$(cat /proc/net/dev|sed -e 's/^ *//' -e 's/:.*//'|grep -Ev '(\||lo|s
 
 interfaces_entry() {
 	cat <<EOF >>/target/etc/network/interfaces
+
+auto $IFACE_LIST
 iface $IFACE_LIST inet static
     address $NET.254
     netmask 255.255.255.0
     network $NET.0
     broadcast $NET.255
+
 EOF
 
 }
