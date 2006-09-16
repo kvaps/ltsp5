@@ -180,6 +180,11 @@ configure_x() {
         preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
       fi
 
+      # set video ram
+      if [ -n "$X_VIDEO_RAM" ]; then
+        preseed $xserver_package $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
+      fi
+
       # Mouse preseeding options.  Use inputattach if available
       if type inputattach >/dev/null 2>/dev/null ; then
         if [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && \
