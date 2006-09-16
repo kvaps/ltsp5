@@ -1,3 +1,10 @@
+ltsp (0.107) edgy; urgency=low
+
+  * Fix typos and formatting of device entry in /etc/network/interfaces in
+    ltsp-client-builder.postinst
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sat, 16 Sep 2006 16:12:19 +0200
+
 ltsp (0.106) edgy; urgency=low
 
   * make sure we disconnect /dev/nbd[n] in ldm before shutdown to avoid 
