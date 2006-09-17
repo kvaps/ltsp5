@@ -25,6 +25,9 @@ ltsp (0.99debian1) unstable; urgency=low
       + clean package cache when finished installing
       + move handling of /etc/exports and root password later
       + ensure /etc/nbd-client exists in the chroot
+      + add plugin directory for custom plugins (such as CDDs)
+      + split daemon handling into separate plugin
+      + split init whitelisting into separate plugin
     - ltsp-update-sshkeys:
       + only update directories with an /etc/ssh directory
     - ltsp-update-kernels:
@@ -53,6 +56,7 @@ ltsp (0.99debian1) unstable; urgency=low
     - fix sdm screen session to run on appropriate tty
     - use daemon to start sdm if present
     - only default to running ldm if no x-display-manager is installed
+    - added X_VIDEO_RAM option
     - update-kernels:
       + be less verbose when called from /etc/kernel/post*.d/
       + make mkelf-linux options a variable
@@ -62,11 +66,12 @@ ltsp (0.99debian1) unstable; urgency=low
     - manpage for ldm
     - versioned dependency on python (>= 2.4)
     - now supports language and session selection (merged from mainline)
+    - handle more cases of booleans (Y/N/YES/NO)
   * debian/control:
     - build-depend on po-debconf
     - change all package priorities to "extra"
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 12 Sep 2006 12:44:34 -0500
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 17 Sep 2006 14:09:33 -0400
 
 ltsp (0.93debian1) unstable; urgency=low
 
