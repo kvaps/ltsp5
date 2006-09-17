@@ -15,8 +15,11 @@ def get_config(name):
     return os.environ.get(name)
 
 def get_config_bool(name):
-    val = os.environ.get(name)
-    return (val and val.lower() == 'true')
+    val = os.environ.get(name).lower()
+    if val == 'y' or val = 'yes' or val = 'true':
+        return True
+    else
+        return False
 
 def get_ip(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
