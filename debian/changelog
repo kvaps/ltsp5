@@ -2,8 +2,9 @@ ltsp (0.99debian2) unstable; urgency=low
 
   [ Vagrant Cascadian ]
   * ldm: fix boolean handling
+  * nbdswapd: support SWAPDIR variable in nbdswapd.conf (Closes: #387991)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 17 Sep 2006 22:44:01 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 18 Sep 2006 10:20:18 -0400
 
 ltsp (0.99debian1) unstable; urgency=low
 
