@@ -22,6 +22,10 @@ ltsp (0.108) edgy; urgency=low
     malone #60805)
   * fix boolean handling in ldm
   * update Ubuntu plugin symlinks
+  * remove /var/run and /var/lock from bind mounting so we dont
+    double-bindmount them to tmpfs
+  * remove /etc/hotplug from bindmounted dirs, to quiten the boot, we dont use
+    hotplug since ages ...
   * documentation updates:
     * doc update for nbdswapd
     * dnsmasq doc examples update (typo fix)
