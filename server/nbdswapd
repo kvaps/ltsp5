@@ -13,8 +13,17 @@ if [ -f /etc/ltsp/nbdswapd.conf ]; then
     . /etc/ltsp/nbdswapd.conf
 fi
 
+if [ -n "$SWAPDIR" ]; then
+    if [ -d "$SWAPDIR" ] && [ -w "$SWAPDIR" ]; then
+        TEMPFILE_OPTS="-d $SWAPDIR"
+    else
+        echo "ERROR: not a directory or not writeable: $SWAPDIR" > /dev/stderr
+        exit 1
+    fi
+fi
+
 if [ -z "$SWAP" ]; then
-    SWAP=$(tempfile)
+    SWAP=$(tempfile $TEMPFILE_OPTS)
 fi
 
 # generate the swap file
