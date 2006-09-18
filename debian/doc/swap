@@ -13,6 +13,8 @@ USE_LOCAL_SWAP=Y
 
 network swap using NBD:
 
+touch /opt/ltsp/i386/etc/nbd-client
+
 in /opt/ltsp/i386/etc/lts.conf:
 
 [Default]
