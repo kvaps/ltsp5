@@ -15,10 +15,14 @@ def get_config(name):
     return os.environ.get(name)
 
 def get_config_bool(name):
-    val = os.environ.get(name).lower()
-    if val == 'y' or val = 'yes' or val = 'true':
+    val = os.environ.get(name)
+    if val:
+        val == val.lower()
+    else:
+        return False
+    if val == 'y' or val == 'yes' or val == 'true':
         return True
-    else
+    else:
         return False
 
 def get_ip(ifname):
