@@ -18,6 +18,7 @@ ltsp (0.108) edgy; urgency=low
   * split daemon and mtab handling into their own plugins
   * fix X_VIDEO_RAM handling in initscript
   * fix boolean handling in ldm
+  * update Ubuntu plugin symlinks
   * documentation updates:
     * doc update for nbdswapd
     * dnsmasq doc examples update (typo fix)
