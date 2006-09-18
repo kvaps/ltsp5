@@ -1,3 +1,32 @@
+ltsp (0.108) edgy; urgency=low
+
+  * fixes in the debian plugins (which dont really affect us):
+    * when hostname is "(none)", also reset hostname variable
+    * fix gdm handling of x-display-manager if installed in the chroot
+    * fix typo in dpkg-divert for policy-rc.d script
+    * debian plugin to keep package cache if wanted
+    *  allow --include as well for debootstrap
+  * whitespace fixes and check for /bin/true in ltsp-update-kernels
+  * add option to quiet ltsp-update-kernels if desired
+  * move /etc/exports handling to a later position for finalization
+  * move rootpw handling/locking to a later position (only sequence number
+    change)
+  * allow --chroot option to name the chroot something other than ARCH (fix
+    requested by jammcq)
+  * add empty plugin directory for custom plugins
+  * split initscript handling in its own plugin
+  * split daemon and mtab handling into their own plugins
+  * fix X_VIDEO_RAM handling in initscript
+  * fix boolean handling in ldm
+  * documentation updates:
+    * doc update for nbdswapd
+    * dnsmasq doc examples update (typo fix)
+    * doc/workstation update, fix gdm docs
+    * doc/examples/qemu-ltsp fix for help function
+    * doc/plugins documentation update
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 18 Sep 2006 21:17:06 +0200
+
 ltsp (0.107) edgy; urgency=low
 
   * Fix typos and formatting of device entry in /etc/network/interfaces in
