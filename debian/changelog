@@ -1,3 +1,10 @@
+ltsp (0.99debian2) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * ldm: fix boolean handling
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 17 Sep 2006 22:44:01 -0400
+
 ltsp (0.99debian1) unstable; urgency=low
 
   [ Vagrant Cascadian ]
