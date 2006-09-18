@@ -27,22 +27,24 @@ if [ -z "$BOOTPROMPT_OPTS" ]; then
 fi
 
 for CHROOT in $ALL_CHROOTS ; do
-    # check for compatible (i.e. chrootable) architecture
-    if [ -x $CHROOT/bin/true ] && chroot $CHROOT /bin/true ; then
-        # update kernels for the chroot
-        if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
-            chroot "$CHROOT" /usr/lib/ltsp/update-kernels
+    if [ -x $CHROOT/bin/true ]; then
+        echo "Updating tftp directories for chroot: $CHROOT"
+        # check for compatible (i.e. chrootable) architecture
+        if chroot $CHROOT /bin/true ; then
+            # update kernels for the chroot
+            if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
+                chroot "$CHROOT" /usr/lib/ltsp/update-kernels
+            fi
         fi
-    fi
 
-    EXTRA_FILES=""
-    CHROOT_NAME="$(basename $CHROOT)"
-    TFTP_CHROOT="$TFTPBOOT/$CHROOT_NAME"
-    mkdir -p $TFTP_CHROOT
+        EXTRA_FILES=""
+        CHROOT_NAME="$(basename $CHROOT)"
+        TFTP_CHROOT="$TFTPBOOT/$CHROOT_NAME"
+        mkdir -p $TFTP_CHROOT
 
-    if [ -f $CHROOT/usr/lib/yaboot/yaboot ]; then
-        cp -a -v $CHROOT/usr/lib/yaboot/yaboot $TFTPDIR
-        cat > $TFTPDIR/yaboot.conf <<EOF
+        if [ -f $CHROOT/usr/lib/yaboot/yaboot ]; then
+            cp -a -v $CHROOT/usr/lib/yaboot/yaboot $TFTPDIR
+            cat > $TFTPDIR/yaboot.conf <<EOF
 timeout=0
 default=ltsp
 root=/dev/ram
@@ -52,30 +54,34 @@ image=/ltsp/$CHROOT_NAME/vmlinux
         initrd=/ltsp/$CHROOT_NAME/initrd.img
         append="$BOOTPROMPT_OPTS"
 EOF
-    else
-        echo "Skipping yaboot configuration. install yaboot package if you need it."
-    fi    
+        else
+            echo "Skipping yaboot configuration. install yaboot package if you need it."
+        fi    
 
-    if [ -f $CHROOT/usr/lib/syslinux/pxelinux.0 ]; then
-        PXECFG=$TFTP_CHROOT/pxelinux.cfg
-        cp $CHROOT/usr/lib/syslinux/pxelinux.0 $TFTP_CHROOT
-        if [ ! -d $PXECFG ]; then
-            mkdir $PXECFG
-        fi
-        if [ -z "$PXELINUX_CMDLINE" ]; then
-            PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
-        fi
-        cat > $PXECFG/default <<EOF
+        if [ -f $CHROOT/usr/lib/syslinux/pxelinux.0 ]; then
+            PXECFG=$TFTP_CHROOT/pxelinux.cfg
+            cp $CHROOT/usr/lib/syslinux/pxelinux.0 $TFTP_CHROOT
+            if [ ! -d $PXECFG ]; then
+                mkdir $PXECFG
+            fi
+            if [ -z "$PXELINUX_CMDLINE" ]; then
+                PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
+            fi
+            cat > $PXECFG/default <<EOF
 $PXELINUX_CMDLINE
 EOF
  
-    else
-        echo "Skipping PXE configuration.  Install the syslinux package if you need it."
-    fi
-
-    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/nbi*.img* $EXTRA_FILES ; do
-        if [ -f "$file" ]; then
-            cp -a -v "$file" $TFTP_CHROOT
+        else
+            echo "Skipping PXE configuration.  Install the syslinux package if you need it."
         fi
-    done
+
+        for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/nbi*.img* $EXTRA_FILES ; do
+            if [ -f "$file" ]; then
+                cp -a -v "$file" $TFTP_CHROOT
+            fi
+        done
+    else
+        # not a valid chroot
+        echo "Skipping invalid chroot: $CHROOT"
+    fi
 done
