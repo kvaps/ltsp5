@@ -1,11 +1,12 @@
 the plugins system for ltsp-build-client:
 
 plugins are called by the "load_plugins" function. common plugins are located
-in /usr/share/ltsp/plugins/common, while vendor-specific plugins are defined in
-/usr/share/ltsp/plugins/VENDOR. if a vendor plugin has the same filename as a
-common plugin, it will override the common plugin. optionally, the admin can
-install or override common or vendor plugins in /etc/ltsp/plugins. there are
-several modes in which these plugins are called:
+in /usr/share/ltsp/plugins/ltsp-build-client/common, while vendor-specific
+plugins are defined in /usr/share/ltsp/plugins/ltsp-build-client/VENDOR. if a
+vendor plugin has the same filename as a common plugin, it will override the
+common plugin. optionally, the admin can install or override common or vendor
+plugins in /etc/ltsp/plugins/ltsp-build-client. there are several modes in
+which these plugins are called:
 
 commandline:
 
