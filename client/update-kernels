@@ -67,10 +67,13 @@ for kernel in $ALL_KERNELS ; do
         fi
     else
         if which mkelf-linux >/dev/null; then
+            if [ -z "$MKELF_LINUX_OPTS" ]; then
+                MKELF_LINUX_OPTS="--ip=dhcp"
+            fi
             if [ -f "$BOOT/$initrd" ]; then
-                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel $BOOT/$initrd
+                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $BOOT/$initrd
             else
-                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel
+                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel
             fi
         else
             if [ -z "$mkelf_seen" ]; then
