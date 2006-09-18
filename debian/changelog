@@ -1,5 +1,7 @@
 ltsp (0.108) edgy; urgency=low
 
+  - The "Detroit hackfest fixing spree" release -
+
   * fixes in the debian plugins (which dont really affect us):
     * when hostname is "(none)", also reset hostname variable
     * fix gdm handling of x-display-manager if installed in the chroot
@@ -16,7 +18,8 @@ ltsp (0.108) edgy; urgency=low
   * add empty plugin directory for custom plugins
   * split initscript handling in its own plugin
   * split daemon and mtab handling into their own plugins
-  * fix X_VIDEO_RAM handling in initscript
+  * fix X_VIDEO_RAM handling in initscript (needs follow up fix of 
+    malone #60805)
   * fix boolean handling in ldm
   * update Ubuntu plugin symlinks
   * documentation updates:
