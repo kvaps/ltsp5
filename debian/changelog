@@ -1,3 +1,21 @@
+ltsp (0.110) edgy; urgency=low
+
+  * fix printer handling in the initscript
+  * fix paths in the start_printer script
+  * fix the paths in the client setup initscript to match FHS fixes in 
+    the ltspfs package
+  * fix boolean handling of env vars in ldm
+  * fix floppy handling in ldm
+  * do not link the apt related plugins
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 20:07:38 +0200
+
+ltsp (0.109) edgy; urgency=low
+ .
+    * make etherboot work automagically
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 19 Sep 2006 16:00:54 +0200
+
 ltsp (0.108) edgy; urgency=low
 
   - The "Detroit hackfest fixing spree" release -
