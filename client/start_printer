@@ -2,7 +2,7 @@
 
 PNUM=$1
 
-. /etc/ltsp_functions
+. /usr/lib/ltsp/ltsp_functions
 
 DEVICE=`get_cfg PRINTER_${PNUM}_DEVICE`
 
@@ -75,9 +75,9 @@ else
     #
     if [ -n "${PRT_OPTS}" ]; then
         logger -t lp_server "Started with: -n ${PORT} ${WO_OPT} -d ${DEVICE} -t \"${PRT_OPTS}\""
-        exec /sbin/lp_server -n ${PORT} ${WO_OPT} -d ${DEVICE} -t "${PRT_OPTS}" >/dev/null 2>&1
+        exec /usr/lib/ltsp/lp_server -n ${PORT} ${WO_OPT} -d ${DEVICE} -t "${PRT_OPTS}" >/dev/null 2>&1
     else
         logger -t lp_server "Started with: -n ${PORT} ${WO_OPT} -d ${DEVICE}"
-        exec /sbin/lp_server -n ${PORT} ${WO_OPT} -d ${DEVICE}                  >/dev/null 2>&1
+        exec /usr/lib/ltsp/lp_server -n ${PORT} ${WO_OPT} -d ${DEVICE}                  >/dev/null 2>&1
     fi
 fi
