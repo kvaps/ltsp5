@@ -81,7 +81,7 @@ class GTKGreeter:
                     y2 = +(self.sq_height*2), fill_color = self.loginwin_color)
         self.entrylabel = self.root.add(gnomecanvas.CanvasText,
                     markup = '<span size="10000"><b>Username:</b></span>',
-                    fill_color = self.foreground_color, x = -33+self.diff, y = 100)
+                    fill_color = self.frame_color, x = -33+self.diff, y = 100)
         # entry with small frame
         self.root.add(gnomecanvas.CanvasRect, x1 = -71+self.diff,
                     y1 = 114, x2 = 71+self.diff,
