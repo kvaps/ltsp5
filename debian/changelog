@@ -1,3 +1,9 @@
+ltsp (0.112) edgy; urgency=low
+
+  * fix ldm edubuntu theme
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 22:36:52 +0200
+
 ltsp (0.111) edgy; urgency=low
 
   * whoops, we dont want the .bzr tree in the source package
