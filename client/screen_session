@@ -83,7 +83,12 @@ fi
 if [ "${SCREEN_SCRIPT}" = "none" ]; then
     sleep ${SLEEP}
 else
-    if [ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
+    if [ -x /etc/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
+        #
+        # Go ahead and run the screen script
+        #
+        exec //ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+    elif [ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
         #
         # Go ahead and run the screen script
         #
