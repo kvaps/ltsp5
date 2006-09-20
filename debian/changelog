@@ -1,3 +1,10 @@
+ltsp (0.111) edgy; urgency=low
+
+  * whoops, we dont want the .bzr tree in the source package
+  * fix debian introduced hang of esd on relogin, closes malone (#61491)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 21:42:23 +0200
+
 ltsp (0.110) edgy; urgency=low
 
   * fix printer handling in the initscript
