@@ -15,15 +15,12 @@ def get_config(name):
     return os.environ.get(name)
 
 def get_config_bool(name):
+    allowed = ['y', 'true']
     val = os.environ.get(name)
-    if val:
-        val == val.lower()
-    else:
-        return False
-    if val == 'y' or val == 'yes' or val == 'true':
-        return True
-    else:
-        return False
+    for valid in allowed:
+        if (val and val.lower() == valid):
+            return True
+    return False
 
 def get_ip(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -157,6 +154,14 @@ class LDM:
             # make sure we clean up after logout if localdev is used
             if self.use_localdev:
                 session_manager = session_manager+' && ltspfsmounter all cleanup'
+                print "info: Enabling localdev support."
+                if os.access("/var/run/.static-device", os.F_OK):
+                    print "info: Enabling static localdev support."
+                    static_dev = open("/var/run/.static-device", "r")
+                    delayed_mnt = open("/var/run/.delayed-mount", "a")
+                    delayed_mnt.writelines(static_dev.readlines())
+                    delayed_mnt.close()
+                    static_dev.close()
 
             # set language
             if lang != 'None':
