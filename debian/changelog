@@ -1,3 +1,10 @@
+ltsp (0.113) edgy; urgency=low
+
+  * make sure the Password label in ldm doesnt change color
+  * better fix for esd, so now actually a second user also gets sound
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 21 Sep 2006 16:36:13 +0200
+
 ltsp (0.112) edgy; urgency=low
 
   * fix ldm edubuntu theme
