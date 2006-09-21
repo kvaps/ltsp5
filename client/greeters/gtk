@@ -271,7 +271,7 @@ class GTKGreeter:
         self.entry.set_text('')
         self.entrylabel = self.root.add(gnomecanvas.CanvasText,
             markup = '<span size="10000"><b>Password:</b></span>',
-            fill_color = self.foreground_color, x = -33+self.diff, y = 100)
+            fill_color = self.frame_color, x = -33+self.diff, y = 100)
         self.entry.set_visibility(False)
         #self.entry.set_invisible_char('●'.e)
         self.flag = 1
