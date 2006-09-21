@@ -130,7 +130,8 @@ class LDM:
                     # forget the previous users authentication key.
                     # A native python implementation is probably
                     # better. [pere 2006-02-24]
-                    # os.system("killall -HUP esd")
+                    os.system("killall esd")
+                    os.system("/usr/bin/esd -nobeeps -public -tcp &")
                 elif self.sound_daemon == 'nasd':
                     print "info: Enabling nasd sound support."
                     # Could use the audiooss package to set LD_PRELOAD.
