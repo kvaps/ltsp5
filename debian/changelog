@@ -2,6 +2,8 @@ ltsp (0.114) edgy; urgency=low
 
   * make sure mknbi is availabe on all i386 systems for out of the box
     etherboot support.
+  * replace the obsolete arch-build with a bzr-release target to make
+    maintenance easier
 
  -- Oliver Grawert <ogra@ubuntu.com>  Sun, 24 Sep 2006 14:44:24 +0200
 
