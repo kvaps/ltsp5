@@ -6,6 +6,9 @@ case "$MODE" in
         MIRROR=${MIRROR:-"http://http.us.debian.org/debian"}
         COMPONENTS=${COMPONENTS:-"main"}
         EARLY_PACKAGES=${EARLY_PACKAGES:-"x-window-system-core ltsp-client discover1 mdetect xresprobe udev xdebconfigurator esound"}
+        if [ "$ARCH" = "i386" ]; then
+            EARLY_PACKAGES="$EARLY_PACKAGES mknbi"
+        fi
         EXCLUDE=${EXCLUDE:-"libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"}
         RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"}
         RC2_WHITELIST=${RC2_WHITELIST:-"ltsp-client nbd-client usplash rmnologin"}
