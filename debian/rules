@@ -6,7 +6,7 @@
 #export DH_VERBOSE=1
 
 DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
-DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
+DEB_SRC_BUILD_PROG:=dpkg-buildpackage -rfakeroot -S -sa
 
 build: build-stamp
 build-stamp:
@@ -84,11 +84,10 @@ binary-arch: build install
 	dh_md5sums -a
 	dh_builddeb -a
 
-arch-build:
-	rm -rf debian/arch-build
-	mkdir -p debian/arch-build/ltsp-$(DEBVER)
-	baz inventory -s | xargs cp -a --parents --target=debian/arch-build/ltsp-$(DEBVER)
-	(cd debian/arch-build/ltsp-$(DEBVER); $(DEB_BUILD_PROG); dpkg-genchanges -S > ../ltsp_$(DEBVER)_source.changes)
+bzr-release:
+	rm -rf ../ltsp-$(DEBVER)
+	bzr export ../ltsp-$(DEBVER)
+	(cd ../ltsp-$(DEBVER); $(DEB_SRC_BUILD_PROG))
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install arch-build
+.PHONY: build clean binary-indep binary-arch binary install bzr-release
