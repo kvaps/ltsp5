@@ -1,3 +1,10 @@
+ltsp (0.115) edgy; urgency=low
+
+  * mknbi doesnt exist on non-i386 arches so dont try to install it on 
+    powerpc 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 27 Sep 2006 23:56:31 +0200
+
 ltsp (0.114) edgy; urgency=low
 
   * make sure mknbi is availabe on all i386 systems for out of the box
