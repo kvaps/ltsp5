@@ -8,6 +8,16 @@ BOOT=/boot
 SUB_ARCH=$(uname -m)
 VENDOR=$(lsb_release -i -s)
 
+case $0 in
+  /etc/kernel/post*.d*) QUIET=true
+esac
+
+msg() {
+    if [ "$QUIET" != "true" ]; then
+       echo $@ 
+    fi
+}
+
 if [ -z "$CHROOT_NAME" ]; then
     # FIXME: replace with a common function
     CHROOT_NAME="$(dpkg --print-installation-architecture)"
@@ -35,7 +45,7 @@ image=/ltsp/$CHROOT_NAME/vmlinux
 EOF
 
 else
-    echo "Skipping yaboot configuration. install yaboot package if you need it."
+    msg "Skipping yaboot configuration. install yaboot package if you need it."
 fi    
 
 if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
@@ -52,18 +62,8 @@ $PXELINUX_CMDLINE
 EOF
 
 else
-    echo "Skipping PXE configuration.  Install the syslinux package if you need it."
+    msg "Skipping PXE configuration.  Install the syslinux package if you need it."
 fi
-
-case $0 in
-  /etc/kernel/post*.d*) QUIET=true
-esac
-
-msg() {
-    if [ "$QUIET" != "true" ]; then
-       echo $@ 
-    fi
-}
 
 # allow specifying a specific kernel image to update, from kernel postinst
 if [ -f "$2" ]; then
