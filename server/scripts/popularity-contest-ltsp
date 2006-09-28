@@ -8,12 +8,12 @@
 # avoids the need for working mail in the chroot environment.
 
 # change this if you have chroots in other locations
-LTSP_BASE="/opt/ltsp"
+BASE="/opt/ltsp"
 
-for base in $LTSP_BASE ; do
-    if [ -d "$LTSP_BASE" ]; then
-        # find all the top-level directories in $LTSP_BASE
-        for dir in $(find $LTSP_BASE -maxdepth 1 -type d) ; do
+for base in $BASE ; do
+    if [ -d "$BASE" ]; then
+        # find all the top-level directories in $BASE
+        for dir in $(find $BASE -maxdepth 1 -type d) ; do
             # only do the following if popularity-contest is installed, 
             # /bin/true exists and returns true (in case of architecture mis-match),
             # and chroot is available

@@ -7,7 +7,7 @@ export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)
 export TEXTDOMAINDIR=/usr/share/locale        # locale dir for gettext codes
 
 VENDOR=$(lsb_release -i -s)
-BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
+export BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 SCRIPT=ltsp-build-client

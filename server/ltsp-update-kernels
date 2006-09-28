@@ -7,7 +7,7 @@ umask 022
 
 TFTPDIR=/var/lib/tftpboot/
 TFTPBOOT=$TFTPDIR/ltsp
-test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
+BASE=${BASE:-"/opt/ltsp"}
 VENDOR=$(lsb_release -i -s)
 
 if [ ! -d $TFTPBOOT ] ; then
@@ -16,7 +16,7 @@ if [ ! -d $TFTPBOOT ] ; then
 fi
 
 ALL_CHROOTS="$@"
-ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
+ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d)"}
 
 if [ -z "$BOOTPROMPT_OPTS" ]; then
     if [ "$VENDOR" = "Ubuntu" ]; then
