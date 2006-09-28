@@ -34,7 +34,7 @@ for CHROOT in $ALL_CHROOTS ; do
     export CHROOT_NAME="$(basename $CHROOT)"
 
     # check for compatible (i.e. chrootable) architecture
-    if chroot $CHROOT /bin/true ; then
+    if [ -x $CHROOT/bin/true ] && chroot $CHROOT /bin/true ; then
         # update kernels for the chroot
         if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
             chroot "$CHROOT" /usr/lib/ltsp/update-kernels

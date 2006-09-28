@@ -55,6 +55,16 @@ else
     echo "Skipping PXE configuration.  Install the syslinux package if you need it."
 fi
 
+case $0 in
+  /etc/kernel/post*.d*) QUIET=true
+esac
+
+msg() {
+    if [ "$QUIET" != "true" ]; then
+       echo $@ 
+    fi
+}
+
 # allow specifying a specific kernel image to update, from kernel postinst
 if [ -f "$2" ]; then
     ALL_KERNELS="$2"
@@ -125,7 +135,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         else
             if [ -z "$mkelf_seen" ]; then
-                echo "Skipping etherboot images.  Install the mknbi package if you need them."
+                msg "Skipping etherboot images.  Install the mknbi package if you need them."
                 mkfelf_seen=true
             fi
         fi
@@ -137,7 +147,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         else
             if [ -z "$netabootwrap_seen" ]; then
-                echo "Skipping netabootwrap images.  Install the aboot package if you need them."
+                msg "Skipping netabootwrap images.  Install the aboot package if you need them."
                 netabootwrap_seen=true
             fi
         fi
@@ -160,7 +170,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         else
             if [ -z "$sparc_piggyback_seen" ]; then
-                echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
+                msg "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
                 sparc_piggyback_seen=true
             fi
         fi
