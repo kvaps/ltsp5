@@ -25,30 +25,27 @@ ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
 
 for CHROOT in $ALL_CHROOTS ; do
     if [ -x $CHROOT/bin/true ]; then
-        echo "looking for files in: $CHROOT"
+        echo "Updating tftp directories for chroot: $CHROOT"
+        # check for compatible (i.e. chrootable) architecture
+        if chroot $CHROOT /bin/true ; then
+            # update kernels for the chroot
+            if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
+                chroot "$CHROOT" /usr/lib/ltsp/update-kernels
+            fi
+        fi
+
+        if [ -f $CHROOT/boot/yaboot ]; then
+            if [ -f $CHROOT/boot/yaboot.conf ]; then
+                # yaboot requires the files in a specific location,
+                # link them so they appear there.
+                ln -s $TFTPBOOT/$CHROOT/boot/yaboot $TFTPDIR
+                ln -s $TFTPBOOT/$CHROOT/boot/yaboot.conf $TFTPDIR
+            else
+                echo "WARNING: yaboot present but not configured."
+            fi
+        fi  
     else
-        # without /bin/true, it is almost certainly not a chroot
-        break
+        # not a valid chroot
+        echo "Skipping invalid chroot: $CHROOT"
     fi
-
-    export CHROOT_NAME="$(basename $CHROOT)"
-
-    # check for compatible (i.e. chrootable) architecture
-    if [ -x $CHROOT/bin/true ] && chroot $CHROOT /bin/true ; then
-        # update kernels for the chroot
-        if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
-            chroot "$CHROOT" /usr/lib/ltsp/update-kernels
-        fi
-    fi
-
-    if [ -f $CHROOT/boot/yaboot ]; then
-        if [ -f $CHROOT/boot/yaboot.conf ]; then
-            # yaboot requires the files in a specific location,
-            # link them so they appear there.
-            ln -s $TFTPBOOT/$CHROOT/boot/yaboot $TFTPDIR
-            ln -s $TFTPBOOT/$CHROOT/boot/yaboot.conf $TFTPDIR
-        else
-            echo "WARNING: yaboot present but not configured."
-        fi
-    fi  
 done
