@@ -4,7 +4,7 @@ set -e
 
 TFTPDIR=${TFTPDIR:-/var/lib/tftpboot/}
 TFTPBOOT=${TFTPBOOT:-"$TFTPDIR/ltsp"}
-LTSPROOT=${LTSPROOT:-"/opt/ltsp"}
+LTSP_BASE=${LTSP_BASE:-"/opt/ltsp"}
 
 if [ ! -d $TFTPDIR ] ; then
     mkdir -p $TFTPDIR
@@ -17,11 +17,11 @@ fi
 
 if [ ! -L $TFTPBOOT ]; then
     # linking ltsp dir
-    ln -s $LTSPROOT $TFTPBOOT
+    ln -s $LTSP_BASE $TFTPBOOT
 fi
 
 ALL_CHROOTS="$@"
-ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
+ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSP_BASE -mindepth 1 -maxdepth 1 -type d)"}
 
 for CHROOT in $ALL_CHROOTS ; do
     if [ -x $CHROOT/bin/true ]; then
