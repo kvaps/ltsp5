@@ -1,3 +1,10 @@
+ltsp (0.116) edgy; urgency=low
+
+  * make sure amd64 clients are built on amd64 and keep i386 optional on 
+    that architecture to unbreak the edubuntu CD install
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 28 Sep 2006 12:33:25 +0200
+
 ltsp (0.115) edgy; urgency=low
 
   * mknbi doesnt exist on non-i386 arches so dont try to install it on 
