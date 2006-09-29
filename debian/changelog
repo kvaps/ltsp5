@@ -1,3 +1,24 @@
+ltsp (0.99debian3) unstable; urgency=high
+
+  [ Vagrant Cascadian ]
+  * urgency set to high, as this fixes an RC bug.
+  * ltsp-client-builder:
+    - disable use of security mirror for CD install
+      (patch by Petter Reinholdtsen, Closes: #389276)
+  * ltsp-client:
+    - make mknbi a dependency for i386
+    - allow custom screen scripts in /etc/ltsp/screen.d
+  * ltsp-build-client:
+    - only display advanced help options if called with --extra-help
+  * debian/control:
+    - add dependencies for "network audio system" as alternatives
+      for esound.
+  * translation updates:
+    - Updated Czech translation of ltsp debconf messages
+      (patch by Miroslav Kure, Closes: #389219)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 29 Sep 2006 11:58:08 -0400
+
 ltsp (0.99debian2) unstable; urgency=low
 
   [ Vagrant Cascadian ]
