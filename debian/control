@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf
 Standards-Version: 3.7.2
 
 Package: ltsp-server
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | atftpd, openssh-client | ssh, iproute, debconf-utils, esound-clients | nas-bin, python (>= 2.4), netbase (>= 4.08)
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | atftpd, openssh-client | ssh, iproute, debconf-utils, esound-clients | nas-bin, python (>= 2.4), netbase (>= 4.08), gettext-base
 Recommends: openssh-server | ssh, nbd-server
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
