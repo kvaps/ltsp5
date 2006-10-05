@@ -59,7 +59,7 @@ case "$1" in
   # if usplash is runing, make sure to stop it now 
   # (yes "start" is the right arg to do it ... even it looks silly)
   		if pidof usplash > /dev/null; then
-			/etc/init.d/usplash start
+            DO_NOT_SWITCH_VT=yes /etc/init.d/usplash start
 		fi
         log_begin_msg "Starting LTSP client..."
 
