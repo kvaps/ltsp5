@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# copyright 2006 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+# the terms of the GNU General Public License version 2 or any later version.
+
 # generates a swap file and configures nbd-server to export it
 # to stdout. should usually be run from an inetd.
 
