@@ -1,3 +1,12 @@
+ltsp (0.117) edgy; urgency=low
+
+  * use the new kernel image name for amd64
+  * add DO_NOT_SWITCH_VT to the ltsp-client initscript, so we swich directly
+    to the screen session from usplash instead of having a flashing tty1
+    inbetween
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  5 Oct 2006 11:35:11 +0200
+
 ltsp (0.116) edgy; urgency=low
 
   * make sure amd64 clients are built on amd64 and keep i386 optional on 
