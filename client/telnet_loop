@@ -1,5 +1,11 @@
 #!/bin/sh
 #
+# Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
+#
+# This software is licensed under the Gnu General Public License.
+# The full text of which can be found at http://www.LTSP.org/license.txt
+#
+#
 # Enter a loop, running telnet to the server.
 #
 
