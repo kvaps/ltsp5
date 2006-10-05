@@ -1,3 +1,13 @@
+/*
+ * getltscfg.c: - parse lts.conf configuration, and return settings
+ *
+ * (c) 1999,2003,2006 by James A. McQuillan (McQuillan Systems, LLC)
+ *
+ * This software is distributed under the terms and conditions of the
+ * GNU General Public License. See file GPL for the full text of the license.
+ *
+ */
+
 #define MAIN
 #undef input
 
