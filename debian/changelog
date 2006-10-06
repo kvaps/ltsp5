@@ -1,3 +1,14 @@
+ltsp (0.118) edgy; urgency=low
+
+  * make sure we test for a special char device if looking for /dev/dsp, 
+    fixes malone #56959
+  * show the ip additionally to the hostname in ldm
+  * switch to vt7 before stopping usplash
+  * add klogd to enabled services in ltsp-build-client
+  * add syslog to the enabled services in ltsp-build-client
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  6 Oct 2006 16:04:59 +0200
+
 ltsp (0.117) edgy; urgency=low
 
   * use the new kernel image name for amd64
