@@ -4,7 +4,8 @@
  * (c) 1999,2003,2006 by James A. McQuillan (McQuillan Systems, LLC)
  *
  * This software is distributed under the terms and conditions of the
- * GNU General Public License. See file GPL for the full text of the license.
+ * GNU General Public License version 2. See file COPYING for the full
+ * text of the license.
  *
  */
 
