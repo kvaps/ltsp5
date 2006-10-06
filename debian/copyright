@@ -25,7 +25,7 @@ client/telnet_loop
 with the following copyright:
 
 Copyright (c) 1999-2006 by James A. McQuillan (McQuillan Systems, LLC)
-This software is licensed under the Gnu General Public License.
+This software is licensed under the Gnu General Public License version 2
 
 
 server/nbdswapd and client/screen.d/sdm carry the following copyright:
