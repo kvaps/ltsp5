@@ -1,3 +1,14 @@
+ltsp (0.99debian4) unstable; urgency=low
+
+  * merge copyright clarifications from upstream
+  * update debian/copyright (Closes: #390797)
+  * ltsp-server:
+    - add dependency on gettext-base
+  * ltsp-client:
+    - removed lp_server (unclear licensing)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  6 Oct 2006 13:03:06 -0400
+
 ltsp (0.99debian3) unstable; urgency=high
 
   [ Vagrant Cascadian ]
