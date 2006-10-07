@@ -8,8 +8,9 @@ ltsp (0.99debian4) unstable; urgency=low
     - removed lp_server (unclear licensing)
   * ltsp-client-builder (udeb):
     - change menu priority to 70 and depend on pkgsel (Closes: #390722)
+    - debconf preseeding for commandline options to ltsp-build-client
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  6 Oct 2006 15:34:26 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat,  7 Oct 2006 17:35:35 -0400
 
 ltsp (0.99debian3) unstable; urgency=high
 
