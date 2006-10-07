@@ -13,8 +13,6 @@ build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
-	cd client/lp_server && ./configure --prefix=/usr
-	$(MAKE) -C client/lp_server
 	$(MAKE) -C po update-po
 	touch build-stamp
 
@@ -24,7 +22,6 @@ clean:
 	rm -f build-stamp
 
 	-$(MAKE) -C client/getltscfg clean
-	-$(MAKE) -C client/lp_server distclean
     
     # Using po specific Makefile to clean message catalogs
 	$(MAKE) -C po clean
