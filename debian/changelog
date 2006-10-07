@@ -1,5 +1,7 @@
-ltsp (0.99debian4) unstable; urgency=low
+ltsp (0.99debian4) unstable; urgency=medium
 
+  [ Vagrant Cascadian ]
+  * urgency medium as it resolves copyright issues
   * merge copyright clarifications from upstream
   * update debian/copyright (Closes: #390797)
   * ltsp-server:
@@ -10,7 +12,7 @@ ltsp (0.99debian4) unstable; urgency=low
     - change menu priority to 70 and depend on pkgsel (Closes: #390722)
     - debconf preseeding for commandline options to ltsp-build-client
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sat,  7 Oct 2006 17:35:35 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat,  7 Oct 2006 17:46:05 -0400
 
 ltsp (0.99debian3) unstable; urgency=high
 
