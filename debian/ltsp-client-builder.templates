@@ -13,3 +13,9 @@ _Description: Build LTSP chroot
 Template: ltsp-client-builder/progress
 Type: text
 _Description: Building LTSP chroot...
+
+Template: ltsp-client-builder/build-client-opts
+Type: string
+Default: --mirror file:///cdrom --security-mirror none
+# Only used for preseeding arguments to ltsp-client-builder.
+Description: arguments for ltsp-build-client
