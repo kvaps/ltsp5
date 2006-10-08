@@ -1,3 +1,10 @@
+ltsp (0.119) edgy; urgency=low
+
+  * documentation update: new example lts.conf and proper table with key/value
+    pairs in lts-parameters.txt
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun,  8 Oct 2006 15:14:03 +0200
+
 ltsp (0.118) edgy; urgency=low
 
   * make sure we test for a special char device if looking for /dev/dsp, 
