@@ -1,4 +1,4 @@
-ltsp (0.99debian4) unstable; urgency=medium
+ltsp (0.99debian5) unstable; urgency=medium
 
   [ Vagrant Cascadian ]
   * urgency medium as it resolves copyright issues
@@ -6,13 +6,16 @@ ltsp (0.99debian4) unstable; urgency=medium
   * update debian/copyright (Closes: #390797)
   * ltsp-server:
     - add dependency on gettext-base
+    - add debian-archive-keyring in new ltsp chroots (Closes: #391878)
+    - allow comma-separated components argument (Closes: #391805)
   * ltsp-client:
     - removed lp_server (unclear licensing)
   * ltsp-client-builder (udeb):
     - change menu priority to 70 and depend on pkgsel (Closes: #390722)
     - debconf preseeding for commandline options to ltsp-build-client
+    - work around bug in debootstrap by touching resolv.conf
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sat,  7 Oct 2006 17:46:05 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon,  9 Oct 2006 10:16:13 -0400
 
 ltsp (0.99debian3) unstable; urgency=high
 
