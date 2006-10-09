@@ -39,6 +39,9 @@ apt-install ltsp-server
 
 db_progress STEP 1
 
+# workaround for: http://bugs.debian.org/390647
+in-target /bin/touch /etc/resolv.conf
+
 DEBIAN_PRIORITY=critical
 in-target /usr/sbin/ltsp-build-client $BUILD_CLIENT_OPTS
 
