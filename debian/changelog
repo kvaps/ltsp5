@@ -1,3 +1,9 @@
+ltsp (0.120) edgy; urgency=low
+
+  * make sure we use the human cursors in new ltsp installs
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  9 Oct 2006 11:15:43 +0200
+
 ltsp (0.119) edgy; urgency=low
 
   * documentation update: new example lts.conf and proper table with key/value
