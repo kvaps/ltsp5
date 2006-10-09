@@ -1,0 +1,13 @@
+case "$MODE" in
+    finalization)
+        if [ ! -d "$ROOT/usr/share/themes/Human" ]; then
+            mkdir -p $ROOT/usr/share/themes/Human
+            echo "[Icon Theme]" > $ROOT/usr/share/themes/Human/cursor.theme
+            echo "Inherits=Human" >> $ROOT/usr/share/themes/Human/cursor.theme
+        fi
+
+        LC_ALL=C chroot $ROOT update-alternatives \
+        --install /usr/share/icons/default/index.theme \
+        x-cursor-theme /usr/share/themes/Human/cursor.theme 40
+        ;;
+esac
