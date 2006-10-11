@@ -1,3 +1,10 @@
+ltsp (0.122) edgy; urgency=low
+
+  * change dependency of ldm from python-gnome2 to python-gnomecanvas
+  * human-cursors-theme is fixed, remove the workaround plugin
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 11 Oct 2006 23:14:34 +0200
+
 ltsp (0.121) edgy; urgency=low
 
   * fix alternative path for cursor theme
