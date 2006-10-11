@@ -37,7 +37,7 @@ Description: LTSP client environment
  for installation inside a LTSP client filesystem.
 
 Package: ldm
-Depends: openssh-client | ssh, python, python-gtk2, python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
+Depends: openssh-client | ssh, python, python-gtk2, python-gnomecanvas, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
 Architecture: all
 Description: LTSP display manager
  ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike
