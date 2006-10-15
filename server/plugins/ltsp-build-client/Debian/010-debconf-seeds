@@ -4,7 +4,7 @@ case "$MODE" in
         ;;
     configure)
         if [ -n "$option_debconf_seeds_value" ]; then
-            DEBCONF_SEEDS="$option_debconf_seeds_value"
+            DEBCONF_SEEDS="$(echo $option_debconf_seeds_value | tr ',' ' ')"
         fi
         ;;
     after-install)
