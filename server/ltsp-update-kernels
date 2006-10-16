@@ -2,13 +2,17 @@
 
 set -e
 
+if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
+    . /etc/ltsp/ltsp-update-kernels.conf
+fi
+
 # Make sure the copied files are readable by all
 umask 022
 
-TFTPDIR=/var/lib/tftpboot/
-TFTPBOOT=$TFTPDIR/ltsp
+TFTPDIR=${TFTPDIR:-"/var/lib/tftpboot/"}
+TFTPBOOT=${TFTPBOOT:-"$TFTPDIR/ltsp"}
 BASE=${BASE:-"/opt/ltsp"}
-VENDOR=$(lsb_release -i -s)
+VENDOR=${VENDOR:-"$(lsb_release -i -s)"}
 
 if [ ! -d $TFTPBOOT ] ; then
     echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
