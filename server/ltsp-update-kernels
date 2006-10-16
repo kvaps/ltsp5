@@ -8,7 +8,7 @@ fi
 
 TFTPDIR=${TFTPDIR:-"/var/lib/tftpboot"}
 TFTPBOOT=${TFTPBOOT:-"$TFTPDIR/ltsp"}
-LTSPROOT=${LTSPROOT:-"/opt/ltsp"}
+LTSP_BASE=${LTSP_BASE:-"/opt/ltsp"}
 COPYTFTP=${COPYTFTP:-"true"}
 
 if [ "$TFTPDIR" = "$LTSPROOT" ]; then
@@ -21,11 +21,11 @@ if [ ! -d $TFTPDIR ] ; then
 fi
 
 ALL_CHROOTS="$@"
-ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
+ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSP_BASE -mindepth 1 -maxdepth 1 -type d)"}
 
 for CHROOT in $ALL_CHROOTS ; do
     if [ -x $CHROOT/bin/true ]; then
-        echo "looking for files in: $CHROOT"
+        echo "Updating tftp directories for chroot: $CHROOT"
 
         export CHROOT_NAME="$(basename $CHROOT)"
 
