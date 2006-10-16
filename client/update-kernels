@@ -39,8 +39,8 @@ else
 fi    
 
 if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
-PXECFG=$BOOT/pxelinux.cfg
-cp /usr/lib/syslinux/pxelinux.0 $BOOT
+    PXECFG=$BOOT/pxelinux.cfg
+    cp /usr/lib/syslinux/pxelinux.0 $BOOT
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
