@@ -1,3 +1,10 @@
+ltsp (0.123) edgy; urgency=low
+
+  * add a workaround for the changed gstreamer autosink detection
+    (closes malone #65690)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 16 Oct 2006 10:29:37 +0200
+
 ltsp (0.122) edgy; urgency=low
 
   * change dependency of ldm from python-gnome2 to python-gnomecanvas
