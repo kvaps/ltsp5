@@ -4,7 +4,7 @@
 # access to the NFS mount point. (much of this code was originally in
 # server/ltsp-update-kernels). --vagrant 20060801
 
-BOOT=/boot
+BOOT=${BOOT:-"/boot"}
 SUB_ARCH=$(uname -m)
 VENDOR=$(lsb_release -i -s)
 
