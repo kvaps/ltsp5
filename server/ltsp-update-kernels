@@ -2,22 +2,22 @@
 
 set -e
 
-TFTPDIR=${TFTPDIR:-/var/lib/tftpboot/}
+if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
+    . /etc/ltsp/ltsp-update-kernels.conf
+fi
+
+TFTPDIR=${TFTPDIR:-"/var/lib/tftpboot"}
 TFTPBOOT=${TFTPBOOT:-"$TFTPDIR/ltsp"}
 LTSPROOT=${LTSPROOT:-"/opt/ltsp"}
+COPYTFTP=${COPYTFTP:-"true"}
+
+if [ "$TFTPDIR" = "$LTSPROOT" ]; then
+    COPYTFTP="false"
+    TFTPBOOT="$TFTPDIR"
+fi
 
 if [ ! -d $TFTPDIR ] ; then
     mkdir -p $TFTPDIR
-fi
-
-if [ -d "$TFTPBOOT" ]; then
-    echo "moving aside old $TFTPBOOT dir"
-    mv $TFTPBOOT $TFTPBOOT.old
-fi
-
-if [ ! -L $TFTPBOOT ]; then
-    # linking ltsp dir
-    ln -s $LTSPROOT $TFTPBOOT
 fi
 
 ALL_CHROOTS="$@"
@@ -35,6 +35,11 @@ for CHROOT in $ALL_CHROOTS ; do
             if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
                 chroot "$CHROOT" /usr/lib/ltsp/update-kernels
             fi
+        fi
+
+        if [ "$COPYTFTP" = "true" ]; then
+            mkdir -p $TFTPBOOT/$CHROOT_NAME
+            cp -a -v $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
         fi
 
         if [ -f $CHROOT/boot/yaboot ]; then
