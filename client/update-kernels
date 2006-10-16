@@ -4,9 +4,13 @@
 # access to the NFS mount point. (much of this code was originally in
 # server/ltsp-update-kernels). --vagrant 20060801
 
+if [ -f /etc/ltsp/update-kernels.conf ]; then
+    . /etc/ltsp/update-kernels.conf
+fi
+
 BOOT=${BOOT:-"/boot"}
-SUB_ARCH=$(uname -m)
-VENDOR=$(lsb_release -i -s)
+SUB_ARCH=${SUB_ARCH:-"$(uname -m)"}
+VENDOR=${VENDOR:-"$(lsb_release -i -s)"}
 
 if [ -z "$CHROOT_NAME" ]; then
     # FIXME: replace with a common function
