@@ -1,5 +1,5 @@
 case "$MODE" in
     after-install)
-        echo ltsp-chroot > $ROOT/etc/hostname
+        echo ltsp > $ROOT/etc/hostname
         ;;
 esac
