@@ -4,10 +4,11 @@ there are a few options to enable swap in ltsp.
 configuration if necessary)
 
 
-using local swap partitions:
+using local swap partitions from the hard disk:
 
 add to /opt/ltsp/i386/etc/lts.conf:
 
+[Default]
 USE_LOCAL_SWAP=Y
 
 
@@ -18,13 +19,23 @@ touch /opt/ltsp/i386/etc/nbd-client
 in /opt/ltsp/i386/etc/lts.conf:
 
 [Default]
-NBD_PORT=9210
-SWAP_SERVER=ip.of.swap.server
+NBD_SWAP=Y
 
 
 apt-get install nbd-server
 
 update-inetd --group LTSP --add "9210 stream tcp nowait nobody /usr/sbin/tcpd /usr/sbin/nbdswapd"
+
+
+encrypting swap space:
+
+in /opt/ltsp/i386/etc/lts.conf:
+
+ENCRYPT_SWAP=Y
+
+and install the cryptsetup package:
+
+chroot /opt/ltsp/i386 apt-get install cryptsetup
 
 
 alternately, you can configure nbd-server the hard way:
