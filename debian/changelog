@@ -1,10 +1,11 @@
 ltsp (0.99debian6) unstable; urgency=low
 
   [ Vagrant Cascadian ]
-  * include french translation for ltsp-build-client (Closes: #392891)
-  * added catalan debconf translation (Closes: #393088)
+  * french translation of ltsp-build-client by Cyril Brulebois
+    (Closes: #392891)
+  * catalan debconf templates translation by JordÃ Polo (Closes: #393088)
   * ltsp-server:
-    - make location of tftp directory configurable 
+    - make location of tftp directory configurable
     - updated swap documentation
     - support both etherboot and PXE in dhcpd.conf example
   * ltsp-client:
@@ -19,8 +20,9 @@ ltsp (0.99debian6) unstable; urgency=low
       + debconf-seeds
       + apt-keys
     - populate /etc/hostname with "ltsp" instead of "ltsp-chroot"
+  * 
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 20 Oct 2006 09:54:14 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 20 Oct 2006 10:27:43 -0400
 
 ltsp (0.99debian5) unstable; urgency=medium
 
