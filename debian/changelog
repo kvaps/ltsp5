@@ -1,3 +1,27 @@
+ltsp (0.99debian6) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * include french translation for ltsp-build-client (Closes: #392891)
+  * added catalan debconf translation (Closes: #393088)
+  * ltsp-server:
+    - make location of tftp directory configurable 
+    - updated swap documentation
+    - support both etherboot and PXE in dhcpd.conf example
+  * ltsp-client:
+    - support encrypted swap
+      + add cryptsetup to suggests
+    - start nbd swapping earlier
+  * ltsp-build-client:
+    - allow comma-separated list for commandline options:
+      + late-packages (Closes: #393002)
+      + early-packages
+      + kernel-packages
+      + debconf-seeds
+      + apt-keys
+    - populate /etc/hostname with "ltsp" instead of "ltsp-chroot"
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 20 Oct 2006 09:54:14 -0400
+
 ltsp (0.99debian5) unstable; urgency=medium
 
   [ Vagrant Cascadian ]
