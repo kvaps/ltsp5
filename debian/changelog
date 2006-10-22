@@ -1,3 +1,10 @@
+ltsp (0.124) edgy; urgency=low
+
+  * add the -f option to the rm command in the 80_ltsp-sound Xsession 
+    script to avoid crashers on login, closes malone #66808
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun, 22 Oct 2006 11:54:31 +0200
+
 ltsp (0.123) edgy; urgency=low
 
   * add a workaround for the changed gstreamer autosink detection
