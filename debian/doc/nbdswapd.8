@@ -1,0 +1,30 @@
+.TH "nbdswapd" "8" "20061023" "Vagrant Cascadian" ""
+.SH "NAME"
+nbdswapd \(em dynamically create swap files on request export with an nbd\-server(1) instance
+.SH "SYNOPSIS"
+.PP 
+\fBnbdswapd\fR 
+.SH "DESCRIPTION"
+.PP 
+\fBnbdswapd\fR will dynamically create a swap file when it receives a request
+and export it using nbd\-server(1). it is usually run from an inetd(8) instance.
+.SH "EXAMPLE"
+.PP 
+add the following lines to /etc/inetd.conf(5):
+.PP 
+9572           stream  tcp     nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdswapd
+.SH "SEE ALSO"
+.PP 
+\fBnbd\-server\fP\fB(1)\fP,
+inetd(8),
+inetd.conf(5), 
+\fBnbd\-client\fP\fB(8)\fP. 
+.SH "AVAILABILITY"
+.PP 
+\fBnbdswapd\fR is part of \fBltsp\fP package 
+and the latest versions are available in source form from 
+\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR. 
+.SH "AUTHOR"
+.PP 
+copyright 2006 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.
