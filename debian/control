@@ -25,7 +25,7 @@ Description: Complete LTSP server environment
 Package: ltsp-client
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
 Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.73e) | initrd-netboot-tools, syslinux [i386 amd64] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], mknbi[i386]
-Recommends: xdebconfigurator, esound | nas
+Recommends: xdebconfigurator, esound | nas, inputattach | joystick
 Suggests: cryptsetup
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
