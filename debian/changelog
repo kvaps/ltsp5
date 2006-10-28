@@ -8,10 +8,12 @@ ltsp (0.99debian6) unstable; urgency=low
     - make location of tftp directory configurable
     - updated swap documentation
     - support both etherboot and PXE in dhcpd.conf example
+    - added man pages for nbdswapd and ldminfod
   * ltsp-client:
     - support encrypted swap
       + add cryptsetup to suggests
     - start nbd swapping earlier
+    - improved mouse support when inputattach is available
   * ltsp-build-client:
     - allow comma-separated list for commandline options:
       + late-packages (Closes: #393002)
@@ -20,9 +22,15 @@ ltsp (0.99debian6) unstable; urgency=low
       + debconf-seeds
       + apt-keys
     - populate /etc/hostname with "ltsp" instead of "ltsp-chroot"
-  * 
+    - install joystick package by default (for serial mice)
+  * debian/control:
+    - ltsp-client:
+      + recommend inputattach | joystick
+    - ltsp-server:
+      + updated inetd related dependencies
+  * added debian/NEWS file
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 20 Oct 2006 10:27:43 -0400
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 28 Oct 2006 09:24:48 -0500
 
 ltsp (0.99debian5) unstable; urgency=medium
 
