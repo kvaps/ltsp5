@@ -9,6 +9,10 @@ ltsp (0.99debian6) unstable; urgency=low
     - updated swap documentation
     - support both etherboot and PXE in dhcpd.conf example
     - added man pages for nbdswapd and ldminfod
+    - ltsp-update-kernels:
+      + can be configured to use an alternate tftp directory
+      + can be configured to not require running ltsp-update-kernels after
+        every kernel update
   * ltsp-client:
     - support encrypted swap
       + add cryptsetup to suggests
@@ -30,7 +34,7 @@ ltsp (0.99debian6) unstable; urgency=low
       + updated inetd related dependencies
   * added debian/NEWS file
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 28 Oct 2006 09:24:48 -0500
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 28 Oct 2006 11:40:14 -0500
 
 ltsp (0.99debian5) unstable; urgency=medium
 
