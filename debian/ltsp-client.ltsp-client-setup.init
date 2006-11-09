@@ -206,10 +206,10 @@ configure_x() {
       fi
 
       # Mouse preseeding options.  Use inputattach if available
-      if type inputattach >/dev/null 2>/dev/null && \
-        [ $(echo "$X_MOUSE_DEVICE" | awk '/\/dev\/ttyS[0-9]/') ] && \
+      if [ -n "$X_MOUSE_DEVICE" ] && \
         [ -n "$X_MOUSE_PROTOCOL" ] && \
-        [ i386 = "$(dpkg --print-architecture)" ]; then
+        type inputattach >/dev/null 2>/dev/null && \
+        [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
           inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
       else
         if [ -n "$X_MOUSE_DEVICE" ]; then 
