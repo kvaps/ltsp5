@@ -7,8 +7,10 @@ ltsp (0.99debian8) unstable; urgency=low
   * change ltsp-client abort-installation debconf question to type "error" and
     priority "critical" (Closes: #398630)
   * only run ltsp-client init scripts if /etc/ltsp_chroot is present.
+  * ltsp-build-client: simplified --arch handling (should work on all
+    architectures now)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 14 Nov 2006 17:57:51 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 14 Nov 2006 18:50:02 -0700
 
 ltsp (0.99debian7) unstable; urgency=low
 
