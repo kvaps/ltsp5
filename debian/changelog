@@ -1,3 +1,15 @@
+ltsp (0.99debian8) unstable; urgency=low
+
+  [Vagrant Cascadian]
+  * drop recommends on inputattach (Closes: #396684)
+  * change dependency on joystick to suggests
+  * optimize check if inputattach should be used
+  * change ltsp-client abort-installation debconf question to type "error" and
+    priority "critical" (Closes: #398630)
+  * only run ltsp-client init scripts if /etc/ltsp_chroot is present.
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Tue, 14 Nov 2006 17:57:51 -0700
+
 ltsp (0.99debian7) unstable; urgency=low
 
   [Vagrant Cascadian]
