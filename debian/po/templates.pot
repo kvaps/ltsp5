@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: mdz@ubuntu.com\n"
-"POT-Creation-Date: 2006-07-14 21:18+0200\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2006-11-15 15:15-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,13 +43,13 @@ msgstr ""
 msgid "Building LTSP chroot..."
 msgstr ""
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Installation aborted "
 msgstr ""
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid ""
@@ -57,7 +57,7 @@ msgid ""
 "the basic structure for a LTSP terminal."
 msgstr ""
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Please read the package description to understand what it means."
