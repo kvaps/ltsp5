@@ -1,0 +1,210 @@
+# spanish translation for ltsp.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ltsp package.
+# FIRST AUTHOR  Hector Colina <hector_colina@yahoo.com>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ltsp 0.99debian7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-09-25 22:24-0400\n"
+"PO-Revision-Date: 2006-11-19\n"
+"Last-Translator:  Hector Colina <hector_colina@yahoo.com>\n"
+"Language-Team: LANGUAGE <LL@li.org\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../server/ltsp-build-client:49
+#, sh-format
+msgid "API ERROR: you need to provide true or false."
+msgstr " ERROR API: Se necesita especificar el valor verdadero o falso. "
+
+#: ../server/ltsp-build-client:101
+#, sh-format
+msgid "Display this help message"
+msgstr "Despliega este mensaje de ayuda"
+
+#: ../server/ltsp-build-client:105
+#, sh-format
+msgid "LTSP Build Client usage:"
+msgstr "Uso del cliente LTSP"
+
+#: ../server/ltsp-build-client:109
+#, sh-format
+msgid "  Regular options:"
+msgstr "Opciones regulares"
+
+#: ../server/ltsp-build-client:112
+#, sh-format
+msgid "  Advanced options:"
+msgstr "Opciones avanzadas"
+
+#: ../server/ltsp-build-client:123
+#, sh-format
+msgid "info: LTSP client installation completed successfully"
+msgstr "Informacin: Instalacin del cliente LTSP completada satisfactoriamente "
+
+#: ../server/ltsp-build-client:125
+#, sh-format
+msgid "error: LTSP client installation ended abnormally"
+msgstr "Error: Instalacin del cliente LTSP finalizada con errores"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "Incluir las claves listadas en el keyring de apt"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install."
+msgstr "Permitir usar paquetes no firmados durante la instalacin"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "Set the components to be used in mirror"
+msgstr "Fijando los componentes a ser usados en el mirror"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "Cargando ..."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, fuzzy, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr "NOTA: Deshabilitando fuente de sguridad de APT para sid. No existe. "
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "Habilitando herramienta popularity-contest en chroot"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "Habilitando herramienta popularity-contest"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Estableciendo la localizacin del mirror"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr ""
+"El mirror que se est agregando tomar prioridad sobre el mirror por defecto"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, fuzzy, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr ""
+"El mirror que se est agregando tomar prioridad sobre el mirror por defecto"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"NOTA: Agregando distribucin por defecto y componentes del mirror de seguridad"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "Consola serial habilitada"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "Habilitando consola serial"
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install."
+msgstr "FIjando la lista de paquetes del kernel a ser instalados"
+
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#, sh-format
+msgid "Set the default locale"
+msgstr "Estableciendo locales por defecto"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed."
+msgstr ""
+"Estableciendo la lista de paquetes a ser instaldos despus de que la "
+"instalacin de base-install haya sido  culminada "
+
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation."
+msgstr "Lista de paquetes a instalar como parte de la instalacin final."
+
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "Mantener en cach los archivos bajados"
+
+#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "Habilitando el soporte para debug"
+
+#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr "Cargando una configuracine especfica de un usuario"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "Estableciendo el tipo de arquitectura destino"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:37
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:38
+#, sh-format
+msgid "       supported values are: %s"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#, fuzzy, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "FIjando la lista de paquetes del kernel a ser instalados"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#, fuzzy, sh-format
+msgid "Set the default base install directory"
+msgstr "Estableciendo locales por defecto"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#, sh-format
+msgid "Set the name of the chroot."
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr ""
+
+#~ msgid "Agregando un mirror de seguridad"
+#~ msgstr "Agregando un mirror de seguridad"
