@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.99debian7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-25 22:24-0400\n"
+"POT-Creation-Date: 2006-11-19 14:58-0700\n"
 "PO-Revision-Date: 2006-11-19\n"
 "Last-Translator:  Hector Colina <hector_colina@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org\n"
@@ -25,27 +25,32 @@ msgstr " ERROR API: Se necesita especificar el valor verdadero o falso. "
 msgid "Display this help message"
 msgstr "Despliega este mensaje de ayuda"
 
-#: ../server/ltsp-build-client:105
+#: ../server/ltsp-build-client:102
+#, sh-format
+msgid "Display help for all available commandline options"
+msgstr ""
+
+#: ../server/ltsp-build-client:106
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Uso del cliente LTSP"
 
-#: ../server/ltsp-build-client:109
+#: ../server/ltsp-build-client:110
 #, sh-format
 msgid "  Regular options:"
 msgstr "Opciones regulares"
 
-#: ../server/ltsp-build-client:112
+#: ../server/ltsp-build-client:114
 #, sh-format
 msgid "  Advanced options:"
 msgstr "Opciones avanzadas"
 
-#: ../server/ltsp-build-client:123
+#: ../server/ltsp-build-client:126
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "Informacin: Instalacin del cliente LTSP completada satisfactoriamente "
 
-#: ../server/ltsp-build-client:125
+#: ../server/ltsp-build-client:128
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "Error: Instalacin del cliente LTSP finalizada con errores"
@@ -68,7 +73,7 @@ msgstr "Fijando los componentes a ser usados en el mirror"
 #: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
-msgstr "Cargando ..."
+msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, fuzzy, sh-format
@@ -105,7 +110,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
-msgstr ""
+msgstr "Agregando un mirror de seguridad"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
 #, sh-format
@@ -150,6 +155,12 @@ msgstr "Lista de paquetes a instalar como parte de la instalacin final."
 msgid "keep cache of downloaded package files"
 msgstr "Mantener en cach los archivos bajados"
 
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "Estableciendo el tipo de arquitectura destino"
+
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "Enable debug support"
@@ -159,11 +170,6 @@ msgstr "Habilitando el soporte para debug"
 #, sh-format
 msgid "Load a user specific configuration file"
 msgstr "Cargando una configuracine especfica de un usuario"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
-msgstr "Estableciendo el tipo de arquitectura destino"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:20
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:31
@@ -205,6 +211,3 @@ msgstr ""
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr ""
-
-#~ msgid "Agregando un mirror de seguridad"
-#~ msgstr "Agregando un mirror de seguridad"
