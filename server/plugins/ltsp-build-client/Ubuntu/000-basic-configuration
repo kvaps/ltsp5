@@ -2,7 +2,7 @@ case "$MODE" in
     configure)
         ARCH=$(dpkg --print-architecture)
         APT_GET_OPTS="-y"
-        DIST=edgy
+        DIST=feisty
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
         EARLY_PACKAGES="xorg ltsp-client discover1 laptop-detect xresprobe esound inputattach usplash ldm ltspfsd human-cursors-theme"
