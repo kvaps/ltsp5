@@ -1,0 +1,1 @@
+test -z "$LTSP_CLIENT" || rm -f $HOME/.gstreamer-0.10/registry.*.xml

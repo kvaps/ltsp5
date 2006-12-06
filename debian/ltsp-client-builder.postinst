@@ -24,7 +24,13 @@ if [ "$RET" = false ]; then
     log "user requested no ltsp chroot"
     exit 0
 fi
-    
+
+#load and use generic arguments
+if db_get ltsp-client-builder/build-client-opts && [ -n "$RET" ] ; then
+    BUILD_CLIENT_OPTS="$RET"
+    log "ltsp-build-client options: $BUILD_CLIENT_OPTS"
+fi
+
 # if everything is fine, run ltsp-build-client on the target disk
 
 db_progress START 0 2 ltsp-client-builder/progress
@@ -33,8 +39,11 @@ apt-install ltsp-server
 
 db_progress STEP 1
 
+# workaround for: http://bugs.debian.org/390647
+in-target /bin/touch /etc/resolv.conf
+
 DEBIAN_PRIORITY=critical
-in-target /usr/sbin/ltsp-build-client --mirror file:///cdrom
+in-target /usr/sbin/ltsp-build-client $BUILD_CLIENT_OPTS
 
 db_progress STEP 1
 
@@ -47,11 +56,14 @@ IFACE_LIST="$(cat /proc/net/dev|sed -e 's/^ *//' -e 's/:.*//'|grep -Ev '(\||lo|s
 
 interfaces_entry() {
 	cat <<EOF >>/target/etc/network/interfaces
+
+auto $IFACE_LIST
 iface $IFACE_LIST inet static
     address $NET.254
     netmask 255.255.255.0
     network $NET.0
     broadcast $NET.255
+
 EOF
 
 }

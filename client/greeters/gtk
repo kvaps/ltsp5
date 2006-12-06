@@ -4,6 +4,8 @@
 import os
 import sys
 import socket
+import struct
+import fcntl
 import string
 import gtk
 import gobject
@@ -18,6 +20,14 @@ from time import localtime, strftime
 # make the path below a link to the theme you want
 # example: sudo ln -s /usr/share/ldm/themes/Ubuntu /usr/share/ldm/themes/default
 themedir = "/usr/share/ldm/themes/default"
+
+def get_ip(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 class GTKGreeter:
     def run(self):
@@ -81,7 +91,7 @@ class GTKGreeter:
                     y2 = +(self.sq_height*2), fill_color = self.loginwin_color)
         self.entrylabel = self.root.add(gnomecanvas.CanvasText,
                     markup = '<span size="10000"><b>Username:</b></span>',
-                    fill_color = self.foreground_color, x = -33+self.diff, y = 100)
+                    fill_color = self.frame_color, x = -33+self.diff, y = 100)
         # entry with small frame
         self.root.add(gnomecanvas.CanvasRect, x1 = -71+self.diff,
                     y1 = 114, x2 = 71+self.diff,
@@ -137,10 +147,12 @@ class GTKGreeter:
                 width = 46, height = 46)
 
     def shutdown(self):
+        os.system('/etc/init.d/nbd-client stop')
         os.system('poweroff -fp')
 
     def draw_bottom_bar(self, show_timer):
         # draw the bottom bar, sysname and timer
+        ip = get_ip('eth0')
         sysname = os.uname()
         timew = 0 
         timeh = 0
@@ -152,7 +164,7 @@ class GTKGreeter:
         self.timelabel.unparent()
      
         self.sysname.set_markup('<span size="12000" color="'+self.clockforeground_color+
-                    '"><b>'+str(sysname[1])+' //</b></span>')
+                    '"><b>'+str(sysname[1])+'</b> ('+str(ip)+') <b>//</b></span>')
      
         # show timer if wanted
         if show_timer == True:
@@ -270,7 +282,7 @@ class GTKGreeter:
         self.entry.set_text('')
         self.entrylabel = self.root.add(gnomecanvas.CanvasText,
             markup = '<span size="10000"><b>Password:</b></span>',
-            fill_color = self.foreground_color, x = -33+self.diff, y = 100)
+            fill_color = self.frame_color, x = -33+self.diff, y = 100)
         self.entry.set_visibility(False)
         #self.entry.set_invisible_char('●'.e)
         self.flag = 1

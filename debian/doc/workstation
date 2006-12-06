@@ -33,14 +33,6 @@ echo 'copy_dirs="$copy_dirs /home"' >> /opt/ltsp/i386/etc/default/ltsp-client-se
 echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> /opt/ltsp/i386/etc/default/ltsp-client-setup
 
 
-enable this stupid workaround that should someday not be needed:
-
-echo 'SCREEN_10=telnet' >> /opt/ltsp/i386/etc/lts.conf
-
-(change SCREEN_10 to a different number if something else is configured to run
-on tty10)
-
-
 to /opt/ltsp/i386/etc/gdm/gdm.conf, add the following lines in the daemon
 section, like so:
 

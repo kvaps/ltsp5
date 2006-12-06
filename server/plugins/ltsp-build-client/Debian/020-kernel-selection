@@ -1,47 +1,60 @@
 case "$MODE" in
+    commandline)
+        add_option "kernel-packages" "`eval_gettext "set the list of kernel packages to install."`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_kernel_packages_value" ]; then
+            KERNEL_PACKAGES="$(echo $option_kernel_packages_value | tr ',' ' ')"
+        fi
+        ;;
     before-install)
-        case $DIST in
-            sarge)
-                test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
-                KERNEL_BASE="kernel-image"
-                ;;
-            *)
-                KERNEL_BASE="linux-image"
-                ;;
-        esac
-        case $ARCH in
-            i386)
-                case $DIST in
-                sid|etch)
-                    # they now only support 486+
-                    KERNEL_ARCH="486"
-                    ;;
-                *) 
-                    KERNEL_ARCH="386"
-                    ;;
-                esac
-                ;;
-            amd64)
-                KERNEL_ARCH="amd64-generic"
-                ;;
-            sparc) 
-                KERNEL_ARCH="$(uname -m)"
-                ;;
-            alpha)
-                case $DIST in
-                    sarge)
-                        KERNEL_ARCH="generic"
-                        ;;
-                    *)
-                        KERNEL_ARCH="alpha-generic"
-                        ;;
-                esac
-                ;;
-            *)
-                KERNEL_ARCH="$ARCH"
-                ;;
-        esac
-        test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
-        LATE_PACKAGES="$LATE_PACKAGES $KERNEL_BASE-$KERNEL_ARCH"
+        if [ -n "$KERNEL_PACKAGES" ]; then
+            LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
+        else
+           # select a kernel
+           case $DIST in
+               sarge)
+                   test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
+                   KERNEL_BASE="kernel-image"
+                   ;;
+               *)
+                   KERNEL_BASE="linux-image"
+                   ;;
+           esac
+           case $ARCH in
+               i386)
+                   case $DIST in
+                   sid|etch)
+                       # they now only support 486+
+                       KERNEL_ARCH="486"
+                       ;;
+                   *) 
+                       KERNEL_ARCH="386"
+                       ;;
+                   esac
+                   ;;
+               amd64)
+                   KERNEL_ARCH="amd64-generic"
+                   ;;
+               sparc) 
+                   KERNEL_ARCH="$(uname -m)"
+                   ;;
+               alpha)
+                   case $DIST in
+                       sarge)
+                           KERNEL_ARCH="generic"
+                           ;;
+                       *)
+                           KERNEL_ARCH="alpha-generic"
+                           ;;
+                   esac
+                   ;;
+               *)
+                   KERNEL_ARCH="$ARCH"
+                   ;;
+           esac
+           test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
+           LATE_PACKAGES="$LATE_PACKAGES $KERNEL_BASE-$KERNEL_ARCH"
+        fi
         ;;
 esac

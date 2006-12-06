@@ -18,10 +18,10 @@ case "$1" in
 		ldm-theme /usr/share/ldm/themes/Debian 55
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Ubuntu 40
+		ldm-theme /usr/share/ldm/themes/Ubuntu 65
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Edubuntu 35
+		ldm-theme /usr/share/ldm/themes/Edubuntu 60
  	update-alternatives \
 		--install /usr/share/ldm/themes/default \
 		ldm-theme /usr/share/ldm/themes/Debian-Edu 50

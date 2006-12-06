@@ -4,8 +4,70 @@
 # access to the NFS mount point. (much of this code was originally in
 # server/ltsp-update-kernels). --vagrant 20060801
 
-BOOT=/boot
-SUB_ARCH=$(uname -m)
+if [ -f /etc/ltsp/update-kernels.conf ]; then
+    . /etc/ltsp/update-kernels.conf
+fi
+
+BOOT=${BOOT:-"/boot"}
+SUB_ARCH=${SUB_ARCH:-"$(uname -m)"}
+VENDOR=${VENDOR:-"$(lsb_release -i -s)"}
+
+case $0 in
+  /etc/kernel/post*.d*) QUIET=true
+esac
+
+msg() {
+    if [ "$QUIET" != "true" ]; then
+       echo $@ 
+    fi
+}
+
+if [ -z "$CHROOT_NAME" ]; then
+    # FIXME: replace with a common function
+    CHROOT_NAME="$(dpkg --print-installation-architecture)"
+fi
+
+if [ -z "$BOOTPROMPT_OPTS" ]; then
+    if [ "$VENDOR" = "Ubuntu" ]; then
+        BOOTPROMPT_OPTS="quiet splash"
+    else 
+        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp"
+    fi
+fi
+
+if [ -f /usr/lib/yaboot/yaboot ]; then
+    cp -a -v /usr/lib/yaboot/yaboot $BOOT
+    cat > $BOOT/yaboot.conf <<EOF
+timeout=0
+default=ltsp
+root=/dev/ram
+
+image=/ltsp/$CHROOT_NAME/vmlinux
+        label=ltsp
+        initrd=/ltsp/$CHROOT_NAME/initrd.img
+        append="$BOOTPROMPT_OPTS"
+EOF
+
+else
+    msg "Skipping yaboot configuration. install yaboot package if you need it."
+fi    
+
+if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
+    PXECFG=$BOOT/pxelinux.cfg
+    cp /usr/lib/syslinux/pxelinux.0 $BOOT
+    if [ ! -d $PXECFG ]; then
+        mkdir $PXECFG
+    fi
+    if [ -z "$PXELINUX_CMDLINE" ]; then
+        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
+    fi
+    cat > $PXECFG/default <<EOF
+$PXELINUX_CMDLINE
+EOF
+
+else
+    msg "Skipping PXE configuration.  Install the syslinux package if you need it."
+fi
 
 # allow specifying a specific kernel image to update, from kernel postinst
 if [ -f "$2" ]; then
@@ -67,14 +129,17 @@ for kernel in $ALL_KERNELS ; do
         fi
     else
         if which mkelf-linux >/dev/null; then
+            if [ -z "$MKELF_LINUX_OPTS" ]; then
+                MKELF_LINUX_OPTS="--ip=dhcp"
+            fi
             if [ -f "$BOOT/$initrd" ]; then
-                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel $BOOT/$initrd
+                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $BOOT/$initrd
             else
-                mkelf-linux --ip=dhcp -o $BOOT/$nbi $kernel
+                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel
             fi
         else
             if [ -z "$mkelf_seen" ]; then
-                echo "Skipping etherboot images.  Install the mknbi package if you need them."
+                msg "Skipping etherboot images.  Install the mknbi package if you need them."
                 mkfelf_seen=true
             fi
         fi
@@ -86,7 +151,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         else
             if [ -z "$netabootwrap_seen" ]; then
-                echo "Skipping netabootwrap images.  Install the aboot package if you need them."
+                msg "Skipping netabootwrap images.  Install the aboot package if you need them."
                 netabootwrap_seen=true
             fi
         fi
@@ -109,7 +174,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         else
             if [ -z "$sparc_piggyback_seen" ]; then
-                echo "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
+                msg "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
                 sparc_piggyback_seen=true
             fi
         fi

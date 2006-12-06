@@ -6,7 +6,7 @@ case "$MODE" in
         if [ -n "$option_arch_value" ]; then
             ARCH_OPT="$option_arch_value"
         else
-            ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/x86.*/i386/ -e s/ppc.*/powerpc/)
+            ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/)
         fi
 
         # Validate the proposed architecture value.
@@ -33,6 +33,18 @@ case "$MODE" in
                 ;;
             esac
             ;;
+            x86_64)
+            case "$(uname -m)" in
+                x86_64)
+                ARCH=amd64
+                ;;
+                *)
+                printf "`eval_gettext "ERROR: --arch %s called on unsupported arch: %s"`", amd64 $(uname -m)
+                exit 1
+                ;;
+            esac
+            ;;
+
             *)
             printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
             printf "`eval_gettext "       supported values are: %s"`", "i386 powerpc"

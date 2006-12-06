@@ -18,7 +18,7 @@
 #########################################################################
 
 frame_color = "#000000"
-foreground = "#523921"
+foreground = "#d2691e"
 background = "#ffffde"
 clockforeground = "#ffffff"
 loginwin_color = "#f7ebd6"

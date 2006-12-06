@@ -5,59 +5,9 @@ case "$MODE" in
         DIST=${DIST:-"$(lsb_release -s -c)"}
         MIRROR=${MIRROR:-"http://http.us.debian.org/debian"}
         COMPONENTS=${COMPONENTS:-"main"}
-        EARLY_PACKAGES=${EARLY_PACKAGES:-"x-window-system-core ltsp-client discover1 mdetect xresprobe udev xdebconfigurator esound ldm"}
+        EARLY_PACKAGES=${EARLY_PACKAGES:-"x-window-system-core ltsp-client discover1 mdetect xresprobe udev xdebconfigurator esound debian-archive-keyring"}
         EXCLUDE=${EXCLUDE:-"libpcap0.7,libgnutls11,liblockfile1,libpcre3,libtasn1-2,libopencdk8,liblzo1,info,manpages,man-db,libgcrypt11,libgdbm3,libgpg-error0,groff-base,at,cron,logrotate,exim4-config,exim4,exim4-base,exim4-daemon-light,ipchains,mailx,pppconfig,pppoe,pppoeconf,tasksel,base-config,apt-utils,dhcp-client,fdutils,iptables,ppp,whiptail"}
         RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs.sh mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common x11-common xfree86-common ifupdown networking"}
         RC2_WHITELIST=${RC2_WHITELIST:-"ltsp-client nbd-client usplash rmnologin"}
-        ;;
-    after-install)
-        # Install start-stop-daemon wrapper
-        chroot $ROOT dpkg-divert --package ltsp-client --add --rename \
-                                 --divert /sbin/start-stop-daemon.real \
-                                          /sbin/start-stop-daemon
-        cp /usr/share/ltsp/scripts/start-stop-daemon $ROOT/sbin/
-
-        # Install policy-rc.d wrapper
-        cp /usr/share/ltsp/scripts/policy-rc.d.ltsp  $ROOT/usr/sbin/
-        chroot $ROOT update-alternatives --install /usr/sbin/policy-rc.d policy-rc.d \
-                                                   /usr/bin/policy-rc.d.ltsp 100
-
-        # Export LTSP_HANDLE_DAEMONS to avoid running daemons while
-        # creating the chroot.
-        export LTSP_HANDLE_DAEMONS="false"
-        ;;
-    finalization)
-        rc_cleanup() {
-            LEVEL=$1; shift
-        
-            if [ $(echo $LEVEL| grep [2-5]) ]; then
-                suffix="2 3 4 5"
-                echo "Cleaning up startup links in init levels: $suffix ..."
-            else
-                suffix=$LEVEL
-                echo "Cleaning up startup links in rc$suffix.d ..."
-            fi
-        
-            RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
-        
-            for match in $@; do
-                RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
-            done
-        
-            for link in $RC_DIR; do
-                name=$(echo $link|sed s/^S[0-9]*//g)
-                seq_number=$(printf %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g))
-                if [ -f $ROOT/etc/init.d/$name ] ; then
-                    chroot $ROOT update-rc.d -f $name remove 2>&1 >/dev/null
-                    chroot $ROOT update-rc.d $name stop $seq_number $suffix . 2>&1 >/dev/null
-                fi
-            done
-        }
-        if [ -n "$RCS_WHITELIST" ]; then
-            rc_cleanup S $RCS_WHITELIST
-        fi
-        if [ -n "$RC2_WHITELIST" ]; then
-            rc_cleanup 2 $RC2_WHITELIST
-        fi
         ;;
 esac

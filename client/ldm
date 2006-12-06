@@ -15,8 +15,12 @@ def get_config(name):
     return os.environ.get(name)
 
 def get_config_bool(name):
+    allowed = ['y', 'true']
     val = os.environ.get(name)
-    return (val and val.lower() == 'true')
+    for valid in allowed:
+        if (val and val.lower() == valid):
+            return True
+    return False
 
 def get_ip(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -106,12 +110,9 @@ class LDM:
 
             ssh_opts = ['-v',
                        '-X',
+                       '-M',
+                       '-S', '/tmp/.ltspfs-socket',
                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
-
-            if self.use_localdev:
-                       localdev_ssh_opts=['-M',
-                          '-S', '/tmp/.ltspfs-socket']
-                       ssh_opts.extend(localdev_ssh_opts)
 
             ssh_auth = ['%s@%s' % (username,self.server)]
 
@@ -129,7 +130,8 @@ class LDM:
                     # forget the previous users authentication key.
                     # A native python implementation is probably
                     # better. [pere 2006-02-24]
-                    os.system("killall -HUP esd")
+                    os.system("killall esd")
+                    os.system("/usr/bin/esd -nobeeps -public -tcp &")
                 elif self.sound_daemon == 'nasd':
                     print "info: Enabling nasd sound support."
                     # Could use the audiooss package to set LD_PRELOAD.
@@ -153,10 +155,18 @@ class LDM:
             # make sure we clean up after logout if localdev is used
             if self.use_localdev:
                 session_manager = session_manager+' && ltspfsmounter all cleanup'
+                print "info: Enabling localdev support."
+                if os.access("/var/run/.static-device", os.F_OK):
+                    print "info: Enabling static localdev support."
+                    static_dev = open("/var/run/.static-device", "r")
+                    delayed_mnt = open("/var/run/.delayed-mount", "a")
+                    delayed_mnt.writelines(static_dev.readlines())
+                    delayed_mnt.close()
+                    static_dev.close()
 
             # set language
             if lang != 'None':
-				lang_command = 'LC_ALL='+lang+' LANGUAGE='+lang+' LANG='+lang
+				lang_command = 'LC_ALL='+lang+'.UTF-8 LANGUAGE='+lang+'.UTF-8 LANG='+lang+'.UTF-8'
             else:
                 lang_command = ''
             # Make sure to run a login shell, to get /etc/profile executed

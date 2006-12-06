@@ -22,6 +22,8 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 # Gracefully exit if the package has been removed.
 test -f /usr/lib/ltsp/ltsp_functions || exit 0
+# Gracefully exit if ltsp_chroot file is not present
+test -f /etc/ltsp_chroot || exit 0
 
 . /lib/lsb/init-functions
 . /usr/lib/ltsp/ltsp_functions
@@ -35,7 +37,7 @@ warn() {
 start_sound() {
     if [ -n "$SOUND" ]; then
         # Detect and report a common problem with thin clients
-		if [ ! -f /dev/dsp ] ; then
+		if [ ! -c /dev/dsp ] ; then
 		    warn "Sound requested but /dev/dsp is missing.  Continuing."
 		fi
 		case "$SOUND_DAEMON" in
@@ -59,7 +61,8 @@ case "$1" in
   # if usplash is runing, make sure to stop it now 
   # (yes "start" is the right arg to do it ... even it looks silly)
   		if pidof usplash > /dev/null; then
-			/etc/init.d/usplash start
+            chvt -t 7
+            /etc/init.d/usplash start
 		fi
         log_begin_msg "Starting LTSP client..."
 

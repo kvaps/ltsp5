@@ -1,14 +1,14 @@
 Source: ltsp
 Section: misc
-Priority: extra
-Maintainer: LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
-Uploaders: Matt Zimmerman <mdz@debian.org>, Carlos Laviola <claviola@debian.org>, Michael Vogt <mvo@debian.org>, Oliver Grawert <ogra@ubuntu.com>, Petter Reinholdtsen <pere@debian.org>, Gustavo Franco <stratus@debian.org>, Vagrant Cascadian <vagrant@freegeek.org>, Otavio Salvador <otavio@debian.org>
-Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf
+Priority: optional
+Maintainer: Matt Zimmerman <mdz@ubuntu.com>
+Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev
 Standards-Version: 3.7.2
 
 Package: ltsp-server
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | atftpd, openssh-client | ssh, iproute, debconf-utils, esound-clients, python (>= 2.4), netbase (>= 4.08)
-Recommends: openssh-server | ssh, nbd-server
+Priority: extra
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, openssh-client | ssh, openbsd-inetd, iproute, debconf-utils, esound-clients, python (>= 2.4), nbd-server, update-inetd, tcpd, gettext-base
+Recommends: openssh-server | ssh, ltspfs
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
 Description: Basic LTSP server environment
@@ -24,9 +24,9 @@ Description: Complete LTSP server environment
  
 Package: ltsp-client
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.73e) | initrd-netboot-tools, syslinux [i386 amd64] | mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc] 
-Recommends: xdebconfigurator, esound
-Suggests: nas
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release 
+Recommends: ubuntu-thin-client, esound|nas, ltspfsd
+Suggests: cryptsetup, inputattach
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: any
@@ -37,7 +37,7 @@ Description: LTSP client environment
  for installation inside a LTSP client filesystem.
 
 Package: ldm
-Depends: openssh-client | ssh, python (>= 2.4), python-gtk2, python-gnome2, python-glade2, gtk2-engines (>= 1:2.6.9-1) | gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
+Depends: openssh-client | ssh, python, python-gtk2, python-gnomecanvas, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
 Architecture: all
 Description: LTSP display manager
  ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike
@@ -51,10 +51,11 @@ Description: LTSP display manager
 
 Package: ltsp-client-builder
 Section: debian-installer
+Priority: optional
 XC-Package-Type: udeb
 Architecture: all
-Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer
-XB-Installer-Menu-Item: 68
+Depends: ${misc:Depends}, ${shlibs:Depends}, pkgsel
+XB-Installer-Menu-Item: 70
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 
  while the cdrom is still mounted.

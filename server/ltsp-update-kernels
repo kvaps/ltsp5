@@ -2,80 +2,58 @@
 
 set -e
 
-# Make sure the copied files are readable by all
-umask 022
+if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
+    . /etc/ltsp/ltsp-update-kernels.conf
+fi
 
-TFTPDIR=/var/lib/tftpboot/
-TFTPBOOT=$TFTPDIR/ltsp
-test -z "$LTSPROOT" && LTSPROOT=/opt/ltsp
-VENDOR=$(lsb_release -i -s)
+TFTPDIR=${TFTPDIR:-"/var/lib/tftpboot"}
+TFTPBOOT=${TFTPBOOT:-"$TFTPDIR/ltsp"}
+BASE=${BASE:-"/opt/ltsp"}
+COPYTFTP=${COPYTFTP:-"true"}
 
-if [ ! -d $TFTPBOOT ] ; then
-    echo "error: Directory $TFTPBOOT is missing.  Unable to continue"
-    exit 1
+if [ "$TFTPDIR" = "$BASE" ]; then
+    COPYTFTP="false"
+    TFTPBOOT="$TFTPDIR"
+fi
+
+if [ ! -d $TFTPDIR ] ; then
+    mkdir -p $TFTPDIR
 fi
 
 ALL_CHROOTS="$@"
-ALL_CHROOTS=${ALL_CHROOTS:-"$(find $LTSPROOT -mindepth 1 -maxdepth 1 -type d)"}
-
-if [ -z "$BOOTPROMPT_OPTS" ]; then
-    if [ "$VENDOR" = "Ubuntu" ]; then
-        BOOTPROMPT_OPTS="quiet splash"
-    else 
-        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp"
-    fi
-fi
+ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d)"}
 
 for CHROOT in $ALL_CHROOTS ; do
-    # check for compatible (i.e. chrootable) architecture
-    if chroot $CHROOT /bin/true ; then
-        # update kernels for the chroot
-        if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
-            chroot "$CHROOT" /usr/lib/ltsp/update-kernels
+    if [ -x $CHROOT/bin/true ]; then
+        echo "Updating tftp directories for chroot: $CHROOT"
+
+        export CHROOT_NAME="$(basename $CHROOT)"
+
+        # check for compatible (i.e. chrootable) architecture
+        if chroot $CHROOT /bin/true ; then
+            # update kernels for the chroot
+            if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
+                chroot "$CHROOT" /usr/lib/ltsp/update-kernels
+            fi
         fi
-    fi
 
-    EXTRA_FILES=""
-    CHROOT_NAME="$(basename $CHROOT)"
-    TFTP_CHROOT="$TFTPBOOT/$CHROOT_NAME"
-    mkdir -p $TFTP_CHROOT
+        if [ "$COPYTFTP" = "true" ]; then
+            mkdir -p $TFTPBOOT/$CHROOT_NAME
+            cp -a -v $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
+        fi
 
-    if [ -f $CHROOT/usr/lib/yaboot/yaboot ]; then
-        cp -a -v $CHROOT/usr/lib/yaboot/yaboot $TFTPDIR
-        cat > $TFTPDIR/yaboot.conf <<EOF
-timeout=0
-default=ltsp
-root=/dev/ram
-
-image=/ltsp/$CHROOT_NAME/vmlinux
-        label=ltsp
-        initrd=/ltsp/$CHROOT_NAME/initrd.img
-        append="$BOOTPROMPT_OPTS"
-EOF
+        if [ -f $CHROOT/boot/yaboot ]; then
+            if [ -f $CHROOT/boot/yaboot.conf ]; then
+                # yaboot requires the files in a specific location,
+                # link them so they appear there.
+                ln -s $TFTPBOOT/$CHROOT/boot/yaboot $TFTPDIR
+                ln -s $TFTPBOOT/$CHROOT/boot/yaboot.conf $TFTPDIR
+            else
+                echo "WARNING: yaboot present but not configured."
+            fi
+        fi  
     else
-        echo "Skipping yaboot configuration. install yaboot package if you need it."
-    fi    
-
-    if [ -f $CHROOT/usr/lib/syslinux/pxelinux.0 ]; then
-        PXECFG=$TFTP_CHROOT/pxelinux.cfg
-        cp $CHROOT/usr/lib/syslinux/pxelinux.0 $TFTP_CHROOT
-        if [ ! -d $PXECFG ]; then
-            mkdir $PXECFG
-        fi
-        if [ -z "$PXELINUX_CMDLINE" ]; then
-            PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
-        fi
-        cat > $PXECFG/default <<EOF
-$PXELINUX_CMDLINE
-EOF
- 
-    else
-        echo "Skipping PXE configuration.  Install the syslinux package if you need it."
+        # not a valid chroot
+        echo "Skipping invalid chroot: $CHROOT"
     fi
-
-    for file in $CHROOT/boot/vmlinu* $CHROOT/boot/initrd.img* $CHROOT/boot/nbi*.img* $EXTRA_FILES ; do
-        if [ -f "$file" ]; then
-            cp -a -v "$file" $TFTP_CHROOT
-        fi
-    done
 done

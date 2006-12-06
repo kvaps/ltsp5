@@ -1,12 +1,42 @@
 This package was created by Matt Zimmerman <mdz@ubuntu.com> in May of
 2005.
 
-modifications for use with debian by Vagrant Cascadian <vagrant@freegeek.org>
+Modifications for use with debian by Vagrant Cascadian <vagrant@freegeek.org>
 in August of 2005.
 
-Several components have been copied from the LTSP project's build
-environment (LBE) tree, and are copyrighted by Jim McQuillan
-<jam@ltsp.org>, and licensed under the GPL version 2.
+The Ubuntu upstream source tree can be found on launchpad:
+
+bzr get http://bazaar.lauchpad.net/~ogra/ltsp-mainline
+
+The source tree for Debian packages can be downloaded using bzr:
+
+bzr get http://pkg-ltsp.alioth.debian.org/bzr/main
+
+The original LTSP sources can be downloaded from: http://ltsp.org
+
+
+The following components have been copied from the LTSP project's build environment
+(LBE) tree:
+
+client/screen.d/shell
+client/screen.d/startx
+client/screen.d/telnet
+client/screen_session
+client/start_printer
+client/start_telnet
+client/telnet_loop
+
+with the following copyright:
+
+Copyright (c) 1999-2006 by James A. McQuillan (McQuillan Systems, LLC)
+This software is licensed under the Gnu General Public License version 2
+
+
+server/nbdswapd and client/screen.d/sdm carry the following copyright:
+
+copyright 2005-2006 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.
+
 
 Other code has been written from scratch for this package, and carries
 the following copyright:

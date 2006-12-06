@@ -4,7 +4,7 @@ case "$MODE" in
             ;;
     configure)
             if [ -n "$option_apt_keys_value" ]; then
-                APT_KEYS="$option_apt_keys_value"
+                APT_KEYS="$(echo $option_apt_keys_value | tr ',' ' ')"
             fi
             ;;
     after-install)

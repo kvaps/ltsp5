@@ -2,7 +2,7 @@ case "$MODE" in
     configure)
         OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"false"}
         ;;
-    after-install)
+    finalization)
         # Export LTSP chroot using NFS to the LTSP client network
         if ! grep -q "^$BASE" /etc/exports ; then
             if [ "$OVERRIDE_EXPORTS" = "true" ]; then
