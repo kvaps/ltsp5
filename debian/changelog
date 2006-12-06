@@ -1,3 +1,56 @@
+ltsp (0.127) feisty; urgency=low
+
+  * Add dependency on openbsd-inetd
+  * Merge with debian bzr branch from http://pkg-ltsp.alioth.debian.org/bzr/main
+    [Vagrant Cascadian]   
+        * translation updates
+        * simplified --arch handling
+        * set ltsp-client/abort-installation question to priority critical and change
+          to type "error"
+        * do not run ltsp-client initscripts if /etc/ltsp_chroot is not present.
+        * improvements to inputattach handling
+        * reorganize network boot dependencies
+        * ltsp-update-kernels: merge
+          http://llama.freegeek.org/~vagrant/bzr/ltsp/features/vagrant-update-kernels
+        * added NEWS file which documents the changes to NBD swapping
+        * man page for ldminfod
+        * added manpage for nbdswapd
+        * credit translators for their work
+        * add cryptsetup to suggests (for encrypted swap support)
+        * updated swap documentation
+        * merge
+          http://llama.freegeek.org/~vagrant/bzr/ltsp/features/vagrant-ltsp-swap
+        * populate /etc/hostname with "ltsp" instead of "ltsp-chroot"
+        * added catalan translation
+        * make location of tftp directory configurable
+        * allow comma-separated list for late-packages, early-packages,
+          kernel-packages, debconf-seeds and apt-keys
+        * include french translation for ltsp-build-client
+        * allow --components to be a comma-separated (for debconf preseeding)
+        * debconf preseeding for ltsp-client-builder
+        * update the description for ltsp-client-builder/build-client-opts
+        * do not build or install lp_server
+        * make options to pass to ltsp-build-client preseedable.
+        * copyright clarifications from upstream
+        * include updated copyright notices in debian/copyright
+        * add dependency on gettext-base (reported by Ronny Aasen)
+        * only display advanced help options if called with --extra-help
+        * allow custom screen scripts in /etc/ltsp/screen.d
+        * implement SWAPDIR in favor of SWAP
+        * added X_VIDEO_RAM variable
+        * split mtab and daemon handling into separate plugins
+        * split init whitelisting into separate plugin
+        * add plugin directory for custom plugins (such as CDDs)
+        * update to include program name in the plugins dir
+        * put LTSP_CHROOT variable for the installation path into /etc/ltsp_client
+        * move root password handling later
+        * move handling of /etc/exports later and to the finalization phase
+        * if daemon is installed, use it to start sdm 
+        * divert /etc/mtab and point /etc/mtab to /proc/mounts
+        * apt-get update now runs after locales have been generated
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  6 Dec 2006 13:02:05 +0100
+
 ltsp (0.126) feisty; urgency=low
 
   * added dependency on update-inetd to ltsp-server (needed by tftpd-hpa now) 
