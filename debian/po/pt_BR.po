@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
-"Report-Msgid-Bugs-To: mdz@ubuntu.com\n"
-"POT-Creation-Date: 2006-09-07 00:27+0200\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2006-11-15 15:15-0700\n"
 "PO-Revision-Date: 2006-03-07 10:46-0300\n"
 "Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
 "Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
@@ -54,7 +54,7 @@ msgstr "Construir chroot LTSP"
 msgid "Building LTSP chroot..."
 msgstr "Construindo chroot LTSP..."
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:4001
 msgid "No Interface for LTSP dhcpd configuration found"
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Installation aborted "
 msgstr "Instalacao abortada"
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid ""
@@ -98,7 +98,7 @@ msgstr ""
 "ltsp-client não pode ser instalado numa máquina regular. Este pacote provê  "
 "a estrutura básica para um terminal LTSP."
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Please read the package description to understand what it means."

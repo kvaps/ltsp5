@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
+#
+# This software is licensed under the Gnu General Public License version 2,
+# the full text of which can be found in the COPYING file.
+#
 
 #
 # Fire up a shell on this tty

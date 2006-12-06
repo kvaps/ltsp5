@@ -4,7 +4,7 @@ case "$MODE" in
         ;;
     configure)
         if [ -n "$option_late_packages_value" ]; then
-            LATE_PACKAGES="$option_late_packages_value"
+            LATE_PACKAGES="$(echo $option_late_packages_value | tr ',' ' ')"
         fi
         ;;
     finalization)

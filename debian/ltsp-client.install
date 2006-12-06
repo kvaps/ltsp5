@@ -8,6 +8,5 @@ client/screen.d usr/lib/ltsp
 client/getltscfg/getltscfg usr/bin
 client/initramfs/init-bottom/unionfs_cow usr/share/ltsp-client
 client/initramfs/hooks/ltsp_client usr/share/initramfs-tools/hooks
-client/lp_server/src/lp_server usr/lib/ltsp
-client/initramfs/conf.d/ltsp etc/initramfs-tools/conf.d
+client/initramfs/conf.d/ltsp usr/share/initramfs-tools/conf.d
 client/update-kernels usr/lib/ltsp

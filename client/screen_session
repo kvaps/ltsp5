@@ -2,8 +2,8 @@
 #
 # Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
 #
-# This software is licensed under the Gnu General Public License.
-# The full text of which can be found at http://www.LTSP.org/license.txt
+# This software is licensed under the Gnu General Public License version 2,
+# the full text of which can be found in the COPYING file.
 #
 
 SLEEP=300
@@ -83,7 +83,12 @@ fi
 if [ "${SCREEN_SCRIPT}" = "none" ]; then
     sleep ${SLEEP}
 else
-    if [ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
+    if [ -x /etc/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
+        #
+        # Go ahead and run the screen script
+        #
+        exec //ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+    elif [ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
         #
         # Go ahead and run the screen script
         #

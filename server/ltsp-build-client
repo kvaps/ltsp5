@@ -7,7 +7,7 @@ export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)
 export TEXTDOMAINDIR=/usr/share/locale        # locale dir for gettext codes
 
 VENDOR=$(lsb_release -i -s)
-BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
+export BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 SCRIPT=ltsp-build-client
@@ -99,6 +99,7 @@ load_modules() {
 
 # Add commandline option to handle --help
 add_option "help" "`eval_gettext "Display this help message"`" "regular" "false"
+add_option "extra-help" "`eval_gettext "Display help for all available commandline options"`" "regular" "false"
 
 # Print usage information.
 usage() {
@@ -108,9 +109,11 @@ usage() {
     echo
     echo -n `eval_gettext "  Regular options:"`
     echo -e "$HELP_MESSAGE" | sort
-    echo
-    echo -n `eval_gettext "  Advanced options:"`
-    echo -e "$ADVANCED_HELP_MESSAGE" | sort
+    if [ "$ADVANCED_HELP" = "true" ]; then
+        echo
+        echo -n `eval_gettext "  Advanced options:"`
+        echo -e "$ADVANCED_HELP_MESSAGE" | sort
+    fi
 }
 
 # Clean up the chroot and exit.
@@ -154,7 +157,10 @@ while [ ! -z "$1" ] && [ "$1" != "--" ]; do
     fi
 done
 
-if [ -n "$option_help_value" ]; then
+if [ -n "$option_help_value" ] || [ -n "$option_extra_help_value" ]; then
+    if [ -n "$option_extra_help_value" ]; then
+        ADVANCED_HELP="true"
+    fi
     usage
     exit 0
 fi

@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: ltsp-server
 Priority: extra
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, openssh-client | ssh, netkit-inetd, iproute, debconf-utils, esound-clients, nbd-server, update-inetd
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, openssh-client | ssh, openbsd-inetd, iproute, debconf-utils, esound-clients, python (>= 2.4), nbd-server, update-inetd, tcpd, gettext-base
 Recommends: openssh-server | ssh, ltspfs
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
@@ -24,9 +24,9 @@ Description: Complete LTSP server environment
  
 Package: ltsp-client
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc] 
-Recommends: ubuntu-thin-client
-Suggests: nas
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release 
+Recommends: ubuntu-thin-client, esound|nas, ltspfsd
+Suggests: cryptsetup, inputattach
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: any
@@ -54,8 +54,8 @@ Section: debian-installer
 Priority: optional
 XC-Package-Type: udeb
 Architecture: all
-Depends: ${misc:Depends}, ${shlibs:Depends}, base-installer
-XB-Installer-Menu-Item: 68
+Depends: ${misc:Depends}, ${shlibs:Depends}, pkgsel
+XB-Installer-Menu-Item: 70
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 
  while the cdrom is still mounted.

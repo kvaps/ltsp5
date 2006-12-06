@@ -7,7 +7,15 @@ case $MODE in
             LOCALE="$option_locale_value"
         fi
         ;;
-    after-install)
+    before-install)
+        # include locales in initial deboostrap
+        if [ -n "$INCLUDE" ]; then
+            INCLUDE="locales"
+        else
+            INCLUDE="$INCLUDE,locales"
+        fi
+        ;;
+    install)
         if [ -f /etc/locale.gen ]; then
             cp /etc/locale.gen $ROOT/etc/
         fi
@@ -26,8 +34,8 @@ case $MODE in
             fi
         fi
 
-        if [ -f $ROOT/etc/locale.gen ]; then
-            DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical LC_ALL=C chroot $ROOT apt-get install locales
+        if [ -f $ROOT/etc/locale.gen ] && [ -x $ROOT/usr/sbin/locale-gen ] ; then
+            DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical LC_ALL=C chroot $ROOT /usr/sbin/locale-gen
         fi
         ;;
 esac

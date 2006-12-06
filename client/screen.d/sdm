@@ -1,4 +1,9 @@
 #!/bin/sh
+
+# copyright 2005-2006 Vagrant Cascadian <vagrant@freegeek.org>, distributed
+# under the terms of the GNU General Public License version 2 or any later
+# version.
+
 # Depend on the sdm-terminal package
 
 tty=$(tty)
@@ -11,4 +16,14 @@ case "$tty" in
       ;;
 esac
 
-exec /usr/sbin/sdm vt$ttynum
+name="ltsp$ttynum-sdm"
+logfile="/var/log/$name"
+command="/usr/sbin/sdm"
+opts="vt$ttynum"
+daemon=/usr/bin/daemon
+if [ -x "$daemon" ]; then
+  exec "$daemon" --name="$name" --respawn -O $logfile -E $logfile -l $logfile -- $command $opts
+else
+  # run undaemonized. password prompting may not work
+  exec $command $opts
+fi

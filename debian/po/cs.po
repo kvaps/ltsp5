@@ -14,9 +14,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
-"Report-Msgid-Bugs-To: mdz@ubuntu.com\n"
-"POT-Creation-Date: 2006-09-07 00:27+0200\n"
-"PO-Revision-Date: 2005-11-13 11:08+0100\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"PO-Revision-Date: 2006-09-24 18:28+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -50,9 +50,9 @@ msgstr "Vytvořit chroot pro LTSP"
 #. Description
 #: ../ltsp-client-builder.templates:3001
 msgid "Building LTSP chroot..."
-msgstr "Vytvářím chroot pro LTSP..."
+msgstr "Vytváří se chroot pro LTSP..."
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:4001
 msgid "No Interface for LTSP dhcpd configuration found"
@@ -84,18 +84,20 @@ msgstr ""
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Installation aborted "
-msgstr ""
+msgstr "Instalace přerušena"
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
 msgstr ""
+"ltsp-client nemůže být nainstalován na běžný počítač. Tento balík poskytuje "
+"základní strukturu pro LTSP terminál."
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Please read the package description to understand what it means."
-msgstr ""
+msgstr "Přečtěte si prosím popis balíku, abyste porozuměli, co to znamená."

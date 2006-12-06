@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.58\n"
-"Report-Msgid-Bugs-To: mdz@ubuntu.com\n"
-"POT-Creation-Date: 2006-09-07 00:27+0200\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2006-11-15 15:15-0700\n"
 "PO-Revision-Date: 2006-06-17 15:49+0200\n"
 "Last-Translator: Jean-Marc Chaton <chaton@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -41,7 +41,7 @@ msgstr "Construction du « chroot » LTSP"
 msgid "Building LTSP chroot..."
 msgstr "Construction de l'environnement fermé d'exécution LTSP en cours ..."
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:4001
 msgid "No Interface for LTSP dhcpd configuration found"
@@ -75,7 +75,7 @@ msgstr ""
 msgid "Installation aborted "
 msgstr "Installation interrompue"
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid ""
@@ -85,7 +85,7 @@ msgstr ""
 "Il est impossible d'installer ltsp-client sur une machine normale. Ce paquet "
 "fournit la structure de base pour un terminal LTSP."
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Please read the package description to understand what it means."
