@@ -4,8 +4,14 @@ plugins are called by the "load_plugins" function. common plugins are located
 in /usr/share/ltsp/plugins/ltsp-build-client/common, while vendor-specific
 plugins are defined in /usr/share/ltsp/plugins/ltsp-build-client/VENDOR. if a
 vendor plugin has the same filename as a common plugin, it will override the
-common plugin. optionally, the admin can install or override common or vendor
-plugins in /etc/ltsp/plugins/ltsp-build-client. 
+common plugin. optionally, the admin can override common or vendor plugins in
+/etc/ltsp/plugins/ltsp-build-client. 
+
+for starting a new VENDOR implementation, focus on the configure, install,
+after-install, and finalization phases at first.
+
+each plugin should be written in such a way as the code is only executed in the
+appropriate phase, such as wrapping the code in case statements.
 
 NOTE:  Plugins are "sourced" not "executed", so be careful to avoid such things
 as "exit" in your plugin scripts
@@ -16,24 +22,48 @@ commandline:
 
 builds the list of commandline arguments supported by the loaded plugins
 
+
 configure:
 
 sets variables for commandline options that are set
+
+we recommend putting very early in your DISTRO plugin dir a plugin such as
+000-basic-configuration that detects and defines some appropriate variables for
+your distro- like which particular version of the distro you are running,
+default lists of packages or package sets to install, default package mirror to
+use, etc.
+
 
 before-install:
 
 before the initial chroot is built
 
+
 install:
 
-where the initial chroot is built (debootstrap, on debian systems)
+where the initial chroot is built
+
+in the install phase, you want to essentially bootstrap a basic chroot of your
+distro. on Debian, this is done with the debootstrap tool. this will obviously
+vary greatly for each distro.
+
 
 after-install:
 
 additional package installation(ltsp-client), tweaks, etc.
 
+in the after-install phase, you may want to add additional packages that might
+be difficult to include as part of the initial bootstrapping of the chroot, if
+the bootstrap tools don't support proper dependency resolution (i.e.
+debootstrap). you may want to add certain configuration tweaks to certain
+packages at this point as well, such as configuring an initramfs generator so
+it will support NFS root.
+
+
 finalization:
 
-the last steps needed, such as installing kernels, copying the kernels and
-network bootable images into the tftp dir, installing the server's ssh keys
-into the chroot, etc.
+in the finalization phase, you may want to install additional packages that
+needed custom configurations to other software before installing, such as a
+kernel (which may require certain initramfs tweaks). you may also want to copy
+the kernel images into a location accessible by tftp at this phase, or seed the
+chroot's /etc/ssh/ssh_known_hosts file with your server's public ssh keys.
