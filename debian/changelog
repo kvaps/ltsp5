@@ -1,3 +1,15 @@
+ltsp (0.99debian9) unstable; urgency=low
+
+  * fix ldm's boolean handling. thanks to Miro Zhorelicky for the patch.
+    (Closes: #403471)
+  * also mount /etc/network/run writeable for proper lo device configuration.
+    (Closes: #403187)
+  * fix execition of screen scripts in /etc/ltsp/screen.d (Closes: #403188)
+  * updated plugins documentation. 
+  * include spanish debconf translations.
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 17 Dec 2006 16:20:44 -0700
+
 ltsp (0.99debian8) unstable; urgency=low
 
   [Vagrant Cascadian]
