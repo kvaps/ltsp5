@@ -17,7 +17,7 @@ def get_config(name):
 def get_config_bool(name):
     val = os.environ.get(name)
     if val:
-        val == val.lower()
+        val = val.lower()
     else:
         return False
     if val == 'y' or val == 'yes' or val == 'true':
