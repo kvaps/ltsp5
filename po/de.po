@@ -1,14 +1,14 @@
-# translation of ltsp.po to Deutsch
+# translation of ltsp gettext messages to Deutsch
 # Copyright (C) 2006 LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
 # This file is distributed under the same license as the ltsp package.
 #
 # Wolfgang Schweer <schweer@cityweb.de>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp-099debian8\n"
+"Project-Id-Version: ltsp-0.99debian8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-17 21:35-0700\n"
-"PO-Revision-Date: 2006-12-18 01:16+0100\n"
+"PO-Revision-Date: 2006-12-18 11:08+0100\n"
 "Last-Translator: Wolfgang Schweer <schweer@cityweb.de>\n"
 "Language-Team: Deutsch <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,6 +29,7 @@ msgstr "Diese Hilfe-Seite anzeigen."
 #, sh-format
 msgid "Display help for all available commandline options"
 msgstr ""
+"Hilfe für alle zur Verfügung stehenden Kommandozeilen-Optionen anzeigen."
 
 #: ../server/ltsp-build-client:106
 #, sh-format
@@ -100,7 +101,7 @@ msgstr "Spiegelserver angeben."
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
-"Spiegelserver hinzufügen; diesem wird höhere Priorität als dem "
+"Spiegelserver hinzufügen; diesem wird eine höhere Priorität als dem "
 "voreingestellten gegeben."
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
@@ -140,7 +141,8 @@ msgstr "Zu installierende Kernel-Pakete angeben. "
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #, sh-format
 msgid "Set the default locale"
-msgstr "Den Default-Wert für locale angeben."
+msgstr ""
+"Angeben, welche Sprache (locale) als Voreinstellung verwendet werden soll."
 
 #: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
@@ -204,7 +206,7 @@ msgstr "Zu installierende Distribution angeben."
 #: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
 msgid "exclude packages from the initial chroot"
-msgstr "Von der Installation im chroot auszuschließende Pakete."
+msgstr " Pakete auflisten, die im chroot nicht installiert werden sollen."
 
 #: ../server/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
