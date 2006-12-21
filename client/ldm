@@ -160,6 +160,14 @@ class LDM:
             # make sure we clean up after logout if localdev is used
             if self.use_localdev:
                 session_manager = session_manager+' && ltspfsmounter all cleanup'
+                print "info: Enabling localdev support."
+                if os.access("/var/run/.static-device", os.F_OK):
+                    print "info: Enabling static localdev support."
+                    static_dev = open("/var/run/.static-device", "r")
+                    delayed_mnt = open("/var/run/.delayed-mount", "a")
+                    delayed_mnt.writelines(static_dev.readlines())
+                    delayed_mnt.close()
+                    static_dev.close()
 
             # set language
             if lang != 'None':
