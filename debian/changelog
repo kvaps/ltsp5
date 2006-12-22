@@ -8,6 +8,7 @@ ltsp (0.99debian9) unstable; urgency=medium
   * fix execution of screen scripts in /etc/ltsp/screen.d (Closes: #403188)
   * install xorg instead of x-window-system-core transitional package in new
     LTSP chroot environments. (Closes: #403234)
+  * updated local devices support. (Closes: #404154)
 
   * updated French gettext message. thanks to Cyril Brulebois.
   * updated gettext messages for Brazilian Portuguese.  (Closes: #403815)
@@ -22,7 +23,7 @@ ltsp (0.99debian9) unstable; urgency=medium
 
   * updated documentation for ltsp-build-client plugins.
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 22 Dec 2006 13:36:42 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 22 Dec 2006 14:58:18 -0700
 
 ltsp (0.99debian8) unstable; urgency=low
 
