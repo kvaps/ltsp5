@@ -37,21 +37,21 @@ load_modules() {
 
 configure_localdev() {
     if [ -n "$LOCALDEV" ]; then
-        if [ ! -d /tmp/drives ];then
-            mkdir /tmp/drives
+        if [ ! -d /var/run/drives ];then
+            mkdir /var/run/drives
         fi
         /usr/bin/ltspfsd -a
         # cdrom devices are handled by the cdpingerponger
-        /usr/bin/cdpinger cdrom # default for usb cdroms
+        /usr/sbin/cdpinger cdrom # default for usb cdroms
 
         # and start one for every additional cdrom device
         if [ -L /dev/cdrom?* ];then
             for CDDEV in $(ls /dev/cdrom?*); do
-                /usr/bin/cdpinger $(basename ${CDDEV})
+                /usr/sbin/cdpinger $(basename ${CDDEV})
             done
         fi
         # handle already plugged devices on login
-        /usr/bin/delayed_mounter
+        /usr/sbin/delayed_mounter
     fi
 }
 
