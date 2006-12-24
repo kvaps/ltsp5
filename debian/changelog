@@ -1,3 +1,10 @@
+ltsp (0.99debian10) unstable; urgency=low
+
+  * added spanish gettext translation. thanks to Felipe Caminos and Hector
+    Colina. (Closes: #404404)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 24 Dec 2006 09:30:00 -0700
+
 ltsp (0.99debian9) unstable; urgency=medium
 
   * urgency medium, it includes it fixes several important bugs:
