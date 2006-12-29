@@ -87,7 +87,7 @@ else
         #
         # Go ahead and run the screen script
         #
-        exec //ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+        exec /etc/ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
     elif [ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
         #
         # Go ahead and run the screen script
