@@ -1,9 +1,10 @@
-ltsp (0.99debian10) unstable; urgency=low
+ltsp (0.99debian10) unstable; urgency=medium
 
+  * priority medium to get the updated translation into etch faster.
   * added spanish gettext translation. thanks to Felipe Caminos and Hector
     Colina. (Closes: #404404)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 24 Dec 2006 09:30:00 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 24 Dec 2006 09:36:43 -0700
 
 ltsp (0.99debian9) unstable; urgency=medium
 
