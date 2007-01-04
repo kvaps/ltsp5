@@ -42,13 +42,6 @@ alternately, you can configure nbd-server the hard way:
 
 apt-get install nbd-server
 
-update-inetd --group LTSP --add "9210 stream tcp nowait nobody /usr/sbin/tcpd /usr/sbin/nbdswapd"
-
-
-alternately, you can configure nbd-server the hard way:
-
-apt-get install nbd-server
-
 in /etc/nbd-server:
 
 NBD_PORT[0]=9210
