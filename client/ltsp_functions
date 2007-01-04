@@ -36,3 +36,10 @@ reg_info(){
     [ -d /tmp/info ] || mkdir /tmp/info
     eval "echo \$${VAR}" >/tmp/info/${VAR}
 }
+
+get_boolean(){
+    case "$(echo $1 | tr 'A-Z' 'a-z')" in
+       true|y|yes) return 0 ;; 
+       *) return 1 ;; 
+    esac
+}

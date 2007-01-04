@@ -15,7 +15,7 @@ def get_config(name):
     return os.environ.get(name)
 
 def get_config_bool(name):
-    allowed = ['y', 'true']
+    allowed = ['y', 'true', 'yes']
     val = os.environ.get(name)
     for valid in allowed:
         if (val and val.lower() == valid):
