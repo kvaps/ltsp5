@@ -1,3 +1,10 @@
+ltsp (0.129) feisty; urgency=low
+
+  * make sure we dont try to install the dropped 80_ltsp-sound file to avoid
+    FTBFS 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  5 Jan 2007 15:50:31 +0100
+
 ltsp (0.128) feisty; urgency=low
 
   * merge jetpipe, the new printserver from
