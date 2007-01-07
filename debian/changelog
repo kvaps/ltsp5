@@ -1,3 +1,11 @@
+ltsp (0.99debian11) unstable; urgency=low
+
+  * updated location of pkg-ltsp bzr repository
+  * add xserver-xorg-video-all and xserver-xorg-input-all to list of packages
+    to install. (Closes: #405726)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun,  7 Jan 2007 09:36:32 -0700
+
 ltsp (0.99debian10) unstable; urgency=medium
 
   * priority medium to get the updated translation into etch faster.
