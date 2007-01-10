@@ -1,3 +1,10 @@
+ltsp (0.130) feisty; urgency=low
+
+  * quickfix for mirror handling on non networked systems to make herd2
+    installable 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 10 Jan 2007 23:35:57 +0100
+
 ltsp (0.129) feisty; urgency=low
 
   * make sure we dont try to install the dropped 80_ltsp-sound file to avoid
