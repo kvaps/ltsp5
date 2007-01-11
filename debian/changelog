@@ -1,3 +1,10 @@
+ltsp (0.131) feisty; urgency=low
+
+  * temporary switch i386 to the -generic kernel image (this might break
+    on machines requiring the 486 codeset ...)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 11 Jan 2007 11:13:41 +0100
+
 ltsp (0.130) feisty; urgency=low
 
   * quickfix for mirror handling on non networked systems to make herd2
