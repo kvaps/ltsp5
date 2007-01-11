@@ -2,7 +2,7 @@ case "$MODE" in
     before-install)
 	case $ARCH in
 	    i386)
-		KERNEL_ARCH="386"
+		KERNEL_ARCH="generic" # this is temporary and shall be 386 again
 		;;
 	    amd64)
 		KERNEL_ARCH="generic"
