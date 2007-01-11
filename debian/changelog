@@ -1,10 +1,14 @@
-ltsp (0.99debian11) unstable; urgency=low
+ltsp (0.99debian11) unstable; urgency=medium
 
+  * urgency medium, as it fixes an RC bug and important bugs
+  * install appropriate linux-image package for amd64. thanks to Damyan
+    Ivanov. (Closes: #406357)
+  * fixes to boolean handling (Closes: #405772)
+  * drop dependency on initrd-netboot-tools as it was removed from Debian.
+    (initramfs-tools is preferred anyways)
   * updated location of pkg-ltsp bzr repository
-  * add xserver-xorg-video-all and xserver-xorg-input-all to list of packages
-    to install. (Closes: #405726)
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sun,  7 Jan 2007 09:36:32 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 11 Jan 2007 00:15:02 -0700
 
 ltsp (0.99debian10) unstable; urgency=medium
 
