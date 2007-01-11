@@ -35,7 +35,7 @@ warn() {
 }
 
 start_sound() {
-    if [ -n "$SOUND" ]; then
+    if boolean_is_true "$SOUND" ; then
         # Detect and report a common problem with thin clients
 		if [ ! -f /dev/dsp ] ; then
 		    warn "Sound requested but /dev/dsp is missing.  Continuing."
