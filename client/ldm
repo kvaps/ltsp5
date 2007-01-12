@@ -120,14 +120,13 @@ class LDM:
             ssh_auth = ['%s@%s' % (username,self.server)]
 
             if self.use_sound:
+                espeakerport = 16001
                 if self.sound_daemon == 'esd':
                     print "info: Enabling esd sound support."
                     # Could start using esddsp, but it is not enabled
                     # because it gave problems when using firefox.
                     #   esddsp', '-m','--server=%s:16001' % (self.ip)
-                    espeakerport = 16001
                     sound_cmd = ['ESPEAKER=%s:%d' % (self.ip, espeakerport)]
-
                     # Make sure esd is ready to accept new
                     # connections/clients.  It need to be reset to
                     # forget the previous users authentication key.
@@ -135,6 +134,11 @@ class LDM:
                     # better. [pere 2006-02-24]
                     os.system("killall esd")
                     os.system("/usr/bin/esd -nobeeps -public -tcp &")
+                elif self.sound_daemon == 'pulse':
+                    print "info: Enabling PulseAudio sound support."
+                    pulseport = 4713
+                    sound_cmd = ['ESPEAKER=%s:%d' % (self.ip, espeakerport),
+                            'PULSE_SERVER=tcp:%s:%d' % (self.ip, pulseport)]
                 elif self.sound_daemon == 'nasd':
                     print "info: Enabling nasd sound support."
                     # Could use the audiooss package to set LD_PRELOAD.
