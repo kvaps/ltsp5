@@ -1,3 +1,11 @@
+ltsp (0.132) feisty; urgency=low
+
+  * add pulse support and dependencies
+  * revert the herd2 quickfix 
+  * remove the broken security mirror line from ltsp-client-builder
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 17 Jan 2007 13:10:01 +0100
+
 ltsp (0.131) feisty; urgency=low
 
   * temporary switch i386 to the -generic kernel image (this might break
