@@ -28,7 +28,7 @@ _Description: Please select the interface you want to use for the thin client ne
  
 Template: ltsp-client-builder/build-client-opts
 Type: string
-Default: --mirror file:///cdrom --security-mirror none
+Default: --mirror file:///cdrom
 # Only used for preseeding arguments to ltsp-client-builder.
 Description: arguments for ltsp-build-client:
  this option is meant to be used with debconf preseeding.
