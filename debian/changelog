@@ -8,7 +8,7 @@ ltsp (0.99debian11) unstable; urgency=medium
     (initramfs-tools is preferred anyways)
   * updated location of pkg-ltsp bzr repository
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 11 Jan 2007 00:15:02 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 11 Jan 2007 00:38:01 -0700
 
 ltsp (0.99debian10) unstable; urgency=medium
 
