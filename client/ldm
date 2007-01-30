@@ -41,7 +41,7 @@ class LDM:
 
         if self.use_sound:
             self.ip = get_ip('eth0')
-            self.sound_daemon = get_config('SOUND_DAEMON') or 'esd'
+            self.sound_daemon = get_config('SOUND_DAEMON') or 'pulse'
 
         if self.use_xfs:
             xfs_server = get_config('XFS_SERVER') or self.server
@@ -137,8 +137,8 @@ class LDM:
                 elif self.sound_daemon == 'pulse':
                     print "info: Enabling PulseAudio sound support."
                     pulseport = 4713
-                    sound_cmd = ['ESPEAKER=%s:%d' % (self.ip, espeakerport),
-                            'PULSE_SERVER=tcp:%s:%d' % (self.ip, pulseport)]
+                    sound_cmd = ['PULSE_SERVER=tcp:%s:%d ESPEAKER=%s:%d' % (self.ip, pulseport, self.ip, espeakerport)]
+                            
                 elif self.sound_daemon == 'nasd':
                     print "info: Enabling nasd sound support."
                     # Could use the audiooss package to set LD_PRELOAD.

@@ -1,0 +1,1 @@
+test -z "$LTSP_CLIENT" || /usr/bin/asoundconf set-pulseaudio

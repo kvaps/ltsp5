@@ -5,7 +5,7 @@ case "$MODE" in
         DIST=feisty
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
-        EARLY_PACKAGES="xorg ltsp-client discover1 laptop-detect xresprobe pulseaudio inputattach usplash ldm ltspfsd human-cursors-theme"
+        EARLY_PACKAGES="xorg ltsp-client discover1 laptop-detect xresprobe pulseaudio pulseaudio-esound-compat inputattach usplash ldm ltspfsd human-cursors-theme"
         RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh mountvirtfs hostname.sh keymap.sh loopback udev mountdevsubfs module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh xorg-common"
         RC2_WHITELIST="klogd sysklogd ltsp-client nbd-client usplash rmnologin stop-bootlogd"
         OVERRIDE_EXPORTS="true"
