@@ -1,3 +1,10 @@
+ltsp (0.134) feisty; urgency=low
+
+  *  enable the kiosk plugin (ltsp-build-client will accept the --kiosk
+     option now)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 13 Feb 2007 01:04:35 +0100
+
 ltsp (0.133) feisty; urgency=low
 
   * final switch for pulseaudio support
