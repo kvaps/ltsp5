@@ -1,3 +1,15 @@
+ltsp (0.135) UNRELEASED; urgency=low
+
+  * Log that we're starting up ldm before stopping usplash. If usplash was
+    running, don't bother logging successful startup, as it will look weird
+    on the console.
+  * If usplash was running, wait a short while for the active console to
+    change after starting up ldm, to try to avoid visible console noise from
+    later init scripts.
+  * Depend on kbd | console-tools for fgconsole.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 23 Feb 2007 13:08:48 +0000
+
 ltsp (0.134) feisty; urgency=low
 
   *  enable the kiosk plugin (ltsp-build-client will accept the --kiosk
