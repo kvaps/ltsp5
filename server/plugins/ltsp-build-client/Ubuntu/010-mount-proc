@@ -1,9 +1,13 @@
 case "$MODE" in
     after-install)
         chroot_mount proc /proc "-t proc"
-        chroot $ROOT ln -s /proc/self/fd /dev
+        if [ ! -d /dev/fd ]; then
+            chroot $ROOT ln -s /proc/self/fd /dev
+        fi
         ;;
     finalization)
-        chroot $ROOT rm /dev/fd
+        if [ -d /dev/fd ]; then
+            chroot $ROOT rm /dev/fd
+        fi
         ;;
 esac

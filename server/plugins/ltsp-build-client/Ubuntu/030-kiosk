@@ -16,14 +16,14 @@ case "$MODE" in
         if [ -n "$KIOSK" ]; then
             # install the webbrowser and a display manager that 
             # is capable to do a timed autologin in the client environment
-            LC_ALL=C chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox feisty-gdm-themes firefox-themes-ubuntu human-gtk-theme
+            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox feisty-gdm-themes firefox-themes-ubuntu human-gtk-theme
 
             # make the necessary directories writeable to the booted client
             echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
             echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> $ROOT/etc/default/ltsp-client-setup
 
             # create a kiosk user
-            LC_ALL=C chroot $ROOT adduser --disabled-password --gecos ,,, kiosk
+            chroot $ROOT adduser --disabled-password --gecos ,,, kiosk
 
             # create a default xsession for that user
             echo "#!/bin/sh" > $ROOT/home/kiosk/.xsession
@@ -47,13 +47,13 @@ case "$MODE" in
             sed -i s/TimedLoginDelay=30/TimedLoginDelay=5/ $ROOT/etc/gdm/gdm-kiosk.conf
 
             # set the new alternative we created as default config
-            LC_ALL=C chroot $ROOT update-alternatives --install /etc/gdm/gdm-cdd.conf gdm-config-derivative /etc/gdm/gdm-kiosk.conf 55
+            chroot $ROOT update-alternatives --install /etc/gdm/gdm-cdd.conf gdm-config-derivative /etc/gdm/gdm-kiosk.conf 55
         fi
         ;;
     finalization)
         # make sure gdm actually starts
         if [ -e $ROOT/etc/init.d/gdm ]; then
-            LC_ALL=C chroot $ROOT mv /etc/rc2.d/K13gdm /etc/rc2.d/S13gdm
+            chroot $ROOT mv /etc/rc2.d/K13gdm /etc/rc2.d/S13gdm
         fi
 esac
 

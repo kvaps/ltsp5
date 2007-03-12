@@ -13,7 +13,7 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/lib/discover /var/lib/nfs"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/console-setup"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
@@ -32,5 +32,5 @@ else
     # If not, copy the entire X config directories to get reconfigure
     # working.  This uses more memory on the client than the
     # xdebconfigurator alternative.
-    copy_dirs="$copy_dirs /etc/X11 /var/lib/xfree86"
+    copy_dirs="$copy_dirs /etc/X11 /var/lib/x11"
 fi

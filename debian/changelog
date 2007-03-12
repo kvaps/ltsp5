@@ -1,3 +1,39 @@
+ltsp (5.0.1) feisty; urgency=low
+
+  [Oliver Grawert]
+  * Version bump to 5.0.x
+  * locale handling fixes (malone #67387, #72626 and #82427)
+  * only create a link for /proc/fd if necessary (malone #90703)
+  * dont attempt to install to unclean targets, spill a warning instead
+    (maolne #71237)
+  * install a default lts.conf with sound, localdev and nbdswap enabled
+  * make sure /var/lib/nfs is writeable on thin clients
+  * add sound dependencies to ltsp-server-standalone (probably split that out
+    in a ltsp-sound metapackage later)
+  * improve handling of boolean variables in the initscript
+  * fix the remaining bits of x11 directory handling, we dont have xfree86 
+    anywhere anymore in ubuntu.
+  * fix typo in cjwatsons patch
+  * sanitize pulse option formatting
+  * make sure console-setup is in the rcS startup links
+  * drop stop-bootlogd and etc-setserial from startup link cleanup list
+    we have neither installed, if users want it, they also want the
+    initscripts.
+  * add pete savages reboot button fix to ldm
+  * add fix to speed up X autodetection by merging all debconf-communicate
+    calls into one. Thanks for the patch to Müller Zsolt <muzso@muzso.hu>
+
+  [Colin Watson]
+  * Log that we're starting up ldm before stopping usplash. If usplash was
+    running, don't bother logging successful startup, as it will look weird
+    on the console.
+  * If usplash was running, wait a short while for the active console to
+    change after starting up ldm, to try to avoid visible console noise from
+    later init scripts.
+  * Depend on kbd | console-tools for fgconsole.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 12 Mar 2007 13:38:48 +0000
+
 ltsp (0.134) feisty; urgency=low
 
   *  enable the kiosk plugin (ltsp-build-client will accept the --kiosk

@@ -57,24 +57,24 @@ configure_localdev() {
 
 configure_console() {
     if [ -n "$CONSOLE_KEYMAP" ]; then
-        loadkeys "$CONSOLE_KEYMAP"
+        ckbcomp -model pc105 "$CONSOLE_KEYMAP" | loadkeys
     fi
 }
 
 configure_swap() {
-    if [ "$USE_LOCAL_SWAP" = "Y" ]; then
+    if  get_boolean "$USE_LOCAL_SWAP" ; then
         # Enable local swap partition if found on local disk
         for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
             swap_devices="$swap_devices $part"
         done
     fi
-    if [ "$NBD_SWAP" = "Y" ]; then
+    if get_boolean "$NBD_SWAP" ; then
         SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
-        NBD_PORT=${NBD_PORT:-"9210"}
+        NBD_PORT=${NBD_PORT:-"9572"}
         modprobe nbd
-        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
+        /sbin/nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
     fi
-    if [ "$ENCRYPT_SWAP" = "Y" ]; then
+    if get_boolean "$ENCRYPT_SWAP" ; then
         if [ -x /sbin/cryptsetup ]; then
             modprobe dm_crypt
         else
@@ -85,7 +85,7 @@ configure_swap() {
     num=0
     for device in $swap_devices ; do
         swap="$device"
-        if [ "$ENCRYPT_SWAP" = "Y" ]; then
+        if get_boolean "$ENCRYPT_SWAP" ; then
             if [ -x /sbin/cryptsetup ]; then
                 cryptsetup -d /dev/urandom create swap$num $swap && swap="/dev/mapper/swap$num"
                 num=$(($num+1))
