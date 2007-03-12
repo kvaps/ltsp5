@@ -22,6 +22,7 @@ ltsp (5.0.1) feisty; urgency=low
   * add pete savages reboot button fix to ldm
   * add fix to speed up X autodetection by merging all debconf-communicate
     calls into one. Thanks for the patch to Müller Zsolt <muzso@muzso.hu>
+  * revert the temporary switch to the -generic kernel on thin clients
 
   [Colin Watson]
   * Log that we're starting up ldm before stopping usplash. If usplash was
