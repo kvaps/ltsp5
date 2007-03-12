@@ -6,9 +6,9 @@ set -e
 case "$1" in
   remove|deconfigure|failed-upgrade)
     update-alternatives --remove ldm-theme \
-	/usr/share/ldm/themes/Ubuntu
+	/usr/share/ldm/themes/ubuntu
     update-alternatives --remove ldm-theme \
-	/usr/share/ldm/themes/Edubuntu
+	/usr/share/ldm/themes/edubuntu
     update-alternatives --remove ldm-theme \
 	/usr/share/ldm/themes/Debian
     update-alternatives --remove ldm-theme \

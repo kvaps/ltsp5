@@ -1,0 +1,12 @@
+case "$MODE" in
+    after-install)
+        for cdd in ed x k; do 
+            if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then 
+                chroot $ROOT apt-get $APT_GET_OPTS install ${cdd}ubuntu-artwork-usplash
+                if [ -d $ROOT/usr/share/ldm/themes/${cdd}ubuntu ]; then 
+                    chroot $ROOT /usr/sbin/update-alternatives --set ldm-theme /usr/share/ldm/themes/${cdd}ubuntu 
+                fi
+            fi 
+        done
+        ;;
+esac
