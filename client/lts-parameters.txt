@@ -151,3 +151,5 @@ TELNET_HOST         Telnet server IP        ltsp server      for use with SCREEN
 ---------------------------------------------------------------------------------------------
 XDM_SERVER          XDMCP server IP         ltsp server      for use with SCREEN_nn=startx
 ---------------------------------------------------------------------------------------------
+SSH_OVERRIDE_PORT   Portnumber              unset            for use wiht a dedicated ssh port
+---------------------------------------------------------------------------------------------

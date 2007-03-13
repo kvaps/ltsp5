@@ -38,6 +38,7 @@ class LDM:
         self.use_xfs = get_config_bool('USE_XFS')
         self.use_sound = get_config_bool('SOUND')
         self.use_localdev = get_config_bool('LOCALDEV')
+        self.override_port = get_config('SSH_OVERRIDE_PORT')
 
         if self.use_sound:
             self.ip = get_ip('eth0')
@@ -111,6 +112,10 @@ class LDM:
             ssh_opts = ['-v',
                        '-X',
                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
+
+            if self.override_port:
+                ssh_extra_port=['-p', self.override_port]
+                ssh_opts.extend(ssh_extra_port)
 
             if self.use_localdev:
                        localdev_ssh_opts=['-M',
