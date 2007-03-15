@@ -1,3 +1,16 @@
+ltsp (5.0.2) feisty; urgency=low
+
+  * fix yaboot handling for tftp in ltsp-update-kernels, 
+  * allow kernel copying to an existing /tftpboot in ltsp-update-kernels 
+    (upstream requirement for upgrades from 4.2)
+  * add lts.conf option SSH_OVERRIDE_PORT for non standard ssh ports 
+    to use with ldm (closes malone #47744)
+  * fix pulse and ltspfs deps harder, 
+  * remove mount-proc from Vendor dir, it's used in the common plugins 
+    section already
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 15 Mar 2007 01:38:46 +0100
+
 ltsp (5.0.1) feisty; urgency=low
 
   [Oliver Grawert]
