@@ -6,54 +6,50 @@ if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
     . /etc/ltsp/ltsp-update-kernels.conf
 fi
 
-TFTPDIR=${TFTPDIR:-"/var/lib/tftpboot"}
-TFTPBOOT=${TFTPBOOT:-"$TFTPDIR/ltsp"}
-BASE=${BASE:-"/opt/ltsp"}
+TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
+BASE=${BASE:-"/opt/ltsp/"}
 COPYTFTP=${COPYTFTP:-"true"}
+TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
 
-if [ "$TFTPDIR" = "$BASE" ]; then
-    COPYTFTP="false"
-    TFTPBOOT="$TFTPDIR"
-fi
-
-if [ ! -d $TFTPDIR ] ; then
-    mkdir -p $TFTPDIR
-fi
-
-ALL_CHROOTS="$@"
-ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d)"}
-
-for CHROOT in $ALL_CHROOTS ; do
-    if [ -x $CHROOT/bin/true ]; then
-        echo "Updating tftp directories for chroot: $CHROOT"
-
-        export CHROOT_NAME="$(basename $CHROOT)"
-
-        # check for compatible (i.e. chrootable) architecture
-        if chroot $CHROOT /bin/true ; then
-            # update kernels for the chroot
-            if [ -x "$CHROOT/usr/lib/ltsp/update-kernels" ]; then
-                chroot "$CHROOT" /usr/lib/ltsp/update-kernels
-            fi
-        fi
-
-        if [ "$COPYTFTP" = "true" ]; then
-            mkdir -p $TFTPBOOT/$CHROOT_NAME
-            cp -a -v $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
-        fi
-
-        if [ -f $CHROOT/boot/yaboot ]; then
-            if [ -f $CHROOT/boot/yaboot.conf ]; then
-                # yaboot requires the files in a specific location,
-                # link them so they appear there.
-                ln -s $TFTPBOOT/$CHROOT/boot/yaboot $TFTPDIR
-                ln -s $TFTPBOOT/$CHROOT/boot/yaboot.conf $TFTPDIR
-            else
-                echo "WARNING: yaboot present but not configured."
-            fi
-        fi  
-    else
-        # not a valid chroot
-        echo "Skipping invalid chroot: $CHROOT"
+for TFTPDIR in $TFTPDIRS ; do
+    if [ ! -d $TFTPDIR ] ; then
+        # skip directory
+        continue
     fi
+
+    TFTPBOOT="$TFTPDIR/$TFTPBOOTDIR"
+
+    if [ "$TFTPDIR" = "$BASE" ]; then
+        COPYTFTP="false"
+        TFTPBOOT="$TFTPDIR"
+    fi
+
+    ALL_CHROOTS="$@"
+    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d)"}
+    
+    for CHROOT in $ALL_CHROOTS ; do
+        if [ -x $CHROOT/bin/true ]; then
+            echo "Updating $TFTPDIR directories for chroot: $CHROOT"
+            export CHROOT_NAME="$(basename $CHROOT)"
+   
+            if [ "$COPYTFTP" = "true" ]; then
+                mkdir -p $TFTPBOOT/$CHROOT_NAME
+                cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
+            fi
+    
+            if [ -f $CHROOT/boot/yaboot ]; then
+                if [ -f $CHROOT/boot/yaboot.conf ]; then
+                    # yaboot requires the files in a specific location,
+                    # link them so they appear there.
+                    ln -s $TFTPBOOT/$CHROOT/boot/yaboot $TFTPDIR
+                    ln -s $TFTPBOOT/$CHROOT/boot/yaboot.conf $TFTPDIR
+                else
+                    echo "WARNING: yaboot present but not configured."
+                fi
+            fi  
+        else
+            # not a valid chroot
+            echo "Skipping invalid chroot: $CHROOT"
+        fi
+    done
 done
