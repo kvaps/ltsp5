@@ -24,12 +24,4 @@ case $MODE in
             cp /etc/default/console-setup $ROOT/etc/default/console-setup
         fi
         ;;
-    finalization)
-
-        KMAP=$(echo "get xserver-xorg/config/inputdevice/keyboard/layout"| debconf-communicate >/dev/null 2&>1 && echo "get xserver-xorg/config/inputdevice/keyboard/layout" | debconf-communicate 2>/dev/null | cut -d ' ' -f 2)
-        if [ -n "$KMAP" ]; then
-            chroot $ROOT echo "set xserver-xorg/config/inputdevice/keyboard/layout $KMAP" | debconf-communicate xserver-xorg
-            chroot $ROOT echo "fset xserver-xorg/config/inputdevice/keyboard/layout seen true" | debconf-communicate xserver-xorg
-        fi
-        ;;
 esac
