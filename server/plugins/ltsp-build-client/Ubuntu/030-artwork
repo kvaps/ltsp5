@@ -1,5 +1,5 @@
 case "$MODE" in
-    after-install)
+    finalization)
         for cdd in ed x k; do 
             if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then 
                 chroot $ROOT apt-get $APT_GET_OPTS install ${cdd}ubuntu-artwork-usplash
