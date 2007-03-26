@@ -30,8 +30,8 @@ test -f /etc/ltsp_chroot || exit 0
 test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
 
 load_modules() {
-    for module in $(env | awk -F= '$1 ~ /^MODULE_/ { print $2 }'); do
-        modprobe $module
+    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/);do
+        modprobe $(echo $module|tr "*" " ")
     done
 }
 
