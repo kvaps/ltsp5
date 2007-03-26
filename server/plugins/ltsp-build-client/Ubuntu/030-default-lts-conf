@@ -11,6 +11,7 @@ case "$MODE" in
     SOUND=True
     LOCALDEV=True
     NBD_SWAP=True
+    SYSLOG=server
 EOF
         ;;
 esac
