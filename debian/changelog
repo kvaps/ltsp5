@@ -1,3 +1,19 @@
+ltsp (5.0.4) feisty; urgency=low
+
+  * fix varoius documentation, malone bugs #94081 and #78927
+  * make sure the lp module is loaded on all thin clients, 
+    fixes malone #94086
+  * fix support for multiple printers (malone #93863)
+  * make sure we set SYSLOG to point to the server in
+    the default lts.conf
+  * move the theme setting of ldm to finalization sequence 
+    to make sure we not only have the usplash but also the 
+    right ldm theme
+  * fix the MODULE_nn option to take arguments for modules it 
+    loads (fixes handling of ISA soundcards)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 26 Mar 2007 13:52:06 +0200
+
 ltsp (5.0.3) feisty; urgency=low
 
   * remove xorg keymap setting form locales plugin, it breaks in d-i 
