@@ -129,9 +129,10 @@ EOF
 }
 
 configure_printer() {
-    if [ -n "$PRINTER_0_DEVICE" ]; then
-        /usr/lib/ltsp/start_printer 0 &
-    fi
+    for prn_dev in $(env | awk -F= '$1 ~ /^PRINTER_[0-9]_DEVICE/ { print $1 }'); do
+        prn_no=`echo $prn_dev | cut -f2 -d'_'`
+        /usr/lib/ltsp/start_printer $prn_no &
+    done
 }
 
 configure_syslog() {
