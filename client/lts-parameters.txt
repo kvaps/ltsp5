@@ -25,7 +25,7 @@ PRINTER_0_DEVICE    dev (i.e. /dev/usblp0)   unset
  (PRINTER_0_TYPE)   P(parallel), S(serial)   unset           only required for serial,
                     U(USB)                                   others are autodetected
  (PRINTER_0_PORT)   A valid portnumber       9100
- (PRINTER_0_WRITE_ONLY)     Y,N              N               serial only
+ (PRINTER_0_WRITE_ONLY)     Y,N              N               
  (PRINTER_0_SPEED)  A baud rate              9600            serial only
  (PRINTER_0_FLOWCTRL) flow control param     S               serial only
  (PRINTER_0_PARITY) Parity setting           N               serial only
