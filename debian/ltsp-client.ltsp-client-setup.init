@@ -121,13 +121,6 @@ EOF
     fi
 }
 
-configure_network() {
-    cat <<EOF > /etc/network/interfaces
-auto lo
-iface lo inet loopback
-EOF
-}
-
 configure_printer() {
     for prn_dev in $(env | awk -F= '$1 ~ /^PRINTER_[0-9]_DEVICE/ { print $1 }'); do
         prn_no=`echo $prn_dev | cut -f2 -d'_'`
@@ -353,7 +346,6 @@ case "$1" in
         fi
         load_modules || true
         configure_console || true
-        configure_network || true
         configure_resolver || true
         configure_swap || true
         configure_syslog || true
