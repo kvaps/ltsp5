@@ -71,6 +71,26 @@ start_sound() {
     fi
 }
 
+configure_localdev() {
+     if get_boolean "$LOCALDEV" ; then
+         if [ ! -d /var/run/drives ];then
+             mkdir /var/run/drives
+         fi
+         /usr/bin/ltspfsd -a
+         # cdrom devices are handled by the cdpingerponger
+         /usr/sbin/cdpinger cdrom # default for usb cdroms
+ 
+         # and start one for every additional cdrom device
+         if [ -L /dev/cdrom?* ];then
+             for CDDEV in $(ls /dev/cdrom?*); do
+                 /usr/sbin/cdpinger $(basename ${CDDEV})
+             done
+         fi
+         # handle already plugged devices on login
+         /usr/sbin/delayed_mounter
+     fi
+ }
+
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client..."
@@ -94,6 +114,7 @@ case "$1" in
         done
 
         start_sound || true
+        configure_localdev || true
 
         $log_end_msg 0
 
