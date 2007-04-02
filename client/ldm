@@ -4,7 +4,6 @@ import os
 import sys
 sys.path.append('/usr/lib/ltsp/python')
 import subprocess
-import time
 import signal
 import socket
 import struct
@@ -72,8 +71,6 @@ class LDM:
             env = os.environ.copy()
             env['DISPLAY'] = self.display
             env['XAUTHORITY'] = self.authfile
-            
-            time.sleep(5)
 
             # Generate an X authority key in ~/.Xauthority
             xauth_command = ['xauth', '-i', '-n', '-f', self.authfile, 'generate', self.display]
