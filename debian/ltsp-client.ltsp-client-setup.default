@@ -24,7 +24,7 @@ copy_dirs=""
 temp_copy_dirs="/var/cache/debconf"
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
+bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf"
 
 if [ -n "$(which xdebconfigurator)" ]; then # xdebconfigurator is installed 
     bindfiles="$bindfiles /etc/X11/xorg.conf /etc/X11/XF86Config-4"
