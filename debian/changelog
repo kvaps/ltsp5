@@ -1,3 +1,23 @@
+ltsp (5.0.5) feisty; urgency=low
+
+  * move printserver startup, localdev helperscripts and soundserver 
+    startup after start of X to speed up booting (should partially 
+    help with LP #97456)
+  * add pulseaudio-esound-compat to ltsp-server-standalone recommends
+    (for people feeling the need to still use esddsp with apps)
+  * drop duplicated module-detect option from pulseaudio startup to 
+    avoid warning in client bootlogs
+  * drop duplicated touching of /etc/nbd-client from ltsp-build-client, 
+    we start nbd from the ltsp-client-setup initscript, no need for a 
+    second run.
+  * remove stray sleep(5) call in ldm for speedup (LP #97456)
+  * add --copy-sourceslist option to ltsp-build-client to reuse the servers 
+    sources.list with ltsp-buiuld-client (fixes LP #48601)
+  * move loopback device entry creation in /etc/network/interfaces to 
+    ltsp-build-client, fixes a race condition while bringing up lo
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  2 Apr 2007 11:39:50 +0200
+
 ltsp (5.0.4) feisty; urgency=low
 
   * fix varoius documentation, malone bugs #94081 and #78927
