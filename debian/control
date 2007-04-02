@@ -17,6 +17,7 @@ Description: Basic LTSP server environment
 
 Package: ltsp-server-standalone
 Depends: ltsp-server, dhcp3-server, libasound2-plugins, libgstreamer-plugins-pulse0.10-0
+Recommends: pulseaudio-esound-compat
 Architecture: all
 Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
