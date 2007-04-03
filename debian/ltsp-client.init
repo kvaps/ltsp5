@@ -93,13 +93,6 @@ configure_localdev() {
     fi
 }
 
- configure_printer() {
-    for prn_dev in $(env | awk -F= '$1 ~ /^PRINTER_[0-9]_DEVICE/ { print $1 }'); do
-        prn_no=`echo $prn_dev | cut -f2 -d'_'`
-        /usr/lib/ltsp/start_printer $prn_no &
-    done
-}  
-
 case "$1" in
   start)
         log_begin_msg "Starting LTSP client..."
@@ -124,7 +117,6 @@ case "$1" in
 
         start_sound || true
         configure_localdev || true
-        configure_printer || true
 
         $log_end_msg 0
 
