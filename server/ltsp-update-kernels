@@ -36,17 +36,6 @@ for TFTPDIR in $TFTPDIRS ; do
                 mkdir -p $TFTPBOOT/$CHROOT_NAME
                 cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
             fi
-    
-            if [ -f $CHROOT/boot/yaboot ]; then
-                if [ -f $CHROOT/boot/yaboot.conf ]; then
-                    # yaboot requires the files in a specific location,
-                    # link them so they appear there.
-                    ln -s $TFTPBOOT/$CHROOT/boot/yaboot $TFTPDIR
-                    ln -s $TFTPBOOT/$CHROOT/boot/yaboot.conf $TFTPDIR
-                else
-                    echo "WARNING: yaboot present but not configured."
-                fi
-            fi  
         else
             # not a valid chroot
             echo "Skipping invalid chroot: $CHROOT"
