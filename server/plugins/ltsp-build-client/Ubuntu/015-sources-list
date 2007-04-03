@@ -8,8 +8,7 @@ case "$MODE" in
         fi
         ;;
     after-install)
-        if [ -n ${COPY_SOURCES_LIST} ]; then
+        if [ -n "$COPY_SOURCES_LIST" ]; then
             cp /etc/apt/sources.list $ROOT/etc/apt/sources.list
-            
         fi
 esac
