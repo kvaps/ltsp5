@@ -72,22 +72,24 @@ start_sound() {
 }
 
 configure_localdev() {
-    if get_boolean "$LOCALDEV" ; then
-        if [ ! -d /var/run/drives ];then
-            mkdir /var/run/drives
-        fi
-        /usr/bin/ltspfsd -a
-        # cdrom devices are handled by the cdpingerponger
-        /usr/sbin/cdpinger cdrom # default for usb cdroms
+    if [ -z "$(pidof ltspfsd)" ]; then
+        if get_boolean "$LOCALDEV" ; then
+            if [ ! -d /var/run/drives ];then
+                mkdir /var/run/drives
+            fi
+            /usr/bin/ltspfsd -a
+            # cdrom devices are handled by the cdpingerponger
+            /usr/sbin/cdpinger cdrom # default for usb cdroms
  
-        # and start one for every additional cdrom device
-        if [ -L /dev/cdrom?* ];then
-            for CDDEV in $(ls /dev/cdrom?*); do
-                /usr/sbin/cdpinger $(basename ${CDDEV})
-            done
+            # and start one for every additional cdrom device
+            if [ -L /dev/cdrom?* ];then
+                for CDDEV in $(ls /dev/cdrom?*); do
+                    /usr/sbin/cdpinger $(basename ${CDDEV})
+                done
+            fi
+            # handle already plugged devices on login
+            /usr/sbin/delayed_mounter
         fi
-        # handle already plugged devices on login
-        /usr/sbin/delayed_mounter
     fi
 }
 
