@@ -1,3 +1,16 @@
+ltsp (5.0.6) feisty; urgency=low
+
+  * move printing back, doesnt gain us anything
+  * make sure the localdev scritps dont start new instaces with every ldm 
+    restart on logout
+  * fix quoting in sources.list plugin
+  * change package selection to not install *all* fonts, we only need the 
+    ones ldm uses (should help massively with bug #97456)
+  * fix yaboot linking in ltsp-update-kernels (closes LP #101927)
+
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  3 Apr 2007 15:49:04 +0200
+
 ltsp (5.0.5) feisty; urgency=low
 
   * move printserver startup, localdev helperscripts and soundserver 
