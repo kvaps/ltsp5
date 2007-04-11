@@ -1,3 +1,10 @@
+ltsp (5.0.7) feisty; urgency=low
+
+  * cosmetical fix, make sure we switch to vt 7 between usplash end
+    and ldm start to prevent tty1 flashing in on slow thin clients
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 10 Apr 2007 15:22:20 +0200
+
 ltsp (5.0.6) feisty; urgency=low
 
   * move printing back, doesnt gain us anything
