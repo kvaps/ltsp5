@@ -101,6 +101,7 @@ case "$1" in
         if pidof usplash > /dev/null; then
             usplash=:
             orig_console="$(fgconsole)"
+            chvt 7 # avoid tty1 flashing before switching to X
             /etc/init.d/usplash start
             # We've just shut down usplash, so don't log success as it will
             # look weird on the console.
