@@ -17,7 +17,7 @@ Description: Basic LTSP server environment
  point the clients to the LTSP server.
 
 Package: ltsp-server-standalone
-Depends: ltsp-server, dhcp3-server
+Depends: ltsp-server, dhcp3-server, ltspfs
 Architecture: all
 Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
