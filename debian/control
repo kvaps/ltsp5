@@ -10,6 +10,7 @@ Package: ltsp-server
 Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | atftpd, openssh-client | ssh, iproute, debconf-utils, esound-clients | nas-bin, python (>= 2.4), openbsd-inetd | inet-superserver, update-inetd, tcpd, gettext-base
 Recommends: openssh-server | ssh, nbd-server
 Suggests: dhcp3-server, sdm, audiooss
+Conflicts: ltsp-utils
 Architecture: all
 Description: Basic LTSP server environment
  This is the basic environment depending on an external DHCP server to
