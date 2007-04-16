@@ -1,0 +1,19 @@
+taken from: http://wiki.debian.org/LTSP/FAQ
+
+Can i use the ltsp-utils package with ltsp-server(-standalone)? (as of 11.04.2007 / Debian Etch)
+
+No, the ltsp-utils package is from LTSP version 4 and the ltsp-server(-standalone) is version 5.
+
+If I specify SCREEN_01 trhough 06 in lts.conf (/opt/ltsp/i386/etc/lts.conf) my keyboard doesn't work.
+
+SCREEN_01 trough 06 conflict with inittab. Comment out the 1 to 6 in inittab or do not use SCREEN_01 to SCREEN_06.
+
+Where do i get more informations on LTSP 5 MueKow?
+
+[WWW] http://wiki.ltsp.org/twiki/bin/view/Ltsp/MueKow - no deeper informations but only primary goals (as of 11.04.2007).
+
+note that the MueKow experiments evolved into LTSP5: [WWW] http://wiki.ltsp.org/twiki/bin/view/Ltsp/Ltsp5
+
+LOCAL_STORAGE in lts.conf doesn't work
+
+In LTSP 5 it's called LOCALDEV. See also: LTSP/Upgrading_4.2 
