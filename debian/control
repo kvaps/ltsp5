@@ -55,7 +55,7 @@ Section: debian-installer
 XC-Package-Type: udeb
 Architecture: all
 Depends: ${misc:Depends}, ${shlibs:Depends}, pkgsel
-XB-Installer-Menu-Item: 70
+XB-Installer-Menu-Item: 7000
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 
  while the cdrom is still mounted.
