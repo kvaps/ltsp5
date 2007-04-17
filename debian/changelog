@@ -9,6 +9,8 @@ ltsp (0.99debian12) unstable; urgency=low
     - automatically include lts.conf in bug reports
     - add next-server to dhcpd.conf (Closes: #416868)
       thanks to Martin Chase for the report
+    - early /var/lock and /var/run handling from Gustavo Franco 
+      (Closes: #416673)
 
   * ltsp-server-standalone:
     - added dependencies on ltspfs, nbd-server, openssh-server
@@ -22,7 +24,9 @@ ltsp (0.99debian12) unstable; urgency=low
   * ltsp-client:
     - make it possible to disable remote syslogging
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 16 Apr 2007 16:18:00 -0600
+  * add dutch debconf translation from cobaco (Closes: #418395)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 16 Apr 2007 20:22:32 -0600
 
 ltsp (0.99debian11) unstable; urgency=medium
 
