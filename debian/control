@@ -10,13 +10,14 @@ Package: ltsp-server
 Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | atftpd, openssh-client | ssh, iproute, debconf-utils, esound-clients | nas-bin, python (>= 2.4), openbsd-inetd | inet-superserver, update-inetd, tcpd, gettext-base
 Recommends: openssh-server | ssh, nbd-server
 Suggests: dhcp3-server, sdm, audiooss
+Conflicts: ltsp-utils
 Architecture: all
 Description: Basic LTSP server environment
  This is the basic environment depending on an external DHCP server to
  point the clients to the LTSP server.
 
 Package: ltsp-server-standalone
-Depends: ltsp-server, dhcp3-server
+Depends: ltsp-server, dhcp3-server, ltspfs, openssh-server, nbd-server
 Architecture: all
 Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
@@ -54,7 +55,7 @@ Section: debian-installer
 XC-Package-Type: udeb
 Architecture: all
 Depends: ${misc:Depends}, ${shlibs:Depends}, pkgsel
-XB-Installer-Menu-Item: 70
+XB-Installer-Menu-Item: 7000
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 
  while the cdrom is still mounted.

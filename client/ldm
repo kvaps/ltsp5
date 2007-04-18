@@ -159,7 +159,7 @@ class LDM:
 
             # make sure we clean up after logout if localdev is used
             if self.use_localdev:
-                session_manager = session_manager+' && ltspfsmounter all cleanup'
+                session_manager = session_manager+' && /usr/sbin/ltspfsmounter all cleanup'
                 print "info: Enabling localdev support."
                 if os.access("/var/run/.static-device", os.F_OK):
                     print "info: Enabling static localdev support."

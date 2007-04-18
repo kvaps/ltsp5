@@ -5,4 +5,8 @@ for chroot in $(find /opt/ltsp/ -mindepth 1 -maxdepth 1 -type d) ; do
         echo "packages in chroot: $chroot" >&3
         COLUMNS=120 dpkg --root=$chroot -l ltsp-client ldm initramfs-tools | egrep 'ltsp-client|ldm|initramfs-tools' >&3
     fi
+    if [ -f $chroot/etc/lts.conf ]; then
+        echo "lts.conf from chroot: $chroot" >&3
+        cat $chroot/etc/lts.conf >&3
+    fi
 done

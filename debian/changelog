@@ -1,3 +1,33 @@
+ltsp (0.99debian12) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * ltsp-server:
+    - install FAQ and Upgrading_4.2 to docs (Closes: #418143, #417667)
+    - conflict with ltsp-utils (Closes: #413316)
+    - add klogd and sysklogd to whitelisted services, which fixes remote
+      syslog (Closes: #410485)
+    - automatically include lts.conf in bug reports
+    - add next-server to dhcpd.conf (Closes: #416868)
+      thanks to Martin Chase for the report
+    - early /var/lock and /var/run handling from Gustavo Franco 
+      (Closes: #416673)
+
+  * ltsp-server-standalone:
+    - added dependencies on ltspfs, nbd-server, openssh-server
+
+  * ldm:
+    - call ltspfsmounter with full path (Closes: #416684)
+
+  * ltsp-client-builder:
+    - multiply menu item by 100 (Closes: #418612)
+
+  * ltsp-client:
+    - make it possible to disable remote syslogging
+
+  * add dutch debconf translation from cobaco (Closes: #418395)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 16 Apr 2007 20:22:32 -0600
+
 ltsp (0.99debian11) unstable; urgency=medium
 
   * urgency medium, as it fixes an RC bug and important bugs
