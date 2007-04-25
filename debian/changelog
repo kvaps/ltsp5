@@ -1,3 +1,9 @@
+ltsp (5.0.8) feisty-proposed; urgency=low
+
+  * add fixed ltsp-sound session script to fix LP bug #105709 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 25 Apr 2007 17:12:16 +0200
+
 ltsp (5.0.7) feisty; urgency=low
 
   * cosmetical fix, make sure we switch to vt 7 between usplash end
