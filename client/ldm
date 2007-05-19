@@ -194,7 +194,7 @@ class LDM:
                                   ';',
                                   'kill -1 $PPID']
 
-            if 'NETWORK_COMPRESSION' in os.environ:
+            if get_config_bool('NETWORK_COMPRESSION'):
                 ssh_opts.append('-C')
             
             command = ['ssh'] + ssh_opts + ssh_auth + ssh_remote_command
