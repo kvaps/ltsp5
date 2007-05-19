@@ -1,0 +1,21 @@
+taken from: http://wiki.debian.org/LTSP/Upgrading_4.2
+
+Upgrading from LTSP 4.2
+
+there are some differences between LTSP 4.2 and the LTSP5 implementation in debian.
+
+you may want to move your LTSP 4.2 installs aside to /opt/ltsp-4.2 so that you can easily switch back if needed.
+
+there is no lts.conf by default. it is only needed if you need to change defaults.
+
+lts.conf:
+
+LOCAL_STORAGE has been renamed LOCALDEV
+
+configuring by hostname is broken due to [WWW] http://bugs.debian.org/406366
+
+SCREEN_01 through SCREEN_06 should not be used, unless conflicting entries in /opt/ltsp/ARCH/etc/inittab are disabled.
+
+ltspfs:
+
+drives are now mounted at /media/USERNAME

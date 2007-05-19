@@ -34,7 +34,7 @@ case "$MODE" in
                    esac
                    ;;
                amd64)
-                   KERNEL_ARCH="amd64-generic"
+                   KERNEL_ARCH="amd64"
                    ;;
                sparc) 
                    KERNEL_ARCH="$(uname -m)"

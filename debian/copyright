@@ -10,7 +10,7 @@ bzr get http://bazaar.lauchpad.net/~ogra/ltsp-mainline
 
 The source tree for Debian packages can be downloaded using bzr:
 
-bzr get http://pkg-ltsp.alioth.debian.org/bzr/main
+bzr get http://bzr.debian.org/bzr/pkg-ltsp/main
 
 The original LTSP sources can be downloaded from: http://ltsp.org
 

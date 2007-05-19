@@ -81,7 +81,7 @@ msgstr ""
 msgid "There were multiple spare interfaces found in this system."
 msgstr ""
 
-#. Type: note
+#. Type: error
 #. Description
 #: ../ltsp-client.templates:1001
 msgid "Installation aborted "

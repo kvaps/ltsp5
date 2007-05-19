@@ -36,7 +36,7 @@ load_modules() {
 }
 
 configure_localdev() {
-    if get_boolean "$LOCALDEV" ; then
+    if boolean_is_true "$LOCALDEV" ; then
         if [ ! -d /var/run/drives ];then
             mkdir /var/run/drives
         fi
@@ -62,19 +62,20 @@ configure_console() {
 }
 
 configure_swap() {
-    if  get_boolean "$USE_LOCAL_SWAP" ; then
+    if boolean_is_true "$USE_LOCAL_SWAP" ; then
         # Enable local swap partition if found on local disk
         for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
             swap_devices="$swap_devices $part"
         done
     fi
-    if get_boolean "$NBD_SWAP" ; then
+
+    if boolean_is_true "$NBD_SWAP" ; then
         SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
-        NBD_PORT=${NBD_PORT:-"9572"}
+        NBD_PORT=${NBD_PORT:-"9210"}
         modprobe nbd
-        /sbin/nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
+        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
     fi
-    if get_boolean "$ENCRYPT_SWAP" ; then
+    if boolean_is_true "$ENCRYPT_SWAP" ; then
         if [ -x /sbin/cryptsetup ]; then
             modprobe dm_crypt
         else
@@ -85,7 +86,7 @@ configure_swap() {
     num=0
     for device in $swap_devices ; do
         swap="$device"
-        if get_boolean "$ENCRYPT_SWAP" ; then
+        if boolean_is_true "$ENCRYPT_SWAP" ; then
             if [ -x /sbin/cryptsetup ]; then
                 cryptsetup -d /dev/urandom create swap$num $swap && swap="/dev/mapper/swap$num"
                 num=$(($num+1))
@@ -129,9 +130,11 @@ configure_printer() {
 }
 
 configure_syslog() {
-    cat <<EOF > /etc/syslog.conf
+    if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
+        cat <<EOF > /etc/syslog.conf
 *.* @${SYSLOG_HOST-$SERVER}
 EOF
+    fi
 }
 
 configure_fstab() {
@@ -210,6 +213,14 @@ configure_x() {
       # set video ram
       if [ -n "$X_VIDEO_RAM" ]; then
         preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
+      fi
+
+      # set compatbility for X_VIDEORAM with ltsp 4.x
+      X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
+
+      # set video ram
+      if [ -n "$X_VIDEO_RAM" ]; then
+        preseed $xserver_package $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
       fi
 
       # Mouse preseeding options.  Use inputattach if available

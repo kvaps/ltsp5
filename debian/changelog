@@ -587,6 +587,83 @@ ltsp (0.100) edgy; urgency=low
 
  -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 00:25:51 +0200
 
+ltsp (0.99debian12) unstable; urgency=low
+
+  [ Vagrant Cascadian ]
+  * ltsp-server:
+    - install FAQ and Upgrading_4.2 to docs (Closes: #418143, #417667)
+    - conflict with ltsp-utils (Closes: #413316)
+    - add klogd and sysklogd to whitelisted services, which fixes remote
+      syslog (Closes: #410485)
+    - automatically include lts.conf in bug reports
+    - add next-server to dhcpd.conf (Closes: #416868)
+      thanks to Martin Chase for the report
+    - early /var/lock and /var/run handling from Gustavo Franco 
+      (Closes: #416673)
+
+  * ltsp-server-standalone:
+    - added dependencies on ltspfs, nbd-server, openssh-server
+
+  * ldm:
+    - call ltspfsmounter with full path (Closes: #416684)
+
+  * ltsp-client-builder:
+    - multiply menu item by 100 (Closes: #418612)
+
+  * ltsp-client:
+    - make it possible to disable remote syslogging
+
+  * add dutch debconf translation from cobaco (Closes: #418395)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 16 Apr 2007 20:22:32 -0600
+
+ltsp (0.99debian11) unstable; urgency=medium
+
+  * urgency medium, as it fixes an RC bug and important bugs
+  * install appropriate linux-image package for amd64. thanks to Damyan
+    Ivanov. (Closes: #406357)
+  * fixes to boolean handling (Closes: #405772)
+  * drop dependency on initrd-netboot-tools as it was removed from Debian.
+    (initramfs-tools is preferred anyways)
+  * updated location of pkg-ltsp bzr repository
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 11 Jan 2007 00:38:01 -0700
+
+ltsp (0.99debian10) unstable; urgency=medium
+
+  * priority medium to get the updated translation into etch faster.
+  * added spanish gettext translation. thanks to Felipe Caminos and Hector
+    Colina. (Closes: #404404)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 24 Dec 2006 09:36:43 -0700
+
+ltsp (0.99debian9) unstable; urgency=medium
+
+  * urgency medium, it includes it fixes several important bugs:
+  * fix ldm's boolean handling. thanks to Miro Zhorelicky for the patch.
+    (Closes: #403471)
+  * also mount /etc/network/run writeable for proper lo device configuration.
+    (Closes: #403187)
+  * fix execution of screen scripts in /etc/ltsp/screen.d (Closes: #403188)
+  * install xorg instead of x-window-system-core transitional package in new
+    LTSP chroot environments. (Closes: #403234)
+  * updated local devices support. (Closes: #404154)
+
+  * updated French gettext message. thanks to Cyril Brulebois.
+  * updated gettext messages for Brazilian Portuguese.  (Closes: #403815)
+    thanks to André Luís Lopes.
+
+  * added Spanish debconf translations (Closes: #403604). thanks to Felipe
+    Caminos.
+  * added German debconf and gettext messages (Closes: #403568, #403597).
+    thanks to Wolfgang Schweer.
+  * added gettext translation for Catalan (Closes: #404064). thanks to Jordà
+    Polo.
+
+  * updated documentation for ltsp-build-client plugins.
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 22 Dec 2006 14:58:18 -0700
+
 ltsp (0.99debian8) unstable; urgency=low
 
   [Vagrant Cascadian]
@@ -932,26 +1009,6 @@ ltsp (0.89) edgy; urgency=low
 
  -- Oliver Grawert <ogra@ubuntu.com>  Fri, 14 Jul 2006 21:13:46 +0200
 
-ltsp (0.88debian1) UNRELEASED; urgency=low
-
-  [ Otavio Salvador ]
-  * Merge changes did by Ubuntu but debian/control since it's very Ubuntu
-    specific.
-    - Fix problem with gettext use. (Closes: #375601)
-
-  [ Tiago Bortoletto Vaz ]
-  * Add a correct i18n support for this package, using a specific Makefile
-    to handle gettext
-  * Fix ltsp-build-client script to get gettext message catalogs from locale
-    dir
-
-  [ Otavio Salvador ]
-  * Simplified debian/rules a little more removing the useless update-po
-    target. Since all its logic was move to po/Makefile file we can make
-    things clear removing it from rules.
-
- -- Otavio Salvador <otavio@debian.org>  Thu, 29 Jun 2006 03:07:24 -0300
-  
 ltsp (0.88) edgy; urgency=low
 
   * merged debian modularization into upstream branch
