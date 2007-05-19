@@ -26,12 +26,6 @@ case $MODE in
             export LANG=$(echo "$LOCALE" | awk '{print $1}')
             echo "$LOCALE" >> $ROOT/etc/locale.gen
             echo "LANG=$LANG" >> $ROOT/etc/default/locale
-            if [ "$DIST" = "sarge" ]; then
-                if [ -f /etc/environment ]; then
-                    cp /etc/environment $ROOT/etc/
-                fi
-                echo "LANG=$LANG" >> $ROOT/etc/environment
-            fi
         fi
 
         if [ -f $ROOT/etc/locale.gen ] && [ -x $ROOT/usr/sbin/locale-gen ] ; then
