@@ -5,9 +5,6 @@ case "$MODE" in
                 echo "`eval_gettext "NOTE: disabling security APT source for sid.  It does not exist."`"
                 SECURITY_MIRROR=none
                 ;;
-            sarge)
-                EARLY_PACKAGES="$EARLY_PACKAGES udhcpc devfsd"
-                ;;
         esac
         ;;
 esac
