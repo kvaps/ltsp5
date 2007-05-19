@@ -352,7 +352,7 @@ ltsp (0.110) edgy; urgency=low
  -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 20:07:38 +0200
 
 ltsp (0.109) edgy; urgency=low
- .
+
     * make etherboot work automagically
 
  -- Oliver Grawert <ogra@ubuntu.com>  Tue, 19 Sep 2006 16:00:54 +0200
