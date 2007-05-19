@@ -1,6 +1,0 @@
-case "$MODE" in
-    after-install)
-	    # make sure this is really writeable after bind mounting it
-        touch $ROOT/etc/nbd-client
-        ;;
-esac

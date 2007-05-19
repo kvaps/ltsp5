@@ -41,7 +41,22 @@ start_sound() {
 		    warn "Sound requested but /dev/dsp is missing.  Continuing."
 		fi
 		case "$SOUND_DAEMON" in
-    	    esd|'') # The default when no value is set
+            pulse|'') # The default when no value is set
+                /usr/bin/pulseaudio --system \
+                --disable-shm \
+                --no-cpu-limit \
+                --resample-method=trivial \
+                --log-target=syslog \
+                --high-priority \
+                -L module-detect \
+			    -L "module-esound-protocol-tcp auth-anonymous=1" \
+			    -L "module-native-protocol-tcp auth-anonymous=1" \
+			    -L module-volume-restore \
+			    -L module-rescue-streams \
+			    -L module-native-protocol-unix \
+			    -n &
+                ;;
+    	    esd) 
     	        /usr/bin/esd -nobeeps -public -tcp &
     	        ;;
     	    nasd)
@@ -56,25 +71,68 @@ start_sound() {
     fi
 }
 
+configure_localdev() {
+    if [ -z "$(pidof ltspfsd)" ]; then
+        if get_boolean "$LOCALDEV" ; then
+            if [ ! -d /var/run/drives ];then
+                mkdir /var/run/drives
+            fi
+            /usr/bin/ltspfsd -a
+            # cdrom devices are handled by the cdpingerponger
+            /usr/sbin/cdpinger cdrom # default for usb cdroms
+ 
+            # and start one for every additional cdrom device
+            if [ -L /dev/cdrom?* ];then
+                for CDDEV in $(ls /dev/cdrom?*); do
+                    /usr/sbin/cdpinger $(basename ${CDDEV})
+                done
+            fi
+            # handle already plugged devices on login
+            /usr/sbin/delayed_mounter
+        fi
+    fi
+}
+
 case "$1" in
   start)
-  # if usplash is runing, make sure to stop it now 
-  # (yes "start" is the right arg to do it ... even it looks silly)
-  		if pidof usplash > /dev/null; then
-            chvt -t 7
-            /etc/init.d/usplash start
-		fi
         log_begin_msg "Starting LTSP client..."
-
-        start_sound || true
+        # if usplash is running, make sure to stop it now 
+        # (yes "start" is the right arg to do it ... even it looks silly)
+        if pidof usplash > /dev/null; then
+            usplash=:
+            orig_console="$(fgconsole)"
+            chvt 7 # avoid tty1 flashing before switching to X
+            /etc/init.d/usplash start
+            # We've just shut down usplash, so don't log success as it will
+            # look weird on the console.
+            log_end_msg=:
+        else
+            usplash=false
+            log_end_msg=log_end_msg
+        fi
 
         for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
             num=${screen##SCREEN_}
             start-stop-daemon --start -b --exec /usr/lib/ltsp/screen_session -- "$num"
         done
-        
 
-        log_end_msg 0
+        start_sound || true
+        configure_localdev || true
+
+        $log_end_msg 0
+
+        if $usplash && [ "$orig_console" != serial ]; then
+            # Wait a short while for the active console to change, to try to
+            # avoid visible console noise from later init scripts.
+            i=0
+            while [ "$(fgconsole)" = "$orig_console" ]; do
+                i="$(($i + 1))"
+                if [ "$i" -gt 5 ]; then
+                    break
+                fi
+                sleep 1
+            done
+        fi
 	;;
   stop)
 #	echo -n "Stopping $DESC: $NAME"

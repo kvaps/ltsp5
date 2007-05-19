@@ -9,7 +9,7 @@ case "$MODE" in
         ;;
     finalization)
         if [ "true" != "$KEEP_PACKAGES" ]; then
-            LC_ALL=C chroot $ROOT apt-get clean
+            chroot $ROOT apt-get clean
         fi
         ;;
 esac

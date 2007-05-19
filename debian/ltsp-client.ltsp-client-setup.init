@@ -30,8 +30,8 @@ test -f /etc/ltsp_chroot || exit 0
 test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
 
 load_modules() {
-    for module in $(env | awk -F= '$1 ~ /^MODULE_/ { print $2 }'); do
-        modprobe $module
+    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/);do
+        modprobe $(echo $module|tr "*" " ")
     done
 }
 
@@ -57,24 +57,24 @@ configure_localdev() {
 
 configure_console() {
     if [ -n "$CONSOLE_KEYMAP" ]; then
-        loadkeys "$CONSOLE_KEYMAP"
+        ckbcomp -model pc105 "$CONSOLE_KEYMAP" | loadkeys
     fi
 }
 
 configure_swap() {
-    if [ "$USE_LOCAL_SWAP" = "Y" ]; then
+    if  get_boolean "$USE_LOCAL_SWAP" ; then
         # Enable local swap partition if found on local disk
         for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
             swap_devices="$swap_devices $part"
         done
     fi
-    if [ "$NBD_SWAP" = "Y" ]; then
+    if get_boolean "$NBD_SWAP" ; then
         SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
-        NBD_PORT=${NBD_PORT:-"9210"}
+        NBD_PORT=${NBD_PORT:-"9572"}
         modprobe nbd
-        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
+        /sbin/nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
     fi
-    if [ "$ENCRYPT_SWAP" = "Y" ]; then
+    if get_boolean "$ENCRYPT_SWAP" ; then
         if [ -x /sbin/cryptsetup ]; then
             modprobe dm_crypt
         else
@@ -85,7 +85,7 @@ configure_swap() {
     num=0
     for device in $swap_devices ; do
         swap="$device"
-        if [ "$ENCRYPT_SWAP" = "Y" ]; then
+        if get_boolean "$ENCRYPT_SWAP" ; then
             if [ -x /sbin/cryptsetup ]; then
                 cryptsetup -d /dev/urandom create swap$num $swap && swap="/dev/mapper/swap$num"
                 num=$(($num+1))
@@ -121,17 +121,11 @@ EOF
     fi
 }
 
-configure_network() {
-    cat <<EOF > /etc/network/interfaces
-auto lo
-iface lo inet loopback
-EOF
-}
-
 configure_printer() {
-    if [ -n "$PRINTER_0_DEVICE" ]; then
-        /usr/lib/ltsp/start_printer 0 &
-    fi
+    for prn_dev in $(env | awk -F= '$1 ~ /^PRINTER_[0-9]_DEVICE/ { print $1 }'); do
+        prn_no=`echo $prn_dev | cut -f2 -d'_'`
+        /usr/lib/ltsp/start_printer $prn_no &
+    done
 }
 
 configure_syslog() {
@@ -146,14 +140,19 @@ configure_fstab() {
   mount /tmp
 }
 
+# muzso: preseed() has been modified to only collect commands in a variable
+#        and does not pipe them instantly to debconf-communicate
+#        We do this at the end in one batch.
 preseed() {
-    package="$1"
-    question="$2"
-    value="$3"
+    question="$1"
+    value="$2"
 
     if [ -n "$value" ]; then
-        echo "set $question $value" | debconf-communicate $package
-        echo "fset $question seen true" | debconf-communicate $package
+        if [ -n "$debconf_commands" ]; then
+          debconf_commands="${debconf_commands}\n"
+        fi
+        debconf_commands="${debconf_commands}set $question $value"
+        debconf_commands="${debconf_commands}\nfset $question seen true"
     fi
 }
 
@@ -184,25 +183,25 @@ configure_x() {
       fi
       # Handle overrides of specific parameters
       if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
-        preseed $xserver_package $xserver_package/autodetect_video_card "false"
-        preseed $xserver_package $xserver_package/config/device/driver "$XSERVER"
+        preseed $xserver_package/autodetect_video_card "false"
+        preseed $xserver_package/config/device/driver "$XSERVER"
       fi
       X_USE_SYNC_RANGES=${X_USE_SYNC_RANGES:-Y}
       if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
-        preseed $xserver_package $xserver_package/autodetect_monitor "false"
-        preseed $xserver_package $xserver_package/config/monitor/selection-method "Advanced"
-        preseed $xserver_package $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
-        preseed $xserver_package $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
+        preseed $xserver_package/autodetect_monitor "false"
+        preseed $xserver_package/config/monitor/selection-method "Advanced"
+        preseed $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
+        preseed $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
         if [ Y = "$X_USE_SYNC_RANGES" ]; then
-            preseed $xserver_package $xserver_package/config/monitor/use_sync_ranges "true"
+            preseed $xserver_package/config/monitor/use_sync_ranges "true"
         else
-            preseed $xserver_package $xserver_package/config/monitor/use_sync_ranges "false"
+            preseed $xserver_package/config/monitor/use_sync_ranges "false"
         fi
       fi
 
       # Color depth preseeding
       if [ -n "$X_COLOR_DEPTH" ]; then
-        preseed $xserver_package $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+        preseed $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
       fi
 
       # set compatbility for X_VIDEORAM with ltsp 4.x
@@ -210,7 +209,7 @@ configure_x() {
 
       # set video ram
       if [ -n "$X_VIDEO_RAM" ]; then
-        preseed $xserver_package $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
+        preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
       fi
 
       # Mouse preseeding options.  Use inputattach if available
@@ -221,19 +220,19 @@ configure_x() {
           inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
       else
         if [ -n "$X_MOUSE_DEVICE" ]; then 
-          preseed $xserver_package $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
+          preseed $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
         fi
         if [ -n "$X_MOUSE_PROTOCOL" ]; then 
-          preseed $xserver_package $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
+          preseed $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
         fi
       fi
       if [ -n "$X_MOUSE_EMULATE3BTN" ]; then
-        preseed $xserver_package $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+        preseed $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
       fi
 
       X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
       if [ -n "$X_MODE" ]; then
-	    preseed $xserver_package $xserver_package/config/display/modes "$X_MODE"
+	    preseed $xserver_package/config/display/modes "$X_MODE"
       fi
 
       # This require fontserver preseeding to work (Debian bug
@@ -244,25 +243,30 @@ configure_x() {
         if [ -z "${XFS_SERVER}" ] ; then
           XFS_SERVER="${SERVER}"
         fi
-        preseed $xserver_package $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
+        preseed $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
       fi
 
       # Make sure xkb values only get preseeded if the variables are actually set
       # (saves boottime to not call debconf-communicate on every empty value)
       if [ -n "$XKBLAYOUT" ]; then
-        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+        preseed $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
       fi
       if [ -n "$XKBMODEL" ]; then
-        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
+        preseed $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
       fi
       if [ -n "$XKBRULES" ]; then
-        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
+        preseed $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
       fi
       if [ -n "$XKBOPTIONS" ]; then
-        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
+        preseed $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
       fi
       if [ -n "$XKBVARIANT" ]; then
-        preseed $xserver_package $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+        preseed $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+      fi
+
+      # muzso: saving "preseeded" values
+      if [ -n "$debconf_commands" ]; then
+        echo $debconf_commands | debconf-communicate $xserver_package
       fi
 
       # Autoconfigure using dexconf when using xdebconfigurator, or X
@@ -342,14 +346,12 @@ case "$1" in
         fi
         load_modules || true
         configure_console || true
-        configure_network || true
         configure_resolver || true
         configure_swap || true
         configure_syslog || true
         configure_fstab || true
         run_rcfiles || true
         configure_x || true
-        configure_localdev ||true
         configure_printer || true
 
 	if [ "$root_write_method" = "bind_mounts" ]; then

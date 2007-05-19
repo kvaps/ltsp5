@@ -1,3 +1,4 @@
 debian/doc/swap
 debian/doc/workstation
 server/doc/plugins
+server/doc/QuickInstall

@@ -1,0 +1,59 @@
+case "$MODE" in
+    commandline)
+        # add a commandline switch to ltsp-build-client (advanced "false" means 
+        # we dont expect any value, callig --kiosk is enough, we could enhance
+        # the plugin to use --kiosk kde for example to install kdm and konqueror
+        # instead if we'd set it to true
+        add_option "kiosk" "`eval_gettext "a simple webkiosk mode."`" "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_kiosk_value" ]; then
+            # set an environment variable we can pick up later
+            KIOSK="True"
+        fi
+        ;;
+    after-install)
+        if [ -n "$KIOSK" ]; then
+            # install the webbrowser and a display manager that 
+            # is capable to do a timed autologin in the client environment
+            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox feisty-gdm-themes firefox-themes-ubuntu human-gtk-theme
+
+            # make the necessary directories writeable to the booted client
+            echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
+            echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> $ROOT/etc/default/ltsp-client-setup
+
+            # create a kiosk user
+            chroot $ROOT adduser --disabled-password --gecos ,,, kiosk
+
+            # create a default xsession for that user
+            echo "#!/bin/sh" > $ROOT/home/kiosk/.xsession
+            # including sound
+            echo "pulseaudio -L module-detect -L module-rescue-streams -L module-native-protocol-unix -L module-volume-restore -n &" >> $ROOT/home/kiosk/.xsession
+            # make sure we have a wm
+            echo "metacity &" >> $ROOT/home/kiosk/.xsession
+            echo "/usr/bin/firefox --fullscreen" >> $ROOT/home/kiosk/.xsession
+
+            # switch to the proper theme 
+            echo "include \"/usr/share/themes/Human/gtk-2.0/gtkrc\"" >$ROOT/home/kiosk/.gtkrc-2.0
+
+            # create a custom configuration for gdm
+            cp $ROOT/etc/gdm/gdm.conf $ROOT/etc/gdm/gdm-kiosk.conf
+            
+            # do some sed magic to enable autologin
+            sed -i s/AutomaticLoginEnable=false/AutomaticLoginEnable=true/ $ROOT/etc/gdm/gdm-kiosk.conf
+            sed -i s/AutomaticLogin=/AutomaticLogin=kiosk/ $ROOT/etc/gdm/gdm-kiosk.conf
+            sed -i s/TimedLoginEnable=false/TimedLoginEnable=true/ $ROOT/etc/gdm/gdm-kiosk.conf
+            sed -i s/TimedLogin=/TimedLogin=kiosk/ $ROOT/etc/gdm/gdm-kiosk.conf
+            sed -i s/TimedLoginDelay=30/TimedLoginDelay=5/ $ROOT/etc/gdm/gdm-kiosk.conf
+
+            # set the new alternative we created as default config
+            chroot $ROOT update-alternatives --install /etc/gdm/gdm-cdd.conf gdm-config-derivative /etc/gdm/gdm-kiosk.conf 55
+        fi
+        ;;
+    finalization)
+        # make sure gdm actually starts
+        if [ -e $ROOT/etc/init.d/gdm ]; then
+            chroot $ROOT mv /etc/rc2.d/K13gdm /etc/rc2.d/S13gdm
+        fi
+esac
+

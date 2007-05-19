@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: ltsp-server
 Priority: extra
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, openssh-client | ssh, openbsd-inetd, iproute, debconf-utils, esound-clients, python (>= 2.4), nbd-server, update-inetd, tcpd, gettext-base
+Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, openssh-client | ssh, openbsd-inetd, iproute, debconf-utils, python (>= 2.4), nbd-server, update-inetd, tcpd, gettext-base
 Recommends: openssh-server | ssh, ltspfs
 Suggests: dhcp3-server, sdm, audiooss
 Architecture: all
@@ -16,7 +16,8 @@ Description: Basic LTSP server environment
  point the clients to the LTSP server.
 
 Package: ltsp-server-standalone
-Depends: ltsp-server, dhcp3-server
+Depends: ltsp-server, dhcp3-server, libasound2-plugins, libgstreamer-plugins-pulse0.10-0
+Recommends: pulseaudio-esound-compat
 Architecture: all
 Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
@@ -24,8 +25,8 @@ Description: Complete LTSP server environment
  
 Package: ltsp-client
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release 
-Recommends: ubuntu-thin-client, esound|nas, ltspfsd
+Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11) | initrd-netboot-tools, syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, pulseaudio-esound-compat, ltspfsd
+Recommends: ubuntu-thin-client, esound|nas|pulseaudio
 Suggests: cryptsetup, inputattach
 Conflicts: ltsp-utils
 Replaces: ltsp-utils

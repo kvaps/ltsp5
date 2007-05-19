@@ -1,3 +1,176 @@
+ltsp (5.0.8) feisty-proposed; urgency=low
+
+  * add fixed ltsp-sound session script to fix LP bug #105709 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 25 Apr 2007 17:12:16 +0200
+
+ltsp (5.0.7) feisty; urgency=low
+
+  * cosmetical fix, make sure we switch to vt 7 between usplash end
+    and ldm start to prevent tty1 flashing in on slow thin clients
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 10 Apr 2007 15:22:20 +0200
+
+ltsp (5.0.6) feisty; urgency=low
+
+  * move printing back, doesnt gain us anything
+  * make sure the localdev scritps dont start new instaces with every ldm 
+    restart on logout
+  * fix quoting in sources.list plugin
+  * change package selection to not install *all* fonts, we only need the 
+    ones ldm uses (should help massively with bug #97456)
+  * fix yaboot linking in ltsp-update-kernels (closes LP #101927)
+
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  3 Apr 2007 15:49:04 +0200
+
+ltsp (5.0.5) feisty; urgency=low
+
+  * move printserver startup, localdev helperscripts and soundserver 
+    startup after start of X to speed up booting (should partially 
+    help with LP #97456)
+  * add pulseaudio-esound-compat to ltsp-server-standalone recommends
+    (for people feeling the need to still use esddsp with apps)
+  * drop duplicated module-detect option from pulseaudio startup to 
+    avoid warning in client bootlogs
+  * drop duplicated touching of /etc/nbd-client from ltsp-build-client, 
+    we start nbd from the ltsp-client-setup initscript, no need for a 
+    second run.
+  * remove stray sleep(5) call in ldm for speedup (LP #97456)
+  * add --copy-sourceslist option to ltsp-build-client to reuse the servers 
+    sources.list with ltsp-buiuld-client (fixes LP #48601)
+  * move loopback device entry creation in /etc/network/interfaces to 
+    ltsp-build-client, fixes a race condition while bringing up lo
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  2 Apr 2007 11:39:50 +0200
+
+ltsp (5.0.4) feisty; urgency=low
+
+  * fix varoius documentation, malone bugs #94081 and #78927
+  * make sure the lp module is loaded on all thin clients, 
+    fixes malone #94086
+  * fix support for multiple printers (malone #93863)
+  * make sure we set SYSLOG to point to the server in
+    the default lts.conf
+  * move the theme setting of ldm to finalization sequence 
+    to make sure we not only have the usplash but also the 
+    right ldm theme
+  * fix the MODULE_nn option to take arguments for modules it 
+    loads (fixes handling of ISA soundcards)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 26 Mar 2007 13:52:06 +0200
+
+ltsp (5.0.3) feisty; urgency=low
+
+  * remove xorg keymap setting form locales plugin, it breaks in d-i 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 20 Mar 2007 15:35:11 +0100
+
+ltsp (5.0.2) feisty; urgency=low
+
+  * fix yaboot handling for tftp in ltsp-update-kernels, 
+  * allow kernel copying to an existing /tftpboot in ltsp-update-kernels 
+    (upstream requirement for upgrades from 4.2)
+  * add lts.conf option SSH_OVERRIDE_PORT for non standard ssh ports 
+    to use with ldm (closes malone #47744)
+  * fix pulse and ltspfs deps harder, 
+  * remove mount-proc from Vendor dir, it's used in the common plugins 
+    section already
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 15 Mar 2007 01:38:46 +0100
+
+ltsp (5.0.1) feisty; urgency=low
+
+  [Oliver Grawert]
+  * Version bump to 5.0.x
+  * locale handling fixes (malone #67387, #72626 and #82427)
+  * only create a link for /proc/fd if necessary (malone #90703)
+  * dont attempt to install to unclean targets, spill a warning instead
+    (maolne #71237)
+  * install a default lts.conf with sound, localdev and nbdswap enabled
+  * make sure /var/lib/nfs is writeable on thin clients
+  * add sound dependencies to ltsp-server-standalone (probably split that out
+    in a ltsp-sound metapackage later)
+  * improve handling of boolean variables in the initscript
+  * fix the remaining bits of x11 directory handling, we dont have xfree86 
+    anywhere anymore in ubuntu.
+  * fix typo in cjwatsons patch
+  * sanitize pulse option formatting
+  * make sure console-setup is in the rcS startup links
+  * drop stop-bootlogd and etc-setserial from startup link cleanup list
+    we have neither installed, if users want it, they also want the
+    initscripts.
+  * add pete savages reboot button fix to ldm
+  * add fix to speed up X autodetection by merging all debconf-communicate
+    calls into one. Thanks for the patch to Müller Zsolt <muzso@muzso.hu>
+  * revert the temporary switch to the -generic kernel on thin clients
+  * fix artwork handling in ldm and update themes
+
+  [Colin Watson]
+  * Log that we're starting up ldm before stopping usplash. If usplash was
+    running, don't bother logging successful startup, as it will look weird
+    on the console.
+  * If usplash was running, wait a short while for the active console to
+    change after starting up ldm, to try to avoid visible console noise from
+    later init scripts.
+  * Depend on kbd | console-tools for fgconsole.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 12 Mar 2007 13:38:48 +0000
+
+ltsp (0.134) feisty; urgency=low
+
+  *  enable the kiosk plugin (ltsp-build-client will accept the --kiosk
+     option now)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 13 Feb 2007 01:04:35 +0100
+
+ltsp (0.133) feisty; urgency=low
+
+  * final switch for pulseaudio support
+  * make sure the right usplash theme is installed
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 30 Jan 2007 16:40:18 +0100
+
+ltsp (0.132) feisty; urgency=low
+
+  * add pulse support and dependencies
+  * revert the herd2 quickfix 
+  * remove the broken security mirror line from ltsp-client-builder
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 17 Jan 2007 13:10:01 +0100
+
+ltsp (0.131) feisty; urgency=low
+
+  * temporary switch i386 to the -generic kernel image (this might break
+    on machines requiring the 486 codeset ...)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 11 Jan 2007 11:13:41 +0100
+
+ltsp (0.130) feisty; urgency=low
+
+  * quickfix for mirror handling on non networked systems to make herd2
+    installable 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 10 Jan 2007 23:35:57 +0100
+
+ltsp (0.129) feisty; urgency=low
+
+  * make sure we dont try to install the dropped 80_ltsp-sound file to avoid
+    FTBFS 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  5 Jan 2007 15:50:31 +0100
+
+ltsp (0.128) feisty; urgency=low
+
+  * merge jetpipe, the new printserver from
+    http://bazaar.launchpad.net/~ogra/ltsp/feisty-ltsp-jetpipe
+  * remove the session sound hack that wiped the gstreame DB on login 
+    (malone: #65690)
+  * merge boolean handling as well as configuration and documentation 
+    fixes from mainline
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  5 Jan 2007 14:02:17 +0100
+
 ltsp (0.127) feisty; urgency=low
 
   * Add dependency on openbsd-inetd
