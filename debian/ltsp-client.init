@@ -73,7 +73,7 @@ start_sound() {
 
 configure_localdev() {
     if [ -z "$(pidof ltspfsd)" ]; then
-        if get_boolean "$LOCALDEV" ; then
+        if boolean_is_true "$LOCALDEV" ; then
             if [ ! -d /var/run/drives ];then
                 mkdir /var/run/drives
             fi
