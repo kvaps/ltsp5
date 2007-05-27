@@ -201,14 +201,6 @@ configure_x() {
         preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
       fi
 
-      # set compatbility for X_VIDEORAM with ltsp 4.x
-      X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
-
-      # set video ram
-      if [ -n "$X_VIDEO_RAM" ]; then
-        preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
-      fi
-
       # Mouse preseeding options.  Use inputattach if available
       if [ -n "$X_MOUSE_DEVICE" ] && \
         [ -n "$X_MOUSE_PROTOCOL" ] && \
