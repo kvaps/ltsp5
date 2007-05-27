@@ -5,6 +5,7 @@ fi
 
 # set compatbility for ltsp 4.x variables
 X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
+LOCALDEV=${LOCALDEV:-"$LOCAL_STORAGE"}
 
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
