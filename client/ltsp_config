@@ -54,3 +54,10 @@ if [ -z "$SOUND_DAEMON" ]; then
         export SOUND=True
     fi
 fi  
+
+# set defaults for local device support
+if [ -z "$LOCALDEV" ]; then
+    if [ -x /usr/bin/ltspfsd ]; then
+        export LOCALDEV=True
+    fi
+fi
