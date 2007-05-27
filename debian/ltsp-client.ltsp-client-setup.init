@@ -220,7 +220,7 @@ configure_x() {
 
       # set video ram
       if [ -n "$X_VIDEO_RAM" ]; then
-        preseed $xserver_package $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
+        preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
       fi
 
       # Mouse preseeding options.  Use inputattach if available
