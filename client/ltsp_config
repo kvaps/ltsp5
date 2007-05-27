@@ -40,3 +40,17 @@ if ! env | grep -q '^SCREEN_'; then
         export SCREEN_07
     fi
 fi
+
+# set defaults for sound support
+if [ -z "$SOUND_DAEMON" ]; then
+    if [ -x /usr/bin/pulseaudio ]; then
+        export SOUND_DAEMON=pulse
+    elif [ -x /usr/bin/esd ]; then
+        export SOUND_DAEMON=esd
+    elif [ -x /usr/bin/nasd ]; then
+        export SOUND_DAEMON=nasd
+    fi
+    if [ -z "$SOUND" ] && [ -n "$SOUND_DAEMON" ]; then
+        export SOUND=True
+    fi
+fi  
