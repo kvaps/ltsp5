@@ -14,7 +14,11 @@ if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     export SERVER
 fi
 
-# Ensure a default screen
+if [ -z "$CONFIGURE_X" ] && [ -x /usr/bin/X ]; then
+    export CONFIGURE_X=True
+fi
+
+# Ensure a default screen if X is present
 if ! env | grep -q '^SCREEN_'; then
     if [ -f /etc/X11/default-display-manager ]; then
         default_display_manager="$(cat /etc/X11/default-display-manager)"
