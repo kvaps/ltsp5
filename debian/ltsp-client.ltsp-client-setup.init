@@ -161,7 +161,7 @@ preseed() {
 
 configure_x() {
     xserver_package=xserver-xorg
-    xserver_config="/etc/X11/xorg.conf" ;;
+    xserver_config="/etc/X11/xorg.conf"
     if [ -n "$XF86CONFIG_FILE" ]; then
         # User has specified a custom config
         cp "$XF86CONFIG_FILE" "$xserver_config"
