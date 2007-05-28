@@ -23,19 +23,27 @@ Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
  the clients.
  
-Package: ltsp-client
+Package: ltsp-client-core
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, pulseaudio-esound-compat | esound | nas, ltspfsd, python, discover1, xresprobe
+Depends: lsb-base, nbd-client, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, python, discover1, xresprobe
 Recommends: ubuntu-thin-client
 Suggests: cryptsetup, inputattach
-Conflicts: ltsp-utils
-Replaces: ltsp-utils
 Architecture: any
 Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
  .
  DO NOT install this package on a regular machine, it is intended only
  for installation inside a LTSP client filesystem.
+
+Package: ltsp-client
+Recommends: ubuntu-thin-client
+Depends: ltsp-client-core, ldm | sdm-terminal | x-display-manager, pulseaudio-esound-compat | esound | nas, ltspfsd
+Suggests: cryptsetup, inputattach
+Conflicts: ltsp-utils
+Replaces: ltsp-utils
+Architecture: all
+Description: LTSP client environment
+ The scripts needed to configure and boot an LTSP client.
 
 Package: ldm
 Depends: openssh-client | ssh, python, python-gtk2, python-gnomecanvas, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
