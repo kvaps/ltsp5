@@ -37,7 +37,7 @@ reg_info(){
     eval "echo \$${VAR}" >/tmp/info/${VAR}
 }
 
-get_boolean(){
+boolean_is_true(){
     case "$(echo $1 | tr 'A-Z' 'a-z')" in
        true|y|yes) return 0 ;; 
        *) return 1 ;; 

@@ -61,6 +61,7 @@ class GTKGreeter:
         self.draw_buttons() # session and lang, should be wrapped by a config option
         self.draw_bottom_bar(False) # set to True if you want a clock
         self.draw_shutdown_button()
+        self.draw_reboot_button()
     
         self.win.show_all()
     
@@ -133,6 +134,9 @@ class GTKGreeter:
     def draw_shutdown_button(self):
         poweroff = gtk.Button('')
         poweroff.connect("clicked", lambda w: self.shutdown())
+	poweroff_tt = gtk.Tooltips()
+	poweroff_tt.set_tip(poweroff, "Shutdown", None)
+	poweroff_tt.enable()
         try:
             bg = gtk.gdk.pixbuf_new_from_file(themedir+'/shutdown.png')
             img = gtk.Image()
@@ -149,6 +153,30 @@ class GTKGreeter:
     def shutdown(self):
         os.system('/etc/init.d/nbd-client stop')
         os.system('poweroff -fp')
+
+    def draw_reboot_button(self):
+        reboot = gtk.Button('')
+        reboot.connect("clicked", lambda w: self.reboot())
+	reboot_tt = gtk.Tooltips()
+	reboot_tt.set_tip(reboot, "Reboot", None)
+	reboot_tt.enable()
+        try:
+            bg = gtk.gdk.pixbuf_new_from_file(themedir+'/reboot.png')
+            img = gtk.Image()
+            img.set_from_pixbuf(bg)
+            reboot.set_image(img)
+            reboot.set_relief('GTK_RELIEF_NONE')
+        except:
+            reboot.set_label('I/O')
+     
+        self.root.add(gnomecanvas.CanvasWidget, x = -((self.width/2)-100), y = (self.height/2)+8,
+                widget = reboot,
+                width = 46, height = 46)
+
+    def reboot(self):
+        os.system('/etc/init.d/nbd-client stop')
+        os.system('reboot -fp')
+
 
     def draw_bottom_bar(self, show_timer):
         # draw the bottom bar, sysname and timer

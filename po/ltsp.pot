@@ -1,6 +1,6 @@
-# SOME DESCRIPTIVE TITLE.
+# ltsp gettext messages for LANGUAGE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the ltsp package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-25 22:24-0400\n"
+"POT-Creation-Date: 2006-12-17 21:35-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,27 +26,32 @@ msgstr ""
 msgid "Display this help message"
 msgstr ""
 
-#: ../server/ltsp-build-client:105
+#: ../server/ltsp-build-client:102
+#, sh-format
+msgid "Display help for all available commandline options"
+msgstr ""
+
+#: ../server/ltsp-build-client:106
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr ""
 
-#: ../server/ltsp-build-client:109
+#: ../server/ltsp-build-client:110
 #, sh-format
 msgid "  Regular options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:112
+#: ../server/ltsp-build-client:114
 #, sh-format
 msgid "  Advanced options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:123
+#: ../server/ltsp-build-client:126
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr ""
 
-#: ../server/ltsp-build-client:125
+#: ../server/ltsp-build-client:128
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
@@ -146,6 +151,12 @@ msgstr ""
 msgid "keep cache of downloaded package files"
 msgstr ""
 
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr ""
+
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "Enable debug support"
@@ -154,11 +165,6 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
 #, sh-format
 msgid "Load a user specific configuration file"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:20

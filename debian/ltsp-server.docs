@@ -1,3 +1,6 @@
 debian/doc/swap
 debian/doc/workstation
+debian/doc/FAQ
+debian/doc/Upgrading_4.2
 server/doc/plugins
+server/doc/QuickInstall

@@ -1,0 +1,6 @@
+case $MODE in
+    install)
+        echo "RAMRUN=yes" >> $ROOT/etc/default/tmpfs
+        echo "RAMLOCK=yes" >> $ROOT/etc/default/tmpfs
+        ;;
+esac
