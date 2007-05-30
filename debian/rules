@@ -86,5 +86,8 @@ bzr-release:
 	bzr export ../ltsp-$(DEBVER)
 	(cd ../ltsp-$(DEBVER); $(DEB_SRC_BUILD_PROG))
 
+controlgen:
+	debian/controlgen
+
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install bzr-release
