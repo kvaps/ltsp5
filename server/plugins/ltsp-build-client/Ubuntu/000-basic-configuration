@@ -2,7 +2,7 @@ case "$MODE" in
     configure)
         ARCH=$(dpkg --print-architecture)
         APT_GET_OPTS="-y"
-        DIST=feisty
+        DIST=${DIST:-"$(lsb_release -s -c)"}
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
         EARLY_PACKAGES="ltsp-client ldm"
