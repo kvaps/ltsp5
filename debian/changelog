@@ -1,3 +1,9 @@
+ltsp (5.0.9) gutsy; urgency=low
+
+  * change default distro to gutsy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 31 May 2007 13:58:14 +0200
+
 ltsp (5.0.8) feisty-proposed; urgency=low
 
   * add fixed ltsp-sound session script to fix LP bug #105709 
