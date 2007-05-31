@@ -84,7 +84,7 @@ binary-arch: build install
 bzr-release:
 	rm -rf ../ltsp-$(DEBVER)
 	bzr export ../ltsp-$(DEBVER)
-	(cd ../ltsp-$(DEBVER); $(DEB_SRC_BUILD_PROG))
+	(cd ../ltsp-$(DEBVER); debian/rules controlgen; $(DEB_SRC_BUILD_PROG))
 
 controlgen:
 	debian/controlgen
