@@ -2,7 +2,7 @@ case "$MODE" in
     configure)
         ARCH=$(dpkg --print-architecture)
         APT_GET_OPTS="-y"
-        DIST=feisty
+        DIST=gutsy
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
         EARLY_PACKAGES="xserver-xorg libgl1-mesa-glx libgl1-mesa-dri libglu1-mesa xfonts-base xbase-clients xutils xkb-data xterm ltsp-client discover1 laptop-detect xresprobe pulseaudio pulseaudio-esound-compat inputattach usplash ldm ltspfsd human-cursors-theme usplash-theme-ubuntu"
