@@ -1,0 +1,20 @@
+MAINTAINER='Matt Zimmerman <mdz@debian.org>'
+
+UPLOADERS=''
+
+LTSP_SERVER_DEPENDS='debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa, openssh-client | ssh, iproute, debconf-utils, esound-clients | nas-bin, python (>= 2.4), openbsd-inetd | inet-superserver, update-inetd, tcpd, gettext-base, nbd-server'
+
+LTSP_SERVER_RECOMMENDS='openssh-server | ssh, ltspfs'
+
+LTSP_SERVER_SUGGESTS='dhcp3-server, sdm, audiooss'
+
+LTSP_SERVER_STANDALONE_DEPENDS='ltsp-server, dhcp3-server, libasound2-plugins, libgstreamer-plugins-pulse0.10-0, ltspfs, openssh-server, nbd-server'
+LTSP_SERVER_STANDALONE_RECOMMENDS='pulseaudio-esound-compat'
+
+LTSP_CLIENT_DEPENDS='lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, pulseaudio-esound-compat, ltspfsd, python'
+
+LTSP_CLIENT_RECOMMENDS='ubuntu-thin-client, pulseaudio | esound | nas'
+
+LTSP_CLIENT_SUGGESTS='cryptsetup, inputattach'
+
+LDM_DEPENDS='openssh-client | ssh, python, python-gtk2, python-gnomecanvas, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver'
