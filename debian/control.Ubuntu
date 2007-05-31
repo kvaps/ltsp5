@@ -13,7 +13,7 @@ LTSP_SERVER_STANDALONE_RECOMMENDS='pulseaudio-esound-compat'
 
 LTSP_CLIENT_CORE_DEPENDS='lsb-base, nbd-client, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, python, discover1, xresprobe'
 
-LTSP_CLIENT_DEPENDS='ltsp-client-core, ldm | sdm-terminal | x-display-manager, pulseaudio-esound-compat, ltspfsd'
+LTSP_CLIENT_DEPENDS='ltsp-client-core, ldm | sdm-terminal | x-display-manager, pulseaudio-esound-compat, ltspfsd, xserver-xorg, libgl1-mesa-glx, libgl1-mesa-dri, libglu1-mesa, xfonts-base, xbase-clients, xutils, xkb-data, xterm, laptop-detect, inputattach, usplash, human-cursors-theme, usplash-theme-ubuntu"
 
 LTSP_CLIENT_RECOMMENDS='ubuntu-thin-client'
 
