@@ -11,9 +11,4 @@ case "$MODE" in
         OVERRIDE_EXPORTS="true"
         export DEBIAN_PRIORITY=critical
         ;;
-    after-install|finalization)
-        # Our code to hanlding after-install and finalization is
-        # exactly the same of Debian so we include it here.
-        . $PLUGINS_BASE/$SCRIPT/Debian/000-basic-configuration
-        ;;
 esac
