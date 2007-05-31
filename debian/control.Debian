@@ -11,7 +11,9 @@ LTSP_SERVER_SUGGESTS='dhcp3-server, sdm, audiooss'
 LTSP_SERVER_STANDALONE_DEPENDS='ltsp-server, dhcp3-server, libasound2-plugins, libgstreamer-plugins-pulse0.10-0, ltspfs, openssh-server, nbd-server'
 LTSP_SERVER_STANDALONE_RECOMMENDS='pulseaudio-esound-compat'
 
-LTSP_CLIENT_DEPENDS='lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, pulseaudio-esound-compat, ltspfsd, python'
+LTSP_CLIENT_CORE_DEPENDS='lsb-base, nbd-client, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, python, discover1, xresprobe'
+
+LTSP_CLIENT_DEPENDS='ltsp-client-core, ldm | sdm-terminal | x-display-manager, pulseaudio-esound-compat | esound | nas, ltspfsd'
 
 LTSP_CLIENT_RECOMMENDS='pulseaudio | esound | nas'
 

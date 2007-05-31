@@ -18,7 +18,11 @@ if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     export SERVER
 fi
 
-# Ensure a default screen
+if [ -z "$CONFIGURE_X" ] && [ -x /usr/bin/X ]; then
+    export CONFIGURE_X=True
+fi
+
+# Ensure a default screen if X is present
 if ! env | grep -q '^SCREEN_'; then
     if [ -f /etc/X11/default-display-manager ]; then
         default_display_manager="$(cat /etc/X11/default-display-manager)"
@@ -42,5 +46,26 @@ if ! env | grep -q '^SCREEN_'; then
     else
         SCREEN_07=startx
         export SCREEN_07
+    fi
+fi
+
+# set defaults for sound support
+if [ -z "$SOUND_DAEMON" ]; then
+    if [ -x /usr/bin/pulseaudio ]; then
+        export SOUND_DAEMON=pulse
+    elif [ -x /usr/bin/esd ]; then
+        export SOUND_DAEMON=esd
+    elif [ -x /usr/bin/nasd ]; then
+        export SOUND_DAEMON=nasd
+    fi
+    if [ -z "$SOUND" ] && [ -n "$SOUND_DAEMON" ]; then
+        export SOUND=True
+    fi
+fi  
+
+# set defaults for local device support
+if [ -z "$LOCALDEV" ]; then
+    if [ -x /usr/bin/ltspfsd ]; then
+        export LOCALDEV=True
     fi
 fi

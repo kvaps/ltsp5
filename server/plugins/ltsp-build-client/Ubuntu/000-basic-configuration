@@ -5,7 +5,7 @@ case "$MODE" in
         DIST=feisty
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
-        EARLY_PACKAGES="xserver-xorg libgl1-mesa-glx libgl1-mesa-dri libglu1-mesa xfonts-base xbase-clients xutils xkb-data xterm ltsp-client discover1 laptop-detect xresprobe pulseaudio pulseaudio-esound-compat inputattach usplash ldm ltspfsd human-cursors-theme usplash-theme-ubuntu"
+        EARLY_PACKAGES="xserver-xorg libgl1-mesa-glx libgl1-mesa-dri libglu1-mesa xfonts-base xbase-clients xutils xkb-data xterm ltsp-client laptop-detect pulseaudio-esound-compat inputattach usplash ldm human-cursors-theme usplash-theme-ubuntu"
         RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh hostname.sh loopback udev module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh console-setup"
         RC2_WHITELIST="klogd sysklogd ltsp-client nbd-client usplash rmnologin"
         OVERRIDE_EXPORTS="true"

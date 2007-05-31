@@ -25,17 +25,23 @@ Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
  the clients.
  
-Package: ltsp-client
+Package: ltsp-client-core
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: LTSP_CLIENT_DEPENDS
-Recommends: LTSP_CLIENT_RECOMMENDS
-Suggests: LTSP_CLIENT_SUGGESTS
+Depends: LTSP_CLIENT_CORE_DEPENDS
 Architecture: any
 Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
  .
  DO NOT install this package on a regular machine, it is intended only
  for installation inside a LTSP client filesystem.
+
+Package: ltsp-client
+Depends: LTSP_CLIENT_DEPENDS
+Recommends: LTSP_CLIENT_RECOMMENDS
+Suggests: LTSP_CLIENT_SUGGESTS
+Architecture: all
+Description: LTSP client environment
+ The scripts needed to configure and boot an LTSP client.
 
 Package: ldm
 Depends: LDM_DEPENDS
