@@ -13,8 +13,8 @@ LTSP_SERVER_STANDALONE_RECOMMENDS='pulseaudio-esound-compat'
 
 LTSP_CLIENT_DEPENDS='lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, pulseaudio-esound-compat, ltspfsd, python'
 
-LTSP_CLIENT_RECOMMENDS='ubuntu-thin-client, pulseaudio | esound | nas'
+LTSP_CLIENT_RECOMMENDS='pulseaudio | esound | nas'
 
-LTSP_CLIENT_SUGGESTS='cryptsetup, inputattach'
+LTSP_CLIENT_SUGGESTS='cryptsetup, joystick [alpha amd64 arm i386 ia64]'
 
-LDM_DEPENDS='openssh-client | ssh, python, python-gtk2, python-gnomecanvas | python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver'
+LDM_DEPENDS='openssh-client | ssh, python, python-gtk2, python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver'
