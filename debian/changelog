@@ -1,3 +1,30 @@
+ltsp (5.0.8debian1) unstable; urgency=low
+
+  * sync with upstream:
+      - support unencrypted LDM logins (LDM_DIRECTX)
+      - generate debian/control to reduce Debian/Ubuntu conflicts
+
+  * sync with Ubuntu:
+      - local printer support (jetpipe)
+      - pulseaudio sound system
+
+  * split ltsp-client into ltsp-client-core and ltsp-client
+      - all features (sound/localdev) enabled by default
+
+  * use proper boolean handling for NETWORK_COMPRESSION, based on patch from
+    Tim Day.  (Closes: #421324)
+
+  * Add code in the ltsp-client-builder udeb and a ltsp-client-builder plugin
+    to pass the d-i keyboard setting to LTSP and X.org. Thanks Petter.
+    (Closes: #421762)
+
+  * sound dependencies moved from ltsp-server to ltsp-server-standalone.
+    (Closes: #356986)
+
+  * drop support for obsoleted packages from debian sarge
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  1 Jun 2007 18:12:14 +0200
+
 ltsp (5.0.8) feisty-proposed; urgency=low
 
   * add fixed ltsp-sound session script to fix LP bug #105709 
