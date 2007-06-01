@@ -1,0 +1,161 @@
+#! /bin/sh
+#
+# Author:	Matt Zimmerman <mdz@ubuntu.com>
+#
+### BEGIN INIT INFO
+# Provides:          ltsp-client
+# Required-Start:    ltsp-client-setup $network $syslog
+# Required-Stop:     ltsp-client-setup $network $syslog
+# Should-Start:      xdebconfigurator
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
+# Short-Description: Script for LTSP client initialization
+# Description:
+### END INIT INFO
+
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="LTSP client"
+NAME=ltsp-client
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Gracefully exit if the package has been removed.
+test -f /usr/lib/ltsp/ltsp_functions || exit 0
+# Gracefully exit if ltsp_chroot file is not present
+test -f /etc/ltsp_chroot || exit 0
+
+. /lib/lsb/init-functions
+. /usr/lib/ltsp/ltsp_functions
+. /usr/lib/ltsp/ltsp_config
+
+warn() {
+    msg="$1"
+    logger -p user.warning -t ltsp-client  "warning: $msg"
+}
+
+start_sound() {
+    if boolean_is_true "$SOUND" ; then
+        # Detect and report a common problem with thin clients
+		if [ ! -c /dev/dsp ] ; then
+		    warn "Sound requested but /dev/dsp is missing.  Continuing."
+		fi
+		case "$SOUND_DAEMON" in
+            pulse|'') # The default when no value is set
+                /usr/bin/pulseaudio --system \
+                --disable-shm \
+                --no-cpu-limit \
+                --resample-method=trivial \
+                --log-target=syslog \
+                --high-priority \
+                -L module-detect \
+			    -L "module-esound-protocol-tcp auth-anonymous=1" \
+			    -L "module-native-protocol-tcp auth-anonymous=1" \
+			    -L module-volume-restore \
+			    -L module-rescue-streams \
+			    -L module-native-protocol-unix \
+			    -n &
+                ;;
+    	    esd) 
+    	        /usr/bin/esd -nobeeps -public -tcp &
+    	        ;;
+    	    nasd)
+    	        /usr/bin/nasd -aa &
+    	        # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
+    	        #aumix-minimal -v100 -w100 -c90 -m10
+    	        ;;
+    	    *)
+    	        warn "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
+    	        ;;
+    	esac
+    fi
+}
+
+configure_localdev() {
+    if [ -z "$(pidof ltspfsd)" ]; then
+        if boolean_is_true "$LOCALDEV" ; then
+            if [ ! -d /var/run/drives ];then
+                mkdir /var/run/drives
+            fi
+            /usr/bin/ltspfsd -a
+            # cdrom devices are handled by the cdpingerponger
+            /usr/sbin/cdpinger cdrom # default for usb cdroms
+ 
+            # and start one for every additional cdrom device
+            if [ -L /dev/cdrom?* ];then
+                for CDDEV in $(ls /dev/cdrom?*); do
+                    /usr/sbin/cdpinger $(basename ${CDDEV})
+                done
+            fi
+            # handle already plugged devices on login
+            /usr/sbin/delayed_mounter
+        fi
+    fi
+}
+
+case "$1" in
+  start)
+        log_begin_msg "Starting LTSP client..."
+        # if usplash is running, make sure to stop it now 
+        # (yes "start" is the right arg to do it ... even it looks silly)
+        if pidof usplash > /dev/null; then
+            usplash=:
+            orig_console="$(fgconsole)"
+            chvt 7 # avoid tty1 flashing before switching to X
+            /etc/init.d/usplash start
+            # We've just shut down usplash, so don't log success as it will
+            # look weird on the console.
+            log_end_msg=:
+        else
+            usplash=false
+            log_end_msg=log_end_msg
+        fi
+
+        for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
+            num=${screen##SCREEN_}
+            start-stop-daemon --start -b --exec /usr/lib/ltsp/screen_session -- "$num"
+        done
+
+        start_sound || true
+        configure_localdev || true
+
+        $log_end_msg 0
+
+        if $usplash && [ "$orig_console" != serial ]; then
+            # Wait a short while for the active console to change, to try to
+            # avoid visible console noise from later init scripts.
+            i=0
+            while [ "$(fgconsole)" = "$orig_console" ]; do
+                i="$(($i + 1))"
+                if [ "$i" -gt 5 ]; then
+                    break
+                fi
+                sleep 1
+            done
+        fi
+	;;
+  stop)
+#	echo -n "Stopping $DESC: $NAME"
+#	d_stop
+#	echo "."
+	;;
+  restart|force-reload)
+	#
+	#	If the "reload" option is implemented, move the "force-reload"
+	#	option to the "reload" entry above. If not, "force-reload" is
+	#	just the same as "restart".
+	#
+	echo -n "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	# echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

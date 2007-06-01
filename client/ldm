@@ -4,7 +4,6 @@ import os
 import sys
 sys.path.append('/usr/lib/ltsp/python')
 import subprocess
-import time
 import signal
 import socket
 import struct
@@ -15,15 +14,12 @@ def get_config(name):
     return os.environ.get(name)
 
 def get_config_bool(name):
+    allowed = ['y', 'true', 'yes']
     val = os.environ.get(name)
-    if val:
-        val = val.lower()
-    else:
-        return False
-    if val == 'y' or val == 'yes' or val == 'true':
-        return True
-    else:
-        return False
+    for valid in allowed:
+        if (val and val.lower() == valid):
+            return True
+    return False
 
 def get_ip(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -37,14 +33,18 @@ class LDM:
     def __init__(self, vt, display):
         self.vt = vt
         self.display = display
-        self.server = get_config('SERVER')
+        self.server = get_config('LDM_SERVER') or get_config('SERVER')
         self.use_xfs = get_config_bool('USE_XFS')
         self.use_sound = get_config_bool('SOUND')
         self.use_localdev = get_config_bool('LOCALDEV')
+        self.override_port = get_config('SSH_OVERRIDE_PORT')
+# Edited by Gideon Romm <gideon@symbio-technologies.com> (Symbio Technologies)
+# If LDM_DIRECTX is True, X traffic is NOT tunneled through ssh
+        self.directx = get_config_bool('LDM_DIRECTX')
 
         if self.use_sound:
             self.ip = get_ip('eth0')
-            self.sound_daemon = get_config('SOUND_DAEMON') or 'esd'
+            self.sound_daemon = get_config('SOUND_DAEMON') or 'pulse'
 
         if self.use_xfs:
             xfs_server = get_config('XFS_SERVER') or self.server
@@ -74,8 +74,6 @@ class LDM:
             env = os.environ.copy()
             env['DISPLAY'] = self.display
             env['XAUTHORITY'] = self.authfile
-            
-            time.sleep(5)
 
             # Generate an X authority key in ~/.Xauthority
             xauth_command = ['xauth', '-i', '-n', '-f', self.authfile, 'generate', self.display]
@@ -112,8 +110,20 @@ class LDM:
             os.environ['SSH_ASKPASS'] = '/usr/lib/ltsp/ldm-askpass'
 
             ssh_opts = ['-v',
-                       '-X',
                        '-c', 'blowfish-cbc,aes128-cbc,3des-cbc']
+
+# Edited by Gideon Romm <gideon@symbio-technologies.com> (Symbio Technologies)
+# Set DISPLAY environment variable if LDM_DIRECTX, otherwise use ssh -X
+            if self.directx:
+                directx_cmd=['DISPLAY=%s%s' % (get_ip('eth0'), self.display)]
+            else:
+                directx_cmd=[]
+                directx_ssh_opts=['-X']
+                ssh_opts.extend(directx_ssh_opts)
+
+            if self.override_port:
+                ssh_extra_port=['-p', self.override_port]
+                ssh_opts.extend(ssh_extra_port)
 
             if self.use_localdev:
                        localdev_ssh_opts=['-M',
@@ -123,20 +133,25 @@ class LDM:
             ssh_auth = ['%s@%s' % (username,self.server)]
 
             if self.use_sound:
+                espeakerport = 16001
                 if self.sound_daemon == 'esd':
                     print "info: Enabling esd sound support."
                     # Could start using esddsp, but it is not enabled
                     # because it gave problems when using firefox.
                     #   esddsp', '-m','--server=%s:16001' % (self.ip)
-                    espeakerport = 16001
                     sound_cmd = ['ESPEAKER=%s:%d' % (self.ip, espeakerport)]
-
                     # Make sure esd is ready to accept new
                     # connections/clients.  It need to be reset to
                     # forget the previous users authentication key.
                     # A native python implementation is probably
                     # better. [pere 2006-02-24]
-                    os.system("killall -HUP esd")
+                    os.system("killall esd")
+                    os.system("/usr/bin/esd -nobeeps -public -tcp &")
+                elif self.sound_daemon == 'pulse':
+                    print "info: Enabling PulseAudio sound support."
+                    pulseport = 4713
+                    sound_cmd = ['PULSE_SERVER=tcp:%s:%d ESPEAKER=%s:%d' % (self.ip, pulseport, self.ip, espeakerport)]
+                            
                 elif self.sound_daemon == 'nasd':
                     print "info: Enabling nasd sound support."
                     # Could use the audiooss package to set LD_PRELOAD.
@@ -171,7 +186,7 @@ class LDM:
 
             # set language
             if lang != 'None':
-				lang_command = 'LC_ALL='+lang+' LANGUAGE='+lang+' LANG='+lang
+                lang_command = 'LC_ALL='+lang+' LANGUAGE='+lang+' LANG='+lang
             else:
                 lang_command = ''
             # Make sure to run a login shell, to get /etc/profile executed
@@ -182,9 +197,9 @@ class LDM:
                                   '-c',
                                   " ".join( ['\'',
                                     'env',
-									lang_command,
+                                    lang_command,
                                     'LTSP_CLIENT="%s"' % (socket.gethostname()),
-                                    ] + sound_cmd + [
+                                    ] + sound_cmd + directx_cmd + [
                                     session_manager,
                                     '\''] ),
                                   ';',

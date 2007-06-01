@@ -4,6 +4,10 @@ This package was created by Matt Zimmerman <mdz@ubuntu.com> in May of
 Modifications for use with debian by Vagrant Cascadian <vagrant@freegeek.org>
 in August of 2005.
 
+The Ubuntu upstream source tree can be found on launchpad:
+
+bzr get http://bazaar.lauchpad.net/~ogra/ltsp-mainline
+
 The source tree for Debian packages can be downloaded using bzr:
 
 bzr get http://bzr.debian.org/bzr/pkg-ltsp/main

@@ -1,0 +1,17 @@
+case "$MODE" in
+    finalization)
+	    # create default lts.conf
+        cat <<EOF > $ROOT/etc/lts.conf
+# This is the default lts.conf file for ltsp 5.
+# For more information about valid options please see: 
+# /usr/share/doc/ltsp-client/examples/lts-parameters.txt.gz
+# in the client environment
+
+[default] 
+    SOUND=True
+    LOCALDEV=True
+    NBD_SWAP=True
+    SYSLOG=server
+EOF
+        ;;
+esac

@@ -1,1 +1,12 @@
-../Debian/010-debootstrap
+case "$MODE" in
+    install)
+        if [ -n "$EXCLUDE" ] ; then
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
+        fi
+        if [ -n "$INCLUDE" ] ; then
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=$INCLUDE"
+        fi
+        # Install base packages
+        debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+        ;;
+esac
