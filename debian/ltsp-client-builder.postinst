@@ -33,9 +33,18 @@ fi
 
 # if everything is fine, run ltsp-build-client on the target disk
 
-db_progress START 0 2 ltsp-client-builder/progress
+db_progress START 0 3 ltsp-client-builder/progress
 
 apt-install ltsp-server
+
+db_progress STEP 1
+
+# Make the d-i keyboard layout setting available in the ltsp chroot.
+if db_get debian-installer/keymap && [ -n "$RET" ] ; then
+    log "Passing keymap $RET on to LTSP"
+
+    echo d-i debian-installer/keymap string "$RET" | in-target debconf-set-selections
+fi
 
 db_progress STEP 1
 

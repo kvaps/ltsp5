@@ -31,5 +31,11 @@ case $MODE in
         if [ -f $ROOT/etc/locale.gen ] && [ -x $ROOT/usr/sbin/locale-gen ] ; then
             DEBIAN_FRONTEND=noninteractive DEBIAN_PRIORITY=critical LC_ALL=C chroot $ROOT /usr/sbin/locale-gen
         fi
+
+        # set debian-installer/keymap question in the chroot if present on the server
+        debian_installer_keymap="$(debconf-get-selections debian-installer/keymap)"
+        if [ -n "$debian_installer_keymap" ]; then
+            echo "$debian_installer_keymap" | chroot $ROOT debconf-set-selections
+        fi
         ;;
 esac

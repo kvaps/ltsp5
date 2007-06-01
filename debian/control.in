@@ -60,7 +60,7 @@ Package: ltsp-client-builder
 Section: debian-installer
 XC-Package-Type: udeb
 Architecture: all
-Depends: ${misc:Depends}, ${shlibs:Depends}, pkgsel
+Depends: ${misc:Depends}, ${shlibs:Depends}, kbd-chooser, pkgsel
 XB-Installer-Menu-Item: 7000
 Description: Build an LTSP environment in the installer target
  This udeb bootstraps the LTSP client chroot in the installer target 
