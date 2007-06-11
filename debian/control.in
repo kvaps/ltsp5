@@ -1,14 +1,15 @@
 Source: ltsp
 Section: misc
 Priority: extra
-Maintainer: Matt Zimmerman <mdz@ubuntu.com>
+Maintainer: MAINTAINER
+Uploaders: UPLOADERS
 Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf
 Standards-Version: 3.7.2
 
 Package: ltsp-server
-Depends: ${misc:Depends}, debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | atftpd, openssh-client | ssh, iproute, debconf-utils, python (>= 2.4), openbsd-inetd | inet-superserver, update-inetd, tcpd, gettext-base, nbd-server
-Recommends: openssh-server | ssh
-Suggests: dhcp3-server, sdm, audiooss
+Depends: ${misc:Depends}, LTSP_SERVER_DEPENDS
+Recommends: LTSP_SERVER_RECOMMENDS
+Suggests: LTSP_SERVER_SUGGESTS
 Conflicts: ltsp-utils
 Replaces: ltsp-utils
 Architecture: all
@@ -17,18 +18,16 @@ Description: Basic LTSP server environment
  point the clients to the LTSP server.
 
 Package: ltsp-server-standalone
-Depends: ltsp-server, dhcp3-server, libasound2-plugins, libgstreamer-plugins-pulse0.10-0, ltspfs, openssh-server, nbd-server
-Recommends: pulseaudio-esound-compat
+Depends: LTSP_SERVER_STANDALONE_DEPENDS
+Recommends: LTSP_SERVER_STANDALONE_RECOMMENDS
 Architecture: all
 Description: Complete LTSP server environment
  This is the complete environment including a DHCP server to bootstrap
  the clients.
  
-Package: ltsp-client
+Package: ltsp-client-core
 Pre-Depends: debconf (>= 0.5) | debconf-2.0
-Depends: lsb-base, nbd-client, ldm | sdm-terminal | x-display-manager, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, pulseaudio-esound-compat, ltspfsd, python
-Recommends: ubuntu-thin-client, pulseaudio | esound | nas
-Suggests: cryptsetup, inputattach
+Depends: LTSP_CLIENT_CORE_DEPENDS
 Architecture: any
 Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
@@ -36,8 +35,16 @@ Description: LTSP client environment
  DO NOT install this package on a regular machine, it is intended only
  for installation inside a LTSP client filesystem.
 
+Package: ltsp-client
+Depends: LTSP_CLIENT_DEPENDS
+Recommends: LTSP_CLIENT_RECOMMENDS
+Suggests: LTSP_CLIENT_SUGGESTS
+Architecture: all
+Description: LTSP client environment
+ The scripts needed to configure and boot an LTSP client.
+
 Package: ldm
-Depends: openssh-client | ssh, python, python-gtk2, python-gnomecanvas | python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver-xfree86 | xserver
+Depends: LDM_DEPENDS
 Architecture: all
 Description: LTSP display manager
  ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike

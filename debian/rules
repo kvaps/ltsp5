@@ -51,7 +51,7 @@ binary-indep: build install
 	dh_install -i -Xarch-ids
 	dh_installdebconf -i	
 	dh_installinit -i --no-start
-	dh_installman -pltsp-server -pltsp-client -pldm
+	dh_installman -pltsp-server -pltsp-client-core -pldm
 	dh_link -i
 	dh_compress -i
 	dh_fixperms -i
@@ -70,7 +70,7 @@ binary-arch: build install
 	dh_install -a
 	dh_installdebconf -a
 	dh_installinit -a --no-start
-	dh_installinit -pltsp-client --name=ltsp-client-setup --no-start -u"start 32 S ."
+	dh_installinit -pltsp-client-core --name=ltsp-client-setup --no-start -u"start 32 S ."
 	dh_link -a
 	dh_strip -a
 	dh_compress -a
@@ -84,7 +84,10 @@ binary-arch: build install
 bzr-release:
 	rm -rf ../ltsp-$(DEBVER)
 	bzr export ../ltsp-$(DEBVER)
-	(cd ../ltsp-$(DEBVER); $(DEB_SRC_BUILD_PROG))
+	(cd ../ltsp-$(DEBVER); debian/rules controlgen; $(DEB_SRC_BUILD_PROG))
+
+controlgen:
+	debian/controlgen
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install bzr-release
