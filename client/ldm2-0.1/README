@@ -1,0 +1,39 @@
+ldm2 is the C translation of the python based LTSP Display Manager
+
+Currently, it doesn't interface with a greeter, as this design will require a 
+conversation with the greeter, rather than a simple "get name and password"
+of the existing greeter.
+
+Work on the greeter will also be done.
+
+For now, as a substitute, I'm using Xdialog to interface with the user.
+
+If you'd like to play with ldm2, here's the steps.
+
+1) Get the branch (you've obviously done this already)
+2) Build ldm2 (standard ./configure && make)
+3) Copy ldm2 to $CHROOT/usr/bin
+4) Modify $CHROOT/usr/lib/ltsp/screen.d/ldm.  Change the call to ldm to ldm2.
+   The command line parameters of ldm2 are the same.
+5) Install Xdialog in the chroot.  Add the Universe repository to the 
+   $CHROOT/etc/apt/sources.list, and apt-get install xdialog.
+
+Currently, LOTS of things won't work.  I've renamed the command socket for
+ldm to /tmp/.ldmsocket, so we'll need to patch up the udev scripts for localdev.
+Plus, I'm not yet setting all the env variables needed, etc etc etc.
+
+However, LDM_DIRECTX works!
+
+As well, cool way was discovered for setting the DISPLAY variable based on the
+SSH_CLIENT variable:
+
+
+DISPLAY=${SSH_CLIENT%% *}:dpy#
+
+I'd just like to say I'm quite proud of that.
+
+Lots more work to do, but a VERY encouraging start.
+
+KEEP WATCHING THE SKIES^H^H^H^H^H^H^H^H^HTHIS SPACE!
+
+Scott
