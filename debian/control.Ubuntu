@@ -17,6 +17,6 @@ LTSP_CLIENT_DEPENDS='ltsp-client-core, ldm | sdm-terminal | x-display-manager, p
 
 LTSP_CLIENT_RECOMMENDS='ubuntu-thin-client'
 
-LTSP_CLIENT_SUGGESTS='cryptsetup, inputattach'
+LTSP_CLIENT_SUGGESTS='cryptsetup'
 
 LDM_DEPENDS='openssh-client | ssh, python, python-gtk2, python-gnomecanvas, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver'
