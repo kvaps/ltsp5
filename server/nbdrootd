@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# copyright 2007 Canonical LTD., Oliver Grawert <ogra@ubuntu.com>,
+# distributed under the terms of the GNU General Public License
+# version 2 or any later version.
+
+# nbd-server wrapper that serves an ltsp squashfs image
+
+# default rootdir
+IMGDIR=/opt/ltsp/images
+
+if [ ! -d "$IMGDIR" ]; then
+    logger "ERROR: not a directory: $IMGDIR please run ltsp-update-image"
+    exit 1
+fi
+
+# start the blockdevice server
+/bin/nbd-server 0 $1 -r

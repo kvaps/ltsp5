@@ -1,2 +1,2 @@
 MODULES="netboot"
-BOOT="nfs"
+BOOT="ltsp-nbd"
