@@ -1,3 +1,38 @@
+ltsp (5.0.11) gutsy; urgency=low
+
+  * add dependency on squashfs-tools for the nbd-root to ltsp-server
+  * default to no xorg.conf and no X autoconfiguration, xorg can do that at
+    runtime now :)
+  * add first implementation of squashfs nbd-root
+  * merge mainline changes from http://bazaar.launchpad.net/~ltsp-drivers/ltsp/mainline
+    * drop /etc/X11/XF86Config-4 from list of files to bind mount
+    * add xbase-clients to ltsp-server-standalone
+    * make related sound programs a hard dependency on ltsp-server-standalone (Debian)
+    * remove code for after-installation and finalization (functionality was moved to
+      other plugins).
+    * get DIST from lsb_release
+    * generate the control file when doing bzr-release
+    * move packages from EARLY_PACKAGES to ltsp-client dependencies for Debian.
+    * clean up sound dependencies for debian
+    * move more packages listed in EARLY_PACKAGES into ltsp-client dependencies.
+    * clean up sound related dependencies.
+    * merge patches to split ltsp-client into two packages
+      * grab templates from ltsp-client-core now.
+      * split ltsp-client into two packages: ltsp-client-core and ltsp-client
+      * merge bugfix in configure_x function
+        - add ltsp-client dependency on discover1 and xresprobe
+        - remove unnecessary packages from EARLY_PACKAGES variables
+      * only configure X if it is installed
+      * enable localdev if not configured and ltspfsd is installed
+      * enable sound if not configured and a known sound daemon is installed
+    * merge patches for debian/control generation, to reduce debian/ubuntu conflicts.
+    * added control bits for Ubuntu
+    * drop packages no longer in debian
+    * add controlgen rule for generating debian/control
+    * generate debian/control rather than maintaining in revision control
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Jun 2007 15:53:04 +0200
+
 ltsp (5.0.10) gutsy; urgency=low
 
   * drop unneeded libgl1-mesa-dri from EARLY_PACKAGES, libgl1-mesa-glx
