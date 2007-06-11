@@ -77,7 +77,7 @@ ldm_getenv_bool(const char *name)
 
 
 int
-ldm_spawn (char *const argv[], int wait)
+ldm_spawn (char *const argv[], pid_t *pid, int wait)
 {
     int status;
     pid_t child;
@@ -89,6 +89,8 @@ ldm_spawn (char *const argv[], int wait)
         execv(argv[0], argv);
         die ("Error: execv() returned");
     } else if (child > 0) {
+        if (pid)                /* save pid if we've been passed a pointer */
+            *pid = child;
         if (wait) {
             if (waitpid (child, &status, 0) < 0)
                 die("Error: wait() call failed");
@@ -139,7 +141,7 @@ create_xauth()
     /* fix the newline */
     mcookiebuf[strlen(mcookiebuf) - 1] = '\0';
     /* We've spawned the X server, create an Xauth key */
-    ldm_spawn(xauth_command, WAIT);
+    ldm_spawn(xauth_command, NULL, WAIT);
 }
 
 void
@@ -163,7 +165,7 @@ launch_x()
     server_command[i++] = ldminfo.display;
     server_command[i++] = NULL;
         
-    ldm_spawn(server_command, NOWAIT);
+    ldm_spawn(server_command, &ldminfo.xserverpid, NOWAIT);
 }
 
 void
@@ -191,7 +193,7 @@ x_session()
     cmd[i++] = "/etc/X11/Xsession";
     cmd[i++] = NULL;
 
-    ldm_spawn(cmd, WAIT);
+    ldm_spawn(cmd, NULL, WAIT);
 }
 
 /*
@@ -220,10 +222,6 @@ main(int argc, char *argv[])
 
     ldminfo.vty = strdup(argv[1]);
     ldminfo.display = strdup(argv[2]);
-
-    if (!(tty2 = fopen("/dev/tty2", "w")))
-        die("Couldn't open /dev/tty2");
-    setvbuf(tty2, NULL, _IONBF, 0);
 
     /*
      * Open our log.  Since we're on a terminal, logging to syslog is preferred,
@@ -282,6 +280,7 @@ main(int argc, char *argv[])
      */
 
     while (1) {
+        int status;
         create_xauth();
         launch_x();
 
@@ -294,11 +293,13 @@ main(int argc, char *argv[])
 
         ssh_session();
         x_session();
-        sleep(100000);
 
         /* x_session's exited.  So, clean up. */
         if (!ldminfo.autologin)
             free(ldminfo.username);
+
+        kill(ldminfo.xserverpid, SIGTERM);
+        waitpid (ldminfo.xserverpid, &status, 0);
 
         unsetenv("DISPLAY");
         unsetenv("XAUTHORITY");

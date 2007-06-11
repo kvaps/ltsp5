@@ -45,16 +45,16 @@ char *
 get_passwd()
 {
     FILE *xdg;
-    char username[BUFSIZ];
+    char password[BUFSIZ];
     char *p;
 
     xdg = popen("Xdialog --stdout --password --inputbox \"Enter your password\" 10 30", "r");
 
-    fgets(username, sizeof username, xdg);
+    fgets(password, sizeof password, xdg);
     pclose(xdg);
 
-    username[strlen(username) - 1] = '\0';
+    password[strlen(password) - 1] = '\0';
 
-    p = strdup(username);
+    p = strdup(password);
     return p;
 }

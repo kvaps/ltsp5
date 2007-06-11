@@ -17,6 +17,7 @@ struct ldm_info {
     int     directx;
     int     sshfd;
     pid_t   sshpid;
+    pid_t   xserverpid;
 };
 
 /* forward decls */
@@ -25,7 +26,7 @@ void usage();
 void die(char *msg);
 char *ldm_getenv(const char *name);
 int ldm_getenv_bool(const char *name);
-int ldm_spawn (char *const argv[], int wait);
+int ldm_spawn (char *const argv[], pid_t *pid, int wait);
 void create_xauth();
 void launch_x();
 char *get_userid();
