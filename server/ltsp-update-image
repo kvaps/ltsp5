@@ -34,7 +34,8 @@ for dir in $(find ${ROOT}/ -maxdepth 1 -type d|grep -v images|cut -d/ -f4); do
             IMG=${dir}
             IMAGE=${IMGDIR}/${IMG}.img
             rm ${IMAGE}
-            mksquashfs ${ROOT}/${IMG} ${IMAGE}
+            mksquashfs ${ROOT}/${IMG} ${IMAGE}.tmp
+            mv ${IMAGE}.tmp ${IMAGE}
         fi
     fi ;
 done
