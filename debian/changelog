@@ -1,3 +1,9 @@
+ltsp (5.0.14) gutsy; urgency=low
+
+  * also rename the ltsp-nbd hook in the .install file (silly me)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 12 Jun 2007 17:07:31 +0200
+
 ltsp (5.0.13) gutsy; urgency=low
 
   * fix the path handling for lts.conf in initramfs
