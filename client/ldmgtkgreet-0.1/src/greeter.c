@@ -290,8 +290,7 @@ int main( int argc,
 	GdkPixbuf *rawpic, *pix;
 	GdkPixmap **pic;
 	GdkBitmap **mask;
-
-	gint *width, *height;
+	gint width, height;
 
 	gtk_init (&argc, &argv);
 
@@ -307,21 +306,20 @@ int main( int argc,
 	root = gdk_get_default_root_window();
 
 	gdk_window_set_cursor(root, busycursor);
-	gdk_drawable_get_size(root, width, height);
+	gdk_drawable_get_size(root, &width, &height);
 
-	pw = *width;
-	ph = *height;
-	h = *height;
-	w = *width;
+	pw = width;
+	ph = height;
+	w = width;
+	h = height;
 
-    
 	logo = gtk_image_new_from_file(PIXMAPS_DIR "/logo.png");
 
 	pix = gtk_image_get_pixbuf ((GtkImage *) logo);
 	lw = gdk_pixbuf_get_width (pix);
 	lh = gdk_pixbuf_get_height (pix);
 
-	spheight = (*height / 4) - (lh / 2);
+	spheight = (height / 4) - (lh / 2);
 
 	rawpic = gdk_pixbuf_new_from_file_at_scale(
 			PIXMAPS_DIR "/bg.png", 
@@ -329,7 +327,6 @@ int main( int argc,
 	gdk_pixbuf_render_pixmap_and_mask(rawpic, pic, mask, 0);
 	gdk_pixbuf_unref(rawpic);
 
-    printf("here\n");
 	gtk_widget_set_app_paintable(window, TRUE);
 	gtk_widget_set_size_request(window, w, h);
 	gtk_widget_realize(window);
