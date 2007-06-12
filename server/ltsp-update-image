@@ -36,6 +36,7 @@ for dir in $(find ${ROOT}/ -maxdepth 1 -type d|grep -v images|cut -d/ -f4); do
             rm ${IMAGE}
             mksquashfs ${ROOT}/${IMG} ${IMAGE}.tmp
             mv ${IMAGE}.tmp ${IMAGE}
+            chmod 0744 ${IMAGE}
         fi
     fi ;
 done
