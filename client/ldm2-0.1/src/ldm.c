@@ -270,7 +270,7 @@ main(int argc, char *argv[])
     ldminfo.session = ldm_getenv("LDM_SESSION");
     ldminfo.greeter_prog = ldm_getenv("LDM_GREETER");
     ldminfo.authfile = "/tmp/.Xauthority";
-    ldminfo.control_socket = "/tmp/.ldm_socket";
+    ldminfo.control_socket = "/tmp/.ltspfs-socket";
 
     sprintf(display_env, "DISPLAY=%s", ldminfo.display);
     sprintf(xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
