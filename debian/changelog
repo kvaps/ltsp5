@@ -1,3 +1,12 @@
+ltsp (5.0.13) gutsy; urgency=low
+
+  * fix the path handling for lts.conf in initramfs
+  * change bootscript whitelist name to ltsp-client-core, else we dont have a
+    client starting
+  * make squashfs image world readable so nbd-server can serve it
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 12 Jun 2007 16:39:41 +0200
+
 ltsp (5.0.12) gutsy; urgency=low
 
   * move ltsp-nbd hook to ltsp_nbd to please update-initramfs
