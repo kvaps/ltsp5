@@ -76,8 +76,9 @@ mountroot()
     mkdir -p ${rootmnt}/rofs
     mount -o move /rofs ${rootmnt}/rofs
 
-    # get the lts.confvia tftp
-    (echo "get /ltsp/tribe1/lts.conf"|tftp ${ROOTSERVER} >/dev/null 2>&1)
+    # get the lts.conf via tftp
+    tftpath=$(echo ${filename%/*}|tr -d '"')
+    (echo "get ${tftpath}/lts.conf"|tftp ${ROOTSERVER} >/dev/null 2>&1)
     if [ -s ./lts.conf ];then
         cp ./lts.conf ${rootmnt}/etc/
     fi
