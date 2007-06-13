@@ -22,39 +22,36 @@
 #include <sys/ioctl.h>
 #include <pty.h>
 
+char *localpasswd;
+
 #include "ldm.h"
 char *
 get_userid()
 {
     FILE *xdg;
     char username[BUFSIZ];
+    char password[BUFSIZ];
+    char dummy[BUFSIZ];
     char *p;
 
-    xdg = popen("Xdialog --stdout --inputbox \"Enter your login id\" 10 30", "r");
+    xdg = popen("ldmgtkgreet", "r");
 
     fgets(username, sizeof username, xdg);
+    fgets(password, sizeof password, xdg);
+    fgets(dummy, sizeof dummy, xdg);
+    fgets(dummy, sizeof dummy, xdg);
     pclose(xdg);
 
     username[strlen(username) - 1] = '\0';
+    password[strlen(password) - 1] = '\0';
 
     p = strdup(username);
+    localpasswd = strdup(password);
     return p;
 }
     
 char *
 get_passwd()
 {
-    FILE *xdg;
-    char password[BUFSIZ];
-    char *p;
-
-    xdg = popen("Xdialog --stdout --password --inputbox \"Enter your password\" 10 30", "r");
-
-    fgets(password, sizeof password, xdg);
-    pclose(xdg);
-
-    password[strlen(password) - 1] = '\0';
-
-    p = strdup(password);
-    return p;
+    return localpasswd;
 }

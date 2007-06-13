@@ -145,7 +145,7 @@ ssh_chat(int fd)
 get_pass:
     password = get_passwd();
 retrypass:
-    seen = expect(fd, 10.0, "ssword:", "continue connecting", NULL);
+    seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
     if (seen == 1) {
         write(fd, password, strlen(password));
         write(fd, "\r\n", 2);
@@ -156,7 +156,7 @@ retrypass:
         exit(1);
     }
 
-    seen = expect(fd, 5.0, SENTINEL, "please try again.", NULL);
+    seen = expect(fd, 120.0, SENTINEL, "please try again.", NULL);
     if (seen == 1) {
         syslog(LOG_INFO, "Saw sentinel. Logged in successfully");
     } else if (seen == 2) {
@@ -194,7 +194,7 @@ ssh_endsession()
     int seen;
 
     write(ldminfo.sshfd, "exit\n", 5);
-    seen = expect(ldminfo.sshfd, 2.0, "closed.", NULL);
+    seen = expect(ldminfo.sshfd, 30.0, "closed.", NULL);
     if (seen == 1) {
         waitpid (ldminfo.sshpid, &status, 0);
         return 0;
