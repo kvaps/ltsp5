@@ -47,10 +47,10 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_ldm2_OBJECTS = ldm2-ldm.$(OBJEXT) ldm2-sshutils.$(OBJEXT) \
-	ldm2-greeter_iface.$(OBJEXT)
+am_ldm2_OBJECTS = ldm.$(OBJEXT) sshutils.$(OBJEXT) \
+	greeter_iface.$(OBJEXT)
 ldm2_OBJECTS = $(am_ldm2_OBJECTS)
-ldm2_DEPENDENCIES =
+ldm2_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -145,8 +145,6 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 ldm2_SOURCES = ldm.c sshutils.c greeter_iface.c ldm.h
-ldm2_CFLAGS = -Wall -W
-ldm2_LDADD = -lutil
 all: all-am
 
 .SUFFIXES:
@@ -213,9 +211,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldm2-greeter_iface.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldm2-ldm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldm2-sshutils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/greeter_iface.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldm.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sshutils.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
@@ -230,48 +228,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-ldm2-ldm.o: ldm.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -MT ldm2-ldm.o -MD -MP -MF "$(DEPDIR)/ldm2-ldm.Tpo" -c -o ldm2-ldm.o `test -f 'ldm.c' || echo '$(srcdir)/'`ldm.c; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/ldm2-ldm.Tpo" "$(DEPDIR)/ldm2-ldm.Po"; else rm -f "$(DEPDIR)/ldm2-ldm.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldm.c' object='ldm2-ldm.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -c -o ldm2-ldm.o `test -f 'ldm.c' || echo '$(srcdir)/'`ldm.c
-
-ldm2-ldm.obj: ldm.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -MT ldm2-ldm.obj -MD -MP -MF "$(DEPDIR)/ldm2-ldm.Tpo" -c -o ldm2-ldm.obj `if test -f 'ldm.c'; then $(CYGPATH_W) 'ldm.c'; else $(CYGPATH_W) '$(srcdir)/ldm.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/ldm2-ldm.Tpo" "$(DEPDIR)/ldm2-ldm.Po"; else rm -f "$(DEPDIR)/ldm2-ldm.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ldm.c' object='ldm2-ldm.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -c -o ldm2-ldm.obj `if test -f 'ldm.c'; then $(CYGPATH_W) 'ldm.c'; else $(CYGPATH_W) '$(srcdir)/ldm.c'; fi`
-
-ldm2-sshutils.o: sshutils.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -MT ldm2-sshutils.o -MD -MP -MF "$(DEPDIR)/ldm2-sshutils.Tpo" -c -o ldm2-sshutils.o `test -f 'sshutils.c' || echo '$(srcdir)/'`sshutils.c; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/ldm2-sshutils.Tpo" "$(DEPDIR)/ldm2-sshutils.Po"; else rm -f "$(DEPDIR)/ldm2-sshutils.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='sshutils.c' object='ldm2-sshutils.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -c -o ldm2-sshutils.o `test -f 'sshutils.c' || echo '$(srcdir)/'`sshutils.c
-
-ldm2-sshutils.obj: sshutils.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -MT ldm2-sshutils.obj -MD -MP -MF "$(DEPDIR)/ldm2-sshutils.Tpo" -c -o ldm2-sshutils.obj `if test -f 'sshutils.c'; then $(CYGPATH_W) 'sshutils.c'; else $(CYGPATH_W) '$(srcdir)/sshutils.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/ldm2-sshutils.Tpo" "$(DEPDIR)/ldm2-sshutils.Po"; else rm -f "$(DEPDIR)/ldm2-sshutils.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='sshutils.c' object='ldm2-sshutils.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -c -o ldm2-sshutils.obj `if test -f 'sshutils.c'; then $(CYGPATH_W) 'sshutils.c'; else $(CYGPATH_W) '$(srcdir)/sshutils.c'; fi`
-
-ldm2-greeter_iface.o: greeter_iface.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -MT ldm2-greeter_iface.o -MD -MP -MF "$(DEPDIR)/ldm2-greeter_iface.Tpo" -c -o ldm2-greeter_iface.o `test -f 'greeter_iface.c' || echo '$(srcdir)/'`greeter_iface.c; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/ldm2-greeter_iface.Tpo" "$(DEPDIR)/ldm2-greeter_iface.Po"; else rm -f "$(DEPDIR)/ldm2-greeter_iface.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='greeter_iface.c' object='ldm2-greeter_iface.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -c -o ldm2-greeter_iface.o `test -f 'greeter_iface.c' || echo '$(srcdir)/'`greeter_iface.c
-
-ldm2-greeter_iface.obj: greeter_iface.c
-@am__fastdepCC_TRUE@	if $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -MT ldm2-greeter_iface.obj -MD -MP -MF "$(DEPDIR)/ldm2-greeter_iface.Tpo" -c -o ldm2-greeter_iface.obj `if test -f 'greeter_iface.c'; then $(CYGPATH_W) 'greeter_iface.c'; else $(CYGPATH_W) '$(srcdir)/greeter_iface.c'; fi`; \
-@am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/ldm2-greeter_iface.Tpo" "$(DEPDIR)/ldm2-greeter_iface.Po"; else rm -f "$(DEPDIR)/ldm2-greeter_iface.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='greeter_iface.c' object='ldm2-greeter_iface.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ldm2_CFLAGS) $(CFLAGS) -c -o ldm2-greeter_iface.obj `if test -f 'greeter_iface.c'; then $(CYGPATH_W) 'greeter_iface.c'; else $(CYGPATH_W) '$(srcdir)/greeter_iface.c'; fi`
 uninstall-info-am:
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)

@@ -1,19 +1,22 @@
-AC_PREREQ(2.59)
-AC_INIT(ldm2, [0.1], [sbalneav@ltsp.org])
+AC_PREREQ(2.61)
+AC_INIT([ldm2],[0.1],[sbalneav@ltsp.org])
 AC_CONFIG_SRCDIR([src/ldm.c])
 AM_INIT_AUTOMAKE
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 AM_MAINTAINER_MODE
-# Checks for programs.
+
+dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
 
-# Checks for header files.
+dnl Checks for header files.
 AC_HEADER_STDC
-AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([syslog.h sys/wait.h fcntl.h],,AC_MSG_ERROR(Required header missing))
 
-# Checks for Libraries
-AC_HAVE_LIBRARY(util)
+dnl Checks for Libraries
+AC_CHECK_LIB([util],[main],[],AC_MSG_ERROR(ldm2 requires libutil))
 
-AC_OUTPUT(Makefile src/Makefile)
+dnl Output
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT
