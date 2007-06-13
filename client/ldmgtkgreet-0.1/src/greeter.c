@@ -12,6 +12,8 @@ add "start with error" function and error dialogs if LDM_ERR is set
 
 #define _GNU_SOURCE
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <string.h>
@@ -288,8 +290,8 @@ int main( int argc,
 	GtkButton *optionbutton;
 	GdkWindow *root;
 	GdkPixbuf *rawpic, *pix;
-	GdkPixmap **pic;
-	GdkBitmap **mask;
+	GdkPixmap *pic;
+	GdkBitmap *mask;
 	gint width, height;
 
 	gtk_init (&argc, &argv);
@@ -321,17 +323,19 @@ int main( int argc,
 
 	spheight = (height / 4) - (lh / 2);
 
-	rawpic = gdk_pixbuf_new_from_file_at_scale(
-			PIXMAPS_DIR "/bg.png", 
-			pw, ph, FALSE, NULL);
-	gdk_pixbuf_render_pixmap_and_mask(rawpic, pic, mask, 0);
+	if (!(rawpic = gdk_pixbuf_new_from_file_at_scale(PIXMAPS_DIR "/bg.png", 
+			pw, ph, FALSE, NULL))) {
+        fprintf(stderr, "Couldn't load background pixmap\n");
+        exit(1);
+    }
+	gdk_pixbuf_render_pixmap_and_mask(rawpic, &pic, &mask, 0);
 	gdk_pixbuf_unref(rawpic);
 
 	gtk_widget_set_app_paintable(window, TRUE);
 	gtk_widget_set_size_request(window, w, h);
 	gtk_widget_realize(window);
 	gdk_window_set_back_pixmap((GdkWindow *) window->window, 
-			*pic, 0);
+			pic, 0);
 	gtk_window_set_decorated((GtkWindow *) window, FALSE);
 
 	vbox = gtk_vbox_new(FALSE, 5);
@@ -355,7 +359,7 @@ int main( int argc,
 	gtk_label_set_markup((GtkLabel *) syslabel, hoststring);
 	update_time(timelabel);
 
-	g_timeout_add(30000, update_time, timelabel);
+	g_timeout_add(30000, (GSourceFunc)update_time, timelabel);
 
 	gtk_box_pack_start((GtkBox *) bottombox, (GtkWidget *) optionbutton, FALSE, FALSE, 5);
 	gtk_box_pack_end((GtkBox *) bottombox, (GtkWidget *) timelabel, FALSE, FALSE, 5);
