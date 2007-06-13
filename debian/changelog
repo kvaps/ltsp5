@@ -1,3 +1,11 @@
+ltsp (5.0.16) gutsy; urgency=low
+
+  * make sure we dont wait less for devices during boot
+  * make sure proc isnt mounted inside the chroot while we build the squashfs
+    image
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 13 Jun 2007 13:55:30 +0200
+
 ltsp (5.0.15) gutsy; urgency=low
 
   * exclude proc sys and tmp from mksqaushfs
