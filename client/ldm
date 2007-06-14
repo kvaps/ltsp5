@@ -127,7 +127,7 @@ class LDM:
 
             if self.use_localdev:
                        localdev_ssh_opts=['-M',
-                          '-S', '/tmp/.ltspfs-socket']
+                          '-S', '/var/run/ldm_socket']
                        ssh_opts.extend(localdev_ssh_opts)
 
             ssh_auth = ['%s@%s' % (username,self.server)]
