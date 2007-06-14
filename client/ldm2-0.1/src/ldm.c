@@ -172,24 +172,40 @@ x_session()
 {
     char *cmd[MAXARGS];
     char displayenv[BUFSIZ];
+    char ltspclienv[BUFSIZ];
     int i = 0;
 
     if (ldminfo.directx)
         snprintf(displayenv, sizeof displayenv, 
-                "DISPLAY=${SSH_CLIENT%%%% *}%s", 
-                ldminfo.display);
+                "DISPLAY=%s%s", ldminfo.ipaddr, ldminfo.display);
+    snprintf(ltspclienv, sizeof ltspclienv,
+             "LTSP_CLIENT=", ldminfo.ipaddr);
 
     cmd[i++] = "/usr/bin/ssh";
+
     if (!ldminfo.directx)
         cmd[i++] = "-X";
+
     cmd[i++] = "-S";
     cmd[i++] = ldminfo.control_socket;
     cmd[i++] = "-l";
     cmd[i++] = ldminfo.username;
     cmd[i++] = ldminfo.server;
+    cmd[i++] = ltspclienv;
+
     if (ldminfo.directx)
         cmd[i++] = displayenv;
+
     cmd[i++] = "/etc/X11/Xsession";
+
+    if (ldminfo.localdev) {
+        cmd[i++] = ";";
+        cmd[i++] = "&&";
+        cmd[i++] = "/usr/sbin/ltspfsmounter";
+        cmd[i++] = "all";
+        cmd[i++] = "cleanup";
+    }
+
     cmd[i++] = NULL;
 
     ldm_spawn(cmd, NULL, WAIT);
