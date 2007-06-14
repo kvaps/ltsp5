@@ -11,6 +11,7 @@ struct ldm_info {
     char    *session;
     char    *greeter_prog;
     char    *control_socket;
+    char    *ipaddr;
     int     autologin;
     int     sound;
     int     localdev;
@@ -34,9 +35,9 @@ char *get_passwd();
 void spawn_ssh(int fd);
 int ssh_session();
 int ssh_endsession();
+void get_ipaddr();
 
 extern struct ldm_info ldminfo;
-extern FILE *tty2;
 #define NOWAIT 0
 #define WAIT 1
 #define MAXARGS 30

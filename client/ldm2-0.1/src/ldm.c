@@ -21,7 +21,6 @@
 
 #include "ldm.h"
 
-FILE *tty2;
 struct ldm_info ldminfo;
 
 void
@@ -231,6 +230,12 @@ main(int argc, char *argv[])
 
     openlog("ldm", LOG_PID | LOG_PERROR , LOG_AUTHPRIV);
     
+    /*
+     * Get our IP address.
+     */
+
+    get_ipaddr();
+
     /*
      * Get some of the environment variables we'll need.
      */

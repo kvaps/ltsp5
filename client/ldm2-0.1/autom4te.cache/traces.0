@@ -180,10 +180,6 @@ m4trace:/usr/share/aclocal-1.9/depout.m4:63: -1- AC_DEFUN([AM_OUTPUT_DEPENDENCY_
      [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
      [AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"])
 ])
-m4trace:/usr/share/aclocal-1.9/header.m4:12: -1- AU_DEFUN([AM_CONFIG_HEADER], [AC_CONFIG_HEADERS($@)])
-m4trace:/usr/share/aclocal-1.9/header.m4:12: -1- AC_DEFUN([AM_CONFIG_HEADER], [AC_DIAGNOSE([obsolete], [The macro `AM_CONFIG_HEADER' is obsolete.
-You should run autoupdate.])dnl
-AC_CONFIG_HEADERS($@)])
 m4trace:/usr/share/aclocal-1.9/init.m4:26: -1- AC_DEFUN([AM_INIT_AUTOMAKE], [AC_PREREQ([2.58])dnl
 dnl Autoconf wants to disallow AM_ names.  We explicitly allow
 dnl the ones we care about.
@@ -615,64 +611,54 @@ AC_PROVIDE_IFELSE([AC_PROG_CXX],
                           defn([AC_PROG_CXX])[_AM_DEPENDENCIES(CXX)])])dnl
 ])
 m4trace:configure.ac:4: -2- _AM_MANGLE_OPTION([no-dependencies])
-m4trace:configure.ac:6: -1- AM_CONFIG_HEADER([config.h])
-m4trace:configure.ac:6: -1- _m4_warn([obsolete], [The macro `AM_CONFIG_HEADER' is obsolete.
-You should run autoupdate.], [/usr/share/aclocal-1.9/header.m4:12: AM_CONFIG_HEADER is expanded from...
-configure.ac:6: the top level])
 m4trace:configure.ac:7: -1- AM_MAINTAINER_MODE
 m4trace:configure.ac:7: -1- AM_CONDITIONAL([MAINTAINER_MODE], [test $USE_MAINTAINER_MODE = yes])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^MAINTAINER_MODE_TRUE$])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^MAINTAINER_MODE_FALSE$])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^MAINT$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CC$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CFLAGS$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^LDFLAGS$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^LIBS$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CPPFLAGS$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CC$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CC$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CC$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CC$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^ac_ct_CC$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^EXEEXT$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^OBJEXT$])
-m4trace:configure.ac:9: -1- _AM_DEPENDENCIES([CC])
-m4trace:configure.ac:9: -1- AM_SET_DEPDIR
-m4trace:configure.ac:9: -1- m4_pattern_allow([^DEPDIR$])
-m4trace:configure.ac:9: -1- AM_OUTPUT_DEPENDENCY_COMMANDS
-m4trace:configure.ac:9: -1- AM_MAKE_INCLUDE
-m4trace:configure.ac:9: -1- m4_pattern_allow([^am__include$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^am__quote$])
-m4trace:configure.ac:9: -1- AM_DEP_TRACK
-m4trace:configure.ac:9: -1- AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^AMDEP_TRUE$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^AMDEP_FALSE$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^AMDEPBACKSLASH$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^CCDEPMODE$])
-m4trace:configure.ac:9: -1- AM_CONDITIONAL([am__fastdepCC], [
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CFLAGS$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^LDFLAGS$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^LIBS$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CC$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^ac_ct_CC$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^EXEEXT$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^OBJEXT$])
+m4trace:configure.ac:10: -1- _AM_DEPENDENCIES([CC])
+m4trace:configure.ac:10: -1- AM_SET_DEPDIR
+m4trace:configure.ac:10: -1- m4_pattern_allow([^DEPDIR$])
+m4trace:configure.ac:10: -1- AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:10: -1- AM_MAKE_INCLUDE
+m4trace:configure.ac:10: -1- m4_pattern_allow([^am__include$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^am__quote$])
+m4trace:configure.ac:10: -1- AM_DEP_TRACK
+m4trace:configure.ac:10: -1- AM_CONDITIONAL([AMDEP], [test "x$enable_dependency_tracking" != xno])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AMDEP_TRUE$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AMDEP_FALSE$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^AMDEPBACKSLASH$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^CCDEPMODE$])
+m4trace:configure.ac:10: -1- AM_CONDITIONAL([am__fastdepCC], [
   test "x$enable_dependency_tracking" != xno \
   && test "$am_cv_CC_dependencies_compiler_type" = gcc3])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^am__fastdepCC_TRUE$])
-m4trace:configure.ac:9: -1- m4_pattern_allow([^am__fastdepCC_FALSE$])
-m4trace:configure.ac:10: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
-m4trace:configure.ac:10: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
-m4trace:configure.ac:10: -1- m4_pattern_allow([^INSTALL_DATA$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^CPP$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^CPPFLAGS$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^CPP$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^GREP$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^GREP$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^EGREP$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^EGREP$])
-m4trace:configure.ac:13: -1- m4_pattern_allow([^STDC_HEADERS$])
-m4trace:configure.ac:14: -1- m4_pattern_allow([^HAVE_SYS_WAIT_H$])
-m4trace:configure.ac:17: -1- _m4_warn([obsolete], [The macro `AC_HAVE_LIBRARY' is obsolete.
-You should run autoupdate.], [../../lib/autoconf/libs.m4:159: AC_HAVE_LIBRARY is expanded from...
-configure.ac:17: the top level])
-m4trace:configure.ac:17: -1- m4_pattern_allow([^HAVE_LIBUTIL$])
-m4trace:configure.ac:19: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
-You should run autoupdate.], [])
-m4trace:configure.ac:19: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:19: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:19: -1- _AC_AM_CONFIG_HEADER_HOOK([$ac_file])
-m4trace:configure.ac:19: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:10: -1- m4_pattern_allow([^am__fastdepCC_TRUE$])
+m4trace:configure.ac:10: -1- m4_pattern_allow([^am__fastdepCC_FALSE$])
+m4trace:configure.ac:11: -1- m4_pattern_allow([^INSTALL_PROGRAM$])
+m4trace:configure.ac:11: -1- m4_pattern_allow([^INSTALL_SCRIPT$])
+m4trace:configure.ac:11: -1- m4_pattern_allow([^INSTALL_DATA$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^CPPFLAGS$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^CPP$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^GREP$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^EGREP$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^EGREP$])
+m4trace:configure.ac:14: -1- m4_pattern_allow([^STDC_HEADERS$])
+m4trace:configure.ac:18: -1- m4_pattern_allow([^HAVE_LIBUTIL$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:22: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:22: -1- _AC_AM_CONFIG_HEADER_HOOK([$ac_file])
+m4trace:configure.ac:22: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
