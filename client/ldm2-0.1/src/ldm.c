@@ -76,42 +76,40 @@ ldm_getenv_bool(const char *name)
 
 
 int
-ldm_spawn (char *const argv[], pid_t *pid, int wait)
+ldm_spawn (char *const argv[])
 {
-    int status;
-    pid_t child;
+    pid_t pid;
   
-    child = fork();
+    pid = fork();
   
-    if (child == 0) {
-        /* execve our arglist */
-        execv(argv[0], argv);
+    if (pid == 0) {
+        execv(argv[0], argv);                   /* execve our arglist */
         die ("Error: execv() returned");
-    } else if (child > 0) {
-        if (pid)                /* save pid if we've been passed a pointer */
-            *pid = child;
-        if (wait) {
-            if (waitpid (child, &status, 0) < 0)
-                die("Error: wait() call failed");
-        }
-    } else if (child < 0) {
+    } else if (pid > 0) {
+        return pid;
+    } else if (pid < 0) {
         die ("Error: fork() failed");
     }
-  
-    if (wait) {
-        if (!WIFEXITED (status)) {
-            die ("Error: execv() returned no status");
-        }
-  
+}
+
+int
+ldm_wait(pid_t pid)
+{
+    int status;
+
+    if (waitpid (pid, &status, 0) < 0)
+        die("Error: wait() call failed");
+    if (!WIFEXITED (status))
+        die ("Error: execv() returned no status");
+    else
         return WEXITSTATUS (status);
-    } else
-        return 0;
 }
 
 void
 create_xauth()
 {
     int fd;
+    pid_t xauthpid;
     FILE *mcookiepipe;
     char mcookiebuf[34];
     char *xauth_command[] = {
@@ -140,7 +138,8 @@ create_xauth()
     /* fix the newline */
     mcookiebuf[strlen(mcookiebuf) - 1] = '\0';
     /* We've spawned the X server, create an Xauth key */
-    ldm_spawn(xauth_command, NULL, WAIT);
+    xauthpid = ldm_spawn(xauth_command);
+    ldm_wait(xauthpid);
 }
 
 void
@@ -164,7 +163,7 @@ launch_x()
     server_command[i++] = ldminfo.display;
     server_command[i++] = NULL;
         
-    ldm_spawn(server_command, &ldminfo.xserverpid, NOWAIT);
+    ldminfo.xserverpid = ldm_spawn(server_command);
 }
 
 void
@@ -173,6 +172,7 @@ x_session()
     char *cmd[MAXARGS];
     char displayenv[BUFSIZ];
     char ltspclienv[BUFSIZ];
+    pid_t xsessionpid;
     int i = 0;
 
     if (ldminfo.directx)
@@ -208,7 +208,8 @@ x_session()
 
     cmd[i++] = NULL;
 
-    ldm_spawn(cmd, NULL, WAIT);
+    xsessionpid = ldm_spawn(cmd);
+    ldm_wait(xsessionpid);
 }
 
 /*
@@ -220,6 +221,7 @@ main(int argc, char *argv[])
 {
     /* decls */
     char display_env[BUFSIZ], xauth_env[BUFSIZ];
+    char fontpath[BUFSIZ];
 
     /*
      * Process command line args.  Need to get our vt, and our display number
@@ -263,17 +265,14 @@ main(int argc, char *argv[])
         die("no server specified");
 
     if (ldm_getenv_bool("USE_XFS")) {
-        int slen;
         char *xfs_server;
 
         xfs_server = ldm_getenv("XFS_SERVER");
-        if (!xfs_server)
-            xfs_server = ldminfo.server;
-        slen = strlen(xfs_server);
-        ldminfo.fontpath = malloc(slen + 10);
-        if (!ldminfo.fontpath)
-            die("out of memory");
-        sprintf(ldminfo.fontpath, "tcp/%s:7100", xfs_server);
+        snprintf(fontpath, sizeof fontpath, "tcp/%s:7100", 
+                 xfs_server ? xfs_server : ldminfo.server);
+        ldminfo.fontpath = fontpath;
+        if (xfs_server)
+            free(xfs_server);
     } else
         ldminfo.fontpath = NULL;
 
@@ -283,25 +282,21 @@ main(int argc, char *argv[])
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
     ldminfo.username = ldm_getenv("LDM_USERNAME");
     ldminfo.password = ldm_getenv("LDM_PASSWORD");
-    if (ldminfo.username && ldminfo.password)
-        ldminfo.autologin = 1;
-    else
-        ldminfo.autologin = 0;
+    ldminfo.autologin =  (ldminfo.username && ldminfo.password) ? TRUE : FALSE;
     ldminfo.lang = ldm_getenv("LDM_LANGUAGE");
     ldminfo.session = ldm_getenv("LDM_SESSION");
     ldminfo.greeter_prog = ldm_getenv("LDM_GREETER");
     ldminfo.authfile = "/tmp/.Xauthority";
     ldminfo.control_socket = "/var/run/ldm_socket";
 
-    sprintf(display_env, "DISPLAY=%s", ldminfo.display);
-    sprintf(xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
+    snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
+    snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
 
     /*
      * Main loop
      */
 
     while (1) {
-        int status;
         create_xauth();
         launch_x();
 
@@ -320,7 +315,7 @@ main(int argc, char *argv[])
             free(ldminfo.username);
 
         kill(ldminfo.xserverpid, SIGTERM);
-        waitpid (ldminfo.xserverpid, &status, 0);
+        ldm_wait(ldminfo.xserverpid);
 
         unsetenv("DISPLAY");
         unsetenv("XAUTHORITY");

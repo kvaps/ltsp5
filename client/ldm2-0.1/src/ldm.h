@@ -27,7 +27,8 @@ void usage();
 void die(char *msg);
 char *ldm_getenv(const char *name);
 int ldm_getenv_bool(const char *name);
-int ldm_spawn (char *const argv[], pid_t *pid, int wait);
+pid_t ldm_spawn (char *const argv[]);
+int ldm_wait (pid_t pid);
 void create_xauth();
 void launch_x();
 char *get_userid();
@@ -43,3 +44,5 @@ extern struct ldm_info ldminfo;
 #define MAXARGS 30
 #define SENTINEL "LTSPROCKS"
 #define MAXEXP 4096
+#define TRUE 1
+#define FALSE 0
