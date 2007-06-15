@@ -1,3 +1,16 @@
+ltsp (5.0.8debian2) unstable; urgency=low
+
+  * ltsp-client:
+    - add alsa-utils to ltsp-client dependencies
+    - drop bind mounting of /etc/X11/XF86Config-4
+  * ldm:
+    - use lsb-release to determine which theme should gets priority
+    - drop ldm theme for Debian-Edu (now maintained in debian-edu-artwork)
+    - move /tmp/.ltspfs-socket to /var/run/ldm_socket
+  * fix bug which causes ltsp-client-core init script to be blacklisted
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri, 15 Jun 2007 20:25:36 +0100
+
 ltsp (5.0.8debian1) unstable; urgency=low
 
   * sync with upstream:
