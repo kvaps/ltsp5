@@ -172,7 +172,16 @@ x_session()
     char *cmd[MAXARGS];
     char displayenv[BUFSIZ];
     char ltspclienv[BUFSIZ];
+    char soundcmd1[BUFSIZ];
+    char soundcmd2[BUFSIZ];
+    char *esdcmd[] = {
+        "/usr/bin/esd",
+        "-nobeeps",
+        "-public", 
+        "-tcp",
+        NULL };
     pid_t xsessionpid;
+    pid_t esdpid = 0;
     int i = 0;
 
     if (ldminfo.directx)
@@ -193,9 +202,39 @@ x_session()
     cmd[i++] = ldminfo.server;
     cmd[i++] = ltspclienv;
 
+    /*
+     * Set the DISPLAY env, of not running over encrypted ssh
+     */
+
     if (ldminfo.directx)
         cmd[i++] = displayenv;
 
+    /*
+     * Handle sound
+     */
+
+    if (ldminfo.sound) {
+        char *daemon = ldminfo.sound_daemon;
+
+        if (!daemon || !strncmp(daemon, "pulse", 5)) {
+            snprintf(soundcmd1, sizeof soundcmd1, "PULSE_SERVER=tcp:%s:4713",
+                     ldminfo.ipaddr);
+            snprintf(soundcmd1, sizeof soundcmd1, "ESPEAKER=%s:16001",
+                     ldminfo.ipaddr);
+            cmd[i++] = soundcmd1;
+            cmd[i++] = soundcmd2;
+        } else if (!strncmp(daemon, "esd", 3)) {
+            snprintf(soundcmd1, sizeof soundcmd1, "ESPEAKER=%s:16001",
+                     ldminfo.ipaddr);
+            cmd[i++] = soundcmd1;
+            esdpid = ldm_spawn(esdcmd);         /* launch ESD */
+        } else if (!strncmp(daemon, "nasd", 4)) {
+            snprintf(soundcmd1, sizeof soundcmd1, "AUDIOSERVER=%s:0",
+                     ldminfo.ipaddr);
+            cmd[i++] = soundcmd1;
+        }
+    }
+            
     cmd[i++] = "/etc/X11/Xsession";
 
     if (ldminfo.localdev) {
@@ -210,6 +249,10 @@ x_session()
 
     xsessionpid = ldm_spawn(cmd);
     ldm_wait(xsessionpid);
+    if (esdpid) {
+        kill(esdpid, SIGTERM);
+        ldm_wait(esdpid);
+    }
 }
 
 /*
@@ -277,6 +320,7 @@ main(int argc, char *argv[])
         ldminfo.fontpath = NULL;
 
     ldminfo.sound = ldm_getenv_bool("SOUND");
+    ldminfo.sound_daemon = ldm_getenv_bool("SOUND_DAEMON");
     ldminfo.localdev = ldm_getenv_bool("LOCALDEV");
     ldminfo.override_port = ldm_getenv("SSH_OVERRIDE_PORT");
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
@@ -323,4 +367,3 @@ main(int argc, char *argv[])
         ssh_endsession();
     }
 }
-

@@ -30,24 +30,30 @@ void
 spawn_ssh(int fd)
 {
     char *sshcmd[MAXARGS];
-    char foo[BUFSIZ];
+    char dpy[BUFSIZ];
     char *env[3];
     int i = 0;
-    int j;
     
-    sprintf(foo, "DISPLAY=%s", ldminfo.display);
-    for (j = 0; j < 3; j++)
-        env[j] = NULL;
+    snprintf(dpy, sizeof dpy, "DISPLAY=%s", ldminfo.display);
     env[0] = "LANG=C";
-    env[1] = foo;
+    env[1] = dpy;
+    env[2] = NULL;
 
     sshcmd[i++] = "/usr/bin/ssh";
+
     if (!ldminfo.directx)
         sshcmd[i++] = "-X";
+
     sshcmd[i++] = "-t";
     sshcmd[i++] = "-M";
     sshcmd[i++] = "-S";
     sshcmd[i++] = ldminfo.control_socket;
+
+    if (ldminfo.override_port) {
+        sshcmd[i++] = "-p";
+        sshcmd[i++] = ldminfo.override_port;
+    }
+
     sshcmd[i++] = "-l";
     sshcmd[i++] = ldminfo.username;
     sshcmd[i++] = ldminfo.server;

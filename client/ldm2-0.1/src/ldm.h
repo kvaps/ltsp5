@@ -9,6 +9,7 @@ struct ldm_info {
     char    *password;
     char    *lang;
     char    *session;
+    char    *sound_daemon;
     char    *greeter_prog;
     char    *control_socket;
     char    *ipaddr;
