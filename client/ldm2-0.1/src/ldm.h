@@ -40,6 +40,8 @@ int ssh_endsession();
 void get_ipaddr();
 
 extern struct ldm_info ldminfo;
+extern FILE *ldmlog;
+
 #define NOWAIT 0
 #define WAIT 1
 #define MAXARGS 30

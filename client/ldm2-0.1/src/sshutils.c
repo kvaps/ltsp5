@@ -134,6 +134,8 @@ expect(int fd, float seconds, ...)
 
 loopend:
 
+    fprintf(ldmlog, "expect saw: %s\n", p);
+
     if (size < 0 || st < 0)
         return -1;                  /* error occured */
     if (st == 0)
@@ -148,28 +150,36 @@ ssh_chat(int fd)
     int seen;
     char *password;
 
+    fprintf(ldmlog, "ssh_chat: getting password from greeter\n");
 get_pass:
     password = get_passwd();
 retrypass:
+    fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh fd\n");
     seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
     if (seen == 1) {
+        fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
         write(fd, password, strlen(password));
         write(fd, "\r\n", 2);
     } else if (seen == 2) {
+        fprintf(ldmlog, "ssh_chat: whoops!  Got the ssh are you sure you want to connect message. Sending yes\n");
         write(fd, "yes\n", 4);
         goto retrypass;
     } else  {
+        fprintf(ldmlog, "ssh_chat: Got something else.  Blargh! I'm ded!\n");
         exit(1);
     }
 
     seen = expect(fd, 120.0, SENTINEL, "please try again.", NULL);
     if (seen == 1) {
-        syslog(LOG_INFO, "Saw sentinel. Logged in successfully");
+        fprintf(ldmlog, "ssh_chat: Saw sentinel. Logged in successfully\n");
     } else if (seen == 2) {
+        fprintf(ldmlog, "ssh_chat: Type your passord right, you dork!\n");
         free(password);
         goto get_pass;
-    } else
+    } else {
+        fprintf(ldmlog, "ssh_chat: Wierdness!  Dying!\n");
         return 1;
+    }
 
     return 0;
 }

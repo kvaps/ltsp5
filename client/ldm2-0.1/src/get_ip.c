@@ -16,6 +16,7 @@
 #include <arpa/inet.h>
 #include <syslog.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "ldm.h"
 

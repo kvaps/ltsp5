@@ -22,6 +22,7 @@
 #include "ldm.h"
 
 struct ldm_info ldminfo;
+FILE *ldmlog;
 
 void
 usage()
@@ -33,25 +34,17 @@ usage()
 void
 die(char *msg)
 {
-    syslog(LOG_ERR, "%s", msg);
+    fprintf(ldmlog, "%s", msg);
     exit(1);
 }
 
 void
 dumpargs(char *args[])
 {
-    FILE *tty;
     int i;
 
-    if (!(tty = fopen("/dev/tty2", "w")))
-        die("Couldn't open /dev/tty2");
-
-    setbuf(tty, NULL);
-
     for (i = 0; args[i]; i++)
-        fprintf(tty, "%s\n", args[i]);
-
-    fclose(tty);
+        fprintf(ldmlog, "%s\n", args[i]);
 }
 
 char *
@@ -306,13 +299,23 @@ main(int argc, char *argv[])
      * Since we're handling login info, log to AUTHPRIV
      */
 
-    openlog("ldm", LOG_PID | LOG_PERROR , LOG_AUTHPRIV);
+    if (!(ldmlog = fopen("/var/run/ldm.log", "w")))
+        die("Couldn't open /var/run/ldm.log");
+
+    setbuf(ldmlog, NULL);      /* Unbuffered */
+
+    /*
+     * openlog("ldm", LOG_PID | LOG_PERROR , LOG_AUTHPRIV);
+     */
     
+    fprintf(ldmlog, "LDM2 starting\n");
+
     /*
      * Get our IP address.
      */
 
     get_ipaddr();
+    fprintf(ldmlog, "LDM2 running on ip address %s\n", ldminfo.ipaddr);
 
     /*
      * Get some of the environment variables we'll need.
@@ -383,4 +386,11 @@ main(int argc, char *argv[])
 
         ssh_endsession();
     }
+
+    /*
+     * don't know why I'm doing this, since I never get here, but it offends
+     * my sensibilities to not close it SOMEWHERE
+     */
+
+    fclose(ldmlog);
 }
