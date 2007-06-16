@@ -1,5 +1,5 @@
 /*
- * ldm.c
+ * sshutils.c
  * LTSP display manager.
  * Manages spawning a session to a server.
  *
@@ -21,6 +21,7 @@
 #include <sys/wait.h>
 #include <sys/ioctl.h>
 #include <string.h>
+#include <signal.h>
 #include <pty.h>
 #include <utmp.h>
 
@@ -206,14 +207,13 @@ ssh_session()
 int
 ssh_endsession()
 {
-    int status;
     int seen;
 
     write(ldminfo.sshfd, "exit\n", 5);
     seen = expect(ldminfo.sshfd, 30.0, "closed.", NULL);
-    if (seen == 1) {
-        waitpid (ldminfo.sshpid, &status, 0);
-        return 0;
-    }
-    return -1;
+    if (seen == 1)
+        return ldm_wait(ldminfo.sshpid);
+    /* hmm, didn't close.  Lets kill it (less nice) */
+    kill(ldminfo.sshpid, SIGTERM);
+    return ldm_wait(ldminfo.sshpid);
 }
