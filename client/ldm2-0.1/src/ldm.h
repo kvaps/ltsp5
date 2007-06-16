@@ -26,7 +26,6 @@ struct ldm_info {
 
 void usage();
 void die(char *msg);
-char *ldm_getenv(const char *name);
 int ldm_getenv_bool(const char *name);
 pid_t ldm_spawn (char *const argv[]);
 int ldm_wait (pid_t pid);
@@ -49,3 +48,4 @@ extern FILE *ldmlog;
 #define MAXEXP 4096
 #define TRUE 1
 #define FALSE 0
+#define ENVSIZE 64

@@ -35,6 +35,7 @@ void
 die(char *msg)
 {
     fprintf(ldmlog, "%s", msg);
+    fclose(ldmlog);
     exit(1);
 }
 
@@ -47,41 +48,18 @@ dumpargs(char *args[])
         fprintf(ldmlog, "%s\n", args[i]);
 }
 
-char *
-ldm_getenv(const char *name)
-{
-    char *env = NULL;
-    char *copy;
-
-    env = getenv(name);
-
-    if (!env)
-        return NULL;
-    else {
-        copy = strdup(env);
-        if (!copy)
-            die("out of memory");
-    }
-
-    return copy;
-}
-
 int
 ldm_getenv_bool(const char *name)
 {
     char *env;
-    int result = 0;
 
-    env = ldm_getenv(name);
+    env = getenv(name);
 
-    if (env) {
-        int c = tolower(*env);
-        if (c == 'y' || c == 't')
-            result = 1;
-        free(env);
-    }
+    if (env)
+        if (*env == 'y' || *env == 't' || *env == 'T' || *env == 'Y')
+            return TRUE;
 
-    return result;
+    return FALSE;
 }
 
 
@@ -180,10 +158,10 @@ void
 x_session()
 {
     char *cmd[MAXARGS];
-    char displayenv[BUFSIZ];
-    char ltspclienv[BUFSIZ];
-    char soundcmd1[BUFSIZ];
-    char soundcmd2[BUFSIZ];
+    char displayenv[ENVSIZE];
+    char ltspclienv[ENVSIZE];
+    char soundcmd1[ENVSIZE];
+    char soundcmd2[ENVSIZE];
     char *esdcmd[] = {
         "/usr/bin/esd",
         "-nobeeps",
@@ -213,7 +191,7 @@ x_session()
     cmd[i++] = ltspclienv;
 
     /*
-     * Set the DISPLAY env, of not running over encrypted ssh
+     * Set the DISPLAY env, if not running over encrypted ssh
      */
 
     if (ldminfo.directx)
@@ -224,7 +202,7 @@ x_session()
      */
 
     if (ldminfo.sound) {
-        char *daemon = ldminfo.sound_daemon;
+        char *daemon = ldminfo.sound_daemon;  
 
         if (!daemon || !strncmp(daemon, "pulse", 5)) {
             snprintf(soundcmd1, sizeof soundcmd1, "PULSE_SERVER=tcp:%s:4713",
@@ -256,7 +234,6 @@ x_session()
 
     cmd[i++] = NULL;
 
-    dumpargs(cmd);
     xsessionpid = ldm_spawn(cmd);
     ldm_wait(xsessionpid);
     if (esdpid) {
@@ -273,8 +250,8 @@ int
 main(int argc, char *argv[])
 {
     /* decls */
-    char display_env[BUFSIZ], xauth_env[BUFSIZ];
-    char fontpath[BUFSIZ];
+    char display_env[ENVSIZE], xauth_env[ENVSIZE];
+    char fontpath[ENVSIZE];
 
     /*
      * Process command line args.  Need to get our vt, and our display number
@@ -299,8 +276,8 @@ main(int argc, char *argv[])
      * Since we're handling login info, log to AUTHPRIV
      */
 
-    if (!(ldmlog = fopen("/var/run/ldm.log", "w")))
-        die("Couldn't open /var/run/ldm.log");
+    if (!(ldmlog = fopen("/var/log/ldm.log", "w")))
+        die("Couldn't open /var/log/ldm.log");
 
     setbuf(ldmlog, NULL);      /* Unbuffered */
 
@@ -321,16 +298,16 @@ main(int argc, char *argv[])
      * Get some of the environment variables we'll need.
      */
 
-    ldminfo.server = ldm_getenv("LDM_SERVER");
+    ldminfo.server = getenv("LDM_SERVER");
     if (!ldminfo.server)
-        ldminfo.server = ldm_getenv("SERVER");
+        ldminfo.server = getenv("SERVER");
     if (!ldminfo.server)
         die("no server specified");
 
     if (ldm_getenv_bool("USE_XFS")) {
         char *xfs_server;
 
-        xfs_server = ldm_getenv("XFS_SERVER");
+        xfs_server = getenv("XFS_SERVER");
         snprintf(fontpath, sizeof fontpath, "tcp/%s:7100", 
                  xfs_server ? xfs_server : ldminfo.server);
         ldminfo.fontpath = fontpath;
@@ -340,57 +317,47 @@ main(int argc, char *argv[])
         ldminfo.fontpath = NULL;
 
     ldminfo.sound = ldm_getenv_bool("SOUND");
-    ldminfo.sound_daemon = ldm_getenv("SOUND_DAEMON");
+    ldminfo.sound_daemon = getenv("SOUND_DAEMON");
     ldminfo.localdev = ldm_getenv_bool("LOCALDEV");
-    ldminfo.override_port = ldm_getenv("SSH_OVERRIDE_PORT");
+    ldminfo.override_port = getenv("SSH_OVERRIDE_PORT");
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
-    ldminfo.username = ldm_getenv("LDM_USERNAME");
-    ldminfo.password = ldm_getenv("LDM_PASSWORD");
+    ldminfo.username = getenv("LDM_USERNAME");
+    ldminfo.password = getenv("LDM_PASSWORD");
     ldminfo.autologin =  (ldminfo.username && ldminfo.password) ? TRUE : FALSE;
-    ldminfo.lang = ldm_getenv("LDM_LANGUAGE");
-    ldminfo.session = ldm_getenv("LDM_SESSION");
-    ldminfo.greeter_prog = ldm_getenv("LDM_GREETER");
-    ldminfo.authfile = "/tmp/.Xauthority";
+    ldminfo.lang = getenv("LDM_LANGUAGE");
+    ldminfo.session = getenv("LDM_SESSION");
+    ldminfo.greeter_prog = getenv("LDM_GREETER");
+    ldminfo.authfile = "/root/.Xauthority";
     ldminfo.control_socket = "/var/run/ldm_socket";
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
 
+    /* Update our environment with a few extra variables. */
+    putenv(display_env);
+    putenv(xauth_env);
+
     /*
      * Main loop
      */
 
-    while (1) {
-        create_xauth();
+    while (TRUE) {
+        create_xauth();                         /* recreate .Xauthority */
         launch_x();
-
-        /* Update our environment with a few extra variables. */
-        putenv(display_env);
-        putenv(xauth_env);
         
         if (!ldminfo.autologin)
             ldminfo.username = get_userid();
 
-        ssh_session();
-        x_session();
+        ssh_session();                          /* Log in via ssh */
+        x_session();                            /* Start X session up */
 
         /* x_session's exited.  So, clean up. */
         if (!ldminfo.autologin)
             free(ldminfo.username);
 
-        kill(ldminfo.xserverpid, SIGTERM);
+        kill(ldminfo.xserverpid, SIGTERM);      /* Kill Xorg server off */
         ldm_wait(ldminfo.xserverpid);
 
-        unsetenv("DISPLAY");
-        unsetenv("XAUTHORITY");
-
-        ssh_endsession();
+        ssh_endsession();                       /* Log out of server */
     }
-
-    /*
-     * don't know why I'm doing this, since I never get here, but it offends
-     * my sensibilities to not close it SOMEWHERE
-     */
-
-    fclose(ldmlog);
 }

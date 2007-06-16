@@ -29,9 +29,9 @@ char *
 get_userid()
 {
     FILE *xdg;
-    char username[BUFSIZ];
-    char password[BUFSIZ];
-    char dummy[BUFSIZ];
+    char username[ENVSIZE];
+    char password[ENVSIZE];
+    char dummy[ENVSIZE];
     char *p;
 
     xdg = popen("ldmgtkgreet", "r");

@@ -30,7 +30,7 @@ void
 spawn_ssh(int fd)
 {
     char *sshcmd[MAXARGS];
-    char dpy[BUFSIZ];
+    char dpy[ENVSIZE];
     char *env[3];
     int i = 0;
     
