@@ -37,6 +37,23 @@ die(char *msg)
     exit(1);
 }
 
+void
+dumpargs(char *args[])
+{
+    FILE *tty;
+    int i;
+
+    if (!(tty = fopen("/dev/tty2", "w")))
+        die("Couldn't open /dev/tty2");
+
+    setbuf(tty, NULL);
+
+    for (i = 0; args[i]; i++)
+        fprintf(tty, "%s\n", args[i]);
+
+    fclose(tty);
+}
+
 char *
 ldm_getenv(const char *name)
 {
@@ -188,7 +205,7 @@ x_session()
         snprintf(displayenv, sizeof displayenv, 
                 "DISPLAY=%s%s", ldminfo.ipaddr, ldminfo.display);
     snprintf(ltspclienv, sizeof ltspclienv,
-             "LTSP_CLIENT=", ldminfo.ipaddr);
+             "LTSP_CLIENT=%s", ldminfo.ipaddr);
 
     cmd[i++] = "/usr/bin/ssh";
 
@@ -219,7 +236,7 @@ x_session()
         if (!daemon || !strncmp(daemon, "pulse", 5)) {
             snprintf(soundcmd1, sizeof soundcmd1, "PULSE_SERVER=tcp:%s:4713",
                      ldminfo.ipaddr);
-            snprintf(soundcmd1, sizeof soundcmd1, "ESPEAKER=%s:16001",
+            snprintf(soundcmd2, sizeof soundcmd2, "ESPEAKER=%s:16001",
                      ldminfo.ipaddr);
             cmd[i++] = soundcmd1;
             cmd[i++] = soundcmd2;
@@ -238,7 +255,6 @@ x_session()
     cmd[i++] = "/etc/X11/Xsession";
 
     if (ldminfo.localdev) {
-        cmd[i++] = ";";
         cmd[i++] = "&&";
         cmd[i++] = "/usr/sbin/ltspfsmounter";
         cmd[i++] = "all";
@@ -247,6 +263,7 @@ x_session()
 
     cmd[i++] = NULL;
 
+    dumpargs(cmd);
     xsessionpid = ldm_spawn(cmd);
     ldm_wait(xsessionpid);
     if (esdpid) {
@@ -320,7 +337,7 @@ main(int argc, char *argv[])
         ldminfo.fontpath = NULL;
 
     ldminfo.sound = ldm_getenv_bool("SOUND");
-    ldminfo.sound_daemon = ldm_getenv_bool("SOUND_DAEMON");
+    ldminfo.sound_daemon = ldm_getenv("SOUND_DAEMON");
     ldminfo.localdev = ldm_getenv_bool("LOCALDEV");
     ldminfo.override_port = ldm_getenv("SSH_OVERRIDE_PORT");
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
