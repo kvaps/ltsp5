@@ -1,2 +1,2 @@
 EXTRA_DIST = autogen.sh
-SUBDIRS = src man
+SUBDIRS = src man share scripts

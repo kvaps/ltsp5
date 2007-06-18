@@ -155,6 +155,23 @@ launch_x()
 }
 
 void
+rc_files(char *action)
+{
+    pid_t rcpid;
+
+    char *rc_cmd[] = {
+        "/bin/sh",
+        RC_DIR "/ldm-script",
+        action,
+        NULL };
+
+    /* start */
+        
+    rcpid = ldm_spawn(rc_cmd);
+    ldm_wait(rcpid);
+}
+
+void
 x_session()
 {
     char *cmd[MAXARGS];
@@ -251,6 +268,7 @@ main(int argc, char *argv[])
 {
     /* decls */
     char display_env[ENVSIZE], xauth_env[ENVSIZE];
+    char server_env[ENVSIZE], socket_env[ENVSIZE];
     char fontpath[ENVSIZE];
 
     /*
@@ -332,10 +350,15 @@ main(int argc, char *argv[])
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
+    snprintf(server_env, sizeof server_env,  "LDM_SERVER=%s", ldminfo.server);
+    snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
+             ldminfo.control_socket);
 
     /* Update our environment with a few extra variables. */
     putenv(display_env);
     putenv(xauth_env);
+    putenv(server_env);
+    putenv(socket_env);
 
     /*
      * Main loop
@@ -349,9 +372,12 @@ main(int argc, char *argv[])
             ldminfo.username = get_userid();
 
         ssh_session();                          /* Log in via ssh */
+        rc_files("start");                      /* Execute any rc files */
         x_session();                            /* Start X session up */
 
         /* x_session's exited.  So, clean up. */
+
+        rc_files("stop");                       /* Execute any rc files */
         if (!ldminfo.autologin)
             free(ldminfo.username);
 

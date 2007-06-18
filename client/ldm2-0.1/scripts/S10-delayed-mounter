@@ -1,0 +1,11 @@
+
+
+#
+# sourced with .
+#
+# Script to automatically add what's in the ltspfs_fstab on login.
+#
+
+for DIR in $(awk '{print $2}' /var/run/ltspfs_fstab); do
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/sbin/ltspfsmounter ${DIR} add"
+done

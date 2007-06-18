@@ -6,34 +6,48 @@ of the existing greeter.
 
 Work on the greeter will also be done.
 
-For now, as a substitute, I'm using Xdialog to interface with the user.
+For now, We're using a simple GTK greeter that Ollie designed.  We'll make
+it more pretty.
 
 If you'd like to play with ldm2, here's the steps.
 
 1) Get the branch (you've obviously done this already)
-2) Build ldm2 (standard ./configure && make)
+2) Build ldm2 (standard ./configure --prefix=usr  && make)
 3) Copy ldm2 to $CHROOT/usr/bin
-4) Modify $CHROOT/usr/lib/ltsp/screen.d/ldm.  Change the call to ldm to ldm2.
+4) Copy share/ldm-script to $CHROOT/usr/share/ldm
+5) Copy scripts/* to $CHROOT/usr/share/ldm/rc.d
+6) Modify $CHROOT/usr/lib/ltsp/screen.d/ldm.  Change the call to ldm to ldm2.
    The command line parameters of ldm2 are the same.
-5) Install Xdialog in the chroot.  Add the Universe repository to the 
-   $CHROOT/etc/apt/sources.list, and apt-get install xdialog.
+7) Install ldmgtkgreet in the chroot
 
-Currently, LOTS of things won't work.  I've renamed the command socket for
-ldm to /tmp/.ldmsocket, so we'll need to patch up the udev scripts for localdev.
-Plus, I'm not yet setting all the env variables needed, etc etc etc.
+Currently, most things work.  Sound and Localdev seems to setup ok.
+The command socket for ldm now lives in  /var/run/ldm_socket, snd the udev
+scripts have been patched up in my ltspfs-upstream branch.
 
-However, LDM_DIRECTX works!
+LDM_DIRECTX works!
 
-As well, cool way was discovered for setting the DISPLAY variable based on the
-SSH_CLIENT variable:
+We've got a new scripting mechanism for startup and shutdown scripts.
+Right after the ssh connections been completed, /usr/share/ldm/ldm-script start
+is called, which exectutes everything called S* in the rc.d dir in the ldm
+share.
 
+Two environment variables are passed down:
 
-DISPLAY=${SSH_CLIENT%% *}:dpy#
+LDM_SERVER points to the server LDM is talking to, and
+LDM_SOCKET points to the command socket the ssh connection has set up.
 
-I'd just like to say I'm quite proud of that.
+A three line script now replaces all the functionality of the delayed-mounter
+daemon.
 
-Lots more work to do, but a VERY encouraging start.
+to exectute something on the server, you can simply do:
 
-KEEP WATCHING THE SKIES^H^H^H^H^H^H^H^H^HTHIS SPACE!
+ssh -M $LDM_SOCKET $LDM_SERVER "your server command here"
+
+After the X session's ended, ldm-script stop is called which looks for K* 
+scripts.
+
+Note that the scripts are .'d so, exits in your rc scripts will be bad mojo.
+
+Have Fun!
 
 Scott

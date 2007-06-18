@@ -79,6 +79,7 @@ CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DEPS_CFLAGS = @DEPS_CFLAGS@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -145,6 +146,9 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 ldm2_SOURCES = ldm.c sshutils.c greeter_iface.c get_ip.c ldm.h
+AM_CPPFLAGS = $(DEPS_CFLAGS) \
+              -DRC_DIR=\""$(datadir)/ldm"\"
+
 all: all-am
 
 .SUFFIXES:
