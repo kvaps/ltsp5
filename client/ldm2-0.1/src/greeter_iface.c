@@ -53,5 +53,9 @@ get_userid()
 char *
 get_passwd()
 {
+    if (getenv("LDM_PASSWORD")) {
+        localpasswd = strdup(getenv("LDM_PASSWORD"));
+    }
+
     return localpasswd;
 }
