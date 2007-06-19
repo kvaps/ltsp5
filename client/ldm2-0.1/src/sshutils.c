@@ -195,11 +195,14 @@ ssh_session()
     if ( (pid = fork()) < 0)
         perror("fork error");
     else if (pid > 0) {           /* parent */
+        close(fd_slave);
         ssh_chat(fd_master);
         ldminfo.sshfd = fd_master;
         ldminfo.sshpid = pid;
-    } else                        /* child */
+    } else {
+        close(fd_master);           /* child */
         spawn_ssh(fd_slave);
+    }
 
     return 0;
 }
@@ -208,12 +211,18 @@ int
 ssh_endsession()
 {
     int seen;
+    int status;
 
     write(ldminfo.sshfd, "exit\n", 5);
     seen = expect(ldminfo.sshfd, 30.0, "closed.", NULL);
     if (seen == 1)
-        return ldm_wait(ldminfo.sshpid);
-    /* hmm, didn't close.  Lets kill it (less nice) */
-    kill(ldminfo.sshpid, SIGTERM);
-    return ldm_wait(ldminfo.sshpid);
+        status = ldm_wait(ldminfo.sshpid);
+    else {
+        /* hmm, didn't close.  Lets kill it (less nice) */
+        kill(ldminfo.sshpid, SIGTERM);
+        status = ldm_wait(ldminfo.sshpid);
+    }
+
+    close (ldminfo.sshfd);
+    return status;
 }

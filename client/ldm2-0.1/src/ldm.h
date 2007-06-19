@@ -43,7 +43,7 @@ extern FILE *ldmlog;
 
 #define NOWAIT 0
 #define WAIT 1
-#define MAXARGS 30
+#define MAXARGS 32
 #define SENTINEL "LTSPROCKS"
 #define MAXEXP 4096
 #define TRUE 1

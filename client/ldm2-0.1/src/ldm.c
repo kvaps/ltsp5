@@ -51,9 +51,7 @@ dumpargs(char *args[])
 int
 ldm_getenv_bool(const char *name)
 {
-    char *env;
-
-    env = getenv(name);
+    char *env = getenv(name);
 
     if (env)
         if (*env == 'y' || *env == 't' || *env == 'T' || *env == 'Y')
@@ -70,14 +68,20 @@ ldm_spawn (char *const argv[])
   
     pid = fork();
   
-    if (pid == 0) {
+    if (pid == 0) {                             /* child */
+        int i;
+        setsid();                               /* Become group leader */
+        for (i = getdtablesize(); i >= 0; --i)
+            close(i);                           /* close all descriptors */
+        i = open("/dev/null",O_RDWR);           /* open stdin */
+        dup(i);                                 /* stdout */
+        dup(i);                                 /* stderr */
         execv(argv[0], argv);                   /* execve our arglist */
         die ("Error: execv() returned");
-    } else if (pid > 0) {
+    } else if (pid > 0)
         return pid;
-    } else if (pid < 0) {
+    else if (pid < 0)
         die ("Error: fork() failed");
-    }
 }
 
 int
@@ -96,38 +100,29 @@ ldm_wait(pid_t pid)
 void
 create_xauth()
 {
-    int fd;
     pid_t xauthpid;
-    FILE *mcookiepipe;
-    char mcookiebuf[34];
+    int status;
+
     char *xauth_command[] = {
        "/usr/bin/xauth", 
        "-i",
        "-n",
        "-f",
        ldminfo.authfile,
-       "add",
+       "generate",
        ldminfo.display,
-       ".",
-       mcookiebuf,
        NULL };
 
     /*
-     * Create an empty .Xauthority file.
+     * Since we're talking to the X server, we might have to give it a moment
+     * or two to start up.  So do this in a loop.
      */
 
-    fd = creat(ldminfo.authfile, S_IRUSR | S_IWUSR);
-    close(fd);
-
-	/* get an mcookie */
-    mcookiepipe = popen("mcookie", "r");
-    fgets(mcookiebuf, sizeof mcookiebuf, mcookiepipe);
-    pclose(mcookiepipe);
-    /* fix the newline */
-    mcookiebuf[strlen(mcookiebuf) - 1] = '\0';
-    /* We've spawned the X server, create an Xauth key */
-    xauthpid = ldm_spawn(xauth_command);
-    ldm_wait(xauthpid);
+    do {
+        sleep(1);
+        xauthpid = ldm_spawn(xauth_command);
+        status = ldm_wait(xauthpid);
+    } while (status);
 }
 
 void
@@ -135,6 +130,13 @@ launch_x()
 {
     char *server_command[MAXARGS];
     int i = 0;
+    int fd;
+
+    /*
+     * Create an empty .Xauthority file.
+     */
+    fd = creat(ldminfo.authfile, S_IRUSR | S_IWUSR);
+    close(fd);
 
     /* Spawn the X server */
     server_command[i++] = "/usr/bin/X";
@@ -189,17 +191,17 @@ x_session()
     pid_t esdpid = 0;
     int i = 0;
 
+    snprintf(ltspclienv, sizeof ltspclienv, "LTSP_CLIENT=%s", ldminfo.ipaddr);
     if (ldminfo.directx)
         snprintf(displayenv, sizeof displayenv, 
-                "DISPLAY=%s%s", ldminfo.ipaddr, ldminfo.display);
-    snprintf(ltspclienv, sizeof ltspclienv,
-             "LTSP_CLIENT=%s", ldminfo.ipaddr);
+                "DISPLAY=%s%s ", ldminfo.ipaddr, ldminfo.display);
 
     cmd[i++] = "/usr/bin/ssh";
 
     if (!ldminfo.directx)
         cmd[i++] = "-X";
 
+    cmd[i++] = "-t";
     cmd[i++] = "-S";
     cmd[i++] = ldminfo.control_socket;
     cmd[i++] = "-l";
@@ -249,8 +251,13 @@ x_session()
         cmd[i++] = "cleanup";
     }
 
+    cmd[i++] = ";";
+    cmd[i++] = "kill";
+    cmd[i++] = "-1";
+    cmd[i++] = "$PPID";
     cmd[i++] = NULL;
 
+    dumpargs(cmd);
     xsessionpid = ldm_spawn(cmd);
     ldm_wait(xsessionpid);
     if (esdpid) {
@@ -365,8 +372,8 @@ main(int argc, char *argv[])
      */
 
     while (TRUE) {
-        create_xauth();                         /* recreate .Xauthority */
         launch_x();
+        create_xauth();                         /* recreate .Xauthority */
         
         if (!ldminfo.autologin)
             ldminfo.username = get_userid();
