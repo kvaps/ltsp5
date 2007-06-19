@@ -40,15 +40,15 @@ static void destroy(GtkWidget *widget,
 static void halt(GtkWidget *widget,
 		gpointer data)
 {
-	printf("halt\n");
-	gtk_main_quit ();
+	GError **error;
+	g_spawn_command_line_async("/sbin/poweroff -fp", error);
 }
 
 static void reboot(GtkWidget *widget,
 		gpointer data)
 {
-	printf("reboot\n");
-	gtk_main_quit ();
+	GError **error;
+	g_spawn_command_line_async("/sbin/reboot -fp", error);
 }
 
 gboolean update_time(GtkWidget *label)
