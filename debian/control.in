@@ -3,7 +3,7 @@ Section: misc
 Priority: extra
 Maintainer: MAINTAINER
 Uploaders: UPLOADERS
-Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf
+Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf, libgtk2.0-dev
 Standards-Version: 3.7.2
 
 Package: ltsp-server
@@ -44,8 +44,8 @@ Description: LTSP client environment
  The scripts needed to configure and boot an LTSP client.
 
 Package: ldm
-Depends: LDM_DEPENDS
-Architecture: all
+Depends: ${misc:Depends}, ${shlibs:Depends}, LDM_DEPENDS
+Architecture: any
 Description: LTSP display manager
  ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike
  those it wraps the X11 traffic within an ssh tunnel to provide a
