@@ -29,7 +29,13 @@ char pass[255];
 char language[255] = "None";
 char session[255] = "None";
 
-GtkWidget *label;
+#define EXPAND TRUE
+#define DONTEXPAND FALSE
+#define FILL TRUE
+#define DONTFILL FALSE
+
+
+GtkWidget *UserPrompt;
 
 static void destroy(GtkWidget *widget,
 		gpointer data)
@@ -225,7 +231,7 @@ static void switch_entry(GtkEntry *entry,
 	strncpy(user, text, sizeof(user));
 	gtk_entry_set_text(entry, "");
 	gtk_entry_set_visibility(entry, FALSE);
-	gtk_label_set_markup((GtkLabel *) label, \
+	gtk_label_set_markup((GtkLabel *) UserPrompt, \
 			(_("<b>Password:</b>")));
 }
 
@@ -285,8 +291,9 @@ int main( int argc,
 	gint lw, lh;
 
 	GdkCursor *normcursor, *busycursor;
-	GtkWidget *window, *entry, *syslabel, *logo, *hbox2, *timelabel;
-	GtkWidget *bottombox, *spacer, *vbox, *vbox2, *hbox;
+	GtkWidget *window, *entry, *syslabel, *logo, *EntryBox, *timelabel;
+	GtkWidget *StatusBarBox, *spacer, *vbox, *vbox2, *hbox;
+    GtkWidget *StatusMessages;
 	GtkButton *optionbutton;
 	GdkWindow *root;
 	GdkPixbuf *rawpic, *pix;
@@ -339,11 +346,11 @@ int main( int argc,
 	gtk_window_set_decorated((GtkWindow *) window, FALSE);
 
 	vbox = gtk_vbox_new(FALSE, 5);
-	vbox2 = gtk_vbox_new(FALSE, 0);
-	hbox2 = gtk_hbox_new(FALSE, 5);
+	vbox2 = gtk_vbox_new(FALSE, 0); 
+	EntryBox = gtk_hbox_new(FALSE, 5);
 	hbox = gtk_hbox_new(FALSE, 0);
 
-	bottombox = gtk_hbox_new(FALSE, 0);
+	StatusBarBox = gtk_hbox_new(FALSE, 0);
 
 	optionbutton = (GtkButton *) gtk_button_new_from_stock("gtk-preferences");
 	gtk_button_set_relief(optionbutton, GTK_RELIEF_NONE);
@@ -361,11 +368,11 @@ int main( int argc,
 
 	g_timeout_add(30000, (GSourceFunc)update_time, timelabel);
 
-	gtk_box_pack_start((GtkBox *) bottombox, (GtkWidget *) optionbutton, FALSE, FALSE, 5);
-	gtk_box_pack_end((GtkBox *) bottombox, (GtkWidget *) timelabel, FALSE, FALSE, 5);
-	gtk_box_pack_end((GtkBox *) bottombox, (GtkWidget *) syslabel, FALSE, FALSE, 0);
+	gtk_box_pack_start((GtkBox *) StatusBarBox, (GtkWidget *) optionbutton, FALSE, FALSE, 5);
+	gtk_box_pack_end((GtkBox *) StatusBarBox, (GtkWidget *) timelabel, FALSE, FALSE, 5);
+	gtk_box_pack_end((GtkBox *) StatusBarBox, (GtkWidget *) syslabel, FALSE, FALSE, 0);
 
-	label = gtk_label_new("");
+	UserPrompt = gtk_label_new("");
 	spacer = gtk_label_new("");
 
 	if (lw < 180)
@@ -373,25 +380,29 @@ int main( int argc,
 		lw=180;
 	}
 
-	gtk_label_set_markup((GtkLabel *) label, \
+	gtk_label_set_markup((GtkLabel *) UserPrompt, \
 			(_("<b>Username:</b>")));
-	gtk_misc_set_alignment((GtkMisc *) label, 1, 0.5);
-	gtk_widget_set_size_request(label, (lw / 2), 0);
+	gtk_misc_set_alignment((GtkMisc *) UserPrompt, 1, 0.5);
+	gtk_widget_set_size_request(UserPrompt, (lw / 2), 0);
 
+    StatusMessages = gtk_label_new("");
+    gtk_label_set_markup((GtkLabel *) StatusMessages, \
+                (_("<span foreground=\"red\" weight=\"ultrabold\">Here is where status messages go</span>")));
 	entry = gtk_entry_new();
 	gtk_entry_set_width_chars((GtkEntry *) entry, 12);
 	g_signal_connect (G_OBJECT (entry), "activate", 
 			G_CALLBACK (switch_entry), root);
 
-	gtk_box_pack_start((GtkBox *) hbox2, label, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) hbox2, entry, FALSE, FALSE, 0);
+	gtk_box_pack_start((GtkBox *) EntryBox, UserPrompt, FALSE, FALSE, 0);
+	gtk_box_pack_start((GtkBox *) EntryBox, entry, FALSE, FALSE, 0);
 
 	gtk_box_pack_start((GtkBox *) vbox, spacer, FALSE, FALSE, spheight);
 	gtk_box_pack_start((GtkBox *) vbox, logo, FALSE, FALSE, 5);
-	gtk_box_pack_start((GtkBox *) vbox, hbox2, TRUE, FALSE, 0);
+	gtk_box_pack_start((GtkBox *) vbox, EntryBox, TRUE, FALSE, 0);
+	gtk_box_pack_start((GtkBox *) vbox, StatusMessages, TRUE, FALSE, 0);
 	gtk_box_pack_start((GtkBox *) hbox, vbox, TRUE, FALSE, 0);
 	gtk_box_pack_start((GtkBox *) vbox2, hbox, FALSE, FALSE, 0);
-	gtk_box_pack_end((GtkBox *) vbox2, bottombox, FALSE, FALSE, 5);
+	gtk_box_pack_end((GtkBox *) vbox2, StatusBarBox, FALSE, FALSE, 5);
 
 	gtk_container_add (GTK_CONTAINER (window), vbox2);
 
