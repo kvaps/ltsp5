@@ -1,3 +1,17 @@
+ltsp (5.0.17) gutsy; urgency=low
+
+  * new LDM !!!
+    * add new C based ldm from Scott Balneaves <sbalneav@ltsp.org>
+    * add new C based ldm gtk greeter
+    * clean up ldm-deps
+    * add libgtk2.0-dev to ltsp build-deps
+    * switch ldm to arch any
+    * add new ldm.install file
+    * comment out theme selection in ldm.postinst (no themeing yet)
+    * add handling of new ldm and greeter to debian/rules
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Jun 2007 12:32:18 +0200
+
 ltsp (5.0.16) gutsy; urgency=low
 
   * make sure we dont wait less for devices during boot
