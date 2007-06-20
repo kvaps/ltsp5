@@ -13,6 +13,13 @@ build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
+	cd client/ldm2-0.1; ./configure --prefix=/usr; cd -
+	$(MAKE) -C client/ldm2-0.1
+	cp client/ldm2-0.1/src/ldm2 client/ldm2-0.1/src/ldm
+	cp client/ldm2-0.1/man/ldm2.1 client/ldm2-0.1/man/ldm.1
+	cd client/ldmgtkgreet-0.1; ./configure --prefix=/usr; cd -
+	$(MAKE) -C client/ldmgtkgreet-0.1
+
 	$(MAKE) -C po update-po
 	touch build-stamp
 
@@ -22,6 +29,8 @@ clean:
 	rm -f build-stamp
 
 	-$(MAKE) -C client/getltscfg clean
+	-$(MAKE) -C client/ldm2-0.1 clean
+	-$(MAKE) -C client/ldmgtkgreet-0.1 clean
     
     # Using po specific Makefile to clean message catalogs
 	$(MAKE) -C po clean

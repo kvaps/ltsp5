@@ -19,4 +19,4 @@ LTSP_CLIENT_RECOMMENDS='ubuntu-thin-client'
 
 LTSP_CLIENT_SUGGESTS='cryptsetup, inputattach'
 
-LDM_DEPENDS='openssh-client | ssh, python, python-gtk2, python-gnomecanvas, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver'
+LDM_DEPENDS='openssh-client | ssh, gtk2-engines-ubuntulooks, xserver-xorg | xserver'
