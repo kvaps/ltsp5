@@ -1,0 +1,70 @@
+#!/bin/sh
+# copyright 2007 Canonical LTD., Oliver Grawert <ogra@ubuntu.com> distributed under
+# the terms of the GNU General Public License version 2 or any later version.
+
+# generates a squashfs image from an ltsp chroot to be served by an inetd driven
+# nbd-server process, note that ltsp-client needs to support nbd booting for that.
+# all versions of the ltsp-client package past 5.0.11 should be able to do that
+
+# defaults
+ROOT="/opt/ltsp"
+PORT=2000
+IMGDIR="${ROOT}/images"
+IMG=""
+
+# default chroot name
+if [ -z ${CHROOT} ];then
+    CHROOT=$(dpkg --print-architecture)
+fi
+
+# source config file
+if [ -f /etc/default/ltsp-update-image ]; then
+    . /etc/default/ltsp-update-image
+fi
+
+# make sure the images dir exists
+if [ ! -d ${IMGDIR} ];then
+    mkdir -p ${IMGDIR}
+fi
+
+# find out if we are really an nbd client and if so, build the image
+for dir in $(find ${ROOT}/ -maxdepth 1 -type d|grep -v images|cut -d/ -f4); do
+    if [ $(grep nbd ${ROOT}/${dir}/usr/share/initramfs-tools/conf.d/ltsp 2>/dev/null) ];then
+        if [ $dir = $CHROOT ];then
+            IMG=${dir}
+            IMAGE=${IMGDIR}/${IMG}.img
+            rm ${IMAGE}
+            mksquashfs ${ROOT}/${IMG} ${IMAGE}.tmp -e /proc/* -e /sys/* -e /tmp/*
+            mv ${IMAGE}.tmp ${IMAGE}
+            chmod 0744 ${IMAGE}
+        fi
+    fi ;
+done
+
+# make sure hosts.allow has the keepalive option for nbdrootd
+if [ -z "$(grep nbdrootd /etc/hosts.allow)" ];then
+    echo 'nbdrootd: ALL: keepalive' >>/etc/hosts.allow
+fi
+
+# only take action if there is no entry for the image in inetd.conf yet
+if [ -n "$(grep ${IMAGE} /etc/inetd.conf|grep -v "^#")" ];then
+    echo "${IMAGE} already in /etc/inetd.conf"
+else
+    # Make sure we use the first free port available
+    CHECKPORT=""
+    while [ -z ${CHECKPORT} ];do
+        if [ -n "$(grep ^${PORT} /etc/inetd.conf)" ];then
+            PORT=`expr $PORT + 1`
+        else
+            CHECKPORT=${PORT}
+        fi
+    done
+    update-inetd --group LTSP --add "${PORT}                   stream  tcp\
+    nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+fi
+
+# append kernel option for nbd port to tftpboot
+if [ -z "$(grep NBDPORT /var/lib/tftpboot/ltsp/${IMG}/pxelinux.cfg/default)" ]; then
+    OLD=$(cat  /var/lib/tftpboot/ltsp/${IMG}/pxelinux.cfg/default)
+    echo "${OLD} NBDPORT=${PORT}" > /var/lib/tftpboot/ltsp/${IMG}/pxelinux.cfg/default
+fi
