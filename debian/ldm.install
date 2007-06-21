@@ -1,7 +1,7 @@
-client/ldm2-0.1/src/ldm usr/sbin
-client/ldm2-0.1/man/ldm.1 usr/share/man/man1
-client/ldm2-0.1/share/ldm-script usr/share/ldm
-client/ldm2-0.1/scripts/S10-delayed-mounter usr/share/ldm/rc.d
-client/ldmgtkgreet-0.1/src/ldmgtkgreet usr/bin
-client/ldmgtkgreet-0.1/pixmaps/*.png usr/share/ldm
-client/ldmgtkgreet-0.1/gtkrc/greeter-gtkrc usr/share/ldm
+client/ldm2/src/ldm usr/sbin
+client/ldm2/share/ldm-script usr/share/ldm
+client/ldm2/scripts/S10-delayed-mounter usr/share/ldm/rc.d
+client/ldmgtkgreet/src/ldmgtkgreet usr/bin
+client/ldmgtkgreet/themes usr/share/ldm/
+client/ldmgtkgreet/pixmaps/*.png usr/share/ldm/themes/ubuntu
+client/ldmgtkgreet/gtkrc/greeter-gtkrc usr/share/ldm/themes/ubuntu

@@ -13,18 +13,24 @@ set -e
 
 case "$1" in
     configure)
-	#update-alternatives \
-	#	--install /usr/share/ldm/themes/default \
-	#	ldm-theme /usr/share/ldm/themes/Debian 55
-	#update-alternatives \
-	#	--install /usr/share/ldm/themes/default \
-	#	ldm-theme /usr/share/ldm/themes/ubuntu 65
-	#update-alternatives \
-	#	--install /usr/share/ldm/themes/default \
-	#	ldm-theme /usr/share/ldm/themes/edubuntu 60
- 	#update-alternatives \
-	#	--install /usr/share/ldm/themes/default \
-	#	ldm-theme /usr/share/ldm/themes/Debian-Edu 50
+	update-alternatives \
+		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/Debian 55
+	update-alternatives \
+		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/ubuntu 65
+	update-alternatives \
+		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/edubuntu 60
+    update-alternatives \
+		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/kubuntu 60
+    update-alternatives \
+		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/xubuntu 60
+ 	update-alternatives \
+		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/Debian-Edu 50
        ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
