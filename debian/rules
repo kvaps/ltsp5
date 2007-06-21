@@ -91,6 +91,8 @@ binary-arch: build install
 bzr-release:
 	rm -rf ../ltsp-$(DEBVER)
 	bzr export ../ltsp-$(DEBVER)
+	(cd ../ltsp-$(DEBVER)/client/ldm2; ./autogen.sh; cd -)
+	(cd ../ltsp-$(DEBVER)/client/ldmgtkgreet; ./autogen.sh; cd -)
 	(cd ../ltsp-$(DEBVER); debian/rules controlgen; $(DEB_SRC_BUILD_PROG))
 
 controlgen:
