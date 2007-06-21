@@ -13,6 +13,7 @@ add "start with error" function and error dialogs if LDM_ERR is set
 #define _GNU_SOURCE
 
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -36,28 +37,31 @@ char session[255] = "None";
 
 
 GtkWidget *UserPrompt;
+GtkWidget *StatusMessages;
+GtkWidget *entry;
 
-static void destroy(GtkWidget *widget,
-		gpointer data)
+static void
+destroy(GtkWidget *widget, gpointer data)
 {
 	gtk_main_quit ();
 }
 
-static void halt(GtkWidget *widget,
-		gpointer data)
+static void
+halt(GtkWidget *widget, gpointer data)
 {
 	GError **error;
 	g_spawn_command_line_async("/sbin/poweroff -fp", error);
 }
 
-static void reboot(GtkWidget *widget,
-		gpointer data)
+static void
+reboot(GtkWidget *widget, gpointer data)
 {
 	GError **error;
 	g_spawn_command_line_async("/sbin/reboot -fp", error);
 }
 
-gboolean update_time(GtkWidget *label)
+gboolean
+update_time(GtkWidget *label)
 {	
 	const char *timestring = 0;
 	time_t timet;
@@ -74,15 +78,50 @@ gboolean update_time(GtkWidget *label)
 	return TRUE;
 }
 
-static void destroy_popup(GtkWidget *widget,
-		GtkWidget *langwin)
+static void
+destroy_popup(GtkWidget *widget, GtkWidget *langwin)
 {
 	gtk_widget_destroy(langwin);
 	return;
 }
 
-static void sesswin(GtkWidget *widget,
-		GtkWindow *win)
+gboolean
+handle_command(GIOChannel *io_input)
+{
+    GString *buf;
+
+    buf = g_string_new("");
+
+    g_io_channel_read_line_string(io_input, buf, NULL, NULL);
+
+    if (!g_strncasecmp(buf->str, "msg", 3)) {
+        gchar **split_buf;
+        split_buf = g_strsplit (buf->str, " ", 2);
+        gtk_label_set_markup((GtkLabel *) StatusMessages, split_buf[1]);
+        g_strfreev (split_buf);
+    } else if (!g_strncasecmp(buf->str, "quit", 4)) {
+	    GdkCursor *cursor;
+	    cursor = gdk_cursor_new(GDK_WATCH);
+	    gdk_window_set_cursor(gdk_get_default_root_window(), cursor);
+	    gtk_main_quit ();
+    } else if (!g_strncasecmp(buf->str, "prompt", 6)) {
+        gchar **split_buf;
+        split_buf = g_strsplit (buf->str, " ", 2);
+        gtk_label_set_markup((GtkLabel *) UserPrompt, split_buf[1]);
+        g_strfreev (split_buf);
+    } else if (!g_strncasecmp(buf->str, "userid", 6)) {
+        gtk_entry_set_visibility(GTK_ENTRY(entry), TRUE);
+    } else if (!g_strncasecmp(buf->str, "passwd", 6)) {
+        gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
+    }
+
+    g_string_free(buf, TRUE);
+    return TRUE;
+}
+
+    
+static void
+sesswin(GtkWidget *widget, GtkWindow *win)
 {
 	GtkWidget *sesswin, *s_vbox, *s_buttonbox;
 	GtkWidget *s_cancel, *s_accept, *s_frame, *s_vbox2;
@@ -139,8 +178,8 @@ static void sesswin(GtkWidget *widget,
 
 }
 
-static void langwin(GtkWidget *widget,
-		GtkWindow *win)
+static void
+langwin(GtkWidget *widget, GtkWindow *win)
 {
 	GtkWidget *langwin, *label, *vbox, *buttonbox, *select;
 	GtkWidget *cancel, *accept, *frame;
@@ -185,7 +224,8 @@ static void langwin(GtkWidget *widget,
 	return;
 }
 
-char* get_sysname(void)
+char *
+get_sysname(void)
 {
 	struct utsname name;
 	char *node;
@@ -197,7 +237,8 @@ char* get_sysname(void)
 	return NULL;
 }
 
-char* get_ip(void)
+char *
+get_ip(void)
 {
 	struct ifreq ifa; 
 	struct sockaddr_in *i;
@@ -211,32 +252,15 @@ char* get_ip(void)
 	return inet_ntoa(i->sin_addr);
 }
 
-static void switch_entry(GtkEntry *entry,
-		GdkWindow *window)
+static void
+handle_entry(GtkEntry *entry, GdkWindow *window)
 {
-	char text[255];
-	GdkCursor *cursor;
-
-	cursor = gdk_cursor_new(GDK_WATCH);
-
-	strncpy(text, gtk_entry_get_text(entry), sizeof(text));
-	if (strlen(text) < 1 ) {
-		return;
-	}
-	if (strlen(user) > 0 ) {
-		gdk_window_set_cursor(window, cursor);
-		printf("%s\n%s\n%s\n%s\n", user, text, language, session);
-		gtk_main_quit ();
-	}
-	strncpy(user, text, sizeof(user));
-	gtk_entry_set_text(entry, "");
-	gtk_entry_set_visibility(entry, FALSE);
-	gtk_label_set_markup((GtkLabel *) UserPrompt, \
-			(_("<b>Password:</b>")));
+	printf("%s\n", gtk_entry_get_text(entry));
+    gtk_entry_set_text(entry, "");
 }
 
-static void popup_menu(GtkWidget *widget,
-		GtkWindow *window)
+static void
+popup_menu(GtkWidget *widget, GtkWindow *window)
 {
 	GtkWidget *menu, *lang_item, *sess_item, *quit_item, *reboot_item;
 	GtkWidget *sep, *langico, *sessico, *rebootico, *haltico;
@@ -282,8 +306,8 @@ static void popup_menu(GtkWidget *widget,
 	return;	
 }
 
-int main( int argc,
-		char *argv[] )
+int
+main(int argc, char *argv[])
 {
 	int pw, ph, spheight, w, h;
 	const char *hoststring = 0;
@@ -291,15 +315,15 @@ int main( int argc,
 	gint lw, lh;
 
 	GdkCursor *normcursor, *busycursor;
-	GtkWidget *window, *entry, *syslabel, *logo, *EntryBox, *timelabel;
+	GtkWidget *window, *syslabel, *logo, *EntryBox, *timelabel;
 	GtkWidget *StatusBarBox, *spacer, *vbox, *vbox2, *hbox;
-    GtkWidget *StatusMessages;
 	GtkButton *optionbutton;
 	GdkWindow *root;
 	GdkPixbuf *rawpic, *pix;
 	GdkPixmap *pic;
 	GdkBitmap *mask;
 	gint width, height;
+    GIOChannel *g_stdin;
 
 	gtk_init (&argc, &argv);
 
@@ -309,8 +333,7 @@ int main( int argc,
 	busycursor = gdk_cursor_new(GDK_WATCH);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	g_signal_connect (G_OBJECT (window), "destroy",
-			G_CALLBACK (destroy), NULL);
+	g_signal_connect (G_OBJECT (window), "destroy", G_CALLBACK(destroy), NULL);
 
 	root = gdk_get_default_root_window();
 
@@ -330,19 +353,15 @@ int main( int argc,
 
 	spheight = (height / 4) - (lh / 2);
 
-	if (!(rawpic = gdk_pixbuf_new_from_file_at_scale(PIXMAPS_DIR "/bg.png", 
-			pw, ph, FALSE, NULL))) {
-        fprintf(stderr, "Couldn't load background pixmap\n");
-        exit(1);
-    }
+	rawpic = gdk_pixbuf_new_from_file_at_scale(PIXMAPS_DIR "/bg.png", 
+			pw, ph, FALSE, NULL);
 	gdk_pixbuf_render_pixmap_and_mask(rawpic, &pic, &mask, 0);
 	gdk_pixbuf_unref(rawpic);
 
 	gtk_widget_set_app_paintable(window, TRUE);
 	gtk_widget_set_size_request(window, w, h);
 	gtk_widget_realize(window);
-	gdk_window_set_back_pixmap((GdkWindow *) window->window, 
-			pic, 0);
+	gdk_window_set_back_pixmap((GdkWindow *) window->window, pic, 0);
 	gtk_window_set_decorated((GtkWindow *) window, FALSE);
 
 	vbox = gtk_vbox_new(FALSE, 5);
@@ -356,9 +375,8 @@ int main( int argc,
 	gtk_button_set_relief(optionbutton, GTK_RELIEF_NONE);
 	gtk_button_set_focus_on_click((GtkButton *) optionbutton, FALSE);
 	
-	g_signal_connect (G_OBJECT (optionbutton), "clicked",
-			G_CALLBACK (popup_menu),
-			window);
+	g_signal_connect (G_OBJECT(optionbutton), "clicked",
+			G_CALLBACK(popup_menu), window);
 
 	syslabel = gtk_label_new("");
 	timelabel = gtk_label_new("");
@@ -368,47 +386,51 @@ int main( int argc,
 
 	g_timeout_add(30000, (GSourceFunc)update_time, timelabel);
 
-	gtk_box_pack_start((GtkBox *) StatusBarBox, (GtkWidget *) optionbutton, FALSE, FALSE, 5);
-	gtk_box_pack_end((GtkBox *) StatusBarBox, (GtkWidget *) timelabel, FALSE, FALSE, 5);
-	gtk_box_pack_end((GtkBox *) StatusBarBox, (GtkWidget *) syslabel, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
+                       GTK_WIDGET(optionbutton), FALSE, FALSE, 5);
+	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
+                     GTK_WIDGET(timelabel), FALSE, FALSE, 5);
+	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
+                     GTK_WIDGET(syslabel), FALSE, FALSE, 0);
 
 	UserPrompt = gtk_label_new("");
 	spacer = gtk_label_new("");
 
 	if (lw < 180)
-	{
 		lw=180;
-	}
 
-	gtk_label_set_markup((GtkLabel *) UserPrompt, \
-			(_("<b>Username:</b>")));
 	gtk_misc_set_alignment((GtkMisc *) UserPrompt, 1, 0.5);
 	gtk_widget_set_size_request(UserPrompt, (lw / 2), 0);
 
     StatusMessages = gtk_label_new("");
-    gtk_label_set_markup((GtkLabel *) StatusMessages, \
-                (_("<span foreground=\"red\" weight=\"ultrabold\">Here is where status messages go</span>")));
 	entry = gtk_entry_new();
-	gtk_entry_set_width_chars((GtkEntry *) entry, 12);
-	g_signal_connect (G_OBJECT (entry), "activate", 
-			G_CALLBACK (switch_entry), root);
+	gtk_entry_set_width_chars(GTK_ENTRY(entry), 12);
+	g_signal_connect(G_OBJECT(entry), "activate", 
+			G_CALLBACK(handle_entry), root);
 
-	gtk_box_pack_start((GtkBox *) EntryBox, UserPrompt, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) EntryBox, entry, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(EntryBox), UserPrompt, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(EntryBox), entry, FALSE, FALSE, 0);
 
-	gtk_box_pack_start((GtkBox *) vbox, spacer, FALSE, FALSE, spheight);
-	gtk_box_pack_start((GtkBox *) vbox, logo, FALSE, FALSE, 5);
-	gtk_box_pack_start((GtkBox *) vbox, EntryBox, TRUE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) vbox, StatusMessages, TRUE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) hbox, vbox, TRUE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) vbox2, hbox, FALSE, FALSE, 0);
-	gtk_box_pack_end((GtkBox *) vbox2, StatusBarBox, FALSE, FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(vbox), spacer, FALSE, FALSE, spheight);
+	gtk_box_pack_start(GTK_BOX(vbox), logo, FALSE, FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(vbox), EntryBox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), StatusMessages, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(vbox2), StatusBarBox, FALSE, FALSE, 5);
 
 	gtk_container_add (GTK_CONTAINER (window), vbox2);
 
-	gtk_widget_show_all  (window);
+	gtk_widget_show_all(window);
 
 	gdk_window_set_cursor(root, normcursor);
+
+    /*
+     * Start listening to stdin
+     */
+
+    g_stdin = g_io_channel_unix_new(STDIN_FILENO);        /* listen to stdin */
+    g_io_add_watch(g_stdin, G_IO_IN, (GIOFunc)handle_command, g_stdin);
 
 	gtk_main ();
 
