@@ -6,8 +6,8 @@ case "$MODE" in
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
         EARLY_PACKAGES="ltsp-client ldm"
-        RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh hostname.sh loopback udev module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-screen.sh console-setup"
-        RC2_WHITELIST="klogd sysklogd ltsp-client nbd-client usplash rmnologin"
+        RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh hostname.sh loopback udev module-init-tools procps.sh etc-setserial ltsp-client-setup setserial"
+        RC2_WHITELIST="klogd sysklogd ltsp-client-core usplash rmnologin"
         OVERRIDE_EXPORTS="true"
         export DEBIAN_PRIORITY=critical
         ;;

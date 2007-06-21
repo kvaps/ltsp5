@@ -10,8 +10,7 @@ case "$MODE" in
 [default] 
     SOUND=True
     LOCALDEV=True
-    NBD_SWAP=True
-    SYSLOG=server
+    CONFIGURE_X=False
 EOF
         ;;
 esac
