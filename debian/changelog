@@ -1,3 +1,14 @@
+ltsp (5.0.18) gutsy; urgency=low
+
+  * added missing theme flavors for kubuntu and xubuntu
+  * added ldm2 theme support
+  * fixed manpage location in the ldm package
+  * make sure autogen.sh is run from 'debian/rules bzr-release' we dont want
+    autofoo crap in the source tree
+  * Merged scotts initial greeter implementation of a status message entry.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 21 Jun 2007 16:45:16 +0200
+
 ltsp (5.0.17) gutsy; urgency=low
 
   * new LDM !!!
