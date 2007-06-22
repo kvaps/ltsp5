@@ -7,7 +7,6 @@ TODO:
 fill lang popup window (with translated langs)
 fill session list
 configfile
-add "start with error" function and error dialogs if LDM_ERR is set
 */
 
 #define _GNU_SOURCE
@@ -70,7 +69,7 @@ update_time(GtkWidget *label)
 	timet = time( NULL );
 	timePtr = localtime( &timet );
 
-	timestring = g_strdup_printf("%.2d.%.2d, %.2d:%.2d", timePtr->tm_mday, \
+	timestring = g_strdup_printf("%.2d.%.2d, %.2d:%.2d", timePtr->tm_mday, 
 			timePtr->tm_mon+1, timePtr->tm_hour, timePtr->tm_min);
 
 	gtk_label_set_markup((GtkLabel *) label, timestring);
@@ -144,31 +143,35 @@ sesswin(GtkWidget *widget, GtkWindow *win)
 			gtk_radio_button_group( GTK_RADIO_BUTTON( radio_button1 )),
 				_("_3. GNOME") );*/
 
-	gtk_box_pack_start((GtkBox *) s_vbox2, (GtkWidget *) radio_button1, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) s_vbox2, (GtkWidget *) radio_button2, FALSE, FALSE, 0);
-	/*gtk_box_pack_start((GtkBox *) s_vbox2, (GtkWidget *) radio_button3, FALSE, FALSE, 0);*/
+	gtk_box_pack_start(GTK_BOX(s_vbox2), GTK_WIDGET(radio_button1),
+                       FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(s_vbox2), GTK_WIDGET(radio_button2),
+                       FALSE, FALSE, 0);
+	/*gtk_box_pack_start(GTK_BOX(s_vbox2), GTK_WIDGET(radio_button3),
+                         FALSE, FALSE, 0);*/
 
 	gtk_container_set_border_width (GTK_CONTAINER (s_vbox2), 15);
 	gtk_container_set_border_width (GTK_CONTAINER (s_vbox), 5);
 
 	s_cancel = gtk_button_new_from_stock("gtk-cancel");
-	g_signal_connect (G_OBJECT (s_cancel), "clicked",
-			G_CALLBACK (destroy_popup),
-			sesswin);
+	g_signal_connect (G_OBJECT(s_cancel), "clicked", G_CALLBACK(destroy_popup),
+			          sesswin);
 
 	s_accept = gtk_button_new_with_mnemonic(_("Change _Session"));
 
-	gtk_box_pack_end((GtkBox *) s_buttonbox, (GtkWidget *) s_accept, FALSE, FALSE, 0);
-	gtk_box_pack_end((GtkBox *) s_buttonbox, (GtkWidget *) s_cancel, FALSE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(s_buttonbox), GTK_WIDGET(s_accept),
+                     FALSE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(s_buttonbox), GTK_WIDGET(s_cancel),
+                     FALSE, FALSE, 0);
 
-	gtk_box_pack_start((GtkBox *) s_vbox, (GtkWidget *) s_vbox2, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) s_vbox, (GtkWidget *) s_buttonbox, TRUE, TRUE, 5);
+	gtk_box_pack_start(GTK_BOX(s_vbox), GTK_WIDGET(s_vbox2), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(s_vbox), GTK_WIDGET(s_buttonbox), TRUE, TRUE, 5);
 
 	s_frame = gtk_frame_new("");
-	gtk_label_set_markup((GtkLabel *) gtk_frame_get_label_widget((GtkFrame *) s_frame),
+	gtk_label_set_markup(GTK_LABEL(gtk_frame_get_label_widget(GTK_FRAME(s_frame))),
 			_("<b>Sessions</b>"));
-	gtk_frame_set_shadow_type((GtkFrame *) s_frame, GTK_SHADOW_OUT);
-	gtk_frame_set_label_align((GtkFrame *) s_frame, 0.0, 0.0);
+	gtk_frame_set_shadow_type(GTK_FRAME(s_frame), GTK_SHADOW_OUT);
+	gtk_frame_set_label_align(GTK_FRAME(s_frame), 0.0, 0.0);
 
 	gtk_container_add (GTK_CONTAINER (s_frame), s_vbox);
 	gtk_container_add (GTK_CONTAINER (sesswin), s_frame);
