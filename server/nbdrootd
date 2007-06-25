@@ -15,4 +15,4 @@ if [ ! -d "$IMGDIR" ]; then
 fi
 
 # start the blockdevice server
-/bin/nbd-server 0 $1 -r
+/bin/nbd-server 0 $1 -r -C /dev/null > /dev/null 2>&1
