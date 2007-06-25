@@ -245,7 +245,7 @@ x_session()
     cmd[i++] = "/etc/X11/Xsession";
 
     if (ldminfo.localdev) {
-        cmd[i++] = "&&";
+        cmd[i++] = "||";        /* closes bug number 121254 */
         cmd[i++] = "/usr/sbin/ltspfsmounter";
         cmd[i++] = "all";
         cmd[i++] = "cleanup";
