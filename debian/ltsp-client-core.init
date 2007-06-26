@@ -46,7 +46,6 @@ start_sound() {
                 --disable-shm \
                 --no-cpu-limit \
                 --resample-method=trivial \
-                --log-target=syslog \
                 --high-priority \
                 -L module-detect \
 			    -L "module-esound-protocol-tcp auth-anonymous=1" \
