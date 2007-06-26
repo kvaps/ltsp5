@@ -18,8 +18,11 @@ struct ldm_info {
     int     localdev;
     int     directx;
     int     sshfd;
+    int     greeterrfd;
+    int     greeterwfd;
     pid_t   sshpid;
     pid_t   xserverpid;
+    pid_t   greeterpid;
 };
 
 /* forward decls */

@@ -139,7 +139,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-gtkrcdir = $(datadir)/ldm
+gtkrcdir = $(datadir)/ldm/themes/default
 gtkrc_DATA = greeter-gtkrc
 EXTRA_DIST = $(gtkrc_DATA)
 all: all-am

@@ -352,6 +352,8 @@ main(int argc, char *argv[])
     ldminfo.lang = getenv("LDM_LANGUAGE");
     ldminfo.session = getenv("LDM_SESSION");
     ldminfo.greeter_prog = getenv("LDM_GREETER");
+    if (!ldminfo.greeter_prog)
+        ldminfo.greeter_prog = "/usr/bin/ldmgtkgreet";
     ldminfo.authfile = "/root/.Xauthority";
     ldminfo.control_socket = "/var/run/ldm_socket";
 
@@ -375,10 +377,13 @@ main(int argc, char *argv[])
         launch_x();
         create_xauth();                         /* recreate .Xauthority */
         
+        fprintf(ldmlog, "Spawning greeter.........\n");
+        spawn_greeter();
         if (!ldminfo.autologin)
             ldminfo.username = get_userid();
 
         ssh_session();                          /* Log in via ssh */
+        close_greeter();
         rc_files("start");                      /* Execute any rc files */
         x_session();                            /* Start X session up */
 
