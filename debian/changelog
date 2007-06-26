@@ -1,3 +1,10 @@
+ltsp (5.0.20) gutsy; urgency=low
+
+  * fix handling of mounted cdroms in ltsp-update-image
+  * drop the unused excludes from mksquashfs
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 26 Jun 2007 21:12:44 +0200
+
 ltsp (5.0.19) gutsy; urgency=low
 
   * fix nbdrootd to reflect teh new nbd-server syntax
