@@ -26,27 +26,46 @@ char *localpasswd;
 
 #include "ldm.h"
 
-int remap_pipe(int r, int w)
+int
+popen2(char **args, int *fpin, int *fpout)
 {
-    if (r == 0 && w == 1)
-        return TRUE;
-    if (r >= 1 && w > 1)
-        return dup2(r, 0) == 0 && close(r) == 0 &&
-               dup2(w, 1) == 0 && close(w) == 0;
-    if (r == 0 && w >= 1)
-        return dup2(w, 1) == 0 && close(w) == 0;
-    if (r >= 1 && w == 1)
-        return dup2(r, 0) == 0 && close(r) == 0;
-    if (r >= 1 && w == 0)
-        return dup2(w, 1) == 0 && close(w) == 0 &&
-               dup2(r, 0) == 0 && close(r) == 0;
-    if (r == 1 && w == 0) {
-        const int tmp = dup(w);
-        return tmp > 1 && close(w) == 0 &&
-               dup2(r, 0) == 0 && close(r) == 0 &&
-               dup2(tmp, 1) == 0 && close(tmp) == 0;
+    int pin[2], pout[2];
+    pid_t pid;
+
+    if(pipe(pin) == -1)
+        die("pipe\n");
+    if(pipe(pout) == -1)
+        die("pipe\n");
+
+    pid = fork();
+
+    if(pid == -1)
+        die("fork\n");
+
+    if (pid == 0) {
+        /* we are "in" the child */
+
+        /* this process' stdin should be the read end of the pin pipe.
+         * dup2 closes original stdin */
+        dup2(pin[0], STDIN_FILENO);
+        close(pin[0]);
+        close(pin[1]);
+        dup2(pout[1], STDOUT_FILENO);
+        /* this process' stdout should be the write end of the pout
+         * pipe. dup2 closes original stdout */
+        close(pout[1]);
+        close(pout[0]);
+
+        execv(args[0], args);
+        /* on sucess, execv never returns */
+        return(-1);
     }
-    return  FALSE;
+
+    close(pin[0]);
+    close(pout[1]);
+    *fpin = pin[1];
+    *fpout = pout[0];
+    return(pid);
 }
 
 void
@@ -55,26 +74,10 @@ spawn_greeter()
     char *greet[] = {
         ldminfo.greeter_prog,
         NULL};
-    pid_t pid;
-    int writepipe[2];                           /* parent -> child */
-    int readpipe[2];                            /* child -> parent */
 
-    fprintf(ldmlog, "spawning greeter\n");
-    if (pipe(readpipe) < 0 || pipe(writepipe) < 0)
-        die("Couldn't open greeter pipes\n");
-
-    pid = fork();
-    if (pid == 0) {                             /* child */
-        if (!remap_pipe(writepipe[0], readpipe[1]))
-            die("Couldn't remap greeter pipes");
-        execv(greet[0], greet);                   /* execve our arglist */
-        die ("Error: execv() returned\n");
-    } else if (pid > 0) {
-        ldminfo.greeterpid = pid;
-        ldminfo.greeterrfd = readpipe[0];
-        ldminfo.greeterwfd = writepipe[1];
-    } else if (pid < 0)
-        die ("Error: fork() failed\n");
+    
+    ldminfo.greeterpid = popen2(greet, &ldminfo.greeterwfd,
+                                       &ldminfo.greeterrfd);
 }
     
 char *
@@ -89,6 +92,7 @@ get_userid()
     p = username;
     while(1) {
         read(ldminfo.greeterrfd, p, 1);
+        fprintf(ldmlog, "get_userid: read %c\n", *p);
         if (*p == '\n')
             break;
         p++;

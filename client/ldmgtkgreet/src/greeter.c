@@ -434,6 +434,7 @@ main(int argc, char *argv[])
 
     g_stdin = g_io_channel_unix_new(STDIN_FILENO);        /* listen to stdin */
     g_io_add_watch(g_stdin, G_IO_IN, (GIOFunc)handle_command, g_stdin);
+    setbuf(stdout, NULL);
 
 	gtk_main ();
 

@@ -379,10 +379,16 @@ main(int argc, char *argv[])
         
         fprintf(ldmlog, "Spawning greeter.........\n");
         spawn_greeter();
+        fprintf(ldmlog, "after greeter.........\n");
+        
+        fprintf(ldmlog, "before get_userid.........\n");
         if (!ldminfo.autologin)
             ldminfo.username = get_userid();
+        fprintf(ldmlog, "after get_userid.........\n");
 
+        fprintf(ldmlog, "before ssh_session.........\n");
         ssh_session();                          /* Log in via ssh */
+        fprintf(ldmlog, "after ssh_session.........\n");
         close_greeter();
         rc_files("start");                      /* Execute any rc files */
         x_session();                            /* Start X session up */
