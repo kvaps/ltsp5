@@ -1,16 +1,16 @@
 #
 # Catalan translation for ltsp package.
-# Copyright (C) 2006 Matt Zimmerman.
+# Copyright (C) 2007 LTSP Debian/Ubuntu Maintainers.
 # This file is distributed under the same license as the ltsp package.
 #
-# Jordà Polo <jorda@ettin.org>, 2006.
+# Jordà Polo <jorda@ettin.org>, 2006, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.99debian5\n"
+"Project-Id-Version: 5.0.8debian2\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
-"PO-Revision-Date: 2006-10-15 00:01+0200\n"
+"POT-Creation-Date: 2007-06-16 10:08-0300\n"
+"PO-Revision-Date: 2007-06-27 20:01+0200\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
 "Language-Team: Català <debian-l10n-catalan@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -46,15 +46,46 @@ msgstr "Construeix el chroot LTSP"
 msgid "Building LTSP chroot..."
 msgstr "S'està construint el chroot per a LTSP..."
 
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid "No Interface for LTSP dhcpd configuration found"
+msgstr ""
+"No s'ha trobat cap interfície per a la configuració del dhcpd de l'LTSP"
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid ""
+"There are no free interfaces for usage with the LTSP Server. Please "
+"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
+"interface after the installation finished."
+msgstr ""
+"No hi ha cap interfície disponible per al servidor LTSP. Si us plau, quan "
+"acabi la instal·lació, configureu el fitxer /etc/ltsp/dhcpd.conf manualment "
+"per a que apunti a una interfície estàtica vàlida."
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
+msgstr "Interfície per a la xarxa de clients lleugers:"
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "There were multiple spare interfaces found in this system."
+msgstr "S'han trobat diverses interfícies disponibles en aquest sistema."
+
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Installation aborted "
 msgstr "S'ha avortat la instal·lació "
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
@@ -64,7 +95,7 @@ msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Please read the package description to understand what it means."
 msgstr ""
 "Si us plau, llegiu la descripció del paquet per entendre el que vol dir."
