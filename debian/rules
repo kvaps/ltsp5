@@ -6,7 +6,7 @@
 #export DH_VERBOSE=1
 
 DEBVER=$(shell dpkg-parsechangelog |sed -n -e '/^Version:/s/^Version: //p')
-DEB_BUILD_PROG:=debuild --preserve-envvar PATH --preserve-envvar CCACHE_DIR -us -uc $(DEB_BUILD_PROG_OPTS)
+DEB_SRC_BUILD_PROG:=dpkg-buildpackage -rfakeroot -S -sa
 
 build: build-stamp
 build-stamp:
@@ -51,7 +51,7 @@ binary-indep: build install
 	dh_install -i -Xarch-ids
 	dh_installdebconf -i	
 	dh_installinit -i --no-start
-	dh_installman -pltsp-server -pltsp-client -pldm
+	dh_installman -pltsp-server -pltsp-client-core -pldm
 	dh_link -i
 	dh_compress -i
 	dh_fixperms -i
@@ -70,7 +70,7 @@ binary-arch: build install
 	dh_install -a
 	dh_installdebconf -a
 	dh_installinit -a --no-start
-	dh_installinit -pltsp-client --name=ltsp-client-setup --no-start -u"start 32 S ."
+	dh_installinit -pltsp-client-core --name=ltsp-client-setup --no-start -u"start 32 S ."
 	dh_link -a
 	dh_strip -a
 	dh_compress -a
@@ -81,11 +81,13 @@ binary-arch: build install
 	dh_md5sums -a
 	dh_builddeb -a
 
-arch-build:
-	rm -rf debian/arch-build
-	mkdir -p debian/arch-build/ltsp-$(DEBVER)
-	baz inventory -s | xargs cp -a --parents --target=debian/arch-build/ltsp-$(DEBVER)
-	(cd debian/arch-build/ltsp-$(DEBVER); $(DEB_BUILD_PROG); dpkg-genchanges -S > ../ltsp_$(DEBVER)_source.changes)
+bzr-release:
+	rm -rf ../ltsp-$(DEBVER)
+	bzr export ../ltsp-$(DEBVER)
+	(cd ../ltsp-$(DEBVER); debian/rules controlgen; $(DEB_SRC_BUILD_PROG))
+
+controlgen:
+	debian/controlgen
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install arch-build
+.PHONY: build clean binary-indep binary-arch binary install bzr-release

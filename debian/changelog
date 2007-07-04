@@ -1,3 +1,619 @@
+ltsp (5.0.8debian1) unstable; urgency=low
+
+  * sync with upstream:
+      - support unencrypted LDM logins (LDM_DIRECTX)
+      - generate debian/control to reduce Debian/Ubuntu conflicts
+
+  * sync with Ubuntu:
+      - local printer support (jetpipe)
+      - pulseaudio sound system
+
+  * split ltsp-client into ltsp-client-core and ltsp-client
+      - all features (sound/localdev) enabled by default
+
+  * use proper boolean handling for NETWORK_COMPRESSION, based on patch from
+    Tim Day.  (Closes: #421324)
+
+  * Add code in the ltsp-client-builder udeb and a ltsp-client-builder plugin
+    to pass the d-i keyboard setting to LTSP and X.org. Thanks Petter.
+    (Closes: #421762)
+
+  * sound dependencies moved from ltsp-server to ltsp-server-standalone.
+    (Closes: #356986)
+
+  * drop support for obsoleted packages from debian sarge
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Fri,  1 Jun 2007 18:12:14 +0200
+
+ltsp (5.0.8) feisty-proposed; urgency=low
+
+  * add fixed ltsp-sound session script to fix LP bug #105709 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 25 Apr 2007 17:12:16 +0200
+
+ltsp (5.0.7) feisty; urgency=low
+
+  * cosmetical fix, make sure we switch to vt 7 between usplash end
+    and ldm start to prevent tty1 flashing in on slow thin clients
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 10 Apr 2007 15:22:20 +0200
+
+ltsp (5.0.6) feisty; urgency=low
+
+  * move printing back, doesnt gain us anything
+  * make sure the localdev scritps dont start new instaces with every ldm 
+    restart on logout
+  * fix quoting in sources.list plugin
+  * change package selection to not install *all* fonts, we only need the 
+    ones ldm uses (should help massively with bug #97456)
+  * fix yaboot linking in ltsp-update-kernels (closes LP #101927)
+
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  3 Apr 2007 15:49:04 +0200
+
+ltsp (5.0.5) feisty; urgency=low
+
+  * move printserver startup, localdev helperscripts and soundserver 
+    startup after start of X to speed up booting (should partially 
+    help with LP #97456)
+  * add pulseaudio-esound-compat to ltsp-server-standalone recommends
+    (for people feeling the need to still use esddsp with apps)
+  * drop duplicated module-detect option from pulseaudio startup to 
+    avoid warning in client bootlogs
+  * drop duplicated touching of /etc/nbd-client from ltsp-build-client, 
+    we start nbd from the ltsp-client-setup initscript, no need for a 
+    second run.
+  * remove stray sleep(5) call in ldm for speedup (LP #97456)
+  * add --copy-sourceslist option to ltsp-build-client to reuse the servers 
+    sources.list with ltsp-buiuld-client (fixes LP #48601)
+  * move loopback device entry creation in /etc/network/interfaces to 
+    ltsp-build-client, fixes a race condition while bringing up lo
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  2 Apr 2007 11:39:50 +0200
+
+ltsp (5.0.4) feisty; urgency=low
+
+  * fix varoius documentation, malone bugs #94081 and #78927
+  * make sure the lp module is loaded on all thin clients, 
+    fixes malone #94086
+  * fix support for multiple printers (malone #93863)
+  * make sure we set SYSLOG to point to the server in
+    the default lts.conf
+  * move the theme setting of ldm to finalization sequence 
+    to make sure we not only have the usplash but also the 
+    right ldm theme
+  * fix the MODULE_nn option to take arguments for modules it 
+    loads (fixes handling of ISA soundcards)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 26 Mar 2007 13:52:06 +0200
+
+ltsp (5.0.3) feisty; urgency=low
+
+  * remove xorg keymap setting form locales plugin, it breaks in d-i 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 20 Mar 2007 15:35:11 +0100
+
+ltsp (5.0.2) feisty; urgency=low
+
+  * fix yaboot handling for tftp in ltsp-update-kernels, 
+  * allow kernel copying to an existing /tftpboot in ltsp-update-kernels 
+    (upstream requirement for upgrades from 4.2)
+  * add lts.conf option SSH_OVERRIDE_PORT for non standard ssh ports 
+    to use with ldm (closes malone #47744)
+  * fix pulse and ltspfs deps harder, 
+  * remove mount-proc from Vendor dir, it's used in the common plugins 
+    section already
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 15 Mar 2007 01:38:46 +0100
+
+ltsp (5.0.1) feisty; urgency=low
+
+  [Oliver Grawert]
+  * Version bump to 5.0.x
+  * locale handling fixes (malone #67387, #72626 and #82427)
+  * only create a link for /proc/fd if necessary (malone #90703)
+  * dont attempt to install to unclean targets, spill a warning instead
+    (maolne #71237)
+  * install a default lts.conf with sound, localdev and nbdswap enabled
+  * make sure /var/lib/nfs is writeable on thin clients
+  * add sound dependencies to ltsp-server-standalone (probably split that out
+    in a ltsp-sound metapackage later)
+  * improve handling of boolean variables in the initscript
+  * fix the remaining bits of x11 directory handling, we dont have xfree86 
+    anywhere anymore in ubuntu.
+  * fix typo in cjwatsons patch
+  * sanitize pulse option formatting
+  * make sure console-setup is in the rcS startup links
+  * drop stop-bootlogd and etc-setserial from startup link cleanup list
+    we have neither installed, if users want it, they also want the
+    initscripts.
+  * add pete savages reboot button fix to ldm
+  * add fix to speed up X autodetection by merging all debconf-communicate
+    calls into one. Thanks for the patch to Müller Zsolt <muzso@muzso.hu>
+  * revert the temporary switch to the -generic kernel on thin clients
+  * fix artwork handling in ldm and update themes
+
+  [Colin Watson]
+  * Log that we're starting up ldm before stopping usplash. If usplash was
+    running, don't bother logging successful startup, as it will look weird
+    on the console.
+  * If usplash was running, wait a short while for the active console to
+    change after starting up ldm, to try to avoid visible console noise from
+    later init scripts.
+  * Depend on kbd | console-tools for fgconsole.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 12 Mar 2007 13:38:48 +0000
+
+ltsp (0.134) feisty; urgency=low
+
+  *  enable the kiosk plugin (ltsp-build-client will accept the --kiosk
+     option now)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 13 Feb 2007 01:04:35 +0100
+
+ltsp (0.133) feisty; urgency=low
+
+  * final switch for pulseaudio support
+  * make sure the right usplash theme is installed
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 30 Jan 2007 16:40:18 +0100
+
+ltsp (0.132) feisty; urgency=low
+
+  * add pulse support and dependencies
+  * revert the herd2 quickfix 
+  * remove the broken security mirror line from ltsp-client-builder
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 17 Jan 2007 13:10:01 +0100
+
+ltsp (0.131) feisty; urgency=low
+
+  * temporary switch i386 to the -generic kernel image (this might break
+    on machines requiring the 486 codeset ...)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 11 Jan 2007 11:13:41 +0100
+
+ltsp (0.130) feisty; urgency=low
+
+  * quickfix for mirror handling on non networked systems to make herd2
+    installable 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 10 Jan 2007 23:35:57 +0100
+
+ltsp (0.129) feisty; urgency=low
+
+  * make sure we dont try to install the dropped 80_ltsp-sound file to avoid
+    FTBFS 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  5 Jan 2007 15:50:31 +0100
+
+ltsp (0.128) feisty; urgency=low
+
+  * merge jetpipe, the new printserver from
+    http://bazaar.launchpad.net/~ogra/ltsp/feisty-ltsp-jetpipe
+  * remove the session sound hack that wiped the gstreame DB on login 
+    (malone: #65690)
+  * merge boolean handling as well as configuration and documentation 
+    fixes from mainline
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  5 Jan 2007 14:02:17 +0100
+
+ltsp (0.127) feisty; urgency=low
+
+  * Add dependency on openbsd-inetd
+  * Merge with debian bzr branch from http://pkg-ltsp.alioth.debian.org/bzr/main
+    [Vagrant Cascadian]   
+        * translation updates
+        * simplified --arch handling
+        * set ltsp-client/abort-installation question to priority critical and change
+          to type "error"
+        * do not run ltsp-client initscripts if /etc/ltsp_chroot is not present.
+        * improvements to inputattach handling
+        * reorganize network boot dependencies
+        * ltsp-update-kernels: merge
+          http://llama.freegeek.org/~vagrant/bzr/ltsp/features/vagrant-update-kernels
+        * added NEWS file which documents the changes to NBD swapping
+        * man page for ldminfod
+        * added manpage for nbdswapd
+        * credit translators for their work
+        * add cryptsetup to suggests (for encrypted swap support)
+        * updated swap documentation
+        * merge
+          http://llama.freegeek.org/~vagrant/bzr/ltsp/features/vagrant-ltsp-swap
+        * populate /etc/hostname with "ltsp" instead of "ltsp-chroot"
+        * added catalan translation
+        * make location of tftp directory configurable
+        * allow comma-separated list for late-packages, early-packages,
+          kernel-packages, debconf-seeds and apt-keys
+        * include french translation for ltsp-build-client
+        * allow --components to be a comma-separated (for debconf preseeding)
+        * debconf preseeding for ltsp-client-builder
+        * update the description for ltsp-client-builder/build-client-opts
+        * do not build or install lp_server
+        * make options to pass to ltsp-build-client preseedable.
+        * copyright clarifications from upstream
+        * include updated copyright notices in debian/copyright
+        * add dependency on gettext-base (reported by Ronny Aasen)
+        * only display advanced help options if called with --extra-help
+        * allow custom screen scripts in /etc/ltsp/screen.d
+        * implement SWAPDIR in favor of SWAP
+        * added X_VIDEO_RAM variable
+        * split mtab and daemon handling into separate plugins
+        * split init whitelisting into separate plugin
+        * add plugin directory for custom plugins (such as CDDs)
+        * update to include program name in the plugins dir
+        * put LTSP_CHROOT variable for the installation path into /etc/ltsp_client
+        * move root password handling later
+        * move handling of /etc/exports later and to the finalization phase
+        * if daemon is installed, use it to start sdm 
+        * divert /etc/mtab and point /etc/mtab to /proc/mounts
+        * apt-get update now runs after locales have been generated
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  6 Dec 2006 13:02:05 +0100
+
+ltsp (0.126) feisty; urgency=low
+
+  * added dependency on update-inetd to ltsp-server (needed by tftpd-hpa now) 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue,  5 Dec 2006 18:04:18 +0100
+
+ltsp (0.125) feisty; urgency=low
+
+  * switch package to feisty as default distro 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 28 Nov 2006 18:24:32 +0100
+
+ltsp (0.124) edgy; urgency=low
+
+  * add the -f option to the rm command in the 80_ltsp-sound Xsession 
+    script to avoid crashers on login, closes malone #66808
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun, 22 Oct 2006 11:54:31 +0200
+
+ltsp (0.123) edgy; urgency=low
+
+  * add a workaround for the changed gstreamer autosink detection
+    (closes malone #65690)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 16 Oct 2006 10:29:37 +0200
+
+ltsp (0.122) edgy; urgency=low
+
+  * change dependency of ldm from python-gnome2 to python-gnomecanvas
+  * human-cursors-theme is fixed, remove the workaround plugin
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 11 Oct 2006 23:14:34 +0200
+
+ltsp (0.121) edgy; urgency=low
+
+  * fix alternative path for cursor theme
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  9 Oct 2006 12:13:56 +0200
+
+ltsp (0.120) edgy; urgency=low
+
+  * make sure we use the human cursors in new ltsp installs
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon,  9 Oct 2006 11:15:43 +0200
+
+ltsp (0.119) edgy; urgency=low
+
+  * documentation update: new example lts.conf and proper table with key/value
+    pairs in lts-parameters.txt
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun,  8 Oct 2006 15:14:03 +0200
+
+ltsp (0.118) edgy; urgency=low
+
+  * make sure we test for a special char device if looking for /dev/dsp, 
+    fixes malone #56959
+  * show the ip additionally to the hostname in ldm
+  * switch to vt7 before stopping usplash
+  * add klogd to enabled services in ltsp-build-client
+  * add syslog to the enabled services in ltsp-build-client
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  6 Oct 2006 16:04:59 +0200
+
+ltsp (0.117) edgy; urgency=low
+
+  * use the new kernel image name for amd64
+  * add DO_NOT_SWITCH_VT to the ltsp-client initscript, so we swich directly
+    to the screen session from usplash instead of having a flashing tty1
+    inbetween
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  5 Oct 2006 11:35:11 +0200
+
+ltsp (0.116) edgy; urgency=low
+
+  * make sure amd64 clients are built on amd64 and keep i386 optional on 
+    that architecture to unbreak the edubuntu CD install
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 28 Sep 2006 12:33:25 +0200
+
+ltsp (0.115) edgy; urgency=low
+
+  * mknbi doesnt exist on non-i386 arches so dont try to install it on 
+    powerpc 
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 27 Sep 2006 23:56:31 +0200
+
+ltsp (0.114) edgy; urgency=low
+
+  * make sure mknbi is availabe on all i386 systems for out of the box
+    etherboot support.
+  * replace the obsolete arch-build with a bzr-release target to make
+    maintenance easier
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun, 24 Sep 2006 14:44:24 +0200
+
+ltsp (0.113) edgy; urgency=low
+
+  * make sure the Password label in ldm doesnt change color
+  * better fix for esd, so now actually a second user also gets sound
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 21 Sep 2006 16:36:13 +0200
+
+ltsp (0.112) edgy; urgency=low
+
+  * fix ldm edubuntu theme
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 22:36:52 +0200
+
+ltsp (0.111) edgy; urgency=low
+
+  * whoops, we dont want the .bzr tree in the source package
+  * fix debian introduced hang of esd on relogin, closes malone (#61491)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 21:42:23 +0200
+
+ltsp (0.110) edgy; urgency=low
+
+  * fix printer handling in the initscript
+  * fix paths in the start_printer script
+  * fix the paths in the client setup initscript to match FHS fixes in 
+    the ltspfs package
+  * fix boolean handling of env vars in ldm
+  * fix floppy handling in ldm
+  * do not link the apt related plugins
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Sep 2006 20:07:38 +0200
+
+ltsp (0.109) edgy; urgency=low
+
+    * make etherboot work automagically
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 19 Sep 2006 16:00:54 +0200
+
+ltsp (0.108) edgy; urgency=low
+
+  - The "Detroit hackfest fixing spree" release -
+
+  * fixes in the debian plugins (which dont really affect us):
+    * when hostname is "(none)", also reset hostname variable
+    * fix gdm handling of x-display-manager if installed in the chroot
+    * fix typo in dpkg-divert for policy-rc.d script
+    * debian plugin to keep package cache if wanted
+    *  allow --include as well for debootstrap
+  * whitespace fixes and check for /bin/true in ltsp-update-kernels
+  * add option to quiet ltsp-update-kernels if desired
+  * move /etc/exports handling to a later position for finalization
+  * move rootpw handling/locking to a later position (only sequence number
+    change)
+  * allow --chroot option to name the chroot something other than ARCH (fix
+    requested by jammcq)
+  * add empty plugin directory for custom plugins
+  * split initscript handling in its own plugin
+  * split daemon and mtab handling into their own plugins
+  * fix X_VIDEO_RAM handling in initscript (needs follow up fix of 
+    malone #60805)
+  * fix boolean handling in ldm
+  * update Ubuntu plugin symlinks
+  * remove /var/run and /var/lock from bind mounting so we dont
+    double-bindmount them to tmpfs
+  * remove /etc/hotplug from bindmounted dirs, to quiten the boot, we dont use
+    hotplug since ages ...
+  * documentation updates:
+    * doc update for nbdswapd
+    * dnsmasq doc examples update (typo fix)
+    * doc/workstation update, fix gdm docs
+    * doc/examples/qemu-ltsp fix for help function
+    * doc/plugins documentation update
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 18 Sep 2006 21:17:06 +0200
+
+ltsp (0.107) edgy; urgency=low
+
+  * Fix typos and formatting of device entry in /etc/network/interfaces in
+    ltsp-client-builder.postinst
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sat, 16 Sep 2006 16:12:19 +0200
+
+ltsp (0.106) edgy; urgency=low
+
+  * make sure we disconnect /dev/nbd[n] in ldm before shutdown to avoid 
+    idling nbdswapd connections
+  * mark the nbd device as swap device in ltsp-client-setup initscript
+  * add server/plugins/ltsp-build-client/Ubuntu/010-nbd-client to make sure
+    /etc/nbd-client is there before we bind mount it to a tmpfs
+  * add server/plugins/ltsp-build-client/Ubuntu/010-cleanup-consoles, 
+    to remove additional consoles from /etc/event.d to save memory
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Sep 2006 12:09:16 +0200
+
+ltsp (0.105) edgy; urgency=low
+
+  * drop ldm-swapon in favor if vargrantc's new ndbswapd inetd wrapper
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sat,  9 Sep 2006 14:46:00 +0200
+
+ltsp (0.104) edgy; urgency=low
+
+  * work around dd breakage with non C locales in ldm-swapon
+  * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d
+  * fix Ubuntu/000-basic-configuration to look in the right dir for finalization
+  * move the botloaders from ltsp-server to ltsp-client to make the new
+    ltsp-update-kernels architecture happy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  8 Sep 2006 23:22:39 +0200
+
+ltsp (0.103) edgy; urgency=low
+
+  * merge debian changes
+  * revert ldm changes to the ssh socket made by debian
+  * [Vagrant Cascadian]
+    * add dependency on netbase (ldminfod uses inetd)
+    * merge support for locales
+    * add python dependency for ldminfod
+    * merge plugin modularization:
+    * load functions from $PLUGINS_BASE dir
+    * move ltsp-build-client plugins to it's own plugin directory.
+    * split load_plugins function into separate file
+    * don't force LC_ALL=C or LANG=C when happens after locales get configured
+    * initial plugin to configure locales in the installed chroot
+    * use true as a no-op.
+    * example to use dnsmasq as a dhcp server
+    * added server/doc/examples dir, move qemu-ltsp to examples
+    * if a viable x-display-manager is installed, don't default to ldm/sdm/startx
+    * versioned dependency on python >= 2.4 instead of python2.4
+    * added readme to explain how to build a client chroot, and what support is
+    * run sdm on the appropriate terminal
+    * mention --help to list all available options
+    * update ltsp-build-client man page
+    * removed unprintable character that was causing lintian warnings
+    * install manpage for ldm
+    * manpage for ldm
+    * tweak rules to insall manpages for ltsp-client, too.
+    * inlude plugins documentation ltsp-server package
+    * document the plugins system
+    * add documentation about swap and workstation-style installs
+    * install bug helpers
+    * bug reporting script to probe for installed packages in chroot(s)
+    * drop recommends on nbd-client, it's already a dependency.
+    * install getltscfg manpage
+    * manpage for getltscfg
+    * bugfix for whitelisting
+    * only add localdev ssh options if configured for localdev
+    * merge with mainline: localdev and language support in ldm, whitespace fixes
+    * whitespace correction
+    * only run the rc whitelisting code if there is something whitelisted
+    * only set "ips" variable once, using the "ip" command.
+    * only update ssh keys in chroots with an /etc/ssh directory
+    * overwrite /etc/hosts on boot, not just append to it
+    * bugfix: tweak /etc/hostname instead of /etc/hosts
+    * build-depend on po-debconf
+    * only install udhdpc on sarge
+    * add qemu-ltsp script to examples
+    * added wrapper script to test with qemu
+    * check for initrd-netboot-tools in the chroot
+    * increment version and mention recent changes
+    * use lsb_release to set default dist
+    * depend on initramfs-tools 0.73e, which implements conf.d handling correctly
+    * move initramfs-tools hook from /etc/initramfs-tools/conf.d/
+    * no need to set NFSOPTS anymore, default for initramfs-tools works
+    * set background color to white for debian theme
+    * mention change to update-kernels running on kernel install
+    * create relative symlink for nbi images
+    * versioned nbi does not include .old when linking nbi.img.old,
+    * check for existing nbi image in $BOOT
+    * only make nbi symlink if real nbi file exists
+    * call update-client from kernel postinst/postrm hooks
+    * support updating a specific kernel
+    * mention openbsd-inetd preference and close debian bug #382681
+    * ldm really depends on python2.4 now
+    * merge sparc fixes to update-kernels
+    * bugfixes for sparc-utils handling
+    * use the lsb_release short form to set VENDOR (instead of extra call to awk)
+    * use the lsb_release short for to set VENDOR (instead of extra call to sed)
+    * include example dhcpd.conf
+    * debian theme changes
+    * improved background for debian theme
+    * check for vmlinux* and vmlinuz* for symlink versioning
+    * mark update-kernels as executable
+    * move 035-update-kernels back to common (works with new plugin ordering)
+    * move rootpass so it prompts for the password (if enabled) at the very end.
+    * merge new plugin ordering from vagrant-new-plugins
+    * merge load_plugin_modules into load_plugins
+    * change order of plugin loading to be alpha-numeric order
+    * merge sparc-utils code into common code block
+    * handle both vmlinuz and vmlinux
+    * merge mkelf-linux and netabootwrap code
+    * implement boot prompt options common to yaboot and pxelinux configuration
+    * improved text when pxe is not being configured.
+    * move $BOOT calls to other locations, simplify symlink handling
+    * properly handle symlinked kernels
+    * support vmlinuz.old for mkelf-linux
+    * also catch versioned nbi images
+    * add VENDOR variable used by PXELINUX_CMDLINE
+    * copy nbi images, too.
+    * sparc images now begin with nbi
+    * allow updating only a specified chroot
+    * no need to copy the System.map files
+    * removed mkvmlinuz from ltsp-client dependencies
+    * download pxelinux.0 from it's new location (i386 only)
+    * mknbi is not available on amd64
+    * move pxe and yaboot handling back into ltsp-update-kernels, but use binaries
+    * added TFTP_CHROOT variable to identify the chroot-specific tftp dir
+    * reduce warnings with find by properly ordering options and arguments
+    * create the chroot-specific tftp directory to ensure files can be copied into it.
+    * merge another initrd-netboot-tools bugfix
+    * merge initramfs-tools bugfix
+    * use architecture-specific dependencies
+    * allow yaboot to satisfy network boot dependency
+    * move dependencies for various network boot generators from ltsp-server
+    * attempt to support pxelinux and yaboot
+    * just install yaboot.conf to /boot (remove leftover code from ltsp-update-kernels)
+    * bugfix: update-kernels is installed into /usr/lib/ltsp
+    * code to actually update the images in the chroot (was in ltsp-update-kernels)
+    * dropped handling kernel update code on the server directly, instead call a
+    * update-kernels needs to be run after the kernel gets installed (Debian/030-late-packages)
+    * simplify handling of vmlinuz and vmlinux copying
+    * merge mount-proc into common plugins
+    * bugfix: put quotes around clients
+    * plugin to update the ssh keys
+    * added plugin to update the kernels
+    * only set PXELINUX_CMDLINE if not already set
+    * define PXELINUX_CMDLINE variable, and set for ubuntu
+    * install initramfs-tools/conf.d/ltsp into /etc/initramfs-tools/conf.d
+    * use initramfs-tools/conf.d if available
+    * bugfix: check for initrd-netboot-tools in the chroot
+    * allow yaboot to satisfy network boot generator dependency
+    * only set values if not already set
+    * update with enable-popcon text
+    * handle another combination of binary and configuration file for initramfs-tools
+    * add /etc/hosts.ltsp to /etc/hosts on boot if present
+    * merge code to ltsp-update-keys to add a static file of ssh_known_hosts entries
+    * add ssh_known_hosts.extra to chroot's ssh_known_hosts files
+    * add /etc/hosts.ltsp file to /etc/hosts if present
+    * the sparc code we have uses binaries from sparc-utils, not silo.
+    * document USE_LOCAL_SWAP
+    * USE_LOCAL_SWAP for swap on local disks (from patch by Petter Reinholdtsen)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri,  8 Sep 2006 01:27:06 +0200
+
+ltsp (0.102) edgy; urgency=low
+
+  * added ldm-swapon, an automatic userspace swap script using the ssh tunnel
+    to automatically create swapfiles for nbd-server/client. implements the 
+    NBD_SWAP and SWAP_SIZE options for lts.conf
+  * adds dependency on nbd-server to the ltsp-server package
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 19:26:42 +0200
+
+ltsp (0.101) edgy; urgency=low
+
+  * update po files
+  * merge fixes for ldm lang/session handling from
+    http://llama.freegeek.org/~vagrant/bzr/ltsp/features/vagrant-lang-session/
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 00:56:13 +0200
+
+ltsp (0.100) edgy; urgency=low
+
+  * merge ltsp-dhcpd-autogeneration (configure a default interface for ltsp
+    from the installer udeb) from ltsp-mainline
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu,  7 Sep 2006 00:25:51 +0200
+
 ltsp (0.99debian12) unstable; urgency=low
 
   [ Vagrant Cascadian ]
@@ -261,6 +877,53 @@ ltsp (0.99debian1) unstable; urgency=low
 
  -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 17 Sep 2006 14:09:33 -0400
 
+ltsp (0.99) edgy; urgency=low
+
+  * merged
+    http://people.ubuntu.com/~ogra/bzr-archive/ltsp/ldm-login-and-session-handling/,
+    implements login and session selection in ldm
+  * move the /etc/hosts plugin from Debian subdir to common plugins
+  * fix usplash breakage in ldm
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed,  6 Sep 2006 03:35:29 +0200
+
+ltsp (0.98) edgy; urgency=low
+
+  * move finalization plugins to the vendor dir with a more proper sequence
+    number, so they dont run to early
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 31 Aug 2006 10:54:25 +0200
+
+ltsp (0.97) edgy; urgency=low
+
+  * small fixes to the localdev support
+  * add plugins for running ltsp-update-{sshkeys,kernels} at the end of
+    the ltsp-build-client run
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 29 Aug 2006 17:53:01 +0200
+
+ltsp (0.96) edgy; urgency=low
+
+  * make sure ldm always creates our localdev socket
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 28 Aug 2006 19:40:55 +0200
+
+ltsp (0.95) edgy; urgency=low
+
+  * enable the language and session buttons in ldm (non functional yet
+    for the ltsp-login-and-session-handling spec)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 24 Aug 2006 13:49:46 +0200
+
+ltsp (0.94) edgy; urgency=low
+
+  * add local device support:
+    make sure LOCALDEV=True is set in lts.conf, the ltspfsd package 
+    is installed in the client chroot and the ltspfs package is installed
+    on the ltsp server (new created chroots will have ltspfsd by default)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 22 Aug 2006 19:09:59 +0200
+
 ltsp (0.93debian1) unstable; urgency=low
 
   [ Otavio Salvador ]
@@ -390,30 +1053,30 @@ ltsp (0.88) edgy; urgency=low
 
 ltsp (0.87debian2) unstable; urgency=low
 
-   [ Otavio Salvador ]
-   * Make LTSP messages translatable.
-   * Minimal fixes for indentation of ltsp-client-setup init script.
-   * Fix Permission Denied error due a error in unionfs mount command in
-     initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
-     debugging it. (Closes: #360249)
-   * We don't need to set initramfs-tools as default since it's since
-     Debian kernel 2.6.15.
-   * Improved common/020-init-image including better code formating and
-     documentation.
-   * Converted set-arch modules to be a common one. For this dpkg use was
-     remove. Support for error messages translation was also added.
+  [ Otavio Salvador ]
+  * Make LTSP messages translatable.
+  * Minimal fixes for indentation of ltsp-client-setup init script.
+  * Fix Permission Denied error due a error in unionfs mount command in
+    initramfs hooks. Thanks to Dean Montgomery <dmonty@sd73.bc.ca> by
+    debugging it. (Closes: #360249)
+  * We don't need to set initramfs-tools as default since it's since
+    Debian kernel 2.6.15.
+  * Improved common/020-init-image including better code formating and
+    documentation.
+  * Converted set-arch modules to be a common one. For this dpkg use was
+    remove. Support for error messages translation was also added.
  
-   [ Gustavo Franco ]
-   * po/pt_BR.po:
-     - Add po/ltsp.pot Portuguese Brazilian translation by myself.
- 
-   [ Otavio Salvador ]
-   * Move translation update routine to update-po rules target.
-   * Fix code style in common/010-set-base.
-   * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
-     <chaton@debian.org> for the bug report and updated file.
-     (Closes: #374656)
-   * Add support to initramfs-tools >= 0.64.
+  [ Gustavo Franco ]
+  * po/pt_BR.po:
+    - Add po/ltsp.pot Portuguese Brazilian translation by myself.
+  
+  [ Otavio Salvador ]
+  * Move translation update routine to update-po rules target.
+  * Fix code style in common/010-set-base.
+  * Update debian/po/fr.po. Thanks for Jean-Marc Chaton
+    <chaton@debian.org> for the bug report and updated file. 
+    (Closes: #374656)
+  * Add support to initramfs-tools >= 0.64.
 
  -- Otavio Salvador <otavio@debian.org>  Fri, 23 Jun 2006 15:48:37 -0300
 

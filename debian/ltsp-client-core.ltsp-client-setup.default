@@ -13,7 +13,7 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/hotplug/.run /var/lib/nfs /etc/network/run"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/console-setup"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
@@ -24,7 +24,7 @@ copy_dirs=""
 temp_copy_dirs="/var/cache/debconf"
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf"
+bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf"
 
 if [ -n "$(which xdebconfigurator)" ]; then # xdebconfigurator is installed 
     bindfiles="$bindfiles /etc/X11/xorg.conf /etc/X11/XF86Config-4"
@@ -32,5 +32,5 @@ else
     # If not, copy the entire X config directories to get reconfigure
     # working.  This uses more memory on the client than the
     # xdebconfigurator alternative.
-    copy_dirs="$copy_dirs /etc/X11 /var/lib/xfree86"
+    copy_dirs="$copy_dirs /etc/X11 /var/lib/x11"
 fi

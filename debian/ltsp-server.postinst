@@ -37,6 +37,7 @@ echo 'invoke-rc.d nfs-kernel-server reload'
         fi
 		# enable the ldm info daemon in inetd.conf
 		update-inetd --group LTSP --add "9571           stream  tcp     nowait  nobody /usr/sbin/tcpd /usr/sbin/ldminfod"
+		update-inetd --group LTSP --add "9572			stream  tcp 	nowait 	nobody /usr/sbin/tcpd /usr/sbin/nbdswapd"
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

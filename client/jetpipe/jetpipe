@@ -1,0 +1,50 @@
+#!/usr/bin/python
+#
+# Minimal Printserver, forwards a printer device to a tcp port (usually 9100)
+# 
+# TODO: 
+#   * add read for bidirectional comm ?
+#   * add writeonly opts
+#   * serial device support ?
+#
+# Copyright 2006, Canonical Ltd.
+# 
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License with your
+# Debian GNU system, in /usr/share/common-licenses/GPL.  If not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA
+
+import socket
+import sys
+
+# Print usage information
+if len(sys.argv)!=3:
+    print 'Usage: jetpipe <printerdevice> <port>'
+    sys.exit(0)
+
+# Wait for a job on <port> to forward to <printerdevice>
+def listen():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(('', int(sys.argv[2])))
+    s.listen(1)
+    conn, addr = s.accept()
+    while 1:
+        data = conn.recv(1024)
+        if not data: break
+        p = open(sys.argv[1], 'wb')
+        p.write(data)
+        p.flush()
+        p.close()
+    conn.close()
+
+# Rewspawn eternally
+while 1:
+    listen()
