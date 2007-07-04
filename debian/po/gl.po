@@ -1,0 +1,96 @@
+# Galician translation of ltsp's debconf templates
+# This file is distributed under the same license as the ltsp package.
+# Jacobo Tarrio <jtarrio@debian.org>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ltsp\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2007-07-03 20:01-0500\n"
+"PO-Revision-Date: 2007-07-04 18:40+0200\n"
+"Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../ltsp-client-builder.templates:1001
+msgid "Set up an LTSP chroot environment?"
+msgstr "¿Configurar un ambiente chroot de LTSP?"
+
+#. Type: boolean
+#. Description
+#: ../ltsp-client-builder.templates:1001
+msgid ""
+"This will set up an LTSP chroot environment on the machine, to act as a thin "
+"client server."
+msgstr ""
+"Isto ha configurar un ambiente chroot de LTSP na máquina, para actuar coma "
+"un servidor de clientes lixeiros."
+
+#. Type: text
+#. Description
+#. Item in the main menu to select this package
+#: ../ltsp-client-builder.templates:2001
+msgid "Build LTSP chroot"
+msgstr "Construír chroot de LTSP"
+
+#. Type: text
+#. Description
+#: ../ltsp-client-builder.templates:3001
+msgid "Building LTSP chroot..."
+msgstr "A construír o chroot de LTSP..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid "No Interface for LTSP dhcpd configuration found"
+msgstr "Non se atopou ningunha interface para configurar dhcpd para LTSP"
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid ""
+"There are no free interfaces for usage with the LTSP Server. Please "
+"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
+"interface after the installation finished."
+msgstr ""
+"Non hai interfaces libres para empregalas co servidor LTSP. Configure o "
+"ficheiro /etc/ltsp/dhcpd.conf manualmente para que apunte a unha interface "
+"estática válida despois de rematar a instalación."
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
+msgstr "Interface para a rede de clientes lixeiros:"
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "There were multiple spare interfaces found in this system."
+msgstr "Atopáronse varias interfaces libres no sistema."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid "Installation aborted "
+msgstr "Instalación cancelada "
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid ""
+"ltsp-client cannot be installed in a regular machine. This package provides  "
+"the basic structure for a LTSP terminal."
+msgstr ""
+"Non se pode instalar ltsp-client nunha máquina normal. Este paquete fornece "
+"a estructura básica para un terminal LTSP."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid "Please read the package description to understand what it means."
+msgstr "Consulte a descrición do paquete para entender o que significa."
