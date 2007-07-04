@@ -11,20 +11,24 @@ set -e
 #          <failed-install-package> <version> `removing'
 #          <conflicting-package> <version>
 
+DIST="$(lsb_release --short --id)"
+
+case $DIST in
+    Debian) ldm_debian_priority="70" ;;
+    Ubuntu) ldm_ubuntu_priority="70" ;;
+esac
+
 case "$1" in
     configure)
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Debian 55
+		ldm-theme /usr/share/ldm/themes/Debian ${ldm_debian_priority:-"60"}
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/ubuntu 65
+		ldm-theme /usr/share/ldm/themes/ubuntu ${ldm_ubuntu_priority:-"60"}
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
 		ldm-theme /usr/share/ldm/themes/edubuntu 60
- 	update-alternatives \
-		--install /usr/share/ldm/themes/default \
-		ldm-theme /usr/share/ldm/themes/Debian-Edu 50
        ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

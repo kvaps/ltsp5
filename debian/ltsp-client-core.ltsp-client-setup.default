@@ -27,7 +27,7 @@ temp_copy_dirs="/var/cache/debconf"
 bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf"
 
 if [ -n "$(which xdebconfigurator)" ]; then # xdebconfigurator is installed 
-    bindfiles="$bindfiles /etc/X11/xorg.conf /etc/X11/XF86Config-4"
+    bindfiles="$bindfiles /etc/X11/xorg.conf"
 else
     # If not, copy the entire X config directories to get reconfigure
     # working.  This uses more memory on the client than the
