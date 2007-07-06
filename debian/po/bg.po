@@ -1,0 +1,92 @@
+# translation of bg.po to Bulgarian
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Damyan Ivanov <dam@modsoftsys.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2007-07-03 20:01-0500\n"
+"PO-Revision-Date: 2007-07-06 12:31+0300\n"
+"Last-Translator: Damyan Ivanov <dam@modsoftsys.com>\n"
+"Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#. Type: boolean
+#. Description
+#: ../ltsp-client-builder.templates:1001
+msgid "Set up an LTSP chroot environment?"
+msgstr "Подготвяне на chroot обкръжение за LTSP?"
+
+#. Type: boolean
+#. Description
+#: ../ltsp-client-builder.templates:1001
+msgid ""
+"This will set up an LTSP chroot environment on the machine, to act as a thin "
+"client server."
+msgstr "Подготвянето на обкръжение за LTSP е необходимо за функционирането на системата като сървър за тънки клиенти."
+
+#. Type: text
+#. Description
+#. Item in the main menu to select this package
+#: ../ltsp-client-builder.templates:2001
+msgid "Build LTSP chroot"
+msgstr "Създаване на обкръжение за LTSP"
+
+#. Type: text
+#. Description
+#: ../ltsp-client-builder.templates:3001
+msgid "Building LTSP chroot..."
+msgstr "Създава се обкръжение за LTSP..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid "No Interface for LTSP dhcpd configuration found"
+msgstr "Не е открит интерфейс за dhcpd и LTSP"
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid ""
+"There are no free interfaces for usage with the LTSP Server. Please "
+"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
+"interface after the installation finished."
+msgstr "Няма свободни интерфейси за използване с LTSP сървър. Необходимо е след завършване на инсталацията да настроите /etc/ltsp/dhcpd.conf, използвайки статичен мрежов интерфейс."
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
+msgstr "Интерфейс за мрежата с тънки клиенти:"
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "There were multiple spare interfaces found in this system."
+msgstr "Системата има няколко свободни интерфейса."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid "Installation aborted "
+msgstr "Инсталирането е прекъснато "
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid ""
+"ltsp-client cannot be installed in a regular machine. This package provides  "
+"the basic structure for a LTSP terminal."
+msgstr "Пакетът ltsp-client е предназначен за инсталиране на машини-терминали за LTSP, а не на „нормални“ машини."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid "Please read the package description to understand what it means."
+msgstr "Повече информация има в описанието на пакета."
+
