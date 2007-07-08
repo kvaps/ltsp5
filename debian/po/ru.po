@@ -1,0 +1,100 @@
+# translation of ru.po to Russian
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yuri Kozlov <kozlov.y@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: 5.0.8debian2\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2007-07-03 20:01-0500\n"
+"PO-Revision-Date: 2007-07-08 19:44+0400\n"
+"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
+"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. Type: boolean
+#. Description
+#: ../ltsp-client-builder.templates:1001
+msgid "Set up an LTSP chroot environment?"
+msgstr "Настроить chroot-окружение LTSP?"
+
+#. Type: boolean
+#. Description
+#: ../ltsp-client-builder.templates:1001
+msgid ""
+"This will set up an LTSP chroot environment on the machine, to act as a thin "
+"client server."
+msgstr ""
+"Сейчас будет настроено chroot-окружение LTSP на машине, которая "
+"будет выступать в качестве сервера тонких клиентов."
+
+#. Type: text
+#. Description
+#. Item in the main menu to select this package
+#: ../ltsp-client-builder.templates:2001
+msgid "Build LTSP chroot"
+msgstr "Сборка LTSP chroot"
+
+#. Type: text
+#. Description
+#: ../ltsp-client-builder.templates:3001
+msgid "Building LTSP chroot..."
+msgstr "Собирается LTSP chroot..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid "No Interface for LTSP dhcpd configuration found"
+msgstr "Нет интерфейса для настройки LTSP dhcpd"
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid ""
+"There are no free interfaces for usage with the LTSP Server. Please "
+"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
+"interface after the installation finished."
+msgstr ""
+"Нет свободных интерфейсов для использования LTSP Сервером. "
+"После завершения установки настройте файл /etc/ltsp/dhcpd.conf вручную, "
+"указав работающий статический интерфейс."
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
+msgstr "Интерфейс в сеть тонких клиентов:"
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "There were multiple spare interfaces found in this system."
+msgstr "В системе найдено несколько незадействованных интерфейсов."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid "Installation aborted "
+msgstr "Установка прервана "
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid ""
+"ltsp-client cannot be installed in a regular machine. This package provides  "
+"the basic structure for a LTSP terminal."
+msgstr ""
+"ltsp-client не может быть установлен на обычную машину. Этот пакет "
+"предоставляет базовую структуру для LTSP-терминала."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:1001
+msgid "Please read the package description to understand what it means."
+msgstr "Чтобы понять, что произошло обратитесь к описанию пакета."
+
