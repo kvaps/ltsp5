@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
-"PO-Revision-Date: 2006-09-24 18:28+0200\n"
+"POT-Creation-Date: 2007-07-03 20:01-0500\n"
+"PO-Revision-Date: 2007-07-07 23:06+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -52,43 +52,45 @@ msgstr "Vytvořit chroot pro LTSP"
 msgid "Building LTSP chroot..."
 msgstr "Vytváří se chroot pro LTSP..."
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:5001
 msgid "No Interface for LTSP dhcpd configuration found"
-msgstr ""
+msgstr "Žádné rozhraní pro konfiguraci LTSP dhcpd nebylo nalezeno"
 
 #. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:5001
 msgid ""
 "There are no free interfaces for usage with the LTSP Server. Please "
 "configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
 "interface after the installation finished."
 msgstr ""
+"Neexistují žádná volná rozhraní, která by mohl LTSP server použít. Po "
+"instalaci prosím ručně upravte soubor /etc/ltsp/dhcpd.conf tak, aby ukazoval "
+"na platné statické rozhraní."
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid ""
-"Please select the interface you want to use for the thin client network."
-msgstr ""
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
+msgstr "Rozhraní pro síť tenkého klienta:"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
+#: ../ltsp-client-builder.templates:6001
 msgid "There were multiple spare interfaces found in this system."
-msgstr ""
+msgstr "Na tomto systému bylo nalezeno vícero volných rozhraní."
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Installation aborted "
 msgstr "Instalace přerušena"
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
@@ -98,6 +100,6 @@ msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Please read the package description to understand what it means."
 msgstr "Přečtěte si prosím popis balíku, abyste porozuměli, co to znamená."
