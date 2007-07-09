@@ -109,6 +109,9 @@ case "$1" in
             usplash=false
             log_end_msg=log_end_msg
         fi
+        if boolean_is_true "$CONFIGURE_X" ; then
+            /usr/lib/ltsp/configure-x.sh
+        fi
 
         for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
             num=${screen##SCREEN_}

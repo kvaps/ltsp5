@@ -10,4 +10,5 @@ client/initramfs/hooks/ltsp_nbd usr/share/initramfs-tools/hooks
 client/initramfs/scripts/ltsp-nbd usr/share/initramfs-tools/scripts
 client/initramfs/conf.d/ltsp usr/share/initramfs-tools/conf.d
 client/update-kernels usr/lib/ltsp
+client/configure-x.sh usr/lib/ltsp
 client/jetpipe/jetpipe  usr/sbin
