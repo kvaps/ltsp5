@@ -378,7 +378,8 @@ main(int argc, char *argv[])
         create_xauth();                         /* recreate .Xauthority */
         
         fprintf(ldmlog, "Spawning greeter.........\n");
-        spawn_greeter();
+        if (!ldminfo.autologin)
+            spawn_greeter();
         fprintf(ldmlog, "after greeter.........\n");
         
         fprintf(ldmlog, "before get_userid.........\n");
@@ -389,7 +390,8 @@ main(int argc, char *argv[])
         fprintf(ldmlog, "before ssh_session.........\n");
         ssh_session();                          /* Log in via ssh */
         fprintf(ldmlog, "after ssh_session.........\n");
-        close_greeter();
+        if (!ldminfo.autologin)
+            close_greeter();
         rc_files("start");                      /* Execute any rc files */
         x_session();                            /* Start X session up */
 

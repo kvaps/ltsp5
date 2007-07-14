@@ -149,17 +149,17 @@ int
 ssh_chat(int fd)
 {
     int seen;
-    char *password;
 
     fprintf(ldmlog, "ssh_chat: getting password from greeter\n");
 get_pass:
-    password = get_passwd();
+    if (!ldminfo.autologin)
+        ldminfo.password = get_passwd();
 retrypass:
     fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh fd\n");
     seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
     if (seen == 1) {
         fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
-        write(fd, password, strlen(password));
+        write(fd, ldminfo.password, strlen(ldminfo.password));
         write(fd, "\r\n", 2);
     } else if (seen == 2) {
         fprintf(ldmlog, "ssh_chat: whoops!  Got the ssh are you sure you want to connect message. Sending yes\n");
@@ -174,8 +174,9 @@ retrypass:
     if (seen == 1) {
         fprintf(ldmlog, "ssh_chat: Saw sentinel. Logged in successfully\n");
     } else if (seen == 2) {
-        fprintf(ldmlog, "ssh_chat: Type your passord right, you dork!\n");
-        free(password);
+        fprintf(ldmlog, "ssh_chat: Type your password right!!\n");
+        if (!ldminfo.autologin)
+            free(ldminfo.password);
         goto get_pass;
     } else {
         fprintf(ldmlog, "ssh_chat: Wierdness!  Dying!\n");
