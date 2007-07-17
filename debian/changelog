@@ -1,3 +1,14 @@
+ltsp (5.0.21) gutsy; urgency=low
+
+  * add new X configuratin script, update teh initscripts for that
+  * add asound plugins to ltsp-client for oss support for the HW that
+    still has no alsa drivers
+  * fixed deps and maintainer in control.Ubuntu
+  * make pulse startup not depend on syslog
+  * no, we dont want next-server in the default dhcpd.conf
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 17 Jul 2007 10:18:30 +0200
+
 ltsp (5.0.20) gutsy; urgency=low
 
   * fix handling of mounted cdroms in ltsp-update-image
