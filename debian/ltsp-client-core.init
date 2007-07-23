@@ -86,8 +86,6 @@ configure_localdev() {
                     /usr/sbin/cdpinger $(basename ${CDDEV})
                 done
             fi
-            # handle already plugged devices on login
-            /usr/sbin/delayed_mounter
         fi
     fi
 }
