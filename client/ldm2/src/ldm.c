@@ -381,14 +381,28 @@ main(int argc, char *argv[])
         if (!ldminfo.autologin)
             spawn_greeter();
         fprintf(ldmlog, "after greeter.........\n");
-        
         fprintf(ldmlog, "before get_userid.........\n");
         if (!ldminfo.autologin)
             ldminfo.username = get_userid();
         fprintf(ldmlog, "after get_userid.........\n");
 
+        
         fprintf(ldmlog, "before ssh_session.........\n");
-        ssh_session();                          /* Log in via ssh */
+        while(1) {
+            int retval;
+            retval = ssh_session();             /* Log in via ssh */
+            if (!retval)
+                break;
+            if (retval == 2) {
+                ldm_wait(ldminfo.sshpid);
+                close(ldminfo.sshfd);
+                if (!ldminfo.autologin) {
+                    free(ldminfo.username);
+                    free(ldminfo.password);
+                }
+            }
+        }
+
         fprintf(ldmlog, "after ssh_session.........\n");
         if (!ldminfo.autologin)
             close_greeter();

@@ -149,11 +149,13 @@ int
 ssh_chat(int fd)
 {
     int seen;
+    char *newpw1, *newpw2;
 
-    fprintf(ldmlog, "ssh_chat: getting password from greeter\n");
+
 get_pass:
     if (!ldminfo.autologin)
         ldminfo.password = get_passwd();
+
 retrypass:
     fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh fd\n");
     seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
@@ -170,20 +172,60 @@ retrypass:
         exit(1);
     }
 
-    seen = expect(fd, 120.0, SENTINEL, "please try again.", NULL);
+    seen = expect(fd, 120.0,
+                      SENTINEL,                     /* 1 */
+                      "please try again.",          /* 2 */
+                      "password has expired",       /* 3 */
+                      NULL);
     if (seen == 1) {
         fprintf(ldmlog, "ssh_chat: Saw sentinel. Logged in successfully\n");
+        return 0;
     } else if (seen == 2) {
         fprintf(ldmlog, "ssh_chat: Type your password right!!\n");
+        set_message("Password incorrect.  Try again.");
         if (!ldminfo.autologin)
             free(ldminfo.password);
         goto get_pass;
-    } else {
-        fprintf(ldmlog, "ssh_chat: Wierdness!  Dying!\n");
-        return 1;
     }
 
-    return 0;
+    /*
+     * Dropped out the bottom, so it's a password change.
+     */
+
+    /* First, it wants the same password again */
+    set_message("Your password has expired.  Please enter a new one.");
+newpwloop:
+    newpw1 = get_passwd();
+    set_message("Please enter your password again to verify.");
+    newpw2 = get_passwd();
+
+    if (strcmp(newpw1, newpw2)) {
+        free(newpw1);
+        free(newpw2);
+        set_message("Your passwords didn't match.  Try again. Please enter a password.");
+        goto newpwloop;
+    }
+
+    write(fd, ldminfo.password, strlen(ldminfo.password));
+    write(fd, "\n", 1);
+
+    seen = expect(fd, 30.0, "ssword:", NULL);
+    if (seen == 1) {
+        write(fd, newpw2, strlen(newpw2));
+        write(fd, "\n", 1);
+    }
+    seen = expect(fd, 30.0, "ssword:", NULL);
+    if (seen == 1) {
+        write(fd, newpw2, strlen(newpw2));
+        write(fd, "\n", 1);
+    }
+
+    
+    seen = expect(fd, 30.0, "updated successfully", NULL);
+    if (seen == 1)
+        return 2;
+    else
+        return 1;
 }
         
 int
@@ -196,16 +238,15 @@ ssh_session()
     if ( (pid = fork()) < 0)
         perror("fork error");
     else if (pid > 0) {           /* parent */
-        close(fd_slave);
-        ssh_chat(fd_master);
+        int retval;
+        retval = ssh_chat(fd_master);
         ldminfo.sshfd = fd_master;
         ldminfo.sshpid = pid;
+        return retval;
     } else {
         close(fd_master);           /* child */
         spawn_ssh(fd_slave);
     }
-
-    return 0;
 }
 
 int

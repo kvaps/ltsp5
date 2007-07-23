@@ -128,6 +128,19 @@ get_passwd()
 }
 
 void
+set_message(char *message)
+{
+    char password[255];
+    char *prompt = "msg ";
+    char *pw = "\n";
+    char *p;
+
+    write(ldminfo.greeterwfd, prompt, strlen(prompt));
+    write(ldminfo.greeterwfd, message, strlen(message));
+    write(ldminfo.greeterwfd, pw, strlen(pw));
+}
+
+void
 close_greeter()
 {
     char *quit = "quit\n";
