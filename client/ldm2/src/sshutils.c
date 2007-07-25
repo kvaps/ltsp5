@@ -116,6 +116,7 @@ expect(int fd, float seconds, ...)
      */
 
     while(1) {
+        int loopend = 0;
         st = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
         if (st <= 0)                /* timeout or bad thing */
             break;
@@ -129,11 +130,14 @@ expect(int fd, float seconds, ...)
         }
 
         for (i = 0; expects[i] != NULL && i < 16; i++)
-            if (strstr(p, expects[i]))
-                goto loopend;
-    }
+            if (strstr(p, expects[i])) {
+                loopend = TRUE;
+                break;
+            }
 
-loopend:
+        if (loopend)
+            break;
+    }
 
     fprintf(ldmlog, "expect saw: %s\n", p);
 
@@ -151,41 +155,42 @@ ssh_chat(int fd)
     int seen;
     char *newpw1, *newpw2;
 
+    while (TRUE) {
+        if (!ldminfo.autologin && !ldminfo.password)
+            ldminfo.password = get_passwd();
 
-get_pass:
-    if (!ldminfo.autologin)
-        ldminfo.password = get_passwd();
+        fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh\n");
+        seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
+        if (seen == 1) {
+            fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
+            write(fd, ldminfo.password, strlen(ldminfo.password));
+            write(fd, "\r\n", 2);
+        } else if (seen == 2) {
+            fprintf(ldmlog, "Server isn't in ssh_known_hosts\n");
+            if (!ldminfo.autologin)
+                set_message("This workstation isn't authorized to connect to server");
+            sleep(5);
+            return 2;
+        } else  {
+            die("Unexpected text from ssh session.  Exiting\n");
+        }
 
-retrypass:
-    fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh fd\n");
-    seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
-    if (seen == 1) {
-        fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
-        write(fd, ldminfo.password, strlen(ldminfo.password));
-        write(fd, "\r\n", 2);
-    } else if (seen == 2) {
-        fprintf(ldmlog, "ssh_chat: whoops!  Got the ssh are you sure you want to connect message. Sending yes\n");
-        write(fd, "yes\n", 4);
-        goto retrypass;
-    } else  {
-        fprintf(ldmlog, "ssh_chat: Got something else.  Blargh! I'm ded!\n");
-        exit(1);
-    }
-
-    seen = expect(fd, 120.0,
-                      SENTINEL,                     /* 1 */
-                      "please try again.",          /* 2 */
-                      "password has expired",       /* 3 */
-                      NULL);
-    if (seen == 1) {
-        fprintf(ldmlog, "ssh_chat: Saw sentinel. Logged in successfully\n");
-        return 0;
-    } else if (seen == 2) {
-        fprintf(ldmlog, "ssh_chat: Type your password right!!\n");
-        set_message("Password incorrect.  Try again.");
-        if (!ldminfo.autologin)
-            free(ldminfo.password);
-        goto get_pass;
+        seen = expect(fd, 120.0,
+                          SENTINEL,                     /* 1 */
+                          "please try again.",          /* 2 */
+                          "password has expired",       /* 3 */
+                          NULL);
+        if (seen == 1) {
+            fprintf(ldmlog, "Saw sentinel. Logged in successfully\n");
+            return 0;
+        } else if (seen == 2) {
+            set_message("Password incorrect.  Try again.");
+            if (!ldminfo.autologin) {
+                free(ldminfo.password);
+                ldminfo.password = NULL;
+            }
+        } else
+            break;
     }
 
     /*
@@ -194,18 +199,21 @@ retrypass:
 
     /* First, it wants the same password again */
     set_message("Your password has expired.  Please enter a new one.");
-newpwloop:
-    newpw1 = get_passwd();
-    set_message("Please enter your password again to verify.");
-    newpw2 = get_passwd();
 
-    if (strcmp(newpw1, newpw2)) {
+    while (TRUE) {
+        newpw1 = get_passwd();
+        set_message("Please enter your password again to verify.");
+        newpw2 = get_passwd();
+
+        if (!strcmp(newpw1, newpw2))
+            break;
+            
         free(newpw1);
         free(newpw2);
         set_message("Your passwords didn't match.  Try again. Please enter a password.");
-        goto newpwloop;
     }
 
+    /* send old password first */
     write(fd, ldminfo.password, strlen(ldminfo.password));
     write(fd, "\n", 1);
 
@@ -219,13 +227,17 @@ newpwloop:
         write(fd, newpw2, strlen(newpw2));
         write(fd, "\n", 1);
     }
-
     
     seen = expect(fd, 30.0, "updated successfully", NULL);
-    if (seen == 1)
+    if (seen == 1) {
+        free(ldminfo.password);
+        ldminfo.password = newpw2;
         return 2;
-    else
-        return 1;
+    } 
+        
+    free(newpw1);
+    free(newpw2);
+    return 1;
 }
         
 int

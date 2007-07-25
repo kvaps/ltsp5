@@ -279,6 +279,12 @@ main(int argc, char *argv[])
     char fontpath[ENVSIZE];
 
     /*
+     * Zero out our info struct.
+     */
+
+    bzero(&ldminfo, sizeof ldminfo);
+
+    /*
      * Process command line args.  Need to get our vt, and our display number
      * Since we don't have any fancy args, we won't bother to do this with
      * getopt, rather, we'll just do it manually.
@@ -363,7 +369,10 @@ main(int argc, char *argv[])
     snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
              ldminfo.control_socket);
 
-    /* Update our environment with a few extra variables. */
+    /* 
+     * Update our environment with a few extra variables.
+     */
+
     putenv(display_env);
     putenv(xauth_env);
     putenv(server_env);
@@ -374,32 +383,30 @@ main(int argc, char *argv[])
      */
 
     while (TRUE) {
+        fprintf(ldmlog, "Launching Xorg\n");
         launch_x();
         create_xauth();                         /* recreate .Xauthority */
         
-        fprintf(ldmlog, "Spawning greeter.........\n");
+        fprintf(ldmlog, "Spawning greeter: %s\n", ldminfo.greeter_prog);
         if (!ldminfo.autologin)
             spawn_greeter();
-        fprintf(ldmlog, "after greeter.........\n");
-        fprintf(ldmlog, "before get_userid.........\n");
-        if (!ldminfo.autologin)
-            ldminfo.username = get_userid();
-        fprintf(ldmlog, "after get_userid.........\n");
 
-        
-        fprintf(ldmlog, "before ssh_session.........\n");
-        while(1) {
+        if (ldminfo.autologin) {
+            fprintf(ldmlog, "Autologin of userid: %s\n", ldminfo.username);
+        } else {
+            fprintf(ldmlog, "Getting of userid from greeter\n");
+            ldminfo.username = get_userid();
+        }
+
+        while(TRUE) {
             int retval;
+            fprintf(ldmlog, "Attempting ssh session as %s\n", ldminfo.username);
             retval = ssh_session();             /* Log in via ssh */
             if (!retval)
                 break;
             if (retval == 2) {
                 ldm_wait(ldminfo.sshpid);
                 close(ldminfo.sshfd);
-                if (!ldminfo.autologin) {
-                    free(ldminfo.username);
-                    free(ldminfo.password);
-                }
             }
         }
 
