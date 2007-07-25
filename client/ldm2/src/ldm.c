@@ -352,9 +352,8 @@ main(int argc, char *argv[])
     ldminfo.localdev = ldm_getenv_bool("LOCALDEV");
     ldminfo.override_port = getenv("SSH_OVERRIDE_PORT");
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
-    ldminfo.username = getenv("LDM_USERNAME");
-    ldminfo.password = getenv("LDM_PASSWORD");
-    ldminfo.autologin =  (ldminfo.username && ldminfo.password) ? TRUE : FALSE;
+    if (getenv("LDM_USERNAME") || getenv("LDM_PASSWORD"))
+        ldminfo.autologin = TRUE;
     ldminfo.lang = getenv("LDM_LANGUAGE");
     ldminfo.session = getenv("LDM_SESSION");
     ldminfo.greeter_prog = getenv("LDM_GREETER");
@@ -387,16 +386,12 @@ main(int argc, char *argv[])
         launch_x();
         create_xauth();                         /* recreate .Xauthority */
         
-        fprintf(ldmlog, "Spawning greeter: %s\n", ldminfo.greeter_prog);
-        if (!ldminfo.autologin)
+        if (!ldminfo.autologin) {
+            fprintf(ldmlog, "Spawning greeter: %s\n", ldminfo.greeter_prog);
             spawn_greeter();
-
-        if (ldminfo.autologin) {
-            fprintf(ldmlog, "Autologin of userid: %s\n", ldminfo.username);
-        } else {
-            fprintf(ldmlog, "Getting of userid from greeter\n");
-            ldminfo.username = get_userid();
         }
+
+        ldminfo.username = get_userid();
 
         while(TRUE) {
             int retval;
@@ -410,17 +405,19 @@ main(int argc, char *argv[])
             }
         }
 
-        fprintf(ldmlog, "after ssh_session.........\n");
-        if (!ldminfo.autologin)
+        clear_username();                       /* Don't keep these in mem */
+        clear_password();
+
+        fprintf(ldmlog, "Established ssh session.\n");
+        if (ldminfo.greeterpid)
             close_greeter();
+
         rc_files("start");                      /* Execute any rc files */
         x_session();                            /* Start X session up */
 
         /* x_session's exited.  So, clean up. */
 
         rc_files("stop");                       /* Execute any rc files */
-        if (!ldminfo.autologin)
-            free(ldminfo.username);
 
         kill(ldminfo.xserverpid, SIGTERM);      /* Kill Xorg server off */
         ldm_wait(ldminfo.xserverpid);

@@ -87,20 +87,24 @@ get_userid()
     char *prompt = "prompt <b>Username</b>\n";
     char *p;
 
-    write(ldminfo.greeterwfd, prompt, strlen(prompt));
+    if (p = getenv("LDM_USERNAME")) {
+        return strdup(p);
+    } else {
+        write(ldminfo.greeterwfd, prompt, strlen(prompt));
 
-    p = username;
-    while(1) {
-        read(ldminfo.greeterrfd, p, 1);
-        fprintf(ldmlog, "get_userid: read %c\n", *p);
-        if (*p == '\n')
-            break;
-        p++;
+        p = username;
+        while(1) {
+            read(ldminfo.greeterrfd, p, 1);
+            fprintf(ldmlog, "get_userid: read %c\n", *p);
+            if (*p == '\n')
+                break;
+            p++;
+        }
+
+        *p = '\0';
+
+        return strdup(username);
     }
-
-    *p = '\0';
-
-    return strdup(username);
 }
     
 char *
@@ -111,20 +115,24 @@ get_passwd()
     char *pw = "passwd\n";
     char *p;
 
-    write(ldminfo.greeterwfd, prompt, strlen(prompt));
-    write(ldminfo.greeterwfd, pw, strlen(pw));
+    if (p = getenv("LDM_USERNAME")) {
+        return strdup(p);
+    } else {
+        write(ldminfo.greeterwfd, prompt, strlen(prompt));
+        write(ldminfo.greeterwfd, pw, strlen(pw));
 
-    p = password;
-    while(1) {
-        read(ldminfo.greeterrfd, p, 1);
-        if (*p == '\n')
-            break;
-        p++;
+        p = password;
+        while(1) {
+            read(ldminfo.greeterrfd, p, 1);
+            if (*p == '\n')
+                break;
+            p++;
+        }
+
+        *p = '\0';
+
+        return strdup(password);
     }
-
-    *p = '\0';
-
-    return strdup(password);
 }
 
 void
@@ -146,4 +154,5 @@ close_greeter()
     char *quit = "quit\n";
     write(ldminfo.greeterwfd, quit, strlen(quit));
     ldm_wait(ldminfo.greeterpid);
+    ldminfo.greeterpid = 0;
 }

@@ -40,6 +40,8 @@ void spawn_ssh(int fd);
 int ssh_session();
 int ssh_endsession();
 void get_ipaddr();
+void clean_username();
+void clean_password();
 
 extern struct ldm_info ldminfo;
 extern FILE *ldmlog;

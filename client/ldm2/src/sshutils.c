@@ -28,6 +28,24 @@
 #include "ldm.h"
 
 void
+clear_username()
+{
+    /* bzero memory before free */
+    bzero(ldminfo.username, strlen(ldminfo.username));
+    free(ldminfo.username);
+    ldminfo.username = NULL;
+}
+
+void
+clear_password()
+{
+    /* bzero memory before free */
+    bzero(ldminfo.password, strlen(ldminfo.password));
+    free(ldminfo.password);
+    ldminfo.password = NULL;
+}
+
+void
 spawn_ssh(int fd)
 {
     char *sshcmd[MAXARGS];
@@ -148,7 +166,7 @@ expect(int fd, float seconds, ...)
     else
         return i + 1;               /* which expect did we see? */
 }
-            
+
 int
 ssh_chat(int fd)
 {
@@ -156,7 +174,7 @@ ssh_chat(int fd)
     char *newpw1, *newpw2;
 
     while (TRUE) {
-        if (!ldminfo.autologin && !ldminfo.password)
+        if (!ldminfo.password)
             ldminfo.password = get_passwd();
 
         fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh\n");
@@ -185,10 +203,8 @@ ssh_chat(int fd)
             return 0;
         } else if (seen == 2) {
             set_message("Password incorrect.  Try again.");
-            if (!ldminfo.autologin) {
-                free(ldminfo.password);
-                ldminfo.password = NULL;
-            }
+            if (!ldminfo.autologin)
+                clear_password();
         } else
             break;
     }
@@ -208,7 +224,9 @@ ssh_chat(int fd)
         if (!strcmp(newpw1, newpw2))
             break;
             
+        bzero(newpw1, strlen(newpw1));
         free(newpw1);
+        bzero(newpw2, strlen(newpw2));
         free(newpw2);
         set_message("Your passwords didn't match.  Try again. Please enter a password.");
     }
@@ -230,11 +248,13 @@ ssh_chat(int fd)
     
     seen = expect(fd, 30.0, "updated successfully", NULL);
     if (seen == 1) {
-        free(ldminfo.password);
+        clear_password();
         ldminfo.password = newpw2;
         return 2;
     } 
         
+    bzero(newpw1, strlen(newpw1));
+    bzero(newpw2, strlen(newpw2));
     free(newpw1);
     free(newpw2);
     return 1;
@@ -278,5 +298,6 @@ ssh_endsession()
     }
 
     close (ldminfo.sshfd);
+    ldminfo.sshpid = 0;
     return status;
 }
