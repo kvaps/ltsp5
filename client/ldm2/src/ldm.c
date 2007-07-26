@@ -405,7 +405,6 @@ main(int argc, char *argv[])
             }
         }
 
-        clear_username();                       /* Don't keep these in mem */
         clear_password();
 
         fprintf(ldmlog, "Established ssh session.\n");
@@ -423,5 +422,6 @@ main(int argc, char *argv[])
         ldm_wait(ldminfo.xserverpid);
 
         ssh_endsession();                       /* Log out of server */
+        clear_username();
     }
 }

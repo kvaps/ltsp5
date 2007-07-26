@@ -177,6 +177,7 @@ ssh_chat(int fd)
         if (!ldminfo.password)
             ldminfo.password = get_passwd();
 
+        set_message("<b>Verifying password, please wait...</b>");
         fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh\n");
         seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
         if (seen == 1) {
