@@ -28,6 +28,7 @@ char user[255];
 char pass[255];
 char language[255] = "None";
 char session[255] = "None";
+char host[255] = "None";
 
 #define EXPAND TRUE
 #define DONTEXPAND FALSE
@@ -227,6 +228,52 @@ langwin(GtkWidget *widget, GtkWindow *win)
 	return;
 }
 
+static void
+hostwin(GtkWidget *widget, GtkWindow *win)
+{
+	GtkWidget *hostwin, *label, *vbox, *buttonbox, *select;
+	GtkWidget *cancel, *accept, *frame;
+	
+	hostwin = gtk_window_new(GTK_WINDOW_POPUP);
+	gtk_window_set_position((GtkWindow *) hostwin, GTK_WIN_POS_CENTER_ALWAYS);
+	gtk_window_set_modal((GtkWindow *) hostwin, TRUE);
+	
+	vbox = gtk_vbox_new(FALSE, 0);
+	buttonbox = gtk_hbox_new(FALSE, 5);
+	select = gtk_combo_box_new();
+
+	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
+
+	cancel = gtk_button_new_from_stock("gtk-cancel");
+	g_signal_connect (G_OBJECT (cancel), "clicked",
+			G_CALLBACK (destroy_popup),
+			hostwin);
+
+	accept = gtk_button_new_with_mnemonic(_("Change _Host"));
+
+	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) accept, FALSE, FALSE, 0);
+	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) cancel, FALSE, FALSE, 0);
+
+	label = gtk_label_new("");
+	gtk_label_set_markup((GtkLabel *) label, 
+			 _("Select the host for your session to use:"));
+
+	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) label, FALSE, FALSE, 0);
+	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) select, FALSE, FALSE, 5);
+	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) buttonbox, TRUE, TRUE, 5);
+
+	frame = gtk_frame_new("");
+	gtk_frame_set_shadow_type((GtkFrame *) frame, GTK_SHADOW_OUT);
+	gtk_frame_set_label_align((GtkFrame *) frame, 1.0, 0.0);
+
+	gtk_container_add (GTK_CONTAINER (frame), vbox);
+	gtk_container_add (GTK_CONTAINER (hostwin), frame);
+
+	gtk_widget_show_all(hostwin);
+
+	return;
+}
+
 char *
 get_sysname(void)
 {
@@ -265,17 +312,24 @@ handle_entry(GtkEntry *entry, GdkWindow *window)
 static void
 popup_menu(GtkWidget *widget, GtkWindow *window)
 {
-	GtkWidget *menu, *lang_item, *sess_item, *quit_item, *reboot_item;
-	GtkWidget *sep, *langico, *sessico, *rebootico, *haltico;
+	GtkWidget *menu, *lang_item, *sess_item, *host_item, *quit_item,
+              *reboot_item;
+	GtkWidget *sep, *langico, *sessico, *hostico, *rebootico, *haltico;
 
 	menu = gtk_menu_new (); 
 
-	lang_item = gtk_image_menu_item_new_with_mnemonic (_("_Select language ..."));
+	lang_item = gtk_image_menu_item_new_with_mnemonic(_("_Select language ..."));
 	langico = gtk_image_new_from_file (PIXMAPS_DIR "/language.png");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *) lang_item, langico);
-	sess_item = gtk_image_menu_item_new_with_mnemonic (_("_Select session ..."));
+
+	sess_item = gtk_image_menu_item_new_with_mnemonic(_("_Select session ..."));
 	sessico = gtk_image_new_from_file (PIXMAPS_DIR "/session.png");
 	gtk_image_menu_item_set_image((GtkImageMenuItem *) sess_item, sessico);
+
+	host_item = gtk_image_menu_item_new_with_mnemonic(_("_Select host ..."));
+	hostico = gtk_image_new_from_file (PIXMAPS_DIR "/host.png");
+	gtk_image_menu_item_set_image((GtkImageMenuItem *) host_item, hostico);
+
 	sep = gtk_separator_menu_item_new();
 	reboot_item =  gtk_image_menu_item_new_with_mnemonic (_("_Reboot"));
 	rebootico = gtk_image_new_from_file (PIXMAPS_DIR "/reboot.png");
@@ -292,10 +346,13 @@ popup_menu(GtkWidget *widget, GtkWindow *window)
 			G_CALLBACK (langwin), window);
 	g_signal_connect_swapped (G_OBJECT (sess_item), "activate",
 			G_CALLBACK (sesswin), window);
+	g_signal_connect_swapped (G_OBJECT (host_item), "activate",
+			G_CALLBACK (hostwin), window);
 
 
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), lang_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), sess_item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), host_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), reboot_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
