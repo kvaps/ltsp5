@@ -377,7 +377,7 @@ main(int argc, char *argv[])
 	GdkCursor *normcursor, *busycursor;
 	GtkWidget *window, *syslabel, *logo, *EntryBox, *timelabel;
 	GtkWidget *StatusBarBox, *spacer, *vbox, *vbox2, *hbox;
-	GtkButton *optionbutton;
+	GtkButton *optionbutton, *cancelbutton;
 	GdkWindow *root;
 	GdkPixbuf *rawpic, *pix;
 	GdkPixmap *pic;
@@ -438,6 +438,17 @@ main(int argc, char *argv[])
 	g_signal_connect (G_OBJECT(optionbutton), "clicked",
 			G_CALLBACK(popup_menu), window);
 
+    /*
+     * Cancel button 
+     */
+
+	cancelbutton = (GtkButton *) gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	gtk_button_set_relief(cancelbutton, GTK_RELIEF_NONE);
+	gtk_button_set_focus_on_click((GtkButton *) cancelbutton, FALSE);
+
+	g_signal_connect (G_OBJECT(cancelbutton), "clicked",
+			G_CALLBACK(destroy), window);
+
 	syslabel = gtk_label_new("");
 	timelabel = gtk_label_new("");
 	hoststring = g_strdup_printf("<b>%s (%s) //</b>", get_sysname(), get_ip());
@@ -448,6 +459,8 @@ main(int argc, char *argv[])
 
 	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
                        GTK_WIDGET(optionbutton), FALSE, FALSE, 5);
+	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
+                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
                      GTK_WIDGET(timelabel), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
