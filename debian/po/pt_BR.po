@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
-"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-07-29 14:52-0500\n"
 "PO-Revision-Date: 2006-03-07 10:46-0300\n"
 "Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
 "Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
@@ -54,15 +54,15 @@ msgstr "Construir chroot LTSP"
 msgid "Building LTSP chroot..."
 msgstr "Construindo chroot LTSP..."
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:5001
 msgid "No Interface for LTSP dhcpd configuration found"
 msgstr ""
 
 #. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:5001
 msgid ""
 "There are no free interfaces for usage with the LTSP Server. Please "
 "configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
@@ -71,26 +71,25 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid ""
-"Please select the interface you want to use for the thin client network."
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
+#: ../ltsp-client-builder.templates:6001
 msgid "There were multiple spare interfaces found in this system."
 msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Installation aborted "
 msgstr "Instalacao abortada"
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
@@ -100,7 +99,7 @@ msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Please read the package description to understand what it means."
 msgstr ""
 "Por favor leia a descrição do pacote para entendermelhor o que isso "

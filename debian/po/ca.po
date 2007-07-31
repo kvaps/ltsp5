@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.99debian5\n"
-"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-07-29 14:52-0500\n"
 "PO-Revision-Date: 2006-10-15 00:01+0200\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
 "Language-Team: Català <debian-l10n-catalan@lists.debian.org>\n"
@@ -46,15 +46,42 @@ msgstr "Construeix el chroot LTSP"
 msgid "Building LTSP chroot..."
 msgstr "S'està construint el chroot per a LTSP..."
 
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid "No Interface for LTSP dhcpd configuration found"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:5001
+msgid ""
+"There are no free interfaces for usage with the LTSP Server. Please "
+"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
+"interface after the installation finished."
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid "There were multiple spare interfaces found in this system."
+msgstr ""
+
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Installation aborted "
 msgstr "S'ha avortat la instal·lació "
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
@@ -64,7 +91,7 @@ msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Please read the package description to understand what it means."
 msgstr ""
 "Si us plau, llegiu la descripció del paquet per entendre el que vol dir."

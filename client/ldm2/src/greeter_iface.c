@@ -80,58 +80,65 @@ spawn_greeter()
                                        &ldminfo.greeterrfd);
 }
     
-char *
+int
+get_greeter_string(char *str)
+{
+    char b[BUFSIZ];
+    char *p = b;
+    int i = 0;
+    int ret;
+
+    while(TRUE) {
+        if (i == (BUFSIZ - 1))
+            break;
+        ret = read(ldminfo.greeterrfd, p, 1);
+        if (ret < 0)
+            return 1;
+        if (*p == '\n')
+            break;
+        p++;
+        i++;
+    }
+
+    *p = '\0';
+
+    mystrncpy(str, b, LDMSTRSZ);
+
+    return 0;
+}
+
+
+int
 get_userid()
 {
-    char username[255];
     char *prompt = "prompt <b>Username</b>\n";
     char *p;
 
+    fprintf(ldmlog, "In get_userid\n");
     if (p = getenv("LDM_USERNAME")) {
-        return strdup(p);
+        mystrncpy(ldminfo.username, p, LDMSTRSZ);
+        return 0;
     } else {
         write(ldminfo.greeterwfd, prompt, strlen(prompt));
-
-        p = username;
-        while(1) {
-            read(ldminfo.greeterrfd, p, 1);
-            fprintf(ldmlog, "get_userid: read %c\n", *p);
-            if (*p == '\n')
-                break;
-            p++;
-        }
-
-        *p = '\0';
-
-        return strdup(username);
+        return get_greeter_string(ldminfo.username);
     }
 }
     
-char *
+int
 get_passwd()
 {
-    char password[255];
     char *prompt = "prompt <b>Password</b>\n";
     char *pw = "passwd\n";
     char *p;
 
-    if (p = getenv("LDM_USERNAME")) {
-        return strdup(p);
+    fprintf(ldmlog, "In get_passwd\n");
+    if (p = getenv("LDM_PASSWORD")) {
+        mystrncpy(ldminfo.password, p, LDMSTRSZ);
+        return 0;
     } else {
         write(ldminfo.greeterwfd, prompt, strlen(prompt));
         write(ldminfo.greeterwfd, pw, strlen(pw));
-
-        p = password;
-        while(1) {
-            read(ldminfo.greeterrfd, p, 1);
-            if (*p == '\n')
-                break;
-            p++;
-        }
-
-        *p = '\0';
-
-        return strdup(password);
+        return get_greeter_string(ldminfo.password);
     }
 }
 
@@ -151,8 +158,11 @@ set_message(char *message)
 void
 close_greeter()
 {
-    char *quit = "quit\n";
-    write(ldminfo.greeterwfd, quit, strlen(quit));
+    kill(ldminfo.greeterpid, SIGTERM);
     ldm_wait(ldminfo.greeterpid);
+    close(ldminfo.greeterrfd);
+    close(ldminfo.greeterwfd);
+    ldminfo.greeterrfd = 0;
+    ldminfo.greeterwfd = 0;
     ldminfo.greeterpid = 0;
 }

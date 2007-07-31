@@ -30,19 +30,13 @@
 void
 clear_username()
 {
-    /* bzero memory before free */
-    bzero(ldminfo.username, strlen(ldminfo.username));
-    free(ldminfo.username);
-    ldminfo.username = NULL;
+    bzero(ldminfo.username, LDMSTRSZ);
 }
 
 void
 clear_password()
 {
-    /* bzero memory before free */
-    bzero(ldminfo.password, strlen(ldminfo.password));
-    free(ldminfo.password);
-    ldminfo.password = NULL;
+    bzero(ldminfo.password, LDMSTRSZ);
 }
 
 void
@@ -68,7 +62,7 @@ spawn_ssh(int fd)
     sshcmd[i++] = "-S";
     sshcmd[i++] = ldminfo.control_socket;
 
-    if (ldminfo.override_port) {
+    if (*ldminfo.override_port != '\0') {
         sshcmd[i++] = "-p";
         sshcmd[i++] = ldminfo.override_port;
     }
@@ -143,7 +137,7 @@ expect(int fd, float seconds, ...)
             break;
 
         if ((total + size) < MAXEXP) {
-            strncpy(p + total, buffer, size);
+            mystrncpy(p + total, buffer, size);
             total += size;
         }
 
@@ -174,12 +168,15 @@ ssh_chat(int fd)
     char *newpw1, *newpw2;
 
     while (TRUE) {
-        if (!ldminfo.password)
-            ldminfo.password = get_passwd();
+        if (!*ldminfo.password)
+            if (get_passwd())
+                return 1;
 
         set_message("<b>Verifying password, please wait...</b>");
         fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh\n");
-        seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
+        seen = expect(fd, 30.0, "ssword:",
+                                "continue connecting",
+                                NULL);
         if (seen == 1) {
             fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
             write(fd, ldminfo.password, strlen(ldminfo.password));
@@ -189,7 +186,7 @@ ssh_chat(int fd)
             if (!ldminfo.autologin)
                 set_message("This workstation isn't authorized to connect to server");
             sleep(5);
-            return 2;
+            die("Terminal not authorized, run ltsp-update-sshkeys\n");
         } else  {
             die("Unexpected text from ssh session.  Exiting\n");
         }
@@ -197,15 +194,22 @@ ssh_chat(int fd)
         seen = expect(fd, 120.0,
                           SENTINEL,                     /* 1 */
                           "please try again.",          /* 2 */
-                          "password has expired",       /* 3 */
+                          "Permission denied",          /* 3 */
+                          "password has expired",       /* 4 */
                           NULL);
         if (seen == 1) {
             fprintf(ldmlog, "Saw sentinel. Logged in successfully\n");
             return 0;
         } else if (seen == 2) {
-            set_message("Password incorrect.  Try again.");
+            set_message("<b>Password incorrect.  Try again.</b>");
             if (!ldminfo.autologin)
                 clear_password();
+        } else if (seen == 3) {
+            fprintf(ldmlog, "User %s failed password 3 times\n",
+                            ldminfo.username);
+            set_message("<b>Login failed!</b>");
+            sleep(5);
+            die("User failed login.  Restarting\n");
         } else
             break;
     }
@@ -218,9 +222,9 @@ ssh_chat(int fd)
     set_message("Your password has expired.  Please enter a new one.");
 
     while (TRUE) {
-        newpw1 = get_passwd();
+        get_passwd(newpw1);
         set_message("Please enter your password again to verify.");
-        newpw2 = get_passwd();
+        get_passwd(newpw2);
 
         if (!strcmp(newpw1, newpw2))
             break;
@@ -250,7 +254,7 @@ ssh_chat(int fd)
     seen = expect(fd, 30.0, "updated successfully", NULL);
     if (seen == 1) {
         clear_password();
-        ldminfo.password = newpw2;
+        mystrncpy(ldminfo.password, newpw2, LDMSTRSZ);
         return 2;
     } 
         
@@ -258,6 +262,11 @@ ssh_chat(int fd)
     bzero(newpw2, strlen(newpw2));
     free(newpw1);
     free(newpw2);
+
+
+    set_message("Password not updated.");
+    sleep(5);
+    die("Password couldn't be updated.");
     return 1;
 }
         
@@ -285,20 +294,12 @@ ssh_session()
 int
 ssh_endsession()
 {
-    int seen;
     int status;
 
-    write(ldminfo.sshfd, "exit\n", 5);
-    seen = expect(ldminfo.sshfd, 30.0, "closed.", NULL);
-    if (seen == 1)
-        status = ldm_wait(ldminfo.sshpid);
-    else {
-        /* hmm, didn't close.  Lets kill it (less nice) */
-        kill(ldminfo.sshpid, SIGTERM);
-        status = ldm_wait(ldminfo.sshpid);
-    }
-
+    kill(ldminfo.sshpid, SIGTERM);
+    status = ldm_wait(ldminfo.sshpid);
     close (ldminfo.sshfd);
+    ldminfo.sshfd = 0;
     ldminfo.sshpid = 0;
     return status;
 }
