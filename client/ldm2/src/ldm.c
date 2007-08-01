@@ -36,6 +36,17 @@ die(char *msg)
 {
     fprintf(ldmlog, "%s", msg);
     fclose(ldmlog);
+
+    /* Shut things down gracefully if we can */
+    if (ldminfo.greeterpid)
+        close_greeter();
+    if (ldminfo.sshpid)
+        ssh_endsession();
+    if (ldminfo.xserverpid) {
+        kill(ldminfo.xserverpid, SIGTERM);      /* Kill Xorg server off */
+        ldm_wait(ldminfo.xserverpid);
+    }
+
     exit(1);
 }
 
@@ -45,7 +56,19 @@ dumpargs(char *args[])
     int i;
 
     for (i = 0; args[i]; i++)
-        fprintf(ldmlog, "%s\n", args[i]);
+        fprintf(ldmlog, "%s ", args[i]);
+
+    fprintf(ldmlog, "\n");
+}
+
+char *
+mystrncpy(char *d, char *s, int n)
+{
+    if (!s) {
+        *d = '\0';
+        return d;
+    } else
+        return strncpy(d, s, n);
 }
 
 int
@@ -91,9 +114,10 @@ ldm_wait(pid_t pid)
 
     if (waitpid (pid, &status, 0) < 0)
         die("Error: wait() call failed");
-    if (!WIFEXITED (status))
-        die ("Error: execv() returned no status");
-    else
+    if (!WIFEXITED (status)) {
+        fprintf(ldmlog, "Process returned no status\n");
+        return 1;
+    } else
         return WEXITSTATUS (status);
 }
 
@@ -145,7 +169,7 @@ launch_x()
     server_command[i++] = "-br";
     server_command[i++] = "-ac";
     server_command[i++] = "-noreset";
-    if (ldminfo.fontpath) {
+    if (*ldminfo.fontpath != '\0') {
         server_command[i++] = "-fp";
         server_command[i++] = ldminfo.fontpath;
     }
@@ -245,7 +269,7 @@ x_session()
     cmd[i++] = "/etc/X11/Xsession";
 
     if (ldminfo.localdev) {
-        cmd[i++] = "&&";
+        cmd[i++] = "||";        /* closes bug number 121254 */
         cmd[i++] = "/usr/sbin/ltspfsmounter";
         cmd[i++] = "all";
         cmd[i++] = "cleanup";
@@ -276,7 +300,12 @@ main(int argc, char *argv[])
     /* decls */
     char display_env[ENVSIZE], xauth_env[ENVSIZE];
     char server_env[ENVSIZE], socket_env[ENVSIZE];
-    char fontpath[ENVSIZE];
+
+    /*
+     * Zero out our info struct.
+     */
+
+    bzero(&ldminfo, sizeof ldminfo);
 
     /*
      * Process command line args.  Need to get our vt, and our display number
@@ -292,8 +321,8 @@ main(int argc, char *argv[])
     if (*argv[2] != ':')            /* more sanity */
         usage();
 
-    ldminfo.vty = strdup(argv[1]);
-    ldminfo.display = strdup(argv[2]);
+    mystrncpy(ldminfo.vty, argv[1], LDMSTRSZ);
+    mystrncpy(ldminfo.display, argv[2], LDMSTRSZ);
 
     /*
      * Open our log.  Since we're on a terminal, logging to syslog is preferred,
@@ -301,7 +330,7 @@ main(int argc, char *argv[])
      * Since we're handling login info, log to AUTHPRIV
      */
 
-    if (!(ldmlog = fopen("/var/log/ldm.log", "w")))
+    if (!(ldmlog = fopen("/var/log/ldm.log", "a")))
         die("Couldn't open /var/log/ldm.log");
 
     setbuf(ldmlog, NULL);      /* Unbuffered */
@@ -323,37 +352,35 @@ main(int argc, char *argv[])
      * Get some of the environment variables we'll need.
      */
 
-    ldminfo.server = getenv("LDM_SERVER");
-    if (!ldminfo.server)
-        ldminfo.server = getenv("SERVER");
-    if (!ldminfo.server)
+    mystrncpy(ldminfo.server, getenv("LDM_SERVER"), LDMSTRSZ);
+    if (!strlen(ldminfo.server))
+        mystrncpy(ldminfo.server, getenv("SERVER"), LDMSTRSZ);
+    if (!strlen(ldminfo.server))
         die("no server specified");
+
+    fprintf(ldmlog, "Got a server\n");
 
     if (ldm_getenv_bool("USE_XFS")) {
         char *xfs_server;
-
         xfs_server = getenv("XFS_SERVER");
-        snprintf(fontpath, sizeof fontpath, "tcp/%s:7100", 
+        snprintf(ldminfo.fontpath, LDMSTRSZ, "tcp/%s:7100", 
                  xfs_server ? xfs_server : ldminfo.server);
-        ldminfo.fontpath = fontpath;
-        if (xfs_server)
-            free(xfs_server);
-    } else
-        ldminfo.fontpath = NULL;
+    } 
 
     ldminfo.sound = ldm_getenv_bool("SOUND");
-    ldminfo.sound_daemon = getenv("SOUND_DAEMON");
+    mystrncpy(ldminfo.sound_daemon, getenv("SOUND_DAEMON"), LDMSTRSZ);
     ldminfo.localdev = ldm_getenv_bool("LOCALDEV");
-    ldminfo.override_port = getenv("SSH_OVERRIDE_PORT");
+    mystrncpy(ldminfo.override_port, getenv("SSH_OVERRIDE_PORT"), LDMSTRSZ);
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
-    ldminfo.username = getenv("LDM_USERNAME");
-    ldminfo.password = getenv("LDM_PASSWORD");
-    ldminfo.autologin =  (ldminfo.username && ldminfo.password) ? TRUE : FALSE;
-    ldminfo.lang = getenv("LDM_LANGUAGE");
-    ldminfo.session = getenv("LDM_SESSION");
-    ldminfo.greeter_prog = getenv("LDM_GREETER");
-    ldminfo.authfile = "/root/.Xauthority";
-    ldminfo.control_socket = "/var/run/ldm_socket";
+    if (getenv("LDM_USERNAME") || getenv("LDM_PASSWORD"))
+        ldminfo.autologin = TRUE;
+    mystrncpy(ldminfo.lang, getenv("LDM_LANGUAGE"), LDMSTRSZ);
+    mystrncpy(ldminfo.session, getenv("LDM_SESSION"), LDMSTRSZ);
+    mystrncpy(ldminfo.greeter_prog, getenv("LDM_GREETER"), LDMSTRSZ);
+    if (*ldminfo.greeter_prog == '\0')
+        mystrncpy(ldminfo.greeter_prog, "/usr/bin/ldmgtkgreet", LDMSTRSZ);
+    mystrncpy(ldminfo.authfile, "/root/.Xauthority", LDMSTRSZ);
+    mystrncpy(ldminfo.control_socket, "/var/run/ldm_socket", LDMSTRSZ);
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
@@ -361,36 +388,62 @@ main(int argc, char *argv[])
     snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
              ldminfo.control_socket);
 
-    /* Update our environment with a few extra variables. */
+    /* 
+     * Update our environment with a few extra variables.
+     */
+
     putenv(display_env);
     putenv(xauth_env);
     putenv(server_env);
     putenv(socket_env);
 
     /*
-     * Main loop
+     * Begin running display manager
      */
 
-    while (TRUE) {
-        launch_x();
-        create_xauth();                         /* recreate .Xauthority */
-        
-        if (!ldminfo.autologin)
-            ldminfo.username = get_userid();
-
-        ssh_session();                          /* Log in via ssh */
-        rc_files("start");                      /* Execute any rc files */
-        x_session();                            /* Start X session up */
-
-        /* x_session's exited.  So, clean up. */
-
-        rc_files("stop");                       /* Execute any rc files */
-        if (!ldminfo.autologin)
-            free(ldminfo.username);
-
-        kill(ldminfo.xserverpid, SIGTERM);      /* Kill Xorg server off */
-        ldm_wait(ldminfo.xserverpid);
-
-        ssh_endsession();                       /* Log out of server */
+    fprintf(ldmlog, "Launching Xorg\n");
+    launch_x();
+    create_xauth();                         /* recreate .Xauthority */
+    
+    if (!ldminfo.autologin) {
+        fprintf(ldmlog, "Spawning greeter: %s\n", ldminfo.greeter_prog);
+        spawn_greeter();
     }
+
+    if (get_userid() ||
+        *(ldminfo.username) == '\0')
+        die("Greeter returned null userid");
+
+    while(TRUE) {
+        int retval;
+        fprintf(ldmlog, "Attempting ssh session as %s\n", ldminfo.username);
+        retval = ssh_session();             /* Log in via ssh */
+        if (!retval)
+            break;
+        if (retval == 2) {
+            ldm_wait(ldminfo.sshpid);
+            close(ldminfo.sshfd);
+        }
+    }
+
+    clear_password();
+
+    fprintf(ldmlog, "Established ssh session.\n");
+    if (ldminfo.greeterpid)
+        close_greeter();
+
+    rc_files("start");                      /* Execute any rc files */
+    x_session();                            /* Start X session up */
+
+    /* x_session's exited.  So, clean up. */
+
+    rc_files("stop");                       /* Execute any rc files */
+
+    kill(ldminfo.xserverpid, SIGTERM);      /* Kill Xorg server off */
+    ldm_wait(ldminfo.xserverpid);
+
+    ssh_endsession();                       /* Log out of server */
+    clear_username();
+
+    exit(0);
 }

@@ -33,4 +33,6 @@ case "$tty" in
 esac
 displaynum=$(($ttynum - 1))
 
-exec ldm vt$ttynum :$displaynum
+while true; do
+    ldm vt$ttynum :$displaynum
+done

@@ -21,8 +21,8 @@ if __name__ == "__main__":
     try:
         lines=[]
         for alternative in ['x-session-manager','x-window-manager']:
-            lines.append(Popen(['/usr/sbin/update-alternatives', '--list', alternative ],
-                      stdout=PIPE).communicate()[0])
+            lines.extend(Popen(['/usr/sbin/update-alternatives', '--list', alternative ],
+                      stdout=PIPE).communicate()[0].split())
     except OSError:
         print "ERROR"
         sys.exit(0)

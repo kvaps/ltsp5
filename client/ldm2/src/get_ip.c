@@ -81,7 +81,7 @@ get_ipaddr()
 
 	    if (!(info.ifr_flags & IFF_LOOPBACK) && (info.ifr_flags & IFF_UP)) {
 	        sa = (struct sockaddr_in *) &ifr->ifr_addr;
-	        ldminfo.ipaddr = strdup(inet_ntoa(sa->sin_addr));
+	        mystrncpy(ldminfo.ipaddr, inet_ntoa(sa->sin_addr), LDMSTRSZ);
 	        break;
 	    }
 

@@ -28,6 +28,18 @@
 #include "ldm.h"
 
 void
+clear_username()
+{
+    bzero(ldminfo.username, LDMSTRSZ);
+}
+
+void
+clear_password()
+{
+    bzero(ldminfo.password, LDMSTRSZ);
+}
+
+void
 spawn_ssh(int fd)
 {
     char *sshcmd[MAXARGS];
@@ -50,7 +62,7 @@ spawn_ssh(int fd)
     sshcmd[i++] = "-S";
     sshcmd[i++] = ldminfo.control_socket;
 
-    if (ldminfo.override_port) {
+    if (*ldminfo.override_port != '\0') {
         sshcmd[i++] = "-p";
         sshcmd[i++] = ldminfo.override_port;
     }
@@ -116,6 +128,7 @@ expect(int fd, float seconds, ...)
      */
 
     while(1) {
+        int loopend = 0;
         st = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
         if (st <= 0)                /* timeout or bad thing */
             break;
@@ -124,16 +137,19 @@ expect(int fd, float seconds, ...)
             break;
 
         if ((total + size) < MAXEXP) {
-            strncpy(p + total, buffer, size);
+            mystrncpy(p + total, buffer, size);
             total += size;
         }
 
         for (i = 0; expects[i] != NULL && i < 16; i++)
-            if (strstr(p, expects[i]))
-                goto loopend;
-    }
+            if (strstr(p, expects[i])) {
+                loopend = TRUE;
+                break;
+            }
 
-loopend:
+        if (loopend)
+            break;
+    }
 
     fprintf(ldmlog, "expect saw: %s\n", p);
 
@@ -144,45 +160,114 @@ loopend:
     else
         return i + 1;               /* which expect did we see? */
 }
-            
+
 int
 ssh_chat(int fd)
 {
     int seen;
-    char *password;
+    char *newpw1, *newpw2;
 
-    fprintf(ldmlog, "ssh_chat: getting password from greeter\n");
-get_pass:
-    password = get_passwd();
-retrypass:
-    fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh fd\n");
-    seen = expect(fd, 120.0, "ssword:", "continue connecting", NULL);
-    if (seen == 1) {
-        fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
-        write(fd, password, strlen(password));
-        write(fd, "\r\n", 2);
-    } else if (seen == 2) {
-        fprintf(ldmlog, "ssh_chat: whoops!  Got the ssh are you sure you want to connect message. Sending yes\n");
-        write(fd, "yes\n", 4);
-        goto retrypass;
-    } else  {
-        fprintf(ldmlog, "ssh_chat: Got something else.  Blargh! I'm ded!\n");
-        exit(1);
+    while (TRUE) {
+        if (!*ldminfo.password)
+            if (get_passwd())
+                return 1;
+
+        set_message("<b>Verifying password, please wait...</b>");
+        fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh\n");
+        seen = expect(fd, 30.0, "ssword:",
+                                "continue connecting",
+                                NULL);
+        if (seen == 1) {
+            fprintf(ldmlog, "ssh_chat: got it!  Sending pw\n");
+            write(fd, ldminfo.password, strlen(ldminfo.password));
+            write(fd, "\r\n", 2);
+        } else if (seen == 2) {
+            fprintf(ldmlog, "Server isn't in ssh_known_hosts\n");
+            if (!ldminfo.autologin)
+                set_message("This workstation isn't authorized to connect to server");
+            sleep(5);
+            die("Terminal not authorized, run ltsp-update-sshkeys\n");
+        } else  {
+            die("Unexpected text from ssh session.  Exiting\n");
+        }
+
+        seen = expect(fd, 120.0,
+                          SENTINEL,                     /* 1 */
+                          "please try again.",          /* 2 */
+                          "Permission denied",          /* 3 */
+                          "password has expired",       /* 4 */
+                          NULL);
+        if (seen == 1) {
+            fprintf(ldmlog, "Saw sentinel. Logged in successfully\n");
+            return 0;
+        } else if (seen == 2) {
+            set_message("<b>Password incorrect.  Try again.</b>");
+            if (!ldminfo.autologin)
+                clear_password();
+        } else if (seen == 3) {
+            fprintf(ldmlog, "User %s failed password 3 times\n",
+                            ldminfo.username);
+            set_message("<b>Login failed!</b>");
+            sleep(5);
+            die("User failed login.  Restarting\n");
+        } else
+            break;
     }
 
-    seen = expect(fd, 120.0, SENTINEL, "please try again.", NULL);
-    if (seen == 1) {
-        fprintf(ldmlog, "ssh_chat: Saw sentinel. Logged in successfully\n");
-    } else if (seen == 2) {
-        fprintf(ldmlog, "ssh_chat: Type your passord right, you dork!\n");
-        free(password);
-        goto get_pass;
-    } else {
-        fprintf(ldmlog, "ssh_chat: Wierdness!  Dying!\n");
-        return 1;
+    /*
+     * Dropped out the bottom, so it's a password change.
+     */
+
+    /* First, it wants the same password again */
+    set_message("Your password has expired.  Please enter a new one.");
+
+    while (TRUE) {
+        get_passwd(newpw1);
+        set_message("Please enter your password again to verify.");
+        get_passwd(newpw2);
+
+        if (!strcmp(newpw1, newpw2))
+            break;
+            
+        bzero(newpw1, strlen(newpw1));
+        free(newpw1);
+        bzero(newpw2, strlen(newpw2));
+        free(newpw2);
+        set_message("Your passwords didn't match.  Try again. Please enter a password.");
     }
 
-    return 0;
+    /* send old password first */
+    write(fd, ldminfo.password, strlen(ldminfo.password));
+    write(fd, "\n", 1);
+
+    seen = expect(fd, 30.0, "ssword:", NULL);
+    if (seen == 1) {
+        write(fd, newpw2, strlen(newpw2));
+        write(fd, "\n", 1);
+    }
+    seen = expect(fd, 30.0, "ssword:", NULL);
+    if (seen == 1) {
+        write(fd, newpw2, strlen(newpw2));
+        write(fd, "\n", 1);
+    }
+    
+    seen = expect(fd, 30.0, "updated successfully", NULL);
+    if (seen == 1) {
+        clear_password();
+        mystrncpy(ldminfo.password, newpw2, LDMSTRSZ);
+        return 2;
+    } 
+        
+    bzero(newpw1, strlen(newpw1));
+    bzero(newpw2, strlen(newpw2));
+    free(newpw1);
+    free(newpw2);
+
+
+    set_message("Password not updated.");
+    sleep(5);
+    die("Password couldn't be updated.");
+    return 1;
 }
         
 int
@@ -195,34 +280,26 @@ ssh_session()
     if ( (pid = fork()) < 0)
         perror("fork error");
     else if (pid > 0) {           /* parent */
-        close(fd_slave);
-        ssh_chat(fd_master);
+        int retval;
+        retval = ssh_chat(fd_master);
         ldminfo.sshfd = fd_master;
         ldminfo.sshpid = pid;
+        return retval;
     } else {
         close(fd_master);           /* child */
         spawn_ssh(fd_slave);
     }
-
-    return 0;
 }
 
 int
 ssh_endsession()
 {
-    int seen;
     int status;
 
-    write(ldminfo.sshfd, "exit\n", 5);
-    seen = expect(ldminfo.sshfd, 30.0, "closed.", NULL);
-    if (seen == 1)
-        status = ldm_wait(ldminfo.sshpid);
-    else {
-        /* hmm, didn't close.  Lets kill it (less nice) */
-        kill(ldminfo.sshpid, SIGTERM);
-        status = ldm_wait(ldminfo.sshpid);
-    }
-
+    kill(ldminfo.sshpid, SIGTERM);
+    status = ldm_wait(ldminfo.sshpid);
     close (ldminfo.sshfd);
+    ldminfo.sshfd = 0;
+    ldminfo.sshpid = 0;
     return status;
 }

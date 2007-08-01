@@ -34,7 +34,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = ldm2$(EXEEXT)
+bin_PROGRAMS = ldm$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -47,10 +47,10 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_ldm2_OBJECTS = ldm.$(OBJEXT) sshutils.$(OBJEXT) \
+am_ldm_OBJECTS = ldm.$(OBJEXT) sshutils.$(OBJEXT) \
 	greeter_iface.$(OBJEXT) get_ip.$(OBJEXT)
-ldm2_OBJECTS = $(am_ldm2_OBJECTS)
-ldm2_LDADD = $(LDADD)
+ldm_OBJECTS = $(am_ldm_OBJECTS)
+ldm_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -58,8 +58,8 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(ldm2_SOURCES)
-DIST_SOURCES = $(ldm2_SOURCES)
+SOURCES = $(ldm_SOURCES)
+DIST_SOURCES = $(ldm_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -145,7 +145,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-ldm2_SOURCES = ldm.c sshutils.c greeter_iface.c get_ip.c ldm.h
+ldm_SOURCES = ldm.c sshutils.c greeter_iface.c get_ip.c ldm.h
 AM_CPPFLAGS = $(DEPS_CFLAGS) \
               -DRC_DIR=\""$(datadir)/ldm"\"
 
@@ -205,9 +205,9 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-ldm2$(EXEEXT): $(ldm2_OBJECTS) $(ldm2_DEPENDENCIES) 
-	@rm -f ldm2$(EXEEXT)
-	$(LINK) $(ldm2_LDFLAGS) $(ldm2_OBJECTS) $(ldm2_LDADD) $(LIBS)
+ldm$(EXEEXT): $(ldm_OBJECTS) $(ldm_DEPENDENCIES) 
+	@rm -f ldm$(EXEEXT)
+	$(LINK) $(ldm_LDFLAGS) $(ldm_OBJECTS) $(ldm_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
