@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Yuri Kozlov <kozlov.y@gmail.com>, 2007.
+# Stepan Golosunov <stepan@golosunov.pp.ru>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.8debian2\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-03 20:01-0500\n"
-"PO-Revision-Date: 2007-07-08 19:44+0400\n"
+"POT-Creation-Date: 2007-07-25 07:57+0200\n"
+"PO-Revision-Date: 2007-07-26 21:08+0400\n"
 "Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,82 +20,97 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
 msgstr "Настроить chroot-окружение LTSP?"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
+#| msgid ""
+#| "This will set up an LTSP chroot environment on the machine, to act as a "
+#| "thin client server."
 msgid ""
-"This will set up an LTSP chroot environment on the machine, to act as a thin "
-"client server."
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
 msgstr ""
-"Сейчас будет настроено chroot-окружение LTSP на машине, которая "
-"будет выступать в качестве сервера тонких клиентов."
+"Выберите нужно ли настраивать chroot-окружение LTSP на этой машине, чтобы "
+"она работала в качестве сервера тонких клиентов."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:2001
+#: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
 msgstr "Сборка LTSP chroot"
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:3001
+#: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
 msgstr "Собирается LTSP chroot..."
 
-#. Type: note
+#. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid "No Interface for LTSP dhcpd configuration found"
-msgstr "Нет интерфейса для настройки LTSP dhcpd"
+#: ../ltsp-client-builder.templates:6001
+#| msgid "No Interface for LTSP dhcpd configuration found"
+msgid "No interface for LTSP dhcpd configuration"
+msgstr "Нет интерфейса для конфигурации LTSP dhcpd"
 
-#. Type: note
+#. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:5001
+#: ../ltsp-client-builder.templates:6001
+#| msgid ""
+#| "There are no free interfaces for usage with the LTSP Server. Please "
+#| "configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid "
+#| "static interface after the installation finished."
 msgid ""
-"There are no free interfaces for usage with the LTSP Server. Please "
-"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
-"interface after the installation finished."
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
 msgstr ""
-"Нет свободных интерфейсов для использования LTSP Сервером. "
-"После завершения установки настройте файл /etc/ltsp/dhcpd.conf вручную, "
-"указав работающий статический интерфейс."
+"Нет свободных интерфейсов для использования LTSP сервером. После завершения "
+"установки настройте файл /etc/ltsp/dhcpd.conf вручную, указав работающий "
+"статический интерфейс."
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid "Interface for the thin client network:"
 msgstr "Интерфейс в сеть тонких клиентов:"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:6001
-msgid "There were multiple spare interfaces found in this system."
-msgstr "В системе найдено несколько незадействованных интерфейсов."
+#: ../ltsp-client-builder.templates:7001
+msgid ""
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
+msgstr ""
+"Выберите из имеющихся незадействованных интерфейсов системы тот, "
+"который должен использоваться для тонкого клиента."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-core.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Installation aborted "
 msgstr "Установка прервана "
 
 #. Type: error
 #. Description
-#: ../ltsp-client-core.templates:1001
+#: ../ltsp-client-core.templates:2001
+#| msgid ""
+#| "ltsp-client cannot be installed in a regular machine. This package "
+#| "provides  the basic structure for a LTSP terminal."
 msgid ""
-"ltsp-client cannot be installed in a regular machine. This package provides  "
-"the basic structure for a LTSP terminal."
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
 msgstr ""
-"ltsp-client не может быть установлен на обычную машину. Этот пакет "
+"Пакет ltsp-client не может быть установлен на обычную машину. Этот пакет "
 "предоставляет базовую структуру для LTSP-терминала."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-core.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
-msgstr "Чтобы понять, что произошло обратитесь к описанию пакета."
+msgstr "Чтобы понять, что произошло, обратитесь к описанию пакета."
 
