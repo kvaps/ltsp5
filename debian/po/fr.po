@@ -1,93 +1,105 @@
-# 
+# Translation of ltsp debconf templates to French
+# This file is licensed under the same license as the ltsp package
+#
+# Copyright: 
+#  before 2007: Jean-Marc Chaton <chaton@debian.org>
+#  Christian Perrier <bubulle@debian.org>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 0.58\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
-"PO-Revision-Date: 2006-06-17 15:49+0200\n"
+"POT-Creation-Date: 2007-07-25 07:57+0200\n"
+"PO-Revision-Date: 2007-07-25 08:01+0200\n"
 "Last-Translator: Jean-Marc Chaton <chaton@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
 msgstr ""
-"Faut-il créer un environnement fermé d'exécution (« chroot ») pour LTSP ?"
+"Faut-il crÃ©er un environnement fermÃ© d'exÃ©cution (Â«Â chrootÂ Â») pour LTSPÂ ?"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid ""
-"This will set up an LTSP chroot environment on the machine, to act as a thin "
-"client server."
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
 msgstr ""
-"Si vous choisissez cette option, un environnement fermé d'exécution sera "
-"établi pour que la machine fonctionne en serveur de client léger LTSP."
+"Veuillez choisir si vous souhaitez Ã©tablir un environnement fermÃ© "
+"d'exÃ©cution pour que la machine fonctionne en serveur de client lÃ©ger LTSP."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:2001
+#: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "Construction du « chroot » LTSP"
+msgstr "Construction du Â«Â chrootÂ Â» LTSP"
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:3001
+#: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
-msgstr "Construction de l'environnement fermé d'exécution LTSP en cours ..."
+msgstr "Construction de l'environnement fermÃ© d'exÃ©cution LTSP en cours ..."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:4001
-msgid "No Interface for LTSP dhcpd configuration found"
-msgstr ""
-
-#. Type: note
-#. Description
-#: ../ltsp-client-builder.templates:4001
-msgid ""
-"There are no free interfaces for usage with the LTSP Server. Please "
-"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
-"interface after the installation finished."
-msgstr ""
-
-#. Type: select
-#. Description
-#: ../ltsp-client-builder.templates:5001
-msgid ""
-"Please select the interface you want to use for the thin client network."
-msgstr ""
-
-#. Type: select
-#. Description
-#: ../ltsp-client-builder.templates:5001
-msgid "There were multiple spare interfaces found in this system."
-msgstr ""
+#: ../ltsp-client-builder.templates:6001
+msgid "No interface for LTSP dhcpd configuration"
+msgstr "Aucune interface trouvÃ©e pour la configuration du dhcpd de LTSP"
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-builder.templates:6001
+msgid ""
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
+msgstr ""
+"Il n'existe pas d'interface libre utilisable par le serveur LTSP. Veuillez "
+"modifier le fichier /etc/ltsp/dhcpd.conf pour pointer vers une interface "
+"valable aprÃ¨s la fin de l'installation."
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:7001
+msgid "Interface for the thin client network:"
+msgstr "Interface pour le rÃ©seau de clients lÃ©gersÂ :"
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:7001
+msgid ""
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
+msgstr ""
+"Veuillez choisir, parmi les interfaces libres de ce systÃ¨me, celle qui doit "
+"Ãªtre utilisÃ©e pour le client lÃ©ger."
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:2001
 msgid "Installation aborted "
 msgstr "Installation interrompue"
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid ""
-"ltsp-client cannot be installed in a regular machine. This package provides  "
-"the basic structure for a LTSP terminal."
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
 msgstr ""
 "Il est impossible d'installer ltsp-client sur une machine normale. Ce paquet "
 "fournit la structure de base pour un terminal LTSP."
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
 msgstr ""
 "Veuillez lire la description du paquet pour comprendre ce que cela signifie."
