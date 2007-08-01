@@ -48,7 +48,7 @@ fi
 
 # only take action if there is no entry for the image in inetd.conf yet
 if [ -n "$(grep ${IMAGE} /etc/inetd.conf|grep -v "^#")" ];then
-    echo "${IMAGE} already in /etc/inetd.conf"
+    echo "${IMAGE} already in /etc/inetd.conf, no need to update."
 else
     # Make sure we use the first free port available
     CHECKPORT=""
@@ -61,10 +61,4 @@ else
     done
     update-inetd --group LTSP --add "${PORT}                   stream  tcp\
     nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
-fi
-
-# append kernel option for nbd port to tftpboot
-if [ -z "$(grep NBDPORT /var/lib/tftpboot/ltsp/${IMG}/pxelinux.cfg/default)" ]; then
-    OLD=$(cat  /var/lib/tftpboot/ltsp/${IMG}/pxelinux.cfg/default)
-    echo "${OLD} NBDPORT=${PORT}" > /var/lib/tftpboot/ltsp/${IMG}/pxelinux.cfg/default
 fi

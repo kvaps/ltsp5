@@ -7,10 +7,6 @@ mountroot()
 	run_scripts /scripts/nfs-top
 	[ "$quiet" != "y" ] && log_end_msg
 
-    if [ -z ${NBDPORT} ];then
-        NBDPORT=2000
-    fi
-
 	# For DHCP
 	modprobe -q af_packet
 
@@ -45,13 +41,28 @@ mountroot()
 	# source relevant ipconfig output
 	. /tmp/net-${DEVICE}.conf
 
+    if [ -n "${nbdroot}" ]; then
+               NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
+               NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
+       else
+               NBD_ROOT_SERVER="${ROOTSERVER}"
+               NBD_ROOT_PORT=${nbdport:-"2000"}
+       fi
+       if [ -n "${nbdswap}" ]; then
+               NBD_SWAP_SERVER=$( echo "${nbdswap}" | sed 's/:.*//')
+               NBD_SWAP_PORT=$( echo "${nbdswap}" | sed 's/.*://')
+       else
+               NBD_SWAP_SERVER="${ROOTSERVER}"
+               NBD_SWAP_PORT=${nbdswapport:-"9572"}
+    fi
+
     # try to get swap from the server if we dont have enough ram (less than 48M)
     min_ram=49152
     real_ram=$(cat /proc/meminfo |grep MemTotal|tr -d " [a-z][A-Z]:")
 
     if [ ${real_ram} -lt ${min_ram} ];then
         [ "$quiet" != "y" ] && log_begin_msg "Only found ${real_ram}k main ram, trying network swap."
-        nbd-client ${ROOTSERVER} 9572 /dev/nbd1 || true
+        nbd-client ${NBD_SWAP_SERVER} ${NBD_SWAP_PORT} /dev/nbd1 || true
         mkswap /dev/nbd1 || true
         swapon /dev/nbd1 || true
         [ "$quiet" != "y" ] && log_end_msg
@@ -64,7 +75,7 @@ mountroot()
     mount -t tmpfs tmpfs /cow
 
     # mount the readonly root
-    nbd-client ${ROOTSERVER} ${NBDPORT} /dev/nbd0 && mount -o ro -t squashfs /dev/nbd0 /rofs
+    nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 && mount -o ro -t squashfs /dev/nbd0 /rofs
 
     # merge ro and rw filesystems
     mount -t unionfs -o dirs=/cow=rw:/rofs=ro unionfs ${rootmnt}
