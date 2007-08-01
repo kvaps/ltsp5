@@ -1,9 +1,18 @@
+# These templates have been reviewed by the debian-l10n-english
+# team
+#
+# If modifications/additions/rewording are needed, please ask
+# debian-l10n-english@lists.debian.org for advice.
+#
+# Even minor modifications require translation updates and such
+# changes should be coordinated with translators and reviewers.
+
 Template: ltsp-client-builder/run
 Type: boolean
 Default: false
 _Description: Set up an LTSP chroot environment?
- This will set up an LTSP chroot environment on the machine, to act as
- a thin client server.
+ Please choose whether you want to set up an LTSP chroot environment
+ on this machine, to act as a thin client server.
 
 Template: debian-installer/ltsp-client-builder/title
 Type: text
@@ -22,14 +31,15 @@ Description: arguments for ltsp-build-client:
  this option is meant to be used with debconf preseeding.
 
 Template: ltsp-client-builder/dhcp-manual
-Type: note
-_Description: No Interface for LTSP dhcpd configuration found
- There are no free interfaces for usage with the LTSP Server. Please configure the file /etc/ltsp/dhcpd.conf 
- manually to point to a valid static interface after the installation finished.
+Type: error
+_Description: No interface for LTSP dhcpd configuration
+ There are no free interfaces for usage with the LTSP server. Please
+ manually configure the /etc/ltsp/dhcpd.conf file to point to a valid
+ static interface after the installation has completed.
 
 Template: ltsp-client-builder/dhcp-interface
 Type: select
 Choices: ${choices}
 _Description: Interface for the thin client network:
- There were multiple spare interfaces found in this system.
- 
+ Please choose, among the multiple spare interfaces this system has, which
+ one should be used for the thin client.
