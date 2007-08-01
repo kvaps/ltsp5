@@ -1,3 +1,31 @@
+ltsp (5.0.22) gutsy; urgency=low
+
+  [Oliver Grawert]
+  * added ldm screen scripts for screensaver and compiz handling
+  * added nbdroot fixes from MrMoo
+  * hide cancel button
+  * added host selector icon to all themes
+
+  [Scott Balneaves]
+  * New ldm screen script
+  * Lots of work.  Converted to all static memory, to eliminate leaks.  Fixed
+    login failures, control-alt-backspace resets, etc.
+  * Closes Launchpad bug 105709: updated 80_ltsp-sound to address unsafe quoting.
+  * Added cancel button to greeter
+  * Added host selection box to ldmgtkgreet
+  * fixed some bugs, added login status message
+  * Cleaned up username and password handling a bit
+  * Password expiry working.  Goto's eliminated. World saved.  more to do
+  * Fixed bug in ldminfod
+  * Closes Launchpad Bug #127516.  The delayed_mounter isn't needed with ldm2
+  * Beginnings of password expiry
+  * Added rdesktop script courtesy Colin Osterhout
+  * Touched up jetpipe a bit: don't keep remaking socket
+  * Got autologin working
+  * Closes Launchpad bug # 121254
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 01 Aug 2007 16:32:53 +0200
+
 ltsp (5.0.21) gutsy; urgency=low
 
   * add new X configuratin script, update teh initscripts for that
