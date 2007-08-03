@@ -1,0 +1,185 @@
+#!/bin/sh
+
+OUT_FILE="/etc/X11/xorg.conf"
+ORIG_CONSOLE=$(fgconsole)
+
+clear
+
+# Generate initial file
+INPUT_FILE=$(LANG=C Xorg -configure :1 2>&1 |grep "Your xorg.conf file is "|tr -d '\n'|cut -d' ' -f5)
+
+# Handle keyboard settings, default to console-setup settings
+handle_keyboard_settings() {
+    XKBOPTIONS_TMP="$XKBOPTIONS"
+    if [ -z "$XKBLAYOUT" ] && [ -z "$XKBMODEL" ];then
+        if [ -e /etc/default/console-setup ];then
+            . /etc/default/console-setup
+        fi
+    fi
+    test -z "$XKBRULES" && XKBRULES="xorg"
+    test -z "$XKBMODEL" && XKBMODEL="pc105"
+    test -z "$XKBLAYOUT" && XKBLAYOUT="en"
+    test -z "$XKBOPTIONS_TMP" && XKBOPTIONS=$XKBOPTIONS_TMP
+
+    KBSTRING="Option\t\"XkbRules\"\t\"$XKBRULES\"\n\tOption\t\"XkbModel\"\t\"$XKBMODEL\"\n\tOption\t\"XkbLayout\"\t\"$XKBLAYOUT\""
+
+    if [ -n "$XKBVARIANT" ]; then
+        KBSTRING="${KBSTRING}\n\tOption\t\"XkbVariant\"\t\"$XKBVARIANT\""
+    fi
+    if [ -n "$XKBOPTIONS" ]; then
+        KBSTRING="${KBSTRING}\n\tOption\t\"XKbOptions\"\t\"$XKBOPTIONS\""
+    fi
+    if [ "$(grep -c XkbLayout $INPUT_FILE)" = 0 ];then
+        sed -i /'Driver.*"kbd"'/a\ "\\\t$KBSTRING" $INPUT_FILE
+    fi
+}
+
+# Handle additional mouse settings (/dev/psaux is used by synaptics already, we dont
+# want anything to use /dev/input/mice, serial mice are handled by inputattach)
+handle_mouse_settings() {
+    if [ -n "$X_MOUSE_DEVICE" ] &&
+        [ -z "$(echo $X_MOUSE_DEVICE | grep '/dev/tty')" ] &&
+        [ -z "$(echo $X_MOUSE_DEVICE | grep '/dev/input/mice')" ] &&
+        [ -z "$(echo $X_MOUSE_DEVICE | grep '/dev/psaux')" ];then
+        X_MOUSE_DEVICE=$(echo $X_MOUSE_DEVICE |sed -e s/'\/'/'\\\/'/g)
+        test -z $X_MOUSE_PROTOCOL && X_MOUSE_PROTOCOL="auto"
+        EXTRAMOUSE="EndSection\n\nSection \"InputDevice\"\n\tIdentifier\t\"Mouse1\"\n\tDriver\t\"mouse\"\n\tOption\t"Device"\t$X_MOUSE_DEVICE\n\tOption\t\"Protocol\"\t$X_MOUSE_PROTOCOL\nEndSection"
+        sed -i /'Identifier  "Mouse0"'/,/'EndSection'/s/'EndSection'/"$EXTRAMOUSE"/g $INPUT_FILE
+        sed -i /'Section "ServerLayout"'/,/'EndSection'/s/'EndSection'/"\tInputDevice\t\"Mouse1\"\nEndSection"/g $INPUT_FILE
+    fi
+
+    if [ "$X_MOUSE_EMULATE3BTN" != "False" ];then
+        sed -i /'Identifier  "Mouse0"'/,/'EndSection'/s/'EndSection'/'\tOption\t"Emulate3Buttons"\t"true"\nEndSection'/ $INPUT_FILE
+        if [ !"$(grep Mouse1 $INPUT_FILE)" ];then
+            sed -i /'Identifier\t"Mouse1"'/,/'EndSection'/s/'EndSection'/'\tOption\t"Emulate3Buttons"\t"true"\nEndSection'/ $INPUT_FILE
+        fi
+    fi
+}
+
+# Handle driver options
+handle_driver(){
+    if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
+        SERVERLINE="Driver\t\"$XSERVER\""
+        sed -i /'Section "Device"'/,/'EndSection'/s/'Driver.*'/$SERVERLINE/g $INPUT_FILE
+    fi
+}
+
+# Set Videoram
+set_videoram(){
+    if [ -n "$X_VIDEO_RAM" ];then
+        RAMLINE="\tOption\t\"VideoRam\"\t\"$X_VIDEO_RAM\"\nEndSection"
+        sed -i /'Section "Device"'/,/'EndSection'/s/'EndSection'/$RAMLINE/g $INPUT_FILE
+    fi
+}
+
+# FIXME
+# Handle Monitor settings
+set_sync_ranges(){
+    # beware, Xorg -configure sometimes writes these values in the bootstrapped file,
+    # so we need replacement code as well
+    if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
+        if [ -z "$(grep HorizSync $INPUT_FILE)"] && [ -z "$(grep VertRefresh $INPUT_FILE)"];then
+            echo "replace $X_HORZSYNC $X_VERTREFRESH" >/dev/null
+        else
+            echo "add $X_HORZSYNC $X_VERTREFRESH" >/dev/null
+        fi
+    fi
+}
+
+# Handle modes
+handle_modes(){
+    if [ -n "$X_MODE_0" ] || [ -n "$X_MODE_1" ] || [ -n "$X_MODE_2" ];then
+        # FIXME
+        # We only want to add modes if there arent any in the file yet (add fix to replace exisiting ones)
+        if [ "$(grep Modes $INPUT_FILE|sed -e 's/\t*.[0-9]//g' -e 's/\t//g'|grep -c ^Modes)" = 0 ];then
+            X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/^ +//g;s/ *$//g')
+            MODELINES="SubSection \"Display\"\n\t\tModes\t\t$X_MODE"
+            sed -i s/'SubSection "Display"'/"$MODELINES"/g $INPUT_FILE
+        fi
+    fi
+}
+
+# Set default Depth if specified
+set_default_depth(){
+    if [ -n "$X_COLOR_DEPTH" ];then
+        # Prepend DefaultDepth line above the first occurence of 'SubSection "Display"'
+        DEPTH="DefaultDepth $X_COLOR_DEPTH\n\tSubSection \"Display\""
+        if [ -z "$(grep DefaultDepth $INPUT_FILE)" ];then
+            sed -i 1,/'SubSection "Display"'/s/'SubSection "Display"'/"$DEPTH"/ $INPUT_FILE
+        fi
+    fi
+}
+
+# FIXME
+# Handle XFS (do we really want to support that ? most apps use server sided fonts anyway)
+handle_xfs(){
+    echo $XFS_SERVER >/dev/null
+}
+
+# Add hardcoded devcies for ubuntu (synaptics and wacom tablet support)
+hardcoded_devices(){
+    HARDCODED_DEVS="EndSection\n\n\
+Section \"InputDevice\"\n\
+\tIdentifier\t\"Synaptics Touchpad\"\n\
+\tDriver\t\"synaptics\"\n\
+\tOption\t\"SendCoreEvents\"\t\"true\"\n\
+\tOption\t\"Device\"\t\"\/dev\/psaux\"\n\
+\tOption\t\"Protocol\"\t\"auto-dev\"\n\
+\tOption\t\"HorizScrollDelta\"\t\"0\"\n\
+EndSection\n\n\
+Section \"InputDevice\"\n\
+\tDriver\t\"wacom\"\n\
+\tIdentifier\t\"stylus\"\n\
+\tOption\t\"Device\"\t\"\/dev\/input\/wacom\"\n\
+\tOption\t\"Type\"\t\t\"stylus\"\n\
+\tOption\t\"ForceDevice\"\t\"ISDV4\"\t\# Tablet PC ONLY\n\
+EndSection\n\n\
+Section \"InputDevice\"\n\
+\tDriver\t\"wacom\"\n\
+\tIdentifier\t\"eraser\"\n\
+\tOption\t\"Device\"\t\"\/dev\/input\/wacom\"\n\
+\tOption\t\"Type\"\t\t\"eraser\"\n\
+\tOption\t\"ForceDevice\"\t\"ISDV4\"\t\# Tablet PC ONLY\n\
+EndSection\n\n\
+Section \"InputDevice\"\n\
+\tDriver\t\"wacom\"\n\
+\tIdentifier\t\"cursor\"\n\
+\tOption\t\"Device\"\t\"\/dev\/input\/wacom\"\n\
+\tOption\t\"Type\"\t\t\"cursor\"\n\
+\tOption\t\"ForceDevice\"\t\"ISDV4\"\t\# Tablet PC ONLY\n\
+EndSection"
+
+    sed -i /'Identifier  "Mouse0"'/,/'EndSection'/s/'EndSection'/"$HARDCODED_DEVS"/g $INPUT_FILE
+
+    HARDCODED_LAYOUT="\tInputDevice\t\"stylus\"\t\"SendCoreEvents\"\n\
+\tInputDevice\t\"cursor\"\t\"SendCoreEvents\"\n\
+\tInputDevice\t\"eraser\"\t\"SendCoreEvents\"\n\
+\tInputDevice\t\"Synaptics Touchpad\"\n\
+EndSection"
+
+    sed -i /'Section "ServerLayout"'/,/'EndSection'/s/'EndSection'/"$HARDCODED_LAYOUT"/g $INPUT_FILE
+}
+
+# Append DRI section if not there yet
+append_dri(){
+    if [ "$(grep -c 0666 $INPUT_FILE)" = 0 ];then
+        cat <<EOF >> $INPUT_FILE
+Section "DRI"
+        Mode    0666
+EndSection
+EOF
+    fi
+}
+
+handle_keyboard_settings || true
+handle_mouse_settings || true
+handle_driver || true
+set_videoram || true
+handle_modes || true
+set_default_depth || true
+hardcoded_devices || true
+append_dri || true
+
+mv $INPUT_FILE $OUT_FILE
+
+clear

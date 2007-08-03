@@ -268,6 +268,16 @@ configure_x() {
     fi
 }
 
+configure_serial_mouse() {
+      if [ -n "$X_MOUSE_DEVICE" ] && \
+          [ -n "$X_MOUSE_PROTOCOL" ] && \
+          type inputattach >/dev/null 2>/dev/null && \
+          [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
+          inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+      fi
+}
+
+
 bind_mounts () {
   # set defaults
   test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
@@ -337,9 +347,10 @@ case "$1" in
         configure_syslog || true
         configure_fstab || true
         run_rcfiles || true
-        if boolean_is_true "$CONFIGURE_X" ; then
-            configure_x || true
-        fi
+        #if boolean_is_true "$CONFIGURE_X" ; then
+        #    configure_x || true
+        #fi
+        configure_serial_mouse || true
         configure_printer || true
 
 	if [ "$root_write_method" = "bind_mounts" ]; then

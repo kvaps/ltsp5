@@ -1,0 +1,6 @@
+#
+# sourced with .
+#
+# Script to automatically switch to metacity unless DESKTOP_EFFECTS is True
+#
+ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/gconftool-2 --set --type string /apps/gnome-screensaver/mode blank-only"
