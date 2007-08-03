@@ -3,7 +3,7 @@ case "$MODE" in
         ARCH=$(uname -m)
         EMERGE="emerge"
         EMERGE_OPTS="--usepkg"
-        EARLY_PACKAGES="xorg-server ltsp esound joystick splashutils ltspfs"
+        EARLY_PACKAGES="xorg-server ltsp pulseaudio joystick splashutils ltspfs"
         RCS_WHITELIST="bootmisc checkfs checkroot clock consolefont hostname keymaps localmount modules net.lo rmnologin urandom ltsp-client-setup"
         RC2_WHITELIST="ltsp-client nbd-client splash local syslog-ng"
         OVERRIDE_EXPORTS="true"
