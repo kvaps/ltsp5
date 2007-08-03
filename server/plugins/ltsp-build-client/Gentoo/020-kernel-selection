@@ -5,11 +5,10 @@ case "$MODE" in
 
 		# Add networking drivers to configs/generic/modules_load.gk so they
 		# get added to the initramfs; ditto for nfs
-		while read line; do
-			MODULE_NET="$MODULE_NET $line"
-		done \
-			< <(find /usr/src/linux/drivers/net/ -name *.ko \
-				| sed -e "s:.*/::" -e "s:\.ko::"); echo
+		for MOD in $(find /lib/modules/`uname -r`/kernel/drivers/net/ \
+			-name *.ko | sed -e "s:.*/::" -e "s:\.ko::"); do
+			MODULE_NET="$MODULE_NET $MOD"
+		done
 
 		sed -i \
 			-e "s~^\(module-net.*\)~\1 := $MODULE_NET~g" \

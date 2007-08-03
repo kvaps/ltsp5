@@ -18,7 +18,7 @@ case "$MODE" in
 		if [ -n "$INCLUDE" ] ; then
 			for i in $INCLUDE; do
 				BASE_PACKAGES_FINAL="$BASE_PACKAGES_FINAL $i"
-			fi
+			done
 		fi
 		$EMERGE $BASE_PACKAGES_FINAL
 		USE="bootstrap" $EMERGE baselayout
