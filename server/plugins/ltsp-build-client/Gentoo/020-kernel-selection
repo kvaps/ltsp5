@@ -21,7 +21,7 @@ case "$MODE" in
 			$GK_PREFIX/genkernel.conf
 
 		# Run genkernel to create and install kernel image
-		genkernel \
+		$GK_PREFIX/genkernel \
 			--bootdir=$ROOT/boot \
 			--install-mod-path=$ROOT \
 			--links \
