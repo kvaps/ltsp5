@@ -8,6 +8,6 @@ case "$MODE" in
         fi
         ;;
     finalization)
-        emerge $EMERGE_OPTS $LATE_PACKAGES
+        $EMERGE $EMERGE_OPTS $LATE_PACKAGES
         ;;
 esac

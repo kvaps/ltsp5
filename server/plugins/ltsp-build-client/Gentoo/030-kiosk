@@ -1,0 +1,52 @@
+case "$MODE" in
+    commandline)
+        # add a commandline switch to ltsp-build-client (advanced "false" means 
+        # we dont expect any value, callig --kiosk is enough, we could enhance
+        # the plugin to use --kiosk kde for example to install kdm and konqueror
+        # instead if we'd set it to true
+        add_option "kiosk" "`eval_gettext "a simple webkiosk mode."`" "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_kiosk_value" ]; then
+            # set an environment variable we can pick up later
+            KIOSK="True"
+        fi
+        ;;
+    after-install)
+        if [ -n "$KIOSK" ]; then
+            # install the webbrowser and a display manager that 
+            # is capable to do a timed autologin in the client environment
+            chroot $ROOT $EMERGE $EMERGE_OPTS install gdm mozilla-firefox
+
+### FIXME GENTOO
+            # make the necessary directories writeable to the booted client
+            echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
+            echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> $ROOT/etc/default/ltsp-client-setup
+### FIXME END
+
+            # create a kiosk user
+            chroot $ROOT adduser --disabled-password --gecos ,,, kiosk
+
+            # create a default xsession for that user
+            echo "#!/bin/sh" > $ROOT/home/kiosk/.xsession
+            # including sound
+            echo "pulseaudio -L module-detect -L module-rescue-streams -L module-native-protocol-unix -L module-volume-restore -n &" >> $ROOT/home/kiosk/.xsession
+            # make sure we have a wm
+            echo "metacity &" >> $ROOT/home/kiosk/.xsession
+            echo "/usr/bin/firefox --fullscreen" >> $ROOT/home/kiosk/.xsession
+
+            # do some sed magic to enable autologin
+            sed -i s/AutomaticLoginEnable=false/AutomaticLoginEnable=true/ $ROOT/etc/X11/gdm/gdm.conf
+            sed -i s/AutomaticLogin=/AutomaticLogin=kiosk/ $ROOT/etc/X11/gdm/gdm.conf
+            sed -i s/TimedLoginEnable=false/TimedLoginEnable=true/ $ROOT/etc/X11/gdm/gdm.conf
+            sed -i s/TimedLogin=/TimedLogin=kiosk/ $ROOT/etc/X11/gdm/gdm.conf
+            sed -i s/TimedLoginDelay=30/TimedLoginDelay=5/ $ROOT/etc/X11/gdm/gdm.conf
+        fi
+        ;;
+    finalization)
+        # make sure gdm actually starts
+        if [ -e $ROOT/etc/init.d/xdm ]; then
+            chroot $ROOT rc-update add xdm default
+        fi
+esac
+

@@ -1,41 +1,11 @@
 case "$MODE" in
     configure)
         ARCH=$(uname -m)
+        EMERGE="emerge"
         EMERGE_OPTS="--usepkg"
-        EARLY_PACKAGES="xorg-x11 ltsp esound joystick splashutils ltspfs"
+        EARLY_PACKAGES="xorg-server ltsp esound joystick splashutils ltspfs"
         RCS_WHITELIST="bootmisc checkfs checkroot clock consolefont hostname keymaps localmount modules net.lo rmnologin urandom ltsp-client-setup"
         RC2_WHITELIST="ltsp-client nbd-client splash local syslog-ng"
         OVERRIDE_EXPORTS="true"
-        ;;
-    after-install)
-        # Export LTSP_HANDLE_DAEMONS to avoid running daemons while
-        # creating the chroot.
-        export LTSP_HANDLE_DAEMONS="false"
-        ;;
-    finalization)
-        rc_cleanup() {
-            LEVEL=$1; shift
-        
-            echo "Cleaning up startup links in $LEVEL ..."
-        
-            RC_DIR=$(cd $ROOT/etc/runlevels/$LEVEL/; ls)
-        
-            for match in $@; do
-                RC_DIR=$(echo "$RC_DIR"|sed "s/^$match$//g")
-            done
-        
-            for name in $RC_DIR; do
-                if [ -f $ROOT/etc/init.d/$name ] ; then
-                    rc-update del $name 2>&1 >/dev/null
-                    $ROOT/etc/init.d/$name stop 2>&1 >/dev/null
-                fi
-            done
-        }
-        if [ -n "$RCS_WHITELIST" ]; then
-            rc_cleanup boot $RCS_WHITELIST
-        fi
-        if [ -n "$RC2_WHITELIST" ]; then
-            rc_cleanup default $RC2_WHITELIST
-        fi
         ;;
 esac

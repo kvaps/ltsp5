@@ -1,10 +1,10 @@
 case "$MODE" in
     install)
         # Install base packages
-		emerge glibc dhcpcd udev coreutils gzip gcc less openssh nano \
+		$EMERGE glibc dhcpcd udev coreutils gzip gcc less openssh nano \
 			util-linux psmisc procps debianutils diffutils findutils gawk grep \
 			kbd net-tools iputils wget tar cpio bzip2 virtual/modutils \
 			syslog-ng which
-		USE="bootstrap" emerge baselayout
+		USE="bootstrap" $EMERGE baselayout
         ;;
 esac

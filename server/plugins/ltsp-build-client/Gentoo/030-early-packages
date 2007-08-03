@@ -8,6 +8,6 @@ case "$MODE" in
         fi
         ;;
     after-install)
-        emerge $EMERGE_OPTS $EARLY_PACKAGES
+        $EMERGE $EMERGE_OPTS $EARLY_PACKAGES
         ;;
 esac
