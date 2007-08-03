@@ -1,0 +1,38 @@
+case "$MODE" in
+    before-install)
+		# Where is genkernel?
+		GK_PREFIX=/home/donnie/genkernel/
+
+		# Add networking drivers to configs/generic/modules_load.gk so they
+		# get added to the initramfs; ditto for nfs
+		while read line; do
+			MODULE_NET="$MODULE_NET $line"
+		done \
+			< <(find /usr/src/linux/drivers/net/ -name *.ko \
+				| sed -e "s:.*/::" -e "s:\.ko::"); echo
+
+		sed -i \
+			-e "s~^\(module-net.*\)~\1 := $MODULE_NET~g" \
+			-e "s~^\(module-nfs.*\)~\1 := nfs~g" \
+			$GK_PREFIX/configs/generic/modules_load.gk
+
+		# Requires unionfs 1.4 for 2.6.18 compatibility
+		sed -i \
+			-e 's:^\(UNIONFS_VER\).*:UNIONFS_VER="1.4":g' \
+			$GK_PREFIX/genkernel.conf
+
+		# Run genkernel to create and install kernel image
+		genkernel \
+			--bootdir=$ROOT/boot \
+			--install-mod-path=$ROOT \
+			--links \
+			--makeopts=-j4 \
+			--debuglevel=5 \
+			--unionfs \
+			--portmap \
+			--tempdir=/tmp/genkernel \
+			--menuconfig \
+			--no-clean \
+			all::
+	;;
+esac

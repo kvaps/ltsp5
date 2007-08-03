@@ -1,0 +1,9 @@
+case "$MODE" in
+    after-install)
+        mount proc $ROOT/proc "-t proc"
+        ln -s /proc/self/fd $ROOT/dev
+        ;;
+    finalization)
+        rm $ROOT/dev/fd
+        ;;
+esac
