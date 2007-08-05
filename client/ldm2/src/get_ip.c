@@ -50,7 +50,7 @@ get_ipaddr()
             die("Out of memory");
 
 	    if (ioctl(skfd, SIOCGIFCONF, &ifc) < 0) {
-            syslog(LOG_ERR, "SIOCGIFCONF");
+            fprintf(ldmlog, "SIOCGIFCONF\n");
 	        goto out;
 	    }
 
@@ -75,23 +75,23 @@ get_ipaddr()
 
 	    strcpy(info.ifr_name, ifr->ifr_name);
 	    if (ioctl(skfd, SIOCGIFFLAGS, &info) < 0) {
-            syslog(LOG_ERR, "SIOCGIFFLAGS");
+            fprintf(ldmlog, "SIOCGIFFLAGS\n");
 	        goto out;
 	    }
 
 	    if (!(info.ifr_flags & IFF_LOOPBACK) && (info.ifr_flags & IFF_UP)) {
 	        sa = (struct sockaddr_in *) &ifr->ifr_addr;
-	        mystrncpy(ldminfo.ipaddr, inet_ntoa(sa->sin_addr), LDMSTRSZ);
+	        scopy(ldminfo.ipaddr, inet_ntoa(sa->sin_addr));
 	        break;
 	    }
 
 	    ifr++;
     }
 
-    if (n == ifc.ifc_len)
-	    syslog(LOG_ERR, "No configured interface found");
-
 out:
     if (ifc.ifc_buf)
         free(ifc.ifc_buf);
+
+    if (n == ifc.ifc_len)
+	    die("No configured interface found\n");
 }

@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <glib.h>
 
 #include "ldm.h"
 
@@ -31,13 +32,22 @@ usage()
     exit(1);
 }
 
+/*
+ * die()
+ *
+ * Close display manager down with an error message.
+ */
+
 void
 die(char *msg)
 {
     fprintf(ldmlog, "%s", msg);
     fclose(ldmlog);
 
-    /* Shut things down gracefully if we can */
+    /*
+     * Shut things down gracefully if we can
+     */ 
+
     if (ldminfo.greeterpid)
         close_greeter();
     if (ldminfo.sshpid)
@@ -50,26 +60,32 @@ die(char *msg)
     exit(1);
 }
 
-void
-dumpargs(char *args[])
-{
-    int i;
-
-    for (i = 0; args[i]; i++)
-        fprintf(ldmlog, "%s ", args[i]);
-
-    fprintf(ldmlog, "\n");
-}
+/*
+ * scopy()
+ *
+ * Copy a string.  Used to move data in and out of our ldminfo structure.
+ * Note: if the source string is null, or points to a valid string of '\0',
+ * both result in a dest string length of 0.
+ */
 
 char *
-mystrncpy(char *d, char *s, int n)
+scopy(char *dest, char *source)
 {
-    if (!s) {
-        *d = '\0';
-        return d;
-    } else
-        return strncpy(d, s, n);
+    if (!source)
+        *dest = '\0';
+    else {
+        strncpy(dest, source, LDMSTRSZ - 1);
+        *(dest + LDMSTRSZ - 1) = '\0';     /* ensure null termination */
+    }
+
+    return dest;
 }
+
+/*
+ * ldm_getenv_bool()
+ *
+ * Handle boolean environment types.
+ */
 
 int
 ldm_getenv_bool(const char *name)
@@ -85,26 +101,16 @@ ldm_getenv_bool(const char *name)
 
 
 int
-ldm_spawn (char *const argv[])
+ldm_spawn (char **argv)
 {
     pid_t pid;
   
-    pid = fork();
-  
-    if (pid == 0) {                             /* child */
-        int i;
-        setsid();                               /* Become group leader */
-        for (i = getdtablesize(); i >= 0; --i)
-            close(i);                           /* close all descriptors */
-        i = open("/dev/null",O_RDWR);           /* open stdin */
-        dup(i);                                 /* stdout */
-        dup(i);                                 /* stderr */
-        execv(argv[0], argv);                   /* execve our arglist */
-        die ("Error: execv() returned");
-    } else if (pid > 0)
-        return pid;
-    else if (pid < 0)
-        die ("Error: fork() failed");
+    g_spawn_async(NULL, argv, NULL,
+                  G_SPAWN_DO_NOT_REAP_CHILD |
+                  G_SPAWN_STDOUT_TO_DEV_NULL |
+                  G_SPAWN_STDERR_TO_DEV_NULL,
+                  NULL, NULL, &pid, NULL);
+    return pid;
 }
 
 int
@@ -152,7 +158,7 @@ create_xauth()
 void
 launch_x()
 {
-    char *server_command[MAXARGS];
+    char *argv[MAXARGS];
     int i = 0;
     int fd;
 
@@ -163,21 +169,21 @@ launch_x()
     close(fd);
 
     /* Spawn the X server */
-    server_command[i++] = "/usr/bin/X";
-    server_command[i++] = "-auth";
-    server_command[i++] = ldminfo.authfile;
-    server_command[i++] = "-br";
-    server_command[i++] = "-ac";
-    server_command[i++] = "-noreset";
+    argv[i++] = "/usr/bin/X";
+    argv[i++] = "-auth";
+    argv[i++] = ldminfo.authfile;
+    argv[i++] = "-br";
+    argv[i++] = "-ac";
+    argv[i++] = "-noreset";
     if (*ldminfo.fontpath != '\0') {
-        server_command[i++] = "-fp";
-        server_command[i++] = ldminfo.fontpath;
+        argv[i++] = "-fp";
+        argv[i++] = ldminfo.fontpath;
     }
-    server_command[i++] = ldminfo.vty;
-    server_command[i++] = ldminfo.display;
-    server_command[i++] = NULL;
+    argv[i++] = ldminfo.vty;
+    argv[i++] = ldminfo.display;
+    argv[i++] = NULL;
         
-    ldminfo.xserverpid = ldm_spawn(server_command);
+    ldminfo.xserverpid = ldm_spawn(argv);
 }
 
 void
@@ -281,7 +287,6 @@ x_session()
     cmd[i++] = "$PPID";
     cmd[i++] = NULL;
 
-    dumpargs(cmd);
     xsessionpid = ldm_spawn(cmd);
     ldm_wait(xsessionpid);
     if (esdpid) {
@@ -300,6 +305,8 @@ main(int argc, char *argv[])
     /* decls */
     char display_env[ENVSIZE], xauth_env[ENVSIZE];
     char server_env[ENVSIZE], socket_env[ENVSIZE];
+
+    g_type_init();
 
     /*
      * Zero out our info struct.
@@ -321,8 +328,8 @@ main(int argc, char *argv[])
     if (*argv[2] != ':')            /* more sanity */
         usage();
 
-    mystrncpy(ldminfo.vty, argv[1], LDMSTRSZ);
-    mystrncpy(ldminfo.display, argv[2], LDMSTRSZ);
+    scopy(ldminfo.vty, argv[1]);
+    scopy(ldminfo.display, argv[2]);
 
     /*
      * Open our log.  Since we're on a terminal, logging to syslog is preferred,
@@ -352,9 +359,9 @@ main(int argc, char *argv[])
      * Get some of the environment variables we'll need.
      */
 
-    mystrncpy(ldminfo.server, getenv("LDM_SERVER"), LDMSTRSZ);
+    scopy(ldminfo.server, getenv("LDM_SERVER"));
     if (!strlen(ldminfo.server))
-        mystrncpy(ldminfo.server, getenv("SERVER"), LDMSTRSZ);
+        scopy(ldminfo.server, getenv("SERVER"));
     if (!strlen(ldminfo.server))
         die("no server specified");
 
@@ -363,24 +370,24 @@ main(int argc, char *argv[])
     if (ldm_getenv_bool("USE_XFS")) {
         char *xfs_server;
         xfs_server = getenv("XFS_SERVER");
-        snprintf(ldminfo.fontpath, LDMSTRSZ, "tcp/%s:7100", 
+        snprintf(ldminfo.fontpath, sizeof ldminfo.fontpath, "tcp/%s:7100", 
                  xfs_server ? xfs_server : ldminfo.server);
     } 
 
     ldminfo.sound = ldm_getenv_bool("SOUND");
-    mystrncpy(ldminfo.sound_daemon, getenv("SOUND_DAEMON"), LDMSTRSZ);
+    scopy(ldminfo.sound_daemon, getenv("SOUND_DAEMON"));
     ldminfo.localdev = ldm_getenv_bool("LOCALDEV");
-    mystrncpy(ldminfo.override_port, getenv("SSH_OVERRIDE_PORT"), LDMSTRSZ);
+    scopy(ldminfo.override_port, getenv("SSH_OVERRIDE_PORT"));
     ldminfo.directx = ldm_getenv_bool("LDM_DIRECTX");
     if (getenv("LDM_USERNAME") || getenv("LDM_PASSWORD"))
         ldminfo.autologin = TRUE;
-    mystrncpy(ldminfo.lang, getenv("LDM_LANGUAGE"), LDMSTRSZ);
-    mystrncpy(ldminfo.session, getenv("LDM_SESSION"), LDMSTRSZ);
-    mystrncpy(ldminfo.greeter_prog, getenv("LDM_GREETER"), LDMSTRSZ);
+    scopy(ldminfo.lang, getenv("LDM_LANGUAGE"));
+    scopy(ldminfo.session, getenv("LDM_SESSION"));
+    scopy(ldminfo.greeter_prog, getenv("LDM_GREETER"));
     if (*ldminfo.greeter_prog == '\0')
-        mystrncpy(ldminfo.greeter_prog, "/usr/bin/ldmgtkgreet", LDMSTRSZ);
-    mystrncpy(ldminfo.authfile, "/root/.Xauthority", LDMSTRSZ);
-    mystrncpy(ldminfo.control_socket, "/var/run/ldm_socket", LDMSTRSZ);
+        scopy(ldminfo.greeter_prog, "/usr/bin/ldmgtkgreet");
+    scopy(ldminfo.authfile, "/root/.Xauthority");
+    scopy(ldminfo.control_socket, "/var/run/ldm_socket");
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
@@ -426,24 +433,34 @@ main(int argc, char *argv[])
         }
     }
 
-    clear_password();
+    /*
+     * Clear out the password so it's not sitting in memory anywhere
+     */
+
+    bzero(ldminfo.password, sizeof ldminfo.password);
 
     fprintf(ldmlog, "Established ssh session.\n");
     if (ldminfo.greeterpid)
         close_greeter();
 
+    fprintf(ldmlog, "Executing rc files.\n");
     rc_files("start");                      /* Execute any rc files */
+    fprintf(ldmlog, "Beginning X session.\n");
     x_session();                            /* Start X session up */
+    fprintf(ldmlog, "X session ended.\n");
 
     /* x_session's exited.  So, clean up. */
 
+    fprintf(ldmlog, "Executing rc files.\n");
     rc_files("stop");                       /* Execute any rc files */
 
+    fprintf(ldmlog, "Killing X server.\n");
     kill(ldminfo.xserverpid, SIGTERM);      /* Kill Xorg server off */
     ldm_wait(ldminfo.xserverpid);
 
+    fprintf(ldmlog, "Ending ssh session.\n");
     ssh_endsession();                       /* Log out of server */
-    clear_username();
 
+    fclose(ldmlog);
     exit(0);
 }

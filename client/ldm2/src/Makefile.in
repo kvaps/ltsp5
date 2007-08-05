@@ -50,7 +50,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_ldm_OBJECTS = ldm.$(OBJEXT) sshutils.$(OBJEXT) \
 	greeter_iface.$(OBJEXT) get_ip.$(OBJEXT)
 ldm_OBJECTS = $(am_ldm_OBJECTS)
-ldm_LDADD = $(LDADD)
+am__DEPENDENCIES_1 =
+ldm_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -79,12 +80,15 @@ CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DEPS_CFLAGS = @DEPS_CFLAGS@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+GLIB_CFLAGS = @GLIB_CFLAGS@
+GLIB_LIBS = @GLIB_LIBS@
+GOBJECT_CFLAGS = @GOBJECT_CFLAGS@
+GOBJECT_LIBS = @GOBJECT_LIBS@
 GREP = @GREP@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -106,6 +110,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -146,7 +151,9 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 ldm_SOURCES = ldm.c sshutils.c greeter_iface.c get_ip.c ldm.h
-AM_CPPFLAGS = $(DEPS_CFLAGS) \
+ldm_LDADD = $(GLIB_LIBS) $(GOBJECT_LIBS)
+AM_CPPFLAGS = $(GLIB_CFLAGS) \
+              $(GOBJECT_CFLAGS) \
               -DRC_DIR=\""$(datadir)/ldm"\"
 
 all: all-am

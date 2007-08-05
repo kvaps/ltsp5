@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
-#include <syslog.h>
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -20,24 +19,11 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <sys/ioctl.h>
-#include <string.h>
-#include <signal.h>
 #include <pty.h>
 #include <utmp.h>
+#include <glib.h>
 
 #include "ldm.h"
-
-void
-clear_username()
-{
-    bzero(ldminfo.username, LDMSTRSZ);
-}
-
-void
-clear_password()
-{
-    bzero(ldminfo.password, LDMSTRSZ);
-}
 
 void
 spawn_ssh(int fd)
@@ -137,7 +123,7 @@ expect(int fd, float seconds, ...)
             break;
 
         if ((total + size) < MAXEXP) {
-            mystrncpy(p + total, buffer, size);
+            strncpy(p + total, buffer, size);
             total += size;
         }
 
@@ -165,7 +151,8 @@ int
 ssh_chat(int fd)
 {
     int seen;
-    char *newpw1, *newpw2;
+    char *oldpw;
+    char *newpw1;
 
     while (TRUE) {
         if (!*ldminfo.password)
@@ -203,7 +190,7 @@ ssh_chat(int fd)
         } else if (seen == 2) {
             set_message("<b>Password incorrect.  Try again.</b>");
             if (!ldminfo.autologin)
-                clear_password();
+                bzero(ldminfo.password, sizeof ldminfo.password);
         } else if (seen == 3) {
             fprintf(ldmlog, "User %s failed password 3 times\n",
                             ldminfo.username);
@@ -221,47 +208,47 @@ ssh_chat(int fd)
     /* First, it wants the same password again */
     set_message("Your password has expired.  Please enter a new one.");
 
-    while (TRUE) {
-        get_passwd(newpw1);
-        set_message("Please enter your password again to verify.");
-        get_passwd(newpw2);
+    oldpw = strdup(ldminfo.password);
 
-        if (!strcmp(newpw1, newpw2))
+    while (TRUE) {
+        get_passwd();
+        newpw1 = strdup(ldminfo.password);
+        set_message("Please enter your password again to verify.");
+        get_passwd();
+
+        if (!strcmp(ldminfo.password, newpw1))
             break;
             
         bzero(newpw1, strlen(newpw1));
         free(newpw1);
-        bzero(newpw2, strlen(newpw2));
-        free(newpw2);
         set_message("Your passwords didn't match.  Try again. Please enter a password.");
     }
 
     /* send old password first */
-    write(fd, ldminfo.password, strlen(ldminfo.password));
+    write(fd, oldpw, strlen(oldpw));
     write(fd, "\n", 1);
 
     seen = expect(fd, 30.0, "ssword:", NULL);
     if (seen == 1) {
-        write(fd, newpw2, strlen(newpw2));
+        write(fd, ldminfo.password, strlen(ldminfo.password));
         write(fd, "\n", 1);
     }
     seen = expect(fd, 30.0, "ssword:", NULL);
     if (seen == 1) {
-        write(fd, newpw2, strlen(newpw2));
+        write(fd, ldminfo.password, strlen(ldminfo.password));
         write(fd, "\n", 1);
     }
     
     seen = expect(fd, 30.0, "updated successfully", NULL);
     if (seen == 1) {
-        clear_password();
-        mystrncpy(ldminfo.password, newpw2, LDMSTRSZ);
+        bzero(ldminfo.password, sizeof ldminfo.password);
         return 2;
     } 
         
+    bzero(oldpw, strlen(oldpw));
     bzero(newpw1, strlen(newpw1));
-    bzero(newpw2, strlen(newpw2));
+    free(oldpw);
     free(newpw1);
-    free(newpw2);
 
 
     set_message("Password not updated.");
@@ -296,7 +283,8 @@ ssh_endsession()
 {
     int status;
 
-    kill(ldminfo.sshpid, SIGTERM);
+    write(ldminfo.sshfd, "exit\r\n", 6);
+    expect(ldminfo.sshfd, 15.0, "closed", NULL);
     status = ldm_wait(ldminfo.sshpid);
     close (ldminfo.sshfd);
     ldminfo.sshfd = 0;

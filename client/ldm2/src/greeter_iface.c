@@ -14,59 +14,10 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <string.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <sys/wait.h>
-#include <sys/ioctl.h>
-#include <pty.h>
-
-char *localpasswd;
+#include <glib.h>
 
 #include "ldm.h"
-
-int
-popen2(char **args, int *fpin, int *fpout)
-{
-    int pin[2], pout[2];
-    pid_t pid;
-
-    if(pipe(pin) == -1)
-        die("pipe\n");
-    if(pipe(pout) == -1)
-        die("pipe\n");
-
-    pid = fork();
-
-    if(pid == -1)
-        die("fork\n");
-
-    if (pid == 0) {
-        /* we are "in" the child */
-
-        /* this process' stdin should be the read end of the pin pipe.
-         * dup2 closes original stdin */
-        dup2(pin[0], STDIN_FILENO);
-        close(pin[0]);
-        close(pin[1]);
-        dup2(pout[1], STDOUT_FILENO);
-        /* this process' stdout should be the write end of the pout
-         * pipe. dup2 closes original stdout */
-        close(pout[1]);
-        close(pout[0]);
-
-        execv(args[0], args);
-        /* on sucess, execv never returns */
-        return(-1);
-    }
-
-    close(pin[0]);
-    close(pout[1]);
-    *fpin = pin[1];
-    *fpout = pout[0];
-    return(pid);
-}
 
 void
 spawn_greeter()
@@ -75,21 +26,23 @@ spawn_greeter()
         ldminfo.greeter_prog,
         NULL};
 
-    
-    ldminfo.greeterpid = popen2(greet, &ldminfo.greeterwfd,
-                                       &ldminfo.greeterrfd);
+    g_spawn_async_with_pipes(NULL, greet, NULL,
+                             G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL,
+                             &ldminfo.greeterpid,
+                             &ldminfo.greeterwfd,
+                             &ldminfo.greeterrfd,
+                             NULL, NULL);
 }
     
 int
-get_greeter_string(char *str)
+get_greeter_string(char *str, int len)
 {
-    char b[BUFSIZ];
-    char *p = b;
+    char *p = str;
     int i = 0;
     int ret;
 
     while(TRUE) {
-        if (i == (BUFSIZ - 1))
+        if (i == (len - 1))
             break;
         ret = read(ldminfo.greeterrfd, p, 1);
         if (ret < 0)
@@ -102,25 +55,23 @@ get_greeter_string(char *str)
 
     *p = '\0';
 
-    mystrncpy(str, b, LDMSTRSZ);
-
     return 0;
 }
 
 
 int
-get_userid()
+get_userid(char *str, int len)
 {
     char *prompt = "prompt <b>Username</b>\n";
     char *p;
 
     fprintf(ldmlog, "In get_userid\n");
     if (p = getenv("LDM_USERNAME")) {
-        mystrncpy(ldminfo.username, p, LDMSTRSZ);
+        scopy(ldminfo.username, p);
         return 0;
     } else {
         write(ldminfo.greeterwfd, prompt, strlen(prompt));
-        return get_greeter_string(ldminfo.username);
+        return get_greeter_string(ldminfo.username, sizeof ldminfo.username);
     }
 }
     
@@ -133,12 +84,12 @@ get_passwd()
 
     fprintf(ldmlog, "In get_passwd\n");
     if (p = getenv("LDM_PASSWORD")) {
-        mystrncpy(ldminfo.password, p, LDMSTRSZ);
+        scopy(ldminfo.password, p);
         return 0;
     } else {
         write(ldminfo.greeterwfd, prompt, strlen(prompt));
         write(ldminfo.greeterwfd, pw, strlen(pw));
-        return get_greeter_string(ldminfo.password);
+        return get_greeter_string(ldminfo.password, sizeof ldminfo.password);
     }
 }
 

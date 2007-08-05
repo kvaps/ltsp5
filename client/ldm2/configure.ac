@@ -17,7 +17,14 @@ AC_CHECK_HEADERS([syslog.h sys/wait.h fcntl.h],,AC_MSG_ERROR(Required header mis
 dnl Checks for Libraries
 AC_CHECK_LIB([util],[main],[],AC_MSG_ERROR(ldm2 requires libutil))
 
-AC_SUBST(DEPS_CFLAGS)
+dnl Check for Packages
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.6.0)
+PKG_CHECK_MODULES(GOBJECT, gobject-2.0 >= 2.6.0)
+
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
+AC_SUBST(GOBJECT_CFLAGS)
+AC_SUBST(GOBJECT_LIBS)
 
 dnl Output
 AC_CONFIG_FILES([Makefile src/Makefile share/Makefile scripts/Makefile man/Makefile])
