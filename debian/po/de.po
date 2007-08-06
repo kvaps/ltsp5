@@ -1,16 +1,16 @@
-# translation of de.po to Deutsch
+# translation of ltsp debconf templates to German
 # Copyright (C) 2006 LTSP Debian/Ubuntu Maintainers <pkg-ltsp-devel@lists.alioth.debian.org>
 # This file is distributed under the same license as the ltsp package.
 #
 # Wolfgang Schweer <schweer@cityweb.de>, 2006, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
+"Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-03 20:01-0500\n"
-"PO-Revision-Date: 2007-07-04 09:58+0200\n"
+"POT-Creation-Date: 2007-07-25 07:57+0200\n"
+"PO-Revision-Date: 2007-08-02 22:42+0200\n"
 "Last-Translator: Wolfgang Schweer <schweer@cityweb.de>\n"
-"Language-Team: Deutsch <de@li.org>\n"
+"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,87 +19,88 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
-msgstr "Eine chroot-Umgebung für LTSP einrichten?"
+msgstr "Eine LTSP-Chroot-Umgebung einrichten?"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid ""
-"This will set up an LTSP chroot environment on the machine, to act as a thin "
-"client server."
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
 msgstr ""
-"Auf diesem Rechner wird eine LTSP-chroot-Umgebung eingerichtet, "
-"damit er als Server für Thin Clients dienen kann."
+"Bitte entscheiden Sie, ob auf diesem Rechner eine LTSP-Chroot-Umgebung "
+"eingerichtet werden soll, damit er als Server für Thin Clients dienen kann."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:2001
+#: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "LTSP-chroot-Umgebung einrichten."
+msgstr "LTSP-Chroot-Umgebung einrichten"
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:3001
+#: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
-msgstr "Die LTSP-chroot-Umgebung wird eingerichtet ..."
+msgstr "Die LTSP-Chroot-Umgebung wird eingerichtet ..."
 
-#. Type: note
+#. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid "No Interface for LTSP dhcpd configuration found"
-msgstr ""
-"Es wurde keine Netzwerkschnittstelle gefunden, "
-"um den dhcp-Server für LTSP einrichten zu können."
-
-#. Type: note
+#: ../ltsp-client-builder.templates:6001
+msgid "No interface for LTSP dhcpd configuration"
+msgstr "Keine Netzwerkschnittstelle für die LTSP-dhcpd-Konfiguration "
+"vorhanden."
+#. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:5001
+#: ../ltsp-client-builder.templates:6001
 msgid ""
-"There are no free interfaces for usage with the LTSP Server. Please "
-"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
-"interface after the installation finished."
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
 msgstr ""
-"Es gibt keine freien Netzwerkschnittstellen für den LTSP-Server. Bitte "
-"nach Abschluss der Installation die Datei /etc/ltsp/dhcpd.conf editieren, "
-"so dass ein gültiges statisches Interface zur Verfügung steht. "
+"Es gibt keine freien Netzwerkschnittstellen für den LTSP-Server. "
+"Bitte editieren Sie nach Abschluss der Installation die Datei "
+"/etc/ltsp/dhcpd.conf per Hand, so dass sie auf eine gültige statische "
+"Schnittstelle verweist."
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid "Interface for the thin client network:"
 msgstr "Netzwerkschnittstelle für das Thin-Client-Netzwerk:"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:6001
-msgid "There were multiple spare interfaces found in this system."
-msgstr "Es wurden mehrere freie Netzerkschnittstellen gefunden."
+#: ../ltsp-client-builder.templates:7001
+msgid ""
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
+msgstr "Dieses Rechnersystem besitzt mehrere freie Netzwerkschnittstellen. "
+"Bitte wählen Sie aus, welche für den Thin Client benutzt werden soll."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-core.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Installation aborted "
 msgstr "Installation abgebrochen."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-core.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid ""
-"ltsp-client cannot be installed in a regular machine. This package provides  "
-"the basic structure for a LTSP terminal."
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
 msgstr ""
 "Das Paket ltsp-client kann nicht auf einem normal genutzten Rechner "
-"installiert werden; das Paket stellt die Grundstruktur für ein LTSP-Terminal "
-"zur Verfügung."
+"installiert werden; das Paket stellt die Grundstruktur für ein "
+"LTSP-Terminal zur Verfügung."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-core.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
-msgstr ""
-"In der Paket-Beschreibung steht, was damit gemeint ist;"
-"bitte nachlesen."
+msgstr "Bitte lesen Sie die Paketbeschreibung, um zu verstehen, was damit "
+"gemeint ist."
 
