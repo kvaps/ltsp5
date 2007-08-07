@@ -24,11 +24,13 @@ configfile
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 
-char user[255];
-char pass[255];
-char language[255] = "None";
-char session[255] = "None";
-char host[255] = "None";
+#include <ldminfo.h>
+
+char user[MAXSTRSZ];
+char pass[MAXSTRSZ];
+char language[MAXSTRSZ] = "None";
+char session[MAXSTRSZ] = "None";
+char host[MAXSTRSZ] = "None";
 
 #define EXPAND TRUE
 #define DONTEXPAND FALSE
@@ -39,6 +41,10 @@ char host[255] = "None";
 GtkWidget *UserPrompt;
 GtkWidget *StatusMessages;
 GtkWidget *entry;
+GHashTable *ldminfo_hash = NULL;
+GList *sorted_host_list = NULL;
+gint current_host_id = 0;
+gint selected_host_id = 0;
 
 static void
 destroy(GtkWidget *widget, gpointer data)
@@ -85,6 +91,34 @@ destroy_popup(GtkWidget *widget, GtkWidget *langwin)
 	return;
 }
 
+static void
+hostwin_update_host(GtkWidget *widget, gpointer data)
+{
+	current_host_id = gtk_combo_box_get_active( GTK_COMBO_BOX(widget) );
+	return;
+}
+
+static void
+hostwin_accept(GtkWidget *widget, GtkWidget *hostwin)
+{
+	selected_host_id = current_host_id;
+	gtk_widget_destroy(hostwin);
+	return;
+}
+
+static void
+hostwin_cancel(GtkWidget *widget, GtkWidget *hostwin)
+{
+	gtk_widget_destroy(hostwin);
+	return;
+}
+
+void update_selected_host()
+{
+    g_strlcpy(host, g_list_nth_data(sorted_host_list, selected_host_id),
+              MAXSTRSZ);
+}
+
 gboolean
 handle_command(GIOChannel *io_input)
 {
@@ -113,13 +147,15 @@ handle_command(GIOChannel *io_input)
         gtk_entry_set_visibility(GTK_ENTRY(entry), TRUE);
     } else if (!g_strncasecmp(buf->str, "passwd", 6)) {
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
+    } else if (!g_strncasecmp(buf->str, "hostname", 8)) {
+    	update_selected_host();
+        printf("%s\n", host);
     }
 
     g_string_free(buf, TRUE);
     return TRUE;
 }
 
-    
 static void
 sesswin(GtkWidget *widget, GtkWindow *win)
 {
@@ -183,10 +219,17 @@ sesswin(GtkWidget *widget, GtkWindow *win)
 }
 
 static void
+populate_lang_combo_box(const char *lang, GtkWidget *lang_combo_box)
+{
+	gtk_combo_box_append_text(GTK_COMBO_BOX(lang_combo_box),g_strdup(lang));
+}
+
+static void
 langwin(GtkWidget *widget, GtkWindow *win)
 {
 	GtkWidget *langwin, *label, *vbox, *buttonbox, *select;
 	GtkWidget *cancel, *accept, *frame;
+    ldminfo *curr_host = NULL;
 	
 	langwin = gtk_window_new(GTK_WINDOW_POPUP);
 	gtk_window_set_position((GtkWindow *) langwin, GTK_WIN_POS_CENTER_ALWAYS);
@@ -194,7 +237,17 @@ langwin(GtkWidget *widget, GtkWindow *win)
 	
 	vbox = gtk_vbox_new(FALSE, 0);
 	buttonbox = gtk_hbox_new(FALSE, 5);
-	select = gtk_combo_box_new();
+	select = gtk_combo_box_new_text();
+
+    /* 
+     * Populate lang with default host hash
+     */
+
+    curr_host = g_hash_table_lookup(ldminfo_hash, 
+                                    g_list_nth_data(sorted_host_list,
+                                    current_host_id));
+
+    g_list_foreach(curr_host->languages, (GFunc)populate_lang_combo_box, select);
 
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
@@ -229,10 +282,18 @@ langwin(GtkWidget *widget, GtkWindow *win)
 }
 
 static void
+populate_host_combo_box(const char *hostname, GtkWidget *host_combo_box)
+{
+	gtk_combo_box_append_text(GTK_COMBO_BOX(host_combo_box),g_strdup(hostname));
+}
+
+static void
 hostwin(GtkWidget *widget, GtkWindow *win)
 {
-	GtkWidget *hostwin, *label, *vbox, *buttonbox, *select;
+	GtkWidget *hostwin, *label, *vbox, *buttonbox, *combo_host;
 	GtkWidget *cancel, *accept, *frame;
+	GtkListStore *list_store;
+	GtkTreeIter iter;
 	
 	hostwin = gtk_window_new(GTK_WINDOW_POPUP);
 	gtk_window_set_position((GtkWindow *) hostwin, GTK_WIN_POS_CENTER_ALWAYS);
@@ -240,16 +301,34 @@ hostwin(GtkWidget *widget, GtkWindow *win)
 	
 	vbox = gtk_vbox_new(FALSE, 0);
 	buttonbox = gtk_hbox_new(FALSE, 5);
-	select = gtk_combo_box_new();
 
+
+	/* I don't get the right behavior with a list store, the text never appears
+	list_store = gtk_list_store_new(1, G_TYPE_STRING);
+	gtk_list_store_append (list_store, &iter);
+	gtk_list_store_set (list_store, &iter, 0, "testing1", -1);
+	combo_host = gtk_combo_box_new_with_model(GTK_TREE_MODEL(list_store));
+	*/
+	
+	combo_host = gtk_combo_box_new_text();
+	g_list_foreach(sorted_host_list, (GFunc)populate_host_combo_box, combo_host);
+	
+	g_signal_connect (G_OBJECT (combo_host), "changed",
+		G_CALLBACK (hostwin_update_host),
+		NULL);
+
+	gtk_combo_box_set_active(GTK_COMBO_BOX(combo_host), selected_host_id);
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
 	cancel = gtk_button_new_from_stock("gtk-cancel");
 	g_signal_connect (G_OBJECT (cancel), "clicked",
-			G_CALLBACK (destroy_popup),
+			G_CALLBACK (hostwin_cancel),
 			hostwin);
 
-	accept = gtk_button_new_with_mnemonic(_("Change _Host"));
+	accept =  gtk_button_new_from_stock("gtk-apply");
+	g_signal_connect (G_OBJECT (accept), "clicked",
+			G_CALLBACK (hostwin_accept),
+			hostwin);
 
 	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) accept, FALSE, FALSE, 0);
 	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) cancel, FALSE, FALSE, 0);
@@ -259,7 +338,7 @@ hostwin(GtkWidget *widget, GtkWindow *win)
 			 _("Select the host for your session to use:"));
 
 	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) label, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) select, FALSE, FALSE, 5);
+	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) combo_host, FALSE, FALSE, 5);
 	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) buttonbox, TRUE, TRUE, 5);
 
 	frame = gtk_frame_new("");
@@ -270,7 +349,7 @@ hostwin(GtkWidget *widget, GtkWindow *win)
 	gtk_container_add (GTK_CONTAINER (hostwin), frame);
 
 	gtk_widget_show_all(hostwin);
-
+	
 	return;
 }
 
@@ -389,6 +468,11 @@ main(int argc, char *argv[])
 
 	gtk_rc_add_default_file (GTKRC_DIR "/greeter-gtkrc");
 
+	/* Initialize information about hosts */
+	ldminfo_hash_init(&ldminfo_hash, getenv("LDM_SERVER"));
+	_ldminfo_query_all(ldminfo_hash);
+	ldminfo_get_sorted_host_list(ldminfo_hash, &sorted_host_list);
+
 	normcursor = gdk_cursor_new(GDK_LEFT_PTR);
 	busycursor = gdk_cursor_new(GDK_WATCH);
 
@@ -459,8 +543,8 @@ main(int argc, char *argv[])
 
 	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
                        GTK_WIDGET(optionbutton), FALSE, FALSE, 5);
-	/*gtk_box_pack_start(GTK_BOX(StatusBarBox), 
-                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);*/
+	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
+                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
                      GTK_WIDGET(timelabel), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
@@ -494,10 +578,11 @@ main(int argc, char *argv[])
 
 	gtk_container_add (GTK_CONTAINER (window), vbox2);
 
+	
 	gtk_widget_show_all(window);
 
 	gdk_window_set_cursor(root, normcursor);
-
+	
     /*
      * Start listening to stdin
      */

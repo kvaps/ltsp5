@@ -17,10 +17,21 @@
 # 02111-1307, USA.
 
 
+#
+# Load ltsp config defaults
+#
+
 . /usr/lib/ltsp/ltsp_config
 
-# XXX
+#
+# Set up path
+#
+
 PATH=$PATH:/usr/bin/X11
+
+#
+# Compute tty and displaynum
+#
 
 tty=$(tty)
 case "$tty" in
@@ -34,5 +45,27 @@ esac
 displaynum=$(($ttynum - 1))
 
 while true; do
+    #
+    # Server scalability.  If there exists a /usr/lib/ltsp/get_hosts file, then
+    # use it to populate the LDM_SERVER environment variable.
+    #
+
+    if [ -x /usr/lib/ltsp/get_hosts ] ; then
+        export LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    fi
+
+    #
+    # Loop though each of the hosts, and get their ldminfo
+    #
+
+    if [ "x$LDM_SERVER" != "x" ]; then
+        if [ ! -d /tmp/ldm ] ; then
+            mkdir -p /tmp/ldm
+        fi
+        for SRV in $LDM_SERVER ; do
+            nc $SRV 9571 > /tmp/ldm/$SRV
+        done
+    fi
+        
     ldm vt$ttynum :$displaynum
 done
