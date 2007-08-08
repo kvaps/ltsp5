@@ -23,11 +23,12 @@
 #define LDMINFO_H
 
 #define MAXSTRSZ 255
-//#define PORT 9571
-#define PORT 9573
 #define MAXBUFSIZE 4096
 
-// info about servers
+/*
+ * Info about servers
+ */
+
 typedef struct {
 	GList *languages;
 	GList *sessions;
@@ -35,16 +36,21 @@ typedef struct {
 	int state;
 } ldminfo;
 
-// state enum
+/* 
+ * state enum
+ */
+
 enum {
 	SRV_UP,
 	SRV_DOWN
 };
 
-/* Init the hash table : key=char hostnames, values=struct *ldminfo
+/* 
+ * Init the hash table : key=char hostnames, values=struct *ldminfo
  * ldm_server is the LDM_SERVER variable, a list of hostnames separated by space
  */
-void		ldminfo_hash_init(GHashTable **lsminfo_hash, const char *ldm_server);
+
+void ldminfo_hash_init(GHashTable **lsminfo_hash, const char *ldm_server);
 
 /* update the best_srv_hostname */
 void		ldminfo_get_best_server(GHashTable *ldminfo_hash, char **best_host);
@@ -65,9 +71,6 @@ void		_ldminfo_query_all(GHashTable *ldminfo_hash);
 
 /* split string by line and then construct the ldm_host_info */
 void 		_ldminfo_parse_string(const char *s, ldminfo *ldm_host_info);
-
-/* test if string is an IPv4 address */
-int is_ipaddr(const char *z);
 
 #endif /* LDMINFO_H */
 
