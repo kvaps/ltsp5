@@ -468,7 +468,8 @@ popup_menu(GtkWidget *widget, GtkWindow *window)
 
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), lang_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), sess_item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), host_item);
+    if (g_hash_table_size(ldminfo_hash) > 1)
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), host_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), reboot_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
