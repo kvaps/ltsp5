@@ -73,6 +73,19 @@ ltsp_x_config() {
             echo "Error! - ${XF86CONFIG_FILE} - File not found!"
             echo
         fi
+    elif [ ! -z "${XORG_CONF}" ]; then
+        reg_info XORG_CONF
+    #
+    # If XORG_CONF is defined in the lts.conf file, then
+    # it points to an XF86Config file that is pre-made for a workstation
+    #
+        if [ -f ${XORG_CONF} ]; then
+            cp ${XORG_CONF} ${XFCFG}
+        else
+            echo
+            echo "Error! - ${XORG_CONF} - File not found!"
+            echo
+        fi
     else
     #
     # Build the XF86Config file from entries in the lts.conf file

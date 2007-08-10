@@ -30,6 +30,13 @@
 PATH=$PATH:/usr/bin/X11
 
 #
+# Custom xorg.conf file?
+#
+
+[ ! -z "${XORG_CONF}" ] && [ -f ${XORG_CONF} ] && \
+    cp ${XORG_CONF} /etc/X11/xorg.conf
+
+#
 # Compute tty and displaynum
 #
 
