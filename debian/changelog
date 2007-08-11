@@ -1,3 +1,23 @@
+ltsp (5.0.8debian3) UNRELEASED; urgency=low
+
+  * Debconf templates and debian/control reviewed by the debian-l10n-
+    english team as part of the Smith review project. Closes: #434048
+  * Debconf translation updates:
+    - French. Closes: #434600
+    - Swedish. Closes: #434611
+    - Basque. Closes: #434612
+    - Portuguese. Closes: #434683
+    - Catalan. Closes: #434810
+    - Vietnamese. Closes: #434834
+    - Galician. Closes: #434849
+    - Bulgarian. Closes: #433619
+    - Russian. Closes: #435570
+    - German. Closes: #435821
+    - Czech. Closes: #436283
+    - Dutch. Closes: #436856
+
+ -- Christian Perrier <bubulle@debian.org>  Sat, 21 Jul 2007 09:54:59 +0200
+
 ltsp (5.0.8debian2) unstable; urgency=low
 
   * ltsp-client:

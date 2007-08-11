@@ -50,8 +50,9 @@ msgstr "Die LTSP-Chroot-Umgebung wird eingerichtet ..."
 #. Description
 #: ../ltsp-client-builder.templates:6001
 msgid "No interface for LTSP dhcpd configuration"
-msgstr "Keine Netzwerkschnittstelle für die LTSP-dhcpd-Konfiguration "
-"vorhanden."
+msgstr ""
+"Keine Netzwerkschnittstelle für die LTSP-dhcpd-Konfiguration vorhanden."
+
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
@@ -60,10 +61,9 @@ msgid ""
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
 "after the installation has completed."
 msgstr ""
-"Es gibt keine freien Netzwerkschnittstellen für den LTSP-Server. "
-"Bitte editieren Sie nach Abschluss der Installation die Datei "
-"/etc/ltsp/dhcpd.conf per Hand, so dass sie auf eine gültige statische "
-"Schnittstelle verweist."
+"Es gibt keine freien Netzwerkschnittstellen für den LTSP-Server. Bitte "
+"editieren Sie nach Abschluss der Installation die Datei /etc/ltsp/dhcpd.conf "
+"per Hand, so dass sie auf eine gültige statische Schnittstelle verweist."
 
 #. Type: select
 #. Description
@@ -77,13 +77,14 @@ msgstr "Netzwerkschnittstelle für das Thin-Client-Netzwerk:"
 msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
-msgstr "Dieses Rechnersystem besitzt mehrere freie Netzwerkschnittstellen. "
-"Bitte wählen Sie aus, welche für den Thin Client benutzt werden soll."
+msgstr ""
+"Dieses Rechnersystem besitzt mehrere freie Netzwerkschnittstellen. Bitte "
+"wählen Sie aus, welche für den Thin Client benutzt werden soll."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr "Installation abgebrochen."
 
 #. Type: error
@@ -94,13 +95,13 @@ msgid ""
 "package provides the basic structure for a LTSP terminal."
 msgstr ""
 "Das Paket ltsp-client kann nicht auf einem normal genutzten Rechner "
-"installiert werden; das Paket stellt die Grundstruktur für ein "
-"LTSP-Terminal zur Verfügung."
+"installiert werden; das Paket stellt die Grundstruktur für ein LTSP-Terminal "
+"zur Verfügung."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
-msgstr "Bitte lesen Sie die Paketbeschreibung, um zu verstehen, was damit "
-"gemeint ist."
-
+msgstr ""
+"Bitte lesen Sie die Paketbeschreibung, um zu verstehen, was damit gemeint "
+"ist."

@@ -24,8 +24,12 @@ msgstr "Konfigurera en chroot-miljö för LTSP?"
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
-msgid "Please choose whether you want to set up an LTSP chroot environment on this machine, to act as a thin client server."
-msgstr "Välj huruvida du vill konfigurera en chroot-miljö för LTSP på den här maskinen som fungerar som en server för tunna klienter."
+msgid ""
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
+msgstr ""
+"Välj huruvida du vill konfigurera en chroot-miljö för LTSP på den här "
+"maskinen som fungerar som en server för tunna klienter."
 
 #. Type: text
 #. Description
@@ -49,8 +53,14 @@ msgstr "Inget nätverksgränssnitt för LTSP:s dhcpd-konfiguration"
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
-msgid "There are no free interfaces for usage with the LTSP server. Please manually configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface after the installation has completed."
-msgstr "Det finns inga lediga nätverksgränssnitt att använda för LTSP-servern. Konfigurera filen /etc/ltsp/dhcpd.conf manuellt till att peka på ett giltigt statiskt nätverksgränssnitt efter att installationen är färdig."
+msgid ""
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
+msgstr ""
+"Det finns inga lediga nätverksgränssnitt att använda för LTSP-servern. "
+"Konfigurera filen /etc/ltsp/dhcpd.conf manuellt till att peka på ett giltigt "
+"statiskt nätverksgränssnitt efter att installationen är färdig."
 
 #. Type: select
 #. Description
@@ -61,24 +71,31 @@ msgstr "Nätverksgränssnitt för tunna klient-nätverket:"
 #. Type: select
 #. Description
 #: ../ltsp-client-builder.templates:7001
-msgid "Please choose, among the multiple spare interfaces this system has, which one should be used for the thin client."
-msgstr "Välj, bland de reservgränssnitt som det här systemet har, vilket som ska användas för den tunna klienten."
+msgid ""
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
+msgstr ""
+"Välj, bland de reservgränssnitt som det här systemet har, vilket som ska "
+"användas för den tunna klienten."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr "Installationen avbröts "
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "The ltsp-client package cannot be installed in a regular machine. This package provides the basic structure for a LTSP terminal."
-msgstr "Paketet ltsp-client kan inte installeras på en vanlig maskin. Det här paketet tillhandahåller grundläggande struktur för en LTSP-terminal."
+msgid ""
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
+msgstr ""
+"Paketet ltsp-client kan inte installeras på en vanlig maskin. Det här "
+"paketet tillhandahåller grundläggande struktur för en LTSP-terminal."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
 msgstr "Läs paketbeskrivningen för att förstå vad det betyder."
-

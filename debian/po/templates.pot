@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-08-01 14:28-0700\n"
+"POT-Creation-Date: 2007-08-08 18:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr ""
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr ""
 
 #. Type: error

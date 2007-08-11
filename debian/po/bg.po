@@ -5,7 +5,7 @@
 # Damyan Ivanov <dam@modsoftsys.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-07-25 07:57+0200\n"
 "PO-Revision-Date: 2007-07-31 16:20+0300\n"
@@ -28,7 +28,9 @@ msgstr "Подготвяне на обкръжение за chroot на LTSP?"
 msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
-msgstr "Изберете дали искате да подготвите обкръжение за LTSP. От това зависи функционирането на системата като сървър за тънки клиенти."
+msgstr ""
+"Изберете дали искате да подготвите обкръжение за LTSP. От това зависи "
+"функционирането на системата като сървър за тънки клиенти."
 
 #. Type: text
 #. Description
@@ -73,12 +75,14 @@ msgstr "Интерфейс за мрежата с тънки клиенти:"
 msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
-msgstr "Изберете кой от своодните мрежови интерфейси да бъде използван от тънкия клиент."
+msgstr ""
+"Изберете кой от своодните мрежови интерфейси да бъде използван от тънкия "
+"клиент."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr "Инсталирането е прекъснато "
 
 #. Type: error
@@ -87,7 +91,9 @@ msgstr "Инсталирането е прекъснато "
 msgid ""
 "The ltsp-client package cannot be installed in a regular machine. This "
 "package provides the basic structure for a LTSP terminal."
-msgstr "Пакетът ltsp-client не бива да се инсталира на обикновени машини. Предназначението му е да подсигури инфраструктура за терминал LTSP."
+msgstr ""
+"Пакетът ltsp-client не бива да се инсталира на обикновени машини. "
+"Предназначението му е да подсигури инфраструктура за терминал LTSP."
 
 #. Type: error
 #. Description
@@ -95,6 +101,5 @@ msgstr "Пакетът ltsp-client не бива да се инсталира н
 msgid "Please read the package description to understand what it means."
 msgstr "Повече информация има в описанието на пакета."
 
-msgid "There were multiple spare interfaces found in this system."
-msgstr "Системата има няколко свободни интерфейса."
-
+#~ msgid "There were multiple spare interfaces found in this system."
+#~ msgstr "Системата има няколко свободни интерфейса."

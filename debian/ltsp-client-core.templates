@@ -9,7 +9,7 @@
 
 Template: ltsp-client/abort-installation
 Type: error
-_Description: Installation aborted 
+_Description: Installation aborted
  The ltsp-client package cannot be installed in a regular
  machine. This package provides the basic structure for a LTSP
  terminal.

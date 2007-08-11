@@ -11,12 +11,11 @@
 #
 #    Developers do not need to manually edit POT or PO files.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"POT-Creation-Date: 2007-07-25 07:57+0200\n"
 "PO-Revision-Date: 2006-03-07 10:46-0300\n"
 "Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
 "Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
@@ -27,16 +26,20 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
 msgstr "Criar um chroot para o LTSP ?"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
+#, fuzzy
+#| msgid ""
+#| "This will set up an LTSP chroot environment on the machine, to act as a "
+#| "thin client server."
 msgid ""
-"This will set up an LTSP chroot environment on the machine, to act as a thin "
-"client server."
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
 msgstr ""
 "Isto irÃ¡ criar um chroot LTSP na mÃ¡quina, para atuar como um servidor de "
 "clientes finos."
@@ -44,63 +47,68 @@ msgstr ""
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:2001
+#: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
 msgstr "Construir chroot LTSP"
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:3001
+#: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
 msgstr "Construindo chroot LTSP..."
 
 #. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:4001
-msgid "No Interface for LTSP dhcpd configuration found"
-msgstr ""
-
-#. Type: note
-#. Description
-#: ../ltsp-client-builder.templates:4001
-msgid ""
-"There are no free interfaces for usage with the LTSP Server. Please "
-"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
-"interface after the installation finished."
-msgstr ""
-
-#. Type: select
-#. Description
-#: ../ltsp-client-builder.templates:5001
-msgid ""
-"Please select the interface you want to use for the thin client network."
-msgstr ""
-
-#. Type: select
-#. Description
-#: ../ltsp-client-builder.templates:5001
-msgid "There were multiple spare interfaces found in this system."
+#: ../ltsp-client-builder.templates:6001
+msgid "No interface for LTSP dhcpd configuration"
 msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
-msgid "Installation aborted "
+#: ../ltsp-client-builder.templates:6001
+msgid ""
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:7001
+msgid "Interface for the thin client network:"
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:7001
+msgid ""
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:2001
+msgid "Installation aborted"
 msgstr "Instalacao abortada"
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
+#, fuzzy
+#| msgid ""
+#| "ltsp-client cannot be installed in a regular machine. This package "
+#| "provides  the basic structure for a LTSP terminal."
 msgid ""
-"ltsp-client cannot be installed in a regular machine. This package provides  "
-"the basic structure for a LTSP terminal."
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
 msgstr ""
 "ltsp-client não pode ser instalado numa máquina regular. Este pacote provê  "
 "a estrutura básica para um terminal LTSP."
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
 msgstr ""
 "Por favor leia a descrição do pacote para entendermelhor o que isso "

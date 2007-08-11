@@ -16,7 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Type: boolean
 #. Description
@@ -27,9 +28,6 @@ msgstr "Настроить chroot-окружение LTSP?"
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
-#| msgid ""
-#| "This will set up an LTSP chroot environment on the machine, to act as a "
-#| "thin client server."
 msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
@@ -53,17 +51,12 @@ msgstr "Собирается LTSP chroot..."
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
-#| msgid "No Interface for LTSP dhcpd configuration found"
 msgid "No interface for LTSP dhcpd configuration"
 msgstr "Нет интерфейса для конфигурации LTSP dhcpd"
 
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
-#| msgid ""
-#| "There are no free interfaces for usage with the LTSP Server. Please "
-#| "configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid "
-#| "static interface after the installation finished."
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
@@ -86,21 +79,18 @@ msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
 msgstr ""
-"Выберите из имеющихся незадействованных интерфейсов системы тот, "
-"который должен использоваться для тонкого клиента."
+"Выберите из имеющихся незадействованных интерфейсов системы тот, который "
+"должен использоваться для тонкого клиента."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr "Установка прервана "
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-#| msgid ""
-#| "ltsp-client cannot be installed in a regular machine. This package "
-#| "provides  the basic structure for a LTSP terminal."
 msgid ""
 "The ltsp-client package cannot be installed in a regular machine. This "
 "package provides the basic structure for a LTSP terminal."
@@ -113,4 +103,3 @@ msgstr ""
 #: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
 msgstr "Чтобы понять, что произошло, обратитесь к описанию пакета."
-

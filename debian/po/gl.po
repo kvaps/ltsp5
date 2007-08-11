@@ -23,9 +23,6 @@ msgstr "¿Configurar un ambiente chroot de LTSP?"
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
-#| msgid ""
-#| "This will set up an LTSP chroot environment on the machine, to act as a "
-#| "thin client server."
 msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
@@ -49,17 +46,12 @@ msgstr "A construír o chroot de LTSP..."
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
-#| msgid "No Interface for LTSP dhcpd configuration found"
 msgid "No interface for LTSP dhcpd configuration"
 msgstr "Ningunha interface para configurar dhcpd para LTSP"
 
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
-#| msgid ""
-#| "There are no free interfaces for usage with the LTSP Server. Please "
-#| "configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid "
-#| "static interface after the installation finished."
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
@@ -88,15 +80,12 @@ msgstr ""
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr "Instalación cancelada "
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-#| msgid ""
-#| "ltsp-client cannot be installed in a regular machine. This package "
-#| "provides  the basic structure for a LTSP terminal."
 msgid ""
 "The ltsp-client package cannot be installed in a regular machine. This "
 "package provides the basic structure for a LTSP terminal."

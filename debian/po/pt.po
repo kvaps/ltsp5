@@ -82,7 +82,7 @@ msgstr ""
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
+msgid "Installation aborted"
 msgstr "Instalação cancelada "
 
 #. Type: error
