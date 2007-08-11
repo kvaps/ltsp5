@@ -15,7 +15,7 @@
 while getopts bpa: ARGS
 do
     case ${ARGS} in
-        r)    BASE=$OPTARG
+        b)    BASE=$OPTARG
               ;;
         p)    PORT=$OPTARG
               ;;
