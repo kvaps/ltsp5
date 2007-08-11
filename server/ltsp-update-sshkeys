@@ -9,7 +9,7 @@ do
     case ${ARGS} in
         b)    BASE=$OPTARG
               ;;
-       \?)    echo "Usage: $0 [-b ltspbase] [-p port] [-a architecture]"
+       \?)    echo "Usage: $0 [-b ltspbase]"
               exit 1
               ;;
        esac

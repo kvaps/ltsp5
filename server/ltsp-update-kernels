@@ -2,12 +2,24 @@
 
 set -e
 
+while getopts b: ARGS
+do
+    case ${ARGS} in
+        b)    BASE=$OPTARG
+              ;;
+       \?)    echo "Usage: $0 [-b ltspbase]"
+              exit 1
+              ;;
+       esac
+done
+shift $((${OPTIND} - 1))
+
 if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
     . /etc/ltsp/ltsp-update-kernels.conf
 fi
 
 TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
-BASE=${BASE:-"/opt/ltsp/"}
+BASE=${BASE:-"/opt/ltsp"}
 COPYTFTP=${COPYTFTP:-"true"}
 TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
 
@@ -25,7 +37,8 @@ for TFTPDIR in $TFTPDIRS ; do
     fi
 
     ALL_CHROOTS="$@"
-    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d)"}
+    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d | \
+                                  grep -v images)"}
     
     for CHROOT in $ALL_CHROOTS ; do
         if [ -x $CHROOT/bin/true ]; then
