@@ -35,7 +35,7 @@
 #include <sys/ioctl.h>
 #include <netdb.h>
 
-#include "ldminfo.h"
+#include <greeter.h>
 
 //GHashTable *ldminfo_hash        = NULL;
 

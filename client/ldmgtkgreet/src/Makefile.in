@@ -47,7 +47,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_ldmgtkgreet_OBJECTS = greeter.$(OBJEXT) ldminfo.$(OBJEXT)
+am_ldmgtkgreet_OBJECTS = hostwin.$(OBJEXT) greeter.$(OBJEXT) \
+	langwin.$(OBJEXT) ldminfo.$(OBJEXT) sesswin.$(OBJEXT)
 ldmgtkgreet_OBJECTS = $(am_ldmgtkgreet_OBJECTS)
 am__DEPENDENCIES_1 =
 ldmgtkgreet_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -147,7 +148,9 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-ldmgtkgreet_SOURCES = greeter.c ldminfo.c ldminfo.h
+ldmgtkgreet_SOURCES = hostwin.c greeter.c langwin.c ldminfo.c \
+                      sesswin.c greeter.h
+
 ldmgtkgreet_LDADD = $(DEPS_LIBS)
 AM_CPPFLAGS = $(DEPS_CFLAGS) \
               -DPIXMAPS_DIR=\""$(datadir)/ldm/themes/default"\" \
@@ -220,7 +223,10 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/greeter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hostwin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/langwin.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ldminfo.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sesswin.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

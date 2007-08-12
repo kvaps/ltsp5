@@ -1,7 +1,8 @@
 ## Process this file with automake to produce Makefile.in
 
 bin_PROGRAMS = ldmgtkgreet
-ldmgtkgreet_SOURCES = greeter.c ldminfo.c ldminfo.h
+ldmgtkgreet_SOURCES = hostwin.c greeter.c langwin.c ldminfo.c \
+                      sesswin.c greeter.h
 
 ldmgtkgreet_LDADD = $(DEPS_LIBS)
 AM_CPPFLAGS = $(DEPS_CFLAGS) \
