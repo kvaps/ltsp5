@@ -1,22 +1,33 @@
 ltsp (5.0.8debian3) UNRELEASED; urgency=low
 
+  [ Christian Perrier ]
   * Debconf templates and debian/control reviewed by the debian-l10n-
     english team as part of the Smith review project. Closes: #434048
   * Debconf translation updates:
-    - French. Closes: #434600
+    - French. Closes: #434600, #431978
     - Swedish. Closes: #434611
-    - Basque. Closes: #434612
-    - Portuguese. Closes: #434683
-    - Catalan. Closes: #434810
-    - Vietnamese. Closes: #434834
-    - Galician. Closes: #434849
-    - Bulgarian. Closes: #433619
-    - Russian. Closes: #435570
-    - German. Closes: #435821
-    - Czech. Closes: #436283
+    - Basque. Closes: #434612, #431669
+    - Portuguese. Closes: #434683, #431790
+    - Catalan. Closes: #434810, #430853
+    - Vietnamese. Closes: #434834, #431654
+    - Galician. Closes: #434849, #431744
+    - Bulgarian. Closes: #433619, #431955
+    - Russian. Closes: #435570, 435571, #432226
+    - German. Closes: #435821, #431668
+
+    - Czech. Closes: #436283, #432211
     - Dutch. Closes: #436856
 
- -- Christian Perrier <bubulle@debian.org>  Sat, 21 Jul 2007 09:54:59 +0200
+  [ Vagrant Cascadian ]
+  * apply patch by Teddy Hogeborn for the gtk greeter to display more locales
+    (Closes: #430074)
+  * added notes for modifying boot prompt options (Closes: #428446)
+  * move suggestion for joystick from ltsp-client to ltsp-client-core
+  * make cryptsetup an ltsp-client dependency
+  * add suggests for ltsp-client-core on all packages depended on by
+    ltsp-client
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 12 Aug 2007 07:35:35 -0700
 
 ltsp (5.0.8debian2) unstable; urgency=low
 
