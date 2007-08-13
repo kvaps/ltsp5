@@ -385,7 +385,6 @@ main(int argc, char *argv[])
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
-    snprintf(server_env, sizeof server_env,  "LDM_SERVER=%s", ldminfo.server);
     snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
              ldminfo.control_socket);
 
@@ -395,7 +394,6 @@ main(int argc, char *argv[])
 
     putenv(display_env);
     putenv(xauth_env);
-    putenv(server_env);
     putenv(socket_env);
 
     /*
@@ -443,6 +441,9 @@ main(int argc, char *argv[])
         die("Couldn't get a valid language setting");
     if (get_session())
         die("Couldn't get a valid session setting");
+
+    snprintf(server_env, sizeof server_env,  "LDM_SERVER=%s", ldminfo.server);
+    putenv(server_env);
 
     fprintf(ldmlog, "Established ssh session.\n");
     if (ldminfo.greeterpid)

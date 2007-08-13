@@ -256,6 +256,7 @@ main(int argc, char *argv[])
 	gtk_rc_add_default_file (GTKRC_DIR "/greeter-gtkrc");
 
 	/* Initialize information about hosts */
+
 	ldminfo_hash_init(&ldminfo_hash, getenv("LDM_SERVER"));
 	_ldminfo_query_all(ldminfo_hash);
 	ldminfo_get_sorted_host_list(ldminfo_hash, &sorted_host_list);

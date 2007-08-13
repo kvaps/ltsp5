@@ -57,8 +57,9 @@ while true; do
     # use it to populate the LDM_SERVER environment variable.
     #
 
-    [ -x /usr/lib/ltsp/get_hosts ] && LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
-    [ -z "${LDM_SERVER}" ] && LDM_SERVER=${SERVER}
+    [ -x /usr/lib/ltsp/get_hosts ] && \
+        export LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    [ -z "${LDM_SERVER}" ] && export LDM_SERVER=${SERVER}
 
     #
     # Loop though each of the hosts, and get their ldminfo
