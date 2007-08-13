@@ -79,9 +79,10 @@ set_sync_ranges(){
     # so we need replacement code as well
     if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
         if [ -z "$(grep HorizSync $INPUT_FILE)"] && [ -z "$(grep VertRefresh $INPUT_FILE)"];then
-            echo "replace $X_HORZSYNC $X_VERTREFRESH" >/dev/null
+            sed -i -e 's/^\s*VertRefresh.*$/\tVertRefresh\t'$X_VERTREFRESH'/' $INPUT_FILE
+            sed -i -e 's/^\s*HorizSync.*$/\tHorizSync\t'$X_HORZSYNC'/' $INPUT_FILE
         else
-            echo "add $X_HORZSYNC $X_VERTREFRESH" >/dev/null
+            sed -i -e '/Section "Monitor"/,3aVertRefresh='$X_VERTREFRESH'\nHorizSync='$X_HORZSYNC'' $INPUT_FILE
         fi
     fi
 }
@@ -89,12 +90,19 @@ set_sync_ranges(){
 # Handle modes
 handle_modes(){
     if [ -n "$X_MODE_0" ] || [ -n "$X_MODE_1" ] || [ -n "$X_MODE_2" ];then
-        # FIXME
         # We only want to add modes if there arent any in the file yet (add fix to replace exisiting ones)
+        X_MODE=""
+        X_MODE_0=$( echo "$X_MODE_0" | sed -r 's/^ +//g;s/ *$//g')
+        X_MODE_1=$( echo "$X_MODE_1" | sed -r 's/^ +//g;s/ *$//g')
+        X_MODE_2=$( echo "$X_MODE_2" | sed -r 's/^ +//g;s/ *$//g')
+        [ -n "$X_MODE_0" ] && X_MODE="$X_MODE \"$X_MODE_0\""
+        [ -n "$X_MODE_1" ] && X_MODE="$X_MODE \"$X_MODE_1\""
+        [ -n "$X_MODE_2" ] && X_MODE="$X_MODE \"$X_MODE_2\""
         if [ "$(grep Modes $INPUT_FILE|sed -e 's/\t*.[0-9]//g' -e 's/\t//g'|grep -c ^Modes)" = 0 ];then
-            X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/^ +//g;s/ *$//g')
             MODELINES="SubSection \"Display\"\n\t\tModes\t\t$X_MODE"
             sed -i s/'SubSection "Display"'/"$MODELINES"/g $INPUT_FILE
+        else 
+            sed -i -e 's/^.*Modes.*$/\t\tModes\t\t'${X_MODE}'/'  
         fi
     fi
 }
@@ -171,6 +179,37 @@ EOF
     fi
 }
 
+# add_touchscreen
+add_touchscreen(){
+    if [ "${USE_TOUCH}" = "Y" ]; then
+        sed -i -e '/ServerLayout/a\\tInputDevice\t"Touchscreen"\t"SendCoreEvents"' $INPUT_FILE
+        cat <<-EOF >> $INPUT_FILE
+
+Section "InputDevice"
+       Identifier  "TouchScreen"
+       Driver      "${X_TOUCH_DRIVER:-elographics}"
+       Option      "Device"           "${X_TOUCH_DEVICE:-/dev/ttyS0}"
+       Option      "DeviceName"       "Elo"
+EOF
+        [ -n "${X_TOUCH_MINX}" ] && cat <<-EOF >> $INPUT_FILE
+       Option      "MinX"             "${X_TOUCH_MINX:-433}"
+       Option      "MaxX"             "${X_TOUCH_MAXX:-3588}"
+       Option      "MinY"             "${X_TOUCH_MINY:-569}"
+       Option      "MaxY"             "${X_TOUCH_MAXY:-3526}"
+EOF
+        [ -n "${X_TOUCH_UNDELAY}" ] && cat <<-EOF >> $INPUT_FILE
+       Option      "UntouchDelay"     "${X_TOUCH_UNDELAY:-10}"
+EOF
+        [ -n "${X_TOUCH_RPTDELAY}" ] && cat <<-EOF >> $INPUT_FILE
+       Option      "ReportDelay"      "${X_TOUCH_RPTDELAY:-10}"
+EOF
+        cat <<-EOF >> $INPUT_FILE
+       Option      "AlwaysCore"
+EndSection
+EOF
+fi
+}
+
 handle_keyboard_settings || true
 handle_mouse_settings || true
 handle_driver || true
@@ -179,6 +218,7 @@ handle_modes || true
 set_default_depth || true
 hardcoded_devices || true
 append_dri || true
+add_touchscreen || true
 
 mv $INPUT_FILE $OUT_FILE
 
