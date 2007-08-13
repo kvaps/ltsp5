@@ -272,7 +272,7 @@ x_session()
         }
     }
             
-    cmd[i++] = "/etc/X11/Xsession";
+    cmd[i++] = ldminfo.session;
 
     if (ldminfo.localdev) {
         cmd[i++] = "||";        /* closes bug number 121254 */
@@ -359,14 +359,6 @@ main(int argc, char *argv[])
      * Get some of the environment variables we'll need.
      */
 
-    scopy(ldminfo.server, getenv("LDM_SERVER"));
-    if (!strlen(ldminfo.server))
-        scopy(ldminfo.server, getenv("SERVER"));
-    if (!strlen(ldminfo.server))
-        die("no server specified");
-
-    fprintf(ldmlog, "Got a server\n");
-
     if (ldm_getenv_bool("USE_XFS")) {
         char *xfs_server;
         xfs_server = getenv("XFS_SERVER");
@@ -383,6 +375,8 @@ main(int argc, char *argv[])
         ldminfo.autologin = TRUE;
     scopy(ldminfo.lang, getenv("LDM_LANGUAGE"));
     scopy(ldminfo.session, getenv("LDM_SESSION"));
+    if (*ldminfo.session == '\0')
+        scopy(ldminfo.session, "/etc/X11/Xsession");
     scopy(ldminfo.greeter_prog, getenv("LDM_GREETER"));
     if (*ldminfo.greeter_prog == '\0')
         scopy(ldminfo.greeter_prog, "/usr/bin/ldmgtkgreet");
@@ -421,6 +415,12 @@ main(int argc, char *argv[])
         *(ldminfo.username) == '\0')
         die("Greeter returned null userid");
 
+    if (get_host() ||
+        *(ldminfo.server) == '\0')
+        die("Couldn't get a valid hostname");
+
+    fprintf(ldmlog, "Establishing a session with %s\n", ldminfo.server);
+
     while(TRUE) {
         int retval;
         fprintf(ldmlog, "Attempting ssh session as %s\n", ldminfo.username);
@@ -438,6 +438,11 @@ main(int argc, char *argv[])
      */
 
     bzero(ldminfo.password, sizeof ldminfo.password);
+
+    if (get_language())
+        die("Couldn't get a valid language setting");
+    if (get_session())
+        die("Couldn't get a valid session setting");
 
     fprintf(ldmlog, "Established ssh session.\n");
     if (ldminfo.greeterpid)

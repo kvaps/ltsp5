@@ -106,6 +106,45 @@ set_message(char *message)
     write(ldminfo.greeterwfd, pw, strlen(pw));
 }
 
+int
+get_host()
+{
+    char *cmd = "hostname\n";
+
+    write(ldminfo.greeterwfd, cmd, strlen(cmd));
+    return get_greeter_string(ldminfo.server, sizeof ldminfo.server);
+}
+
+int
+get_language()
+{
+    char *cmd = "language\n";
+    char lang[LDMSTRSZ];
+    int status;
+
+    write(ldminfo.greeterwfd, cmd, strlen(cmd));
+    status =  get_greeter_string(lang, sizeof lang);
+    if (*(ldminfo.lang) != '\0')
+        return 0;                           /* admin has set LDM_LANGUAGE */
+    if (strncmp(lang, "None", 4))          /* If "None", use default */
+        scopy(ldminfo.lang, lang);
+    return status;
+}
+
+int
+get_session()
+{
+    char *cmd = "session\n";
+    char session[LDMSTRSZ];
+    int status;
+
+    write(ldminfo.greeterwfd, cmd, strlen(cmd));
+    status =  get_greeter_string(session, sizeof session);
+    if (strncmp(session, "None", 4))        /* If "None", use default */
+        scopy(ldminfo.session, session);
+    return status;
+}
+
 void
 close_greeter()
 {

@@ -40,16 +40,16 @@ PATH=$PATH:/usr/bin/X11
 # Compute tty and displaynum
 #
 
-tty=$(tty)
-case "$tty" in
+TTY=$(tty)
+case "${TTY}" in
   /dev/tty*) # with udev (2.6 kernel)
-      ttynum=${tty#/dev/tty}
+      TTYNUM=${TTY#/dev/tty}
       ;;
   /dev/vc/*) # with devfs (2.4 kernel)
-      ttynum=${tty#/dev/vc/}
+      TTYNUM=${TTY#/dev/vc/}
       ;;
 esac
-displaynum=$(($ttynum - 1))
+DISPLAYNUM=$((${TTYNUM} - 1))
 
 while true; do
     #
@@ -57,22 +57,19 @@ while true; do
     # use it to populate the LDM_SERVER environment variable.
     #
 
-    if [ -x /usr/lib/ltsp/get_hosts ] ; then
-        export LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
-    fi
+    [ -x /usr/lib/ltsp/get_hosts ] && LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    [ -z "${LDM_SERVER}" ] && LDM_SERVER=${SERVER}
 
     #
     # Loop though each of the hosts, and get their ldminfo
     #
 
-    if [ "x$LDM_SERVER" != "x" ]; then
-        if [ ! -d /tmp/ldm ] ; then
-            mkdir -p /tmp/ldm
-        fi
+    if [ -n "${LDM_SERVER}" ]; then
+        [ ! -d /tmp/ldm ] && mkdir -p /tmp/ldm
         for SRV in $LDM_SERVER ; do
             nc $SRV 9571 > /tmp/ldm/$SRV
         done
     fi
         
-    ldm vt$ttynum :$displaynum
+    ldm vt${TTYNUM} :${DISPLAYNUM}
 done
