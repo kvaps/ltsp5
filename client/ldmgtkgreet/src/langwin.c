@@ -15,7 +15,7 @@
 
 #include <greeter.h>
 
-gchar language[MAXSTRSZ] = "None";
+gchar language[MAXSTRSZ];
 
 #define EXPAND TRUE
 #define DONTEXPAND FALSE
@@ -42,6 +42,23 @@ langwin_accept(GtkWidget *widget, GtkWidget *langwin)
  */
 
 void
+update_selected_lang()
+{
+    if (lang_selected == 0)
+        g_strlcpy(language, "None", MAXSTRSZ);
+    else {
+        ldminfo *curr_host = NULL;
+        GList *l = NULL;
+        
+        curr_host = g_hash_table_lookup(ldminfo_hash, 
+                                        g_list_nth_data(sorted_host_list,
+                                        selected_host_id));
+        l = curr_host->languages;
+        g_strlcpy(language, g_list_nth_data(l, lang_selected - 1), MAXSTRSZ);
+    }
+}
+
+void
 populate_lang_combo_box(const char *lang, GtkWidget *lang_combo_box)
 {
 	gtk_combo_box_append_text(GTK_COMBO_BOX(lang_combo_box),g_strdup(lang));
@@ -63,7 +80,7 @@ langwin(GtkWidget *widget, GtkWindow *win)
 
     curr_host = g_hash_table_lookup(ldminfo_hash, 
                                     g_list_nth_data(sorted_host_list,
-                                    current_host_id));
+                                    selected_host_id));
 
     gtk_combo_box_append_text(GTK_COMBO_BOX(lang_select),
                               g_strdup(_("Default")));

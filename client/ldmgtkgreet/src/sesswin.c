@@ -16,7 +16,7 @@
 
 #include <greeter.h>
 
-gchar session[MAXSTRSZ] = "None";
+gchar session[MAXSTRSZ];
 GtkWidget *sess_select;                     /* session selection combo */
 gint sess_total = 0;
 gint sess_selected = 0;
@@ -35,6 +35,25 @@ sesswin_accept(GtkWidget *widget, GtkWidget *sesswin)
 /*
  * External functions
  */
+
+void
+update_selected_sess()
+{
+    if (sess_selected == 0)
+        g_strlcpy(session, "None", MAXSTRSZ);
+    else if (sess_selected == 1)
+        g_strlcpy(session, "/usr/bin/xterm", MAXSTRSZ);  /* failsafe xterm */
+    else {
+        ldminfo *curr_host = NULL;
+        GList *s = NULL;
+
+        curr_host = g_hash_table_lookup(ldminfo_hash,
+                                        g_list_nth_data(sorted_host_list,
+                                        selected_host_id));
+        s = curr_host->sessions;
+        g_strlcpy(session, g_list_nth_data(s, sess_selected - 2), MAXSTRSZ);
+    }
+}
 
 void
 populate_sess_combo_box(const char *sess, GtkWidget *sess_combo_box)

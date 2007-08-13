@@ -108,6 +108,7 @@ extern gchar language[MAXSTRSZ];
 extern GtkWidget *lang_select;
 extern gint lang_total;
 extern gint lang_selected;
+void update_selected_lang();
 void populate_lang_combo_box(const char *lang, GtkWidget *lang_combo_box);
 void langwin(GtkWidget *widget, GtkWindow *win);
 
@@ -120,6 +121,7 @@ extern GtkWidget *sess_select;                     /* session selection combo */
 extern gint sess_total;
 extern gint sess_selected;
 
+void update_selected_sess();
 void populate_sess_combo_box(const char *sess, GtkWidget *sess_combo_box);
 void sesswin(GtkWidget *widget, GtkWindow *win);
 

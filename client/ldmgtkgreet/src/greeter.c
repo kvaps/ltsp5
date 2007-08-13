@@ -30,6 +30,7 @@ GtkWidget *entry;                           /* entry box */
 
 GHashTable *ldminfo_hash = NULL;
 GList *sorted_host_list = NULL;
+GIOChannel *g_stdout;                       /* stdout io channel */
 
 static void
 destroy(GtkWidget *widget, gpointer data)
@@ -54,7 +55,7 @@ reboot(GtkWidget *widget, gpointer data)
 gboolean
 update_time(GtkWidget *label)
 {	
-	const char *timestring = 0;
+	gchar *timestring = 0;
 	time_t timet;
 	struct tm *timePtr;
 
@@ -65,6 +66,8 @@ update_time(GtkWidget *label)
 			timePtr->tm_mon+1, timePtr->tm_hour, timePtr->tm_min);
 
 	gtk_label_set_markup((GtkLabel *) label, timestring);
+
+    g_free(timestring);
 
 	return TRUE;
 }
@@ -105,8 +108,26 @@ handle_command(GIOChannel *io_input)
     } else if (!g_strncasecmp(buf->str, "passwd", 6)) {
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
     } else if (!g_strncasecmp(buf->str, "hostname", 8)) {
+        gchar *hoststr;
     	update_selected_host();
-        printf("%s\n", host);
+	    hoststr = g_strdup_printf("%s\n", host);
+        g_io_channel_write_chars(g_stdout, hoststr, -1, NULL, NULL);
+        g_io_channel_flush(g_stdout, NULL);
+        g_free(hoststr);
+    } else if (!g_strncasecmp(buf->str, "language", 8)) {
+        gchar *langstr;
+    	update_selected_lang();
+	    langstr = g_strdup_printf("%s\n", language);
+        g_io_channel_write_chars(g_stdout, langstr, -1, NULL, NULL);
+        g_io_channel_flush(g_stdout, NULL);
+        g_free(langstr);
+    } else if (!g_strncasecmp(buf->str, "session", 7)) {
+        gchar *sessstr;
+    	update_selected_sess();
+	    sessstr = g_strdup_printf("%s\n", session);
+        g_io_channel_write_chars(g_stdout, sessstr, -1, NULL, NULL);
+        g_io_channel_flush(g_stdout, NULL);
+        g_free(sessstr);
     }
 
     g_string_free(buf, TRUE);
@@ -144,7 +165,12 @@ get_ip(void)
 static void
 handle_entry(GtkEntry *entry, GdkWindow *window)
 {
-	printf("%s\n", gtk_entry_get_text(entry));
+    gchar *entrystr;
+    
+	entrystr = g_strdup_printf("%s\n", gtk_entry_get_text(entry));
+    g_io_channel_write_chars(g_stdout, entrystr, -1, NULL, NULL);
+    g_io_channel_flush(g_stdout, NULL);
+    g_free(entrystr);
     gtk_entry_set_text(entry, "");
 }
 
@@ -349,8 +375,8 @@ main(int argc, char *argv[])
      */
 
     g_stdin = g_io_channel_unix_new(STDIN_FILENO);        /* listen to stdin */
+    g_stdout = g_io_channel_unix_new(STDOUT_FILENO); 
     g_io_add_watch(g_stdin, G_IO_IN, (GIOFunc)handle_command, g_stdin);
-    setbuf(stdout, NULL);
 
 	gtk_main ();
 
