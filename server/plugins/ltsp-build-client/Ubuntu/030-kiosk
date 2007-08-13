@@ -16,7 +16,7 @@ case "$MODE" in
         if [ -n "$KIOSK" ]; then
             # install the webbrowser and a display manager that 
             # is capable to do a timed autologin in the client environment
-            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox feisty-gdm-themes firefox-themes-ubuntu human-gtk-theme
+            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox feisty-gdm-themes firefox-themes-ubuntu human-gtk-theme metacity
 
             # make the necessary directories writeable to the booted client
             echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
