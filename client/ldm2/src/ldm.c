@@ -211,6 +211,9 @@ x_session()
     char ltspclienv[ENVSIZE];
     char soundcmd1[ENVSIZE];
     char soundcmd2[ENVSIZE];
+    char lang1[ENVSIZE];
+    char lang2[ENVSIZE];
+    char lang3[ENVSIZE];
     char *esdcmd[] = {
         "/usr/bin/esd",
         "-nobeeps",
@@ -225,6 +228,11 @@ x_session()
     if (ldminfo.directx)
         snprintf(displayenv, sizeof displayenv, 
                 "DISPLAY=%s%s ", ldminfo.ipaddr, ldminfo.display);
+    if (*(ldminfo.lang) != '\0') {
+        snprintf(lang1, sizeof lang1, "LC_ALL=%s", ldminfo.lang);
+        snprintf(lang2, sizeof lang2, "LANGUAGE=%s", ldminfo.lang);
+        snprintf(lang3, sizeof lang3, "LANG=%s", ldminfo.lang);
+    }
 
     cmd[i++] = "/usr/bin/ssh";
 
@@ -238,6 +246,16 @@ x_session()
     cmd[i++] = ldminfo.username;
     cmd[i++] = ldminfo.server;
     cmd[i++] = ltspclienv;
+
+    /*
+     * Set our language, if a different one is picked.
+     */
+
+    if (*(ldminfo.lang) != '\0') {
+        cmd[i++] = lang1;
+        cmd[i++] = lang2;
+        cmd[i++] = lang3;
+    }
 
     /*
      * Set the DISPLAY env, if not running over encrypted ssh
