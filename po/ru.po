@@ -1,0 +1,221 @@
+# translation of ru.po to Russian
+# ltsp gettext messages for LANGUAGE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ltsp package.
+#
+# Yuri Kozlov <kozlov.y@gmail.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: 5.0.8debian2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-12-17 21:35-0700\n"
+"PO-Revision-Date: 2007-07-26 21:47+0400\n"
+"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
+"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../server/ltsp-build-client:49
+#, sh-format
+msgid "API ERROR: you need to provide true or false."
+msgstr "ОШИБКА API: вам нужно указать значение true или false."
+
+#: ../server/ltsp-build-client:101
+#, sh-format
+msgid "Display this help message"
+msgstr "показать эту справку"
+
+#: ../server/ltsp-build-client:102
+#, sh-format
+msgid "Display help for all available commandline options"
+msgstr "показать справку по всем доступным параметрам командной строки"
+
+#: ../server/ltsp-build-client:106
+#, sh-format
+msgid "LTSP Build Client usage:"
+msgstr "Сборка клиента LTSP:"
+
+#: ../server/ltsp-build-client:110
+#, sh-format
+msgid "  Regular options:"
+msgstr "  Обычные параметры:"
+
+#: ../server/ltsp-build-client:114
+#, sh-format
+msgid "  Advanced options:"
+msgstr "  Дополнительные параметры:"
+
+#: ../server/ltsp-build-client:126
+#, sh-format
+msgid "info: LTSP client installation completed successfully"
+msgstr "инфо: установка клиента LTSP успешно завершена"
+
+#: ../server/ltsp-build-client:128
+#, sh-format
+msgid "error: LTSP client installation ended abnormally"
+msgstr "ошибка: установка клиента LTSP завершилась неудачно"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "включить указанные ключи в связку apt"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install."
+msgstr "разрешить неподписанные пакеты на время установки"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "Set the components to be used in mirror"
+msgstr "задать используемые компоненты с зеркала"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "загрузить ответы debconf в chroot после установки"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr ""
+"ЗАМЕЧАНИЕ: выключение безопасности источников APT в sid. Её не существует."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "включить popularity-contest в chroot"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "Включение участия в подсчёте популярности пакетов..."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "указать зеркало"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "добавить зеркало с приоритетом выше, чем у зеркала по умолчанию"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "добавить зеркало с приоритетом ниже, чем у зеркала по умолчанию"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr "добавить зеркало безопасности"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"ЗАМЕЧАНИЕ: добавляется дистрибутив и компоненты с зеркала безопасности:"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "включить консоль на последовательном порту"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "Включение консоли на последовательном порту..."
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install."
+msgstr "задать список пакетов ядер для установки"
+
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#, sh-format
+msgid "Set the default locale"
+msgstr "задать локаль по умолчанию"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed."
+msgstr "задать список пакетов для установки после завершения base-install"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation."
+msgstr "задать список пакетов для установки в конце установки"
+
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "сохранить кэш скачанных файлов пакетов"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "задать архитектуру клиента (target)"
+
+#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "включить поддержку отладки"
+
+#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr "загрузить заданный пользовательский файл конфигурации"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr "ОШИБКА: --arch %s вызвана на неподдерживаемой архитектуре: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:37
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+"ОШИБКА: неподдерживаемая архитектура. Проверьте аргумент параметра --arch: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:38
+#, sh-format
+msgid "       supported values are: %s"
+msgstr "       поддерживаемые значения: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "указать дистрибутив, используемый для установки"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "исключить пакеты из начального chroot"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "задать базовый каталог установки по умолчанию"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#, sh-format
+msgid "Set the name of the chroot."
+msgstr "задать имя chroot"
+
+#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr "предлагать задать пароль root, по умолчанию выключен"
+
+#~ msgid "a simple webkiosk mode."
+#~ msgstr "простой режим веб-киоска."
+
+#~ msgid "use the servers sources.list instead of generating one"
+#~ msgstr "использовать sources.list с сервера вместо генерации"

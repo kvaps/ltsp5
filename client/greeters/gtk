@@ -436,7 +436,7 @@ class GTKGreeter:
             sesslist=[]
             langlist=[]
 
-            for line in ldm_info.recv(1024).split('\n'):
+            for line in ldm_info.recv(8192, socket.MSG_WAITALL).split('\n'):
                 if line.startswith('/'):
                     sesslist.append(line)
                 else:

@@ -1,67 +1,54 @@
-#
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# Swedish translation for ltsp debconf.
+# Copyright (C) 2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the ltsp package.
+# Daniel Nylander <po@danielnylander.se>, 2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2006-03-07 10:46-0300\n"
-"Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
-"Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
-"org>\n"
+"PO-Revision-Date: 2007-07-25 09:15+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
-msgstr "Criar um chroot para o LTSP ?"
+msgstr "Konfigurera en chroot-miljö för LTSP?"
 
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
-#, fuzzy
-#| msgid ""
-#| "This will set up an LTSP chroot environment on the machine, to act as a "
-#| "thin client server."
 msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
 msgstr ""
-"Isto irÃ¡ criar um chroot LTSP na mÃ¡quina, para atuar como um servidor de "
-"clientes finos."
+"Välj huruvida du vill konfigurera en chroot-miljö för LTSP på den här "
+"maskinen som fungerar som en server för tunna klienter."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
 #: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "Construir chroot LTSP"
+msgstr "Bygg chroot för LTSP"
 
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
-msgstr "Construindo chroot LTSP..."
+msgstr "Bygger chroot för LTSP..."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
 msgid "No interface for LTSP dhcpd configuration"
-msgstr ""
+msgstr "Inget nätverksgränssnitt för LTSP:s dhcpd-konfiguration"
 
 #. Type: error
 #. Description
@@ -71,12 +58,15 @@ msgid ""
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
 "after the installation has completed."
 msgstr ""
+"Det finns inga lediga nätverksgränssnitt att använda för LTSP-servern. "
+"Konfigurera filen /etc/ltsp/dhcpd.conf manuellt till att peka på ett giltigt "
+"statiskt nätverksgränssnitt efter att installationen är färdig."
 
 #. Type: select
 #. Description
 #: ../ltsp-client-builder.templates:7001
 msgid "Interface for the thin client network:"
-msgstr ""
+msgstr "Nätverksgränssnitt för tunna klient-nätverket:"
 
 #. Type: select
 #. Description
@@ -85,31 +75,27 @@ msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
 msgstr ""
+"Välj, bland de reservgränssnitt som det här systemet har, vilket som ska "
+"användas för den tunna klienten."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Installation aborted"
-msgstr "Instalacao abortada"
+msgstr "Installationen avbröts "
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-#, fuzzy
-#| msgid ""
-#| "ltsp-client cannot be installed in a regular machine. This package "
-#| "provides  the basic structure for a LTSP terminal."
 msgid ""
 "The ltsp-client package cannot be installed in a regular machine. This "
 "package provides the basic structure for a LTSP terminal."
 msgstr ""
-"ltsp-client não pode ser instalado numa máquina regular. Este pacote provê  "
-"a estrutura básica para um terminal LTSP."
+"Paketet ltsp-client kan inte installeras på en vanlig maskin. Det här "
+"paketet tillhandahåller grundläggande struktur för en LTSP-terminal."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
-msgstr ""
-"Por favor leia a descrição do pacote para entendermelhor o que isso "
-"significa."
+msgstr "Läs paketbeskrivningen för att förstå vad det betyder."

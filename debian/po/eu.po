@@ -1,67 +1,55 @@
-#
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# Basque translations for PACKAGE package.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Piarres Beobide <pi@beobide.net>, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp\n"
+"Project-Id-Version: LTSP-debconf\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2006-03-07 10:46-0300\n"
-"Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
-"Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
-"org>\n"
+"PO-Revision-Date: 2007-07-04 10:11+0200\n"
+"Last-Translator: Piarres Beobide <pi@beobide.net>\n"
+"Language-Team: Euskara <librezale@librezale.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.0.1\n"
 
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
-msgstr "Criar um chroot para o LTSP ?"
+msgstr "LTSP chroot ingurunera konfiguratu?"
 
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
-#, fuzzy
-#| msgid ""
-#| "This will set up an LTSP chroot environment on the machine, to act as a "
-#| "thin client server."
 msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
 msgstr ""
-"Isto irÃ¡ criar um chroot LTSP na mÃ¡quina, para atuar como um servidor de "
-"clientes finos."
+"Mesedez hautatu makina hau bezero arin bezala funtzionatzeko LTSP chroot "
+"ingurunea konfiguratzea nahi duzun ala ez."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
 #: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "Construir chroot LTSP"
+msgstr "LTSP chroot-a eraiki"
 
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
-msgstr "Construindo chroot LTSP..."
+msgstr "LTSP chroot-a eraikitzen..."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-builder.templates:6001
 msgid "No interface for LTSP dhcpd configuration"
-msgstr ""
+msgstr "Ez dago interfazerik LTSP dhcpd konfiguraziorako"
 
 #. Type: error
 #. Description
@@ -71,12 +59,15 @@ msgid ""
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
 "after the installation has completed."
 msgstr ""
+"Ez dago LSTP Zerbitzariak erabiltzeko interfaze librerik. Mesedez "
+"konfigurazioa amaitu ondoren /etc/ltsp/dhcpd.conf fitxategia eskuz "
+"konfiguratu baliozko interfaze estatiko batetara lotzeko."
 
 #. Type: select
 #. Description
 #: ../ltsp-client-builder.templates:7001
 msgid "Interface for the thin client network:"
-msgstr ""
+msgstr "Bezero arin sarearen interfazea:"
 
 #. Type: select
 #. Description
@@ -85,31 +76,31 @@ msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
 msgstr ""
+"Mesedez hautatu, sistema honek dituen erabili gabeko interfazeen artean, "
+"zein erabili behar den bezero arinarentzat."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Installation aborted"
-msgstr "Instalacao abortada"
+msgstr "Instalazioa utzi egin da"
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-#, fuzzy
-#| msgid ""
-#| "ltsp-client cannot be installed in a regular machine. This package "
-#| "provides  the basic structure for a LTSP terminal."
 msgid ""
 "The ltsp-client package cannot be installed in a regular machine. This "
 "package provides the basic structure for a LTSP terminal."
 msgstr ""
-"ltsp-client não pode ser instalado numa máquina regular. Este pacote provê  "
-"a estrutura básica para um terminal LTSP."
+"ltsp-client paketea ezin da makina arrunt batetan instalatu. Pakete honek "
+"LTSP terminalaren oinarrizko egitura du."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
 msgstr ""
-"Por favor leia a descrição do pacote para entendermelhor o que isso "
-"significa."
+"Mesedez pakete deskribapena irakurri horrek zer esan nahi duen ulertzeko."
+
+#~ msgid "There were multiple spare interfaces found in this system."
+#~ msgstr "Erabili gabeko interfaze anitz aurkitu dira sistema honetan."

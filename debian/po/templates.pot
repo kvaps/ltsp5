@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"POT-Creation-Date: 2007-08-08 18:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,75 +18,76 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
 msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid ""
-"This will set up an LTSP chroot environment on the machine, to act as a thin "
-"client server."
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
 msgstr ""
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:2001
+#: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
 msgstr ""
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:3001
+#: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
 msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:4001
-msgid "No Interface for LTSP dhcpd configuration found"
+#: ../ltsp-client-builder.templates:6001
+msgid "No interface for LTSP dhcpd configuration"
 msgstr ""
 
-#. Type: note
+#. Type: error
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:6001
 msgid ""
-"There are no free interfaces for usage with the LTSP Server. Please "
-"configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
-"interface after the installation finished."
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid ""
-"Please select the interface you want to use for the thin client network."
+#: ../ltsp-client-builder.templates:7001
+msgid "Interface for the thin client network:"
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid "There were multiple spare interfaces found in this system."
-msgstr ""
-
-#. Type: error
-#. Description
-#: ../ltsp-client.templates:1001
-msgid "Installation aborted "
-msgstr ""
-
-#. Type: error
-#. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
-"ltsp-client cannot be installed in a regular machine. This package provides  "
-"the basic structure for a LTSP terminal."
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
 msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
+msgid "Installation aborted"
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:2001
+msgid ""
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
 msgstr ""

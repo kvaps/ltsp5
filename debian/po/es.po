@@ -30,12 +30,11 @@
 # traductor (campo Last-Translator) y ponga en copia a la lista de
 # traducción de Debian al español (<debian-l10n-spanish@lists.debian.org>)
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.99debian8 \n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"POT-Creation-Date: 2007-07-25 07:57+0200\n"
 "PO-Revision-Date: 2006-12-18 08:35-0300\n"
 "Last-Translator: Felipe Caminos <felipem@gigared.com>\n"
 "Language-Team: Debian l10n spanish <debian-l10n-spanish@lists.debian.org>\n"
@@ -46,47 +45,89 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
 msgstr "¿Desea establecer un entorno restringido para LTSP?"
 
 #. Type: boolean
 #. Description
-#: ../ltsp-client-builder.templates:1001
+#: ../ltsp-client-builder.templates:2001
+#, fuzzy
+#| msgid ""
+#| "This will set up an LTSP chroot environment on the machine, to act as a "
+#| "thin client server."
 msgid ""
-"This will set up an LTSP chroot environment on the machine, to act as a thin "
-"client server."
-msgstr "Esto establecerá un entorno restringido («chroot») para LTSP en el equipo, para utilizarse como servidor de cliente ligero."
+"Please choose whether you want to set up an LTSP chroot environment on this "
+"machine, to act as a thin client server."
+msgstr ""
+"Esto establecerá un entorno restringido («chroot») para LTSP en el equipo, "
+"para utilizarse como servidor de cliente ligero."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
-#: ../ltsp-client-builder.templates:2001
+#: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
 msgstr "Construir el entorno restringido para LTSP"
 
 #. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:3001
+#: ../ltsp-client-builder.templates:4001
 msgid "Building LTSP chroot..."
 msgstr "Construyendo el entorno restringido para LTSP ..."
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
-msgid "Installation aborted "
+#: ../ltsp-client-builder.templates:6001
+msgid "No interface for LTSP dhcpd configuration"
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../ltsp-client-builder.templates:6001
+msgid ""
+"There are no free interfaces for usage with the LTSP server. Please manually "
+"configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
+"after the installation has completed."
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:7001
+msgid "Interface for the thin client network:"
+msgstr ""
+
+#. Type: select
+#. Description
+#: ../ltsp-client-builder.templates:7001
+msgid ""
+"Please choose, among the multiple spare interfaces this system has, which "
+"one should be used for the thin client."
+msgstr ""
+
+#. Type: error
+#. Description
+#: ../ltsp-client-core.templates:2001
+msgid "Installation aborted"
 msgstr "Instalación cancelada"
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
+#, fuzzy
+#| msgid ""
+#| "ltsp-client cannot be installed in a regular machine. This package "
+#| "provides  the basic structure for a LTSP terminal."
 msgid ""
-"ltsp-client cannot be installed in a regular machine. This package provides  "
-"the basic structure for a LTSP terminal."
-msgstr "No se puede instalar el cliente LTSP en un equipo común. Este paquete solo provee la estructura básica para un terminal LTSP."
+"The ltsp-client package cannot be installed in a regular machine. This "
+"package provides the basic structure for a LTSP terminal."
+msgstr ""
+"No se puede instalar el cliente LTSP en un equipo común. Este paquete solo "
+"provee la estructura básica para un terminal LTSP."
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
-msgstr "Por favor, lea la descripción del paquete para entender qué significa esto."
+msgstr ""
+"Por favor, lea la descripción del paquete para entender qué significa esto."

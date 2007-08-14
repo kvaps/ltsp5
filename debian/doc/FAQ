@@ -4,9 +4,11 @@ Can i use the ltsp-utils package with ltsp-server(-standalone)? (as of 11.04.200
 
 No, the ltsp-utils package is from LTSP version 4 and the ltsp-server(-standalone) is version 5.
 
+
 If I specify SCREEN_01 trhough 06 in lts.conf (/opt/ltsp/i386/etc/lts.conf) my keyboard doesn't work.
 
 SCREEN_01 trough 06 conflict with inittab. Comment out the 1 to 6 in inittab or do not use SCREEN_01 to SCREEN_06.
+
 
 Where do i get more informations on LTSP 5 MueKow?
 
@@ -14,6 +16,18 @@ Where do i get more informations on LTSP 5 MueKow?
 
 note that the MueKow experiments evolved into LTSP5: [WWW] http://wiki.ltsp.org/twiki/bin/view/Ltsp/Ltsp5
 
+
 LOCAL_STORAGE in lts.conf doesn't work
 
 In LTSP 5 it's called LOCALDEV. See also: LTSP/Upgrading_4.2 
+
+
+How do i configure boot prompt options [http://bugs.debian.org/428446 (debian bug 428446)]
+
+create /opt/ltsp/i386/etc/update-kernels.conf with the following line(adapt to your needs):
+
+  export BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp nfsroot=/opt/ltsp/i386"
+
+and create a symlink for backwards compatibility:
+
+  ln -s /opt/ltsp/i386/etc/update-kernels.conf /etc/ltsp/ltsp-update-kernels.conf
