@@ -21,6 +21,7 @@ if __name__ == "__main__":
         print "ERROR"
         sys.exit(0)
     langs = lines.split(None)
+    langs.sort()
     for lang in langs:
         lang = lang.rstrip()
         if lang.endswith('.utf8'):

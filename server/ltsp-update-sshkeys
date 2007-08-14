@@ -1,28 +1,30 @@
 #!/bin/sh
 
 #
-# Handle command line args
+# Handle args
 #
 
-while getopts b: ARGS
-do
-    case ${ARGS} in
-        b)    BASE=$OPTARG
-              ;;
-       \?)    echo "Usage: $0 [-b ltspbase]"
-              exit 1
-              ;;
-       esac
+ARGS=$(getopt -o b:e: --long base:,export: -n $0 -- "$@")
+
+[ $? != 0 ] && exit 1
+
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -b|--base)        BASE=$2 ; shift 2;;
+        -e|--export)      EXPORTFILE=$2 ; shift 2;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
 done
 
 # Set up variables
 BASE=${BASE:-"/opt/ltsp"}
-test -z "${CHROOTS}" && \
-    CHROOTS=$(find ${BASE}/. -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
-              grep -v images)
+[ -z "${CHROOTS}" ] && CHROOTS=$(find ${BASE} -mindepth 1 -maxdepth 1 
+                                 -type d 2>/dev/null | grep -v images)
 HOSTNAME=$(hostname)
-IPS=$(ip -o addr show | awk '$3 == "inet" && $4 !~ /^127\./ { print $4 }' | \
-      sed -e 's,/[0-9][0-9]*\>,,g')
+IPS=$(ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
 OUTPUT=$(tempfile)
 ENC="dsa rsa"
 NAMES="${HOSTNAME} ${IPS}"
@@ -45,23 +47,42 @@ for NAME in ${NAMES}; do
                 "# Creating ${encryption}-hostkey for ${NAME}"
 		else
 			logger -f $LOGFILE -t ltsp \
-                "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
+                "No ${ENCRYPTION} key found for ${NAME}, please configure \
+                 your ssh server correctly"
 		fi
     done
 done
 
 # Add any additional hosts
-if [ -f /etc/ltsp/ssh_known_hosts.extra ]; then
-    cat /etc/ltsp/ssh_known_hosts.extra >> $OUTPUT
+for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
+    cat SSHHOST >> $OUTPUT
 fi
 
-for CHROOT in ${CHROOTS}; do
-    if [ -d ${CHROOT}/etc/ssh ]; then
-        install -m 644 $OUTPUT ${CHROOT}/etc/ssh/ssh_known_hosts
+#
+# export file
+# We need this for multiple host support.  This way, we can do an
+# ltsp-update-sshkeys --export ssh_known_hosts.myname
+# and install this file in the /etc/ltsp dir, where it will be picked up
+# by the above.
+# Note that ltsp-update-sshkeys --export - cats to stdout
+# If no export specified, then update local chroots.
+#
+
+if [ -n "${EXPORTFILE}" ]; then 
+    if [ "${EXPORTFILE}" = "-" ]; then
+        cat ${OUTPUT}
     else
-        echo "WARNING: ${CHROOT}/etc/ssh not found. skipping..."
+        install -m 644 ${OUTPUT} ${EXPORTFILE}
     fi
-done
+else
+    for CHROOT in ${CHROOTS}; do
+        if [ -d ${CHROOT}/etc/ssh ]; then
+            install -m 644 $OUTPUT ${CHROOT}/etc/ssh/ssh_known_hosts
+        else
+            echo "WARNING: ${CHROOT}/etc/ssh not found. skipping..."
+        fi
+    done
+fi
 
 rm -f ${OUTPUT}
 

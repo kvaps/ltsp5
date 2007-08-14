@@ -12,19 +12,20 @@
 # Handle command line args
 #
 
-while getopts bpa: ARGS
-do
-    case ${ARGS} in
-        b)    BASE=$OPTARG
-              ;;
-        p)    PORT=$OPTARG
-              ;;
-        a)    ARCH=$OPTARG
-              ;;
-       \?)    echo "Usage: $0 [-b ltspbase] [-p port] [-a architecture]"
-              exit 1
-              ;;
-       esac
+ARGS=$(getopt -o b:p:a: --long base:,port:,arch: -n $0 -- "$@")
+
+[ $? != 0 ] && exit 1
+
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -b|--base) BASE=$2 ; shift 2;;
+        -p|--port) PORT=$2 ; shift 2;;
+        -a|--arch) ARCH=$2 ; shift 2;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
 done
 
 # defaults

@@ -2,24 +2,34 @@
 
 set -e
 
-while getopts b: ARGS
-do
-    case ${ARGS} in
-        b)    BASE=$OPTARG
-              ;;
-       \?)    echo "Usage: $0 [-b ltspbase]"
-              exit 1
-              ;;
-       esac
+#
+# Handle args
+#
+
+ARGS=$(getopt -o b:t:c:d: --long base:,tftpdirs:,copytftp:,tftpbootdir: \
+       -n $0 -- "$@")
+
+[ $? != 0 ] && exit 1
+
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -b|--base)        BASE=$2 ; shift 2;;
+        -t|--tftpdirs)    TFTPDIRS=$2 ; shift 2;;
+        -c|--copytftp)    COPYTFTP=$2 ; shift 2;;
+        -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
 done
-shift $((${OPTIND} - 1))
 
 if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
     . /etc/ltsp/ltsp-update-kernels.conf
 fi
 
-TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
 BASE=${BASE:-"/opt/ltsp"}
+TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
 COPYTFTP=${COPYTFTP:-"true"}
 TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
 
