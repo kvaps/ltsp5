@@ -1,64 +1,103 @@
 #!/bin/sh
-# copyright 2007 Canonical LTD., Oliver Grawert <ogra@ubuntu.com> distributed under
-# the terms of the GNU General Public License version 2 or any later version.
+# copyright 2007 Canonical LTD., Oliver Grawert <ogra@ubuntu.com>
+# distributed under the terms of the GNU General Public License version 2
+# or any later version.  
 
 # generates a squashfs image from an ltsp chroot to be served by an inetd driven
-# nbd-server process, note that ltsp-client needs to support nbd booting for that.
-# all versions of the ltsp-client package past 5.0.11 should be able to do that
+# nbd-server process, note that ltsp-client needs to support nbd booting fori
+# that. All versions of the ltsp-client package past 5.0.11 should be able
+# to do that
 
-# defaults
-ROOT="/opt/ltsp"
-PORT=2000
-IMGDIR="${ROOT}/images"
-IMG=""
+usage() {
+cat <<EOF
+$0 [OPTION]
+  -b, --basedir  Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
+  -p, --port     Port you wish this nbd image to communicate on.  Default
+                 is 2000.
+  -a, --arch     Architecture of this image.  Default is arch of the host.
+  -h, --help     This message.
+EOF
+}
 
-# default chroot name
-if [ -z ${CHROOT} ];then
-    CHROOT=$(dpkg --print-architecture)
-fi
+#
+# Handle command line args
+#
 
-# source config file
-if [ -f /etc/default/ltsp-update-image ]; then
-    . /etc/default/ltsp-update-image
-fi
+ARGS=$(getopt -o b:p:a:h --long base:,port:,arch:,help -n $0 -- "$@")
 
-# make sure the images dir exists
-if [ ! -d ${IMGDIR} ];then
-    mkdir -p ${IMGDIR}
-fi
+[ $? != 0 ] && exit 1
 
-# find out if we are really an nbd client and if so, build the image
-for dir in $(find ${ROOT}/ -maxdepth 1 -type d|grep -v images|cut -d/ -f4); do
-    if [ $(grep nbd ${ROOT}/${dir}/usr/share/initramfs-tools/conf.d/ltsp 2>/dev/null) ];then
-        if [ $dir = $CHROOT ];then
-            IMG=${dir}
-            IMAGE=${IMGDIR}/${IMG}.img
-            rm ${IMAGE}
-            mksquashfs ${ROOT}/${IMG} ${IMAGE}.tmp -e cdrom
-            mv ${IMAGE}.tmp ${IMAGE}
-            chmod 0744 ${IMAGE}
-        fi
-    fi ;
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -b|--base) BASE=$2 ; shift 2 ;;
+        -p|--port) PORT=$2 ; shift 2 ;;
+        -a|--arch) ARCH=$2 ; shift 2 ;;
+        -h|--help) usage ; exit 0 ;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
 done
 
-# make sure hosts.allow has the keepalive option for nbdrootd
-if [ -z "$(grep nbdrootd /etc/hosts.allow)" ];then
-    echo 'nbdrootd: ALL: keepalive' >>/etc/hosts.allow
+# defaults
+BASE=${BASE:-"/opt/ltsp/"}
+PORT=${PORT:-"2000"}
+[ -z "${ARCH}" ] && ARCH=$(dpkg --print-architecture)
+
+IMGDIR="${BASE}/images"
+CONFFILE="/usr/share/initramfs-tools/conf.d/ltsp"
+CHROOT="${BASE}/${ARCH}"
+
+#
+# for updateing the pxe config
+#
+
+TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
+TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
+
+# source config file
+[ -f /etc/default/ltsp-update-image ] && . /etc/default/ltsp-update-image
+
+# make sure the images dir exists
+[ ! -d ${IMGDIR} ] && mkdir -p ${IMGDIR}
+
+# find out if we are really an nbd client and if so, build the image
+if [ -d "${CHROOT}" ]; then
+    if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
+        IMAGE="${IMGDIR}/${ARCH}.img"
+        rm "${IMAGE}"
+        mksquashfs "${CHROOT}" "${IMAGE}.tmp" -e cdrom
+        mv "${IMAGE}.tmp" "${IMAGE}"
+        chmod 0744 "${IMAGE}"
+    fi
 fi
 
-# only take action if there is no entry for the image in inetd.conf yet
-if [ -n "$(grep ${IMAGE} /etc/inetd.conf|grep -v "^#")" ];then
-    echo "${IMAGE} already in /etc/inetd.conf, no need to update."
-else
-    # Make sure we use the first free port available
-    CHECKPORT=""
-    while [ -z ${CHECKPORT} ];do
-        if [ -n "$(grep ^${PORT} /etc/inetd.conf)" ];then
-            PORT=`expr $PORT + 1`
-        else
-            CHECKPORT=${PORT}
-        fi
-    done
-    update-inetd --group LTSP --add "${PORT}                   stream  tcp\
+# Make sure hosts.allow has the keepalive option for nbdrootd
+grep nbdrootd /etc/hosts.allow > /dev/null 2>&1 || \
+    echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
+
+# If the image is already in inetd.conf, and not commented out, exit ok
+grep ${IMAGE} /etc/inetd.conf | grep -v "^#" > /dev/null 2>&1 && exit 0
+
+# Check and see if our desired port is already there.
+grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 &&
+    echo "Error: port ${PORT} is already defined in inetd.conf" &&
+    exit 1
+
+# Update inetd.conf
+update-inetd --group LTSP --add "${PORT}                   stream  tcp\
     nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+
+# If port's been specified, set the port.
+
+if [ -n "${PORT}" ] ; then
+    for TFTPDIR in $TFTPDIRS ; do
+        [ ! -d $TFTPDIR ] && continue       # skip directory
+        PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${ARCH}/pxelinux.cfg/default"
+        [ ! -f ${PXECFG} ] && continue
+        grep nbdport ${PXECFG} > /dev/null 2>&1 &&
+            sed -i -e 's/nbdport=[0-9]*/nbdport=${PORT}/g' ${PXECFG} ||
+            sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
+    done
 fi

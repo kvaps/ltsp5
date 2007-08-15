@@ -17,22 +17,60 @@
 # 02111-1307, USA.
 
 
+#
+# Load ltsp config defaults
+#
+
 . /usr/lib/ltsp/ltsp_config
 
-# XXX
+#
+# Set up path
+#
+
 PATH=$PATH:/usr/bin/X11
 
-tty=$(tty)
-case "$tty" in
+#
+# Custom xorg.conf file?
+#
+
+[ ! -z "${XORG_CONF}" ] && [ -f ${XORG_CONF} ] && \
+    cp ${XORG_CONF} /etc/X11/xorg.conf
+
+#
+# Compute tty and displaynum
+#
+
+TTY=$(tty)
+case "${TTY}" in
   /dev/tty*) # with udev (2.6 kernel)
-      ttynum=${tty#/dev/tty}
+      TTYNUM=${TTY#/dev/tty}
       ;;
   /dev/vc/*) # with devfs (2.4 kernel)
-      ttynum=${tty#/dev/vc/}
+      TTYNUM=${TTY#/dev/vc/}
       ;;
 esac
-displaynum=$(($ttynum - 1))
+DISPLAYNUM=$((${TTYNUM} - 1))
 
 while true; do
-    ldm vt$ttynum :$displaynum
+    #
+    # Server scalability.  If there exists a /usr/lib/ltsp/get_hosts file, then
+    # use it to populate the LDM_SERVER environment variable.
+    #
+
+    [ -x /usr/lib/ltsp/get_hosts ] && \
+        export LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    [ -z "${LDM_SERVER}" ] && export LDM_SERVER=${SERVER}
+
+    #
+    # Loop though each of the hosts, and get their ldminfo
+    #
+
+    if [ -n "${LDM_SERVER}" ]; then
+        [ ! -d /tmp/ldm ] && mkdir -p /tmp/ldm
+        for SRV in $LDM_SERVER ; do
+            nc $SRV 9571 > /tmp/ldm/$SRV
+        done
+    fi
+        
+    ldm vt${TTYNUM} :${DISPLAYNUM}
 done

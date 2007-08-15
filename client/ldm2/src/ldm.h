@@ -1,20 +1,20 @@
-#define LDMSTRSZ 255
+#define LDMSTRSZ 256
 
 struct ldm_info {
-    char    server[LDMSTRSZ + 1];
-    char    vty[LDMSTRSZ + 1];
-    char    display[LDMSTRSZ + 1];
-    char    fontpath[LDMSTRSZ + 1];
-    char    override_port[LDMSTRSZ + 1];
-    char    authfile[LDMSTRSZ + 1];
-    char    username[LDMSTRSZ + 1];
-    char    password[LDMSTRSZ + 1];
-    char    lang[LDMSTRSZ + 1];
-    char    session[LDMSTRSZ + 1];
-    char    sound_daemon[LDMSTRSZ + 1];
-    char    greeter_prog[LDMSTRSZ + 1];
-    char    control_socket[LDMSTRSZ + 1];
-    char    ipaddr[LDMSTRSZ + 1];
+    char    server[LDMSTRSZ];
+    char    vty[LDMSTRSZ];
+    char    display[LDMSTRSZ];
+    char    fontpath[LDMSTRSZ];
+    char    override_port[LDMSTRSZ];
+    char    authfile[LDMSTRSZ];
+    char    username[LDMSTRSZ];
+    char    password[LDMSTRSZ];
+    char    lang[LDMSTRSZ];
+    char    session[LDMSTRSZ];
+    char    sound_daemon[LDMSTRSZ];
+    char    greeter_prog[LDMSTRSZ];
+    char    control_socket[LDMSTRSZ];
+    char    ipaddr[LDMSTRSZ];
     int     autologin;
     int     sound;
     int     localdev;
@@ -32,8 +32,8 @@ struct ldm_info {
 void usage();
 void die(char *msg);
 int ldm_getenv_bool(const char *name);
-pid_t ldm_spawn (char *const argv[]);
-char *mystrncpy(char *d, char *s, int n);
+pid_t ldm_spawn (char **argv);
+char *scopy(char *dest, char *source);
 int ldm_wait (pid_t pid);
 void create_xauth();
 void launch_x();
@@ -54,6 +54,4 @@ extern FILE *ldmlog;
 #define MAXARGS 32
 #define SENTINEL "LTSPROCKS"
 #define MAXEXP 4096
-#define TRUE 1
-#define FALSE 0
 #define ENVSIZE 64

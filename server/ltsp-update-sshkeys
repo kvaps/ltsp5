@@ -1,43 +1,100 @@
 #!/bin/sh
 
-test -z "$clients" && clients=$(find /opt/ltsp/. -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
-hostname=$(hostname)
-ips=$(ip -o addr show | awk '$3 == "inet" && $4 !~ /^127\./ { print $4 }' | sed -e 's,/[0-9][0-9]*\>,,g')
-output=$(tempfile)
-enc="dsa rsa"
+#
+# Handle args
+#
 
-names="$hostname $ips"
+usage() {
+cat <<EOF
+$0 [OPTION]
+  -b, --basedir  Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
+  -e, --export   Export ssh key file.  Default is 
+                 \${basedir}/etc/ssh/ssk_known_hosts if unspecified.
+  -h, --help     This message.
+EOF
+}
 
-logfile="/var/log/syslog"
+ARGS=$(getopt -o b:e:h --long base:,export:,help -n $0 -- "$@")
 
-if [ -z "$clients" ]; then
-	logger -f $logfile -t ltsp "No client chroots found, please run ltsp-build-client"
+[ $? != 0 ] && exit 1
+
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -b|--base)   BASE=$2 ; shift 2 ;;
+        -e|--export) EXPORTFILE=$2 ; shift 2 ;;
+        -h|--help)   usage ; exit 0 ;; 
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+done
+
+# Set up variables
+BASE=${BASE:-"/opt/ltsp"}
+[ -z "${CHROOTS}" ] && CHROOTS=$(find ${BASE} -mindepth 1 -maxdepth 1 
+                                 -type d 2>/dev/null | grep -v images)
+HOSTNAME=$(hostname)
+IPS=$(ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
+OUTPUT=$(tempfile)
+ENC="dsa rsa"
+NAMES="${HOSTNAME} ${IPS}"
+LOGFILE="/var/log/syslog"
+
+# Any chroots found?
+if [ -z "${CHROOTS}" ]; then
+	logger -f $LOGFILE -t ltsp \
+        "No client chroots found, please run ltsp-build-client"
 	exit 0
 fi
 
-for name in $names; do
-    for encryption in $enc; do
-		if [ -f /etc/ssh/ssh_host_${encryption}_key.pub ]; then
-			echo $(echo $name $(cat /etc/ssh/ssh_host_${encryption}_key.pub|awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $output
-			logger -f $logfile -t ltsp "# Creating ${encryption}-hostkey for $name"
+# Get encryption keys
+for NAME in ${NAMES}; do
+    for ENCRYPTION in ${ENC}; do
+		if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
+			echo $(echo $NAME $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
+                awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
+			logger -f $LOGFILE -t ltsp \
+                "# Creating ${encryption}-hostkey for ${NAME}"
 		else
-			logger -f $logfile -t ltsp "No ${encryption} key found for ${name}, please configure your ssh server correctly"
+			logger -f $LOGFILE -t ltsp \
+                "No ${ENCRYPTION} key found for ${NAME}, please configure \
+                 your ssh server correctly"
 		fi
     done
 done
 
-if [ -f /etc/ltsp/ssh_known_hosts.extra ]; then
-    cat /etc/ltsp/ssh_known_hosts.extra >> $output
+# Add any additional hosts
+for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
+    cat SSHHOST >> $OUTPUT
 fi
 
-for client in $clients; do
-    if [ -d $client/etc/ssh ]; then
-        install -m 644 $output $client/etc/ssh/ssh_known_hosts
-    else
-        echo "WARNING: $client/etc/ssh not found. skipping..."
-    fi
-done
+#
+# export file
+# We need this for multiple host support.  This way, we can do an
+# ltsp-update-sshkeys --export ssh_known_hosts.myname
+# and install this file in the /etc/ltsp dir, where it will be picked up
+# by the above.
+# Note that ltsp-update-sshkeys --export - cats to stdout
+# If no export specified, then update local chroots.
+#
 
-rm -f $output
+if [ -n "${EXPORTFILE}" ]; then 
+    if [ "${EXPORTFILE}" = "-" ]; then
+        cat ${OUTPUT}
+    else
+        install -m 644 ${OUTPUT} ${EXPORTFILE}
+    fi
+else
+    for CHROOT in ${CHROOTS}; do
+        if [ -d ${CHROOT}/etc/ssh ]; then
+            install -m 644 $OUTPUT ${CHROOT}/etc/ssh/ssh_known_hosts
+        else
+            echo "WARNING: ${CHROOT}/etc/ssh not found. skipping..."
+        fi
+    done
+fi
+
+rm -f ${OUTPUT}
 
 exit 0

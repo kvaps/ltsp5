@@ -1,13 +1,8 @@
 /*
-LTSP Graphical GTK Greeter
-Copyright (2007) Oliver Grawert <ogra@ubuntu.com>, Canonical Ltd.
-Code Licensed under GPL v2
-
-TODO:
-fill lang popup window (with translated langs)
-fill session list
-configfile
-*/
+ * LTSP Graphical GTK Greeter
+ * Copyright (2007) Oliver Grawert <ogra@ubuntu.com>, Canonical Ltd.
+ * Code Licensed under GPL v2
+ */
 
 #define _GNU_SOURCE
 
@@ -24,21 +19,18 @@ configfile
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 
-char user[255];
-char pass[255];
-char language[255] = "None";
-char session[255] = "None";
-char host[255] = "None";
+#include <greeter.h>
 
-#define EXPAND TRUE
-#define DONTEXPAND FALSE
-#define FILL TRUE
-#define DONTFILL FALSE
+char user[MAXSTRSZ];
+char pass[MAXSTRSZ];
 
+GtkWidget *UserPrompt;                      /* propmt area before the entry */
+GtkWidget *StatusMessages;                  /* Status msg area below entry */
+GtkWidget *entry;                           /* entry box */
 
-GtkWidget *UserPrompt;
-GtkWidget *StatusMessages;
-GtkWidget *entry;
+GHashTable *ldminfo_hash = NULL;
+GList *sorted_host_list = NULL;
+GIOChannel *g_stdout;                       /* stdout io channel */
 
 static void
 destroy(GtkWidget *widget, gpointer data)
@@ -63,7 +55,7 @@ reboot(GtkWidget *widget, gpointer data)
 gboolean
 update_time(GtkWidget *label)
 {	
-	const char *timestring = 0;
+	gchar *timestring = 0;
 	time_t timet;
 	struct tm *timePtr;
 
@@ -75,13 +67,15 @@ update_time(GtkWidget *label)
 
 	gtk_label_set_markup((GtkLabel *) label, timestring);
 
+    g_free(timestring);
+
 	return TRUE;
 }
 
-static void
-destroy_popup(GtkWidget *widget, GtkWidget *langwin)
+void
+destroy_popup(GtkWidget *widget, GtkWidget *popup)
 {
-	gtk_widget_destroy(langwin);
+	gtk_widget_destroy(popup);
 	return;
 }
 
@@ -113,165 +107,31 @@ handle_command(GIOChannel *io_input)
         gtk_entry_set_visibility(GTK_ENTRY(entry), TRUE);
     } else if (!g_strncasecmp(buf->str, "passwd", 6)) {
         gtk_entry_set_visibility(GTK_ENTRY(entry), FALSE);
+    } else if (!g_strncasecmp(buf->str, "hostname", 8)) {
+        gchar *hoststr;
+    	update_selected_host();
+	    hoststr = g_strdup_printf("%s\n", host);
+        g_io_channel_write_chars(g_stdout, hoststr, -1, NULL, NULL);
+        g_io_channel_flush(g_stdout, NULL);
+        g_free(hoststr);
+    } else if (!g_strncasecmp(buf->str, "language", 8)) {
+        gchar *langstr;
+    	update_selected_lang();
+	    langstr = g_strdup_printf("%s\n", language);
+        g_io_channel_write_chars(g_stdout, langstr, -1, NULL, NULL);
+        g_io_channel_flush(g_stdout, NULL);
+        g_free(langstr);
+    } else if (!g_strncasecmp(buf->str, "session", 7)) {
+        gchar *sessstr;
+    	update_selected_sess();
+	    sessstr = g_strdup_printf("%s\n", session);
+        g_io_channel_write_chars(g_stdout, sessstr, -1, NULL, NULL);
+        g_io_channel_flush(g_stdout, NULL);
+        g_free(sessstr);
     }
 
     g_string_free(buf, TRUE);
     return TRUE;
-}
-
-    
-static void
-sesswin(GtkWidget *widget, GtkWindow *win)
-{
-	GtkWidget *sesswin, *s_vbox, *s_buttonbox;
-	GtkWidget *s_cancel, *s_accept, *s_frame, *s_vbox2;
-	GtkWidget *radio_button1;
-	GtkWidget *radio_button2;
-	/*GtkWidget *radio_button3;*/
-
-	sesswin = gtk_window_new(GTK_WINDOW_POPUP);
-	gtk_window_set_position((GtkWindow *) sesswin, GTK_WIN_POS_CENTER_ALWAYS);
-	gtk_window_set_modal((GtkWindow *) sesswin, TRUE);
-
-	s_vbox = gtk_vbox_new(FALSE, 0);
-	s_vbox2 = gtk_vbox_new(FALSE, 0);
-	s_buttonbox = gtk_hbox_new(FALSE, 5);
-
-	radio_button1 = gtk_radio_button_new_with_mnemonic( NULL, _("_1. Default") );
-	radio_button2 = gtk_radio_button_new_with_mnemonic( gtk_radio_button_group( GTK_RADIO_BUTTON( radio_button1 )), 
-				_("_2. Terminal (failsafe)") );
-	/*radio_button3 = gtk_radio_button_new_with_mnemonic(
-			gtk_radio_button_group( GTK_RADIO_BUTTON( radio_button1 )),
-				_("_3. GNOME") );*/
-
-	gtk_box_pack_start(GTK_BOX(s_vbox2), GTK_WIDGET(radio_button1),
-                       FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(s_vbox2), GTK_WIDGET(radio_button2),
-                       FALSE, FALSE, 0);
-	/*gtk_box_pack_start(GTK_BOX(s_vbox2), GTK_WIDGET(radio_button3),
-                         FALSE, FALSE, 0);*/
-
-	gtk_container_set_border_width (GTK_CONTAINER (s_vbox2), 15);
-	gtk_container_set_border_width (GTK_CONTAINER (s_vbox), 5);
-
-	s_cancel = gtk_button_new_from_stock("gtk-cancel");
-	g_signal_connect (G_OBJECT(s_cancel), "clicked", G_CALLBACK(destroy_popup),
-			          sesswin);
-
-	s_accept = gtk_button_new_with_mnemonic(_("Change _Session"));
-
-	gtk_box_pack_end(GTK_BOX(s_buttonbox), GTK_WIDGET(s_accept),
-                     FALSE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(s_buttonbox), GTK_WIDGET(s_cancel),
-                     FALSE, FALSE, 0);
-
-	gtk_box_pack_start(GTK_BOX(s_vbox), GTK_WIDGET(s_vbox2), FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(s_vbox), GTK_WIDGET(s_buttonbox), TRUE, TRUE, 5);
-
-	s_frame = gtk_frame_new("");
-	gtk_label_set_markup(GTK_LABEL(gtk_frame_get_label_widget(GTK_FRAME(s_frame))),
-			_("<b>Sessions</b>"));
-	gtk_frame_set_shadow_type(GTK_FRAME(s_frame), GTK_SHADOW_OUT);
-	gtk_frame_set_label_align(GTK_FRAME(s_frame), 0.0, 0.0);
-
-	gtk_container_add (GTK_CONTAINER (s_frame), s_vbox);
-	gtk_container_add (GTK_CONTAINER (sesswin), s_frame);
-
-	gtk_widget_show_all(sesswin);
-	return;
-
-}
-
-static void
-langwin(GtkWidget *widget, GtkWindow *win)
-{
-	GtkWidget *langwin, *label, *vbox, *buttonbox, *select;
-	GtkWidget *cancel, *accept, *frame;
-	
-	langwin = gtk_window_new(GTK_WINDOW_POPUP);
-	gtk_window_set_position((GtkWindow *) langwin, GTK_WIN_POS_CENTER_ALWAYS);
-	gtk_window_set_modal((GtkWindow *) langwin, TRUE);
-	
-	vbox = gtk_vbox_new(FALSE, 0);
-	buttonbox = gtk_hbox_new(FALSE, 5);
-	select = gtk_combo_box_new();
-
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-
-	cancel = gtk_button_new_from_stock("gtk-cancel");
-	g_signal_connect (G_OBJECT (cancel), "clicked",
-			G_CALLBACK (destroy_popup),
-			langwin);
-
-	accept = gtk_button_new_with_mnemonic(_("Change _Language"));
-
-	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) accept, FALSE, FALSE, 0);
-	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) cancel, FALSE, FALSE, 0);
-
-	label = gtk_label_new("");
-	gtk_label_set_markup((GtkLabel *) label, 
-			 _("Select the language for your session to use:"));
-
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) label, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) select, FALSE, FALSE, 5);
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) buttonbox, TRUE, TRUE, 5);
-
-	frame = gtk_frame_new("");
-	gtk_frame_set_shadow_type((GtkFrame *) frame, GTK_SHADOW_OUT);
-	gtk_frame_set_label_align((GtkFrame *) frame, 1.0, 0.0);
-
-	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	gtk_container_add (GTK_CONTAINER (langwin), frame);
-
-	gtk_widget_show_all(langwin);
-
-	return;
-}
-
-static void
-hostwin(GtkWidget *widget, GtkWindow *win)
-{
-	GtkWidget *hostwin, *label, *vbox, *buttonbox, *select;
-	GtkWidget *cancel, *accept, *frame;
-	
-	hostwin = gtk_window_new(GTK_WINDOW_POPUP);
-	gtk_window_set_position((GtkWindow *) hostwin, GTK_WIN_POS_CENTER_ALWAYS);
-	gtk_window_set_modal((GtkWindow *) hostwin, TRUE);
-	
-	vbox = gtk_vbox_new(FALSE, 0);
-	buttonbox = gtk_hbox_new(FALSE, 5);
-	select = gtk_combo_box_new();
-
-	gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-
-	cancel = gtk_button_new_from_stock("gtk-cancel");
-	g_signal_connect (G_OBJECT (cancel), "clicked",
-			G_CALLBACK (destroy_popup),
-			hostwin);
-
-	accept = gtk_button_new_with_mnemonic(_("Change _Host"));
-
-	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) accept, FALSE, FALSE, 0);
-	gtk_box_pack_end((GtkBox *) buttonbox, (GtkWidget *) cancel, FALSE, FALSE, 0);
-
-	label = gtk_label_new("");
-	gtk_label_set_markup((GtkLabel *) label, 
-			 _("Select the host for your session to use:"));
-
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) label, FALSE, FALSE, 0);
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) select, FALSE, FALSE, 5);
-	gtk_box_pack_start((GtkBox *) vbox, (GtkWidget *) buttonbox, TRUE, TRUE, 5);
-
-	frame = gtk_frame_new("");
-	gtk_frame_set_shadow_type((GtkFrame *) frame, GTK_SHADOW_OUT);
-	gtk_frame_set_label_align((GtkFrame *) frame, 1.0, 0.0);
-
-	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	gtk_container_add (GTK_CONTAINER (hostwin), frame);
-
-	gtk_widget_show_all(hostwin);
-
-	return;
 }
 
 char *
@@ -305,7 +165,12 @@ get_ip(void)
 static void
 handle_entry(GtkEntry *entry, GdkWindow *window)
 {
-	printf("%s\n", gtk_entry_get_text(entry));
+    gchar *entrystr;
+    
+	entrystr = g_strdup_printf("%s\n", gtk_entry_get_text(entry));
+    g_io_channel_write_chars(g_stdout, entrystr, -1, NULL, NULL);
+    g_io_channel_flush(g_stdout, NULL);
+    g_free(entrystr);
     gtk_entry_set_text(entry, "");
 }
 
@@ -352,7 +217,8 @@ popup_menu(GtkWidget *widget, GtkWindow *window)
 
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), lang_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), sess_item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), host_item);
+    if (g_hash_table_size(ldminfo_hash) > 1)
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), host_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), sep);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), reboot_item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), quit_item);
@@ -388,6 +254,12 @@ main(int argc, char *argv[])
 	gtk_init (&argc, &argv);
 
 	gtk_rc_add_default_file (GTKRC_DIR "/greeter-gtkrc");
+
+	/* Initialize information about hosts */
+
+	ldminfo_hash_init(&ldminfo_hash, getenv("LDM_SERVER"));
+	_ldminfo_query_all(ldminfo_hash);
+	ldminfo_get_sorted_host_list(ldminfo_hash, &sorted_host_list);
 
 	normcursor = gdk_cursor_new(GDK_LEFT_PTR);
 	busycursor = gdk_cursor_new(GDK_WATCH);
@@ -459,8 +331,8 @@ main(int argc, char *argv[])
 
 	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
                        GTK_WIDGET(optionbutton), FALSE, FALSE, 5);
-	/*gtk_box_pack_start(GTK_BOX(StatusBarBox), 
-                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);*/
+	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
+                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
                      GTK_WIDGET(timelabel), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
@@ -494,17 +366,18 @@ main(int argc, char *argv[])
 
 	gtk_container_add (GTK_CONTAINER (window), vbox2);
 
+	
 	gtk_widget_show_all(window);
 
 	gdk_window_set_cursor(root, normcursor);
-
+	
     /*
      * Start listening to stdin
      */
 
     g_stdin = g_io_channel_unix_new(STDIN_FILENO);        /* listen to stdin */
+    g_stdout = g_io_channel_unix_new(STDOUT_FILENO); 
     g_io_add_watch(g_stdin, G_IO_IN, (GIOFunc)handle_command, g_stdin);
-    setbuf(stdout, NULL);
 
 	gtk_main ();
 

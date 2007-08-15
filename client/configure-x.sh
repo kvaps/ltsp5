@@ -1,5 +1,12 @@
 #!/bin/sh
 
+#
+# If someone's overridden the config with their own custom config, then
+# just exit silently
+#
+
+[ ! -z "${XORG_CONF} ] && exit
+
 OUT_FILE="/etc/X11/xorg.conf"
 ORIG_CONSOLE=$(fgconsole)
 
