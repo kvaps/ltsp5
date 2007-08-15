@@ -8,11 +8,22 @@
 # that. All versions of the ltsp-client package past 5.0.11 should be able
 # to do that
 
+usage() {
+cat <<EOF
+$0 [OPTION]
+  -b, --basedir  Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
+  -p, --port     Port you wish this nbd image to communicate on.  Default
+                 is 2000.
+  -a, --arch     Architecture of this image.  Default is arch of the host.
+  -h, --help     This message.
+EOF
+}
+
 #
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a: --long base:,port:,arch: -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:h --long base:,port:,arch:,help -n $0 -- "$@")
 
 [ $? != 0 ] && exit 1
 
@@ -20,9 +31,10 @@ eval set -- "${ARGS}"
 
 while true ; do
     case "$1" in
-        -b|--base) BASE=$2 ; shift 2;;
-        -p|--port) PORT=$2 ; shift 2;;
-        -a|--arch) ARCH=$2 ; shift 2;;
+        -b|--base) BASE=$2 ; shift 2 ;;
+        -p|--port) PORT=$2 ; shift 2 ;;
+        -a|--arch) ARCH=$2 ; shift 2 ;;
+        -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
     esac
@@ -36,6 +48,13 @@ PORT=${PORT:-"2000"}
 IMGDIR="${BASE}/images"
 CONFFILE="/usr/share/initramfs-tools/conf.d/ltsp"
 CHROOT="${BASE}/${ARCH}"
+
+#
+# for updateing the pxe config
+#
+
+TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
+TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
 
 # source config file
 [ -f /etc/default/ltsp-update-image ] && . /etc/default/ltsp-update-image
@@ -69,3 +88,16 @@ grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 &&
 # Update inetd.conf
 update-inetd --group LTSP --add "${PORT}                   stream  tcp\
     nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+
+# If port's been specified, set the port.
+
+if [ -n "${PORT}" ] ; then
+    for TFTPDIR in $TFTPDIRS ; do
+        [ ! -d $TFTPDIR ] && continue       # skip directory
+        PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${ARCH}/pxelinux.cfg/default"
+        [ ! -f ${PXECFG} ] && continue
+        grep nbdport ${PXECFG} > /dev/null 2>&1 &&
+            sed -i -e 's/nbdport=[0-9]*/nbdport=${PORT}/g' ${PXECFG} ||
+            sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
+    done
+fi
