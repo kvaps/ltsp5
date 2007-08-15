@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "ldm.h"
 
@@ -119,7 +120,7 @@ ldm_wait(pid_t pid)
     int status;
 
     if (waitpid (pid, &status, 0) < 0)
-        die("Error: wait() call failed");
+        die(_("Error: wait() call failed"));
     if (!WIFEXITED (status)) {
         fprintf(ldmlog, "Process returned no status\n");
         return 1;
@@ -356,7 +357,7 @@ main(int argc, char *argv[])
      */
 
     if (!(ldmlog = fopen("/var/log/ldm.log", "a")))
-        die("Couldn't open /var/log/ldm.log");
+        die(_("Couldn't open /var/log/ldm.log"));
 
     setbuf(ldmlog, NULL);      /* Unbuffered */
 
@@ -423,13 +424,13 @@ main(int argc, char *argv[])
     create_xauth();                         /* recreate .Xauthority */
     
     if (!ldminfo.autologin) {
-        fprintf(ldmlog, "Spawning greeter: %s\n", ldminfo.greeter_prog);
+        fprintf(ldmlog, _("Spawning greeter: %s\n"), ldminfo.greeter_prog);
         spawn_greeter();
     }
 
     if (get_userid() ||
         *(ldminfo.username) == '\0')
-        die("Greeter returned null userid");
+        die(_("Greeter returned null userid"));
 
     if (get_host() ||
         *(ldminfo.server) == '\0')

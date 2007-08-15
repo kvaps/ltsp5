@@ -22,6 +22,7 @@
 #include <pty.h>
 #include <utmp.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "ldm.h"
 
@@ -159,7 +160,7 @@ ssh_chat(int fd)
             if (get_passwd())
                 return 1;
 
-        set_message("<b>Verifying password, please wait...</b>");
+        set_message(_("<b>Verifying password, please wait...</b>"));
         fprintf(ldmlog, "ssh_chat: looking for ssword: from ssh\n");
         seen = expect(fd, 30.0, "ssword:",
                                 "continue connecting",
@@ -171,7 +172,7 @@ ssh_chat(int fd)
         } else if (seen == 2) {
             fprintf(ldmlog, "Server isn't in ssh_known_hosts\n");
             if (!ldminfo.autologin)
-                set_message("This workstation isn't authorized to connect to server");
+                set_message(_("This workstation isn't authorized to connect to server"));
             sleep(5);
             die("Terminal not authorized, run ltsp-update-sshkeys\n");
         } else  {
@@ -188,13 +189,13 @@ ssh_chat(int fd)
             fprintf(ldmlog, "Saw sentinel. Logged in successfully\n");
             return 0;
         } else if (seen == 2) {
-            set_message("<b>Password incorrect.  Try again.</b>");
+            set_message(_("<b>Password incorrect.  Try again.</b>"));
             if (!ldminfo.autologin)
                 bzero(ldminfo.password, sizeof ldminfo.password);
         } else if (seen == 3) {
             fprintf(ldmlog, "User %s failed password 3 times\n",
                             ldminfo.username);
-            set_message("<b>Login failed!</b>");
+            set_message(_("<b>Login failed!</b>"));
             sleep(5);
             die("User failed login.  Restarting\n");
         } else
@@ -206,14 +207,14 @@ ssh_chat(int fd)
      */
 
     /* First, it wants the same password again */
-    set_message("Your password has expired.  Please enter a new one.");
+    set_message(_("Your password has expired.  Please enter a new one."));
 
     oldpw = strdup(ldminfo.password);
 
     while (TRUE) {
         get_passwd();
         newpw1 = strdup(ldminfo.password);
-        set_message("Please enter your password again to verify.");
+        set_message(_("Please enter your password again to verify."));
         get_passwd();
 
         if (!strcmp(ldminfo.password, newpw1))
@@ -221,7 +222,7 @@ ssh_chat(int fd)
             
         bzero(newpw1, strlen(newpw1));
         free(newpw1);
-        set_message("Your passwords didn't match.  Try again. Please enter a password.");
+        set_message(_("Your passwords didn't match.  Try again. Please enter a password."));
     }
 
     /* send old password first */
@@ -251,7 +252,7 @@ ssh_chat(int fd)
     free(newpw1);
 
 
-    set_message("Password not updated.");
+    set_message(_("Password not updated."));
     sleep(5);
     die("Password couldn't be updated.");
     return 1;

@@ -16,6 +16,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "ldm.h"
 
@@ -62,7 +63,9 @@ get_greeter_string(char *str, int len)
 int
 get_userid(char *str, int len)
 {
-    char *prompt = "prompt <b>Username</b>\n";
+    char *prompt1 = "prompt <b>";
+    char *prompt2 = _("Username");
+    char *prompt3 = "</b>\n";
     char *p;
 
     fprintf(ldmlog, "In get_userid\n");
@@ -70,7 +73,9 @@ get_userid(char *str, int len)
         scopy(ldminfo.username, p);
         return 0;
     } else {
-        write(ldminfo.greeterwfd, prompt, strlen(prompt));
+        write(ldminfo.greeterwfd, prompt1, strlen(prompt1));
+        write(ldminfo.greeterwfd, prompt2, strlen(prompt2));
+        write(ldminfo.greeterwfd, prompt3, strlen(prompt3));
         return get_greeter_string(ldminfo.username, sizeof ldminfo.username);
     }
 }
@@ -78,7 +83,9 @@ get_userid(char *str, int len)
 int
 get_passwd()
 {
-    char *prompt = "prompt <b>Password</b>\n";
+    char *prompt1 = "prompt <b>";
+    char *prompt2 = _("Password");
+    char *prompt3 = "</b>\n";
     char *pw = "passwd\n";
     char *p;
 
@@ -87,7 +94,9 @@ get_passwd()
         scopy(ldminfo.password, p);
         return 0;
     } else {
-        write(ldminfo.greeterwfd, prompt, strlen(prompt));
+        write(ldminfo.greeterwfd, prompt1, strlen(prompt1));
+        write(ldminfo.greeterwfd, prompt2, strlen(prompt2));
+        write(ldminfo.greeterwfd, prompt3, strlen(prompt3));
         write(ldminfo.greeterwfd, pw, strlen(pw));
         return get_greeter_string(ldminfo.password, sizeof ldminfo.password);
     }

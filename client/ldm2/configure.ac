@@ -26,6 +26,8 @@ AC_SUBST(GLIB_LIBS)
 AC_SUBST(GOBJECT_CFLAGS)
 AC_SUBST(GOBJECT_LIBS)
 
+AM_GNU_GETTEXT([external])
+
 dnl Output
-AC_CONFIG_FILES([Makefile src/Makefile share/Makefile scripts/Makefile man/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile share/Makefile scripts/Makefile man/Makefile po/Makefile.in])
 AC_OUTPUT
