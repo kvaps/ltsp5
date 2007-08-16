@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+import os
 import locale
 from subprocess import *
 
@@ -75,8 +76,11 @@ def compute_server_rating():
 if __name__ == "__main__":
     # Get the server's default locale
     # We want it to appear first in the list
-    name, encoding = locale.getdefaultlocale()
-    defaultlocale = name + "." + encoding
+    fd=os.open('/etc/environment', 0)
+    for line in os.read(fd ,512).split():
+        if line.startswith('LANG='):
+            defaultlocale = line.split('=')[1].strip('"')
+
     defaultlocale = defaultlocale.replace('UTF8', 'UTF-8')
     print "language:" + defaultlocale
     # Get list of valid locales from locale -a
