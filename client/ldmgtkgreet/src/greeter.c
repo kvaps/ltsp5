@@ -331,8 +331,8 @@ main(int argc, char *argv[])
 
 	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
                        GTK_WIDGET(optionbutton), FALSE, FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(StatusBarBox), 
-                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);
+	/*gtk_box_pack_start(GTK_BOX(StatusBarBox), 
+                       GTK_WIDGET(cancelbutton), FALSE, FALSE, 5);*/
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
                      GTK_WIDGET(timelabel), FALSE, FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(StatusBarBox), 
