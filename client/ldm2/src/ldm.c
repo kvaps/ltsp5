@@ -427,7 +427,14 @@ main(int argc, char *argv[])
     if (*ldminfo.greeter_prog == '\0')
         scopy(ldminfo.greeter_prog, "/usr/bin/ldmgtkgreet");
     scopy(ldminfo.authfile, "/root/.Xauthority");
-    scopy(ldminfo.control_socket, "/var/run/ldm_socket");
+
+    /*
+     * If we run multiple ldm sessions on multiply vty's we need separate 
+     * control sockets.
+     */
+
+    snprintf(ldminfo.control_socket, sizeof ldminfo.control_socket,
+             "/var/run/ldm_socket_%s", ldminfo.vty);
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
