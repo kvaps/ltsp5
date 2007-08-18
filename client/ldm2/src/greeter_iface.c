@@ -20,19 +20,29 @@
 
 #include "ldm.h"
 
+/*
+ * spawn_greeter()
+ *
+ * Launch the greeter program.  Save stdin and stdout in the ldminfo struct.
+ */
+
 void
 spawn_greeter()
 {
     char *greet[] = {
         ldminfo.greeter_prog,
         NULL};
+    gboolean res;
 
-    g_spawn_async_with_pipes(NULL, greet, NULL,
-                             G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL,
-                             &ldminfo.greeterpid,
-                             &ldminfo.greeterwfd,
-                             &ldminfo.greeterrfd,
-                             NULL, NULL);
+    res = g_spawn_async_with_pipes(NULL, greet, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
+              NULL, NULL, &ldminfo.greeterpid, &ldminfo.greeterwfd,
+              &ldminfo.greeterrfd, NULL, NULL);
+
+    if (!res) {
+        fprintf(ldmlog, "spawn_greeter failed to execute:\n");
+        dump_cmdline(greet);
+        die("Exiting ldm\n");
+    }
 }
     
 int

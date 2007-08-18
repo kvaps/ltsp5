@@ -17,6 +17,7 @@
 #include <syslog.h>
 #include <string.h>
 #include <stdio.h>
+#include <glib.h>
 
 #include "ldm.h"
 

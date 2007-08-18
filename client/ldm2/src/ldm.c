@@ -62,6 +62,19 @@ die(char *msg)
 }
 
 /*
+ * Print out command lines.  For debugging.
+ */
+
+void
+dump_cmdline(char *argv[])
+{
+    int i;
+
+    for (i = 0; argv[i]; i++)
+        fprintf(ldmlog, "%s ", argv[i]);
+    fprintf(ldmlog, "\n");
+}
+/*
  * scopy()
  *
  * Copy a string.  Used to move data in and out of our ldminfo structure.
@@ -101,21 +114,35 @@ ldm_getenv_bool(const char *name)
 }
 
 
-int
+/*
+ * ldm_spawn:
+ *
+ * Execute commands.  Ignore stdin and stdout.
+ */
+
+GPid
 ldm_spawn (char **argv)
 {
-    pid_t pid;
+    GPid pid;
+    gboolean res;
   
-    g_spawn_async(NULL, argv, NULL,
+    res = g_spawn_async(NULL, argv, NULL,
                   G_SPAWN_DO_NOT_REAP_CHILD |
                   G_SPAWN_STDOUT_TO_DEV_NULL |
                   G_SPAWN_STDERR_TO_DEV_NULL,
                   NULL, NULL, &pid, NULL);
+
+    if (!res) {
+        fprintf(ldmlog, "ldm_spawn failed to execute:\n");
+        dump_cmdline(argv);
+        die("Exiting ldm\n");
+    }
+
     return pid;
 }
 
 int
-ldm_wait(pid_t pid)
+ldm_wait(GPid pid)
 {
     int status;
 
@@ -131,7 +158,7 @@ ldm_wait(pid_t pid)
 void
 create_xauth()
 {
-    pid_t xauthpid;
+    GPid xauthpid;
     int status;
 
     char *xauth_command[] = {
@@ -190,7 +217,7 @@ launch_x()
 void
 rc_files(char *action)
 {
-    pid_t rcpid;
+    GPid rcpid;
 
     char *rc_cmd[] = {
         "/bin/sh",
@@ -221,8 +248,8 @@ x_session()
         "-public", 
         "-tcp",
         NULL };
-    pid_t xsessionpid;
-    pid_t esdpid = 0;
+    GPid xsessionpid;
+    GPid esdpid = 0;
     int i = 0;
 
     snprintf(ltspclienv, sizeof ltspclienv, "LTSP_CLIENT=%s", ldminfo.ipaddr);
