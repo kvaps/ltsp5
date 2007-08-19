@@ -1,3 +1,9 @@
+ltsp (5.0.24) gutsy; urgency=low
+
+  * fix typo in ltsp-update-sshkeys (Closes LP# 133443)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun, 19 Aug 2007 10:59:59 +0200
+
 ltsp (5.0.23) gutsy; urgency=low
 
   * ldm2 merged from sbalneav:
