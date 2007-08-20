@@ -52,8 +52,10 @@ case "$MODE" in
         ;;
     finalization)
         # make sure gdm actually starts
-        if [ -e $ROOT/etc/init.d/gdm ]; then
-            chroot $ROOT mv /etc/rc2.d/K13gdm /etc/rc2.d/S13gdm
+        if [ -n "$KIOSK" ]; then
+            if [ -e $ROOT/etc/init.d/gdm ]; then
+                chroot $ROOT mv /etc/rc2.d/K13gdm /etc/rc2.d/S13gdm
+            fi
         fi
 esac
 
