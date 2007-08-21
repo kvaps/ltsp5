@@ -61,7 +61,7 @@ if [ -z "$SOUND_DAEMON" ]; then
     if [ -z "$SOUND" ] && [ -n "$SOUND_DAEMON" ]; then
         export SOUND=True
     fi
-fi  
+fi
 
 # set defaults for local device support
 if [ -z "$LOCALDEV" ]; then
