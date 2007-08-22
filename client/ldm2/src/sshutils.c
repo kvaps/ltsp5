@@ -60,7 +60,7 @@ spawn_ssh(int fd)
      * ssh parameter it needs
      */
 
-    sprintf(userserver, sizeof userserver, "%s@%s", ldminfo.username,
+    snprintf(userserver, sizeof userserver, "%s@%s", ldminfo.username,
                                                     ldminfo.server);
     sshcmd[i++] = userserver;
     sshcmd[i++] = "echo";
