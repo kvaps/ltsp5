@@ -19,14 +19,19 @@ DESC="LTSP client setup"
 NAME=ltsp-client-setup
 SCRIPTNAME=/etc/init.d/$NAME
 
-# Gracefully exit if the package has been removed.
-test -f /usr/lib/ltsp/ltsp_functions || exit 0
 # Gracefully exit if ltsp_chroot file is not present
 test -f /etc/ltsp_chroot || exit 0
 
 . /lib/lsb/init-functions
-. /usr/lib/ltsp/ltsp_functions
 . /usr/lib/ltsp/ltsp_config
+
+boolean_is_true(){
+    case "$(echo $1 | tr 'A-Z' 'a-z')" in
+       true|y|yes) return 0 ;; 
+       *) return 1 ;; 
+    esac
+}
+
 test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
 
 load_modules() {
@@ -125,9 +130,13 @@ EOF
 }
 
 configure_printer() {
-    for prn_dev in $(env | awk -F= '$1 ~ /^PRINTER_[0-9]_DEVICE/ { print $1 }'); do
-        prn_no=`echo $prn_dev | cut -f2 -d'_'`
-        /usr/lib/ltsp/start_printer $prn_no &
+    for I in 0 1 2; do
+        eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
+
+        if [ -n "${DEVICE}" ]; then
+            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\}
+            /usr/sbin/jetpipe ${DEVICE} ${PORT}
+        fi
     done
 }
 

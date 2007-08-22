@@ -37,28 +37,30 @@ export TERM=linux           # Setup the terminal type
 TTY=`/usr/bin/basename \`/usr/bin/tty\``
 [ "${TTY}" = "console" ] && TTY="tty1"    # Special case for first screen
 
-#
-# Clear the screen, to place cursor at the top
-#
-/usr/bin/clear
+while :; do
+    #
+    # Clear the screen, to place cursor at the top
+    #
+    /usr/bin/clear
 
-#
-# Echo this message, telling user how to proceed.
-#
-echo -n "Screen:${TTY} - Press <enter> to establish a connection to server..."
-read CMD
+    #
+    # Echo this message, telling user how to proceed.
+    #
+    echo -n "Screen:${TTY} - Press <enter> to establish a connection to server..."
+    read CMD
 
-#
-# Clear the screen before launching telnet
-#
-/usr/bin/clear
+    #
+    # Clear the screen before launching telnet
+    #
+    /usr/bin/clear
 
-#
-# Launch the telnet program.
-#
-/usr/bin/telnet ${TELNET_ARGS}
-#
-# Brief pause, in case telnet had errors to report
-#
-echo -n "Please wait..."
-/bin/sleep 1
+    #
+    # Launch the telnet program.
+    #
+    /usr/bin/telnet ${TELNET_ARGS}
+    #
+    # Brief pause, in case telnet had errors to report
+    #
+    echo -n "Please wait..."
+    /bin/sleep 1
+done

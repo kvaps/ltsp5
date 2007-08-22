@@ -51,7 +51,7 @@ case "${TTY}" in
 esac
 DISPLAYNUM=$((${TTYNUM} - 1))
 
-while true; do
+while :; do
     #
     # Server scalability.  If there exists a /usr/lib/ltsp/get_hosts file, then
     # use it to populate the LDM_SERVER environment variable.

@@ -22,9 +22,6 @@ client/screen.d/shell
 client/screen.d/startx
 client/screen.d/telnet
 client/screen_session
-client/start_printer
-client/start_telnet
-client/telnet_loop
 
 with the following copyright:
 
