@@ -1,7 +1,11 @@
+#
+# ltsp_config: This should be sourced by most scripts within an ltsp
+# environment.  Ensures that LTSP5 defaults are set up
+#
+#
 
-if [ -f /etc/lts.conf ]; then
-    eval `getltscfg -a`
-fi
+# Read in lts.conf entries.
+[ -f /etc/lts.conf ] && eval $(getltscfg -a)
 
 # set compatbility for ltsp 4.x variables
 X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
@@ -10,17 +14,18 @@ LOCALDEV=${LOCALDEV:-"$LOCAL_STORAGE"}
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     nfs_server=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
-    if [ -n "$nfs_server" ]; then
-        SERVER="$nfs_server"
-    else
-        SERVER="192.168.0.254"
-    fi
+    SERVER="${nfs_server:-192.168.0.254}"
     export SERVER
 fi
 
-if [ -z "$CONFIGURE_X" ] && [ -x /usr/bin/X ]; then
+#
+# Set CONFIGURE_X = True if it isn't set, X exists, and we haven't
+# specified a manual xorg config file
+#
+
+[ -z "$CONFIGURE_X" ] && [ -x /usr/bin/X ] && \
+[ -z "$XF86CONFIG_FILE" ] && [ -z "$XORG_CONF" ] && \
     export CONFIGURE_X=True
-fi
 
 # Ensure a default screen if X is present
 if ! env | grep -q '^SCREEN_'; then
@@ -28,7 +33,8 @@ if ! env | grep -q '^SCREEN_'; then
         default_display_manager="$(cat /etc/X11/default-display-manager)"
         if [ -x "$default_display_manager" ]; then
             display_manager_configured=true
-        elif [ "$default_display_manager" = "/usr/bin/gdm" ] && [ -x /usr/sbin/gdm ]; then
+        elif [ "$default_display_manager" = "/usr/bin/gdm" ] && \
+             [ -x /usr/sbin/gdm ]; then
             # some versions of gdm set default-display-manager to /usr/bin/gdm,
             # even if there is no /usr/bin/gdm, but start /usr/sbin/gdm.
             display_manager_configured=true
@@ -38,14 +44,11 @@ if ! env | grep -q '^SCREEN_'; then
         # Do nothing, these daemons (xdm, gdm, kdm, wdm, etc.) should configure themselves.
         true
     elif [ -x /usr/sbin/ldm ]; then
-        SCREEN_07=ldm
-        export SCREEN_07
+        export SCREEN_07=ldm
     elif [ -x /usr/sbin/sdm ]; then
-        SCREEN_07=sdm
-        export SCREEN_07
+        export SCREEN_07=sdm
     else
-        SCREEN_07=startx
-        export SCREEN_07
+        export SCREEN_07=startx
     fi
 fi
 
@@ -64,8 +67,4 @@ if [ -z "$SOUND_DAEMON" ]; then
 fi
 
 # set defaults for local device support
-if [ -z "$LOCALDEV" ]; then
-    if [ -x /usr/bin/ltspfsd ]; then
-        export LOCALDEV=True
-    fi
-fi
+[ -z "$LOCALDEV" ] && [ -x /usr/bin/ltspfsd ] && export LOCALDEV=True

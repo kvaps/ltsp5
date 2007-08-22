@@ -75,23 +75,18 @@ start_sound() {
 }
 
 configure_localdev() {
-    if [ -z "$(pidof ltspfsd)" ]; then
-        if boolean_is_true "$LOCALDEV" ; then
-            if [ ! -d /var/run/drives ];then
-                mkdir /var/run/drives
-            fi
-            # Make this sessions secret auth cookie for ltspfs
-            mcookie > /var/run/ltspfs_token
-            /usr/bin/ltspfsd
-            # cdrom devices are handled by the cdpingerponger
-            /usr/sbin/cdpinger cdrom # default for usb cdroms
- 
-            # and start one for every additional cdrom device
-            if [ -L /dev/cdrom?* ];then
-                for CDDEV in $(ls /dev/cdrom?*); do
-                    /usr/sbin/cdpinger $(basename ${CDDEV})
-                done
-            fi
+    if boolean_is_true "$LOCALDEV" ; then
+        # Make this sessions secret auth cookie for ltspfs
+        mcookie > /var/run/ltspfs_token
+        /usr/bin/ltspfsd
+        # cdrom devices are handled by the cdpingerponger
+        /usr/sbin/cdpinger cdrom # default for usb cdroms
+
+        # and start one for every additional cdrom device
+        if [ -L /dev/cdrom?* ];then
+            for CDDEV in $(ls /dev/cdrom?*); do
+                /usr/sbin/cdpinger $(basename ${CDDEV})
+            done
         fi
     fi
 }
