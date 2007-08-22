@@ -58,8 +58,9 @@ while :; do
     #
 
     [ -x /usr/lib/ltsp/get_hosts ] && \
-        export LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
-    [ -z "${LDM_SERVER}" ] && export LDM_SERVER=${SERVER}
+    	LDM_SERVER=$(/usr/lib/ltsp/get_hosts) || \
+    	LDM_SERVER=${SERVER}
+    export LDM_SERVER
 
     #
     # Loop though each of the hosts, and get their ldminfo
