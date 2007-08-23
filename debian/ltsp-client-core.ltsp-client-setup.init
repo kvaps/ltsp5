@@ -51,7 +51,9 @@ configure_console() {
 }
 
 configure_swap() {
-    if boolean_is_true "$USE_LOCAL_SWAP" ; then # Enable local swap partition if found on local disk for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
+    if boolean_is_true "$USE_LOCAL_SWAP" ; then
+        # Enable local swap partition if found on local disk
+        for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
             swap_devices="$swap_devices $part"
         done
     fi
