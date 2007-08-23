@@ -154,9 +154,6 @@ preseed() {
 configure_x() {
     # If the user has specified an xorg.conf file, then copy it over.
     xserver_config="/etc/X11/xorg.conf"
-    [ -n "$XF86CONFIG_FILE" ] && [ -f "$XF86CONFIG_FILE" ] && \
-        cp "$XF86CONFIG_FILE" "$xserver_config"
-    # Newer XORG_CONF variable should take precidence
     [ -n "$XORG_CONF" ] && [ -f "$XORG_CONF" ] && \
         cp "$XORG_CONF" "$xserver_config"
 }

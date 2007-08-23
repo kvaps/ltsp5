@@ -6,7 +6,6 @@
 #
 
 [ -n "${XORG_CONF}" ] && exit
-[ -n "${XF86CONFIG_FILE}" ] && exit
 
 OUT_FILE="/etc/X11/xorg.conf"
 ORIG_CONSOLE=$(fgconsole)
