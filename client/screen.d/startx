@@ -56,19 +56,7 @@ ltsp_x_config() {
         fi
     fi
 
-    if [ ! -z "${XF86CONFIG_FILE}" ]; then
-    #
-    # If XF86CONFIG_FILE is defined in the lts.conf file, then
-    # it points to an XF86Config file that is pre-made for a workstation
-    #
-        if [ -f /etc/${XF86CONFIG_FILE} ]; then
-            cp /etc/${XF86CONFIG_FILE} ${XFCFG}
-        else
-            echo
-            echo "Error! - ${XF86CONFIG_FILE} - File not found!"
-            echo
-        fi
-    elif [ ! -z "${XORG_CONF}" ]; then
+    [ ! -z "${XORG_CONF}" ]; then
     #
     # If XORG_CONF is defined in the lts.conf file, then
     # it points to an XF86Config file that is pre-made for a workstation
