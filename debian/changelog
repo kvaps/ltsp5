@@ -1,4 +1,4 @@
-ltsp (5.0.8debian3) UNRELEASED; urgency=low
+ltsp (5.0.8debian3) unstable; urgency=low
 
   [ Christian Perrier ]
   * Debconf templates and debian/control reviewed by the debian-l10n-
