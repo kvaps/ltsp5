@@ -391,7 +391,7 @@ main(int argc, char *argv[])
     /*
      * openlog("ldm", LOG_PID | LOG_PERROR , LOG_AUTHPRIV);
      */
-    
+
     fprintf(ldmlog, "LDM2 starting\n");
 
     /*
@@ -465,7 +465,7 @@ main(int argc, char *argv[])
      */
 
     snprintf(ldminfo.control_socket, sizeof ldminfo.control_socket,
-             "/var/run/ldm_socket_%s", ldminfo.server);
+             "/var/run/ldm_socket_%s_%s", ldminfo.vty, ldminfo.server);
     snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
              ldminfo.control_socket);
     putenv(socket_env);
