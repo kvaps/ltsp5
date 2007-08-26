@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb\n"
-"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2006-11-15 15:15-0700\n"
+"Report-Msgid-Bugs-To: ogra@ubuntu.com\n"
+"POT-Creation-Date: 2007-08-25 01:06-0500\n"
 "PO-Revision-Date: 2005-09-30 18:30MET\n"
 "Last-Translator: Petter Reinholdtsen <pere@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -53,15 +53,15 @@ msgstr "Bygg LTSP chroot"
 msgid "Building LTSP chroot..."
 msgstr "Bygger LTSP chroot..."
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:5001
 msgid "No Interface for LTSP dhcpd configuration found"
 msgstr ""
 
 #. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:4001
+#: ../ltsp-client-builder.templates:5001
 msgid ""
 "There are no free interfaces for usage with the LTSP Server. Please "
 "configure the file /etc/ltsp/dhcpd.conf  manually to point to a valid static "
@@ -70,26 +70,25 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
-msgid ""
-"Please select the interface you want to use for the thin client network."
+#: ../ltsp-client-builder.templates:6001
+msgid "Interface for the thin client network:"
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:5001
+#: ../ltsp-client-builder.templates:6001
 msgid "There were multiple spare interfaces found in this system."
 msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Installation aborted "
 msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid ""
 "ltsp-client cannot be installed in a regular machine. This package provides  "
 "the basic structure for a LTSP terminal."
@@ -97,6 +96,6 @@ msgstr ""
 
 #. Type: error
 #. Description
-#: ../ltsp-client.templates:1001
+#: ../ltsp-client-core.templates:1001
 msgid "Please read the package description to understand what it means."
 msgstr ""
