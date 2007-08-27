@@ -7,6 +7,7 @@
 #
 
 SLEEP=300
+SCRIPT_DIR=/usr/lib/ltsp/screen.d
 
 # Load LTSP configuration
 . /usr/lib/ltsp/ltsp_config
@@ -47,8 +48,9 @@ eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
 SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
 SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
-[ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ] && \
-    exec /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
+    exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+fi
 
 logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
 echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"

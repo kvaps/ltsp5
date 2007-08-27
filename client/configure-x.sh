@@ -5,7 +5,9 @@
 # just exit silently
 #
 
-test -n "${X_CONF}" && exit
+if [ -n "${X_CONF}" ]; then
+    exit
+fi
 
 OUT_FILE="/etc/X11/xorg.conf"
 ORIG_CONSOLE=$(fgconsole)
@@ -18,7 +20,7 @@ INPUT_FILE=$(LANG=C Xorg -configure :1 2>&1 |grep "Your xorg.conf file is "|tr -
 # Handle keyboard settings, default to console-setup settings
 handle_keyboard_settings() {
     XKBOPTIONS_TMP="$XKBOPTIONS"
-    if [ -z "$XKBLAYOUT" ] && [ -z "$XKBMODEL" ];then
+    if [ -z "$XKBLAYOUT" ] && [ -z "$XKBMODEL" ]; then
         if [ -e /etc/default/console-setup ];then
             . /etc/default/console-setup
         fi

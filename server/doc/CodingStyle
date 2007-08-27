@@ -1,0 +1,23 @@
+After a quick discussion on coding styles, here's what we've currently got
+for consensus:
+
+For shell scripts:
+
+ - Shell scripts should be fully posix compliant.
+ - We will favour the use of if [ ]; then else fi, over && and ||, for clarity
+ - When using a multi check if, exception will be using the
+   if [ .. ] && [ .. ] || [ .. ] form, as opposed to [ .. -a .. -o .. ] form.
+ - If a single line test is used, use test <conditional> &&/|| result, and only
+   for tests that fit on a single line.
+ - We'll use spaces instead of tabs, and the indentation level will be 4
+   spaces, the same as python.
+
+For C programs:
+ - Programs should be passed through the "indent" program periodically to clean
+   them up.
+ - The following indent command line should be used:
+   indent -kr -i4 -nut -c50 -psl
+     - K&R style (Scott's a greybeard)
+     - 4 character tab width, and spaces instead of tabs
+     - Align inline comments on column 50
+     - A newline after function definitions
