@@ -154,8 +154,8 @@ preseed() {
 configure_x() {
     # If the user has specified an xorg.conf file, then copy it over.
     xserver_config="/etc/X11/xorg.conf"
-    [ -n "$XORG_CONF" ] && [ -f "$XORG_CONF" ] && \
-        cp "$XORG_CONF" "$xserver_config"
+    [ -n "$X_CONF" ] && [ -f "$X_CONF" ] && \
+        cp "$X_CONF" "$xserver_config"
 }
 
 configure_serial_mouse() {

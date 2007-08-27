@@ -128,34 +128,26 @@ for kernel in $ALL_KERNELS ; do
             fi
         fi
     else
-        if which mkelf-linux >/dev/null; then
-            if [ -z "$MKELF_LINUX_OPTS" ]; then
-                MKELF_LINUX_OPTS="--ip=dhcp"
-            fi
-            if [ -f "$BOOT/$initrd" ]; then
-                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $BOOT/$initrd
-            else
-                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel
-            fi
+        if which mkelfImage >/dev/null; then
+            MKELF_INITRD_OPT=""
+            [ -z "$MKELF_LINUX_OPTS" ] && MKELF_LINUX_OPTS="ip=dhcp"
+            [ -f "$BOOT/$initrd" ] && MKELF_INITRD_OPT="--ramdisk=$BOOT/$initrd"
+            mkelfImage --command-line=$MKELF_LINUX_OPTS --output=$BOOT/$nbi \
+                --kernel=$kernel $MKELF_INITRD_OPT
         else
-            if [ -z "$mkelf_seen" ]; then
-                msg "Skipping etherboot images.  Install the mknbi package if you need them."
-                mkfelf_seen=true
-            fi
+            [ -z "$mkelf_seen" ] && mkfelf_seen=true && \
+                msg "Skipping etherboot images.  Install the mkelfimage package if you need them."
         fi
         if which netabootwrap >/dev/null; then
-            if [ -f "$BOOT/$initrd" ]; then
-                netabootwrap -t $BOOT/$nbi -k $kernel -i $BOOT/$initrd
-            else
-                netabootwrap -t $BOOT/$nbi -k $kernel
-            fi
+            ABOOT_INITRD_OPT=""
+            [ -f "$BOOT/$initrd" ] && ABOOT_INITRD_OPT="-i $BOOT/$initrd"
+            netabootwrap -t $BOOT/$nbi -k $kernel $ABOOT_INITRD_OPT
         else
-            if [ -z "$netabootwrap_seen" ]; then
+            [ -z "$netabootwrap_seen" ] && netabootwrap_seen=true && \
                 msg "Skipping netabootwrap images.  Install the aboot package if you need them."
-                netabootwrap_seen=true
-            fi
         fi
         if which elftoaout >/dev/null ; then
+            SPARC_INITRD_OPT=""
             piggyback_cmd=""
             case $SUB_ARCH in
                 sparc64) piggyback_cmd=piggyback64 ;;
@@ -167,16 +159,11 @@ for kernel in $ALL_KERNELS ; do
             # TODO: proper tempfile handline
             gzip -cd $kernel > $nbi.tmp
             elftoaout -o $nbi $nbi.tmp
-            if [ -f "$BOOT/$initrd" ]; then
-                $piggyback_cmd $BOOT/$nbi $sysmap $BOOT/$initrd
-            else
-                $piggyback_cmd $BOOT/$nbi $sysmap
-            fi
+            [ -f "$BOOT/$initrd" ] && SPARC_INITRD_OPT="$BOOT/$initrd"
+            $piggyback_cmd $BOOT/$nbi $sysmap $SPARC_INITRD_OPT
         else
-            if [ -z "$sparc_piggyback_seen" ]; then
+            [ -z "$sparc_piggyback_seen" ] && sparc_piggyback_seen=true && \
                 msg "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
-                sparc_piggyback_seen=true
-            fi
         fi
     fi
 done

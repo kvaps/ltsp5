@@ -5,7 +5,7 @@
 # just exit silently
 #
 
-[ -n "${XORG_CONF}" ] && exit
+[ -n "${X_CONF}" ] && exit
 
 OUT_FILE="/etc/X11/xorg.conf"
 ORIG_CONSOLE=$(fgconsole)

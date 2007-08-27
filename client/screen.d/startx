@@ -56,16 +56,16 @@ ltsp_x_config() {
         fi
     fi
 
-    [ ! -z "${XORG_CONF}" ]; then
+    [ ! -z "${X_CONF}" ]; then
     #
-    # If XORG_CONF is defined in the lts.conf file, then
+    # If X_CONF is defined in the lts.conf file, then
     # it points to an XF86Config file that is pre-made for a workstation
     #
-        if [ -f ${XORG_CONF} ]; then
-            cp ${XORG_CONF} ${XFCFG}
+        if [ -f ${X_CONF} ]; then
+            cp ${X_CONF} ${XFCFG}
         else
             echo
-            echo "Error! - ${XORG_CONF} - File not found!"
+            echo "Error! - ${X_CONF} - File not found!"
             echo
         fi
     else
