@@ -64,6 +64,12 @@ TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
 
 # find out if we are really an nbd client and if so, build the image
 if [ -d "${CHROOT}" ]; then
+    # Check and see if user's left /proc mounted in chroot.  If so, issue
+    # a warning, and exit
+    PROC_MOUNTED=$(chroot /opt/ltsp/i386 test -f /proc/cpuinfo && echo True)
+    [ -n "${PROC_MOUNTED}" ] && \
+        echo "/proc mounted in chroot ${CHROOT}, Unmounting." && \
+        umount ${CHROOT}/proc 
     if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
         IMAGE="${IMGDIR}/${ARCH}.img"
         rm "${IMAGE}"
