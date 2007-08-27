@@ -37,10 +37,11 @@ while :; do
     # use it to populate the LDM_SERVER environment variable.
     #
 
-    [ -z "${LDM_SERVER}" ] && \
-        [ -x /usr/lib/ltsp/get_hosts ] && \
-    	LDM_SERVER=$(/usr/lib/ltsp/get_hosts) || \
+    if [ -z "${LDM_SERVER}" ] && [ -x /usr/lib/ltsp/get_hosts ]; then
+    	LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    else
     	LDM_SERVER=${SERVER}
+    fi
     export LDM_SERVER
 
     #
@@ -48,7 +49,7 @@ while :; do
     #
 
     if [ -n "${LDM_SERVER}" ]; then
-        [ ! -d /tmp/ldm ] && mkdir -p /tmp/ldm
+        test ! -d /tmp/ldm && mkdir -p /tmp/ldm
         for SRV in $LDM_SERVER ; do
             nc $SRV 9571 > /tmp/ldm/$SRV
         done

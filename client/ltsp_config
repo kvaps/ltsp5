@@ -5,7 +5,7 @@
 #
 
 # Read in lts.conf entries.
-[ -f /etc/lts.conf ] && eval $(getltscfg -a)
+test -f /etc/lts.conf && eval $(getltscfg -a)
 
 # set compatbility for ltsp 4.x variables
 X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
@@ -24,9 +24,9 @@ fi
 # specified a manual xorg config file
 #
 
-[ -z "$CONFIGURE_X" ] && [ -x /usr/bin/X ] && \
-[ -z "$X_CONF" ] && \
+if [ -z "$CONFIGURE_X" ] && [ -x /usr/bin/X ] && [ -z "$X_CONF" ]; then
     export CONFIGURE_X=True
+fi
 
 # Ensure a default screen if X is present
 if ! env | grep -q '^SCREEN_'; then
@@ -68,4 +68,6 @@ if [ -z "$SOUND_DAEMON" ]; then
 fi
 
 # set defaults for local device support
-[ -z "$LOCALDEV" ] && [ -x /usr/bin/ltspfsd ] && export LOCALDEV=True
+if [ -z "$LOCALDEV" ] && [ -x /usr/bin/ltspfsd ]; then
+    export LOCALDEV=True
+fi
