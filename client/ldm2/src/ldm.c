@@ -62,6 +62,19 @@ die(char *msg)
 }
 
 /*
+ * Print out command lines.  For debugging.
+ */
+
+void
+dump_cmdline(char *argv[])
+{
+    int i;
+
+    for (i = 0; argv[i]; i++)
+        fprintf(ldmlog, "%s ", argv[i]);
+    fprintf(ldmlog, "\n");
+}
+/*
  * scopy()
  *
  * Copy a string.  Used to move data in and out of our ldminfo structure.
@@ -101,21 +114,35 @@ ldm_getenv_bool(const char *name)
 }
 
 
-int
+/*
+ * ldm_spawn:
+ *
+ * Execute commands.  Ignore stdin and stdout.
+ */
+
+GPid
 ldm_spawn (char **argv)
 {
-    pid_t pid;
+    GPid pid;
+    gboolean res;
   
-    g_spawn_async(NULL, argv, NULL,
+    res = g_spawn_async(NULL, argv, NULL,
                   G_SPAWN_DO_NOT_REAP_CHILD |
                   G_SPAWN_STDOUT_TO_DEV_NULL |
                   G_SPAWN_STDERR_TO_DEV_NULL,
                   NULL, NULL, &pid, NULL);
+
+    if (!res) {
+        fprintf(ldmlog, "ldm_spawn failed to execute:\n");
+        dump_cmdline(argv);
+        die("Exiting ldm\n");
+    }
+
     return pid;
 }
 
 int
-ldm_wait(pid_t pid)
+ldm_wait(GPid pid)
 {
     int status;
 
@@ -131,7 +158,7 @@ ldm_wait(pid_t pid)
 void
 create_xauth()
 {
-    pid_t xauthpid;
+    GPid xauthpid;
     int status;
 
     char *xauth_command[] = {
@@ -190,7 +217,7 @@ launch_x()
 void
 rc_files(char *action)
 {
-    pid_t rcpid;
+    GPid rcpid;
 
     char *rc_cmd[] = {
         "/bin/sh",
@@ -221,8 +248,8 @@ x_session()
         "-public", 
         "-tcp",
         NULL };
-    pid_t xsessionpid;
-    pid_t esdpid = 0;
+    GPid xsessionpid;
+    GPid esdpid = 0;
     int i = 0;
 
     snprintf(ltspclienv, sizeof ltspclienv, "LTSP_CLIENT=%s", ldminfo.ipaddr);
@@ -294,7 +321,7 @@ x_session()
     cmd[i++] = ldminfo.session;
 
     if (ldminfo.localdev) {
-        cmd[i++] = "||";        /* closes bug number 121254 */
+        cmd[i++] = ";";        /* closes bug number 121254 */
         cmd[i++] = "/usr/sbin/ltspfsmounter";
         cmd[i++] = "all";
         cmd[i++] = "cleanup";
@@ -364,7 +391,7 @@ main(int argc, char *argv[])
     /*
      * openlog("ldm", LOG_PID | LOG_PERROR , LOG_AUTHPRIV);
      */
-    
+
     fprintf(ldmlog, "LDM2 starting\n");
 
     /*
@@ -400,12 +427,9 @@ main(int argc, char *argv[])
     if (*ldminfo.greeter_prog == '\0')
         scopy(ldminfo.greeter_prog, "/usr/bin/ldmgtkgreet");
     scopy(ldminfo.authfile, "/root/.Xauthority");
-    scopy(ldminfo.control_socket, "/var/run/ldm_socket");
 
     snprintf(display_env, sizeof display_env,  "DISPLAY=%s", ldminfo.display);
     snprintf(xauth_env, sizeof xauth_env, "XAUTHORITY=%s", ldminfo.authfile);
-    snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
-             ldminfo.control_socket);
 
     /* 
      * Update our environment with a few extra variables.
@@ -413,7 +437,6 @@ main(int argc, char *argv[])
 
     putenv(display_env);
     putenv(xauth_env);
-    putenv(socket_env);
 
     /*
      * Begin running display manager
@@ -435,6 +458,19 @@ main(int argc, char *argv[])
     if (get_host() ||
         *(ldminfo.server) == '\0')
         die("Couldn't get a valid hostname");
+
+    /*
+     * If we run multiple ldm sessions on multiply vty's we need separate 
+     * control sockets.
+     */
+
+    snprintf(ldminfo.control_socket, sizeof ldminfo.control_socket,
+             "/var/run/ldm_socket_%s_%s", ldminfo.vty, ldminfo.server);
+    snprintf(socket_env, sizeof socket_env, "LDM_SOCKET=%s", 
+             ldminfo.control_socket);
+    putenv(socket_env);
+    snprintf(server_env, sizeof server_env,  "LDM_SERVER=%s", ldminfo.server);
+    putenv(server_env);
 
     fprintf(ldmlog, "Establishing a session with %s\n", ldminfo.server);
 
@@ -461,8 +497,6 @@ main(int argc, char *argv[])
     if (get_session())
         die("Couldn't get a valid session setting");
 
-    snprintf(server_env, sizeof server_env,  "LDM_SERVER=%s", ldminfo.server);
-    putenv(server_env);
 
     fprintf(ldmlog, "Established ssh session.\n");
     if (ldminfo.greeterpid)

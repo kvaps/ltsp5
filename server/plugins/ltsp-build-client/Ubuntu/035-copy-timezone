@@ -1,0 +1,6 @@
+case "$MODE" in
+    finalization)
+        # Set default timezone to that of server Bug #126443
+        cp /etc/timezone $ROOT/etc/timezone
+        ;;
+esac

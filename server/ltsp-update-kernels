@@ -63,12 +63,12 @@ for TFTPDIR in $TFTPDIRS ; do
     ALL_CHROOTS="$@"
     ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d | \
                                   grep -v images)"}
-    
+
     for CHROOT in $ALL_CHROOTS ; do
         if [ -x $CHROOT/bin/true ]; then
             echo "Updating $TFTPDIR directories for chroot: $CHROOT"
             export CHROOT_NAME="$(basename $CHROOT)"
-   
+
             if [ "$COPYTFTP" = "true" ]; then
                 mkdir -p $TFTPBOOT/$CHROOT_NAME
                 cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/

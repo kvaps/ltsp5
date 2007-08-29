@@ -31,9 +31,10 @@ spawn_ssh(int fd)
 {
     char *sshcmd[MAXARGS];
     char dpy[ENVSIZE];
+    char userserver[ENVSIZE];
     char *env[3];
     int i = 0;
-    
+
     snprintf(dpy, sizeof dpy, "DISPLAY=%s", ldminfo.display);
     env[0] = "LANG=C";
     env[1] = dpy;
@@ -54,9 +55,14 @@ spawn_ssh(int fd)
         sshcmd[i++] = ldminfo.override_port;
     }
 
-    sshcmd[i++] = "-l";
-    sshcmd[i++] = ldminfo.username;
-    sshcmd[i++] = ldminfo.server;
+    /*
+     * Need to maintain user@server because cdpinger uses @ sign to find
+     * ssh parameter it needs
+     */
+
+    snprintf(userserver, sizeof userserver, "%s@%s", ldminfo.username,
+                                                    ldminfo.server);
+    sshcmd[i++] = userserver;
     sshcmd[i++] = "echo";
     sshcmd[i++] = SENTINEL;
     sshcmd[i++] = ";";
@@ -257,7 +263,7 @@ ssh_chat(int fd)
     die("Password couldn't be updated.");
     return 1;
 }
-        
+
 int
 ssh_session()
 {

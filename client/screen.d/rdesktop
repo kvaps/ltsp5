@@ -18,15 +18,9 @@
 #
 
 PATH=/bin:$PATH; export PATH
-. /usr/lib/ltsp/ltsp_functions
+. /usr/lib/ltsp/ltsp_config
  
-# Get the lts.conf entries
-eval `/usr/bin/getltscfg -a`
-
 RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
-
-reg_info RDP_SERVER
-reg_info RDP_OPTIONS
 
 TTY=`/usr/bin/basename \`/usr/bin/tty\``
 XFCFG=/tmp/XF86Config.${TTY}

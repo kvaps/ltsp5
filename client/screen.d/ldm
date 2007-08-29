@@ -2,15 +2,15 @@
 # Depend on the ldm package
 #
 # Copyright 2005, Canonical Ltd.
-# 
+#
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License with your
 # Debian GNU system, in /usr/share/common-licenses/GPL.  If not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
@@ -24,53 +24,36 @@
 . /usr/lib/ltsp/ltsp_config
 
 #
-# Set up path
-#
-
-PATH=$PATH:/usr/bin/X11
-
-#
-# Custom xorg.conf file?
-#
-
-[ ! -z "${XORG_CONF}" ] && [ -f ${XORG_CONF} ] && \
-    cp ${XORG_CONF} /etc/X11/xorg.conf
-
-#
 # Compute tty and displaynum
 #
 
 TTY=$(tty)
-case "${TTY}" in
-  /dev/tty*) # with udev (2.6 kernel)
-      TTYNUM=${TTY#/dev/tty}
-      ;;
-  /dev/vc/*) # with devfs (2.4 kernel)
-      TTYNUM=${TTY#/dev/vc/}
-      ;;
-esac
+TTYNUM=${TTY#/dev/tty}
 DISPLAYNUM=$((${TTYNUM} - 1))
 
-while true; do
+while :; do
     #
     # Server scalability.  If there exists a /usr/lib/ltsp/get_hosts file, then
     # use it to populate the LDM_SERVER environment variable.
     #
 
-    [ -x /usr/lib/ltsp/get_hosts ] && \
-        export LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
-    [ -z "${LDM_SERVER}" ] && export LDM_SERVER=${SERVER}
+    if [ -z "${LDM_SERVER}" ] && [ -x /usr/lib/ltsp/get_hosts ]; then
+    	LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    else
+    	LDM_SERVER=${SERVER}
+    fi
+    export LDM_SERVER
 
     #
     # Loop though each of the hosts, and get their ldminfo
     #
 
     if [ -n "${LDM_SERVER}" ]; then
-        [ ! -d /tmp/ldm ] && mkdir -p /tmp/ldm
+        test ! -d /tmp/ldm && mkdir -p /tmp/ldm
         for SRV in $LDM_SERVER ; do
             nc $SRV 9571 > /tmp/ldm/$SRV
         done
     fi
-        
+
     ldm vt${TTYNUM} :${DISPLAYNUM}
 done

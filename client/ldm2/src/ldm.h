@@ -23,8 +23,8 @@ struct ldm_info {
     int     greeterrfd;
     int     greeterwfd;
     pid_t   sshpid;
-    pid_t   xserverpid;
-    pid_t   greeterpid;
+    GPid    xserverpid;
+    GPid    greeterpid;
 };
 
 /* forward decls */

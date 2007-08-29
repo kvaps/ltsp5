@@ -7,6 +7,7 @@
 #
 
 SLEEP=300
+SCRIPT_DIR=/usr/lib/ltsp/screen.d
 
 # Load LTSP configuration
 . /usr/lib/ltsp/ltsp_config
@@ -42,60 +43,14 @@ else
 fi
 
 export SCREEN_NUM
-
-SCREEN_VAR=SCREEN_${SCREEN_NUM}
-eval SCREEN_CMD=\$$SCREEN_VAR
+eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
 
 SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
 SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
-#
-# Check for a missing SCREEN_01 entry in lts.conf.
-# If it is missing, but they have a RUNLEVEL entry, then
-# this is likely a lts.conf file from LTSP-3.0 or older.
-# So, lets warn them about it, but then try to do the right thing.
-#
-if [ "${SCREEN_NUM}" -eq 1 ]; then
-  if [ "${SCREEN_SCRIPT}" = "none" ]; then
-    case "${RUNLEVEL}" in
-      3)      SCREEN_SCRIPT="shell"
-              SHOW_WARNING="Y"
-              ;;
-      none|5) SCREEN_SCRIPT="startx"
-              SHOW_WARNING="Y"
-              ;;
-      *)      SCREEN_SCRIPT="none"
-              SHOW_WARNING="Y"
-              ;;
-    esac
-    if [ "${SHOW_WARNING}" = "Y" ]; then
-      echo; echo
-      echo "Warning: SCREEN_01 not set in lts.conf"
-      echo "         Please have the administrator fix this!"
-      echo; echo
-      echo "defaulting to: ${SCREEN_SCRIPT}"
-      echo
-      sleep 5s
-    fi
-  fi
+if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
+    exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
 fi
 
-if [ "${SCREEN_SCRIPT}" = "none" ]; then
-    sleep ${SLEEP}
-else
-    if [ -x /etc/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
-        #
-        # Go ahead and run the screen script
-        #
-        exec /etc/ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
-    elif [ -x /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ]; then
-        #
-        # Go ahead and run the screen script
-        #
-        exec /usr/lib/ltsp/screen.d/${SCREEN_SCRIPT} ${SCREEN_ARGS}
-    else
-        logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
-        echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
-        sleep ${SLEEP}
-    fi
-fi
+logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
