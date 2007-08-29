@@ -96,10 +96,10 @@ set_sync_ranges(){
     # so we need replacement code as well
     if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
         if [ -z "$(grep HorizSync $INPUT_FILE)"] && [ -z "$(grep VertRefresh $INPUT_FILE)"];then
+            sed -i -e '/Section "Monitor"/,3aVertRefresh='$X_VERTREFRESH'\nHorizSync\t'$X_HORZSYNC'' $INPUT_FILE
+        else
             sed -i -e 's/^\s*VertRefresh.*$/\tVertRefresh\t'$X_VERTREFRESH'/' $INPUT_FILE
             sed -i -e 's/^\s*HorizSync.*$/\tHorizSync\t'$X_HORZSYNC'/' $INPUT_FILE
-        else
-            sed -i -e '/Section "Monitor"/,3aVertRefresh='$X_VERTREFRESH'\nHorizSync='$X_HORZSYNC'' $INPUT_FILE
         fi
     fi
 }
@@ -236,6 +236,7 @@ set_default_depth || true
 hardcoded_devices || true
 append_dri || true
 add_touchscreen || true
+set_sync_ranges || true
 
 mv $INPUT_FILE $OUT_FILE
 

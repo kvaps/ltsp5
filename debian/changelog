@@ -1,3 +1,56 @@
+ltsp (5.0.24) gutsy; urgency=low
+
+  * fix typo in ltsp-update-sshkeys (Closes LP# 133443)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun, 19 Aug 2007 10:59:59 +0200
+
+ltsp (5.0.23) gutsy; urgency=low
+
+  * ldm2 merged from sbalneav:
+    * added german .po file
+    * hide cancel button again
+    * add ABOUT-NLS
+    * add scotts m4 dir
+    * Added gettext support.  i18n ahoy
+    * language selection working now.
+    * fixed problem with greeter crashing
+    * finished main functionality with greeter.  Lang, sess, and host info
+      all selectable.
+    * Major rework of the greeter.  Split functions up into multiple files.
+      Accept working in session and language windows.
+      Multihost selecting working well.
+    * Added session window
+    * No host menu if only one host
+    * Added XORG_CONF variable for manual config override.
+    * Got greeter reloading lang info on host change
+    * Merged some of fgiraldeau's code, but not the network part
+    * transition to glib
+  * Merged Gadis changes from
+    http://bazaar.launchpad.net/~gideon/ltsp/gadi-configurex-mods-ltsp:
+    * Modified confiugre-x.sh:  Added support for touchscreens and code to
+      handle sync ranges.
+  * add metacity to --kiosk mode, when did that get lost ?
+  * Updated ldminfod from Francis' tree
+  * fix default locale handling in ldminfod (locale.getdefaultlocale()
+    doesnt return anything in inetd mode)
+  * fix typo in configure-x.sh script
+  * Added usage messages to ltsp-update scripts. ltsp-update-image now
+    changes nbdport parameter in pxeconfig file
+  * Fixed command line processing using external getopt, so long and short
+    options are used. --base standard.  Added --export option to -sshkeys,
+    so that admins can export sshkeys on machines, for loading into the
+    chroot on the nbd server. -sshkeys now looks in /etc/ltsp/ssh_known_hosts.*
+    and adds all hostnames to chroot found there.
+  * And, for completeness, added -b option handling to ltsp-update-kernels
+  * Updated ltsp-update-sshkeys to also handle a -b basedir option, plus some
+    cleanup.
+  * Fixed up some problems with ltsp-update-kernels, added command line
+    processing.
+    Removed unnecessary image dir test in nbdrootd. Added -C /dev/null
+    to nbdswapd.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 15 Aug 2007 10:55:14 +0200
+
 ltsp (5.0.22) gutsy; urgency=low
 
   [Oliver Grawert]
