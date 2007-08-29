@@ -12,6 +12,12 @@ fi
 OUT_FILE="/etc/X11/xorg.conf"
 ORIG_CONSOLE=$(fgconsole)
 
+# Xorg writes some temp files, which fails if we're running an NFS mounted
+# root, because it tries to write to /.  Setting HOME avoids this.
+
+HOME=/tmp
+export HOME
+
 clear
 
 # Generate initial file
