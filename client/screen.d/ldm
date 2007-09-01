@@ -31,6 +31,28 @@ TTY=$(tty)
 TTYNUM=${TTY#/dev/tty}
 DISPLAYNUM=$((${TTYNUM} - 1))
 
+#
+# limit ram percentage.  By default, behaviour is no limit.
+# Use this to stop firefox crashing sites with pathalogically large images,
+# etc.
+#
+
+X_RAMPERC=${X_RAMPERC:-100}
+
+if [ ${X_RAMPERC} -lt 100 ]; then
+    XMEM=0
+    while read TYPE VALUE UNITS; do
+        case ${TYPE} in
+            MemFree:|SwapFree:)
+                XMEM=$((${XMEM} + ${VALUE}))
+                ;;
+        esac
+    done < /proc/meminfo
+    XMEM=$((${XMEM} * ${X_RAMPERC} / 100))
+
+    ulimit -v ${XMEM}
+fi
+
 while :; do
     #
     # Server scalability.  If there exists a /usr/lib/ltsp/get_hosts file, then
