@@ -1,0 +1,6 @@
+# set hostname to ltsp if none is received from dhcp
+while read HOSTNAME; do
+    if [ "${HOSTNAME}" = "(none)" ]; then
+        echo "ltsp" > /proc/sys/kernel/hostname
+    fi
+done < /proc/sys/kernel/hostname
