@@ -22,4 +22,4 @@ LTSP_CLIENT_DEPENDS="ltsp-client-core, xorg, $LTSP_CLIENT_COMMON"
 
 LTSP_CLIENT_RECOMMENDS=''
 
-LDM_DEPENDS='openssh-client | ssh, python, python-gtk2, python-gnome2, python-glade2, gtk2-engines-clearlooks, xserver-xorg | xserver, lsb-release'
+LDM_DEPENDS='openssh-client | ssh, gtk2-engines-clearlooks, xserver-xorg | xserver, lsb-release'
