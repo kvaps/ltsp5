@@ -3,7 +3,7 @@ client/ltsp_config usr/lib/ltsp
 client/screen.d usr/lib/ltsp
 client/getltscfg/getltscfg usr/bin
 client/initramfs/hooks/ltsp_nbd usr/share/initramfs-tools/hooks
-client/initramfs/scripts/ltsp-nbd usr/share/initramfs-tools/scripts
+client/initramfs/scripts/ltsp_nbd usr/share/initramfs-tools/scripts
 client/initramfs/scripts/nfs-bottom/ltsp usr/share/initramfs-tools/scripts/nfs-bottom
 client/initramfs/conf.d/ltsp usr/share/initramfs-tools/conf.d
 client/update-kernels usr/lib/ltsp
