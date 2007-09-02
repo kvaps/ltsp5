@@ -13,7 +13,7 @@ case "$MODE" in
 
             # install the webbrowser and a display manager that 
             # is capable to do a timed autologin in the client environment
-            KIOSK_BROWSER=${KIOSK_BROWSER:-"iceweasel"
+            KIOSK_BROWSER=${KIOSK_BROWSER:-"iceweasel"}
             KIOSK_DM=${KIOSK_DM:-"gdm"}
             KIOSK_WM=${KIOSK_WM:-"metacity"}
             KIOSK_PACKAGES=${KIOSK_PACKAGES:-"$KIOSK_BROWSER $KIOSK_DM $KIOSK_WM"}
