@@ -11,7 +11,7 @@ LTSP_SERVER_SUGGESTS='dhcp3-server, sdm, audiooss'
 LTSP_SERVER_STANDALONE_DEPENDS='ltsp-server, dhcp3-server, libasound2-plugins, ltspfs, openssh-server, nbd-server, pulseaudio-esound-compat | esound-clients | nas-bin, xbase-clients'
 LTSP_SERVER_STANDALONE_RECOMMENDS=''
 
-LTSP_CLIENT_CORE_DEPENDS='lsb-base, nbd-client, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, python, discover1, xresprobe'
+LTSP_CLIENT_CORE_DEPENDS='lsb-base, nbd-client, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, python, discover1, xresprobe, tftp-hpa'
 
 LTSP_CLIENT_COMMON='ldm | sdm-terminal | x-display-manager, pulseaudio-esound-compat | esound | nas, ltspfsd, mdetect, xdebconfigurator, alsa-utils, cryptsetup'
 
