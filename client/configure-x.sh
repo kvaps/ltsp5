@@ -23,7 +23,7 @@ export HOME
 clear
 
 # Generate initial file
-INPUT_FILE=$(LANG=C Xorg -configure :1 2>&1 |grep "Your xorg.conf file is "|tr -d '\n'|cut -d' ' -f5)
+INPUT_FILE=$(LANG=C Xorg -configure -novtswitch :1 2>&1 |grep "Your xorg.conf file is "|tr -d '\n'|cut -d' ' -f5)
 
 # Handle keyboard settings, default to console-setup settings
 handle_keyboard_settings() {
