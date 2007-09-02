@@ -89,7 +89,7 @@ if [ -d "${CHROOT}" ]; then
 fi
 
 # Make sure hosts.allow has the keepalive option for nbdrootd
-if [ ! $(grep nbdrootd /etc/hosts.allow > /dev/null 2>&1) ]; then
+if [ $(grep nbdrootd /etc/hosts.allow > /dev/null 2>&1) -eq 1 ]; then
     echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
 fi
 
