@@ -1,3 +1,36 @@
+ltsp (5.0.24debian1) UNRELEASED; urgency=low
+
+  * remove -s from LDFLAGS: don't strip getltscfg (Closes: #437540)
+    thanks to Julien Danjou
+  * set default hostname in the initramfs (Closes: #406366, #418142)
+    thanks to Damyan Ivanov and Joshua Pritikin
+
+  * sync with ubuntu:
+    - ltsp-client-core dependencies:
+      + added console-setup, libasound2-plugins, tftp-hpda dependencies
+
+    - ltsp-server dependencies:
+      + added squashfs-tools dependencies
+
+    - ldm rewrite:
+      + drop dependency on python packages
+      + includes gettext support (Closes: #432708)
+        thanks to Petter Reinholdtsen
+
+    - ltsp-build-client plugins:
+      + kiosk plugin inspired by ubuntu kiosk plugin
+      + create a default lts.conf
+      + link to default-modules plugin from Ubuntu
+      + link to copy-timezone plugin from ubuntu
+      + link to var-lib-nfs plugin from Ubuntu
+      + copy console-setup if present
+
+   * revert changes from ubuntu:
+     - keep using nfs and bind_mounts by default
+     - rename ltsp-nbd script to ltsp_nbd (needed for initramfs-tools)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun,  2 Sep 2007 10:35:32 -0700
+
 ltsp (5.0.24) gutsy; urgency=low
 
   * fix typo in ltsp-update-sshkeys (Closes LP# 133443)
