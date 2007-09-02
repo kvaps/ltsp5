@@ -11,6 +11,7 @@ case "$MODE" in
     #SOUND=False
     #LOCALDEV=False
     #CONFIGURE_X=False
+    X_COLOR_DEPTH=16
 EOF
         ;;
 esac

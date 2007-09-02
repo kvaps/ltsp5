@@ -238,6 +238,6 @@ append_dri || true
 add_touchscreen || true
 set_sync_ranges || true
 
-mv $INPUT_FILE $OUT_FILE
+cp $INPUT_FILE $OUT_FILE && rm $INPUT_FILE
 
 clear
