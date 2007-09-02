@@ -1,0 +1,20 @@
+case "$MODE" in
+    commandline)
+        add_option "copy-package-cache" "`eval_gettext "cache downloaded packages"`" "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_copy_package_cache_value" ]; then
+            COPY_PACKAGE_CACHE=true
+        fi
+        ;;
+    before-install)
+        if [ "true" = "$COPY_PACKAGE_CACHE" ]; then
+            mkdir -p $ROOT/var/cache/apt/archives/
+            cp /var/cache/apt/archives/*.deb $ROOT/var/cache/apt/archives/ || true
+        fi
+    finalization)
+        if [ "true" = "$COPY_PACKAGE_CACHE" ]; then
+            cp -u $ROOT/var/cache/apt/archives/*.deb /var/cache/apt/archives/ || true
+        fi
+        ;;
+esac
