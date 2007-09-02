@@ -1,5 +1,7 @@
 case "$MODE" in
     after-install)
-        echo ltsp > $ROOT/etc/hostname
+        # zero out the hostname file, so system hostname gotten from DHCP takes
+        # priority.
+        echo > $ROOT/etc/hostname
         ;;
 esac
