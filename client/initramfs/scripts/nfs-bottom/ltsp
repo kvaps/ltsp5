@@ -3,5 +3,4 @@ while read HOSTNAME; do
     if [ "${HOSTNAME}" = "(none)" ]; then
         echo "ltsp" > /proc/sys/kernel/hostname
     fi
-    :> ${rootmnt}/etc/hostname
 done < /proc/sys/kernel/hostname
