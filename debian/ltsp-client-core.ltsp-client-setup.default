@@ -3,7 +3,7 @@
 # bind_mounts or unionfs
 # NOTE: if you change this parameter, you must regenerate the initramfs
 # e.g., dpkg-reconfigure linux-image-<version>
-root_write_method="unionfs"
+root_write_method="bind_mounts"
 
 # tmpfs directory mounted when using tmpfs/bind
 tmpfs_dir=/var/lib/ltsp-client-setup
