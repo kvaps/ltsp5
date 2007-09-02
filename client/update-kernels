@@ -134,7 +134,7 @@ for kernel in $ALL_KERNELS ; do
                 MKELF_LINUX_OPTS="ip=dhcp"
             fi
             if [ -f "$BOOT/$initrd" ]; then
-                && MKELF_INITRD_OPT="--ramdisk=$BOOT/$initrd"
+                MKELF_INITRD_OPT="--ramdisk=$BOOT/$initrd"
             fi
             mkelfImage --command-line=$MKELF_LINUX_OPTS --output=$BOOT/$nbi \
                 --kernel=$kernel $MKELF_INITRD_OPT
