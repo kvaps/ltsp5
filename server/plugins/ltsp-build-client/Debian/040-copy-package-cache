@@ -12,6 +12,7 @@ case "$MODE" in
             mkdir -p $ROOT/var/cache/apt/archives/
             cp /var/cache/apt/archives/*.deb $ROOT/var/cache/apt/archives/ || true
         fi
+        ;;
     finalization)
         if [ "true" = "$COPY_PACKAGE_CACHE" ]; then
             cp -u $ROOT/var/cache/apt/archives/*.deb /var/cache/apt/archives/ || true
