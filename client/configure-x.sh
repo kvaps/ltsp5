@@ -5,10 +5,20 @@
 # just exit silently
 #
 
-[ -n "${X_CONF}" ] && exit
+if [ -n "${X_CONF}" ]; then
+    exit
+fi
 
 OUT_FILE="/etc/X11/xorg.conf"
 ORIG_CONSOLE=$(fgconsole)
+HOME=/tmp                   # Needed because in nfs root, Xorg -configure
+export HOME                 # tries to write to /, and fails.
+
+# Xorg writes some temp files, which fails if we're running an NFS mounted
+# root, because it tries to write to /.  Setting HOME avoids this.
+
+HOME=/tmp
+export HOME
 
 clear
 
@@ -18,7 +28,7 @@ INPUT_FILE=$(LANG=C Xorg -configure :1 2>&1 |grep "Your xorg.conf file is "|tr -
 # Handle keyboard settings, default to console-setup settings
 handle_keyboard_settings() {
     XKBOPTIONS_TMP="$XKBOPTIONS"
-    if [ -z "$XKBLAYOUT" ] && [ -z "$XKBMODEL" ];then
+    if [ -z "$XKBLAYOUT" ] && [ -z "$XKBMODEL" ]; then
         if [ -e /etc/default/console-setup ];then
             . /etc/default/console-setup
         fi
@@ -86,10 +96,10 @@ set_sync_ranges(){
     # so we need replacement code as well
     if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
         if [ -z "$(grep HorizSync $INPUT_FILE)"] && [ -z "$(grep VertRefresh $INPUT_FILE)"];then
+            sed -i -e '/Section "Monitor"/,3aVertRefresh='$X_VERTREFRESH'\nHorizSync\t'$X_HORZSYNC'' $INPUT_FILE
+        else
             sed -i -e 's/^\s*VertRefresh.*$/\tVertRefresh\t'$X_VERTREFRESH'/' $INPUT_FILE
             sed -i -e 's/^\s*HorizSync.*$/\tHorizSync\t'$X_HORZSYNC'/' $INPUT_FILE
-        else
-            sed -i -e '/Section "Monitor"/,3aVertRefresh='$X_VERTREFRESH'\nHorizSync='$X_HORZSYNC'' $INPUT_FILE
         fi
     fi
 }
@@ -226,6 +236,7 @@ set_default_depth || true
 hardcoded_devices || true
 append_dri || true
 add_touchscreen || true
+set_sync_ranges || true
 
 mv $INPUT_FILE $OUT_FILE
 

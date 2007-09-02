@@ -32,8 +32,10 @@ done
 
 # Set up variables
 BASE=${BASE:-"/opt/ltsp"}
-[ -z "${CHROOTS}" ] && CHROOTS=$(find ${BASE} -mindepth 1 -maxdepth 1 
-                                 -type d 2>/dev/null | grep -v images)
+if [ -z "${CHROOTS}" ]; then
+    CHROOTS=$(find ${BASE} -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
+              grep -v images)
+fi
 HOSTNAME=$(hostname)
 IPS=$(ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
 OUTPUT=$(tempfile)
@@ -66,7 +68,7 @@ done
 
 # Add any additional hosts
 for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
-    cat SSHHOST >> $OUTPUT
+    cat ${SSHHOST} >> $OUTPUT
 done
 
 #
@@ -79,7 +81,7 @@ done
 # If no export specified, then update local chroots.
 #
 
-if [ -n "${EXPORTFILE}" ]; then 
+if [ -n "${EXPORTFILE}" ]; then
     if [ "${EXPORTFILE}" = "-" ]; then
         cat ${OUTPUT}
     else
