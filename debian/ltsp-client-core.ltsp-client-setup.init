@@ -19,14 +19,19 @@ DESC="LTSP client setup"
 NAME=ltsp-client-setup
 SCRIPTNAME=/etc/init.d/$NAME
 
-# Gracefully exit if the package has been removed.
-test -f /usr/lib/ltsp/ltsp_functions || exit 0
 # Gracefully exit if ltsp_chroot file is not present
 test -f /etc/ltsp_chroot || exit 0
 
 . /lib/lsb/init-functions
-. /usr/lib/ltsp/ltsp_functions
 . /usr/lib/ltsp/ltsp_config
+
+boolean_is_true(){
+    case "$(echo $1 | tr 'A-Z' 'a-z')" in
+       true|y|yes) return 0 ;; 
+       *) return 1 ;; 
+    esac
+}
+
 test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
 
 load_modules() {
@@ -36,23 +41,7 @@ load_modules() {
 }
 
 configure_localdev() {
-    if boolean_is_true "$LOCALDEV" ; then
-        if [ ! -d /var/run/drives ];then
-            mkdir /var/run/drives
-        fi
-        /usr/bin/ltspfsd -a
-        # cdrom devices are handled by the cdpingerponger
-        /usr/sbin/cdpinger cdrom # default for usb cdroms
-
-        # and start one for every additional cdrom device
-        if [ -L /dev/cdrom?* ];then
-            for CDDEV in $(ls /dev/cdrom?*); do
-                /usr/sbin/cdpinger $(basename ${CDDEV})
-            done
-        fi
-        # handle already plugged devices on login
-        /usr/sbin/delayed_mounter
-    fi
+    boolean_is_true "$LOCALDEV" && mkdir /var/run/drives
 }
 
 configure_console() {
@@ -73,8 +62,10 @@ configure_swap() {
         SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
         NBD_PORT=${NBD_PORT:-"9210"}
         modprobe nbd
-        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && swap_devices="$swap_devices /dev/nbd0"
+        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && \
+            swap_devices="$swap_devices /dev/nbd0"
     fi
+
     if boolean_is_true "$ENCRYPT_SWAP" ; then
         if [ -x /sbin/cryptsetup ]; then
             modprobe dm_crypt
@@ -83,6 +74,7 @@ configure_swap() {
             swap_devices=""
         fi
     fi
+
     num=0
     for device in $swap_devices ; do
         swap="$device"
@@ -123,9 +115,11 @@ EOF
 }
 
 configure_printer() {
-    for prn_dev in $(env | awk -F= '$1 ~ /^PRINTER_[0-9]_DEVICE/ { print $1 }'); do
-        prn_no=`echo $prn_dev | cut -f2 -d'_'`
-        /usr/lib/ltsp/start_printer $prn_no &
+    for I in 0 1 2; do
+        eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
+        [ -n "${DEVICE}" ] && \
+            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} && \
+            /usr/sbin/jetpipe ${DEVICE} ${PORT}
     done
 }
 
@@ -138,9 +132,9 @@ EOF
 }
 
 configure_fstab() {
-  echo "/dev/root       /       unionfs defaults        0       0" > /etc/fstab
-  echo "tmpfs           /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
-  mount /tmp
+    echo "/dev/root     /       unionfs defaults        0       0" > /etc/fstab
+    echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
+    mount /tmp
 }
 
 # muzso: preseed() has been modified to only collect commands in a variable
@@ -151,185 +145,87 @@ preseed() {
     value="$2"
 
     if [ -n "$value" ]; then
-        if [ -n "$debconf_commands" ]; then
-          debconf_commands="${debconf_commands}\n"
-        fi
+        [ -n "$debconf_commands" ] && debconf_commands="${debconf_commands}\n"
         debconf_commands="${debconf_commands}set $question $value"
         debconf_commands="${debconf_commands}\nfset $question seen true"
     fi
 }
 
 configure_x() {
-    xserver_package=xserver-xorg
+    # If the user has specified an xorg.conf file, then copy it over.
     xserver_config="/etc/X11/xorg.conf"
-    if [ -n "$XF86CONFIG_FILE" ]; then
-        # User has specified a custom config
-        cp "$XF86CONFIG_FILE" "$xserver_config"
-    else
-      # Autoconfigure
-      if [ -n "$(which xdebconfigurator)" ]; then
-        xdebconfigurator
-      fi
-      # Handle overrides of specific parameters
-      if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
-        preseed $xserver_package/autodetect_video_card "false"
-        preseed $xserver_package/config/device/driver "$XSERVER"
-      fi
-      X_USE_SYNC_RANGES=${X_USE_SYNC_RANGES:-Y}
-      if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
-        preseed $xserver_package/autodetect_monitor "false"
-        preseed $xserver_package/config/monitor/selection-method "Advanced"
-        preseed $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
-        preseed $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
-        if [ Y = "$X_USE_SYNC_RANGES" ]; then
-            preseed $xserver_package/config/monitor/use_sync_ranges "true"
-        else
-            preseed $xserver_package/config/monitor/use_sync_ranges "false"
-        fi
-      fi
+    [ -n "$X_CONF" ] && [ -f "$X_CONF" ] && \
+        cp "$X_CONF" "$xserver_config"
+}
 
-      # Color depth preseeding
-      if [ -n "$X_COLOR_DEPTH" ]; then
-        preseed $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
-      fi
-
-      # set video ram
-      if [ -n "$X_VIDEO_RAM" ]; then
-        preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
-      fi
-
-      # Mouse preseeding options.  Use inputattach if available
+configure_serial_mouse() {
       if [ -n "$X_MOUSE_DEVICE" ] && \
-        [ -n "$X_MOUSE_PROTOCOL" ] && \
-        type inputattach >/dev/null 2>/dev/null && \
-        [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
+          [ -n "$X_MOUSE_PROTOCOL" ] && \
+          type inputattach >/dev/null 2>/dev/null && \
+          [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
           inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
-      else
-        if [ -n "$X_MOUSE_DEVICE" ]; then 
-          preseed $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
-        fi
-        if [ -n "$X_MOUSE_PROTOCOL" ]; then 
-          preseed $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
-        fi
       fi
-      if [ -n "$X_MOUSE_EMULATE3BTN" ]; then
-        preseed $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
-      fi
-
-      X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
-      if [ -n "$X_MODE" ]; then
-	    preseed $xserver_package/config/display/modes "$X_MODE"
-      fi
-
-      # This require fontserver preseeding to work (Debian bug
-      # #323262, fixed in xorg-x11 version 6.8.99.901.dfsg.1-1).
-      # Also done using code in screen.d/startx and screen.d/ldm until
-      # the xorg-x11 version make it into unstable and testing.
-      if [ Y = "${USE_XFS}" ] ; then
-        if [ -z "${XFS_SERVER}" ] ; then
-          XFS_SERVER="${SERVER}"
-        fi
-        preseed $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
-      fi
-
-      # Make sure xkb values only get preseeded if the variables are actually set
-      # (saves boottime to not call debconf-communicate on every empty value)
-      if [ -n "$XKBLAYOUT" ]; then
-        preseed $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
-      fi
-      if [ -n "$XKBMODEL" ]; then
-        preseed $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
-      fi
-      if [ -n "$XKBRULES" ]; then
-        preseed $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
-      fi
-      if [ -n "$XKBOPTIONS" ]; then
-        preseed $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
-      fi
-      if [ -n "$XKBVARIANT" ]; then
-        preseed $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
-      fi
-
-      # muzso: saving "preseeded" values
-      if [ -n "$debconf_commands" ]; then
-        echo $debconf_commands | debconf-communicate $xserver_package
-      fi
-
-      # Autoconfigure using dexconf when using xdebconfigurator, or X
-      # package postinst if not.  Using dexconf directly might save
-      # some memory on the client.
-      if [ -n "$(which xdebconfigurator)" ] &&
-         [ "$root_write_method" = "bind_mounts" ]; then
-        # Using dexconf instead of reconfigure to save memory ?
-        dexconf -o $xserver_config
-      else
-        dpkg-reconfigure -fnoninteractive -pcritical $xserver_package
-      fi
-    fi
 }
 
 bind_mounts () {
-  # set defaults
-  test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
-  test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
-  test -z "$copy_dirs" && copy_dirs=""
-  test -z "$temp_copy_dirs" && temp_copy_dirs="/var/cache/debconf"
-  test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
-  mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
-  # preserve directory structure
-  for d in $rw_dirs ; do
-    if [ -d "$d" ]; then
-      cd $tmpfs_dir
-      tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
-      mount --bind $tmpfs_dir/$d $d
-    else
-      echo "WARNING: $d does not exist"
-    fi
-  done  
-  # copy contents into tmpfs
-  for d in $copy_dirs $temp_copy_dirs; do
-    if [ -d "$d" ]; then
-      cd $tmpfs_dir
-      tar -cpf - $d 2> /dev/null | tar xpf -
-      mount --bind $tmpfs_dir/$d $d
-    else
-      echo "WARNING: $d does not exist"
-    fi
-  done
-  # mount one file on top of another
-  for f in $bindfiles ; do
-    if [ -e "$f" ]; then
-      mkdir -p "$(dirname $tmpfs_dir/$f)"
-      cp $f $tmpfs_dir/$f
-      mount --bind $tmpfs_dir/$f $f
-    else
-      echo "WARNING: $f does not exist"
-    fi
-  done
+    # set defaults
+    test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
+    test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
+    test -z "$copy_dirs" && copy_dirs=""
+    test -z "$temp_copy_dirs" && temp_copy_dirs="/var/cache/debconf"
+    test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
+    mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
+    # preserve directory structure
+    for d in $rw_dirs ; do
+        if [ -d "$d" ]; then
+            cd $tmpfs_dir
+            tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist"
+        fi
+    done
+    # copy contents into tmpfs
+    for d in $copy_dirs $temp_copy_dirs; do
+        if [ -d "$d" ]; then
+            cd $tmpfs_dir
+            tar -cpf - $d 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist"
+        fi
+    done
+    # mount one file on top of another
+    for f in $bindfiles ; do
+        if [ -e "$f" ]; then
+            mkdir -p "$(dirname $tmpfs_dir/$f)"
+            cp $f $tmpfs_dir/$f
+            mount --bind $tmpfs_dir/$f $f
+        else
+            echo "WARNING: $f does not exist"
+        fi
+    done
 }
 
 bind_unmounts() {
-  for dir in $temp_copy_dirs; do
-    umount $dir
-    rm -rf $tmpfs_dir/${dir#/}
-  done
+    for dir in $temp_copy_dirs; do
+        umount $dir
+        rm -rf $tmpfs_dir/${dir#/}
+    done
 }
 
 run_rcfiles() {
-  for rcfile in $(env | sort | awk -F= '$1 ~ /^RCFILE_/ { print $2 }'); do
-    if [ -x "$rcfile" ]; then
-      "$rcfile" $@
-    fi
-  done
+    for rcfile in $(env | sort | awk -F= '$1 ~ /^RCFILE_/ { print $2 }'); do
+        [ -x "$rcfile" ] && "$rcfile" $@
+    done
 }
 
 case "$1" in
-  start)
+    start)
         log_begin_msg "Setting up LTSP client..."
-	type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 120" || true
-        if [ "$root_write_method" = "bind_mounts" ]; then
-          bind_mounts
-        fi
+	    type usplash_write >/dev/null 2>/dev/null && \
+            usplash_write "TIMEOUT 120" || true
+        [ "$root_write_method" = "bind_mounts" ] && bind_mounts
         load_modules || true
         configure_console || true
         configure_resolver || true
@@ -337,39 +233,33 @@ case "$1" in
         configure_syslog || true
         configure_fstab || true
         run_rcfiles || true
-        if boolean_is_true "$CONFIGURE_X" ; then
-            configure_x || true
-        fi
+        configure_x || true
+        configure_serial_mouse || true
         configure_printer || true
-
-	if [ "$root_write_method" = "bind_mounts" ]; then
-          bind_unmounts
-        fi
-
+	    [ "$root_write_method" = "bind_mounts" ] && bind_unmounts
         log_end_msg 0
-	;;
-  stop)
-#	echo -n "Stopping $DESC: $NAME"
-#	d_stop
-#	echo "."
-	;;
-  restart|force-reload)
-	#
-	#	If the "reload" option is implemented, move the "force-reload"
-	#	option to the "reload" entry above. If not, "force-reload" is
-	#	just the same as "restart".
-	#
-	echo -n "Restarting $DESC: $NAME"
-	d_stop
-	sleep 1
-	d_start
-	echo "."
-	;;
-  *)
-	# echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
-	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-	exit 1
-	;;
+	    ;;
+    stop)
+        #	echo -n "Stopping $DESC: $NAME"
+        #	d_stop
+        #	echo "."
+	    ;;
+    restart|force-reload)
+	    #
+	    #	If the "reload" option is implemented, move the "force-reload"
+    	#	option to the "reload" entry above. If not, "force-reload" is
+	    #	just the same as "restart".
+	    #
+	    echo -n "Restarting $DESC: $NAME"
+	    d_stop
+	    sleep 1
+	    d_start
+	    echo "."
+	    ;;
+    *)
+	    echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	    exit 1
+	    ;;
 esac
 
 exit 0

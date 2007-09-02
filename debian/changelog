@@ -1,3 +1,227 @@
+ltsp (5.0.24) gutsy; urgency=low
+
+  * fix typo in ltsp-update-sshkeys (Closes LP# 133443)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Sun, 19 Aug 2007 10:59:59 +0200
+
+ltsp (5.0.23) gutsy; urgency=low
+
+  * ldm2 merged from sbalneav:
+    * added german .po file
+    * hide cancel button again
+    * add ABOUT-NLS
+    * add scotts m4 dir
+    * Added gettext support.  i18n ahoy
+    * language selection working now.
+    * fixed problem with greeter crashing
+    * finished main functionality with greeter.  Lang, sess, and host info
+      all selectable.
+    * Major rework of the greeter.  Split functions up into multiple files.
+      Accept working in session and language windows.
+      Multihost selecting working well.
+    * Added session window
+    * No host menu if only one host
+    * Added XORG_CONF variable for manual config override.
+    * Got greeter reloading lang info on host change
+    * Merged some of fgiraldeau's code, but not the network part
+    * transition to glib
+  * Merged Gadis changes from
+    http://bazaar.launchpad.net/~gideon/ltsp/gadi-configurex-mods-ltsp:
+    * Modified confiugre-x.sh:  Added support for touchscreens and code to
+      handle sync ranges.
+  * add metacity to --kiosk mode, when did that get lost ?
+  * Updated ldminfod from Francis' tree
+  * fix default locale handling in ldminfod (locale.getdefaultlocale()
+    doesnt return anything in inetd mode)
+  * fix typo in configure-x.sh script
+  * Added usage messages to ltsp-update scripts. ltsp-update-image now
+    changes nbdport parameter in pxeconfig file
+  * Fixed command line processing using external getopt, so long and short
+    options are used. --base standard.  Added --export option to -sshkeys,
+    so that admins can export sshkeys on machines, for loading into the
+    chroot on the nbd server. -sshkeys now looks in /etc/ltsp/ssh_known_hosts.*
+    and adds all hostnames to chroot found there.
+  * And, for completeness, added -b option handling to ltsp-update-kernels
+  * Updated ltsp-update-sshkeys to also handle a -b basedir option, plus some
+    cleanup.
+  * Fixed up some problems with ltsp-update-kernels, added command line
+    processing.
+    Removed unnecessary image dir test in nbdrootd. Added -C /dev/null
+    to nbdswapd.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 15 Aug 2007 10:55:14 +0200
+
+ltsp (5.0.22) gutsy; urgency=low
+
+  [Oliver Grawert]
+  * added ldm screen scripts for screensaver and compiz handling
+  * added nbdroot fixes from MrMoo
+  * hide cancel button
+  * added host selector icon to all themes
+
+  [Scott Balneaves]
+  * New ldm screen script
+  * Lots of work.  Converted to all static memory, to eliminate leaks.  Fixed
+    login failures, control-alt-backspace resets, etc.
+  * Closes Launchpad bug 105709: updated 80_ltsp-sound to address unsafe quoting.
+  * Added cancel button to greeter
+  * Added host selection box to ldmgtkgreet
+  * fixed some bugs, added login status message
+  * Cleaned up username and password handling a bit
+  * Password expiry working.  Goto's eliminated. World saved.  more to do
+  * Fixed bug in ldminfod
+  * Closes Launchpad Bug #127516.  The delayed_mounter isn't needed with ldm2
+  * Beginnings of password expiry
+  * Added rdesktop script courtesy Colin Osterhout
+  * Touched up jetpipe a bit: don't keep remaking socket
+  * Got autologin working
+  * Closes Launchpad bug # 121254
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 01 Aug 2007 16:32:53 +0200
+
+ltsp (5.0.21) gutsy; urgency=low
+
+  * add new X configuratin script, update teh initscripts for that
+  * add asound plugins to ltsp-client for oss support for the HW that
+    still has no alsa drivers
+  * fixed deps and maintainer in control.Ubuntu
+  * make pulse startup not depend on syslog
+  * no, we dont want next-server in the default dhcpd.conf
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 17 Jul 2007 10:18:30 +0200
+
+ltsp (5.0.20) gutsy; urgency=low
+
+  * fix handling of mounted cdroms in ltsp-update-image
+  * drop the unused excludes from mksquashfs
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 26 Jun 2007 21:12:44 +0200
+
+ltsp (5.0.19) gutsy; urgency=low
+
+  * fix nbdrootd to reflect teh new nbd-server syntax
+  * fix the libgl1-mesa-dri dep of ltsp-client-core again
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 25 Jun 2007 12:13:50 +0200
+
+ltsp (5.0.18) gutsy; urgency=low
+
+  * added missing theme flavors for kubuntu and xubuntu
+  * added ldm2 theme support
+  * fixed manpage location in the ldm package
+  * make sure autogen.sh is run from 'debian/rules bzr-release' we dont want
+    autofoo crap in the source tree
+  * Merged scotts initial greeter implementation of a status message entry.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 21 Jun 2007 16:45:16 +0200
+
+ltsp (5.0.17) gutsy; urgency=low
+
+  * new LDM !!!
+    * add new C based ldm from Scott Balneaves <sbalneav@ltsp.org>
+    * add new C based ldm gtk greeter
+    * clean up ldm-deps
+    * add libgtk2.0-dev to ltsp build-deps
+    * switch ldm to arch any
+    * add new ldm.install file
+    * comment out theme selection in ldm.postinst (no themeing yet)
+    * add handling of new ldm and greeter to debian/rules
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 20 Jun 2007 12:32:18 +0200
+
+ltsp (5.0.16) gutsy; urgency=low
+
+  * make sure we dont wait less for devices during boot
+  * make sure proc isnt mounted inside the chroot while we build the squashfs
+    image
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 13 Jun 2007 13:55:30 +0200
+
+ltsp (5.0.15) gutsy; urgency=low
+
+  * exclude proc sys and tmp from mksqaushfs
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 12 Jun 2007 20:57:34 +0200
+
+ltsp (5.0.14) gutsy; urgency=low
+
+  * also rename the ltsp-nbd hook in the .install file (silly me)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 12 Jun 2007 17:07:31 +0200
+
+ltsp (5.0.13) gutsy; urgency=low
+
+  * fix the path handling for lts.conf in initramfs
+  * change bootscript whitelist name to ltsp-client-core, else we dont have a
+    client starting
+  * make squashfs image world readable so nbd-server can serve it
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 12 Jun 2007 16:39:41 +0200
+
+ltsp (5.0.12) gutsy; urgency=low
+
+  * move ltsp-nbd hook to ltsp_nbd to please update-initramfs
+  * drop duplicated dependency on inputattach
+  * make sure we only move the newly built image around to not corrupt the
+    existing one
+  * add tftp-hpa to ltsp-client-core deps for the new lts.conf in
+    initramfs feature
+  * fix debian/control.Ubuntu quotation
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 12 Jun 2007 14:59:33 +0200
+
+ltsp (5.0.11) gutsy; urgency=low
+
+  * add dependency on squashfs-tools for the nbd-root to ltsp-server
+  * default to no xorg.conf and no X autoconfiguration, xorg can do that at
+    runtime now :)
+  * add first implementation of squashfs nbd-root
+  * merge mainline changes from http://bazaar.launchpad.net/~ltsp-drivers/ltsp/mainline
+    * drop /etc/X11/XF86Config-4 from list of files to bind mount
+    * add xbase-clients to ltsp-server-standalone
+    * make related sound programs a hard dependency on ltsp-server-standalone (Debian)
+    * remove code for after-installation and finalization (functionality was moved to
+      other plugins).
+    * get DIST from lsb_release
+    * generate the control file when doing bzr-release
+    * move packages from EARLY_PACKAGES to ltsp-client dependencies for Debian.
+    * clean up sound dependencies for debian
+    * move more packages listed in EARLY_PACKAGES into ltsp-client dependencies.
+    * clean up sound related dependencies.
+    * merge patches to split ltsp-client into two packages
+      * grab templates from ltsp-client-core now.
+      * split ltsp-client into two packages: ltsp-client-core and ltsp-client
+      * merge bugfix in configure_x function
+        - add ltsp-client dependency on discover1 and xresprobe
+        - remove unnecessary packages from EARLY_PACKAGES variables
+      * only configure X if it is installed
+      * enable localdev if not configured and ltspfsd is installed
+      * enable sound if not configured and a known sound daemon is installed
+    * merge patches for debian/control generation, to reduce debian/ubuntu conflicts.
+    * added control bits for Ubuntu
+    * drop packages no longer in debian
+    * add controlgen rule for generating debian/control
+    * generate debian/control rather than maintaining in revision control
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 11 Jun 2007 15:53:04 +0200
+
+ltsp (5.0.10) gutsy; urgency=low
+
+  * drop unneeded libgl1-mesa-dri from EARLY_PACKAGES, libgl1-mesa-glx
+    replaces it
+  * no, we dont want any esound dependencies for ltsp-server we also dont
+    want nas (merge mistake from debian)
+  * fix distro and apt option handling in 000-basic-configuration, clean
+    up RC whitelists
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 05 Jun 2007 14:26:18 +0200
+
+ltsp (5.0.9) gutsy; urgency=low
+
+  * change default distro to gutsy
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 31 May 2007 13:58:14 +0200
+
 ltsp (5.0.8debian3) unstable; urgency=low
 
   [ Christian Perrier ]

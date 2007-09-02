@@ -2,35 +2,58 @@
 # Depend on the ldm package
 #
 # Copyright 2005, Canonical Ltd.
-# 
+#
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License with your
 # Debian GNU system, in /usr/share/common-licenses/GPL.  If not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
 
+#
+# Load ltsp config defaults
+#
+
 . /usr/lib/ltsp/ltsp_config
 
-# XXX
-PATH=$PATH:/usr/bin/X11
+#
+# Compute tty and displaynum
+#
 
-tty=$(tty)
-case "$tty" in
-  /dev/tty*) # with udev (2.6 kernel)
-      ttynum=${tty#/dev/tty}
-      ;;
-  /dev/vc/*) # with devfs (2.4 kernel)
-      ttynum=${tty#/dev/vc/}
-      ;;
-esac
-displaynum=$(($ttynum - 1))
+TTY=$(tty)
+TTYNUM=${TTY#/dev/tty}
+DISPLAYNUM=$((${TTYNUM} - 1))
 
-exec ldm vt$ttynum :$displaynum
+while :; do
+    #
+    # Server scalability.  If there exists a /usr/lib/ltsp/get_hosts file, then
+    # use it to populate the LDM_SERVER environment variable.
+    #
+
+    if [ -z "${LDM_SERVER}" ] && [ -x /usr/lib/ltsp/get_hosts ]; then
+    	LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+    else
+    	LDM_SERVER=${SERVER}
+    fi
+    export LDM_SERVER
+
+    #
+    # Loop though each of the hosts, and get their ldminfo
+    #
+
+    if [ -n "${LDM_SERVER}" ]; then
+        test ! -d /tmp/ldm && mkdir -p /tmp/ldm
+        for SRV in $LDM_SERVER ; do
+            nc $SRV 9571 > /tmp/ldm/$SRV
+        done
+    fi
+
+    ldm vt${TTYNUM} :${DISPLAYNUM}
+done

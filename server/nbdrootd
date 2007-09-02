@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# copyright 2007 Canonical LTD., Oliver Grawert <ogra@ubuntu.com>,
+# distributed under the terms of the GNU General Public License
+# version 2 or any later version.
+
+# nbd-server wrapper that serves an ltsp squashfs image
+# start the blockdevice server
+/bin/nbd-server 0 $1 -r -C /dev/null > /dev/null 2>&1

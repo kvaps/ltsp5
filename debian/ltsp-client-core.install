@@ -1,13 +1,10 @@
 client/screen_session usr/lib/ltsp
-client/start_printer usr/lib/ltsp
-client/start_telnet usr/lib/ltsp
-client/telnet_loop usr/lib/ltsp
-client/ltsp_functions usr/lib/ltsp
 client/ltsp_config usr/lib/ltsp
 client/screen.d usr/lib/ltsp
 client/getltscfg/getltscfg usr/bin
-client/initramfs/init-bottom/unionfs_cow usr/share/ltsp-client
-client/initramfs/hooks/ltsp_client usr/share/initramfs-tools/hooks
+client/initramfs/hooks/ltsp_nbd usr/share/initramfs-tools/hooks
+client/initramfs/scripts/ltsp-nbd usr/share/initramfs-tools/scripts
 client/initramfs/conf.d/ltsp usr/share/initramfs-tools/conf.d
 client/update-kernels usr/lib/ltsp
+client/configure-x.sh usr/lib/ltsp
 client/jetpipe/jetpipe  usr/sbin
