@@ -2,7 +2,7 @@ case "$MODE" in
     finalization)
         rc_cleanup() {
             LEVEL=$1; shift
-        
+
             if [ $(echo $LEVEL| grep [2-5]) ]; then
                 suffix="2 3 4 5"
                 echo "Cleaning up startup links in init levels: $suffix ..."
@@ -10,13 +10,13 @@ case "$MODE" in
                 suffix=$LEVEL
                 echo "Cleaning up startup links in rc$suffix.d ..."
             fi
-        
+
             RC_DIR=$(cd $ROOT/etc/rc$LEVEL.d/; ls S*)
-        
+
             for match in $@; do
                 RC_DIR=$(echo "$RC_DIR"|sed "s/S[0-9]*$match$//g")
             done
-        
+
             for link in $RC_DIR; do
                 name=$(echo $link|sed s/^S[0-9]*//g)
                 seq_number=$(printf %.2s $(echo $link|sed s/[a-z,\.,S,K,-]*//g))
@@ -31,6 +31,12 @@ case "$MODE" in
         fi
         if [ -n "$RC2_WHITELIST" ]; then
             rc_cleanup 2 $RC2_WHITELIST
+        fi
+        if [ -n "$RC6_WHITELIST" ]; then
+            rc_cleanup 6 $RC6_WHITELIST
+        fi
+        if [ -n "$RC0_WHITELIST" ]; then
+            rc_cleanup 0 $RC0_WHITELIST
         fi
         ;;
 esac
