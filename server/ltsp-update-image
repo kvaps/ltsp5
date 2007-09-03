@@ -89,12 +89,12 @@ if [ -d "${CHROOT}" ]; then
 fi
 
 # Make sure hosts.allow has the keepalive option for nbdrootd
-if [ ! $(grep nbdrootd /etc/hosts.allow > /dev/null 2>&1) ]; then
+if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
     echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
 fi
 
 # If the image is already in inetd.conf, and not commented out, exit ok
-if grep ${IMAGE} /etc/inetd.conf | grep -v "^#" > /dev/null 2>&1 ; then
+if [ -n "$(grep ${IMAGE} /etc/inetd.conf | grep -v '^#')" ] ; then
     exit 0
 fi
 

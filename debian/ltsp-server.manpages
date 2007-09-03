@@ -1,5 +1,7 @@
 debian/doc/ltsp-build-client.8
 debian/doc/ltsp-update-kernels.8
 debian/doc/ltsp-update-sshkeys.8
+debian/doc/ltsp-update-image.8
 debian/doc/nbdswapd.8
+debian/doc/nbdrootd.8
 debian/doc/ldminfod.8

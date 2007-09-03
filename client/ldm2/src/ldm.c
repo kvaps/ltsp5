@@ -263,10 +263,7 @@ x_session()
     }
 
     cmd[i++] = "/usr/bin/ssh";
-
-    if (!ldminfo.directx)
-        cmd[i++] = "-X";
-
+    cmd[i++] = "-X";
     cmd[i++] = "-t";
     cmd[i++] = "-S";
     cmd[i++] = ldminfo.control_socket;
