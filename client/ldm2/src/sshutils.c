@@ -41,10 +41,7 @@ spawn_ssh(int fd)
     env[2] = NULL;
 
     sshcmd[i++] = "/usr/bin/ssh";
-
-    if (!ldminfo.directx)
-        sshcmd[i++] = "-X";
-
+    sshcmd[i++] = "-X";
     sshcmd[i++] = "-t";
     sshcmd[i++] = "-M";
     sshcmd[i++] = "-S";
