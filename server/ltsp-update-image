@@ -100,7 +100,7 @@ fi
 
 # Check and see if our desired port is already there.
 if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
-    echo "Error: port ${PORT} is already defined in inetd.conf"
+    echo "Info: port ${PORT} is already defined in inetd.conf"
     exit 1
 fi
 
@@ -109,6 +109,8 @@ update-inetd --group LTSP --add "${PORT}                   stream  tcp\
     nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
 
 # If port's been specified, set the port.
+# Thats very ugly and needs to go to the config file in the chroot, 
+# else port is lost after ltsp-update-image is run
 
 if [ -n "${PORT}" ] ; then
     for TFTPDIR in $TFTPDIRS ; do
