@@ -1,4 +1,4 @@
-ltsp (5.0.24debian1) UNRELEASED; urgency=low
+ltsp (5.0.25debian1) UNRELEASED; urgency=low
 
   * remove -s from LDFLAGS: don't strip getltscfg (Closes: #437540)
     thanks to Julien Danjou
@@ -30,6 +30,48 @@ ltsp (5.0.24debian1) UNRELEASED; urgency=low
      - rename ltsp-nbd script to ltsp_nbd (needed for initramfs-tools)
 
  -- Vagrant Cascadian <vagrant@freegeek.org>  Sun,  2 Sep 2007 10:35:32 -0700
+
+ltsp (5.0.25) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * Clean up rc links for reboot and shutdown
+  * fix sync range handling in x config script
+
+  [Vagrant Cascadian <vagrant@freegeek.org>]
+  * Drop Debian-Edu themes as Debian-Edu can handle them separately.
+  * Symlink common files from the Debian theme to the edubuntu theme
+  * Use debian's logo for the Debian theme
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * fgiraldeau pointed out a bug with nfs roots that prevents the X
+    configurator from running.  Doesn't affect nbd roots
+  * Some style cleanups, after discussion with vagrantc, and a very brief
+    CodingStyle document
+  * Check for a mounted /proc under the chroot in ltsp-update-image
+  * Merged translation files from debian
+  * To ensure uniqeness, sockets are now of the form
+    /var/run/ldm_socket_vt[x]_ww.xx.yy.zz, where [x] is the vty number
+    of ldm, and ww.xx.yy.zz is the ip address of the server connected to.
+  * Change XORG_CONF to X_CONF per secret LTSP cabal vote
+  * Drop XF86CONFIG_FILE handling, as it's handled in ltsp_config
+  * Simplified backwards compatibility with XF86CONFIG_FILE
+  * Ditch old 2.4 kernel stuff in ldm startscript
+  * Added code for handling mkelfImage, cleaned up example dhcpd.conf file a
+    bit, removed the old python greeter
+  * Fixed typos
+  * Cleaned up ldmgtkgreet, got hosts appearing in same order as LDM_SERVER
+  * Some cleanup on the init functions, properly implement the XF86CONFIG_FILE
+    and XORG_CONF options
+  * Whoops, bashisms
+  * Cleanup of printer, telnet, screen scripts, remove cruft
+  * Fixed ltspfs security
+  * Fixed kiosk plugin (LP #114391).
+  * Added a plugin for copying the server's /etc/timezone to the chroot.
+    (LP #126443)
+  * Fixed bug where you can only run one concurrent ldm
+  * Cleaned up some code, more ldm glibifying
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 30 Aug 2007 00:12:08 +0200
 
 ltsp (5.0.24) gutsy; urgency=low
 
