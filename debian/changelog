@@ -1,3 +1,10 @@
+ltsp (5.0.27) gutsy; urgency=low
+
+  * add new 010-debconf-frontend to Ubuntu to make the udeb
+    changes actually work.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 06 Sep 2007 15:11:12 +0200
+
 ltsp (5.0.26) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
