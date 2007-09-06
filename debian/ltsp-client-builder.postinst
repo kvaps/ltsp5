@@ -31,9 +31,8 @@ if db_get ltsp-client-builder/build-client-opts && [ -n "$RET" ] ; then
     log "ltsp-build-client options: $BUILD_CLIENT_OPTS"
 fi
 
-# if everything is fine, run ltsp-build-client on the target disk
-
-db_progress START 0 2 ltsp-client-builder/progress
+# build the chroot
+db_progress START 0 1800 ltsp-client-builder/progress
 
 apt-install ltsp-server
 
@@ -42,10 +41,65 @@ db_progress STEP 1
 # workaround for: http://bugs.debian.org/390647
 in-target /bin/touch /etc/resolv.conf
 
-DEBIAN_PRIORITY=critical
-in-target /usr/sbin/ltsp-build-client $BUILD_CLIENT_OPTS
+FIFO=/tmp/ltsp-build-client
+LOG=/var/log/ltsp-build-client.log
 
-db_progress STEP 1
+if [ ! -p $FIFO ]; then
+    mkfifo $FIFO
+fi
+
+DEBIAN_PRIORITY=critical
+in-target ltsp-build-client $BUILD_CLIENT_OPTS >$FIFO 2>&1 &
+
+while read line <&9; do
+    db_progress STEP 1
+    echo $line >>$LOG
+done 9<$FIFO
+
+db_progress SET 1800
+
+sleep 3
+
+db_progress STOP
+
+rm $FIFO
+
+# save the log
+if [ ! -d /taget/var/log/ltsp-build ]; then
+    mkdir -p /taget/var/log/ltsp-build
+fi
+mv $LOG /taget/var/log/ltsp-build
+
+# compress the image
+# (we need the percentage of mksquashfs' output 
+# need to pipe through a file ...)
+
+COMPRESS_LOG=/var/log/ltsp-image-build.log
+
+in-target ltsp-update-image >$COMPRESS_LOG 2>&1 &
+
+db_progress START 0 100 ltsp-client-builder/compress
+
+OLDVAL=0
+while [ -z ${LOOP} ]; do
+    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
+    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
+        val=$(echo $rawval|tr -d %)
+        if [ "$val" -gt 96 ]; then
+            db_progress SET 100
+            sleep 3
+            LOOP="False"
+        else
+            if [ "$val" -gt "${OLDVAL}" ];then
+                db_progress SET $val
+                OLDVAL=$val
+            fi
+        fi
+    fi
+done
+
+# save compression log
+mv $COMPRESS_LOG /taget/var/log/ltsp-build/
 
 db_progress STOP
 
