@@ -12,7 +12,11 @@ _Description: Build LTSP chroot
 
 Template: ltsp-client-builder/progress
 Type: text
-_Description: Building LTSP chroot...
+_Description: Building Thin Client system ...
+
+Template: ltsp-client-builder/compress
+Type: text
+_Description: Compressing Thin Client image ...
 
 Template: ltsp-client-builder/build-client-opts
 Type: string
@@ -24,7 +28,7 @@ Description: arguments for ltsp-build-client:
 Template: ltsp-client-builder/dhcp-manual
 Type: note
 _Description: No Interface for LTSP dhcpd configuration found
- There are no free interfaces for usage with the LTSP Server. Please configure the file /etc/ltsp/dhcpd.conf 
+ There are no free interfaces for usage with the LTSP Server. Please configure the file /etc/ltsp/dhcpd.conf
  manually to point to a valid static interface after the installation finished.
 
 Template: ltsp-client-builder/dhcp-interface
@@ -32,4 +36,4 @@ Type: select
 Choices: ${choices}
 _Description: Interface for the thin client network:
  There were multiple spare interfaces found in this system.
- 
+
