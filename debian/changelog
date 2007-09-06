@@ -1,3 +1,38 @@
+ltsp (5.0.27) gutsy; urgency=low
+
+  * add new 010-debconf-frontend to Ubuntu to make the udeb
+    changes actually work.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 06 Sep 2007 15:11:12 +0200
+
+ltsp (5.0.26) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * new udeb postinst (and new template) added, fixes (LP: #121547)
+    we have full progress reporting in teh installer now :)
+  * added option --skipimage to ltsp-build-client to supress ltsp-update-image
+    execution in d-i (we run it separately in the udeb)
+  * its not an error if the port is set in inetd.conf.
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * Close LP: #137461
+  * added missing manpages for ltsp-update-image, and nbdrootd
+  * Fix a couple of debian control issues
+  * Fix bug with localdev: encrypt tunnel for X forwarding for all things.
+    LDM_DIRECTX will override X, but all other communication should be
+    encrypted
+  * since we're zeroing /etc/hostname in the plugin, don't need to do it in
+    the initramfs, add plugin to Ubuntu
+  * fixing problem with hostnames not being set in the client, even if
+    they're specified in dhcpd
+  * Added ram limiting from old 4.2, fixed typo
+
+  [Vagrant Cascadian <vagrant@freegeek.org>]
+  * merged patch to set hostname from the initramfs
+  * merge with scotts-gutsy, *except* keep debian logo.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 06 Sep 2007 13:24:27 +0200
+
 ltsp (5.0.25) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
