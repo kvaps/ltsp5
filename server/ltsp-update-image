@@ -103,7 +103,7 @@ fi
 # Check and see if our desired port is already there.
 if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
     echo "Info: port ${PORT} is already defined in inetd.conf"
-    exit 1
+    exit 0
 fi
 
 # Update inetd.conf
