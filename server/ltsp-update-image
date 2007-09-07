@@ -86,12 +86,8 @@ if [ -d "${CHROOT}" ]; then
         mv "${IMAGE}.tmp" "${IMAGE}"
         chmod 0744 "${IMAGE}"
     else
-        NON_NBD="true"      # Not an NBD image
+        exit 0      # Not an NBD image
     fi
-fi
-
-if [ -n "${NON_NBD}" ]; then
-    exit 0                  # Don't need to do any more checking
 fi
 
 # Make sure hosts.allow has the keepalive option for nbdrootd
