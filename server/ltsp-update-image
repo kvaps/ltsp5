@@ -65,66 +65,71 @@ if [ -f /etc/default/ltsp-update-image ]; then
     . /etc/default/ltsp-update-image
 fi
 
-# make sure the images dir exists
-if [ ! -d ${IMGDIR} ]; then
-    mkdir -p ${IMGDIR}
-fi
-
-# find out if we are really an nbd client and if so, build the image
-if [ -d "${CHROOT}" ]; then
-    # Check and see if user's left /proc mounted in chroot.  If so, issue
-    # a warning, and exit
-    PROC_MOUNTED=$(chroot /opt/ltsp/i386 test -f /proc/cpuinfo && echo True)
-    if [ -n "${PROC_MOUNTED}" ]; then
-        echo "/proc mounted in chroot ${CHROOT}, Unmounting."
-        umount ${CHROOT}/proc
-    fi
-    if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
-        IMAGE="${IMGDIR}/${ARCH}.img"
-        rm "${IMAGE}"
-        mksquashfs "${CHROOT}" "${IMAGE}.tmp" -e cdrom
-        mv "${IMAGE}.tmp" "${IMAGE}"
-        chmod 0744 "${IMAGE}"
-    fi
-fi
-
-# Make sure hosts.allow has the keepalive option for nbdrootd
-if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
-    echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
-fi
-
-# If the image is already in inetd.conf, and not commented out, exit ok
-if [ -n "$(grep ${IMAGE} /etc/inetd.conf | grep -v '^#')" ] ; then
-    exit 0
-fi
-
-# Check and see if our desired port is already there.
-if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
-    echo "Info: port ${PORT} is already defined in inetd.conf"
+if [ ! -d "${CHROOT}" ]; then
+    echo "Error: chroot ${CHROOT} doesn't exist."
     exit 1
 fi
 
-# Update inetd.conf
-update-inetd --group LTSP --add "${PORT}                   stream  tcp\
-    nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+# Find out if we are really an nbd client and if so, build the image.
+# Check and see if user's left /proc mounted in chroot.  If so, issue
+# a warning, and unmount it
+PROC_MOUNTED=$(chroot /opt/ltsp/i386 test -f /proc/cpuinfo && echo True)
+if [ -n "${PROC_MOUNTED}" ]; then
+    echo "/proc mounted in chroot ${CHROOT}, Unmounting."
+    umount ${CHROOT}/proc
+fi
 
-# If port's been specified, set the port.
-# Thats very ugly and needs to go to the config file in the chroot, 
-# else port is lost after ltsp-update-image is run
+# Are we a chroot that wants an nbd image made?
+if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
+    # make sure the images dir exists
+    if [ ! -d ${IMGDIR} ]; then
+        mkdir -p ${IMGDIR}
+    fi
 
-if [ -n "${PORT}" ] ; then
-    for TFTPDIR in $TFTPDIRS ; do
-        if [ ! -d $TFTPDIR ]; then
-            continue       # skip directory
-        fi
-        PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${ARCH}/pxelinux.cfg/default"
-        if [ ! -f ${PXECFG} ]; then
-            continue
-        fi
-        if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
-            sed -i -e 's/nbdport=[0-9]*/nbdport=${PORT}/g' ${PXECFG}
-        else
-            sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
-        fi
-    done
+    IMAGE="${IMGDIR}/${ARCH}.img"
+    rm "${IMAGE}"
+    mksquashfs "${CHROOT}" "${IMAGE}.tmp" -e cdrom
+    mv "${IMAGE}.tmp" "${IMAGE}"
+    chmod 0744 "${IMAGE}"
+
+    # Make sure hosts.allow has the keepalive option for nbdrootd
+    if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
+        echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
+    fi
+
+    # If the image is already in inetd.conf, and not commented out, exit ok
+    if [ -n "$(grep ${IMAGE} /etc/inetd.conf | grep -v '^#')" ] ; then
+        exit 0
+    fi
+
+    # Check and see if our desired port is already there.
+    if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
+        echo "Info: port ${PORT} is already defined in inetd.conf"
+        exit 0
+    fi
+
+    # Update inetd.conf
+    update-inetd --group LTSP --add "${PORT}                   stream  tcp\
+        nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+
+    # If port's been specified, set the port.
+    # Thats very ugly and needs to go to the config file in the chroot,
+    # else port is lost after ltsp-update-image is run
+
+    if [ -n "${PORT}" ] ; then
+        for TFTPDIR in $TFTPDIRS ; do
+            if [ ! -d $TFTPDIR ]; then
+                continue       # skip directory
+            fi
+            PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${ARCH}/pxelinux.cfg/default"
+            if [ ! -f ${PXECFG} ]; then
+                continue
+            fi
+            if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
+                sed -i -e 's/nbdport=[0-9]*/nbdport=${PORT}/g' ${PXECFG}
+            else
+                sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
+            fi
+        done
+    fi
 fi
