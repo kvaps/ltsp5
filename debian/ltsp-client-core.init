@@ -112,9 +112,12 @@ case "$1" in
             /usr/lib/ltsp/configure-x.sh
         fi
 
-        for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
+        for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
             num=${screen##SCREEN_}
-            start-stop-daemon --start -b --exec /usr/lib/ltsp/screen_session -- "$num"
+            if [ -n "$num" ]; then
+                start-stop-daemon --start -b \
+                                  --exec /usr/lib/ltsp/screen_session -- "$num"
+            fi
         done
 
         start_sound || true
