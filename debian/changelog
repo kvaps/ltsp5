@@ -34,6 +34,7 @@ ltsp (5.0.27debian1) unstable; urgency=low
 
   * rename ltsp-nbd script to ltsp_nbd (needed for initramfs-tools)
   * only copy /etc/timezone if present
+  * only install ldm theme for Debian
 
   * merge with scotts-gutsy:
       - ltsp-update-image now safe to run when not building images
@@ -45,7 +46,7 @@ ltsp (5.0.27debian1) unstable; urgency=low
 
   * merge fix from gutsy-ltsp to create fifo with mknod in udeb
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 10 Sep 2007 12:45:16 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 10 Sep 2007 14:04:27 -0700
 
 ltsp (5.0.27) gutsy; urgency=low
 
