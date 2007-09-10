@@ -113,8 +113,7 @@ case "$1" in
 
         for screen in $(env | awk -F= '$1 ~ /^SCREEN_/ { print $1 }'); do
             num=${screen##SCREEN_}
-            start-stop-daemon --start -b \ 
-                --exec /usr/lib/ltsp/screen_session -- "$num"
+            start-stop-daemon --start -b --exec /usr/lib/ltsp/screen_session -- "$num"
         done
 
         start_sound || true
