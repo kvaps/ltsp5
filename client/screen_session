@@ -6,19 +6,12 @@
 # the full text of which can be found in the COPYING file.
 #
 
-SLEEP=300
-SCRIPT_DIR=/usr/lib/ltsp/screen.d
+SCRIPT_DIRS="/etc/ltsp/screen.d /usr/lib/ltsp/screen.d"
 
 # Load LTSP configuration
 . /usr/lib/ltsp/ltsp_config
 
-#
-# Figure out the SCREEN_NUM. Sure, we could do it with
-# awk or some other fancy calculation, but you need to
-# remember that we are running in an NFS-root filesystem,
-# and we really want to avoid loading binaries like awk
-# or perl across the net.
-#
+# Figure out SCREEN_NUM
 if [ -n "$1" ]; then
     SCREEN_NUM="$1"
     TTY_NUM=${SCREEN_NUM#0}
@@ -26,20 +19,13 @@ if [ -n "$1" ]; then
     exec <$TTY >$TTY 2>&1
 else
     TTY=`tty`
-    case ${TTY} in
-      /dev/vc/1  | /dev/tty1  )  SCREEN_NUM="01";;
-      /dev/vc/2  | /dev/tty2  )  SCREEN_NUM="02";;
-      /dev/vc/3  | /dev/tty3  )  SCREEN_NUM="03";;
-      /dev/vc/4  | /dev/tty4  )  SCREEN_NUM="04";;
-      /dev/vc/5  | /dev/tty5  )  SCREEN_NUM="05";;
-      /dev/vc/6  | /dev/tty6  )  SCREEN_NUM="06";;
-      /dev/vc/7  | /dev/tty7  )  SCREEN_NUM="07";;
-      /dev/vc/8  | /dev/tty8  )  SCREEN_NUM="08";;
-      /dev/vc/9  | /dev/tty9  )  SCREEN_NUM="09";;
-      /dev/vc/10 | /dev/tty10 )  SCREEN_NUM="10";;
-      /dev/vc/11 | /dev/tty11 )  SCREEN_NUM="11";;
-      /dev/vc/12 | /dev/tty12 )  SCREEN_NUM="12";;
-    esac
+    SCREEN_NUM=${TTY##/dev/tty}
+    if [ ${#SCREEN_NUM} -gt 2 ]; then       # Is this needed anymore?
+        SCREEN_NUM=${TTY##/dev/vc/}         # /dev/vc/ was 2.4 kernel.
+    fi
+    if [ ${#SCREEN_NUM} -eq 1 ]; then
+        SCREEN_NUM="0${SCREEN_NUM}"
+    fi
 fi
 
 export SCREEN_NUM
@@ -48,9 +34,17 @@ eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
 SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
 SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
-if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
-    exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+if [ "${SCREEN_NUM}" = "01" ]; then
+    logger -t LTSP "Screen scripts should not be run on SCREEN_01"
+    echo "SCREEN_01 Contains a screen script ${SCREEN_SCRIPT} ${SCREEN_ARGS} Please change to another screen"
+    exit 1
 fi
+
+for SCRIPT_DIR in ${SCRIPT_DIRS}; do
+    if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
+        exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+    fi
+done
 
 logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
 echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
