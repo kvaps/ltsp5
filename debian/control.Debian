@@ -6,9 +6,11 @@ LTSP_SERVER_DEPENDS='debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | at
 
 LTSP_SERVER_RECOMMENDS='openssh-server | ssh'
 
-LTSP_SERVER_SUGGESTS='dhcp3-server, sdm, audiooss'
+LTSP_SERVER_COMMON='dhcp3-server, libasound2-plugins, ltspfs, nbd-server, pulseaudio-esound-compat | esound-clients | nas-bin, xbase-clients'
 
-LTSP_SERVER_STANDALONE_DEPENDS='ltsp-server, dhcp3-server, libasound2-plugins, ltspfs, openssh-server, nbd-server, pulseaudio-esound-compat | esound-clients | nas-bin, xbase-clients'
+LTSP_SERVER_SUGGESTS="$LTSP_SERVER_COMMON, sdm, audiooss"
+
+LTSP_SERVER_STANDALONE_DEPENDS="ltsp-server, openssh-server, $LTSP_SERVER_COMMON"
 LTSP_SERVER_STANDALONE_RECOMMENDS=''
 
 LTSP_CLIENT_CORE_DEPENDS='lsb-base, nbd-client, initramfs-tools (>= 0.11), syslinux [i386 amd64], mknbi[i386] | yaboot[powerpc] | aboot[alpha] | sparc-utils[sparc], lsb-release, kbd | console-tools, python, discover1, xresprobe, tftp-hpa, console-setup'
