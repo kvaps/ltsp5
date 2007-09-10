@@ -6,7 +6,7 @@
 # the full text of which can be found in the COPYING file.
 #
 
-SCRIPT_DIR=/usr/lib/ltsp/screen.d
+SCRIPT_DIRS="/etc/ltsp/screen.d /usr/lib/ltsp/screen.d"
 
 # Load LTSP configuration
 . /usr/lib/ltsp/ltsp_config
@@ -40,9 +40,11 @@ if [ "${SCREEN_NUM}" = "01" ]; then
     exit 1
 fi
 
-if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
-    exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
-fi
+for SCRIPT_DIR in ${SCRIPT_DIRS}; do
+    if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
+        exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+    fi
+done
 
 logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
 echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
