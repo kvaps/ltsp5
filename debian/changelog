@@ -1,13 +1,15 @@
-ltsp (5.0.27debian1) UNRELEASED; urgency=low
+ltsp (5.0.27debian1) unstable; urgency=low
 
   * remove -s from LDFLAGS: don't strip getltscfg (Closes: #437540)
     thanks to Julien Danjou
   * set default hostname in the initramfs (Closes: #406366, #418142)
     thanks to Damyan Ivanov and Joshua Pritikin
+  * add versioned dependency on nbd-server
+  * detect root_write_method instead of hard-coding it
 
   * sync with ubuntu:
     - ltsp-client-core dependencies:
-      + added console-setup, libasound2-plugins, tftp-hpda dependencies
+      + added console-setup, libasound2-plugins, tftp-hpa dependencies
 
     - ltsp-server dependencies:
       + added squashfs-tools dependencies
@@ -25,11 +27,25 @@ ltsp (5.0.27debian1) UNRELEASED; urgency=low
       + link to var-lib-nfs plugin from Ubuntu
       + copy console-setup if present
 
-   * revert changes from ubuntu:
-     - keep using nfs and bind_mounts by default
-     - rename ltsp-nbd script to ltsp_nbd (needed for initramfs-tools)
+  * get configure-x.sh working with debian:
+    - set default color depth in lts.conf
+    - copy and delete generated xorg.conf instead of moving it
+    - add -novtswitch option when configuring X
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sun,  2 Sep 2007 10:35:32 -0700
+  * rename ltsp-nbd script to ltsp_nbd (needed for initramfs-tools)
+  * only copy /etc/timezone if present
+
+  * merge with scotts-gutsy:
+      - ltsp-update-image now safe to run when not building images
+      - simplified screen_session
+        + ignore entries on SCREEN_01
+        + re-add support for /etc/ltsp/screen.d
+      - use /bin/sh instead of /bin/bash in screen scripts
+      - don't use full paths when calling binaries in telenet screen script
+
+  * merge fix from gutsy-ltsp to create fifo with mknod in udeb
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 10 Sep 2007 12:45:16 -0700
 
 ltsp (5.0.27) gutsy; urgency=low
 
