@@ -6,7 +6,7 @@ LTSP_SERVER_DEPENDS='debootstrap, nfs-kernel-server, lsb-release, tftpd-hpa | at
 
 LTSP_SERVER_RECOMMENDS='openssh-server | ssh'
 
-LTSP_SERVER_COMMON='dhcp3-server, libasound2-plugins, ltspfs, nbd-server, pulseaudio-esound-compat | esound-clients | nas-bin, xbase-clients'
+LTSP_SERVER_COMMON='dhcp3-server, libasound2-plugins, ltspfs, pulseaudio-esound-compat | esound-clients | nas-bin, xbase-clients'
 
 LTSP_SERVER_SUGGESTS="$LTSP_SERVER_COMMON, sdm, audiooss"
 
