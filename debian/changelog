@@ -11,6 +11,7 @@ ltsp (5.0.27debian1) unstable; urgency=low
   * fix to locale plugin setting keyboard properly
   * fix typo in ltsp-client-setup init that broke syslog handling
   * drop dependency on xdebconfigurator
+  * updated suggests for ltsp-server
 
   * sync with ubuntu:
     - ltsp-client-core dependencies:
@@ -51,7 +52,7 @@ ltsp (5.0.27debian1) unstable; urgency=low
 
   * merge fix from gutsy-ltsp to create fifo with mknod in udeb
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 10 Sep 2007 14:16:15 -0700
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Mon, 10 Sep 2007 14:26:13 -0700
 
 ltsp (5.0.27) gutsy; urgency=low
 
