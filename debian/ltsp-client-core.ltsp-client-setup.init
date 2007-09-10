@@ -126,7 +126,7 @@ configure_printer() {
 configure_syslog() {
     if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
         cat <<EOF > /etc/syslog.conf
-*.* @${SYSLOG_HOST-$SERVER}
+*.* @${SYSLOG_HOST:-$SERVER}
 EOF
     fi
 }

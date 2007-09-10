@@ -38,7 +38,7 @@ case $MODE in
         fi
 
         # set debian-installer/keymap question in the chroot if present on the server
-        debian_installer_keymap="$(debconf-get-selections debian-installer/keymap)"
+        debian_installer_keymap="$(debconf-get-selections | grep debian-installer/keymap)"
         if [ -n "$debian_installer_keymap" ]; then
             echo "$debian_installer_keymap" | chroot $ROOT debconf-set-selections
         fi
