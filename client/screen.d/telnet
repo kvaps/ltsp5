@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
 #
@@ -34,33 +34,26 @@ export TERM=linux           # Setup the terminal type
 #
 # Get this terminal name, to display on the top line of the screen
 #
-TTY=`/usr/bin/basename \`/usr/bin/tty\``
-test "${TTY}" = "console" && TTY="tty1"    # Special case for first screen
+TTY=$(tty)
+TTY=$(basename ${TTY})
+if [ "${TTY}" = "console" ]; then
+    TTY="tty1"              # Special case for first screen
+fi
 
 while :; do
-    #
     # Clear the screen, to place cursor at the top
-    #
-    /usr/bin/clear
+    clear
 
-    #
     # Echo this message, telling user how to proceed.
-    #
-    echo -n "Screen:${TTY} - Press <enter> to establish a connection to server..."
+    echo -n "Screen:${TTY} - Press <enter> to connect to server..."
     read CMD
 
-    #
     # Clear the screen before launching telnet
-    #
-    /usr/bin/clear
+    clear
 
-    #
     # Launch the telnet program.
-    #
-    /usr/bin/telnet ${TELNET_ARGS}
-    #
+    telnet ${TELNET_ARGS}
     # Brief pause, in case telnet had errors to report
-    #
     echo -n "Please wait..."
-    /bin/sleep 1
+    sleep 1
 done
