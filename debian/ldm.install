@@ -5,6 +5,4 @@ client/ldm2/scripts/S10-delayed-mounter usr/share/ldm/rc.d
 client/ldm2/scripts/S15-prevent-compiz usr/share/ldm/rc.d
 client/ldm2/scripts/S15-screensaver-blankonly usr/share/ldm/rc.d
 client/ldmgtkgreet/src/ldmgtkgreet usr/bin
-client/ldmgtkgreet/themes usr/share/ldm/
-client/ldmgtkgreet/pixmaps/*.png usr/share/ldm/themes/ubuntu
-client/ldmgtkgreet/gtkrc/greeter-gtkrc usr/share/ldm/themes/ubuntu
+client/ldmgtkgreet/themes/Debian/ usr/share/ldm/themes/
