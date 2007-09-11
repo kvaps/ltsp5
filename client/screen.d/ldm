@@ -50,7 +50,7 @@ if [ ${X_RAMPERC} -lt 100 ]; then
     done < /proc/meminfo
     XMEM=$((${XMEM} * ${X_RAMPERC} / 100))
 
-    ulimit -v ${XMEM}
+    ulimit -m ${XMEM}
 fi
 
 while :; do

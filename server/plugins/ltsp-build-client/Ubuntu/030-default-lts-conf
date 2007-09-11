@@ -10,7 +10,7 @@ case "$MODE" in
 [default] 
     SOUND=True
     LOCALDEV=True
-    CONFIGURE_X=False
+    CONFIGURE_X=True
 EOF
         ;;
 esac
