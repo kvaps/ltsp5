@@ -1,10 +1,12 @@
 server/ltsp-build-client usr/sbin
 server/ltsp-update-sshkeys usr/sbin
 server/ltsp-update-kernels usr/sbin
+server/ltsp-update-image usr/sbin
 server/ldminfod	usr/sbin
 server/ltsp-keys etc/network/if-up.d
 server/scripts/* usr/share/ltsp/scripts/
 server/plugins/ usr/share/ltsp/
 debian/bugs/ltsp-server/* usr/share/bug/ltsp-server/
 server/nbdswapd usr/sbin
+server/nbdrootd usr/sbin
 server/80_ltsp-sound /etc/X11/Xsession.d

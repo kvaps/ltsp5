@@ -22,6 +22,11 @@ case $MODE in
         if [ -f /etc/default/locale ]; then
             cp /etc/default/locale $ROOT/etc/default
         fi
+
+        if [ -f /etc/default/console-setup ]; then
+            cp /etc/default/console-setup $ROOT/etc/default/console-setup
+        fi
+        
         if [ -n "$LOCALE" ]; then
             export LANG=$(echo "$LOCALE" | awk '{print $1}')
             echo "$LOCALE" >> $ROOT/etc/locale.gen
@@ -33,7 +38,7 @@ case $MODE in
         fi
 
         # set debian-installer/keymap question in the chroot if present on the server
-        debian_installer_keymap="$(debconf-get-selections debian-installer/keymap)"
+        debian_installer_keymap="$(debconf-get-selections | grep debian-installer/keymap)"
         if [ -n "$debian_installer_keymap" ]; then
             echo "$debian_installer_keymap" | chroot $ROOT debconf-set-selections
         fi

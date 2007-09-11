@@ -13,6 +13,11 @@ build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
+	cd client/ldm2; ./configure --prefix=/usr; cd -
+	$(MAKE) -C client/ldm2
+	cd client/ldmgtkgreet; ./configure --prefix=/usr; cd -
+	$(MAKE) -C client/ldmgtkgreet
+
 	$(MAKE) -C po update-po
 	touch build-stamp
 
@@ -22,6 +27,8 @@ clean:
 	rm -f build-stamp
 
 	-$(MAKE) -C client/getltscfg clean
+	-$(MAKE) -C client/ldm2 clean
+	-$(MAKE) -C client/ldmgtkgreet clean
     
     # Using po specific Makefile to clean message catalogs
 	$(MAKE) -C po clean
@@ -84,6 +91,8 @@ binary-arch: build install
 bzr-release:
 	rm -rf ../ltsp-$(DEBVER)
 	bzr export ../ltsp-$(DEBVER)
+	(cd ../ltsp-$(DEBVER)/client/ldm2; ./autogen.sh; cd -)
+	(cd ../ltsp-$(DEBVER)/client/ldmgtkgreet; ./autogen.sh; cd -)
 	(cd ../ltsp-$(DEBVER); debian/rules controlgen; $(DEB_SRC_BUILD_PROG))
 
 controlgen:

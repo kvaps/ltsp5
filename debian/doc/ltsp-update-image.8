@@ -1,0 +1,26 @@
+.TH "ltsp-update-image" "8"
+.SH "NAME"
+ltsp\-update\-image \(em Updates the LTSP server image to be shared by nbd
+.SH "SYNOPSIS"
+.PP
+\fBltsp\-update\-image\fR
+.SH "DESCRIPTION"
+.PP
+\fBltsp\-update\-image\fR updates the current ltsp client
+chroot image by using squashfs to create a compressed image of the
+chroot in /opt/ltsp/arch.  This can then be shared out by nbdrootd(8).
+.SH "SEE ALSO"
+.PP
+\fBltsp\-build\-client\fP\fB(8)\fP,
+\fBltsp\-build\-kernels\fP\fB(8)\fP,
+\fBltsp\-update\-sshkeys\fP\fB(8)\fP,
+\fBnbdrootd\fP\fB(8)\fP.
+.SH "AVAILABILITY"
+.PP
+\fBltsp\-update\-kernels\fR is part of \fBltsp\fP package
+and the latest versions are available in source form from
+\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR.
+.SH "MAN PAGE AUTHOR"
+.PP
+Scott Balneaves \- sbalneav
+sbalneav@ltsp.org

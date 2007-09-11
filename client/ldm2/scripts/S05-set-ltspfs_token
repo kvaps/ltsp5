@@ -1,0 +1,8 @@
+#
+# sourced with .
+#
+# Script to automatically add what's in the ltspfs_fstab on login.
+#
+
+[ -f /var/run/ltspfs_token ] &&
+  xprop -root -f LTSPFS_TOKEN 8s -set LTSPFS_TOKEN $(cat /var/run/ltspfs_token)

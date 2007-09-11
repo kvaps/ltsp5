@@ -1,0 +1,100 @@
+# NFS filesystem mounting			-*- shell-script -*-
+
+# NBD root mounting
+mountroot()
+{
+	[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-top"
+	run_scripts /scripts/nfs-top
+	[ "$quiet" != "y" ] && log_end_msg
+
+	# For DHCP
+	modprobe -q af_packet
+
+	case ${IPOPTS} in
+		none|off)
+			# Do nothing
+			;;
+		""|on|any)
+			# Bring up device
+			ipconfig ${DEVICE}
+			;;
+		dhcp|bootp|rarp|both)
+			ipconfig -c ${IPOPTS} -d ${DEVICE}
+			;;
+		*)
+			ipconfig -d $IPOPTS
+
+			# grab device entry from ip option
+			NEW_DEVICE=${IPOPTS#*:*:*:*:*:*}
+			if [ "${NEW_DEVICE}" != "${IPOPTS}" ]; then
+				NEW_DEVICE=${NEW_DEVICE%:*}
+			else
+				# wrong parse, possibly only a partial string
+				NEW_DEVICE=
+			fi
+			if [ -n "${NEW_DEVICE}" ]; then
+				DEVICE="${NEW_DEVICE}"
+			fi
+			;;
+	esac
+
+	# source relevant ipconfig output
+	. /tmp/net-${DEVICE}.conf
+
+    if [ -n "${nbdroot}" ]; then
+               NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
+               NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
+       else
+               NBD_ROOT_SERVER="${ROOTSERVER}"
+               NBD_ROOT_PORT=${nbdport:-"2000"}
+       fi
+       if [ -n "${nbdswap}" ]; then
+               NBD_SWAP_SERVER=$( echo "${nbdswap}" | sed 's/:.*//')
+               NBD_SWAP_PORT=$( echo "${nbdswap}" | sed 's/.*://')
+       else
+               NBD_SWAP_SERVER="${ROOTSERVER}"
+               NBD_SWAP_PORT=${nbdswapport:-"9572"}
+    fi
+
+    # try to get swap from the server if we dont have enough ram (less than 48M)
+    min_ram=49152
+    real_ram=$(cat /proc/meminfo |grep MemTotal|tr -d " [a-z][A-Z]:")
+
+    if [ ${real_ram} -lt ${min_ram} ];then
+        [ "$quiet" != "y" ] && log_begin_msg "Only found ${real_ram}k main ram, trying network swap."
+        nbd-client ${NBD_SWAP_SERVER} ${NBD_SWAP_PORT} /dev/nbd1 || true
+        mkswap /dev/nbd1 || true
+        swapon /dev/nbd1 || true
+        [ "$quiet" != "y" ] && log_end_msg
+    fi
+
+    mkdir -p /cow
+    mkdir -p /rofs
+
+    # create tmpfs for writeable files
+    mount -t tmpfs tmpfs /cow
+
+    # mount the readonly root
+    nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 && mount -o ro -t squashfs /dev/nbd0 /rofs
+
+    # merge ro and rw filesystems
+    mount -t unionfs -o dirs=/cow=rw:/rofs=ro unionfs ${rootmnt}
+
+    # make the filesystems accessible
+    mkdir -p ${rootmnt}/cow
+    mount -o bind /cow ${rootmnt}/cow
+
+    mkdir -p ${rootmnt}/rofs
+    mount -o move /rofs ${rootmnt}/rofs
+
+    # get the lts.conf via tftp
+    tftpath=$(echo ${filename%/*}|tr -d '"')
+    (echo "get ${tftpath}/lts.conf"|tftp ${ROOTSERVER} >/dev/null 2>&1)
+    if [ -s ./lts.conf ];then
+        cp ./lts.conf ${rootmnt}/etc/
+    fi
+
+	[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-bottom"
+	run_scripts /scripts/nfs-bottom
+	[ "$quiet" != "y" ] && log_end_msg
+}

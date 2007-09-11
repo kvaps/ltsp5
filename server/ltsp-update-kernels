@@ -2,12 +2,48 @@
 
 set -e
 
+usage() {
+cat <<EOF
+$0 [OPTION]
+  -b, --basedir     Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
+  -t, --tftpdirs    List of tftpd dirs to update in. Defaults to
+                    "/var/lib/tftpboot /tftpboot".
+  -c, --copytftp    Copy files.  Defaults to "true".
+  -d, --tftpbootdir Subdir within tftpdir where ltsp kernels are.  Defaults
+                    to "ltsp".
+  -h, --help        This message.
+EOF
+}
+
+#
+# Handle args
+#
+
+ARGS=$(getopt -o b:t:c:d:h --long base:,tftpdirs:,copytftp:,tftpbootdir:,help \
+       -n $0 -- "$@")
+
+[ $? != 0 ] && exit 1
+
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -b|--base)        BASE=$2 ; shift 2 ;;
+        -t|--tftpdirs)    TFTPDIRS=$2 ; shift 2 ;;
+        -c|--copytftp)    COPYTFTP=$2 ; shift 2 ;;
+        -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
+        -h|--help)        usage ; exit 0 ;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+done
+
 if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
     . /etc/ltsp/ltsp-update-kernels.conf
 fi
 
+BASE=${BASE:-"/opt/ltsp"}
 TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
-BASE=${BASE:-"/opt/ltsp/"}
 COPYTFTP=${COPYTFTP:-"true"}
 TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
 
@@ -25,13 +61,14 @@ for TFTPDIR in $TFTPDIRS ; do
     fi
 
     ALL_CHROOTS="$@"
-    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d)"}
-    
+    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d | \
+                                  grep -v images)"}
+
     for CHROOT in $ALL_CHROOTS ; do
         if [ -x $CHROOT/bin/true ]; then
             echo "Updating $TFTPDIR directories for chroot: $CHROOT"
             export CHROOT_NAME="$(basename $CHROOT)"
-   
+
             if [ "$COPYTFTP" = "true" ]; then
                 mkdir -p $TFTPBOOT/$CHROOT_NAME
                 cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/

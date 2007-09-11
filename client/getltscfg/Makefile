@@ -6,7 +6,7 @@ YACC=bison
 LIBS=-lfl -lpopt
 ##LIBS=-lfl -ll -lpopt
 YFLAGS=-v -d
-LDFLAGS=-s
+LDFLAGS=
 CCFLAGS=-W -Wall $(CFLAGS)
 
 getltscfg:	getltscfg.o		\
