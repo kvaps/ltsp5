@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# The following script works for LTSP5 and was tested in Ubuntu "Feisty" Linux.
+# Original rdesktop script by James A. McQuillan,
+# modified for LTSP5 by Colin Osterhout of SERRC (www.serrc.org).
+#
+# This software is licensed under the Gnu General Public License.
+# The full text of which can be found at http://www.LTSP.org/license.txt
+#
+#
+#
+# /opt/ltsp/i386/etc/screen.d/rdesktop
+#
+# Call this through /opt/ltsp/i386/etc/lts.conf like this:
+#           RDP_OPTIONS  = "-a 16"
+#           RDP_SERVER   = w2k3.terminal.server.ip
+#           SCREEN_02    = rdesktop
+#
+
+PATH=/bin:$PATH; export PATH
+. /usr/lib/ltsp/ltsp_config
+ 
+RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
+
+TTY=`/usr/bin/basename \`/usr/bin/tty\``
+XFCFG=/tmp/XF86Config.${TTY}
+export TTY
+
+RDESKTOP_OPTIONS="${RDP_OPTIONS} -f $* ${RDP_SERVER}"
+
+#
+# Setup the DISP variable
+#
+TTY_N=`echo $TTY | sed -e 's/^.*\([0-9]\)$/\1/'`
+export DISP=:$(expr ${TTY_N} - 1).0
+
+################################################################################
+#
+# Setup the XF86Config file
+#
+while :; do
+/usr/bin/xinit      /usr/bin/rdesktop           \
+                            -u "" \
+                          ${RDESKTOP_OPTIONS}         \
+                          -- \
+                          ${DISP}                     \
+                          ${TTY}
+#/usr/bin/x11vnc -display ${DISP} -passwd password -httpport 5800
+
+done

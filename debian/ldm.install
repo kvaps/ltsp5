@@ -1,4 +1,8 @@
-client/ldm usr/sbin
-client/ldm-askpass usr/lib/ltsp
-client/greeters usr/lib/ltsp
-client/themes usr/share/ldm
+client/ldm2/src/ldm usr/sbin
+client/ldm2/share/ldm-script usr/share/ldm
+client/ldm2/scripts/S05-set-ltspfs_token usr/share/ldm/rc.d
+client/ldm2/scripts/S10-delayed-mounter usr/share/ldm/rc.d
+client/ldm2/scripts/S15-prevent-compiz usr/share/ldm/rc.d
+client/ldm2/scripts/S15-screensaver-blankonly usr/share/ldm/rc.d
+client/ldmgtkgreet/src/ldmgtkgreet usr/bin
+client/ldmgtkgreet/themes/Debian/ usr/share/ldm/themes/

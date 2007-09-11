@@ -1,0 +1,7 @@
+#
+# sourced with .
+#
+# Script to automatically switch to metacity unless DESKTOP_EFFECTS is True
+#
+ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/gconftool-2 --set --type string /desktop/gnome/applications/window_manager/current /usr/bin/metacity"
+ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/gconftool-2 --set --type string /desktop/gnome/applications/window_manager/default /usr/bin/metacity"

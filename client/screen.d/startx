@@ -6,15 +6,12 @@
 # the full text of which can be found in the COPYING file.
 #
 
-. /usr/lib/ltsp/ltsp_functions
-
 #
 # Get the lts.conf entries
 #
 . /usr/lib/ltsp/ltsp_config
 
 XDM_SERVER=${XDM_SERVER:-${SERVER}}
-reg_info XDM_SERVER
 
 TTY=$(basename $(tty))
 TTY=${TTY##tty}
@@ -51,7 +48,6 @@ ltsp_x_config() {
             XSERVER=vesa
         fi
     fi
-    reg_info XSERVER
 
     if [ "${XSERVER}" = "i810" ]; then
         if [ ! -f /tmp/i810_loaded ]; then
@@ -60,17 +56,16 @@ ltsp_x_config() {
         fi
     fi
 
-    if [ ! -z "${XF86CONFIG_FILE}" ]; then
-        reg_info XF86CONFIG_FILE
+    if [ ! -z "${X_CONF}" ]; then
     #
-    # If XF86CONFIG_FILE is defined in the lts.conf file, then
+    # If X_CONF is defined in the lts.conf file, then
     # it points to an XF86Config file that is pre-made for a workstation
     #
-        if [ -f /etc/${XF86CONFIG_FILE} ]; then
-            cp /etc/${XF86CONFIG_FILE} ${XFCFG}
+        if [ -f ${X_CONF} ]; then
+            cp ${X_CONF} ${XFCFG}
         else
             echo
-            echo "Error! - ${XF86CONFIG_FILE} - File not found!"
+            echo "Error! - ${X_CONF} - File not found!"
             echo
         fi
     else
@@ -145,7 +140,6 @@ esac
 export DISP=:$(expr ${TTY} - 1).0
 
 DISABLE_ACCESS_CONTROL=${DISABLE_ACCESS_CONTROL:-"N"}
-reg_info DISABLE_ACCESS_CONTROL
 if [ "${DISABLE_ACCESS_CONTROL}" = "Y" ]; then
     ACC_CTRL="-ac"
 else
@@ -165,16 +159,7 @@ if [ Y = "${USE_XFS}" ] ; then
     XF_ARGS="$XF_ARGS -fp tcp/${XFS_SERVER}:7100"
 fi
 
-if [ -w /proc/progress ]; then
-    ${XBINARY} ${ACC_CTRL}              \
-                              ${XF_ARGS}               \
-                              -xf86config ${XFCFG}     \
-                              vt${TTY} ${DISP} >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-      echo -n -e "\n\rxserver failed, press <enter> to continue "
-      read CMD
-    fi
-else
+while :; do
     ${XBINARY} ${ACC_CTRL}              \
                               ${XF_ARGS}               \
                               -xf86config ${XFCFG}     \
@@ -183,4 +168,4 @@ else
       echo -n -e "\n\rxserver failed, press <enter> to continue "
       read CMD
     fi
-fi
+done

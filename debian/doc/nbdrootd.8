@@ -1,0 +1,35 @@
+.TH "nbdrootd"
+.SH "NAME"
+nbdrootd \(em Serve out LTSP images created with ltsp-update-image(8)
+.SH "SYNOPSIS"
+.PP
+\fBnbdrootd\fR
+.SH "DESCRIPTION"
+.PP
+\fBnbdrootd\fR will serve out LTSP images created with ltsp\-update\-image(8)
+which are filesystem images, and compressed with mksquashfs(8).  The nbdrootd(8)
+program is a simple shell script wrapper for nbd\-server(1) program, and 
+it is usually run from an inetd(8) instance.
+.SH "EXAMPLE"
+.PP
+Add the following line to /etc/inetd.conf(5):
+.PP
+2000    stream  tcp    nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd /opt/ltsp/images/i386.img
+.PP
+Note that the ltsp\-update\-image(8) program will do this for you automatically.
+.SH "SEE ALSO"
+.PP
+\fBltsp\-update\-image\fP\fB(1)\fP,
+\fBnbd\-server\fP\fB(1)\fP,
+inetd(8),
+inetd.conf(5),
+\fBnbd\-client\fP\fB(8)\fP.
+.SH "AVAILABILITY"
+.PP
+\fBnbdrootd\fR is part of \fBltsp\fP package
+and the latest versions are available in source form from
+\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR.
+.SH "AUTHOR"
+.PP
+copyright 2007 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.

@@ -1,30 +1,120 @@
 #!/usr/bin/python
 import sys
+import os
+import locale
 from subprocess import *
+
+def get_memory_usage():
+    memusg = {}
+
+    # Get memory usage information, according to /proc/meminfo
+    f = open('/proc/meminfo', 'r')
+    swap_free = 0
+    mem_physical_free = 0
+    mem_buffers = 0
+    mem_cached = 0
+    for line in f.readlines():
+        tokens = line.split()
+        label = tokens[0]
+        size = tokens[1]
+        try:
+            size = int(size)
+        except:
+            # The line is an header, skip it.
+            continue
+
+        # We approximate kb to bytes
+        size = size * 1024
+        if label == 'MemTotal:':
+            memusg['ram_total'] = size
+        elif label == 'MemFree:':
+            mem_physical_free = size
+        elif label == 'Buffers:':
+            mem_buffers = size
+        elif label == 'Cached:':
+            mem_cached = size
+        elif label == 'SwapTotal:':
+            memusg['swap_total'] = size
+        elif label == 'SwapFree:':
+            swap_free = size
+    f.close()
+
+    memusg['ram_used'] = memusg['ram_total'] - mem_physical_free - mem_buffers - mem_cached
+    memusg['swap_used'] = memusg['swap_total'] - swap_free
+
+    return memusg
+
+def get_load_average():
+    # Gets the current system load, according to /proc/loadavg
+    loadavg = {}
+    load_file = open('/proc/loadavg')
+    load_infos = load_file.read().split()
+    loadavg['one_min_avg'] = load_infos[0]
+    loadavg['five_min_avg'] = load_infos[1]
+    loadavg['fifteen_min_avg'] = load_infos[2]
+    # scheduling_info = load_infos[3] # not used
+    # last_pid = load_infos[4]
+    load_file.close()
+    return loadavg
+
+def compute_server_rating():
+    """Compute the server rating from it's state
+       The rating is computed by using load average and the memory
+       used. The returned value is betweed 0 and 100, higher is better
+    """
+    max_acceptable_load_avg = 8.0
+    mem = get_memory_usage()
+    load = get_load_average()
+    rating = 100 - int( \
+        50 * ( float(load['fifteen_min_avg']) / max_acceptable_load_avg ) + \
+        50 * ( float(mem['ram_used']) / float(mem['ram_total']) ) \
+        )
+    if rating < 0:
+        rating = 0
+    return rating
+
 if __name__ == "__main__":
+    # Get the server's default locale
+    # We want it to appear first in the list
+    fd=os.open('/etc/environment', 0)
+    for line in os.read(fd ,512).split():
+        if line.startswith('LANG='):
+            defaultlocale = line.split('=')[1].strip('"')
+
+    defaultlocale = defaultlocale.replace('UTF8', 'UTF-8')
+    print "language:" + defaultlocale
     # Get list of valid locales from locale -a
     try:
         lines = Popen(['locale', '-a'], stdout=PIPE).communicate()[0]
-
     except OSError:
         print "ERROR"
         sys.exit(0)
     langs = lines.split(None)
+    langs.sort()
     for lang in langs:
-        lang=lang.rstrip()
+        lang = lang.rstrip()
         if lang.endswith('.utf8'):
             # locale returns .utf8 when we want .UTF-8
-            lang=lang.replace('.utf8','.UTF-8')
-        if lang != 'POSIX' and lang != 'C':
-            print lang
-    print
+            lang = lang.replace('.utf8','.UTF-8')
+        if lang != 'POSIX' and lang != 'C' and lang != defaultlocale:
+            print "language:" + lang
     try:
-        lines=[]
+        lines = []
         for alternative in ['x-session-manager','x-window-manager']:
-            lines.append(Popen(['/usr/sbin/update-alternatives', '--list', alternative ],
-                      stdout=PIPE).communicate()[0])
+            lines.extend(Popen(['/usr/sbin/update-alternatives', '--list',
+                         alternative ], stdout=PIPE).communicate()[0].split())
     except OSError:
         print "ERROR"
         sys.exit(0)
     for line in lines:
-        print line
+        print "session:" + line
+
+    # Get the rating of this server
+    rate = 0
+    try:
+        rate = compute_server_rating()
+    except:
+        print "ERROR"
+        sys.exit(0)
+    print "rating:" + str(compute_server_rating())
+
