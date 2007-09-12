@@ -45,7 +45,7 @@ FIFO=/tmp/ltsp-build-client
 LOG=/var/log/ltsp-build-client.log
 
 if [ ! -p $FIFO ]; then
-    mkfifo $FIFO
+    mknod $FIFO p
 fi
 
 DEBIAN_PRIORITY=critical
