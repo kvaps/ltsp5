@@ -21,11 +21,11 @@ _Description: Build LTSP chroot
 
 Template: ltsp-client-builder/progress
 Type: text
-_Description: Building Thin Client system ...
+_Description: Building thin client system ...
 
 Template: ltsp-client-builder/compress
 Type: text
-_Description: Compressing Thin Client image ...
+_Description: Compressing thin client image ...
 
 Template: ltsp-client-builder/build-client-opts
 Type: string
