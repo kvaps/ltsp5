@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
 #
@@ -16,16 +16,15 @@ if [ -n "$1" ]; then
     SCREEN_NUM="$1"
     TTY_NUM=${SCREEN_NUM#0}
     TTY=/dev/tty$TTY_NUM
-    exec <$TTY >$TTY 2>&1
+    exec <$TTY >$TTY 2>&1           # redirect stdin/out/err to our tty
 else
+    # If screen_session is called from inittab/upstart, already with a
+    # controlling terminal, then just figure out what screen number we are.
     TTY=`tty`
-    SCREEN_NUM=${TTY##/dev/tty}
-    if [ ${#SCREEN_NUM} -gt 2 ]; then       # Is this needed anymore?
-        SCREEN_NUM=${TTY##/dev/vc/}         # /dev/vc/ was 2.4 kernel.
-    fi
-    if [ ${#SCREEN_NUM} -eq 1 ]; then
-        SCREEN_NUM="0${SCREEN_NUM}"
-    fi
+    case $TTY in
+        /dev/tty?) SCREEN_NUM="0${TTY##/dev/tty}" ;;
+        /dev/tty??) SCREEN_NUM="${TTY##/dev/tty}" ;;
+    esac
 fi
 
 export SCREEN_NUM
