@@ -43,7 +43,7 @@ while true ; do
 done
 
 # defaults
-BASE=${BASE:-"/opt/ltsp/"}
+BASE=${BASE:-"/opt/ltsp"}
 PORT=${PORT:-"2000"}
 if [ -z "${ARCH}" ]; then
     ARCH=$(dpkg --print-architecture)
@@ -139,6 +139,9 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
                 sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
             fi
         done
+        if [ ! -d "${CHROOT}/etc/ltsp" ]; then
+            mkdir "${CHROOT}/etc/ltsp"
+        fi
         echo "BOOTPROMPT_OPTS=\"quiet splash nbdport=${PORT}\"" >${CHROOT}/etc/ltsp/update-kernels.conf
     fi
 fi
