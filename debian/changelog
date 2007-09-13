@@ -1,3 +1,11 @@
+ltsp (5.0.30) gutsy; urgency=low
+
+  * dont try to write to non existing dirs in the chroot from
+    ltsp-update-image (thanks lamont !)
+  * fix issue with doubleslashes in ltsp-update-image
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 13 Sep 2007 22:22:57 +0200
+
 ltsp (5.0.29) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
