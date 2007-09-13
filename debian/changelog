@@ -1,3 +1,15 @@
+ltsp (5.0.29) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * fix setting of SERVER with nbd roots, closes LP: #139059
+  * remove screensaver handling from ldm, gnome-screensaver konws what to do
+    now
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * enable compiz by default (leave it to Xsession on the server to decide)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 13 Sep 2007 16:10:50 +0200
+
 ltsp (5.0.28) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
