@@ -78,4 +78,16 @@ while :; do
     fi
 
     ldm vt${TTYNUM} :${DISPLAYNUM}
+
+    # Clean up from some buggy video drivers that need two kills
+    XPROC=$(pgrep -f ":${DISPLAYNUM}")
+    while [ -n "${XPROC}" ]; do
+	kill $XPROC
+        sleep 1
+	XPROC=$(pgrep -f ":${DISPLAYNUM}")
+    done
+
+    rm -f /root/.Xauthority
+    rm -f /tmp/.X11-unix/X${DISPLAYNUM}
+    rm -f /tmp/.X${DISPLAYNUM}-lock
 done
