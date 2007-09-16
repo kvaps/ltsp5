@@ -24,7 +24,7 @@ other architectures
 
 When building the client chroot, manually select the kernel:
 
-  ltsp-build-client --late-packages KERNEL
+  ltsp-build-client --kernel-packages KERNEL
 
 where KERNEL is the name of the kernel package for your architecture.
 
