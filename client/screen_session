@@ -22,8 +22,8 @@ else
     # controlling terminal, then just figure out what screen number we are.
     TTY=`tty`
     case $TTY in
-        /dev/tty/?) SCREEN_NUM="0${TTY##/dev/tty}" ;;
-        /dev/tty/??) SCREEN_NUM="${TTY##/dev/tty}" ;;
+        /dev/tty?) SCREEN_NUM="0${TTY##/dev/tty}" ;;
+        /dev/tty??) SCREEN_NUM="${TTY##/dev/tty}" ;;
     esac
 fi
 

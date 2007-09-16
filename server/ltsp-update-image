@@ -43,7 +43,7 @@ while true ; do
 done
 
 # defaults
-BASE=${BASE:-"/opt/ltsp/"}
+BASE=${BASE:-"/opt/ltsp"}
 PORT=${PORT:-"2000"}
 if [ -z "${ARCH}" ]; then
     ARCH=$(dpkg --print-architecture)
@@ -97,26 +97,34 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
         echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
     fi
 
-    # If the image is already in inetd.conf, and not commented out, exit ok
-    if [ -n "$(grep ${IMAGE} /etc/inetd.conf | grep -v '^#')" ] ; then
-        exit 0
+    # make sure image and port are properly defined in inetd.conf
+    if grep ^${PORT} /etc/inetd.conf |grep ${IMAGE} > /dev/null 2>&1 ; then
+        echo "Info: port ${PORT} is already defined with ${IMAGE} in inetd.conf"
+        echo "Info: taking no action."
+    else
+        if [ -n "$(grep ${IMAGE} /etc/inetd.conf | grep -v '^#')" ] ; then
+            # if its already there, use its settings
+            echo "Warning: image defined with different port already in inetd.conf"
+            PORT=$(grep ${IMAGE} /etc/inetd.conf |cut -d' ' -f1)
+            echo "Info: using already defined portnumber ${PORT}"
+        else
+            if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
+                # make sure we use a free port
+                echo "Warning: found port in use already"
+                while grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1; do
+                    PORT=$(expr ${PORT} + 1)
+                    echo "Info: raising nbdroot portnumber by one to be ${PORT}"
+                done
+            fi
+            echo "Info: updating inetd config"
+            update-inetd --group LTSP --add "${PORT}               stream  tcp\
+            nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+        fi
     fi
 
-    # Check and see if our desired port is already there.
-    if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
-        echo "Info: port ${PORT} is already defined in inetd.conf"
-        exit 0
-    fi
-
-    # Update inetd.conf
-    update-inetd --group LTSP --add "${PORT}                   stream  tcp\
-        nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
-
-    # If port's been specified, set the port.
-    # Thats very ugly and needs to go to the config file in the chroot,
-    # else port is lost after ltsp-update-image is run
-
-    if [ -n "${PORT}" ] ; then
+    if [ ${PORT} -ne 2000 ];then
+        # seems we use a non default port, add it to pxe config and chroot
+        echo "Info: updating PXE"
         for TFTPDIR in $TFTPDIRS ; do
             if [ ! -d $TFTPDIR ]; then
                 continue       # skip directory
@@ -131,5 +139,9 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
                 sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
             fi
         done
+        if [ ! -d "${CHROOT}/etc/ltsp" ]; then
+            mkdir "${CHROOT}/etc/ltsp"
+        fi
+        echo "BOOTPROMPT_OPTS=\"quiet splash nbdport=${PORT}\"" >${CHROOT}/etc/ltsp/update-kernels.conf
     fi
 fi

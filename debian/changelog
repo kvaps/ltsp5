@@ -1,3 +1,45 @@
+ltsp (5.0.30) gutsy; urgency=low
+
+  * dont try to write to non existing dirs in the chroot from
+    ltsp-update-image (thanks lamont !)
+  * fix issue with doubleslashes in ltsp-update-image
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 13 Sep 2007 22:22:57 +0200
+
+ltsp (5.0.29) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * fix setting of SERVER with nbd roots, closes LP: #139059
+  * remove screensaver handling from ldm, gnome-screensaver konws what to do
+    now
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * enable compiz by default (leave it to Xsession on the server to decide)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 13 Sep 2007 16:10:50 +0200
+
+ltsp (5.0.28) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * mkfifo isnt available in d-i, use mknod instead in the udeb
+  * fix ltsp-update-image to handle existing inetd.conf entries properly
+  * Empty out lts.conf, we detect evrything that was in there automatically
+    and enable it if the corresponding app is in the chroot
+  * Add long note to old lts.conf about the new location in the tftp dir
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * bug pointed out by vagrantc: running ltsp-update-image on a chroot that
+    isn't going to be nbd mounted shouldn't error out
+  * Patch to disallow SCREEN_01 (used by upstart and source for probs)
+  * Eliminate call to awk, should be ulimit -m not -v for the
+    XRAMPERC client limit
+  * Little more cleanup on shell and telnet screen scripts, remove bash
+    references
+  * Instead of starting for all, start for just screens available
+
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 12 Sep 2007 12:01:25 +0200
+
 ltsp (5.0.27debian1) unstable; urgency=low
 
   * remove -s from LDFLAGS: don't strip getltscfg (Closes: #437540)
