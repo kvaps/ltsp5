@@ -79,3 +79,8 @@ fi
 if [ -z "$LOCALDEV" ] && [ -x /usr/bin/ltspfsd ]; then
     export LOCALDEV=True
 fi
+
+# enable encrypted swap when cryptsetup is installed
+if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
+    export ENCRYPT_SWAP=True
+fi
