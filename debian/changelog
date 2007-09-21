@@ -1,3 +1,16 @@
+ltsp (5.0.31) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * change mknbi dependency to mkelfimage for full LinuxBIOS support
+  * add libgl1-mesa-dri to ltsp-client dependencies for compiz support
+    out of the box.
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * Test failure of X autoconf add X_OPTIONS_**  parameters. A buggy
+    via driver revealed this. Won't cause any delay on a sane driver.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 19 Sep 2007 18:21:03 +0200
+
 ltsp (5.0.30) gutsy; urgency=low
 
   * dont try to write to non existing dirs in the chroot from

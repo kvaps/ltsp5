@@ -23,7 +23,17 @@ export HOME
 clear
 
 # Generate initial file
-INPUT_FILE=$(LANG=C Xorg -configure -novtswitch :1 2>&1 |grep "Your xorg.conf file is "|tr -d '\n'|cut -d' ' -f5)
+TEMPFILE=$(tempfile)
+LANG=C Xorg -configure -novtswitch :1 > ${TEMPFILE} 2>&1
+
+if [ $? -ne 0 ]; then
+    logger -t LTSP "Xorg failed to autodetect this card"
+    exit 1;
+fi
+
+INPUT_FILE=$(cat ${TEMPFILE} | grep "Your xorg.conf file is " | tr -d '\n' | cut -d' ' -f5)
+
+rm ${TEMPFILE}
 
 # Handle keyboard settings, default to console-setup settings
 handle_keyboard_settings() {
@@ -87,6 +97,21 @@ set_videoram(){
         RAMLINE="\tOption\t\"VideoRam\"\t\"$X_VIDEO_RAM\"\nEndSection"
         sed -i /'Section "Device"'/,/'EndSection'/s/'EndSection'/$RAMLINE/g $INPUT_FILE
     fi
+}
+
+# Set Options, if any
+set_options() {
+    for OPT in 01 02 03 04 05 06 07 08 09 10 11 12; do
+        eval CURROPT=\$X_OPTION_${OPT}
+        if [ -n "${CURROPT}" ]; then
+            OPTLINE="\tOption\t"
+            for O in ${CURROPT}; do
+                OPTLINE="${OPTLINE}\t${O}"
+            done
+            OPTLINE="${OPTLINE}\nEndSection"
+            sed -i /'Section "Device"'/,/'EndSection'/s/'EndSection'/${OPTLINE}/g $INPUT_FILE
+        fi
+    done
 }
 
 # FIXME
@@ -231,6 +256,7 @@ handle_keyboard_settings || true
 handle_mouse_settings || true
 handle_driver || true
 set_videoram || true
+set_options || true
 handle_modes || true
 set_default_depth || true
 hardcoded_devices || true
