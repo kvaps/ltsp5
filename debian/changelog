@@ -1,3 +1,39 @@
+ltsp (5.0.31debian1) unstable; urgency=low
+
+  * sync with ubuntu
+    - fix bug that caused ltsp-client init script to fail when using nfsroot
+
+  * use lowercase for "thin client" as suggested by Christian Perrier
+    (Closes: #441953)
+  * include french gettext translation by Jean-Baka Domelevo-Entfellner
+    (Closes: #442164)
+
+  * add example script to run ldm from init (Closes: #401357)
+
+  * README.Debian: use --kernel-packages instead of --late-packages for
+    unknown architectures
+
+  * added README.Debian.sound describing the steps to get remote sound to work
+    (thanks to Bryan Sutula, Closes: #425057)
+
+  * tighten sound dependencies:
+    - lower esound and nas dependencies for ltsp-server-stanadlone to
+      suggestions for ltsp-server
+    - ltsp-client:
+      + depend only on pulseaudio-esound-compat
+      + suggest pulseaudio, esound and nas
+
+  * ltsp-client: 
+    - versioned dependency on ltspfsd >= 0.5
+    - enable encrypted swap by default if cryptsetup is available
+
+  * ltsp-build-client: properly handle when debian-installer/keymap debconf
+    question is not present
+
+  * remove old ldm theme directories
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 22 Sep 2007 14:03:47 -0700
+
 ltsp (5.0.31) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
