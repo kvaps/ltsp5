@@ -1,2 +1,3 @@
 client/getltscfg/lts.conf
 client/lts-parameters.txt
+debian/doc/configure-x-xdebconfigurator
