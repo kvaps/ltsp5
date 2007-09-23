@@ -108,7 +108,7 @@ case "$1" in
             log_end_msg=log_end_msg
         fi
         if boolean_is_true "$CONFIGURE_X" ; then
-            /usr/lib/ltsp/configure-x.sh
+            ${CONFIGURE_X_COMMAND:-/usr/lib/ltsp/configure-x.sh}
         fi
 
         for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
