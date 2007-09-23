@@ -2,6 +2,7 @@ ltsp (5.0.31debian1) unstable; urgency=low
 
   * sync with ubuntu
     - fix bug that caused ltsp-client init script to fail when using nfsroot
+    - (re)add support for mkelf-linux (only when mkelfimage is not present)
 
   * use lowercase for "thin client" as suggested by Christian Perrier
     (Closes: #441953)
@@ -23,7 +24,7 @@ ltsp (5.0.31debian1) unstable; urgency=low
       + depend only on pulseaudio-esound-compat
       + suggest pulseaudio, esound and nas
 
-  * ltsp-client: 
+  * ltsp-client:
     - versioned dependency on ltspfsd >= 0.5
     - enable encrypted swap by default if cryptsetup is available
 
@@ -32,7 +33,12 @@ ltsp (5.0.31debian1) unstable; urgency=low
 
   * remove old ldm theme directories
 
- -- Vagrant Cascadian <vagrant@freegeek.org>  Sat, 22 Sep 2007 14:03:47 -0700
+  * quiet read-write filesystem detection
+
+  * allow for custom X configuration command (CONFIGURE_X_COMMAND)
+    - add example alternative x configuration script
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Sun, 23 Sep 2007 16:46:42 -0700
 
 ltsp (5.0.31) gutsy; urgency=low
 
