@@ -22,6 +22,9 @@ case "$1" in
     configure)
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
+		ldm-theme /usr/share/ldm/themes/ltsp 60
+	update-alternatives \
+		--install /usr/share/ldm/themes/default \
 		ldm-theme /usr/share/ldm/themes/Debian ${ldm_debian_priority:-"60"}
 	update-alternatives \
 		--install /usr/share/ldm/themes/default \
