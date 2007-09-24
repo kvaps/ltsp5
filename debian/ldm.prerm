@@ -12,6 +12,6 @@ case "$1" in
     update-alternatives --remove ldm-theme \
 	/usr/share/ldm/themes/Debian
     update-alternatives --remove ldm-theme \
-	/usr/share/ldm/themes/Debian-Edu
+	/usr/share/ldm/themes/ltsp
   ;;
 esac
