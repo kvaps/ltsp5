@@ -1,3 +1,36 @@
+ltsp (5.0.31) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * change mknbi dependency to mkelfimage for full LinuxBIOS support
+  * add libgl1-mesa-dri to ltsp-client dependencies for compiz support
+    out of the box.
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * Test failure of X autoconf add X_OPTIONS_**  parameters. A buggy
+    via driver revealed this. Won't cause any delay on a sane driver.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 19 Sep 2007 18:21:03 +0200
+
+ltsp (5.0.30) gutsy; urgency=low
+
+  * dont try to write to non existing dirs in the chroot from
+    ltsp-update-image (thanks lamont !)
+  * fix issue with doubleslashes in ltsp-update-image
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 13 Sep 2007 22:22:57 +0200
+
+ltsp (5.0.29) gutsy; urgency=low
+
+  [Oliver Grawert <ogra@ubuntu.com>]
+  * fix setting of SERVER with nbd roots, closes LP: #139059
+  * remove screensaver handling from ldm, gnome-screensaver konws what to do
+    now
+
+  [Scott Balneaves <sbalneav@ltsp.org>]
+  * enable compiz by default (leave it to Xsession on the server to decide)
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Thu, 13 Sep 2007 16:10:50 +0200
+
 ltsp (5.0.28) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
