@@ -83,23 +83,23 @@ in-target ltsp-update-image >$COMPRESS_LOG 2>&1 &
 
 db_progress START 0 100 ltsp-client-builder/compress
 
-OLDVAL=0
-while [ -z ${LOOP} ]; do
-    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
-    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
-        val=$(echo $rawval|tr -d %)
-        if [ "$val" -gt 96 ]; then
-            db_progress SET 100
-            sleep 3
-            LOOP="False"
-        else
-            if [ "$val" -gt "${OLDVAL}" ];then
-                db_progress SET $val
-                OLDVAL=$val
-            fi
-        fi
-    fi
-done
+#OLDVAL=0
+#while [ -z ${LOOP} ]; do
+#    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
+#    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
+#        val=$(echo $rawval|tr -d %)
+#        if [ "$val" -gt 96 ]; then
+#            db_progress SET 100
+#            sleep 3
+#            LOOP="False"
+#        else
+#            if [ "$val" -gt "${OLDVAL}" ];then
+#                db_progress SET $val
+#                OLDVAL=$val
+#            fi
+#        fi
+#    fi
+#done
 
 # save compression log
 if [ -e $COMPRESS_LOG ]; then
