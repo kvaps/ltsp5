@@ -1,3 +1,13 @@
+ltsp (5.0.32) gutsy; urgency=low
+
+  * move nfs handling plugin (095-exports) from common to Debian plugin dir
+    we dont use nfs-kernel-server anymore, no need to restart it or mangle
+    /etc/exports, leave that to debian :)
+  * dont try to move files from the udeb postinst if they dont exist so the
+    installer doesnt stop.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 12:50:17 +0200
+
 ltsp (5.0.31) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]
