@@ -79,10 +79,10 @@ fi
 
 COMPRESS_LOG=/var/log/ltsp-image-build.log
 
-in-target ltsp-update-image >$COMPRESS_LOG 2>&1 &
 
 db_progress START 0 100 ltsp-client-builder/compress
 
+in-target ltsp-update-image >$COMPRESS_LOG 2>&1 
 #OLDVAL=0
 #while [ -z ${LOOP} ]; do
 #    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
