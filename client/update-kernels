@@ -178,6 +178,7 @@ for kernel in $ALL_KERNELS ; do
             # TODO: proper tempfile handline
             gzip -cd $kernel > $BOOT/$nbi.tmp
             elftoaout -o $BOOT/$nbi $BOOT/$nbi.tmp
+            rm $BOOT/$nbi.tmp
             if [ -f "$BOOT/$initrd" ]; then
                 SPARC_INITRD_OPT="$BOOT/$initrd"
             fi
