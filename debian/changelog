@@ -1,3 +1,10 @@
+ltsp (5.0.33) gutsy; urgency=low
+
+  * disable d-i output for ltsp-update-image temporary to not risk beta release
+    lauchpad bug #121547 will be fixed afterwards.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 13:29:09 +0200
+
 ltsp (5.0.32) gutsy; urgency=low
 
   * move nfs handling plugin (095-exports) from common to Debian plugin dir
