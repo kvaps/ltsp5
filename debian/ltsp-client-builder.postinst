@@ -68,7 +68,10 @@ rm $FIFO
 if [ ! -d /taget/var/log/ltsp-build ]; then
     mkdir -p /taget/var/log/ltsp-build
 fi
-mv $LOG /taget/var/log/ltsp-build
+
+if [ -e $LOG ]; then
+    mv $LOG /taget/var/log/ltsp-build
+fi
 
 # compress the image
 # (we need the percentage of mksquashfs' output 
@@ -99,7 +102,9 @@ while [ -z ${LOOP} ]; do
 done
 
 # save compression log
-mv $COMPRESS_LOG /taget/var/log/ltsp-build/
+if [ -e $COMPRESS_LOG ]; then
+    mv $COMPRESS_LOG /taget/var/log/ltsp-build/
+fi
 
 db_progress STOP
 
