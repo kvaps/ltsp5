@@ -49,7 +49,7 @@ if [ ! -p $FIFO ]; then
 fi
 
 DEBIAN_PRIORITY=critical
-in-target ltsp-build-client $BUILD_CLIENT_OPTS >$FIFO 2>&1 &
+chroot /target ltsp-build-client $BUILD_CLIENT_OPTS >$FIFO 2>&1 &
 
 while read line <&9; do
     db_progress STEP 1
@@ -74,32 +74,31 @@ if [ -e $LOG ]; then
 fi
 
 # compress the image
-# (we need the percentage of mksquashfs' output 
+# (we need the percentage of mksquashfs' output
 # need to pipe through a file ...)
 
 COMPRESS_LOG=/var/log/ltsp-image-build.log
 
-
 db_progress START 0 100 ltsp-client-builder/compress
 
-in-target ltsp-update-image >$COMPRESS_LOG 2>&1 
-#OLDVAL=0
-#while [ -z ${LOOP} ]; do
-#    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
-#    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
-#        val=$(echo $rawval|tr -d %)
-#        if [ "$val" -gt 96 ]; then
-#            db_progress SET 100
-#            sleep 3
-#            LOOP="False"
-#        else
-#            if [ "$val" -gt "${OLDVAL}" ];then
-#                db_progress SET $val
-#                OLDVAL=$val
-#            fi
-#        fi
-#    fi
-#done
+chroot /target ltsp-update-image >$COMPRESS_LOG 2>&1 &
+OLDVAL=0
+while [ -z ${LOOP} ]; do
+    rawval=$(tail -1 $COMPRESS_LOG |sed -e 's/^.* //')
+    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
+        val=$(echo $rawval|tr -d %)
+        if [ "$val" -gt 95 ]; then
+            db_progress SET 100
+            sleep 3
+            LOOP="False"
+        else
+            if [ "$val" -gt "${OLDVAL}" ];then
+                db_progress SET $val
+                OLDVAL=$val
+            fi
+        fi
+    fi
+done
 
 # save compression log
 if [ -e $COMPRESS_LOG ]; then
@@ -128,22 +127,22 @@ EOF
 }
 
 # if we already have a matching interface, there is no need to go on
-if [ -n "$(ifconfig|grep $NET)" ];then 
+if [ -n "$(ifconfig|grep $NET)" ];then
 	exit 0
 fi
 
 # exclude the interface with the default route, we only want unconfigured ones
 IFACE_TMP=""
 for iface in $IFACE_LIST;do
-	if [ $iface != $DEFAULTROUTE_IFACE ]; then 
-		IFACE_TMP="${IFACE_TMP:+$IFACE_TMP }$iface"
+	if [ $iface != $DEFAULTROUTE_IFACE ]; then
+		IFACE_TMP="${IFACE_TMP:+$IFACE_TMP}$iface"
 	fi
 done
 IFACE_LIST=$IFACE_TMP
 
 # check if we still have more than one possible interface.
 # if thats the case, show a selector with the detected ones
-if [ "$(echo ${IFACE_LIST}|wc -w)" -gt 1 ]; then 
+if [ "$(echo ${IFACE_LIST}|wc -w)" -gt 1 ]; then
 	db_subst ltsp-client-builder/dhcp-interface choices "$(echo "$IFACE_LIST" | sed 's/ /, /g')"
 
 	db_fset ltsp-client-builder/dhcp-interface seen false
@@ -156,7 +155,7 @@ if [ "$(echo ${IFACE_LIST}|wc -w)" -gt 1 ]; then
 	interfaces_entry
 elif [  -z "$IFACE_LIST" ];then
 	# we didnt get a proper interface, tell the user about it
-	db_fset ltsp-client-builder/dhcp-manual seen false   
+	db_fset ltsp-client-builder/dhcp-manual seen false
 	db_input high ltsp-client-builder/dhcp-manual || true
 	db_go || true
 	exit 0
