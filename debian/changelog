@@ -1,3 +1,35 @@
+ltsp (5.0.35) gutsy; urgency=low
+
+  * change debconf frontend to noninteractive in the Ubuntu/095-update-image plugin
+    fixes LP: #144296
+  * fix sed quoting in ltsp-update-image so we dont end up with $PORT but the
+    actual portnumber in the pxe config.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 02 Oct 2007 13:54:42 +0200
+
+ltsp (5.0.34) gutsy; urgency=low
+
+  * make sure the udeb waits until ltsp-update-image is finished
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 18:08:21 +0200
+
+ltsp (5.0.33) gutsy; urgency=low
+
+  * disable d-i output for ltsp-update-image temporary to not risk beta release
+    lauchpad bug #121547 will be fixed afterwards.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 13:29:09 +0200
+
+ltsp (5.0.32) gutsy; urgency=low
+
+  * move nfs handling plugin (095-exports) from common to Debian plugin dir
+    we dont use nfs-kernel-server anymore, no need to restart it or mangle
+    /etc/exports, leave that to debian :)
+  * dont try to move files from the udeb postinst if they dont exist so the
+    installer doesnt stop.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 12:50:17 +0200
+
 ltsp (5.0.31) gutsy; urgency=low
 
   [Oliver Grawert <ogra@ubuntu.com>]

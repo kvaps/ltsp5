@@ -68,7 +68,10 @@ rm $FIFO
 if [ ! -d /taget/var/log/ltsp-build ]; then
     mkdir -p /taget/var/log/ltsp-build
 fi
-mv $LOG /taget/var/log/ltsp-build
+
+if [ -e $LOG ]; then
+    mv $LOG /taget/var/log/ltsp-build
+fi
 
 # compress the image
 # (we need the percentage of mksquashfs' output 
@@ -76,30 +79,32 @@ mv $LOG /taget/var/log/ltsp-build
 
 COMPRESS_LOG=/var/log/ltsp-image-build.log
 
-in-target ltsp-update-image >$COMPRESS_LOG 2>&1 &
 
 db_progress START 0 100 ltsp-client-builder/compress
 
-OLDVAL=0
-while [ -z ${LOOP} ]; do
-    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
-    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
-        val=$(echo $rawval|tr -d %)
-        if [ "$val" -gt 96 ]; then
-            db_progress SET 100
-            sleep 3
-            LOOP="False"
-        else
-            if [ "$val" -gt "${OLDVAL}" ];then
-                db_progress SET $val
-                OLDVAL=$val
-            fi
-        fi
-    fi
-done
+in-target ltsp-update-image >$COMPRESS_LOG 2>&1 
+#OLDVAL=0
+#while [ -z ${LOOP} ]; do
+#    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
+#    if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
+#        val=$(echo $rawval|tr -d %)
+#        if [ "$val" -gt 96 ]; then
+#            db_progress SET 100
+#            sleep 3
+#            LOOP="False"
+#        else
+#            if [ "$val" -gt "${OLDVAL}" ];then
+#                db_progress SET $val
+#                OLDVAL=$val
+#            fi
+#        fi
+#    fi
+#done
 
 # save compression log
-mv $COMPRESS_LOG /taget/var/log/ltsp-build/
+if [ -e $COMPRESS_LOG ]; then
+    mv $COMPRESS_LOG /taget/var/log/ltsp-build/
+fi
 
 db_progress STOP
 
