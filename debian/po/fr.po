@@ -1,16 +1,16 @@
 # Translation of ltsp debconf templates to French
 # This file is licensed under the same license as the ltsp package
 #
-# Copyright: 
+# Copyright:
 #  before 2007: Jean-Marc Chaton <chaton@debian.org>
 #  Christian Perrier <bubulle@debian.org>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2007-07-25 08:01+0200\n"
-"Last-Translator: Jean-Marc Chaton <chaton@debian.org>\n"
+"POT-Creation-Date: 2007-09-10 17:21-0700\n"
+"PO-Revision-Date: 2007-09-18 22:02+0100\n"
+"Last-Translator: Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,23 +39,29 @@ msgstr ""
 #. Item in the main menu to select this package
 #: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "Construction du « chroot » LTSP"
+msgstr "Construire le « chroot » LTSP"
 
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building LTSP chroot..."
-msgstr "Construction de l'environnement fermé d'exécution LTSP en cours ..."
+msgid "Building Thin Client system ..."
+msgstr "Création du système du client léger..."
 
-#. Type: error
+#. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:5001
+msgid "Compressing Thin Client image ..."
+msgstr "Compression de l'image du client léger..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:7001
 msgid "No interface for LTSP dhcpd configuration"
-msgstr "Aucune interface trouvée pour la configuration du dhcpd de LTSP"
+msgstr "Pas d'interface réseau lors de la configuration du démon DHCP de LTSP"
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
@@ -67,13 +73,13 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid "Interface for the thin client network:"
 msgstr "Interface pour le réseau de clients légers :"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
@@ -103,3 +109,6 @@ msgstr ""
 msgid "Please read the package description to understand what it means."
 msgstr ""
 "Veuillez lire la description du paquet pour comprendre ce que cela signifie."
+
+#~ msgid "Building LTSP chroot..."
+#~ msgstr "Construction de l'environnement fermé d'exécution LTSP en cours ..."
