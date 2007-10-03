@@ -26,9 +26,9 @@ clean:
 	dh_testroot
 	rm -f build-stamp
 
-	-$(MAKE) -C client/getltscfg clean
-	-$(MAKE) -C client/ldm2 clean
-	-$(MAKE) -C client/ldmgtkgreet clean
+	[ ! -f client/getltscfg/Makefile ] || $(MAKE) -C client/getltscfg clean
+	[ ! -f cleint/ldm2/Makefile ] || $(MAKE) -C client/ldm2 clean
+	[ ! -f client/ldmgtkgreet ] || $(MAKE) -C client/ldmgtkgreet clean
     
     # Using po specific Makefile to clean message catalogs
 	$(MAKE) -C po clean
