@@ -5,7 +5,9 @@
 #
 
 # Read in lts.conf entries.
-test -f /etc/lts.conf && eval $(getltscfg -a)
+if [ -f /etc/lts.conf ]; then
+    eval $(getltscfg -a) || true
+fi
 
 # set compatbility for ltsp 4.x variables
 X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
