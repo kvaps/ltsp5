@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2007-07-27 09:41+0100\n"
+"PO-Revision-Date: 2007-09-30 18:53+0100\n"
 "Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. Description
 #: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
-msgstr "¿Configurar un ambiente chroot de LTSP?"
+msgstr "¿Configurar un ambiente chroot para LTSP?"
 
 #. Type: boolean
 #. Description
@@ -27,15 +27,15 @@ msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
 msgstr ""
-"Indique se quere configurar un ambiente chroot de LTSP nesta máquina para "
-"actuar coma un servidor de clientes lixeiros."
+"Indique se quere configurar un ambiente chroot para LTSP nesta máquina para "
+"que actúe coma servidor de clientes finos."
 
 #. Type: text
 #. Description
 #. Item in the main menu to select this package
 #: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "Construír chroot de LTSP"
+msgstr "Construír o chroot de LTSP"
 
 #. Type: text
 #. Description
@@ -47,7 +47,7 @@ msgstr "A construír o chroot de LTSP..."
 #. Description
 #: ../ltsp-client-builder.templates:6001
 msgid "No interface for LTSP dhcpd configuration"
-msgstr "Ningunha interface para configurar dhcpd para LTSP"
+msgstr "Non se indicou unha interface para a configuración de dhcpd de LTSP"
 
 #. Type: error
 #. Description
@@ -57,15 +57,15 @@ msgid ""
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
 "after the installation has completed."
 msgstr ""
-"Non hai interfaces libres para empregalas co servidor LTSP. Configure o "
+"Non hai interfaces libres para as empregar co servidor LTSP. Configure o "
 "ficheiro /etc/ltsp/dhcpd.conf manualmente para que apunte a unha interface "
-"estática válida despois de rematar a instalación."
+"estática válida despois de completar a instalación."
 
 #. Type: select
 #. Description
 #: ../ltsp-client-builder.templates:7001
 msgid "Interface for the thin client network:"
-msgstr "Interface para a rede de clientes lixeiros:"
+msgstr "Interface para a rede de clientes finos:"
 
 #. Type: select
 #. Description
@@ -74,13 +74,13 @@ msgid ""
 "Please choose, among the multiple spare interfaces this system has, which "
 "one should be used for the thin client."
 msgstr ""
-"Indique, entre as distintas interfaces sobrantes que ten este sistema, cal "
-"quere empregar para o cliente lixeiro."
+"Escolla, entre as interfaces libres que ten este sistema, a que se debe "
+"empregar para o cliente fino."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted"
+msgid "Installation aborted "
 msgstr "Instalación cancelada "
 
 #. Type: error
@@ -97,7 +97,4 @@ msgstr ""
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Please read the package description to understand what it means."
-msgstr "Consulte a descrición do paquete para entender o que significa."
-
-#~ msgid "There were multiple spare interfaces found in this system."
-#~ msgstr "Atopáronse varias interfaces libres no sistema."
+msgstr "Lea a descrición do paquete para entender o que significa."
