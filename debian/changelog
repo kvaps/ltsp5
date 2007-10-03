@@ -1,3 +1,21 @@
+ltsp (5.0.31debian2) unstable; urgency=low
+
+  * ldm:
+    - new ltsp theme
+    - improved ldm theme for Debian (Closes: #443518)
+
+  * French debconf templates translation by Jean-Baka Domelevo-Entfellner
+    (Closes: #444844)
+
+  * Galician debconf template translation for ltsp by Jacobo Tarrio 
+    (Closes: #444753)
+
+  * bugfixes for network booting on sparc
+
+  * fix lintian warning: debian-rules-ignores-make-clean-error
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Wed,  3 Oct 2007 11:19:07 -0700
+
 ltsp (5.0.31debian1) unstable; urgency=low
 
   * sync with ubuntu
