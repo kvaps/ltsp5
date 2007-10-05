@@ -1,3 +1,11 @@
+ltsp (5.0.38) gutsy; urgency=low
+
+  * move interface configuration in the installer before the ltsp-build-client
+    run and bring the interface up, so ssh keys are generated properly later
+    hopefully helps with LP: #145514
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 05 Oct 2007 19:13:39 +0200
+
 ltsp (5.0.37) gutsy; urgency=low
 
   * revert the ltsp-build-client behavior of the d-i progress bar to teh
