@@ -32,7 +32,7 @@ if db_get ltsp-client-builder/build-client-opts && [ -n "$RET" ] ; then
 fi
 
 # build the chroot
-db_progress START 0 1800 ltsp-client-builder/progress
+db_progress START 0 2 ltsp-client-builder/progress
 
 apt-install ltsp-server
 
@@ -41,37 +41,12 @@ db_progress STEP 1
 # workaround for: http://bugs.debian.org/390647
 in-target /bin/touch /etc/resolv.conf
 
-FIFO=/tmp/ltsp-build-client
-LOG=/var/log/ltsp-build-client.log
-
-if [ ! -p $FIFO ]; then
-    mknod $FIFO p
-fi
-
 DEBIAN_PRIORITY=critical
-chroot /target ltsp-build-client $BUILD_CLIENT_OPTS >$FIFO 2>&1 &
-
-while read line <&9; do
-    db_progress STEP 1
-    echo $line >>$LOG
-done 9<$FIFO
+in-target ltsp-build-client $BUILD_CLIENT_OPTS 2>&1
 
 db_progress SET 1800
 
-sleep 3
-
 db_progress STOP
-
-rm $FIFO
-
-# save the log
-if [ ! -d /taget/var/log/ltsp-build ]; then
-    mkdir -p /taget/var/log/ltsp-build
-fi
-
-if [ -e $LOG ]; then
-    mv $LOG /taget/var/log/ltsp-build
-fi
 
 # compress the image
 # (we need the percentage of mksquashfs' output
@@ -102,7 +77,7 @@ done
 
 # save compression log
 if [ -e $COMPRESS_LOG ]; then
-    mv $COMPRESS_LOG /taget/var/log/ltsp-build/
+    mv $COMPRESS_LOG /taget/var/log/
 fi
 
 db_progress STOP
