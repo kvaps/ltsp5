@@ -1,3 +1,14 @@
+ltsp (5.0.37) gutsy; urgency=low
+
+  * revert the ltsp-build-client behavior of the d-i progress bar to teh
+    feisty behavior, together with the new compress progressbar that should
+    suffice to fix LP: #121547
+
+  * ignore getltscfg if it fails during boot, so we dont need dummy entries 
+    in "comment only" lts.conf files in the future
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 05 Oct 2007 18:03:54 +0200
+
 ltsp (5.0.36) gutsy; urgency=low
 
   * fix most of the d-i progressbar issues and broken whitespace in
