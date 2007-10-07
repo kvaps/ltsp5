@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-09-10 17:21-0700\n"
+"POT-Creation-Date: 2007-10-03 23:28+0000\n"
 "PO-Revision-Date: 2007-09-18 22:02+0100\n"
 "Last-Translator: Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -44,13 +44,13 @@ msgstr "Construire le « chroot » LTSP"
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building Thin Client system ..."
+msgid "Building thin client system ..."
 msgstr "Création du système du client léger..."
 
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:5001
-msgid "Compressing Thin Client image ..."
+msgid "Compressing thin client image ..."
 msgstr "Compression de l'image du client léger..."
 
 #. Type: note
