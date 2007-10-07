@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.99debian3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-01 14:25-0700\n"
-"PO-Revision-Date: 2007-09-02 23:45+0100\n"
+"POT-Creation-Date: 2007-09-13 12:56-0700\n"
+"PO-Revision-Date: 2007-09-27 08:49+0100\n"
 "Last-Translator: Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,6 +26,17 @@ msgstr "Sélectionner les composants à utiliser sur le miroir"
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
 msgstr ""
 "Note : désactivation de la source sécurité d'APT pour sid. Il n'y en a pas."
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
+msgid "cache downloaded packages"
+msgstr "garder en cache les paquets téléchargés"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#, sh-format
+msgid "a simple webkiosk mode."
+msgstr "un mode de kiosque web simplifié"
 
 #: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-late-packages:3
@@ -88,12 +99,12 @@ msgstr "indiquer la liste des paquets de noyau à installer."
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
-msgstr "activer le concours de popularité dans le chroot"
+msgstr "activer les statistiques d'utilisation de paquets dans le chroot"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
 msgid "Enabling popularity contest..."
-msgstr "Activation du concours de popularité..."
+msgstr "Activation des statistiques d'utilisation de paquets..."
 
 #: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
 #, sh-format
@@ -127,10 +138,11 @@ msgstr "garder en cache les paquets téléchargés"
 msgid "allow unsigned packages during install."
 msgstr "autoriser l'installation de paquets non signés."
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
-msgid "a simple webkiosk mode."
-msgstr "un mode de kiosque web simplifié"
+msgid "force to skip the squashfs build (for debian-installer)."
+msgstr ""
+"obliger à ne pas construire de système squashfs (dans l'installateur Debian)."
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
