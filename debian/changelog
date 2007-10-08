@@ -1,3 +1,9 @@
+ltsp (5.0.39) gutsy; urgency=low
+
+  * we want to move the compression log in d-i to target, not taget *sigh*
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 08 Oct 2007 11:14:01 +0200
+
 ltsp (5.0.38) gutsy; urgency=low
 
   * move interface configuration in the installer before the ltsp-build-client
