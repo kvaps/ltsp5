@@ -137,7 +137,7 @@ done
 
 # save compression log
 if [ -e $COMPRESS_LOG ]; then
-    mv $COMPRESS_LOG /taget/var/log/
+    mv $COMPRESS_LOG /target/var/log/
 fi
 
 db_progress STOP
