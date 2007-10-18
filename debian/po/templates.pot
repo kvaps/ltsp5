@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ltsp VERSION\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-08-08 18:33+0200\n"
+"POT-Creation-Date: 2007-10-17 23:50-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,18 +40,24 @@ msgstr ""
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building LTSP chroot..."
+msgid "Building thin client system..."
 msgstr ""
 
-#. Type: error
+#. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:5001
+msgid "Compressing thin client image..."
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:7001
 msgid "No interface for LTSP dhcpd configuration"
 msgstr ""
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
@@ -60,16 +66,16 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid "Interface for the thin client network:"
 msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid ""
-"Please choose, among the multiple spare interfaces this system has, which "
-"one should be used for the thin client."
+"Please choose which of this system's multiple spare interfaces should be "
+"used for the thin client."
 msgstr ""
 
 #. Type: error
@@ -82,12 +88,6 @@ msgstr ""
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid ""
-"The ltsp-client package cannot be installed in a regular machine. This "
-"package provides the basic structure for a LTSP terminal."
-msgstr ""
-
-#. Type: error
-#. Description
-#: ../ltsp-client-core.templates:2001
-msgid "Please read the package description to understand what it means."
+"The ltsp-client package provides the basic structure for an LTSP terminal. "
+"It cannot be installed on a regular machine."
 msgstr ""
