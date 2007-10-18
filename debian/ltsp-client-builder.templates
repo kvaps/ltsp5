@@ -21,11 +21,11 @@ _Description: Build LTSP chroot
 
 Template: ltsp-client-builder/progress
 Type: text
-_Description: Building thin client system ...
+_Description: Building thin client system...
 
 Template: ltsp-client-builder/compress
 Type: text
-_Description: Compressing thin client image ...
+_Description: Compressing thin client image...
 
 Template: ltsp-client-builder/build-client-opts
 Type: string
@@ -45,5 +45,5 @@ Template: ltsp-client-builder/dhcp-interface
 Type: select
 Choices: ${choices}
 _Description: Interface for the thin client network:
- Please choose, among the multiple spare interfaces this system has, which
- one should be used for the thin client.
+ Please choose which of this system's multiple spare interfaces should be
+ used for the thin client.
