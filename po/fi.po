@@ -1,0 +1,233 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ltsp\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-09-13 12:56-0700\n"
+"PO-Revision-Date: 2007-10-18 20:01+0200\n"
+"Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
+"Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Finnish\n"
+"X-Poedit-Country: FINLAND\n"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "Set the components to be used in mirror"
+msgstr "Aseta peilipalvelimella käytettävät komponentit"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr "HUOM: jakelun sid APT-turvapäivityslähde poistetaan käytöstä. Sitä ei ole olemassa."
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
+msgid "cache downloaded packages"
+msgstr "varastoi ladatut paketit"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#, sh-format
+msgid "a simple webkiosk mode."
+msgstr "yksinkertainen verkkokioskitila"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation."
+msgstr "lista lopullisen asennuksen osana asennettavista paketeista"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "aseta kohdearkkitehtuuri"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed."
+msgstr "aseta lista perusasennuksen päättymisen jälkeen asennettavista paketeista."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Aseta peilipalvelimen sijainti"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "lisää peilipalvelin, joka ohittaa tärkeysjärjestyksessä oletuspeilipalvelimen"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "lisää peilipalvelin, joka on tärkeysjärjestyksessä oletuspeilin jälkeen"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr "lisää turvapeilipalvelin"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "sisällytä listatut avaimet apt-avainrenkaaseen"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr "HUOM: oletusjakelu ja -komponentit lisätään turvapeilipalvelimelle:"
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install."
+msgstr "aseta asennettavien ydinpakettien lista."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "ota popularity-contest käyttöön chroot-ympäristössä"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "Otetaan käyttöön popularity contest..."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "ota käyttöön sarjakonsoli"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "Otetaan käyttöön sarjakonsoli..."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "lataa debconf seeding chroot-ympäristössä asennuksen jälkeen"
+
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#, sh-format
+msgid "Set the default locale"
+msgstr "Aseta oletusmaa-asetus"
+
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "varastoi ladatut pakettitiedostot"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install."
+msgstr "salli allekirjoittamat paketit asennuksen aikana"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
+#, sh-format
+msgid "force to skip the squashfs build (for debian-installer)."
+msgstr "pakota ohittamaan squashfs:n kääntäminen (debian-asentimelle)"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
+#, sh-format
+msgid "use the servers sources.list instead of generating one"
+msgstr "käytä palvelimen sources.list-tiedostoa äläkä luo uutta"
+
+#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr "Lataa käyttäjäkohtainen asetustiedosto"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:42
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr "VIRHE: --arch %s kutsui tukematonta arkkitehtuuria: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:49
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr "VIRHE: tukematon arkkitehtuuri. Tarkista valitsimen --arch argumentti: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:50
+#, sh-format
+msgid "       supported values are: %s"
+msgstr "       tuetut arvot ovat: %s"
+
+#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr "pyydä asettamaan pääkäyttäjäsalasana, oletuksena ei käytössä"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "Aseta oletushakemisto perusasennukselle"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "Aseta asennuksessa käytetty jakelu"
+
+#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "Ota käyttöön tuki ohjelmavirheiden jäljitykselle"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "jätä pois paketteja ensimmäisestä chroot-ympäristöstä"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#, sh-format
+msgid "Set the name of the chroot."
+msgstr "Aseta chroot-ympäristön nimi"
+
+#: ../server/ltsp-build-client:49
+#, sh-format
+msgid "API ERROR: you need to provide true or false."
+msgstr "API-VIRHE: sinun tulee antaa tosi (true) tai epätosi (false)"
+
+#: ../server/ltsp-build-client:101
+#, sh-format
+msgid "Display this help message"
+msgstr "Näytä tämä ohjeviesti"
+
+#: ../server/ltsp-build-client:102
+#, sh-format
+msgid "Display help for all available commandline options"
+msgstr "Näytä kaikkien käytettävissä olevien komentorivivalitsimien ohje"
+
+#: ../server/ltsp-build-client:106
+#, sh-format
+msgid "LTSP Build Client usage:"
+msgstr "LTSP Build Clientin käyttö:"
+
+#: ../server/ltsp-build-client:110
+#, sh-format
+msgid "  Regular options:"
+msgstr "  Normaalit valitsimet:"
+
+#: ../server/ltsp-build-client:114
+#, sh-format
+msgid "  Advanced options:"
+msgstr "  Lisävalitsimet::"
+
+#: ../server/ltsp-build-client:126
+#, sh-format
+msgid "info: LTSP client installation completed successfully"
+msgstr "info: LTSP-asiakkaan asennus päättyi onnistuneesti"
+
+#: ../server/ltsp-build-client:128
+#, sh-format
+msgid "error: LTSP client installation ended abnormally"
+msgstr "virhe: LTSP-asiakkaan asennus päättyi epänormaalisti"
+
