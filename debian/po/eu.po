@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LTSP-debconf\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-25 07:57+0200\n"
+"POT-Creation-Date: 2007-10-17 23:50-0700\n"
 "PO-Revision-Date: 2007-07-04 10:11+0200\n"
 "Last-Translator: Piarres Beobide <pi@beobide.net>\n"
 "Language-Team: Euskara <librezale@librezale.org>\n"
@@ -42,41 +42,47 @@ msgstr "LTSP chroot-a eraiki"
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building LTSP chroot..."
-msgstr "LTSP chroot-a eraikitzen..."
+msgid "Building thin client system..."
+msgstr "Bezero ari sistema eraikitzen..."
 
-#. Type: error
+#. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:5001
+msgid "Compressing thin client image..."
+msgstr "Bezero arin irudia konprimitzen..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:7001
 msgid "No interface for LTSP dhcpd configuration"
 msgstr "Ez dago interfazerik LTSP dhcpd konfiguraziorako"
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
 "after the installation has completed."
 msgstr ""
-"Ez dago LSTP Zerbitzariak erabiltzeko interfaze librerik. Mesedez "
+"Ez dago LTSP Zerbitzariak erabiltzeko interfaze librerik. Mesedez "
 "konfigurazioa amaitu ondoren /etc/ltsp/dhcpd.conf fitxategia eskuz "
 "konfiguratu baliozko interfaze estatiko batetara lotzeko."
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid "Interface for the thin client network:"
 msgstr "Bezero arin sarearen interfazea:"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid ""
-"Please choose, among the multiple spare interfaces this system has, which "
-"one should be used for the thin client."
+"Please choose which of this system's multiple spare interfaces should be "
+"used for the thin client."
 msgstr ""
-"Mesedez hautatu, sistema honek dituen erabili gabeko interfazeen artean, "
+"Mesedez hautatu, sistema honek dituen erabili gabeko interfaze anitzen artean, "
 "zein erabili behar den bezero arinarentzat."
 
 #. Type: error
@@ -89,18 +95,25 @@ msgstr "Instalazioa utzi egin da"
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid ""
-"The ltsp-client package cannot be installed in a regular machine. This "
-"package provides the basic structure for a LTSP terminal."
+"The ltsp-client package provides the basic structure for an LTSP terminal. "
+"It cannot be installed on a regular machine."
 msgstr ""
-"ltsp-client paketea ezin da makina arrunt batetan instalatu. Pakete honek "
-"LTSP terminalaren oinarrizko egitura du."
+"ltsp-client paketeak LTSP teminal batentzat oinarrizko egitura du. "
+"Berau ezin da makina arrunt batetan instalatu."
 
-#. Type: error
-#. Description
-#: ../ltsp-client-core.templates:2001
-msgid "Please read the package description to understand what it means."
-msgstr ""
-"Mesedez pakete deskribapena irakurri horrek zer esan nahi duen ulertzeko."
+#~ msgid "Building LTSP chroot..."
+#~ msgstr "LTSP chroot-a eraikitzen..."
+
+#~ msgid ""
+#~ "The ltsp-client package cannot be installed in a regular machine. This "
+#~ "package provides the basic structure for a LTSP terminal."
+#~ msgstr ""
+#~ "ltsp-client paketea ezin da makina arrunt batetan instalatu. Pakete honek "
+#~ "LTSP terminalaren oinarrizko egitura du."
+
+#~ msgid "Please read the package description to understand what it means."
+#~ msgstr ""
+#~ "Mesedez pakete deskribapena irakurri horrek zer esan nahi duen ulertzeko."
 
 #~ msgid "There were multiple spare interfaces found in this system."
 #~ msgstr "Erabili gabeko interfaze anitz aurkitu dira sistema honetan."
