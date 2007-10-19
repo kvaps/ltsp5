@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2007-09-30 18:53+0100\n"
+"POT-Creation-Date: 2007-10-17 23:50-0700\n"
+"PO-Revision-Date: 2007-10-18 21:16+0100\n"
 "Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -40,18 +40,24 @@ msgstr "Construír o chroot de LTSP"
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building LTSP chroot..."
-msgstr "A construír o chroot de LTSP..."
+msgid "Building thin client system..."
+msgstr "A construír o sistema cliente fino..."
 
-#. Type: error
+#. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:5001
+msgid "Compressing thin client image..."
+msgstr "A comprimir a imaxe do cliente fino..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:7001
 msgid "No interface for LTSP dhcpd configuration"
 msgstr "Non se indicou unha interface para a configuración de dhcpd de LTSP"
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
@@ -63,38 +69,45 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid "Interface for the thin client network:"
 msgstr "Interface para a rede de clientes finos:"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid ""
-"Please choose, among the multiple spare interfaces this system has, which "
-"one should be used for the thin client."
+"Please choose which of this system's multiple spare interfaces should be "
+"used for the thin client."
 msgstr ""
-"Escolla, entre as interfaces libres que ten este sistema, a que se debe "
-"empregar para o cliente fino."
+"Escolla cal das interfaces libres deste sistema se debe empregar para o "
+"cliente fino."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-msgid "Installation aborted "
-msgstr "Instalación cancelada "
+msgid "Installation aborted"
+msgstr "Instalación cancelada"
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid ""
-"The ltsp-client package cannot be installed in a regular machine. This "
-"package provides the basic structure for a LTSP terminal."
+"The ltsp-client package provides the basic structure for an LTSP terminal. "
+"It cannot be installed on a regular machine."
 msgstr ""
-"Non se pode instalar o paquete ltsp-client nunha máquina normal. Este "
-"paquete fornece a estructura básica para un terminal LTSP."
+"O paquete ltsp-client fornece a estructura básica para un terminal LTSP. Non "
+"se pode instalar nunha máquina normal."
 
-#. Type: error
-#. Description
-#: ../ltsp-client-core.templates:2001
-msgid "Please read the package description to understand what it means."
-msgstr "Lea a descrición do paquete para entender o que significa."
+#~ msgid "Building LTSP chroot..."
+#~ msgstr "A construír o chroot de LTSP..."
+
+#~ msgid ""
+#~ "The ltsp-client package cannot be installed in a regular machine. This "
+#~ "package provides the basic structure for a LTSP terminal."
+#~ msgstr ""
+#~ "Non se pode instalar o paquete ltsp-client nunha máquina normal. Este "
+#~ "paquete fornece a estructura básica para un terminal LTSP."
+
+#~ msgid "Please read the package description to understand what it means."
+#~ msgstr "Lea a descrición do paquete para entender o que significa."
