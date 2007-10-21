@@ -27,7 +27,7 @@ clean:
 	rm -f build-stamp
 
 	[ ! -f client/getltscfg/Makefile ] || $(MAKE) -C client/getltscfg clean
-	[ ! -f cleint/ldm2/Makefile ] || $(MAKE) -C client/ldm2 clean
+	[ ! -f client/ldm2/Makefile ] || $(MAKE) -C client/ldm2 clean
 	[ ! -f client/ldmgtkgreet/Makefile ] || $(MAKE) -C client/ldmgtkgreet clean
     
     # Using po specific Makefile to clean message catalogs
