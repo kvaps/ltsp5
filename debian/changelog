@@ -1,3 +1,69 @@
+ltsp (5.0.39) gutsy; urgency=low
+
+  * we want to move the compression log in d-i to target, not taget *sigh*
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Mon, 08 Oct 2007 11:14:01 +0200
+
+ltsp (5.0.38) gutsy; urgency=low
+
+  * move interface configuration in the installer before the ltsp-build-client
+    run and bring the interface up, so ssh keys are generated properly later
+    hopefully helps with LP: #145514
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 05 Oct 2007 19:13:39 +0200
+
+ltsp (5.0.37) gutsy; urgency=low
+
+  * revert the ltsp-build-client behavior of the d-i progress bar to teh
+    feisty behavior, together with the new compress progressbar that should
+    suffice to fix LP: #121547
+
+  * ignore getltscfg if it fails during boot, so we dont need dummy entries 
+    in "comment only" lts.conf files in the future
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Fri, 05 Oct 2007 18:03:54 +0200
+
+ltsp (5.0.36) gutsy; urgency=low
+
+  * fix most of the d-i progressbar issues and broken whitespace in
+    debian/ltsp-client-builder.postinst
+  * add a dummy entry to the default lts.conf to quiten down getltscfg on
+    client boots
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 02 Oct 2007 22:22:53 +0200
+
+ltsp (5.0.35) gutsy; urgency=low
+
+  * change debconf frontend to noninteractive in the Ubuntu/095-update-image plugin
+    fixes LP: #144296
+  * fix sed quoting in ltsp-update-image so we dont end up with $PORT but the
+    actual portnumber in the pxe config.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Tue, 02 Oct 2007 13:54:42 +0200
+
+ltsp (5.0.34) gutsy; urgency=low
+
+  * make sure the udeb waits until ltsp-update-image is finished
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 18:08:21 +0200
+
+ltsp (5.0.33) gutsy; urgency=low
+
+  * disable d-i output for ltsp-update-image temporary to not risk beta release
+    lauchpad bug #121547 will be fixed afterwards.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 13:29:09 +0200
+
+ltsp (5.0.32) gutsy; urgency=low
+
+  * move nfs handling plugin (095-exports) from common to Debian plugin dir
+    we dont use nfs-kernel-server anymore, no need to restart it or mangle
+    /etc/exports, leave that to debian :)
+  * dont try to move files from the udeb postinst if they dont exist so the
+    installer doesnt stop.
+
+ -- Oliver Grawert <ogra@ubuntu.com>  Wed, 26 Sep 2007 12:50:17 +0200
+
 ltsp (5.0.31debian2) unstable; urgency=low
 
   * ldm:

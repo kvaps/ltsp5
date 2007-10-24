@@ -31,8 +31,68 @@ if db_get ltsp-client-builder/build-client-opts && [ -n "$RET" ] ; then
     log "ltsp-build-client options: $BUILD_CLIENT_OPTS"
 fi
 
+# configure a default interface for usage with LTSP
+NET=192.168.0
+DEFAULTROUTE_IFACE="$(route -n|grep ^0|sed -e 's/.* //')"
+IFACE_LIST="$(cat /proc/net/dev|sed -e 's/^ *//' -e 's/:.*//'|grep -Ev '(\||lo|sit)')"
+
+interfaces_entry() {
+	cat <<EOF >>/target/etc/network/interfaces
+
+auto $IFACE_LIST
+iface $IFACE_LIST inet static
+    address $NET.254
+    netmask 255.255.255.0
+    network $NET.0
+    broadcast $NET.255
+
+EOF
+    ifconfig $IFACE_LIST $NET.254
+}
+
+interfaces_setup(){
+# if we already have a matching interface, there is no need to go on
+    if [ -n "$(ifconfig|grep $NET)" ];then
+    	return
+    fi
+
+    # exclude the interface with the default route, we only want unconfigured ones
+    IFACE_TMP=""
+    for iface in $IFACE_LIST;do
+    	if [ $iface != $DEFAULTROUTE_IFACE ]; then
+    		IFACE_TMP="${IFACE_TMP:+$IFACE_TMP}$iface"
+    	fi
+    done
+    IFACE_LIST=$IFACE_TMP
+
+    # check if we still have more than one possible interface.
+    # if thats the case, show a selector with the detected ones
+    if [ "$(echo ${IFACE_LIST}|wc -w)" -gt 1 ]; then
+    	db_subst ltsp-client-builder/dhcp-interface choices "$(echo "$IFACE_LIST" | sed 's/ /, /g')"
+
+    	db_fset ltsp-client-builder/dhcp-interface seen false
+    	db_input high ltsp-client-builder/dhcp-interface || true
+        db_go || true
+
+    	db_get ltsp-client-builder/dhcp-interface || true
+    	IFACE_LIST="$RET"
+
+    	interfaces_entry
+    elif [  -z "$IFACE_LIST" ];then
+    	# we didnt get a proper interface, tell the user about it
+    	db_fset ltsp-client-builder/dhcp-manual seen false
+    	db_input high ltsp-client-builder/dhcp-manual || true
+    	db_go || true
+    	return
+    else
+    	interfaces_entry
+    fi
+}
+
+interfaces_setup
+
 # build the chroot
-db_progress START 0 1800 ltsp-client-builder/progress
+db_progress START 0 2 ltsp-client-builder/progress
 
 apt-install ltsp-server
 
@@ -50,51 +110,28 @@ db_progress STEP 1
 # workaround for: http://bugs.debian.org/390647
 in-target /bin/touch /etc/resolv.conf
 
-FIFO=/tmp/ltsp-build-client
-LOG=/var/log/ltsp-build-client.log
-
-if [ ! -p $FIFO ]; then
-    mknod $FIFO p
-fi
-
 DEBIAN_PRIORITY=critical
-in-target ltsp-build-client $BUILD_CLIENT_OPTS >$FIFO 2>&1 &
-
-while read line <&9; do
-    db_progress STEP 1
-    echo $line >>$LOG
-done 9<$FIFO
+in-target ltsp-build-client $BUILD_CLIENT_OPTS 2>&1
 
 db_progress SET 1800
 
-sleep 3
-
 db_progress STOP
 
-rm $FIFO
-
-# save the log
-if [ ! -d /taget/var/log/ltsp-build ]; then
-    mkdir -p /taget/var/log/ltsp-build
-fi
-mv $LOG /taget/var/log/ltsp-build
-
 # compress the image
-# (we need the percentage of mksquashfs' output 
+# (we need the percentage of mksquashfs' output
 # need to pipe through a file ...)
 
 COMPRESS_LOG=/var/log/ltsp-image-build.log
 
-in-target ltsp-update-image >$COMPRESS_LOG 2>&1 &
-
 db_progress START 0 100 ltsp-client-builder/compress
 
+chroot /target ltsp-update-image >$COMPRESS_LOG 2>&1 &
 OLDVAL=0
 while [ -z ${LOOP} ]; do
-    rawval=$(awk 'END{print substr($0, length($0)-4)}' $COMPRESS_LOG| tr -d ' ')
+    rawval=$(tail -1 $COMPRESS_LOG |sed -e 's/^.* //')
     if [ "$(echo $rawval|grep '[0-9]\%$')" ];then
         val=$(echo $rawval|tr -d %)
-        if [ "$val" -gt 96 ]; then
+        if [ "$val" -gt 95 ]; then
             db_progress SET 100
             sleep 3
             LOOP="False"
@@ -108,64 +145,11 @@ while [ -z ${LOOP} ]; do
 done
 
 # save compression log
-mv $COMPRESS_LOG /taget/var/log/ltsp-build/
+if [ -e $COMPRESS_LOG ]; then
+    mv $COMPRESS_LOG /target/var/log/
+fi
 
 db_progress STOP
 
-# configure a default interface for usage with LTSP
-NET=192.168.0
-DEFAULTROUTE_IFACE="$(route -n|grep ^0|sed -e 's/.* //')"
-IFACE_LIST="$(cat /proc/net/dev|sed -e 's/^ *//' -e 's/:.*//'|grep -Ev '(\||lo|sit)')"
-
-interfaces_entry() {
-	cat <<EOF >>/target/etc/network/interfaces
-
-auto $IFACE_LIST
-iface $IFACE_LIST inet static
-    address $NET.254
-    netmask 255.255.255.0
-    network $NET.0
-    broadcast $NET.255
-
-EOF
-
-}
-
-# if we already have a matching interface, there is no need to go on
-if [ -n "$(ifconfig|grep $NET)" ];then 
-	exit 0
-fi
-
-# exclude the interface with the default route, we only want unconfigured ones
-IFACE_TMP=""
-for iface in $IFACE_LIST;do
-	if [ $iface != $DEFAULTROUTE_IFACE ]; then 
-		IFACE_TMP="${IFACE_TMP:+$IFACE_TMP }$iface"
-	fi
-done
-IFACE_LIST=$IFACE_TMP
-
-# check if we still have more than one possible interface.
-# if thats the case, show a selector with the detected ones
-if [ "$(echo ${IFACE_LIST}|wc -w)" -gt 1 ]; then 
-	db_subst ltsp-client-builder/dhcp-interface choices "$(echo "$IFACE_LIST" | sed 's/ /, /g')"
-
-	db_fset ltsp-client-builder/dhcp-interface seen false
-	db_input high ltsp-client-builder/dhcp-interface || true
-    db_go || true
-
-	db_get ltsp-client-builder/dhcp-interface || true
-	IFACE_LIST="$RET"
-
-	interfaces_entry
-elif [  -z "$IFACE_LIST" ];then
-	# we didnt get a proper interface, tell the user about it
-	db_fset ltsp-client-builder/dhcp-manual seen false   
-	db_input high ltsp-client-builder/dhcp-manual || true
-	db_go || true
-	exit 0
-else
-	interfaces_entry
-fi
 
 exit 0

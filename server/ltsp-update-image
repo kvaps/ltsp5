@@ -134,9 +134,9 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
                 continue
             fi
             if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
-                sed -i -e 's/nbdport=[0-9]*/nbdport=${PORT}/g' ${PXECFG}
+                sed -i -e "s/nbdport=[0-9]*/nbdport=${PORT}/g" ${PXECFG}
             else
-                sed -i -e 's/$/ nbdport=${PORT}/g' ${PXECFG}
+                sed -i -e "s/$/ nbdport=${PORT}/g" ${PXECFG}
             fi
         done
         if [ ! -d "${CHROOT}/etc/ltsp" ]; then
