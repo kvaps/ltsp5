@@ -7,14 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2007-08-02 22:42+0200\n"
+"POT-Creation-Date: 2007-10-17 23:50-0700\n"
+"PO-Revision-Date: 2007-10-21 18:42+0200\n"
 "Last-Translator: Wolfgang Schweer <schweer@cityweb.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #. Type: boolean
@@ -38,24 +37,30 @@ msgstr ""
 #. Item in the main menu to select this package
 #: ../ltsp-client-builder.templates:3001
 msgid "Build LTSP chroot"
-msgstr "LTSP-Chroot-Umgebung einrichten"
+msgstr "LTSP-Chroot einrichten"
 
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building LTSP chroot..."
-msgstr "Die LTSP-Chroot-Umgebung wird eingerichtet ..."
+msgid "Building thin client system..."
+msgstr "Das System für Thin Clients wird eingerichtet ..."
 
-#. Type: error
+#. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:5001
+msgid "Compressing thin client image..."
+msgstr "Das Image für Thin Clients wird komprimiert ..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:7001
 msgid "No interface for LTSP dhcpd configuration"
 msgstr ""
-"Keine Netzwerkschnittstelle für die LTSP-dhcpd-Konfiguration vorhanden."
+"Keine Netzwerkschnittstelle für die LTSP-dhcpd-Konfiguration vorhanden"
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
@@ -67,16 +72,16 @@ msgstr ""
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid "Interface for the thin client network:"
 msgstr "Netzwerkschnittstelle für das Thin-Client-Netzwerk:"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid ""
-"Please choose, among the multiple spare interfaces this system has, which "
-"one should be used for the thin client."
+"Please choose which of this system's multiple spare interfaces should be "
+"used for the thin client."
 msgstr ""
 "Dieses Rechnersystem besitzt mehrere freie Netzwerkschnittstellen. Bitte "
 "wählen Sie aus, welche für den Thin Client benutzt werden soll."
@@ -85,23 +90,16 @@ msgstr ""
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Installation aborted"
-msgstr "Installation abgebrochen."
+msgstr "Installation abgebrochen"
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid ""
-"The ltsp-client package cannot be installed in a regular machine. This "
-"package provides the basic structure for a LTSP terminal."
+"The ltsp-client package provides the basic structure for an LTSP terminal. "
+"It cannot be installed on a regular machine."
 msgstr ""
-"Das Paket ltsp-client kann nicht auf einem normal genutzten Rechner "
-"installiert werden; das Paket stellt die Grundstruktur für ein LTSP-Terminal "
-"zur Verfügung."
+"Das Paket ltsp-client stellt die Grundstruktur für ein LTSP-Terminal zur "
+"Verfügung; es kann nicht auf einem normalen Rechner installiert werden."
 
-#. Type: error
-#. Description
-#: ../ltsp-client-core.templates:2001
-msgid "Please read the package description to understand what it means."
-msgstr ""
-"Bitte lesen Sie die Paketbeschreibung, um zu verstehen, was damit gemeint "
-"ist."
+
