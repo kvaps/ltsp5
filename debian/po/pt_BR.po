@@ -1,25 +1,17 @@
-#
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# ltsp Brazilian Portuguese translation
+# Copyright (C) 2007 THE ltsp'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ltsp package.
+# Tiago Bortoletto Vaz <tiago@debian-ba.org>, 2007."
+# Felipe Augusto van de Wiel (faw) <faw@debian.org>, 2007.
 #
 msgid ""
-msgstr ""
+msgstr "pt_BR utf-8\n"
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-07-25 07:57+0200\n"
-"PO-Revision-Date: 2006-03-07 10:46-0300\n"
-"Last-Translator: Tiago Bortoletto Vaz <tiago@debian-ba.org>\n"
-"Language-Team: debian-l10n-portuguese <debian-l10n-portuguese@lists.debian."
-"org>\n"
+"POT-Creation-Date: 2007-10-17 23:50-0700\n"
+"PO-Revision-Date: 2007-10-24 02:02-0200\n"
+"Last-Translator: Felipe Augusto van de Wiel (faw) <faw@debian.org>\n"
+"Language-Team: l10n portuguese <debian-l10n-portuguese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,21 +20,17 @@ msgstr ""
 #. Description
 #: ../ltsp-client-builder.templates:2001
 msgid "Set up an LTSP chroot environment?"
-msgstr "Criar um chroot para o LTSP ?"
+msgstr "Configurar um ambiente chroot LTSP?"
 
 #. Type: boolean
 #. Description
 #: ../ltsp-client-builder.templates:2001
-#, fuzzy
-#| msgid ""
-#| "This will set up an LTSP chroot environment on the machine, to act as a "
-#| "thin client server."
 msgid ""
 "Please choose whether you want to set up an LTSP chroot environment on this "
 "machine, to act as a thin client server."
 msgstr ""
-"Isto irÃ¡ criar um chroot LTSP na mÃ¡quina, para atuar como um servidor de "
-"clientes finos."
+"Por favor, escolha se você quer configurar um ambiente chroot LTSP nesta "
+"máquina, para atuar como um servidor para \"thin clients\"."
 
 #. Type: text
 #. Description
@@ -54,62 +42,80 @@ msgstr "Construir chroot LTSP"
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building LTSP chroot..."
-msgstr "Construindo chroot LTSP..."
+msgid "Building thin client system..."
+msgstr "Construindo o sistema para os \"thin clients\"..."
 
-#. Type: error
+#. Type: text
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:5001
+msgid "Compressing thin client image..."
+msgstr "Compactando imagem para os \"thin clients\"..."
+
+#. Type: note
+#. Description
+#: ../ltsp-client-builder.templates:7001
 msgid "No interface for LTSP dhcpd configuration"
-msgstr ""
+msgstr "Nenhuma interface para a configuração dhcpd LTSP"
 
-#. Type: error
+#. Type: note
 #. Description
-#: ../ltsp-client-builder.templates:6001
+#: ../ltsp-client-builder.templates:7001
 msgid ""
 "There are no free interfaces for usage with the LTSP server. Please manually "
 "configure the /etc/ltsp/dhcpd.conf file to point to a valid static interface "
 "after the installation has completed."
 msgstr ""
+"Não há interfaces livres para usar com o servidor LTSP. Por favor, "
+"manualmente configure o arquivo /etc/ltsp/dhcpd.conf para apontar para uma "
+"interface estática válida após a instalação ter sido completada."
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid "Interface for the thin client network:"
-msgstr ""
+msgstr "Interface para a rede dos \"thin clients\":"
 
 #. Type: select
 #. Description
-#: ../ltsp-client-builder.templates:7001
+#: ../ltsp-client-builder.templates:8001
 msgid ""
-"Please choose, among the multiple spare interfaces this system has, which "
-"one should be used for the thin client."
+"Please choose which of this system's multiple spare interfaces should be "
+"used for the thin client."
 msgstr ""
+"Por favor, escolha qual das múltiplas interfaces sobressalentes do sistema "
+"deveria ser usada para os \"thin clients\"."
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid "Installation aborted"
-msgstr "Instalacao abortada"
+msgstr "Instalação abortada"
 
 #. Type: error
 #. Description
 #: ../ltsp-client-core.templates:2001
-#, fuzzy
-#| msgid ""
-#| "ltsp-client cannot be installed in a regular machine. This package "
-#| "provides  the basic structure for a LTSP terminal."
 msgid ""
-"The ltsp-client package cannot be installed in a regular machine. This "
-"package provides the basic structure for a LTSP terminal."
+"The ltsp-client package provides the basic structure for an LTSP terminal. "
+"It cannot be installed on a regular machine."
 msgstr ""
-"ltsp-client não pode ser instalado numa máquina regular. Este pacote provê  "
-"a estrutura básica para um terminal LTSP."
+"O pacote ltsp-client fornece a estrutura básica para um terminal LTSP. "
+"Ele não pode ser instalado em uma máquina regular."
 
-#. Type: error
-#. Description
-#: ../ltsp-client-core.templates:2001
-msgid "Please read the package description to understand what it means."
-msgstr ""
-"Por favor leia a descrição do pacote para entendermelhor o que isso "
-"significa."
+#~ msgid "Building LTSP chroot..."
+#~ msgstr "Construindo chroot LTSP..."
+
+#, fuzzy
+#~| msgid ""
+#~| "ltsp-client cannot be installed in a regular machine. This package "
+#~| "provides  the basic structure for a LTSP terminal."
+#~ msgid ""
+#~ "The ltsp-client package cannot be installed in a regular machine. This "
+#~ "package provides the basic structure for a LTSP terminal."
+#~ msgstr ""
+#~ "ltsp-client não pode ser instalado numa máquina regular. Este pacote "
+#~ "provê  a estrutura básica para um terminal LTSP."
+
+#~ msgid "Please read the package description to understand what it means."
+#~ msgstr ""
+#~ "Por favor leia a descrição do pacote para entendermelhor o que isso "
+#~ "significa."
