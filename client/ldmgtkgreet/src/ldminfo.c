@@ -82,7 +82,7 @@ ldminfo_init(GHashTable ** ldminfo_hash, GList ** host_list,
 
 /*
  * Do the query for one host and fill ldminfo struct
- * Note: for right now, we're reading files in /tmp.  Francis would like
+ * Note: for right now, we're reading files in /var/run/ldm.  Francis would like
  * the host detection closer to the login and checking network availability
  * etc.  What should happen here, for gutsy+1, is to call out to an
  * external script.  This script will query ldminfo, perform ssh port testing,
@@ -96,7 +96,7 @@ _ldminfo_query_one(const char *hostname, ldminfo * ldm_host_info)
     char buf[MAXBUFSIZE];
     char hostfile[BUFSIZ];
 
-    snprintf(hostfile, sizeof hostfile, "/tmp/ldm/%s", hostname);
+    snprintf(hostfile, sizeof hostfile, "/var/run/ldm/%s", hostname);
 
     filedes = open(hostfile, O_RDONLY);
 

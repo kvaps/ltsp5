@@ -71,9 +71,9 @@ while :; do
     #
 
     if [ -n "${LDM_SERVER}" ]; then
-        test ! -d /tmp/ldm && mkdir -p /tmp/ldm
+        test ! -d /var/run/ldm && mkdir -p /var/run/ldm
         for SRV in $LDM_SERVER ; do
-            nc $SRV 9571 > /tmp/ldm/$SRV
+            nc $SRV 9571 > /var/run/ldm/$SRV
         done
     fi
 

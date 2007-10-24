@@ -23,7 +23,6 @@ PATH=/bin:$PATH; export PATH
 RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
 
 TTY=`/usr/bin/basename \`/usr/bin/tty\``
-XFCFG=/tmp/XF86Config.${TTY}
 export TTY
 
 RDESKTOP_OPTIONS="${RDP_OPTIONS} -f $* ${RDP_SERVER}"
