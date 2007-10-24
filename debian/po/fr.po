@@ -1,6 +1,6 @@
 # Translation of ltsp debconf templates to French
 # This file is licensed under the same license as the ltsp package
-#
+# 
 # Copyright:
 #  before 2007: Jean-Marc Chaton <chaton@debian.org>
 #  Christian Perrier <bubulle@debian.org>, 2007.
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
-"POT-Creation-Date: 2007-10-03 23:28+0000\n"
-"PO-Revision-Date: 2007-09-18 22:02+0100\n"
+"POT-Creation-Date: 2007-10-17 23:50-0700\n"
+"PO-Revision-Date: 2007-10-18 09:51+0100\n"
 "Last-Translator: Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,13 +44,13 @@ msgstr "Construire le « chroot » LTSP"
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:4001
-msgid "Building thin client system ..."
+msgid "Building thin client system..."
 msgstr "Création du système du client léger..."
 
 #. Type: text
 #. Description
 #: ../ltsp-client-builder.templates:5001
-msgid "Compressing thin client image ..."
+msgid "Compressing thin client image..."
 msgstr "Compression de l'image du client léger..."
 
 #. Type: note
@@ -81,8 +81,8 @@ msgstr "Interface pour le réseau de clients légers :"
 #. Description
 #: ../ltsp-client-builder.templates:8001
 msgid ""
-"Please choose, among the multiple spare interfaces this system has, which "
-"one should be used for the thin client."
+"Please choose which of this system's multiple spare interfaces should be "
+"used for the thin client."
 msgstr ""
 "Veuillez choisir, parmi les interfaces libres de ce système, celle qui doit "
 "être utilisée pour le client léger."
@@ -97,18 +97,23 @@ msgstr "Installation interrompue"
 #. Description
 #: ../ltsp-client-core.templates:2001
 msgid ""
-"The ltsp-client package cannot be installed in a regular machine. This "
-"package provides the basic structure for a LTSP terminal."
+"The ltsp-client package provides the basic structure for an LTSP terminal. "
+"It cannot be installed on a regular machine."
 msgstr ""
-"Il est impossible d'installer ltsp-client sur une machine normale. Ce paquet "
-"fournit la structure de base pour un terminal LTSP."
+"Le paquet ltsp-client fournit l'architecture essentielle à un terminal LTSP. "
+"Il ne saurait être installé sur une machine classique."
 
-#. Type: error
-#. Description
-#: ../ltsp-client-core.templates:2001
-msgid "Please read the package description to understand what it means."
-msgstr ""
-"Veuillez lire la description du paquet pour comprendre ce que cela signifie."
+#~ msgid ""
+#~ "The ltsp-client package cannot be installed in a regular machine. This "
+#~ "package provides the basic structure for a LTSP terminal."
+#~ msgstr ""
+#~ "Il est impossible d'installer ltsp-client sur une machine normale. Ce "
+#~ "paquet fournit la structure de base pour un terminal LTSP."
+
+#~ msgid "Please read the package description to understand what it means."
+#~ msgstr ""
+#~ "Veuillez lire la description du paquet pour comprendre ce que cela "
+#~ "signifie."
 
 #~ msgid "Building LTSP chroot..."
 #~ msgstr "Construction de l'environnement fermé d'exécution LTSP en cours ..."
