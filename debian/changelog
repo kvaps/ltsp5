@@ -1,3 +1,46 @@
+ltsp (5.0.39debian1) unstable; urgency=low
+
+  * sync with ubuntu 5.0.39
+
+  * merge patches to use /var/run/ldm instead of /tmp/ldm
+
+  * configure tzdata after installing /etc/timezone 
+    thanks to Bryan Sutula for the report (Closes: #440856)
+
+  * debian/control: 
+    - add XS-X-Vcs-Bzr entry for debian
+
+  * debian/rules:
+    - fix typo in test for Makefile
+    - fix typo: cleint -> client
+
+  * plugin to copy server's Packages files into chroot
+
+  * updates to debconf templates reviewed by Justin B Rye
+
+  * new Finnish debconf templates and ltsp translation by Esko Arajärvi
+    (Closes: #447179)
+
+  * debconf template and ltsp translation updates:
+    - German by Wolfgang Schweer (Closes: #447504)
+    - Russian by Yuri Kozlov (Closes: #447181)
+    - Catalan by Jordà Polo (Closes: #446401)
+    - Brazilian Portuguese by Felipe Augusto van de Wiel (faw)
+      (Closes: #447839, #447838)
+    - French by Jean-Baka Domelevo-Entfellner and Christian Perrier
+      (Closes: #447761, #445479, #445596, #445598)
+
+  * debconf template translation updates:
+    - Dutch cobaco (aka Bart Cornelis) (Closes: #448010)
+    - Portuguese by Ricardo Silva (Closes: #447643)
+    - Czech by Miroslav Kure (Closes: #447438)
+    - Basque by Piarres Beobide (Closes: #447127)
+    - Vietnamese by Clytie Siddall (Closes: #447258)
+    - Galician by Jacobo Tarrio (Closes: #447195)
+    - Swedish by Daniel Nylander (Closes: #447125)
+
+ -- Vagrant Cascadian <vagrant@freegeek.org>  Thu, 25 Oct 2007 23:53:14 -0700
+
 ltsp (5.0.39) gutsy; urgency=low
 
   * we want to move the compression log in d-i to target, not taget *sigh*
