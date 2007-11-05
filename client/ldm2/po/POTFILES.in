@@ -1,4 +1,0 @@
-# List of source files which contain translatable strings.
-src/ldm.c
-src/sshutils.c
-src/greeter_iface.c

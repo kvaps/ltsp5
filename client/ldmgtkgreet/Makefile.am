@@ -1,2 +1,0 @@
-EXTRA_DIST = autogen.sh
-SUBDIRS = src pixmaps gtkrc

@@ -1,9 +1,0 @@
-Note: source passed through
-
-indent -kr -i4 -nut -c50 -psl
-
- -- K&R style
- -- 4 character tab widths
- -- Use space instead of tabs
- -- Align any inline comments on column 50
- -- newline after function definition.
