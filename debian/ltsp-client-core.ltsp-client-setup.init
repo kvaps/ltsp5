@@ -238,6 +238,7 @@ case "$1" in
         run_rcfiles || true
         configure_x || true
         configure_serial_mouse || true
+        configure_localdev || true
         configure_printer || true
 	    [ "$root_write_method" = "bind_mounts" ] && bind_unmounts
         log_end_msg 0
