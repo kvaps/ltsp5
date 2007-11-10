@@ -25,5 +25,3 @@ LTSP_CLIENT_CORE_SUGGESTS="$LTSP_CLIENT_COMMON, joystick [alpha amd64 arm i386 i
 LTSP_CLIENT_DEPENDS="ltsp-client-core, xorg, $LTSP_CLIENT_COMMON"
 
 LTSP_CLIENT_RECOMMENDS=''
-
-LDM_DEPENDS='openssh-client | ssh, gtk2-engines-clearlooks, xserver-xorg | xserver, lsb-release'

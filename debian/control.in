@@ -3,7 +3,7 @@ Section: misc
 Priority: extra
 Maintainer: MAINTAINER
 Uploaders: UPLOADERS
-Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf, libgtk2.0-dev
+Build-Depends: debhelper (>= 4), flex, bison, libpopt-dev, po-debconf
 Standards-Version: 3.7.2
 XS-X-Vcs-Bzr: BZR_URL
 
@@ -50,21 +50,6 @@ Suggests: LTSP_CLIENT_SUGGESTS
 Architecture: all
 Description: LTSP client environment
  This package provides the scripts needed to configure and boot an LTSP client.
- .
- LTSP stands for 'Linux Terminal Server Project'.
-
-Package: ldm
-Depends: ${misc:Depends}, ${shlibs:Depends}, LDM_DEPENDS
-Architecture: any
-Description: LTSP display manager
- ldm is an X11 display manager similar to xdm, gdm and kdm, but unlike
- those it wraps the X11 traffic within an SSH tunnel to provide a
- secure login mechanism for remote X sessions. ldm provides access
- only through SSH, not locally. It is technically possible to use ldm
- to connect to the same host, but probably a waste of CPU power.
- .
- It was written to work with the LTSP project, but should work without
- LTSP as well.
  .
  LTSP stands for 'Linux Terminal Server Project'.
 

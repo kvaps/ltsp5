@@ -19,6 +19,5 @@ sed -e "s%MAINTAINER%$MAINTAINER%g" \
     -e "s%LTSP_CLIENT_DEPENDS%$LTSP_CLIENT_DEPENDS%g" \
     -e "s%LTSP_CLIENT_RECOMMENDS%$LTSP_CLIENT_RECOMMENDS%g" \
     -e "s%LTSP_CLIENT_SUGGESTS%$LTSP_CLIENT_SUGGESTS%g" \
-    -e "s%LDM_DEPENDS%$LDM_DEPENDS%g" \
     -e "s%BZR_URL%$BZR_URL%g" \
     $basedir/control.in > $basedir/control
