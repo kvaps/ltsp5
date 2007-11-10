@@ -1,7 +1,0 @@
-client/ldm2/src/ldm usr/sbin
-client/ldm2/share/ldm-script usr/share/ldm
-client/ldm2/scripts/S05-set-ltspfs_token usr/share/ldm/rc.d
-client/ldm2/scripts/S10-delayed-mounter usr/share/ldm/rc.d
-client/ldmgtkgreet/src/ldmgtkgreet usr/bin
-client/ldmgtkgreet/themes/ltsp/ usr/share/ldm/themes/
-client/ldmgtkgreet/themes/Debian/ usr/share/ldm/themes/
