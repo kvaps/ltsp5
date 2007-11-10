@@ -13,10 +13,6 @@ build-stamp:
 	dh_testdir
 
 	$(MAKE) -C client/getltscfg
-	cd client/ldm2; ./configure --prefix=/usr; cd -
-	$(MAKE) -C client/ldm2
-	cd client/ldmgtkgreet; ./configure --prefix=/usr; cd -
-	$(MAKE) -C client/ldmgtkgreet
 
 	$(MAKE) -C po update-po
 	touch build-stamp
@@ -27,8 +23,6 @@ clean:
 	rm -f build-stamp
 
 	[ ! -f client/getltscfg/Makefile ] || $(MAKE) -C client/getltscfg clean
-	[ ! -f client/ldm2/Makefile ] || $(MAKE) -C client/ldm2 clean
-	[ ! -f client/ldmgtkgreet/Makefile ] || $(MAKE) -C client/ldmgtkgreet clean
     
     # Using po specific Makefile to clean message catalogs
 	$(MAKE) -C po clean
@@ -58,7 +52,7 @@ binary-indep: build install
 	dh_install -i -Xarch-ids
 	dh_installdebconf -i	
 	dh_installinit -i --no-start
-	dh_installman -pltsp-server -pltsp-client-core -pldm
+	dh_installman -pltsp-server -pltsp-client-core
 	dh_link -i
 	dh_compress -i
 	dh_fixperms -i
