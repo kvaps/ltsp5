@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAME=$(basename $(pwd))
-VERSION="5.1"
+VERSION="5.1" # FIXME needs proper automation
 RELEASE=$NAME-$VERSION
 BUILDPATH="/tmp/$RELEASE"
 
@@ -38,6 +38,10 @@ check() {
         fi
     }
 
+tag() {
+    bzr tag $RELEASE
+}
+
 autogen() {
     if [ -x $BUILDPATH/autogen.sh ]; then
         cd $BUILDPATH
@@ -64,6 +68,8 @@ mktbz() {
     cd -
     echo "INFO: created bzipped source tarball in $BUILDPATH.tar.bz2"
 }
+
+mktemp -d $BUILDPATH
 
 case $1 in
     --release)
@@ -94,3 +100,5 @@ case $1 in
         usage
         ;;
      esac
+
+rm -rf $BUILDPATH
