@@ -59,10 +59,12 @@ while :; do
     # use it to populate the LDM_SERVER environment variable.
     #
 
-    if [ -z "${LDM_SERVER}" ] && [ -x /usr/lib/ltsp/get_hosts ]; then
-    	LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
-    else
-    	LDM_SERVER=${SERVER}
+    if [ -z "${LDM_SERVER}" ]; then
+        if [ -x /usr/lib/ltsp/get_hosts ]; then
+            LDM_SERVER=$(/usr/lib/ltsp/get_hosts)
+        else
+            LDM_SERVER=${SERVER}
+        fi
     fi
     export LDM_SERVER
 
