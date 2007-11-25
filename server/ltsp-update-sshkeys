@@ -57,7 +57,7 @@ for NAME in ${NAMES}; do
 			echo $(echo $NAME $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
                 awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
 			logger -f $LOGFILE -t ltsp \
-                "# Creating ${encryption}-hostkey for ${NAME}"
+                "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
 		else
 			logger -f $LOGFILE -t ltsp \
                 "No ${ENCRYPTION} key found for ${NAME}, please configure \
