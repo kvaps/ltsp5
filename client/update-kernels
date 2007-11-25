@@ -138,6 +138,15 @@ for kernel in $ALL_KERNELS ; do
             fi
             mkelfImage --command-line=$MKELF_LINUX_OPTS --output=$BOOT/$nbi \
                 --kernel=$kernel $MKELF_INITRD_OPT
+        elif which mkelf-linux >/dev/null; then
+            if [ -z "$MKELF_LINUX_OPTS" ]; then
+                MKELF_LINUX_OPTS="--ip=dhcp"
+            fi
+            if [ -f "$BOOT/$initrd" ]; then
+                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $BOOT/$initrd
+            else
+                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel
+            fi
         else
             if [ -z "$mkelf_seen" ]; then
                 mkfelf_seen=true
@@ -167,8 +176,9 @@ for kernel in $ALL_KERNELS ; do
             nbi=$nbi-$SUB_ARCH
 
             # TODO: proper tempfile handline
-            gzip -cd $kernel > $nbi.tmp
-            elftoaout -o $nbi $nbi.tmp
+            gzip -cd $kernel > $BOOT/$nbi.tmp
+            elftoaout -o $BOOT/$nbi $BOOT/$nbi.tmp
+            rm $BOOT/$nbi.tmp
             if [ -f "$BOOT/$initrd" ]; then
                 SPARC_INITRD_OPT="$BOOT/$initrd"
             fi

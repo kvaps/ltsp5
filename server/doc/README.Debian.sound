@@ -1,0 +1,28 @@
+in Debian, getting sound support working with LTSP is fairly easy, by
+installing alsa plugins for pulseaudio, and configuring alsa to use pulseaudio:
+
+  apt-get install libasound2-plugins
+
+add the following lines to /etc/asound.conf:
+
+  pcm.!default {
+          type pulse
+  }
+  
+  ctl.!default {
+          type pulse
+  }
+
+and then configure sound applications to talk to alsa.  in my experience, KDE
+and GNOME applications worked automatically, if the whole environments were
+installed. some applications, notably alsaplayer, didn't work using the
+alsa/pulse plugins.
+
+for those applications, you may have luck using the padsp wrapper.
+
+  padsp alsaplayer some_music_file.ogg
+
+if you changed the defaults, and only installed ltsp-client-core in the chroot
+environment, you may need to install the additional dependencies in the chroot:
+
+  chroot /opt/ltsp/i386 apt-get install pulseaudio-esound-compat alsa-utils libasound2-plugins

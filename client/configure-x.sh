@@ -24,7 +24,7 @@ clear
 
 # Generate initial file
 TEMPFILE=$(tempfile)
-LANG=C Xorg -configure :1 > ${TEMPFILE} 2>&1
+LANG=C Xorg -configure -novtswitch :1 > ${TEMPFILE} 2>&1
 
 if [ $? -ne 0 ]; then
     logger -t LTSP "Xorg failed to autodetect this card"
@@ -264,6 +264,6 @@ append_dri || true
 add_touchscreen || true
 set_sync_ranges || true
 
-mv $INPUT_FILE $OUT_FILE
+cp $INPUT_FILE $OUT_FILE && rm $INPUT_FILE
 
 clear

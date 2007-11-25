@@ -16,7 +16,7 @@ X_CONF=${X_CONF:-"$XF86CONFIG_FILE"}
 
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
-    nbd_pid=$(pgrep -f $(cat /proc/mounts|grep /rofs|grep nbd|cut -d" " -f1) 2>/dev/null)
+    nbd_pid=$(pgrep -f $(cat /proc/mounts|grep /rofs|grep nbd|cut -d" " -f1) 2>/dev/null) || true
 
     if [ -n "$nbd_pid" ]; then
         nbd_command=$(ps -o cmd $nbd_pid|grep -v CMD)
@@ -80,4 +80,9 @@ fi
 # set defaults for local device support
 if [ -z "$LOCALDEV" ] && [ -x /usr/bin/ltspfsd ]; then
     export LOCALDEV=True
+fi
+
+# enable encrypted swap when cryptsetup is installed
+if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
+    export ENCRYPT_SWAP=True
 fi

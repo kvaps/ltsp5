@@ -1,0 +1,118 @@
+#! /bin/sh
+
+# configure X using xdebconfigurator, respecting LTSP configuratior values
+
+# put somewhere and set in lts.conf:
+# CONFIGURE_X_COMMAND=/path/to/this/script
+
+# muzso: preseed() has been modified to only collect commands in a variable
+#        and does not pipe them instantly to debconf-communicate
+#        We do this at the end in one batch.
+preseed() {
+    question="$1"
+    value="$2"
+
+    if [ -n "$value" ]; then
+        if [ -n "$debconf_commands" ]; then
+          debconf_commands="${debconf_commands}\n"
+        fi
+        debconf_commands="${debconf_commands}set $question $value"
+        debconf_commands="${debconf_commands}\nfset $question seen true"
+    fi
+}
+
+xserver_package=xserver-xorg
+xserver_config="/etc/X11/xorg.conf"
+if [ -n "$X_CONF" ]; then
+    # User has specified a custom config
+    cp "$X_CONF" "$xserver_config"
+else
+  xdebconfigurator
+
+  # Handle overrides of specific parameters
+  if [ -n "$XSERVER" ] && [ "$XSERVER" != "auto" ]; then
+    preseed $xserver_package/autodetect_video_card "false"
+    preseed $xserver_package/config/device/driver "$XSERVER"
+  fi
+  X_USE_SYNC_RANGES=${X_USE_SYNC_RANGES:-Y}
+  if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
+    preseed $xserver_package/autodetect_monitor "false"
+    preseed $xserver_package/config/monitor/selection-method "Advanced"
+    preseed $xserver_package/config/monitor/vert-refresh "$X_VERTREFRESH"
+    preseed $xserver_package/config/monitor/horiz-sync "$X_HORZSYNC"
+    if [ Y = "$X_USE_SYNC_RANGES" ]; then
+        preseed $xserver_package/config/monitor/use_sync_ranges "true"
+    else
+        preseed $xserver_package/config/monitor/use_sync_ranges "false"
+    fi
+  fi
+
+  # Color depth preseeding
+  if [ -n "$X_COLOR_DEPTH" ]; then
+    preseed $xserver_package/config/display/default_depth "$X_COLOR_DEPTH"
+  fi
+
+  # set video ram
+  if [ -n "$X_VIDEO_RAM" ]; then
+    preseed $xserver_package/config/device/video_ram "$X_VIDEO_RAM"
+  fi
+
+  # Mouse preseeding options.  Use inputattach if available
+  if [ -n "$X_MOUSE_DEVICE" ] && \
+    [ -n "$X_MOUSE_PROTOCOL" ] && \
+    type inputattach >/dev/null 2>/dev/null && \
+    [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
+      inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+  else
+    if [ -n "$X_MOUSE_DEVICE" ]; then 
+      preseed $xserver_package/config/inputdevice/mouse/port "$X_MOUSE_DEVICE"
+    fi
+    if [ -n "$X_MOUSE_PROTOCOL" ]; then 
+      preseed $xserver_package/config/inputdevice/mouse/protocol "$X_MOUSE_PROTOCOL"
+    fi
+  fi
+  if [ -n "$X_MOUSE_EMULATE3BTN" ]; then
+    preseed $xserver_package/config/inputdevice/mouse/emulate3buttons "$X_MOUSE_EMULATE3BTN"
+  fi
+
+  X_MODE=$( echo "$X_MODE_0 $X_MODE_1 $X_MODE_2" | sed -r 's/ +/, /g;s/, *$//g')
+  if [ -n "$X_MODE" ]; then
+	    preseed $xserver_package/config/display/modes "$X_MODE"
+  fi
+
+  # This require fontserver preseeding to work (Debian bug
+  # #323262, fixed in xorg-x11 version 6.8.99.901.dfsg.1-1).
+  # Also done using code in screen.d/startx and screen.d/ldm until
+  # the xorg-x11 version make it into unstable and testing.
+  if [ Y = "${USE_XFS}" ] ; then
+    if [ -z "${XFS_SERVER}" ] ; then
+      XFS_SERVER="${SERVER}"
+    fi
+    preseed $xserver_package/config/fontpath/fontserver "tcp/${XFS_SERVER}:7100"
+  fi
+
+  # Make sure xkb values only get preseeded if the variables are actually set
+  # (saves boottime to not call debconf-communicate on every empty value)
+  if [ -n "$XKBLAYOUT" ]; then
+    preseed $xserver_package/config/inputdevice/keyboard/layout "$XKBLAYOUT"
+  fi
+  if [ -n "$XKBMODEL" ]; then
+    preseed $xserver_package/config/inputdevice/keyboard/model "$XKBMODEL"
+  fi
+  if [ -n "$XKBRULES" ]; then
+    preseed $xserver_package/config/inputdevice/keyboard/rules "$XKBRULES"
+  fi
+  if [ -n "$XKBOPTIONS" ]; then
+    preseed $xserver_package/config/inputdevice/keyboard/options "$XKBOPTIONS"
+  fi
+  if [ -n "$XKBVARIANT" ]; then
+    preseed $xserver_package/config/inputdevice/keyboard/variant "$XKBVARIANT"
+  fi
+
+  # muzso: saving "preseeded" values
+  if [ -n "$debconf_commands" ]; then
+    /bin/echo -e $debconf_commands | debconf-communicate $xserver_package
+  fi
+
+  dexconf -o $xserver_config
+fi

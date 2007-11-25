@@ -2,18 +2,208 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>, 2006
+# Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>, 2007
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.99debian3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-17 21:35-0700\n"
-"PO-Revision-Date: 2006-12-18 18:29+0100\n"
-"Last-Translator: Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>\n"
+"POT-Creation-Date: 2007-09-13 12:56-0700\n"
+"PO-Revision-Date: 2007-09-27 08:49+0100\n"
+"Last-Translator: Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "Set the components to be used in mirror"
+msgstr "Sélectionner les composants à utiliser sur le miroir"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr ""
+"Note : désactivation de la source sécurité d'APT pour sid. Il n'y en a pas."
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
+msgid "cache downloaded packages"
+msgstr "garder en cache les paquets téléchargés"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#, sh-format
+msgid "a simple webkiosk mode."
+msgstr "un mode de kiosque web simplifié"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation."
+msgstr "liste des paquets à installer lors de l'installation finale."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "indiquer l'architecture cible"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed."
+msgstr ""
+"indiquer la liste des paquets à installer une fois l'installation de base "
+"(« base-install ») terminée."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Indiquer l'emplacement du miroir"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "ajouter un miroir, prioritaire sur le miroir par défaut"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "ajouter un miroir, sur lequel le miroir par défaut sera prioritaire"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr "ajouter un miroir sécurité"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "inclure les clés listées dans le trousseau d'APT"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"Note : ajout des distributions et des composants par défaut au miroir "
+"sécurité :"
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install."
+msgstr "indiquer la liste des paquets de noyau à installer."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "activer les statistiques d'utilisation de paquets dans le chroot"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "Activation des statistiques d'utilisation de paquets..."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "activer la console série"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "Activation de la console série..."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "charger la préconfiguration debconf dans le chroot après installation"
+
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#, sh-format
+msgid "Set the default locale"
+msgstr "Indiquer la langue (« locale ») par défaut"
+
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "garder en cache les paquets téléchargés"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install."
+msgstr "autoriser l'installation de paquets non signés."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
+#, sh-format
+msgid "force to skip the squashfs build (for debian-installer)."
+msgstr ""
+"obliger à ne pas construire de système squashfs (dans l'installateur Debian)."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
+#, sh-format
+msgid "use the servers sources.list instead of generating one"
+msgstr ""
+"utiliser les serveurs mentionnés dans sources.list et ne pas générer de "
+"nouvelle liste"
+
+#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr "Charger un fichier de configuration propre à l'utilisateur"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:42
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr "Erreur : --arch %s appelé avec une architecture non supportée : %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:49
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr ""
+"Erreur : architecture non supportée. Vérifiez votre paramètre --arch : %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:50
+#, sh-format
+msgid "       supported values are: %s"
+msgstr "       valeurs possibles : %s"
+
+#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr ""
+"demander la saisie du mot de passe du superutilisateur, désactivé par défaut"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "Indiquer le répertoire d'installation de base par défaut"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "Indiquer la distribution à utiliser pour l'installation"
+
+#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "Activer le débogage"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "exclure des paquets du chroot initial"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#, sh-format
+msgid "Set the name of the chroot."
+msgstr "Indiquer le nom du chroot."
 
 #: ../server/ltsp-build-client:49
 #, sh-format
@@ -54,162 +244,3 @@ msgstr "Info : l'installation du client LTSP est terminée."
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "Erreur : l'installation du client LTSP a échoué."
-
-#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
-#, sh-format
-msgid "include the listed keys in the apt keyring"
-msgstr "inclure les clés listées dans le trousseau d'APT"
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, sh-format
-msgid "allow unsigned packages during install."
-msgstr "autoriser l'installation de paquets non signés."
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
-#, sh-format
-msgid "Set the components to be used in mirror"
-msgstr "Sélectionner les composants à utiliser sur le miroir"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
-#, sh-format
-msgid "load debconf seeding in the chroot after install"
-msgstr "charger la préconfiguration debconf dans le chroot après installation"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
-#, sh-format
-msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr ""
-"Note : désactivation de la source sécurité d'APT pour sid. Il n'y en a pas."
-
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
-#, sh-format
-msgid "enable popularity-contest in the chroot"
-msgstr "activer le concours de popularité dans le chroot"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
-#, sh-format
-msgid "Enabling popularity contest..."
-msgstr "Activation du concours de popularité..."
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, sh-format
-msgid "Set the mirror location"
-msgstr "Indiquer l'emplacement du miroir"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#, sh-format
-msgid "add a mirror, which takes priority over the default mirror"
-msgstr "ajouter un miroir, prioritaire sur le miroir par défaut"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#, sh-format
-msgid "add a mirror, with lower priority than the default mirror"
-msgstr "ajouter un miroir, sur lequel le miroir par défaut sera prioritaire"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
-#, sh-format
-msgid "add a security mirror"
-msgstr "ajouter un miroir sécurité"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
-#, sh-format
-msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
-"Note : ajout des distributions et des composants par défaut au miroir "
-"sécurité :"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
-#, sh-format
-msgid "enable serial console"
-msgstr "activer la console série"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
-#, sh-format
-msgid "Enabling serial console..."
-msgstr "Activation de la console série..."
-
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, sh-format
-msgid "set the list of kernel packages to install."
-msgstr "indiquer la liste des paquets de noyau à installer."
-
-#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
-#, sh-format
-msgid "Set the default locale"
-msgstr "Indiquer la langue (« locale ») par défaut"
-
-#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, sh-format
-msgid "set the list of packages to install after base-install is completed."
-msgstr ""
-"indiquer la liste des paquets à installer une fois l'installation de base "
-"(« base-install ») terminée."
-
-#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, sh-format
-msgid "list of packages to install as part of the final installation."
-msgstr "liste des paquets à installer lors de l'installation finale."
-
-#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
-#, sh-format
-msgid "keep cache of downloaded package files"
-msgstr "garder en cache les paquets téléchargés"
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
-#, sh-format
-msgid "set the target architecture"
-msgstr "indiquer l'architecture cible"
-
-#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
-#, sh-format
-msgid "Enable debug support"
-msgstr "Activer le débogage"
-
-#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
-#, sh-format
-msgid "Load a user specific configuration file"
-msgstr "Charger un fichier de configuration propre à l'utilisateur"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
-#, sh-format
-msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr "Erreur : --arch %s appelé avec une architecture non supportée : %s"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:37
-#, sh-format
-msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
-"Erreur : architecture non supportée. Vérifiez votre paramètre --arch : %s"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:38
-#, sh-format
-msgid "       supported values are: %s"
-msgstr "       valeurs possibles : %s"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#, sh-format
-msgid "Set the distribution to be used for install"
-msgstr "Indiquer la distribution à utiliser pour l'installation"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
-#, sh-format
-msgid "exclude packages from the initial chroot"
-msgstr "exclure des paquets du chroot initial"
-
-#: ../server/plugins/ltsp-build-client/common/010-set-base:3
-#, sh-format
-msgid "Set the default base install directory"
-msgstr "Indiquer le répertoire d'installation de base par défaut"
-
-#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
-#, sh-format
-msgid "Set the name of the chroot."
-msgstr "Indiquer le nom du chroot."
-
-#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
-#, sh-format
-msgid "prompt to set the root password, defaults to disabled"
-msgstr ""
-"demander la saisie du mot de passe du superutilisateur, désactivé par défaut"

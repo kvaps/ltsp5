@@ -27,6 +27,12 @@ apt-get install nbd-server
 update-inetd --group LTSP --add "9210 stream tcp nowait nobody /usr/sbin/tcpd /usr/sbin/nbdswapd"
 
 
+add the following line to /etc/hosts.allow to ensure that dead clients don't
+leave nbd processes running on the server (see http://bugs.debian.org/422962):
+
+nbdswapd: ALL: keepalive
+
+
 encrypting swap space:
 
 in /opt/ltsp/i386/etc/lts.conf:

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # set hostname to ltsp if none is received from dhcp
 
 read HOSTNAME < /proc/sys/kernel/hostname
