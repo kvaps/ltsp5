@@ -126,6 +126,7 @@ on_exit() {
         echo "`eval_gettext "info: LTSP client installation completed successfully"`"
     else
         echo "`eval_gettext "error: LTSP client installation ended abnormally"`"
+        exit 1
     fi
 }
 
