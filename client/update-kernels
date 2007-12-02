@@ -149,7 +149,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         else
             if [ -z "$mkelf_seen" ]; then
-                mkfelf_seen=true
+                mkelf_seen=true
                 msg "Skipping etherboot images.  Install the mkelfimage package if you need them."
             fi
         fi
