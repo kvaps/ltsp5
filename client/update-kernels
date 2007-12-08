@@ -136,8 +136,8 @@ for kernel in $ALL_KERNELS ; do
             if [ -f "$BOOT/$initrd" ]; then
                 MKELFIMAGE_INITRD_OPT="--ramdisk=$BOOT/$initrd"
             fi
-            mkelfImage --command-line="$MKELFIMAGE_OPTS" --output=$BOOT/$nbi \
-                --kernel=$kernel $MKELFIMAGE_INITRD_OPT
+            mkelfImage --command-line="$MKELFIMAGE_OPTS" --output=$BOOT/$nbi.tmp \
+                --kernel=$kernel $MKELFIMAGE_INITRD_OPT && mv $BOOT/$nbi.tmp $BOOT/$nbi
         elif which mkelf-linux >/dev/null; then
             MKELF_LINUX_INITRD_OPT=""
             if [ -z "$MKELF_LINUX_APPEND" ]; then
