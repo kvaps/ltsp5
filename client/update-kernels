@@ -139,14 +139,14 @@ for kernel in $ALL_KERNELS ; do
             mkelfImage --command-line="$MKELFIMAGE_OPTS" --output=$BOOT/$nbi \
                 --kernel=$kernel $MKELFIMAGE_INITRD_OPT
         elif which mkelf-linux >/dev/null; then
+            MKELF_LINUX_INITRD_OPT=""
             if [ -z "$MKELF_LINUX_OPTS" ]; then
                 MKELF_LINUX_OPTS="--append='$BOOTPROMPT_OPTS'"
             fi
             if [ -f "$BOOT/$initrd" ]; then
-                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $BOOT/$initrd
-            else
-                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel
+                MKELF_LINUX_INITRD_OPT="$BOOT/$initrd"
             fi
+            mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $MKELF_LINUX_INITRD_OPT
         else
             if [ -z "$mkelf_seen" ]; then
                 mkelf_seen=true
