@@ -129,24 +129,25 @@ for kernel in $ALL_KERNELS ; do
         fi
     else
         if which mkelfImage >/dev/null; then
-            MKELF_INITRD_OPT=""
-            if [ -z "$MKELF_LINUX_OPTS" ]; then
-                MKELF_LINUX_OPTS="ip=dhcp"
+            MKELFIMAGE_INITRD_OPT=""
+            if [ -z "$MKELFIMAGE_OPTS" ]; then
+                MKELFIMAGE_OPTS="$BOOTPROMPT_OPTS"
             fi
             if [ -f "$BOOT/$initrd" ]; then
-                MKELF_INITRD_OPT="--ramdisk=$BOOT/$initrd"
+                MKELFIMAGE_INITRD_OPT="--ramdisk=$BOOT/$initrd"
             fi
-            mkelfImage --command-line=$MKELF_LINUX_OPTS --output=$BOOT/$nbi \
-                --kernel=$kernel $MKELF_INITRD_OPT
+            mkelfImage --command-line="$MKELFIMAGE_OPTS" --output=$BOOT/$nbi.tmp \
+                --kernel=$kernel $MKELFIMAGE_INITRD_OPT && mv $BOOT/$nbi.tmp $BOOT/$nbi
         elif which mkelf-linux >/dev/null; then
-            if [ -z "$MKELF_LINUX_OPTS" ]; then
-                MKELF_LINUX_OPTS="--ip=dhcp"
+            MKELF_LINUX_INITRD_OPT=""
+            if [ -z "$MKELF_LINUX_APPEND" ]; then
+                MKELF_LINUX_APPEND="$BOOTPROMPT_OPTS"
             fi
             if [ -f "$BOOT/$initrd" ]; then
-                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel $BOOT/$initrd
-            else
-                mkelf-linux $MKELF_LINUX_OPTS -o $BOOT/$nbi $kernel
+                MKELF_LINUX_INITRD_OPT="$BOOT/$initrd"
             fi
+            mkelf-linux $MKELF_LINUX_OPTS --append="$MKELF_LINUX_APPEND" \
+                -o $BOOT/$nbi $kernel $MKELF_LINUX_INITRD_OPT
         else
             if [ -z "$mkelf_seen" ]; then
                 mkelf_seen=true
