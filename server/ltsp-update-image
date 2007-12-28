@@ -3,10 +3,8 @@
 # distributed under the terms of the GNU General Public License version 2
 # or any later version.
 
-# generates a squashfs image from an ltsp chroot to be served by an inetd driven
-# nbd-server process, note that ltsp-client needs to support nbd booting fori
-# that. All versions of the ltsp-client package past 5.0.11 should be able
-# to do that
+# Generates a squashfs image from an ltsp chroot to be served by an inetd driven
+# nbd-server process.
 
 usage() {
 cat <<EOF
