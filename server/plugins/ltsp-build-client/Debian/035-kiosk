@@ -61,6 +61,10 @@ case "$MODE" in
                 # create a custom configuration for gdm with autologin
                 gdm_conf=$ROOT/etc/gdm/gdm.conf
 
+                if ! egrep -q '^\[daemon]' $gdm_conf ; then
+                    echo '[daemon]' >> $gdm_conf
+                fi
+
                 GDM_KIOSK_OPTS=${GDM_KIOSK_OPTS:-"AutomaticLoginEnable=true AutomaticLogin=kiosk TimedLoginEnable=true TimedLogin=kiosk TimedLoginDelay=5"}
                 for line in $GDM_KIOSK_OPTS ; do
                     opt="$(echo $line | cut -d = -f 1)"
