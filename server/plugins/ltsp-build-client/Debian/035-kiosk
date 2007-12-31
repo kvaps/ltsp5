@@ -58,18 +58,18 @@ case "$MODE" in
             #echo "include \"/usr/share/themes/Human/gtk-2.0/gtkrc\"" >$ROOT/home/kiosk/.gtkrc-2.0
 
             if [ "$KIOSK_DM" = "gdm" ]; then
-                # create a custom configuration for gdm
-                cp $ROOT/etc/gdm/gdm.conf $ROOT/etc/gdm/gdm-kiosk.conf
-                
-                # do some sed magic to enable autologin
-                sed -i s/AutomaticLoginEnable=false/AutomaticLoginEnable=true/ $ROOT/etc/gdm/gdm-kiosk.conf
-                sed -i s/AutomaticLogin=/AutomaticLogin=kiosk/ $ROOT/etc/gdm/gdm-kiosk.conf
-                sed -i s/TimedLoginEnable=false/TimedLoginEnable=true/ $ROOT/etc/gdm/gdm-kiosk.conf
-                sed -i s/TimedLogin=/TimedLogin=kiosk/ $ROOT/etc/gdm/gdm-kiosk.conf
-                sed -i s/TimedLoginDelay=30/TimedLoginDelay=5/ $ROOT/etc/gdm/gdm-kiosk.conf
-    
-                # set the new alternative we created as default config
-                chroot $ROOT update-alternatives --install /etc/gdm/gdm-cdd.conf gdm-config-derivative /etc/gdm/gdm-kiosk.conf 55
+                # create a custom configuration for gdm with autologin
+                gdm_conf=$ROOT/etc/gdm/gdm.conf
+
+                GDM_KIOSK_OPTS=${GDM_KIOSK_OPTS:-"AutomaticLoginEnable=true AutomaticLogin=kiosk TimedLoginEnable=true TimedLogin=kiosk TimedLoginDelay=5"}
+                for line in $GDM_KIOSK_OPTS ; do
+                    opt="$(echo $line | cut -d = -f 1)"
+                    val="$(echo $line | cut -d = -f 2)"
+                    if ! egrep -q ^"$opt"= $gdm_conf ; then
+                        sed -i -e "s,\[daemon\],[daemon]\n$opt=,g" $gdm_conf
+                    fi
+                    sed -i -e "s,$opt=.*,$line,g" $gdm_conf
+                done
             fi
         fi
         ;;
