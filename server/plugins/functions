@@ -7,6 +7,12 @@
 # Params:
 # $1 - mode (configure|run)
 # needs variable PLUGIN_DIRS defined
+
+# Red Hat's run-parts lacks --list
+run_parts() {
+    ls $2
+}
+
 load_plugins() {
     set -- "$@"
     MODE=$1
@@ -15,7 +21,7 @@ load_plugins() {
     NAMES=""
     for dir in $PLUGIN_DIRS ; do
         if [ -d "$dir" ]; then
-            FILENAMES="$FILENAMES $(run-parts --list $dir)"
+            FILENAMES="$FILENAMES $(run_parts --list $dir)"
         fi
     done
     for file in $FILENAMES ; do

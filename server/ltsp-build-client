@@ -91,7 +91,8 @@ chroot_mount() {
 # $1 - where to look for the files to be loaded
 load_modules() {
     DIR=$1
-    for file in $(run-parts --list $DIR); do
+    # Red Hat's run-parts lacks --list
+    for file in $(run_parts --list $DIR); do
         debug "  - Loading file $file..."
         . $file
     done
