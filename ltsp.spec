@@ -58,6 +58,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/tftpboot/ltsp/i386/pxelinux.cfg/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/ltsp/swapfiles/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 
 ###### client install
 pushd client/xrexecd
@@ -91,6 +92,8 @@ install -m 0755 server/ltsp-build-client $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-kernels $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-swapfile-delete $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_localstatedir}/lib/tftpboot/ltsp/i386/pxelinux.cfg/default
+install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
+install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -146,6 +149,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/nbdrootd
 %{_sbindir}/nbdswapd
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
+%{_sysconfdir}/xinetd.d/nbdrootd
+%{_sysconfdir}/xinetd.d/nbdswapd
 
 #K12 stuff
 #/usr/sbin/ltsp-initialize

@@ -1,0 +1,14 @@
+# default: off
+# description: NBD root daemon
+service nbdrootd
+{
+	disable		= yes
+	type		= UNLISTED
+	socket_type     = stream
+	wait            = no
+	user            = nobody
+	server          = /usr/sbin/tcpd
+	server_args     = /usr/sbin/ldminfod
+	log_on_failure  += USERID
+	port		= 9571
+}
