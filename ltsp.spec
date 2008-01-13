@@ -51,6 +51,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 # server
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/X11/Xsession.d/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
@@ -91,6 +92,7 @@ install -m 0755 server/ltsp-build-client $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-kernels $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-swapfile-delete $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_localstatedir}/lib/tftpboot/ltsp/i386/pxelinux.cfg/default
+install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -146,6 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/nbdrootd
 %{_sbindir}/nbdswapd
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
+%{_sysconfdir}/ltsp/nbdswapd.conf 
 
 #K12 stuff
 #/usr/sbin/ltsp-initialize
