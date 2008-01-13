@@ -57,6 +57,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/tftpboot/ltsp/i386/pxelinux.cfg/
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/ltsp/swapfiles/
 
 ###### client install
 pushd client/xrexecd
