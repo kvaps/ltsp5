@@ -101,6 +101,7 @@ install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -108,7 +109,6 @@ install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_syscon
 #/usr/share/ltsp/scripts/start-stop-daemon
 #/usr/share/ltsp/scripts/popularity-contest-ltsp
 #/usr/share/ltsp/scripts/policy-rc.d.ltsp
-#/usr/share/ltsp/plugins/*
 #/usr/share/bug/ltsp-server/*
 #/usr/share/doc/ltsp-server/*
 #/usr/share/man/man8/ltsp-update-sshkeys.8.gz
@@ -149,7 +149,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_sbindir}/ltsp-build-client
 %{_sbindir}/ltsp-update-kernels
-%{_datadir}/ltsp/scripts
+%{_datadir}/ltsp/scripts/
+%{_datadir}/ltsp/plugins/
 %{_sysconfdir}/X11/Xsession.d/80_ltsp-sound
 %{_sbindir}/ldminfod
 %{_sbindir}/ltsp-update-sshkeys
