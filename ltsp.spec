@@ -10,6 +10,8 @@ Source0:        ltsp-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: popt-devel
 BuildRequires: flex bison
+BuildRequires: automake
+BuildRequires: libX11-devel
 
 %package client
 Summary:        LTSP client
