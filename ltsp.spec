@@ -8,6 +8,8 @@ License:        GPL+
 URL:            http://www.ltsp.org
 Source0:        ltsp-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRequires: popt-devel
+BuildRequires: flex bison
 
 %package client
 Summary:        LTSP client
@@ -154,11 +156,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
 %{_sysconfdir}/xinetd.d/nbdrootd
 %{_sysconfdir}/xinetd.d/nbdswapd
-%dir %{_sysconfigdir}/ltsp/
+%dir %{_sysconfdir}/ltsp/
 %{_sysconfdir}/ltsp/nbdswapd.conf 
 
 #K12 stuff
-%config(noreplace) %{_sysconfigdir}/ltsp/ltsp-build-client-ks.cfg
+%config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client-ks.cfg
 #/usr/sbin/ltsp-initialize
 #/usr/share/ltsp/chkconfig.d
 #/usr/share/ltsp/scripts.d
