@@ -96,6 +96,7 @@ install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_localstatedir}
 install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -153,17 +154,18 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
 %{_sysconfdir}/xinetd.d/nbdrootd
 %{_sysconfdir}/xinetd.d/nbdswapd
+%dir %{_sysconfigdir}/ltsp/
 %{_sysconfdir}/ltsp/nbdswapd.conf 
 
 #K12 stuff
+%config(noreplace) %{_sysconfigdir}/ltsp/ltsp-build-client-ks.cfg
 #/usr/sbin/ltsp-initialize
 #/usr/share/ltsp/chkconfig.d
 #/usr/share/ltsp/scripts.d
 #%config /usr/share/ltsp/config/ltsp-dhcpd.conf
 #%{_sysconfdir}/rc.d/init.d/*
-#%config /etc/ltsp/ltsp-build-client-ks.cfg
-#%config /etc/ltsp/ltsp-dhcpd.conf
-#%config /etc/ltsp/ltsp.conf
+#%config(noreplace) /etc/ltsp/ltsp-dhcpd.conf
+#%config(noreplace) /etc/ltsp/ltsp.conf
 
 %changelog
 
