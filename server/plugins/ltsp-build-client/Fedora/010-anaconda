@@ -53,7 +53,7 @@ case "$MODE" in
 
         if [ -d "$ROOT" ]; then
            ANACONDA_PRODUCTPATH="Fedora" setarch $TARGETARCH /usr/sbin/anaconda \
-               -G -m $INSTALLREPO --targetarch=$TARGETARCH \
+               -G -m $INSTALLREPO_OPT --targetarch=$TARGETARCH \
                --rootpath $ROOT --kickstart=$KICKSTART_OPT
         fi
     ;;
