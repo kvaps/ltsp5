@@ -160,7 +160,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/xinetd.d/nbdrootd
 %{_sysconfdir}/xinetd.d/nbdswapd
 %dir %{_sysconfdir}/ltsp/
-%{_sysconfdir}/ltsp/nbdswapd.conf 
+%config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
 
 #K12 stuff
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client-ks.cfg
