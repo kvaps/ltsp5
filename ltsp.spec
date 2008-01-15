@@ -1,6 +1,6 @@
 Name:           ltsp
 Version:        REPLACE_VERSION_HERE
-Release:        unofficial%{?dist}
+Release:        unofficial.REPLACE_DATE_HERE%{?dist}
 Summary:        LTSP
 
 Group:          User Interface/Desktops
