@@ -34,16 +34,6 @@ case "$MODE" in
         esac
     ;;
     install)
-        # Anaconda chroot install will fail if selinux is enforcing
-        # XXX: we need to port the workaround from mock...
-        if [ -a /usr/sbin/getenforce ]; then
-           if [ `/usr/sbin/getenforce` == "Enforcing" ]; then
-              echo "ERROR: Cannot anaconda install chroot while SELinux is enforcing."
-              echo "Please use 'setenforce 0'"
-              echo "Do not forget to enable it after anaconda is done."
-           fi
-        fi
-
         # python-ruledispatch conflicts with anaconda Bug #331091
         if [ -d /usr/lib*/python*/site-packages/dispatch/ ]; then
            echo "ERROR: python-ruledispatch conflicts with anaconda.  Please remove it"
@@ -51,10 +41,12 @@ case "$MODE" in
            exit 1
         fi
 
+        # SELINUX NOTE: proper labeling within chroot is currently not possible
         if [ -d "$ROOT" ]; then
            ANACONDA_PRODUCTPATH="Fedora" setarch $TARGETARCH /usr/sbin/anaconda \
                -G -m $INSTALLREPO_OPT --targetarch=$TARGETARCH \
-               --rootpath $ROOT --kickstart=$KICKSTART_OPT
+               --rootpath $ROOT --kickstart=$KICKSTART_OPT \
+               --noselinux
         fi
     ;;
 esac
