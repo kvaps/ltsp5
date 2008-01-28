@@ -76,8 +76,12 @@ def compute_server_rating():
 if __name__ == "__main__":
     # Get the server's default locale
     # We want it to appear first in the list
-    fd=os.open('/etc/environment', 0)
-    for line in os.read(fd ,512).split():
+    try:
+        lines = Popen(['locale'], stdout=PIPE).communicate()[0]
+    except OSError:
+        print "ERROR: failed to run locale"
+        sys.exit(0)
+    for line in lines.split():
         if line.startswith('LANG='):
             defaultlocale = line.split('=')[1].strip('"')
 
