@@ -125,11 +125,8 @@ cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 rm -rf $RPM_BUILD_ROOT
 
 
-%files
-%defattr(-,root,root,-)
-%doc ChangeLog COPYING TODO
-
 %files client
+%defattr(-,root,root,-)
 #%doc ChangeLog COPYING TODO
 #%doc /usr/share/doc/ltsp-client/examples/lts.conf
 #%doc /usr/share/doc/ltsp-client/examples/lts-parameters.txt
@@ -143,6 +140,8 @@ rm -rf $RPM_BUILD_ROOT
 #%{_sysconfdir}/rc.d/init.d/*
 
 %files server
+%defattr(-,root,root,-)
+%doc ChangeLog COPYING TODO
 %{_localstatedir}/lib/tftpboot/ltsp/i386
 %{_localstatedir}/lib/ltsp/swapfiles/
 %config(noreplace) %{_localstatedir}/lib/tftpboot/ltsp/i386/pxelinux.cfg/default
