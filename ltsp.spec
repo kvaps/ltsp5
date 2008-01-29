@@ -103,6 +103,8 @@ install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 
+install -m 0644 server/configs/dhcpd-k12linux.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
 #/usr/sbin/ltsp-update-image
@@ -160,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/xinetd.d/nbdswapd
 %dir %{_sysconfdir}/ltsp/
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
+%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 
 #K12 stuff
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client-ks.cfg
