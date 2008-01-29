@@ -56,7 +56,6 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 # server
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/X11/Xsession.d/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
@@ -88,7 +87,6 @@ cp -av client/screen.d $RPM_BUILD_ROOT%{_datadir}/ltsp/
 #popd
 
 ### server install
-install -m 0755 server/80_ltsp-sound $RPM_BUILD_ROOT%{_sysconfdir}/X11/Xsession.d/
 install -m 0755 server/nbdrootd $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ldminfod $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-sshkeys $RPM_BUILD_ROOT%{_sbindir}
@@ -152,7 +150,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/ltsp-update-kernels
 %{_datadir}/ltsp/scripts/
 %{_datadir}/ltsp/plugins/
-%{_sysconfdir}/X11/Xsession.d/80_ltsp-sound
 %{_sbindir}/ldminfod
 %{_sbindir}/ltsp-update-sshkeys
 %{_sbindir}/nbdrootd
