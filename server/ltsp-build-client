@@ -85,18 +85,6 @@ chroot_mount() {
 ### End of plugins public methods
 ####################################
 
-# Load a bunch of files from a specific directory.
-#
-# Params:
-# $1 - where to look for the files to be loaded
-load_modules() {
-    DIR=$1
-    for file in $(run-parts --list $DIR); do
-        debug "  - Loading file $file..."
-        . $file
-    done
-}
-
 # Add commandline option to handle --help
 add_option "help" "`eval_gettext "Display this help message"`" "regular" "false"
 add_option "extra-help" "`eval_gettext "Display help for all available commandline options"`" "regular" "false"
