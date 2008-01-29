@@ -38,7 +38,7 @@ if [ -z "${CHROOTS}" ]; then
 fi
 HOSTNAME=$(hostname)
 IPS=$(ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
-OUTPUT=$(tempfile)
+OUTPUT=$(mktemp)
 ENC="dsa rsa"
 NAMES="${HOSTNAME} ${IPS}"
 LOGFILE="/var/log/syslog"

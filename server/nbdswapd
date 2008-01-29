@@ -18,7 +18,7 @@ fi
 
 if [ -n "$SWAPDIR" ]; then
     if [ -d "$SWAPDIR" ] && [ -w "$SWAPDIR" ]; then
-        TEMPFILE_OPTS="-d $SWAPDIR"
+        TEMPFILE_OPTS="${SWAPDIR}XXXXXX"
     else
         echo "ERROR: not a directory or not writeable: $SWAPDIR" > /dev/stderr
         exit 1
@@ -26,7 +26,7 @@ if [ -n "$SWAPDIR" ]; then
 fi
 
 if [ -z "$SWAP" ]; then
-    SWAP=$(tempfile $TEMPFILE_OPTS)
+    SWAP=$(mktemp $TEMPFILE_OPTS)
 fi
 
 # generate the swap file

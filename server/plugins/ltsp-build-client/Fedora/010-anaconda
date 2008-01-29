@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#
+# install a LTSP chroot to /opt/ltsp5/i386
+#
+
+case "$MODE" in
+    commandline)
+        add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "false" 
+        add_option "installrepo" "`eval_gettext "Repository to pull packages from"`" "advanced" "false" 
+    ;;
+    configure)
+        if [ -n "$option_kickstart_value" ]; then
+            KICKSTART_OPT="$option_kickstart_value"
+        else
+            KICKSTART_OPT="/etc/ltsp/ltsp-build-client-ks.cfg"
+        fi
+        if [ -n "$option_installrepo_value" ]; then
+            INSTALLREPO_OPT="$option_installrepo_value"
+        else
+            INSTALLREPO_OPT="http://ftp.linux.ncsu.edu/pub/fedora/linux/releases/8/Everything/i386/os/"
+        fi
+
+        case "$ARCH" in
+            amd64)
+                TARGETARCH="x86_64"
+            ;;
+            powerpc)
+                TARGETARCH="ppc"
+            ;;
+            *)
+                TARGETARCH="$ARCH"
+            ;;
+        esac
+    ;;
+    install)
+        # python-ruledispatch conflicts with anaconda Bug #331091
+        if [ -d /usr/lib*/python*/site-packages/dispatch/ ]; then
+           echo "ERROR: python-ruledispatch conflicts with anaconda.  Please remove it"
+           echo "temporarily before running this script.  See Bug #331091."
+           exit 1
+        fi
+
+        # SELINUX NOTE: proper labeling within chroot is currently not possible
+        if [ -d "$ROOT" ]; then
+           ANACONDA_PRODUCTPATH="Fedora" setarch $TARGETARCH /usr/sbin/anaconda \
+               -G -m $INSTALLREPO_OPT --targetarch=$TARGETARCH \
+               --rootpath $ROOT --kickstart=$KICKSTART_OPT \
+               --noselinux
+        fi
+    ;;
+esac

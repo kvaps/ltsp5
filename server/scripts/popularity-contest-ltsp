@@ -3,7 +3,7 @@
 # install this in the server's cron.weekly to have the terminal chroot
 # filesystems submit popularity-contest data
 
-# it requipres installing popularity-contest in each chroot, preferrably
+# it requires installing popularity-contest in each chroot, preferrably
 # configured to use HTTP POST, introduced in popularity-contest 1.30, as this
 # avoids the need for working mail in the chroot environment.
 

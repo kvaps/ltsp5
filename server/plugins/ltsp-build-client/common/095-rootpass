@@ -9,12 +9,12 @@ case "$MODE" in
         ;;
     after-install)
         # Root password is empty by default, lock it
-        chroot $ROOT passwd -l root
+        /usr/sbin/chroot $ROOT passwd -l root
         ;;
     finalization)
         if [ "$ROOTPASS" = "prompt" ]; then
             # prompt for root password
-            chroot $ROOT passwd root
+            /usr/sbin/chroot $ROOT passwd root
         fi
         ;;
 esac

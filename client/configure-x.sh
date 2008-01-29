@@ -23,7 +23,7 @@ export HOME
 clear
 
 # Generate initial file
-TEMPFILE=$(tempfile)
+TEMPFILE=$(mktemp)
 LANG=C Xorg -configure -novtswitch :1 > ${TEMPFILE} 2>&1
 
 if [ $? -ne 0 ]; then

@@ -1,0 +1,15 @@
+#! /bin/sh
+# Remove unused LTSP swap files
+
+[ -f /etc/ltsp/ltsp.conf ] && . /etc/ltsp/ltsp.conf
+[ "$LTSP_SWAP_DIR" ] || LTSP_SWAP_DIR=/var/lib/ltsp/swapfiles/
+
+cd $LTSP_SWAP_DIR || exit 1
+for ip in `ls *.swap 2>/dev/null | sed s/.swap$//g`
+do
+   netstat -natup 2>/dev/null | grep ${ip}: >/dev/null && touch ${ip}.swap
+   ping -c 1 -w 10 ${ip} &> /dev/null && touch ${ip}.swap
+done
+/usr/sbin/tmpwatch --ctime --atime --mtime 360 $LTSP_SWAP_DIR
+
+exit 0
