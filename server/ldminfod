@@ -73,6 +73,25 @@ def compute_server_rating():
         rating = 0
     return rating
 
+def get_sessions (dir):
+    """Get a list of available sessions.
+       Returns a list of sessions gathered from .desktop files
+    """
+    sessions = []
+    if os.path.isdir(dir):
+        for f in os.listdir(dir):
+            if f.endswith('.desktop') and os.path.isfile(os.path.join(dir, f)):
+                x=dict()
+                for line in file(os.path.join(dir, f), 'r').readlines():
+                    if line.count('Exec=') > 0:
+                        variable, value = line.split('=')
+                        x[variable]=value
+                if x.has_key('TryExec'):
+                    sessions.append(x['TryExec'].rstrip())
+                elif x.has_key('Exec'):
+                    sessions.append(x['Exec'].rstrip())
+    return sessions
+
 if __name__ == "__main__":
     # Get the server's default locale
     # We want it to appear first in the list
@@ -103,10 +122,8 @@ if __name__ == "__main__":
         if lang != 'POSIX' and lang != 'C' and lang != defaultlocale:
             print "language:" + lang
     try:
-        lines = []
-        for alternative in ['x-session-manager','x-window-manager']:
-            lines.extend(Popen(['/usr/sbin/update-alternatives', '--list',
-                         alternative ], stdout=PIPE).communicate()[0].split())
+        lines = get_sessions('/usr/share/xsessions/')
+
     except OSError:
         print "ERROR"
         sys.exit(0)
