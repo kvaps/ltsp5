@@ -22,7 +22,7 @@ Summary:        LTSP server
 Group:          User Interface/Desktops
 
 %description
-LTSP
+LTSP client and server
 
 %description client
 LTSP client
@@ -56,6 +56,7 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 # server
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
@@ -102,6 +103,7 @@ install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_syscon
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 
 install -m 0644 server/configs/dhcpd-k12linux.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -160,6 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/ltsp/
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
 %{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+%config(noreplace) %{_sysconfdir}/init.d/ltsp-dhcpd
 
 #K12 stuff
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client-ks.cfg
