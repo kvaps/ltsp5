@@ -1,16 +1,16 @@
 #
 # Catalan translation for ltsp package.
-# Copyright (C) 2007 LTSP Debian/Ubuntu Maintainers. 
+# Copyright (C) 2008 LTSP Debian/Ubuntu Maintainers. 
 # This file is distributed under the same license as the ltsp package.
 #
-# Jordà Polo <jorda@ettin.org>, 2006, 2007.
+# Jordà Polo <jorda@ettin.org>, 2006, 2007, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 5.0.31\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 12:56-0700\n"
-"PO-Revision-Date: 2007-10-18 13:32+0200\n"
+"Project-Id-Version: 5.0.40~bzr20080121-2\n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
+"POT-Creation-Date: 2008-01-29 07:11-0800\n"
+"PO-Revision-Date: 2008-01-30 10:11+0100\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
 "Language-Team: Catalan <debian-l10n-catalan@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,6 +33,16 @@ msgstr ""
 #, sh-format
 msgid "cache downloaded packages"
 msgstr "manté una cau dels paquets"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr "S'estan copiant els paquets"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:18
+#, sh-format
+msgid "done."
+msgstr "fet."
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -123,6 +133,11 @@ msgstr "S'està habilitant la consola sèrie..."
 msgid "load debconf seeding in the chroot after install"
 msgstr ""
 "carrega la preconfiguració de debconf al chroot després de la instal·lació"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr "copia els fitxers «Packages» de l'apt del servidor"
 
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
