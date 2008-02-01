@@ -1,6 +1,6 @@
 # default: off
-# description: NBD root daemon
-service nbdrootd
+# description: LDM Info Daemon
+service ldminfod
 {
 	disable		= yes
 	type		= UNLISTED
@@ -8,7 +8,7 @@ service nbdrootd
 	wait            = no
 	user            = nobody
 	server          = /usr/sbin/tcpd
-	server_args     = /usr/sbin/nbdrootd
+	server_args     = /usr/sbin/ldminfod
 	log_on_failure  += USERID
-	port		= 2000
+	port		= 9571
 }

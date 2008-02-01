@@ -96,15 +96,16 @@ cp -av client/screen.d $RPM_BUILD_ROOT%{_datadir}/ltsp/
 
 ### server install
 install -m 0755 server/nbdrootd $RPM_BUILD_ROOT%{_sbindir}
+install -m 0755 server/nbdswapd $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ldminfod $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-sshkeys $RPM_BUILD_ROOT%{_sbindir}
-install -m 0755 server/nbdswapd $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-build-client $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-kernels $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-swapfile-delete $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
+install -m 0644 server/xinetd.d/ldminfod $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
