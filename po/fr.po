@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.99debian3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 12:56-0700\n"
+"POT-Creation-Date: 2008-01-29 07:11-0800\n"
 "PO-Revision-Date: 2007-09-27 08:49+0100\n"
 "Last-Translator: Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -31,6 +31,16 @@ msgstr ""
 #, sh-format
 msgid "cache downloaded packages"
 msgstr "garder en cache les paquets téléchargés"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:18
+#, sh-format
+msgid "done."
+msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -120,6 +130,11 @@ msgstr "Activation de la console série..."
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
 msgstr "charger la préconfiguration debconf dans le chroot après installation"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3

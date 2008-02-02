@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 12:56-0700\n"
+"POT-Creation-Date: 2008-01-29 07:11-0800\n"
 "PO-Revision-Date: 2007-10-18 20:01+0200\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
 "Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
@@ -20,12 +20,24 @@ msgstr "Aseta peilipalvelimella käytettävät komponentit"
 #: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr "HUOM: jakelun sid APT-turvapäivityslähde poistetaan käytöstä. Sitä ei ole olemassa."
+msgstr ""
+"HUOM: jakelun sid APT-turvapäivityslähde poistetaan käytöstä. Sitä ei ole "
+"olemassa."
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
 msgid "cache downloaded packages"
 msgstr "varastoi ladatut paketit"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:18
+#, sh-format
+msgid "done."
+msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -49,7 +61,8 @@ msgstr "aseta kohdearkkitehtuuri"
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed."
-msgstr "aseta lista perusasennuksen päättymisen jälkeen asennettavista paketeista."
+msgstr ""
+"aseta lista perusasennuksen päättymisen jälkeen asennettavista paketeista."
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
@@ -59,12 +72,14 @@ msgstr "Aseta peilipalvelimen sijainti"
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr "lisää peilipalvelin, joka ohittaa tärkeysjärjestyksessä oletuspeilipalvelimen"
+msgstr ""
+"lisää peilipalvelin, joka ohittaa tärkeysjärjestyksessä oletuspeilipalvelimen"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr "lisää peilipalvelin, joka on tärkeysjärjestyksessä oletuspeilin jälkeen"
+msgstr ""
+"lisää peilipalvelin, joka on tärkeysjärjestyksessä oletuspeilin jälkeen"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
 #, sh-format
@@ -112,6 +127,11 @@ msgstr "Otetaan käyttöön sarjakonsoli..."
 msgid "load debconf seeding in the chroot after install"
 msgstr "lataa debconf seeding chroot-ympäristössä asennuksen jälkeen"
 
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr ""
+
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
@@ -154,7 +174,8 @@ msgstr "VIRHE: --arch %s kutsui tukematonta arkkitehtuuria: %s"
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:49
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr "VIRHE: tukematon arkkitehtuuri. Tarkista valitsimen --arch argumentti: %s"
+msgstr ""
+"VIRHE: tukematon arkkitehtuuri. Tarkista valitsimen --arch argumentti: %s"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:50
 #, sh-format
@@ -230,4 +251,3 @@ msgstr "info: LTSP-asiakkaan asennus päättyi onnistuneesti"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "virhe: LTSP-asiakkaan asennus päättyi epänormaalisti"
-

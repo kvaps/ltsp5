@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-13 12:56-0700\n"
+"POT-Creation-Date: 2008-01-29 07:11-0800\n"
 "PO-Revision-Date: 2007-10-24 08:56+0200\n"
 "Last-Translator: Wolfgang Schweer <schweer@cityweb.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
@@ -29,8 +29,19 @@ msgstr ""
 "Sid deaktiviert, da diese Komponente nicht existiert."
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
 msgid "cache downloaded packages"
 msgstr "Heruntergeladene Pakete im apt-Cache halten"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:18
+#, sh-format
+msgid "done."
+msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -43,8 +54,7 @@ msgstr "Einrichtung als einfacher Webkiosk."
 #, sh-format
 msgid "list of packages to install as part of the final installation."
 msgstr ""
-"Liste von Paketen, die als Teil der Schlussinstallation zu installieren "
-"sind."
+"Liste von Paketen, die als Teil der Schlussinstallation zu installieren sind."
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:3
@@ -126,16 +136,21 @@ msgstr "Zugang über serielle Konsole wird eingerichtet ..."
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
 msgstr ""
-"Nach der Installation Voreinstellungen durch debconf im "
-"Chroot-Verzeichnis ausführen"
+"Nach der Installation Voreinstellungen durch debconf im Chroot-Verzeichnis "
+"ausführen"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "Set the default locale"
 msgstr ""
-"Spracheinstellung (locale) setzen, die als Voreinstellung verwendet "
-"werden soll"
+"Spracheinstellung (locale) setzen, die als Voreinstellung verwendet werden "
+"soll"
 
 #: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/090-clean-package-cache:3
@@ -156,7 +171,8 @@ msgstr "Das Nichtanlegen von squashfs erzwingen (für Debian-Installer)."
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
-msgstr "Die Datei sources.list des Servers benutzen, statt eine neue zu generieren"
+msgstr ""
+"Die Datei sources.list des Servers benutzen, statt eine neue zu generieren"
 
 #: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
 #, sh-format
@@ -169,8 +185,7 @@ msgstr "Benutzerspezifische Konfigurationsdatei laden"
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr ""
-"FEHLER: --arch %s wurde auf der nicht unterstützten Architektur %s "
-"angegeben."
+"FEHLER: --arch %s wurde auf der nicht unterstützten Architektur %s angegeben."
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:49
 #, sh-format
@@ -188,8 +203,8 @@ msgstr "       Zulässige Werte: %s"
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr ""
-"Nachfragen, ob ein Passwort für root gesetzt werden soll; "
-"voreingestellt erfolgt keine Nachfrage"
+"Nachfragen, ob ein Passwort für root gesetzt werden soll; voreingestellt "
+"erfolgt keine Nachfrage"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
@@ -230,8 +245,7 @@ msgstr "Diese Hilfemeldung anzeigen"
 #, sh-format
 msgid "Display help for all available commandline options"
 msgstr ""
-"Hilfe für alle zur Verfügung stehenden Kommandozeilen-Optionen "
-"anzeigen"
+"Hilfe für alle zur Verfügung stehenden Kommandozeilen-Optionen anzeigen"
 
 #: ../server/ltsp-build-client:106
 #, sh-format
@@ -257,4 +271,3 @@ msgstr "INFO: Die LTSP-Client-Installation wurde erfolgreich abgeschlossen"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "FEHLER: Die LTSP-Client-Installation ist gescheitert"
-
