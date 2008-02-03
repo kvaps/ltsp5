@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-29 07:11-0800\n"
+"POT-Creation-Date: 2007-09-13 12:56-0700\n"
 "PO-Revision-Date: 2007-10-24 02:08-0200\n"
 "Last-Translator: Felipe Augusto van de Wiel (faw) <faw@debian.org>\n"
 "Language-Team: l10n portuguese <debian-l10n-portuguese@lists.debian.org>\n"
@@ -31,16 +31,6 @@ msgstr "NOTA: desabilitando fonte APT de segurança para sid. Isto não existe."
 #, sh-format
 msgid "cache downloaded packages"
 msgstr "manter cache de pacotes baixados"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
-#, sh-format
-msgid "Copying packages"
-msgstr "Copiando pacotes"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:18
-#, sh-format
-msgid "done."
-msgstr "terminado."
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -64,7 +54,9 @@ msgstr "definir a arquitetura alvo"
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed."
-msgstr "definir a lista de pacotes a serem instalados após finalizar a instalação básica"
+msgstr ""
+"definir a lista de pacotes a serem instalados após a instalação básica "
+"finalizar."
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
@@ -74,12 +66,14 @@ msgstr "Definir a localização do espelho"
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr "adicionar um espelho que receberá uma prioridade maior que o espelho padrão"
+msgstr ""
+"adicionar um espelho que receberá uma prioridade maior que o espelho padrão"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr "adicionar um espelho com uma prioridade menor que o espelho padrão"
+msgstr ""
+"adicionar um espelho que receberá uma prioridade menor que o espelho padrão"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
 #, sh-format
@@ -95,7 +89,8 @@ msgstr "incluir as chaves listadas no chaveiro do apt"
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr "NOTA: adicionando dist padrão e components para o espelho de segurança:"
+msgstr ""
+"NOTA: adicionando dist padrão e components para o espelho de segurança:"
 
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
@@ -105,7 +100,7 @@ msgstr "definir a lista de pacotes de kernel a serem instalados."
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
-msgstr "habilitar concurso de popularidade no chroot"
+msgstr "habilitar popularity-contest no chroot"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
@@ -127,16 +122,11 @@ msgstr "Habilitando console serial..."
 msgid "load debconf seeding in the chroot after install"
 msgstr "carregar pré-configuração debconf no chroot após a instalação"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
-#, sh-format
-msgid "copy apt Packages files from server"
-msgstr "copiar arquivos apt do servidor"
-
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "Set the default locale"
-msgstr "Definir o local padrão"
+msgstr "Definir o locale padrão"
 
 #: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/090-clean-package-cache:3

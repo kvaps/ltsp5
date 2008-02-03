@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.0.40~bzr20080121-2\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: pkg-ltsp-devel@lists.alioth.debian.org\n"
 "POT-Creation-Date: 2008-01-29 07:11-0800\n"
 "PO-Revision-Date: 2008-01-30 10:11+0100\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
