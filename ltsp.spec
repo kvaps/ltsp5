@@ -153,8 +153,11 @@ rm -rf $RPM_BUILD_ROOT
 %files server
 %defattr(-,root,root,-)
 %doc ChangeLog COPYING TODO
-%{_tftpdir}/ltsp/i386
 %{_localstatedir}/lib/ltsp/swapfiles/
+%dir %{_tftpdir}/
+%dir %{_tftpdir}/ltsp/
+%dir %{_tftpdir}/ltsp/i386/
+%{_tftpdir}/ltsp/i386/pxelinux.0
 %config(noreplace) %{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 
 %{_sbindir}/ltsp-build-client
@@ -168,6 +171,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
 %{_sysconfdir}/xinetd.d/nbdrootd
 %{_sysconfdir}/xinetd.d/nbdswapd
+%{_sysconfdir}/xinetd.d/ldminfod
 %dir %{_sysconfdir}/ltsp/
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
 %{_sysconfdir}/ltsp/ltsp-dhcpd.conf
