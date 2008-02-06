@@ -35,7 +35,7 @@ case "$MODE" in
     ;;
     install)
         # python-ruledispatch conflicts with anaconda Bug #331091
-        if [ -d /usr/lib*/python*/site-packages/dispatch/ ]; then
+        if [ -d /usr/lib*/python*/site-packages/dispatch/__init__.py ]; then
            echo "ERROR: python-ruledispatch conflicts with anaconda.  Please remove it"
            echo "temporarily before running this script.  See Bug #331091."
            exit 1
