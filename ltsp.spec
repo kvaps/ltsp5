@@ -68,9 +68,12 @@ mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
-mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/ltsp/swapfiles/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
+
+%ifarch i386 x86_64
+mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/
+%endif
 
 ###### client install
 pushd client/xrexecd
@@ -102,7 +105,6 @@ install -m 0755 server/ltsp-update-sshkeys $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-build-client $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-kernels $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-swapfile-delete $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
-install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/ldminfod $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
@@ -112,7 +114,11 @@ cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 
 install -m 0644 server/configs/dhcpd-k12linux.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
+
+%ifarch i386 x86_64
+install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386
+%endif
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -157,8 +163,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_tftpdir}/
 %dir %{_tftpdir}/ltsp/
 %dir %{_tftpdir}/ltsp/i386/
+%ifarch i386 x86_64
 %{_tftpdir}/ltsp/i386/pxelinux.0
 %config(noreplace) %{_tftpdir}/ltsp/i386/pxelinux.cfg/default
+%endif
 
 %{_sbindir}/ltsp-build-client
 %{_sbindir}/ltsp-update-kernels
