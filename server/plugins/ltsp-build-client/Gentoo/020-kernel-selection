@@ -3,27 +3,7 @@ case "$MODE" in
 		# Where is genkernel?
 		GK_PREFIX=/usr/share/genkernel/
 
-        ### FIXME
-		# Add networking drivers to configs/generic/modules_load.gk so they
-		# get added to the initramfs; ditto for nfs
-		for MOD in $(find /lib/modules/`uname -r`/kernel/drivers/net/ \
-			-name *.ko | sed -e "s:.*/::" -e "s:\.ko::"); do
-			MODULE_NET="$MODULE_NET $MOD"
-		done
-
-		sed -i \
-			-e "s~^\(module-net[[:space:]]*:=\).*~\1 $MODULE_NET~g" \
-			-e "s~^\(module-nfs[[:space:]]*:=\).*~\1 nfs~g" \
-			$GK_PREFIX/configs/generic/modules_load.gk
-
-        ### FIXME
-		# Requires unionfs 1.4 for 2.6.18 compatibility
-		sed -i \
-			-e 's:^\(UNIONFS_VER\).*:UNIONFS_VER="1.4":g' \
-			$GK_PREFIX/genkernel.conf
-
-		# Run genkernel to create and install kernel image
-		$GK_PREFIX/genkernel \
+        GK_ARGS="
 			--bootdir=$ROOT/boot \
 			--install-mod-path=$ROOT \
 			--links \
@@ -33,7 +13,29 @@ case "$MODE" in
 			--portmap \
 			--tempdir=/var/cache/genkernel \
 			--menuconfig \
-			--no-clean \
-			all::
+			--no-clean
+            "
+
+        # Run genkernel to create and install kernel image
+        $GK_PREFIX/genkernel \
+            $GK_ARGS \
+            kernel::
+
+        # Add networking drivers to configs/generic/modules_load.gk so they
+        # get added to the initramfs; ditto for nfs
+        for MOD in $(find $ROOT/lib/modules/*/kernel/drivers/net/ \
+            -name *.ko | sed -e "s:.*/::" -e "s:\.ko::"); do
+            MODULE_NET="$MODULE_NET $MOD"
+        done
+
+        sed -i \
+            -e "s~^\(module-net[[:space:]]*:=\).*~\1 $MODULE_NET~g" \
+            -e "s~^\(module-nfs[[:space:]]*:=\).*~\1 nfs~g" \
+            $GK_PREFIX/configs/generic/modules_load.gk
+
+        # Run genkernel to create and install initial ram disk
+        $GK_PREFIX/genkernel \
+            $GK_ARGS \
+            initramfs::
 	;;
 esac

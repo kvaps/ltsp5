@@ -1,6 +1,6 @@
 case "$MODE" in
     after-install)
         # point /etc/mtab to /proc/mounts
-        chroot $ROOT ln -sf /proc/mounts /etc/mtab
+        ln -sf /proc/mounts $ROOT/etc/mtab
         ;;
 esac

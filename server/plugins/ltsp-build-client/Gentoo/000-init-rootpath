@@ -1,0 +1,11 @@
+case "$MODE" in
+    before-install)
+        ROOT=$BASE/$CHROOT
+        if [ -d $ROOT ] ; then
+            echo "NOTE: Root directory $ROOT already exists, this will lead to problems, please remove it before trying again. Exiting."
+            exit 0
+        else
+            mkdir -p "$ROOT"
+        fi
+        ;;
+esac
