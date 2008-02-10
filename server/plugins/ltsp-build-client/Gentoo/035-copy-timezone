@@ -1,0 +1,8 @@
+case "$MODE" in
+    finalization)
+        # Set default timezone to that of server
+        if [ -f /etc/localtime ]; then
+            cp /etc/localtime $ROOT/etc/localtime
+        fi
+        ;;
+esac

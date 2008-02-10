@@ -1,0 +1,28 @@
+case "$MODE" in
+    configure)
+        OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"false"}
+        ;;
+    after-install)
+        # Export LTSP chroot using NFS to the LTSP client network
+        if ! grep -q "^$BASE" /etc/exports ; then
+            if [ "$OVERRIDE_EXPORTS" = "true" ]; then
+                cat <<EOF >> /etc/exports
+# Automatically added by ltsp-server
+$BASE       *(ro,no_root_squash,async)
+EOF
+                /usr/sbin/exportfs -av
+            else
+                cat <<EOF
+WARNING: no entry for $BASE in /etc/exports,
+you may want to add the following line to /etc/exports:
+
+$BASE       *(ro,no_root_squash,async)
+
+and then run the command:
+
+/usr/sbin/exportfs -av
+EOF
+            fi
+        fi
+        ;;
+esac

@@ -1,0 +1,13 @@
+case "$MODE" in
+    commandline)
+        add_option "late-packages" "`eval_gettext "list of packages to install as part of the final installation."`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_late_packages_value" ]; then
+            LATE_PACKAGES="$option_late_packages_value"
+        fi
+        ;;
+    finalization)
+        $EMERGE $EMERGE_OPTS $LATE_PACKAGES
+        ;;
+esac
