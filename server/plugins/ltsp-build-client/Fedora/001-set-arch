@@ -1,0 +1,42 @@
+# Set Architecture for Chroot Install
+# 32bit and 64bit x86 architectures assume you want a i386 chroot because that is the most common.
+# Use ltsp-build-client --arch x86_64 to override.
+# Similarly ppc64 assumes you want a ppc chroot.
+# Use ltsp-build-client --arch ppc64  to override.
+
+case "$MODE" in
+    commandline)
+        add_option "arch" "`eval_gettext "set the target architecture"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_arch_value" ]; then
+            ARCH_OPT="$option_arch_value"
+        else
+            ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/)
+        fi
+
+        # Validate the proposed architecture value.
+        case "$ARCH_OPT" in
+            i386|x86_64)
+            case "$(uname -m)" in
+                x86_64|ia64|i386|i486|i586|i686)
+                ARCH=i386
+                ;;
+            esac
+            ;;
+            powerpc)
+            case "$(uname -m)" in
+                ppc64|ppc)
+                ARCH=ppc
+                ;;
+            esac
+            ;;
+
+            *)
+            printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
+            printf "`eval_gettext "       supported values are: %s"`", "i386 x86_64 powerpc"
+            exit 1
+            ;;
+        esac      
+        ;;
+esac
