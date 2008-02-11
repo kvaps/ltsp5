@@ -4,17 +4,19 @@ case "$MODE" in
 		GK_PREFIX=/usr/share/genkernel/
 
         GK_ARGS="
-			--bootdir=$ROOT/boot \
-			--install-mod-path=$ROOT \
-			--links \
-			--makeopts=-j${JOBS} \
-			--debuglevel=5 \
-			--unionfs \
-			--portmap \
-			--tempdir=/var/cache/genkernel \
-			--menuconfig \
-			--no-clean
+            --bootdir=$ROOT/boot \
+            --install-mod-path=$ROOT \
+            --links \
+            --makeopts=-j${JOBS} \
+            --debuglevel=5 \
+            --unionfs \
+            --portmap \
+            --tempdir=/var/cache/genkernel/tmp \
+            --kbuild-output=/var/cache/genkernel/kbuild \
+			--internal-uclibc
+            --no-clean
             "
+            #--menuconfig \
 
         # Run genkernel to create and install kernel image
         $GK_PREFIX/genkernel \
