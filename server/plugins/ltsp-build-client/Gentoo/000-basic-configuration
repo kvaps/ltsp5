@@ -1,0 +1,18 @@
+case "$MODE" in
+    commandline)
+        add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "regular" "true"
+        ;;
+    configure)
+        ARCH=$(uname -m)
+        EMERGE="emerge"
+        EMERGE_OPTS="--usepkg"
+        EARLY_PACKAGES="xorg-server ltsp pulseaudio joystick splashutils ltspfs"
+        RCS_WHITELIST="bootmisc checkfs checkroot clock consolefont hostname keymaps localmount modules net.lo rmnologin urandom ltsp-client-setup"
+        RC2_WHITELIST="ltsp-client nbd-client splash local syslog-ng"
+        OVERRIDE_EXPORTS="true"
+
+        if [ -n "$option_jobs_value" ]; then
+            JOBS="$option_jobs_value"
+        fi
+        ;;
+esac

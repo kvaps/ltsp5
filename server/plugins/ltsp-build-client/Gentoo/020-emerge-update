@@ -1,0 +1,5 @@
+case "$MODE" in
+    after-install)
+        ROOT=$ROOT $EMERGE $EMERGE_OPTS --update --deep world
+        ;;
+esac
