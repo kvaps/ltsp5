@@ -33,7 +33,7 @@ case "$MODE" in
                 ;;
             esac
             ;;
-            x86_64)
+            x86_64|amd64)
             case "$(uname -m)" in
                 x86_64)
                 ARCH=amd64
@@ -47,7 +47,7 @@ case "$MODE" in
 
             *)
             printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
-            printf "`eval_gettext "       supported values are: %s"`", "i386 x86_64 powerpc"
+            printf "`eval_gettext "       supported values are: %s"`", "i386 x86_64 (or amd64) powerpc"
             exit 1
             ;;
         esac      
