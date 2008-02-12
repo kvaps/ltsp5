@@ -72,6 +72,8 @@ MODULE_nn           Kernel module name      autodetected     use to force loadin
                                                              module
 ---------------------------------------------------------------------------------------------
 XF86CONFIG_FILE     path to a file          autodetected     relative to /opt/ltsp/$ARCH
+or
+X_CONF
 ---------------------------------------------------------------------------------------------
 XSERVER             ark                     autodetected
                     ati
