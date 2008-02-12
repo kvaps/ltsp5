@@ -1,6 +1,5 @@
 case "$MODE" in
     finalization)
-        vers=$(dpkg-query -f='${Version}\n' -W ltsp-server)
 	    # create default lts.conf
         cat <<EOF > $ROOT/etc/lts.conf
 # This is the default lts.conf file for ltsp 5.
@@ -20,8 +19,6 @@ case "$MODE" in
 #
 # In case you want to use the lts.conf here, this still works,
 # but you need to run ltsp-update-image after every change.
-[default]
-  LTSP_VERSION=${vers}
 EOF
         ;;
 esac
