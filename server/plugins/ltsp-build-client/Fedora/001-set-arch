@@ -12,29 +12,23 @@ case "$MODE" in
         if [ -n "$option_arch_value" ]; then
             ARCH_OPT="$option_arch_value"
         else
+            # ARCH is not explicitly set by config or command line, get it from the environment
             ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/)
+            # If x86_64 then default to i386 chroot.
+            [ "$ARCH_OPT" == "x86_64 ] && ARCH_OPT=i386
+            # If ppc64 then default to ppc chroot.
+            [ "$ARCH_OPT" == "ppc64" ] && ARCH_OPT=ppc
         fi
 
         # Validate the proposed architecture value.
         case "$ARCH_OPT" in
-            i386|x86_64)
-            case "$(uname -m)" in
-                x86_64|ia64|i386|i486|i586|i686)
-                ARCH=i386
-                ;;
-            esac
-            ;;
-            powerpc)
-            case "$(uname -m)" in
-                ppc64|ppc)
-                ARCH=ppc
-                ;;
-            esac
+            i386|x86_64|ppc|ppc64|ia64|s390|s390x|sparc|sparc64|alpha)
+                ARCH=$ARCH_OPT
             ;;
 
             *)
             printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
-            printf "`eval_gettext "       supported values are: %s"`", "i386 x86_64 powerpc"
+            printf "`eval_gettext "       supported values are: %s"`", "i386 x86_64 ppc ppc64 ia64 s390 s390x sparc sparc64 alpha"
             exit 1
             ;;
         esac      
