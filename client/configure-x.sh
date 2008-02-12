@@ -149,8 +149,12 @@ handle_modes(){
     fi
 }
 
-# Set default Depth if specified
+# Set default Depth 
 set_default_depth(){
+    if [ -z "$X_COLOR_DEPTH" ];then
+        X_COLOR_DEPTH=24
+    fi
+
     if [ -n "$X_COLOR_DEPTH" ];then
         # Prepend DefaultDepth line above the first occurence of 'SubSection "Display"'
         DEPTH="DefaultDepth $X_COLOR_DEPTH\n\tSubSection \"Display\""
