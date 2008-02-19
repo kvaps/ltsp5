@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#
+# install a LTSP chroot to /opt/ltsp/i386
+# requires livecd-tools-015 or higher
+# --kickstart <filename.ks> if you want to override any install options or use a different repository
+#
+
+case "$MODE" in
+    commandline)
+        add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "false" 
+    ;;
+    configure)
+        if [ -n "$option_kickstart_value" ]; then
+            KICKSTART_OPT="$option_kickstart_value"
+        else
+            KICKSTART_OPT="/etc/ltsp/ltsp-build-client-ks.cfg"
+        fi
+
+        case "$ARCH" in
+            amd64)
+                TARGETARCH="x86_64"
+            ;;
+            powerpc)
+                TARGETARCH="ppc"
+            ;;
+            *)
+                TARGETARCH="$ARCH"
+            ;;
+        esac
+    ;;
+    install)
+        # SELINUX NOTE: proper labeling within chroot is currently not possible
+        if [ -d "$ROOT" ]; then
+            setarch $TARGETARCH /usr/bin/chroot-creator \
+               --target=$ROOT \
+               $KICKSTART_OPT
+        fi
+    ;;
+esac

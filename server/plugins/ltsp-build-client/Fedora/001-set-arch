@@ -15,7 +15,7 @@ case "$MODE" in
             # ARCH is not explicitly set by config or command line, get it from the environment
             ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/)
             # If x86_64 then default to i386 chroot.
-            [ "$ARCH_OPT" == "x86_64 ] && ARCH_OPT=i386
+            [ "$ARCH_OPT" == "x86_64" ] && ARCH_OPT=i386
             # If ppc64 then default to ppc chroot.
             [ "$ARCH_OPT" == "ppc64" ] && ARCH_OPT=ppc
         fi
