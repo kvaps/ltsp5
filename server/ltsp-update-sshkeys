@@ -41,7 +41,14 @@ IPS=$(ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
 OUTPUT=$(mktemp)
 ENC="dsa rsa"
 NAMES="${HOSTNAME} ${IPS}"
-LOGFILE="/var/log/syslog"
+# Check for LOGFILE location
+unset LOGFILE
+[ -e /var/log/messages ] && LOGFILE="/var/log/messages"
+[ -e /var/log/syslog ]   && LOGFILE="/var/log/syslog"
+if [ -z "$LOGFILE" ]; then
+    echo "ERROR: Neither /var/log/messages nor /var/log/syslog exists.  Unable to log."
+    exit 0
+fi
 
 # Any chroots found?
 if [ -z "${CHROOTS}" ]; then
