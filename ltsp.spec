@@ -23,6 +23,7 @@ BuildRequires: tftp-server
 %package client
 Summary:        LTSP client
 Group:          User Interface/Desktops
+Requires:       chkconfig
 
 %package server
 Summary:        LTSP server
@@ -90,17 +91,14 @@ install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0755 client/screen_session $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+install -m 0644 client/initscripts/ltsp-init-common $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+install -m 0755 client/initscripts/RPM/ltsp-client-launch $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 cp -av client/screen.d $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 
 # fedora-specific scripts
 #mkdir -p $RPM_BUILD_ROOT/sbin/
 #install -m 0755 %{SOURCE2} ${RPM_BUILD_ROOT}/sbin/mkinitrd-ltsp
 #install -m 0755 %{SOURCE3} ${RPM_BUILD_ROOT}/sbin/ltsp-client-configure
-
-# fedora init scripts
-#pushd $RPM_BUILD_ROOT
-#   tar xvzf %{SOURCE1}
-#popd
 
 ### server install
 install -m 0755 server/nbdrootd $RPM_BUILD_ROOT%{_sbindir}
@@ -131,38 +129,31 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-build-client.conf
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
 #/usr/sbin/ltsp-update-image
-#/usr/share/ltsp/scripts/start-stop-daemon
-#/usr/share/ltsp/scripts/popularity-contest-ltsp
-#/usr/share/ltsp/scripts/policy-rc.d.ltsp
-#/usr/share/bug/ltsp-server/*
-#/usr/share/doc/ltsp-server/*
-#/usr/share/man/man8/ltsp-update-sshkeys.8.gz
-#/usr/share/man/man8/ltsp-update-kernels.8.gz
-#/usr/share/man/man8/ltsp-build-client.8.gz
-#/usr/share/man/man8/ltsp-update-image.8.gz
-
-# fedora server-side scripts 
-#pushd $RPM_BUILD_ROOT
-#  tar xzvf %{SOURCE4}
-#popd 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post client
+/sbin/chkconfig --add ltsp-client-launch
+exit 0
+
+%preun
+if [ $1 = 0 ] ; then
+    /sbin/chkconfig --del ltsp-client-launch
+fi
+exit 0
+
 
 %files client
 %defattr(-,root,root,-)
-#%doc ChangeLog COPYING TODO
-#%doc /usr/share/doc/ltsp-client/examples/lts.conf
-#%doc /usr/share/doc/ltsp-client/examples/lts-parameters.txt
 %{_mandir}/man1/getltscfg.1.gz
-#%config %{_sysconfdir}/init.d/*
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
 #/sbin/ltsp-client-configure
 #/sbin/mkinitrd-ltsp
 %{_prefix}/lib/ltsp
-#%{_sysconfdir}/rc.d/init.d/*
+%{_sysconfdir}/init.d/ltsp-client-launch
+
 
 %files server
 %defattr(-,root,root,-)
@@ -205,9 +196,6 @@ rm -rf $RPM_BUILD_ROOT
 #/usr/sbin/ltsp-initialize
 #/usr/share/ltsp/chkconfig.d
 #/usr/share/ltsp/scripts.d
-#%config /usr/share/ltsp/config/ltsp-dhcpd.conf
-#%{_sysconfdir}/rc.d/init.d/*
-#%config(noreplace) /etc/ltsp/ltsp-dhcpd.conf
 #%config(noreplace) /etc/ltsp/ltsp.conf
 
 %changelog

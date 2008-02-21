@@ -1,0 +1,74 @@
+# Common functions shared by LTSP init scripts
+
+. /usr/lib/ltsp/ltsp_config
+
+boolean_is_true(){
+    case "$(echo $1 | tr 'A-Z' 'a-z')" in
+       true|y|yes) return 0 ;;
+       *) return 1 ;;
+    esac
+}
+
+warn() {
+    msg="$1"
+    logger -p user.warning -t ltsp-client  "warning: $msg"
+}
+
+start_sound() {
+    if boolean_is_true "$SOUND" ; then
+        # Detect and report a common problem with thin clients
+        if [ ! -c /dev/dsp ] ; then
+            warn "Sound requested but /dev/dsp is missing.  Continuing."
+        fi
+        case "$SOUND_DAEMON" in
+            pulse|'') # The default when no value is set
+                /usr/bin/pulseaudio --system \
+                --disable-shm \
+                --no-cpu-limit \
+                --resample-method=trivial \
+                --high-priority \
+                -L module-detect \
+                -L "module-esound-protocol-tcp auth-anonymous=1" \
+                -L "module-native-protocol-tcp auth-anonymous=1" \
+                -L module-volume-restore \
+                -L module-rescue-streams \
+                -L module-native-protocol-unix \
+                -n &
+                ;;
+            esd) 
+                /usr/bin/esd -nobeeps -public -tcp &
+                ;;
+            nasd)
+                /usr/bin/nasd -aa &
+                # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
+                #aumix-minimal -v100 -w100 -c90 -m10
+                ;;
+            *)
+                warn "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
+                ;;
+        esac
+    fi
+}
+
+configure_localdev() {
+    if boolean_is_true "$LOCALDEV" ; then
+        # Make this sessions secret auth cookie for ltspfs
+        mcookie > /var/run/ltspfs_token
+        /usr/bin/ltspfsd
+        # cdrom devices are handled by the cdpingerponger
+        /usr/sbin/cdpinger cdrom # default for usb cdroms
+
+        # and start one for every additional cdrom device
+        if [ -L /dev/cdrom?* ];then
+            for CDDEV in $(ls /dev/cdrom?*); do
+                /usr/sbin/cdpinger $(basename ${CDDEV})
+            done
+        fi
+    fi
+}
+
+configure_x() {
+    if boolean_is_true "$CONFIGURE_X" ; then
+        ${CONFIGURE_X_COMMAND:-/usr/lib/ltsp/configure-x.sh}
+    fi
+}
