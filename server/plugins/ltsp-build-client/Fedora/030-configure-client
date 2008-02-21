@@ -16,5 +16,8 @@ case "$MODE" in
             echo "Enabling Service: $service"
             chroot $ROOT /sbin/chkconfig $service on
         done
+
+        # Setup readonly-root Mode
+        sed -i 's/READONLY=no/READONLY=yes/' $ROOT/etc/sysconfig/readonly-root
         ;;
 esac
