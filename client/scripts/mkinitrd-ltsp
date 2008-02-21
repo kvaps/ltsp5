@@ -1,0 +1,27 @@
+#!/bin/bash
+VERSION=$1
+NFSROOT=$2
+OUTPUT=$3
+
+# NFSROOT example: 192.168.0.254:/opt/ltsp/i386 
+
+if [ ! -d "$3" ]; then
+	echo
+	echo "Usage: $0 <kernel version> <nfsserver:nfsroot> <output directory>"
+	echo
+	echo    "for example:"
+	echo
+	echo    $0 2.6.17-1.2647.fc6 192.168.0.254:/opt/ltsp/i386 /tmp/
+	exit 1
+fi
+
+/sbin/mkinitrd --with-avail==networking --net-dev=eth0  --rootdev $2 --rootfs nfs -f $3/initrd-$1.gz  $1
+
+if [ -f /boot/vmlinuz-$1 ]; then
+	cp -vi /boot/vmlinuz-$1 $3
+else
+	echo
+	echo WARNING: could not find /boot/vmlinuz-$1
+	echo
+	exit 1
+fi
