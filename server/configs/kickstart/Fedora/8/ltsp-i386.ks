@@ -47,7 +47,6 @@ beecrypt
 bitmap-fonts
 bzip2-libs
 cairo
-ccid
 chkconfig
 chkfontpath
 coreutils
@@ -166,8 +165,6 @@ openssl.i386
 pam
 passwd
 pcre
-pcsc-lite
-pcsc-lite-libs
 perl
 popt
 rpcbind
@@ -288,6 +285,7 @@ zlib
 -bluez-libs
 -bluez-utils
 -bzip2
+-ccid
 -comps-extras
 -coolkey
 -cpuspeed
@@ -396,6 +394,8 @@ zlib
 -pax
 -pciutils
 -pcmciautils
+-pcsc-lite
+-pcsc-lite-libs
 -perl-String-CRC32
 -pinfo
 -pkgconfig
