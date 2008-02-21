@@ -62,6 +62,8 @@ mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/ltsp/
+
 # server
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
@@ -85,10 +87,10 @@ popd
 
 install -m 0755 client/getltscfg/getltscfg $RPM_BUILD_ROOT/%{_bindir}/getltscfg
 install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
-install -m 0644 client/ltsp_config $RPM_BUILD_ROOT%{_datadir}/ltsp/
-install -m 0755 client/screen_session $RPM_BUILD_ROOT%{_datadir}/ltsp/
-install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT%{_datadir}/ltsp/
-cp -av client/screen.d $RPM_BUILD_ROOT%{_datadir}/ltsp/
+install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+install -m 0755 client/screen_session $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+cp -av client/screen.d $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 
 # fedora-specific scripts
 #mkdir -p $RPM_BUILD_ROOT/sbin/
@@ -159,7 +161,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/xrexecd
 #/sbin/ltsp-client-configure
 #/sbin/mkinitrd-ltsp
-%{_datadir}/ltsp
+%{_prefix}/lib/ltsp
 #%{_sysconfdir}/rc.d/init.d/*
 
 %files server
