@@ -1,40 +1,42 @@
 #!/bin/bash
 
 #
-# install a LTSP chroot to /opt/ltsp/i386
+# install a LTSP chroot to /opt/ltsp/$ARCH
 # requires livecd-tools-015 or higher
 # --kickstart <filename.ks> if you want to override any install options or use a different repository
 #
 
 case "$MODE" in
     commandline)
-        add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "false" 
+        add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "true" 
+        add_option "cachedir"  "`eval_gettext "Path to chroot-creator cachedir"`" "advanced" "true" 
     ;;
     configure)
         if [ -n "$option_kickstart_value" ]; then
             KICKSTART_OPT="$option_kickstart_value"
+            echo "Manual Kickstart: $KICKSTART_OPT"
         else
-            KICKSTART_OPT="/etc/ltsp/ltsp-build-client-ks.cfg"
+            local RELEASE=$(lsb_release -r |awk {'print $2'})
+            local  DISTRO=$(lsb_release -i |awk {'print $3'})
+            KICKSTART_OPT="/etc/ltsp/kickstart/$DISTRO/$RELEASE/ltsp-$ARCH.ks"
+            echo "Autoconfigured Kickstart: $KICKSTART_OPT"
         fi
 
-        case "$ARCH" in
-            amd64)
-                TARGETARCH="x86_64"
-            ;;
-            powerpc)
-                TARGETARCH="ppc"
-            ;;
-            *)
-                TARGETARCH="$ARCH"
-            ;;
-        esac
+        if [ ! -e $KICKSTART_OPT ]; then
+            echo "ERROR: $KICKSTART_OPT does not exist."
+        fi
+
+        if [ -n "$option_cachedir_value" ]; then
+            CACHEDIR_OPT="--cachedir=$option_cachedir_value"
+            echo "Cachedir: $option_cachedir_value"
+        else
+            unset CACHEDIR_OPT
+        fi
     ;;
     install)
         # SELINUX NOTE: proper labeling within chroot is currently not possible
-        if [ -d "$ROOT" ]; then
-            setarch $TARGETARCH /usr/bin/chroot-creator \
-               --target=$ROOT \
-               $KICKSTART_OPT
-        fi
+        setarch $ARCH /usr/sbin/chroot-creator \
+           --target=$ROOT $CACHEDIR_OPT \
+           $KICKSTART_OPT
     ;;
 esac

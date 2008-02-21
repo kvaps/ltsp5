@@ -1,11 +1,11 @@
-# Kickstart Definition for Client Chroot
+# Kickstart Definition for Client Chroot for i386
 
 # we are going to install into a chroot, such as /opt/ltps/i386
 install
 
 # rev #2 will be configurable (i.e. http or ftp or cdrom/dvd or nfs, etc, etc)
-repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-8&arch=$basearch
-repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f8&arch=$basearch
+repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-8&arch=i386
+repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f8&arch=i386
 
 # this is just garbage, it is not used, but if left empty the user is prompted
 rootpw --iscrypted $1$7RBvKHQ2$gozxTbUdO9.xBncKZQ9760
@@ -76,7 +76,7 @@ freetype
 gawk
 gdbm
 glib2
-glibc
+glibc.i386
 glibc-common
 gnutls
 gphoto2
@@ -88,7 +88,7 @@ info
 initscripts
 iproute
 iputils
-kernel
+kernel.i586
 kernel-headers
 kpartx
 krb5-libs
@@ -159,14 +159,13 @@ neon
 net-snmp-libs
 net-tools
 openldap
-openssl
+openssl.i386
 pam
 passwd
 pcre
 pcsc-lite
 pcsc-lite-libs
 perl
-policycoreutils
 popt
 rpcbind
 procps
@@ -297,11 +296,8 @@ zlib
 -dbus-python
 -desktop-file-utils
 -device-mapper-multipath
--dhcdbd
 -dhclient
 -dhcp
--dhcpv6_client
--diskdumputils
 -dmidecode
 -dos2unix
 -dosfstools
@@ -369,7 +365,6 @@ zlib
 -mtr
 -nano
 -nc
--netdump
 -NetworkManager
 -newt
 -nfs-utils
@@ -419,8 +414,8 @@ zlib
 -rsync
 -selinux-policy
 -selinux-policy-targeted
+-policycoreutils
 -sendmail
--setarch
 -setserial
 -setuptool
 -slang
@@ -433,7 +428,6 @@ zlib
 -syslinux
 -sysreport
 -system-config-network-tui
--system-config-securitylevel-tui
 -talk
 -tcpdump
 -tcp_wrappers

@@ -27,6 +27,8 @@ Group:          User Interface/Desktops
 %package server
 Summary:        LTSP server
 Group:          User Interface/Desktops
+# needed to install client chroots
+Requires:       livecd-tools
 
 %description
 LTSP client and server
@@ -63,6 +65,7 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 # server
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
@@ -104,12 +107,13 @@ install -m 0755 server/ldminfod $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-sshkeys $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-build-client $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-kernels $RPM_BUILD_ROOT%{_sbindir}
+install -m 0755 server/scripts/chroot-creator $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-swapfile-delete $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/ldminfod $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
-install -m 0644 server/configs/ltsp-build-client-ks.cfg $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+cp -pr server/configs/kickstart/* $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 
 install -m 0644 server/configs/dhcpd-k12linux.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
@@ -119,6 +123,8 @@ install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/in
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386
 %endif
+
+touch $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-build-client.conf
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -176,17 +182,24 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/ltsp-update-sshkeys
 %{_sbindir}/nbdrootd
 %{_sbindir}/nbdswapd
+%{_sbindir}/chroot-creator
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
 %{_sysconfdir}/xinetd.d/nbdrootd
 %{_sysconfdir}/xinetd.d/nbdswapd
 %{_sysconfdir}/xinetd.d/ldminfod
+%{_sysconfdir}/init.d/ltsp-dhcpd
+# Configuration Files
 %dir %{_sysconfdir}/ltsp/
+%config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client.conf
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
-%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
-%config(noreplace) %{_sysconfdir}/init.d/ltsp-dhcpd
+%config(noreplace) %{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+%dir %{_sysconfdir}/ltsp/kickstart/
+%dir %{_sysconfdir}/ltsp/kickstart/Fedora/
+%dir %{_sysconfdir}/ltsp/kickstart/Fedora/8/
+%dir %{_sysconfdir}/ltsp/kickstart/Fedora/9/
+%config(noreplace) %{_sysconfdir}/ltsp/kickstart/*/*/*.ks
 
 #K12 stuff
-%config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client-ks.cfg
 #/usr/sbin/ltsp-initialize
 #/usr/share/ltsp/chkconfig.d
 #/usr/share/ltsp/scripts.d

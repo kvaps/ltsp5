@@ -1,0 +1,26 @@
+#case "$MODE" in
+#    commandline)
+#        add_option "prompt-rootpass" "`eval_gettext "prompt to set the root password, defaults to disabled"`" "advanced" "false"
+#        ;;
+#    configure)
+#        if [ -n "$option_prompt_rootpass_value" ]; then
+#            ROOTPASS=prompt
+#        fi
+#        ;;
+#    after-install)
+#        # Root password is empty by default, lock it
+#        /usr/sbin/chroot $ROOT passwd -l root
+#        ;;
+#    finalization)
+#        if [ "$ROOTPASS" = "prompt" ]; then
+#            # prompt for root password
+#            /usr/sbin/chroot $ROOT passwd root
+#        fi
+#        ;;
+#esac
+#
+# FIXME
+# Nullify this entire file.  For some reason "/usr/sbin/chroot $ROOT passwd -l root" 
+# fails with "Only root can do that." while it succeeds if you run it manually.
+# In any case our kickstart file has already disabled root password so we don't
+# need this.  It would be nice if somebody figures out the fix for this later though.
