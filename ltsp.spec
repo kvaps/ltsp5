@@ -79,7 +79,10 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 
 %ifarch i386 x86_64
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/
+mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
 %endif
+mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc/
+mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc64/
 
 ###### client install
 pushd client/xrexecd
@@ -121,7 +124,9 @@ install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/in
 
 %ifarch i386 x86_64
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
+install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/default
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386
+install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64
 %endif
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-build-client.conf
@@ -162,9 +167,16 @@ exit 0
 %dir %{_tftpdir}/
 %dir %{_tftpdir}/ltsp/
 %dir %{_tftpdir}/ltsp/i386/
+%dir %{_tftpdir}/ltsp/i386/pxelinux.cfg/
+%dir %{_tftpdir}/ltsp/x86_64/
+%dir %{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
+%dir %{_tftpdir}/ltsp/ppc/
+%dir %{_tftpdir}/ltsp/ppc64/
 %ifarch i386 x86_64
 %{_tftpdir}/ltsp/i386/pxelinux.0
+%{_tftpdir}/ltsp/x86_64/pxelinux.0
 %config(noreplace) %{_tftpdir}/ltsp/i386/pxelinux.cfg/default
+%config(noreplace) %{_tftpdir}/ltsp/x86_64/pxelinux.cfg/default
 %endif
 
 %{_sbindir}/ltsp-build-client
