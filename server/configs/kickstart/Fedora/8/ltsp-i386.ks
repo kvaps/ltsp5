@@ -44,6 +44,7 @@ audit-libs-python
 basesystem
 bash
 beecrypt
+bitmap-fonts
 bzip2-libs
 cairo
 ccid
@@ -58,6 +59,7 @@ cups-libs
 cyrus-sasl-lib
 db4
 dbus
+dejavu-fonts
 device-mapper
 diffutils
 dmraid
@@ -154,6 +156,7 @@ mkinitrd
 mktemp
 module-init-tools
 nash
+nc
 ncurses
 neon
 net-snmp-libs
@@ -174,6 +177,7 @@ python
 python-sqlite2
 python-urlgrabber
 readline
+redhat-lsb
 rpm
 rpm-libs
 rpm-python
@@ -252,8 +256,10 @@ xorg-x11-drv-vmmouse
 xorg-x11-drv-vmware
 xorg-x11-drv-void
 xorg-x11-drv-voodoo
+xorg-x11-fonts-100dpi
 xorg-x11-server-utils
 xorg-x11-server-Xorg
+xorg-x11-xauth
 xorg-x11-xfs
 xorg-x11-xkb-utils
 ypbind
@@ -364,7 +370,6 @@ zlib
 -mtools
 -mtr
 -nano
--nc
 -NetworkManager
 -newt
 -nfs-utils
@@ -395,6 +400,7 @@ zlib
 -pinfo
 -pkgconfig
 -pm-utils
+-policycoreutils
 -ppp
 -prelink
 -procmail
@@ -403,7 +409,6 @@ zlib
 -rdate
 -rdist
 -readahead
--redhat-lsb
 -redhat-menus
 -rhpl
 -rmt
@@ -414,7 +419,6 @@ zlib
 -rsync
 -selinux-policy
 -selinux-policy-targeted
--policycoreutils
 -sendmail
 -setserial
 -setuptool
