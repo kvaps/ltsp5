@@ -177,7 +177,6 @@ python
 python-sqlite2
 python-urlgrabber
 readline
-redhat-lsb
 rpm
 rpm-libs
 rpm-python
@@ -192,6 +191,7 @@ system-config-display
 sysvinit
 tar
 termcap
+time
 ttmkfdir
 tzdata
 udev
@@ -413,6 +413,7 @@ zlib
 -rdate
 -rdist
 -readahead
+-redhat-lsb
 -redhat-menus
 -rhpl
 -rmt
