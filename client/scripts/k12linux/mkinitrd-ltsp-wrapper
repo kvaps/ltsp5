@@ -1,0 +1,102 @@
+#!/bin/bash
+
+unset kernel
+unset conntype
+unset connaddr
+unset connpath
+unset connport
+
+usage() {
+   echo "Example: $0: --conntype=nfs --connaddr=192.168.0.254 --connpath=/opt/ltsp/i386"
+   exit 1
+}
+
+detect_latest_kernel() {
+    [ -n "$kernel" ] && return 0
+
+    # if not already specified by the command line, try to find the latest kernel automatically
+    kernel="`ls -d /lib/modules/2* | sort -nr | head -n1 | xargs basename`"
+    if [ -z "$kernel" ]; then
+        echo "ERROR: $0: Unable to detect installed kernel version."
+        exit 1
+    fi
+}
+
+validate_args() {
+    if [ ! -d /lib/modules/$kernel/ ]; then
+        echo "ERROR: $0: /lib/modules/$kernel/ does not exist!"
+        exit 1
+    fi
+    # Validate conntype
+    if [ -z "$conntype" ]; then
+        echo "ERROR: $0: conntype must be specified!"
+        exit 1
+    fi
+    # Validate NFS
+    if [ "$conntype" = "nfs" ]; then
+        if [ -z "$connaddr" ] || [ -z "$connpath" ]; then
+            echo "ERROR: $0: connaddr and connpath must be specified for NFS!"
+            exit 1
+        fi
+    fi
+    # Validate NBD readonly squashfs
+    # Validate NBD ext3 read-write
+    # Validate NBD ext3 squashfs dm-snap
+}
+
+# Parse Options
+[ -z "$1" ] && usage
+while [ $# -gt 0 ]; do
+    case $1 in
+        --kernel*)
+            if [ "$1" != "${1##--kernel=}" ]; then
+                kernel=${1##--kernel=}
+            else
+                kernel=$2
+                shift
+            fi
+            ;;
+        --conntype*)
+            if [ "$1" != "${1##--conntype=}" ]; then
+                conntype=${1##--conntype=}
+            else
+                conntype=$2
+                shift
+            fi
+            ;;
+        --connaddr*)
+            if [ "$1" != "${1##--connaddr=}" ]; then
+                connaddr=${1##--connaddr=}
+            else
+                connaddr=$2
+                shift
+            fi
+            ;;
+        --connpath*)
+            if [ "$1" != "${1##--connpath=}" ]; then
+                connpath=${1##--connpath=}
+            else
+                connpath=$2
+                shift
+            fi
+            ;;
+        --connport*)
+            if [ "$1" != "${1##--connport=}" ]; then
+                connport=${1##--connport=}
+            else
+                connport=$2
+                shift
+            fi
+            ;;
+        --help|*)
+            usage 
+            ;;
+    esac
+    shift
+done
+
+detect_latest_kernel
+validate_args
+
+# Only NFS is implemented for now
+/sbin/mkinitrd --with-avail==networking --net-dev=eth0  --rootdev $connaddr:$connpath --rootfs nfs -f /boot/initrd-$kernel.img  $kernel

@@ -91,7 +91,7 @@ pushd client/xrexecd
     make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
-install -m 0755 client/scripts/mkinitrd-ltsp $RPM_BUILD_ROOT/%{_sbindir}/
+install -m 0755 client/scripts/mkinitrd-ltsp-wrapper $RPM_BUILD_ROOT/%{_sbindir}/
 install -m 0755 client/getltscfg/getltscfg $RPM_BUILD_ROOT/%{_bindir}/getltscfg
 install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
@@ -152,7 +152,7 @@ exit 0
 %{_mandir}/man1/getltscfg.1.gz
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
-%{_sbindir}/mkinitrd-ltsp
+%{_sbindir}/mkinitrd-ltsp-wrapper
 %{_prefix}/lib/ltsp
 %{_sysconfdir}/init.d/ltsp-client-launch
 
