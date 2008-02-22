@@ -4,15 +4,15 @@ case "$MODE" in
     after-install)
         echo "ROOT=$ROOT"
         ### Clean up stuff we don't need
-        echo rm -rf $ROOT/boot/initrd*
-        echo rm -rf $ROOT/boot/vmlinuz*
+        rm -rf $ROOT/boot/initrd*
+        rm -rf $ROOT/boot/vmlinuz*
 
         ### Clean up stuff that is actually harmful in the chroot
         # 64bit db4 locks makes it impossible for 32bit rpm to operate within the chroot
-        echo rm -rf $ROOT/var/lib/rpm/__db*
-        # Import RPM GPG Keys
-        chroot $ROOT rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*
+        rm -rf $ROOT/var/lib/rpm/__db*
+        # Import RPM GPG Key
+        setarch $ARCH chroot $ROOT rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora
         # Remove db4 locks again because we don't need them in the image
-        echo rm -rf $ROOT/var/lib/rpm/__db*
+        rm -rf $ROOT/var/lib/rpm/__db*
         ;;
 esac
