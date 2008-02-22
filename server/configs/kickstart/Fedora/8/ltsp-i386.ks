@@ -6,6 +6,7 @@ install
 # rev #2 will be configurable (i.e. http or ftp or cdrom/dvd or nfs, etc, etc)
 repo --name=released --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-8&arch=i386
 repo --name=updates --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f8&arch=i386
+repo --name=temporary --baseurl=http://togami.com/~k12linux-temporary/fedora/8/i386/
 
 # this is just garbage, it is not used, but if left empty the user is prompted
 rootpw --iscrypted $1$7RBvKHQ2$gozxTbUdO9.xBncKZQ9760
@@ -35,7 +36,9 @@ reboot
 
 # this could probably be slimmed-down quite a bit
 %packages --excludedocs
-#ltsp-client
+ltsp-client
+ltspfsd
+ldm
 aspell
 aspell-en
 atk
