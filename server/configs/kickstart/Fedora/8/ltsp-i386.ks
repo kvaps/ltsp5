@@ -90,7 +90,6 @@ initscripts
 iproute
 iputils
 kernel.i586
-kernel-headers
 kpartx
 krb5-libs
 kudzu
@@ -336,6 +335,7 @@ zlib
 -irda-utils
 -irqbalance
 -jwhois
+-kernel-headers
 -krb5-workstation
 -ksh
 -lftp
