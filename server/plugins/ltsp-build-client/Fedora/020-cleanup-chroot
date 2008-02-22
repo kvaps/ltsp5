@@ -2,7 +2,7 @@
 
 case "$MODE" in
     after-install)
-        echo "ROOT=$ROOT"
+        echo "Cleaning up chroot $ROOT"
         ### Clean up stuff we don't need
         rm -rf $ROOT/boot/initrd*
         rm -rf $ROOT/boot/vmlinuz*

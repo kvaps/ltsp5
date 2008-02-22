@@ -34,6 +34,7 @@ case "$MODE" in
         fi
     ;;
     install)
+        echo "Installing into $ROOT"
         # SELINUX NOTE: proper labeling within chroot is currently not possible
         setarch $ARCH /usr/sbin/chroot-creator \
            --target=$ROOT $CACHEDIR_OPT \
