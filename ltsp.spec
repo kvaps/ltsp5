@@ -30,6 +30,7 @@ Summary:        LTSP server
 Group:          User Interface/Desktops
 # needed to install client chroots
 Requires:       livecd-tools
+Requires:       tftp-server
 
 %description
 LTSP client and server
@@ -115,9 +116,11 @@ install -m 0644 server/xinetd.d/ldminfod $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 cp -pr server/configs/kickstart/* $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
-
-install -m 0644 server/configs/dhcpd-k12linux.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
+
+install -m 0644 server/configs/k12linux/dhcpd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+install -m 0644 server/configs/k12linux/ltsp-update-kernels.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+install -m 0644 server/configs/k12linux/ltsp-build-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 
 %ifarch i386 x86_64
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
@@ -125,8 +128,6 @@ install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64
 %endif
-
-touch $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-build-client.conf
 
 ##SKIPPED:
 #/etc/network/if-up.d/ltsp-keys
@@ -191,9 +192,10 @@ exit 0
 %{_sysconfdir}/init.d/ltsp-dhcpd
 # Configuration Files
 %dir %{_sysconfdir}/ltsp/
-%config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client.conf
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
+%config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client.conf
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+%config(noreplace) %{_sysconfdir}/ltsp/ltsp-update-kernels.conf
 %dir %{_sysconfdir}/ltsp/kickstart/
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/8/
