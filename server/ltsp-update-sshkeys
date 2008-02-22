@@ -43,8 +43,8 @@ ENC="dsa rsa"
 NAMES="${HOSTNAME} ${IPS}"
 # Check for LOGFILE location
 unset LOGFILE
-[ -e /var/log/messages ] && LOGFILE="/var/log/messages"
 [ -e /var/log/syslog ]   && LOGFILE="/var/log/syslog"
+[ -e /var/log/messages ] && LOGFILE="/var/log/messages"
 if [ -z "$LOGFILE" ]; then
     echo "ERROR: Neither /var/log/messages nor /var/log/syslog exists.  Unable to log."
     exit 0
