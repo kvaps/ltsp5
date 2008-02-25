@@ -131,6 +131,7 @@ for kernel in $ALL_KERNELS ; do
         fi
     else
         if which mkelfImage >/dev/null; then
+            # x86_64/amd64 i386 ia64(?): mkelfimage
             MKELFIMAGE_INITRD_OPT=""
             if [ -z "$MKELFIMAGE_OPTS" ]; then
                 MKELFIMAGE_OPTS="$BOOTPROMPT_OPTS"
@@ -141,6 +142,7 @@ for kernel in $ALL_KERNELS ; do
             mkelfImage --command-line="$MKELFIMAGE_OPTS" --output=$BOOT/$nbi.tmp \
                 --kernel=$kernel $MKELFIMAGE_INITRD_OPT && mv $BOOT/$nbi.tmp $BOOT/$nbi
         elif which mkelf-linux >/dev/null; then
+            # i386: mknbi
             MKELF_LINUX_INITRD_OPT=""
             if [ -z "$MKELF_LINUX_APPEND" ]; then
                 MKELF_LINUX_APPEND="$BOOTPROMPT_OPTS"
@@ -157,6 +159,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         fi
         if which netabootwrap >/dev/null; then
+            # alpha: aboot
             ABOOT_INITRD_OPT=""
             if [ -f "$BOOT/$initrd" ]; then
                 ABOOT_INITRD_OPT="-i $BOOT/$initrd"
@@ -169,6 +172,7 @@ for kernel in $ALL_KERNELS ; do
             fi
         fi
         if which elftoaout >/dev/null ; then
+            # sparc: sparc-utils
             SPARC_INITRD_OPT=""
             piggyback_cmd=""
             case $SUB_ARCH in
