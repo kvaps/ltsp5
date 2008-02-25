@@ -1,0 +1,13 @@
+# Common functions to be used by initramfs tools
+
+# Detect latest installed kernel
+# Outputs version to $kernelversion
+detect_latest_kernel() {
+    # if not already specified by the command line, try to find the latest kernel automatically
+    kernelversion="`ls -d /lib/modules/2* | sort -nr | head -n1 | xargs basename`"
+    if [ -z "$kernel" ]; then
+        echo "ERROR: $0: Unable to detect installed kernel version."
+        exit 1
+    fi
+}
+
