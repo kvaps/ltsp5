@@ -111,7 +111,7 @@ install -m 0755 server/ldminfod $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-sshkeys $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-build-client $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-update-kernels $RPM_BUILD_ROOT%{_sbindir}
-install -m 0755 server/scripts/chroot-creator $RPM_BUILD_ROOT%{_sbindir}
+install -m 0755 server/scripts/k12linux/chroot-creator $RPM_BUILD_ROOT%{_sbindir}
 install -m 0755 server/ltsp-swapfile-delete $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 install -m 0644 server/xinetd.d/nbdrootd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
