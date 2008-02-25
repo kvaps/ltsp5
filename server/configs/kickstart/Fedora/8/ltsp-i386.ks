@@ -12,7 +12,7 @@ repo --name=temporary --baseurl=http://togami.com/~k12linux-temporary/fedora/8/i
 rootpw --iscrypted $1$7RBvKHQ2$gozxTbUdO9.xBncKZQ9760
 
 # should be selectable...
-lang en_US
+lang en_US.UTF-8
 keyboard us
 firewall --enabled --port=22:tcp
 network --bootproto=dhcp --device=eth0
@@ -47,6 +47,8 @@ audit-libs-python
 basesystem
 bash
 beecrypt
+bind-libs
+bind-utils
 bitmap-fonts
 bzip2-libs
 cairo
@@ -281,8 +283,6 @@ zlib
 -authconfig
 -autofs
 -bc
--bind-libs
--bind-utils
 -binutils
 -bluez-gnome
 -bluez-libs
