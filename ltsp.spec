@@ -72,6 +72,7 @@ mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
@@ -91,7 +92,9 @@ pushd client/xrexecd
     make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
-install -m 0755 client/scripts/mkinitrd-ltsp-wrapper $RPM_BUILD_ROOT/%{_sbindir}/
+install -m 0755 client/mkinitramfs/k12linux/mkinitrd-ltsp-wrapper $RPM_BUILD_ROOT/%{_sbindir}/
+install -m 0755 client/mkinitramfs/k12linux/sysconfig-mkinitrd $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
+install -m 0644 client/mkinitramfs/initramfs-common $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0755 client/getltscfg/getltscfg $RPM_BUILD_ROOT/%{_bindir}/getltscfg
 install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
@@ -153,6 +156,7 @@ exit 0
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
 %{_sbindir}/mkinitrd-ltsp-wrapper
+%config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 %{_prefix}/lib/ltsp
 %{_sysconfdir}/init.d/ltsp-client-launch
 

@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+        # Build initrd
+        setarch $ARCH chroot $ROOT /usr/sbin/mkinitrd-ltsp-wrapper
+        ;;
+esac

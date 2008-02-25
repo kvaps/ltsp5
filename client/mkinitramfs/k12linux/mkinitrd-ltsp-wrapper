@@ -1,17 +1,9 @@
 #!/bin/bash
-
-detect_latest_kernel() {
-    # if not already specified by the command line, try to find the latest kernel automatically
-    kernel="`ls -d /lib/modules/2* | sort -nr | head -n1 | xargs basename`"
-    if [ -z "$kernel" ]; then
-        echo "ERROR: $0: Unable to detect installed kernel version."
-        exit 1
-    fi
-}
-
+. /usr/lib/ltsp/initramfs-common
 detect_latest_kernel
 
 # Only NFS is implemented in mkinitrd for now
 # NFS 192.168.0.254:/opt/ltsp/i386 is pre-defined, but the dhcp server can override this with
 # option root-path "IPADDRESS:PATH";
-/sbin/mkinitrd --with-avail==networking --net-dev=eth0 --rootfs nfs --rootdev=192.168.0.254:/opt/ltsp/i386 --rootopts=noatime,dhcp -f /boot/initrd-$kernel.img $kernel
+/sbin/mkinitrd --with-avail==networking --net-dev=eth0 --rootfs nfs --rootdev=192.168.0.254:/opt/ltsp/i386 --rootopts=noatime,dhcp -f \
+               /boot/initrd-$kernelversion.img $kernelversion
