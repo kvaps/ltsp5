@@ -13,6 +13,10 @@ echo "Creating Net Bootable Initial Ramdisk Image for kernel-$kernelversion"
 /sbin/mkinitrd --with-avail==networking --net-dev=eth0 --rootfs nfs --rootdev=192.168.0.254:/opt/ltsp/i386 --rootopts=noatime,dhcp -f \
                /boot/initrd-$kernelversion.img $kernelversion
 
+# Set permissions
+chmod 644 /boot/vmlinuz*
+chmod 644 /boot/initrd*
+
 # Symlink to latest kernel and initrd
 cd /boot
 ln -sf vmlinuz-$kernelversion     vmlinuz.ltsp
