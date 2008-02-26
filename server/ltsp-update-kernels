@@ -78,4 +78,6 @@ for TFTPDIR in $TFTPDIRS ; do
             echo "Skipping invalid chroot: $CHROOT"
         fi
     done
+    # Update selinux file contexts if necessary
+    [ -e /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR &> /dev/null
 done
