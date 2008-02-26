@@ -5,7 +5,7 @@
 detect_latest_kernel() {
     # if not already specified by the command line, try to find the latest kernel automatically
     kernelversion="`ls -d /lib/modules/2* | sort -nr | head -n1 | xargs basename`"
-    if [ -z "$kernel" ]; then
+    if [ -z "$kernelversion" ]; then
         echo "ERROR: $0: Unable to detect installed kernel version."
         exit 1
     fi
