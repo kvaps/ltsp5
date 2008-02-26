@@ -2,6 +2,9 @@
 . /usr/lib/ltsp/initramfs-common
 detect_latest_kernel
 
+# If /dev/null does not exist, create it
+[ ! -e /dev/null ] && /sbin/MAKEDEV null
+
 # Only NFS is implemented in mkinitrd for now
 # NFS 192.168.0.254:/opt/ltsp/i386 is pre-defined, but the dhcp server can override this with
 # option root-path "IPADDRESS:PATH";
