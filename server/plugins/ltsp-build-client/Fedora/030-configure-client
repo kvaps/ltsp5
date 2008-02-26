@@ -1,7 +1,7 @@
 case "$MODE" in
     after-install)
         # Disable services we don't want
-        for service in gpm mcstrans mdmonitor pcscd; do
+        for service in gpm kudzu mcstrans mdmonitor netfs pcscd rpcbind; do
             if [ ! -e $ROOT/etc/init.d/$service ]; then
                 continue
             fi
