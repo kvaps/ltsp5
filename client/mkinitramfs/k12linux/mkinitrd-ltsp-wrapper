@@ -7,11 +7,11 @@
 detect_latest_kernel
 
 # Only NFS is implemented in mkinitrd for now
-# NFS 192.168.0.254:/opt/ltsp/i386 is pre-defined, but the dhcp server can override this with
-# option root-path "IPADDRESS:PATH";
+# See /etc/sysconfig/mkinitrd to override the defaults
+# The options must be in that config file so the initrd's contructed
+# during kernel installation are automatically valid for LTSP.
 echo "Creating Net Bootable Initial Ramdisk Image for kernel-$kernelversion"
-/sbin/mkinitrd --with-avail==networking --net-dev=eth0 --rootfs nfs --rootdev=192.168.0.254:/opt/ltsp/i386 --rootopts=noatime,dhcp -f \
-               /boot/initrd-$kernelversion.img $kernelversion
+/sbin/mkinitrd -f /boot/initrd-$kernelversion.img $kernelversion
 
 # Set permissions
 chmod 644 /boot/vmlinuz*
