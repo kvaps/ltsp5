@@ -6,7 +6,7 @@
 # the full text of which can be found in the COPYING file.
 #
 
-SCRIPT_DIRS="/etc/ltsp/screen.d /usr/lib/ltsp/screen.d"
+SCRIPT_DIRS="/etc/ltsp/screen.d /usr/lib/ltsp/screen.d /usr/share/ltsp/screen.d"
 
 # Load LTSP configuration
 . /usr/lib/ltsp/ltsp_config

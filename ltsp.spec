@@ -120,7 +120,7 @@ install -m 0755 client/screen_session $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0644 client/initscripts/ltsp-init-common $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0755 client/initscripts/RPM/ltsp-client-launch $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
-cp -av client/screen.d $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+cp -av client/screen.d $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 
 ### server install
 install -m 0755 server/nbdrootd $RPM_BUILD_ROOT%{_sbindir}
@@ -181,6 +181,7 @@ exit 0
 %config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 %{_prefix}/lib/ltsp
 %{_sysconfdir}/init.d/ltsp-client-launch
+%{_datadir}/ltsp/screen.d/
 
 
 %files server
