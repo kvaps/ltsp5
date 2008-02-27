@@ -158,6 +158,22 @@ for kernel in $ALL_KERNELS ; do
                 msg "Skipping etherboot images.  Install the mkelfimage package if you need them."
             fi
         fi
+        if which mknbi-linux >/dev/null ; then
+            # i386: mknbi
+            # generate an legacy-nbi.img for legacy versions of etherboot that
+            # didn't support ELF
+
+            MKNBI_LINUX_INITRD_OPT=""
+            if [ -z "$MKNBI_LINUX_APPEND" ]; then
+                MKNBI_LINUX_APPEND="$BOOTPROMPT_OPTS"
+            fi
+            if [ -f "$BOOT/$initrd" ]; then
+                MKNBI_LINUX_INITRD_OPT="$BOOT/$initrd"
+            fi
+            mknbi-linux $MKNBI_LINUX_OPTS --append="$MKNBI_LINUX_APPEND" \
+                -o $BOOT/legacy-"$nbi" $kernel $MKNBI_LINUX_INITRD_OPT
+
+        fi
         if which netabootwrap >/dev/null; then
             # alpha: aboot
             ABOOT_INITRD_OPT=""
