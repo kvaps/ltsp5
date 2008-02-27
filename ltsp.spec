@@ -20,10 +20,16 @@ BuildRequires: tftp-server
 %define _tftpdir %(cat /etc/xinetd.d/tftp |grep server_args | awk -F"-s " {'print $2'} || echo -n "/BOGUS/DIRECTORY")
 %endif
 
+%description
+LTSP client and server
+
 %package client
 Summary:        LTSP client
 Group:          User Interface/Desktops
 Requires:       chkconfig
+
+%description client
+LTSP client
 
 %package server
 Summary:        LTSP server
@@ -32,14 +38,22 @@ Group:          User Interface/Desktops
 Requires:       livecd-tools
 Requires:       tftp-server
 
-%description
-LTSP client and server
-
-%description client
-LTSP client
-
 %description server
 LTSP server
+
+%ifarch i386 x86_64
+%package vmclient
+Summary:        LTSP Virtual Machine Client
+Group:          Applications/Emulators
+Requires:       kvm
+Requires:       bridge-utils
+
+%description vmclient
+Run a qemu-kvm virtual machine as a PXE client.  This allows you to test a 
+LTSP server without the hassle of having extra hardware.  Requires 
+your system to support hardware virtualization or it will be very slow.
+%endif
+
 
 %prep
 %setup -q 
@@ -87,6 +101,10 @@ mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc64/
 
+%ifarch i386 x86_64
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
+%endif
+
 ###### client install
 pushd client/xrexecd
     make install DESTDIR=$RPM_BUILD_ROOT
@@ -126,15 +144,19 @@ install -m 0644 server/configs/k12linux/ltsp-update-kernels.conf $RPM_BUILD_ROOT
 install -m 0644 server/configs/k12linux/ltsp-build-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 
 %ifarch i386 x86_64
+# PXE
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/default
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64
 %endif
 
-##SKIPPED:
-#/etc/network/if-up.d/ltsp-keys
-#/usr/sbin/ltsp-update-image
+%ifarch i386 x86_64
+# vmclient
+install -m 0644 vmclient/ifcfg-ltspbr0 $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
+install -m 0755 vmclient/launch-vmclient         $RPM_BUILD_ROOT%{_sbindir}/
+install -m 0755 vmclient/ltsp-qemu-bridge-ifup   $RPM_BUILD_ROOT%{_sbindir}/
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -210,7 +232,13 @@ exit 0
 #/usr/sbin/ltsp-initialize
 #/usr/share/ltsp/chkconfig.d
 #/usr/share/ltsp/scripts.d
-#%config(noreplace) /etc/ltsp/ltsp.conf
+
+%ifarch i386 x86_64
+%files vmclient
+%config(noreplace)%{_sysconfdir}/sysconfig/network-scripts/ifcfg-ltspbr0
+%{_sbindir}/launch-vmclient
+%{_sbindir}/ltsp-qemu-bridge-ifup
+%endif
 
 %changelog
 

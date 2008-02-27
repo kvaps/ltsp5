@@ -1,0 +1,2 @@
+#!/bin/sh
+qemu-kvm -hda /dev/null -boot n -m 256 -net nic -net tap,script=/usr/sbin/ltsp-qemu-bridge-ifup

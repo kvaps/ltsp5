@@ -1,0 +1,14 @@
+# Sample Configuration for Initscript Driven Bridge
+# Put this into /etc/sysconfig/network-scripts/ifcfg-ltspbr0
+# Note that this network range does not match the defaults in dhcpd.conf
+DEVICE=ltspbr0
+TYPE=Bridge
+ONBOOT=yes
+BOOTPROTO=static
+STP=off
+USERCTL=no
+IPV6INIT=no
+PEERDNS=yes
+NETMASK=255.255.255.0
+IPADDR=172.31.100.254
+ARP=yes

@@ -1,0 +1,5 @@
+#!/bin/sh
+export PATH=/sbin:/usr/sbin:$PATH
+switch=ltspbr0
+ifconfig $1 0.0.0.0 up
+brctl addif ${switch} $1
