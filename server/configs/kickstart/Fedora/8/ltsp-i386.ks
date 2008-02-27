@@ -235,6 +235,7 @@ xorg-x11-drv-mutouch
 xorg-x11-drv-neomagic
 xorg-x11-drv-nsc
 xorg-x11-drv-nv
+xorg-x11-drv-openchrome
 xorg-x11-drv-palmax
 xorg-x11-drv-penmount
 xorg-x11-drv-rendition
