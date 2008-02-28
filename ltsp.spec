@@ -77,9 +77,8 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
-mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/ltsp/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/
 
 # server
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
@@ -112,13 +111,13 @@ pushd client/xrexecd
 popd
 
 install -m 0755 client/mkinitramfs/k12linux/mkinitrd-ltsp-wrapper $RPM_BUILD_ROOT/%{_sbindir}/
-install -m 0644 client/mkinitramfs/initramfs-common $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+install -m 0644 client/mkinitramfs/initramfs-common $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 install -m 0755 client/getltscfg/getltscfg $RPM_BUILD_ROOT/%{_bindir}/getltscfg
 install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
-install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
-install -m 0755 client/screen_session $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
-install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
-install -m 0644 client/initscripts/ltsp-init-common $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
+install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_datadir}/ltsp/
+install -m 0755 client/screen_session $RPM_BUILD_ROOT/%{_datadir}/ltsp/
+install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT/%{_datadir}/ltsp/
+install -m 0644 client/initscripts/ltsp-init-common $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 install -m 0755 client/initscripts/RPM/ltsp-client-launch $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 cp -av client/screen.d $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 
@@ -181,8 +180,13 @@ exit 0
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
 %{_sbindir}/mkinitrd-ltsp-wrapper
-%{_prefix}/lib/ltsp
 %{_sysconfdir}/init.d/ltsp-client-launch
+%dir %{_datadir}/ltsp
+%{_datadir}/ltsp/configure-x.sh
+%{_datadir}/ltsp/initramfs-common
+%{_datadir}/ltsp/ltsp-init-common
+%{_datadir}/ltsp/ltsp_config
+%{_datadir}/ltsp/screen_session
 %{_datadir}/ltsp/screen.d/
 
 
