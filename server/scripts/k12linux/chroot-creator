@@ -60,6 +60,15 @@ class ChrootCreator(imgcreate.ImageCreator):
         print("Mounting %s for chroot installation" % self.__bindroot.src)
         self.__bindroot.mount()
 
+        # NOTE: This part is LTSP specific
+        # Copy mkinitrd configuration into /etc/sysconfig/mkinitrd before package installation
+        # This allows mkinitrd to DTRT the first time.
+        imgcreate.fs.makedirs(self._instroot + "/etc/sysconfig")
+        imgcreate.fs.makedirs(self._instroot + "/etc/sysconfig/network-scripts")
+        shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-mkinitrd",self._instroot + "/etc/sysconfig/mkinitrd")
+        shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-network",self._instroot + "/etc/sysconfig/network")
+        shutil.copyfile("/etc/ltsp/mkinitrd/ifcfg-eth0",self._instroot + "/etc/sysconfig/network-scripts/ifcfg-eth0")
+
     def _unmount_instroot(self):
         if not self.__bindroot is None:
             self.__bindroot.unmount()

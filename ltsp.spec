@@ -85,6 +85,7 @@ mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
@@ -111,7 +112,6 @@ pushd client/xrexecd
 popd
 
 install -m 0755 client/mkinitramfs/k12linux/mkinitrd-ltsp-wrapper $RPM_BUILD_ROOT/%{_sbindir}/
-install -m 0755 client/mkinitramfs/k12linux/sysconfig-mkinitrd $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/mkinitrd
 install -m 0644 client/mkinitramfs/initramfs-common $RPM_BUILD_ROOT/%{_prefix}/lib/ltsp/
 install -m 0755 client/getltscfg/getltscfg $RPM_BUILD_ROOT/%{_bindir}/getltscfg
 install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
@@ -136,6 +136,9 @@ install -m 0644 server/xinetd.d/nbdswapd $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/xinetd.d/ldminfod $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 install -m 0644 server/configs/nbdswapd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 cp -pr server/configs/kickstart/* $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
+install -m 0644 server/configs/k12linux/mkinitrd/ifcfg-eth0 $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
+install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-mkinitrd $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
+install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-network $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
 
@@ -178,7 +181,6 @@ exit 0
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
 %{_sbindir}/mkinitrd-ltsp-wrapper
-%config(noreplace) %{_sysconfdir}/sysconfig/mkinitrd
 %{_prefix}/lib/ltsp
 %{_sysconfdir}/init.d/ltsp-client-launch
 %{_datadir}/ltsp/screen.d/
@@ -228,6 +230,8 @@ exit 0
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/8/
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/9/
 %config(noreplace) %{_sysconfdir}/ltsp/kickstart/*/*/*.ks
+%dir %{_sysconfdir}/ltsp/mkinitrd/
+%config(noreplace) %{_sysconfdir}/ltsp/mkinitrd/*
 
 #K12 stuff
 #/usr/sbin/ltsp-initialize

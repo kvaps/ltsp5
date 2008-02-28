@@ -10,8 +10,9 @@ detect_latest_kernel
 # See /etc/sysconfig/mkinitrd to override the defaults
 # The options must be in that config file so the initrd's contructed
 # during kernel installation are automatically valid for LTSP.
-echo "Creating Net Bootable Initial Ramdisk Image for kernel-$kernelversion"
-/sbin/mkinitrd -f /boot/initrd-$kernelversion.img $kernelversion
+#echo "Creating Net Bootable Initial Ramdisk Image for kernel-$kernelversion"
+# DISABLED: This is done automatically at kernel install time now
+#/sbin/mkinitrd -f /boot/initrd-$kernelversion.img $kernelversion
 
 # Set permissions
 chmod 644 /boot/vmlinuz*

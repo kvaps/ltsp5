@@ -2,5 +2,6 @@ case "$MODE" in
     after-install)
         # Build initrd
         setarch $ARCH chroot $ROOT /usr/sbin/mkinitrd-ltsp-wrapper
+        # TODO: Move that script and funtions into ltsp-server
         ;;
 esac

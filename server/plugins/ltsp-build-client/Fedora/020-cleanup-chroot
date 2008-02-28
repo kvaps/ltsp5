@@ -3,9 +3,6 @@
 case "$MODE" in
     after-install)
         echo "Cleaning up chroot $ROOT"
-        ### Clean up stuff we don't need
-        rm -rf $ROOT/boot/initrd*
-
         ### Clean up stuff that is actually harmful in the chroot
         # 64bit db4 locks makes it impossible for 32bit rpm to operate within the chroot
         rm -rf $ROOT/var/lib/rpm/__db*
