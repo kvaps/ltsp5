@@ -42,6 +42,10 @@ fi
 
 for SCRIPT_DIR in ${SCRIPT_DIRS}; do
     if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
+        if [ "${SCRIPT_DIR}" = "/usr/lib/ltsp/screen.d" ]; then
+            echo "Warning: /usr/lib/ltsp/screen.d is deprecated and will be removed in the future."
+            echo "         ${SCREEN_SCRIPT} requires updating to use /usr/share/ltsp."
+        fi
         exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
     fi
 done
