@@ -13,7 +13,7 @@
 # Get the lts.conf entries, and assign them to shell
 # variables.
 #
-. /usr/lib/ltsp/ltsp_config
+. /usr/share/ltsp/ltsp_config
 
 #
 # Get the IP address of the host to telnet into.

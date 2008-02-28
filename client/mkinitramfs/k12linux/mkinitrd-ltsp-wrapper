@@ -1,5 +1,5 @@
 #!/bin/bash
-. /usr/lib/ltsp/initramfs-common
+. /usr/share/ltsp/initramfs-common
 
 # If /dev/null does not exist, create it
 [ ! -e /dev/null ] && /sbin/MAKEDEV null

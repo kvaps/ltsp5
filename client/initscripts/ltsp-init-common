@@ -1,6 +1,6 @@
 # Common functions shared by LTSP init scripts
 
-. /usr/lib/ltsp/ltsp_config
+. /usr/share/ltsp/ltsp_config
 
 boolean_is_true(){
     case "$(echo $1 | tr 'A-Z' 'a-z')" in
@@ -69,6 +69,6 @@ configure_localdev() {
 
 configure_x() {
     if boolean_is_true "$CONFIGURE_X" ; then
-        ${CONFIGURE_X_COMMAND:-/usr/lib/ltsp/configure-x.sh}
+        ${CONFIGURE_X_COMMAND:-/usr/share/ltsp/configure-x.sh}
     fi
 }

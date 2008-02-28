@@ -10,7 +10,7 @@
 SCRIPT_DIRS="/etc/ltsp/screen.d /usr/share/ltsp/screen.d /usr/lib/ltsp/screen.d"
 
 # Load LTSP configuration
-. /usr/lib/ltsp/ltsp_config
+. /usr/share/ltsp/ltsp_config
 
 # Figure out SCREEN_NUM
 if [ -n "$1" ]; then

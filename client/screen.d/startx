@@ -9,7 +9,7 @@
 #
 # Get the lts.conf entries
 #
-. /usr/lib/ltsp/ltsp_config
+. /usr/share/ltsp/ltsp_config
 
 XDM_SERVER=${XDM_SERVER:-${SERVER}}
 
