@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+        # Build initrd
+        MODE="$MODE" /usr/sbin/ltsp-prepare-kernel
+        ;;
+esac

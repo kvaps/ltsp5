@@ -56,3 +56,38 @@ load_plugins() {
         done
     done
 }
+
+# Confirms that ROOT is a chroot
+# Success: return 0
+# Failure: exit 1
+#          return 1 if --return-on-fail
+confirm_chroot() {
+    if [ -z $ROOT ]; then
+        echo "ERROR: ROOT is not defined."
+        exit 1
+    fi
+    if [ ! -e $ROOT/bin/true ]; then
+        [ "$1" = "--return-on-fail" ] && return 1
+        echo "ERROR: $ROOT is not a valid chroot."
+        exit 1
+    fi
+    return 0
+}
+
+# Detect latest installed kernel
+# Outputs version to $kernelversion
+detect_latest_kernel() {
+    confirm_chroot
+
+    # If /dev/null does not exist, create it (basename needs it)
+    [   ! -e /dev/null ] && /sbin/MAKEDEV null
+
+    # If not already specified by the command line, try to find the latest kernel automatically
+    unset kernelversion
+    kernelversion="`ls -d $ROOT/lib/modules/2* | sort -nr | head -n1 | xargs basename`"
+    if [ ! -d $ROOT/lib/modules/$kernelversion ]; then
+        echo "ERROR: $0: Unable to detect installed kernel version."
+        exit 1
+    fi
+    return 0
+}

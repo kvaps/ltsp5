@@ -1,0 +1,35 @@
+#!/bin/bash
+. /usr/share/ltsp/plugins/functions 
+
+# TODO: Add optional parameters to allow use of non-latest kernel
+
+# Check and set ARCH if necessary
+if [ -z $ARCH ]; then
+    UNAMEM="$(uname -m)"
+    case $UNAMEM in
+    i386|i586|i686|x86_64)
+        ARCH=i386
+    ;;
+    ppc|ppc64)
+        ARCH=ppc
+    ;;
+    *)
+        ARCH="$UNAMEM" 
+    ;;
+    esac
+    echo "ARCH not defined, assuming $ARCH."
+fi
+# Set ROOT
+ROOT="/opt/ltsp/$ARCH"
+
+detect_latest_kernel
+
+# Set permissions
+chmod 644 $ROOT/boot/vmlinuz*
+chmod 644 $ROOT/boot/initrd*
+
+# Symlink kernel and initrd
+cd $ROOT/boot
+ln -sf vmlinuz-$kernelversion     vmlinuz.ltsp
+ln -sf  initrd-$kernelversion.img initrd.ltsp
+cd - > /dev/null

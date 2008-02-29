@@ -110,8 +110,6 @@ pushd client/xrexecd
     make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
-install -m 0755 client/mkinitramfs/k12linux/mkinitrd-ltsp-wrapper $RPM_BUILD_ROOT/%{_sbindir}/
-install -m 0644 client/mkinitramfs/initramfs-common $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 install -m 0755 client/getltscfg/getltscfg $RPM_BUILD_ROOT/%{_bindir}/getltscfg
 install -m 0644 client/getltscfg/getltscfg.1 $RPM_BUILD_ROOT/%{_mandir}/man1/
 install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_datadir}/ltsp/
@@ -140,6 +138,7 @@ install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-mkinitrd $RPM_BUILD_R
 install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-network $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
+install -m 0755 server/scripts/k12linux/ltsp-prepare-kernel $RPM_BUILD_ROOT/%{_sbindir}/
 
 install -m 0644 server/configs/k12linux/dhcpd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 install -m 0644 server/configs/k12linux/ltsp-update-kernels.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
@@ -179,11 +178,9 @@ exit 0
 %{_mandir}/man1/getltscfg.1.gz
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
-%{_sbindir}/mkinitrd-ltsp-wrapper
 %{_sysconfdir}/init.d/ltsp-client-launch
 %dir %{_datadir}/ltsp
 %{_datadir}/ltsp/configure-x.sh
-%{_datadir}/ltsp/initramfs-common
 %{_datadir}/ltsp/ltsp-init-common
 %{_datadir}/ltsp/ltsp_config
 %{_datadir}/ltsp/screen_session
@@ -210,6 +207,7 @@ exit 0
 %endif
 
 %{_sbindir}/ltsp-build-client
+%{_sbindir}/ltsp-prepare-kernel
 %{_sbindir}/ltsp-update-kernels
 %{_datadir}/ltsp/scripts/
 %{_datadir}/ltsp/plugins/
