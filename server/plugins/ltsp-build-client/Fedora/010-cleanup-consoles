@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+        # Set Runlevel 5 and turn off the mingetty's
+        sed -i 's/^id:3/^id:5/; /^[1-6].*/d;' $ROOT/etc/inittab
+        ;;
+esac
