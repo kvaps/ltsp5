@@ -59,7 +59,7 @@ if ! env | grep -q '^SCREEN_'; then
     elif [ -x /usr/sbin/sdm ]; then
         export SCREEN_07=sdm
     else
-        export SCREEN_07=startx
+        export SCREEN_07=xdmcp
     fi
 fi
 
