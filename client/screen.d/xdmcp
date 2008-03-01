@@ -38,7 +38,7 @@ unset XFCFG
 #
 if [ -n "${X_CONF}" ]; then
     if [ -f ${X_CONF} ]; then
-        XFCFG=/etc/X11/xorg.conf
+        XFCFG=/tmp/xorg.conf
         cp ${X_CONF} ${XFCFG}
     else
         echo
