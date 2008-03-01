@@ -193,6 +193,7 @@ system-config-display
 sysvinit
 tar
 termcap
+tftp
 time
 ttmkfdir
 tzdata

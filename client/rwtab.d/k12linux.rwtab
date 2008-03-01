@@ -1,0 +1,6 @@
+dirs    /etc/udev/rules.d/
+dirs    /var/lib/dbus/
+
+files	/etc/lts.conf
+files   /etc/X11/xorg.conf
+files   /var/lib/random-seed

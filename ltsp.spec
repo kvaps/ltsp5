@@ -77,7 +77,8 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rwtab.d/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/X11/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/
 
 # server
@@ -116,8 +117,11 @@ install -m 0644 client/ltsp_config $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 install -m 0755 client/screen_session $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 install -m 0755 client/configure-x.sh $RPM_BUILD_ROOT/%{_datadir}/ltsp/
 install -m 0644 client/initscripts/ltsp-init-common $RPM_BUILD_ROOT/%{_datadir}/ltsp/
-install -m 0755 client/initscripts/RPM/ltsp-client-launch $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
+install -m 0755 client/initscripts/RPM/ltsp-client-launch $RPM_BUILD_ROOT%{_sbindir}
+install -m 0644 client/rwtab.d/k12linux.rwtab $RPM_BUILD_ROOT%{_sysconfdir}/rwtab.d
 cp -av client/screen.d $RPM_BUILD_ROOT/%{_datadir}/ltsp/
+touch $RPM_BUILD_ROOT%{_sysconfdir}/lts.conf
+touch $RPM_BUILD_ROOT%{_localstatedir}/lib/random-seed
 
 ### server install
 install -m 0755 server/nbdrootd $RPM_BUILD_ROOT%{_sbindir}
@@ -144,6 +148,10 @@ install -m 0644 server/configs/k12linux/dhcpd.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install -m 0644 server/configs/k12linux/ltsp-update-kernels.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/k12linux/ltsp-build-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 
+for arch in i386 x86_64 ppc ppc64; do
+    install -m 0644 server/configs/k12linux/lts.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/$arch/
+done
+
 %ifarch i386 x86_64
 # PXE
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
@@ -162,29 +170,24 @@ install -m 0755 vmclient/ltsp-qemu-bridge-ifup   $RPM_BUILD_ROOT%{_sbindir}/
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post client
-/sbin/chkconfig --add ltsp-client-launch
-exit 0
-
-%preun
-if [ $1 = 0 ] ; then
-    /sbin/chkconfig --del ltsp-client-launch
-fi
-exit 0
-
 
 %files client
 %defattr(-,root,root,-)
 %{_mandir}/man1/getltscfg.1.gz
 %{_bindir}/getltscfg
 %{_bindir}/xrexecd
-%{_sysconfdir}/init.d/ltsp-client-launch
+%{_sbindir}/ltsp-client-launch
 %dir %{_datadir}/ltsp
 %{_datadir}/ltsp/configure-x.sh
 %{_datadir}/ltsp/ltsp-init-common
 %{_datadir}/ltsp/ltsp_config
 %{_datadir}/ltsp/screen_session
 %{_datadir}/ltsp/screen.d/
+
+# readonly-root related files
+%{_sysconfdir}/rwtab.d/*
+%{_localstatedir}/lib/random-seed
+%config(noreplace) %{_sysconfdir}/lts.conf
 
 
 %files server
@@ -234,6 +237,10 @@ exit 0
 %config(noreplace) %{_sysconfdir}/ltsp/kickstart/*/*/*.ks
 %dir %{_sysconfdir}/ltsp/mkinitrd/
 %config(noreplace) %{_sysconfdir}/ltsp/mkinitrd/*
+%config(noreplace)%{_tftpdir}/ltsp/i386/lts.conf
+%config(noreplace)%{_tftpdir}/ltsp/x86_64/lts.conf
+%config(noreplace)%{_tftpdir}/ltsp/ppc/lts.conf
+%config(noreplace)%{_tftpdir}/ltsp/ppc64/lts.conf
 
 #K12 stuff
 #/usr/sbin/ltsp-initialize

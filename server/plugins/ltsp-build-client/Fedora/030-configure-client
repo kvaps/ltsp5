@@ -1,7 +1,7 @@
 case "$MODE" in
     after-install)
         # Disable services we don't want
-        for service in gpm haldaemon kudzu mcstrans mdmonitor netfs network pcscd rpcbind; do
+        for service in ConsoleKit gpm haldaemon kudzu mcstrans mdmonitor messagebus netfs network pcscd rpcbind; do
             if [ ! -e $ROOT/etc/init.d/$service ]; then
                 continue
             fi
@@ -9,15 +9,18 @@ case "$MODE" in
             chroot $ROOT /sbin/chkconfig $service off
         done
         # Enable services we do want
-        for service in ltsp-client-launch; do
-            if [ ! -e $ROOT/etc/init.d/$service ]; then
-                continue
-            fi
-            echo "Enabling Service: $service"
-            chroot $ROOT /sbin/chkconfig $service on
-        done
+        #for service in foo; do
+        #    if [ ! -e $ROOT/etc/init.d/$service ]; then
+        #        continue
+        #    fi
+        #    echo "Enabling Service: $service"
+        #    chroot $ROOT /sbin/chkconfig $service on
+        #done
 
         # Setup readonly-root Mode
         sed -i 's/READONLY=no/READONLY=yes/' $ROOT/etc/sysconfig/readonly-root
+
+        # Set ltsp-launch-client as DM
+        echo "DISPLAYMANAGER=/usr/sbin/ltsp-client-launch" > $ROOT/etc/sysconfig/desktop
         ;;
 esac
