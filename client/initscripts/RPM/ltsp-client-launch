@@ -2,92 +2,63 @@
 #
 # ltsp-client-launch        LTSP Client Launcher
 #
-# chkconfig: - 95 5
 # description: This launches the LTSP clients defined in /etc/lts.conf
 #              along with sound server and other configured devices.
 #
-# config: /etc/lts.conf
-#
-# Return values according to LSB for all commands but status:
-# 0 - success
-# 1 - generic or unspecified error
-# 2 - invalid or excess argument(s)
-# 3 - unimplemented feature (e.g. "reload")
-# 4 - insufficient privilege
-# 5 - program is not installed
-# 6 - program is not configured
-# 7 - program is not running
-#
-### BEGIN INIT INFO
-# Provides: ltsp-client-launch
-# Required-Start: $syslog $local_fs $network
-# Required-Stop: $syslog $local_fs
-# Should-Start: $network
-# Default-Start: 
-# Default-Stop: 0 1 6
-# Short-Description: LTSP Client Launcher
-# Description: Launches LTSP clients defined in /etc/lts.conf
-### END INIT INFO
-
-PATH=/sbin:/bin:/usr/bin:/usr/sbin
-prog="ltsp-client-launch"
 
 # Gracefully exit if ltsp_chroot file is not present
 test -f /etc/ltsp_chroot || exit 0
 
+# Make sure LANG is set
+if [ -z "$LANG" ]
+then
+  if [ -f /etc/sysconfig/language ]
+  then
+    LANG=`. /etc/sysconfig/language; echo $RC_LANG`
+    export LANG
+  fi
+fi
+
+if [ -z "$LC_MESSAGES" ]
+then
+  if [ -z "$LC_ALL" ]
+  then
+    LC_MESSAGES=$LANG
+    export LC_MESSAGES
+  fi
+fi
+
+# Find tftp server
+# XXX: option routers is not guaranteed to be the tftp server.  Need to figure
+#      out a better way to detect the tftp server address.
+ROOTSERVER="$(cat /dev/.dhclient-eth0.leases |grep "routers" |awk {'print $3'} |sed 's/;//')"
+ARCH=$(uname -m)
+[ "$ARCH" = "i686" ] && ARCH=i386
+TFTPPATH="/ltsp/$ARCH/lts.conf"
+
+# Attempt to get lts.conf via tftp
+cd /var/run
+(echo "get ${TFTPPATH}"|tftp ${ROOTSERVER} >/dev/null 2>&1)
+if [ -s ./lts.conf ];then
+    cp ./lts.conf /etc/lts.conf
+fi
+cd - > /dev/null
+
 # Source function libraries.
-. /etc/init.d/functions
 . /usr/share/ltsp/ltsp-init-common
+. /etc/rc.d/init.d/functions
 
-RETVAL=0
+# Start Screen Sessions defined in /etc/lts.conf
+for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
+eval num=\$SCREEN_$screen
+if [ -n "$num" ]; then
+    daemon /usr/share/ltsp/screen_session "$screen"
+fi
+done
 
-start(){
-	echo -n $"Starting $prog: "
+start_sound
+configure_localdev
 
-        # FIXME: Configuring X might not be needed, test this
-        #configure_x
-
-        # Start Screen Sessions defined in /etc/lts.conf
-        for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
-            eval num=\$SCREEN_$screen
-            if [ -n "$num" ]; then
-                daemon /usr/share/ltsp/screen_session "$screen"
-            fi
-        done
-
-        start_sound
-        configure_localdev
-
-	touch /var/lock/subsys/ltsp-client-launch
-	return $RETVAL
-}
-
-stop(){
-	echo -n $"Stopping $prog: "
-        # Nothing to stop
-	rm -f /var/lock/subsys/ltsp-client-launch
-	return $RETVAL
-}
-
-restart(){
-	stop
-	start
-}
-
-# See how we were called.
-case "$1" in
-    start)
-	start
-	;;
-    stop)
-	stop
-	;;
-    restart)
-	restart
-	;;
-    *)
-	echo $"Usage: $0 {start|stop|restart}"
-	RETVAL=3
-esac
-
-exit $RETVAL
+while :; do
+    sleep 365d
+done
