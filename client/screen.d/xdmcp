@@ -31,15 +31,18 @@ else
 fi
 
 unset XFCFG
-
 #
 # If X_CONF is defined in the lts.conf file, then
 # it points to an xorg.conf file that is pre-made for a workstation
 #
 if [ -n "${X_CONF}" ]; then
     if [ -f ${X_CONF} ]; then
-        XFCFG=/tmp/xorg.conf
-        cp ${X_CONF} ${XFCFG}
+        if [ -e /etc/X11/xorg.conf ]; then
+            cp ${X_CONF} /etc/X11/xorg.conf
+        else
+            XFCFG=/var/run/ltsp-xorg.conf
+            cp ${X_CONF} ${XFCFG}
+        fi
     else
         echo
         echo "Error! - ${X_CONF} - File not found!"
