@@ -11,6 +11,12 @@
 #
 . /usr/share/ltsp/ltsp_config
 
+error_delay() {
+    echo -n -e "\n\rERROR: $1"
+    read CMD
+}
+
+
 XDM_SERVER=${XDM_SERVER:-${SERVER}}
 
 TTY=$(basename $(tty))
@@ -23,117 +29,27 @@ else
     XF_ARGS=$*
 fi
 
-# XXX
-PATH=$PATH:/usr/bin/X11
-
-################################################################################
 #
-# Setup the XF86Config file
+# If X_CONF is defined in the lts.conf file, then
+# it points to an xorg.conf file that is pre-made for a workstation
 #
-
-ltsp_x_config() {
-    XSERVER=${XSERVER:-"auto"}
-
-
-    if [ "${XSERVER}" = "auto" ]; then
-        echo "Scanning for video card"
-        XSERVER=`/sbin/pci_scan /etc/vidlist`
-        if [ -z "${XSERVER}" ]; then
-            echo
-            echo "  WARNING: Auto probe of the video card failed !"
-            echo "           You should specify the proper X server in lts.conf"
-            echo "           Proceeding with the SLOW vesa server"
-            echo 
-            sleep 5s
-            XSERVER=vesa
+if [ -n "${X_CONF}" ]; then
+    if [ -f ${X_CONF} ]; then
+        if [ -z "${XFCFG}" ]; then
+            error_delay "X_CONF=$X_CONF defined but XFCFG not defined in lts.conf."
+            exit 1
         fi
-    fi
-
-    if [ "${XSERVER}" = "i810" ]; then
-        if [ ! -f /tmp/i810_loaded ]; then
-            modprobe agpgart
-            >/tmp/i810_loaded
-        fi
-    fi
-
-    if [ ! -z "${X_CONF}" ]; then
-    #
-    # If X_CONF is defined in the lts.conf file, then
-    # it points to an XF86Config file that is pre-made for a workstation
-    #
-        if [ -f ${X_CONF} ]; then
-            cp ${X_CONF} ${XFCFG}
-        else
-            echo
-            echo "Error! - ${X_CONF} - File not found!"
-            echo
-        fi
+        cp ${X_CONF} ${XFCFG}
     else
-    #
-    # Build the XF86Config file from entries in the lts.conf file
-    # If it starts with 'XF86_', then we use XFree86 3.3.6.  Otherwise,
-    # we use XFree86 4.x
-    #
-        case ${XSERVER} in
-
-            XF86_*)  /etc/build_x3_cfg ${XSERVER} >${XFCFG}
-                ;;
-
-            *)       /etc/build_x4_cfg ${XSERVER} >${XFCFG}
-                ;;
-        esac
+        echo
+        echo "Error! - ${X_CONF} - File not found!"
+        echo
     fi
-}
-
-ubuntu_x_config() {
-    # set default xserver, use same selection method as in
-    # ltsp-client.ltsp-client-setup.init
-    if [ -d /usr/share/doc/xserver-xorg/ ]; then
-	XFCFG=/etc/X11/xorg.conf
-    elif [ -d /usr/share/doc/xserver-xfree86/ ]; then
-	XFCFG=/etc/X11/XF86Config-4
-    else
-        echo "WARNING: no known xserver detected"
-        return
-    fi
-}
-
-if true; then
-    ubuntu_x_config
-else
-    ltsp_x_config
 fi
 
-################################################################################
-#
-# Figure out how to run the X server
-#
- 
-case ${XSERVER} in
+XBINARY="X"
+OPTS=""
 
-    XF86_*)  XBINARY="${XSERVER}"
-             XOPTS=""
-             ;;
-
-    Xvesa)   XBINARY="Xvesa"
-             case "${X_MODE_0}" in
-                 1280x1024)   XOPTS="-shadow -mode 0x011A"
-                              ;;
-                 1024x768)    XOPTS="-shadow -mode 0x0117"
-                              ;;
-                 800x600)     XOPTS="-shadow -mode 0x0114"
-                              ;;
-                 640x480)     XOPTS="-shadow -mode 0x0111"
-                              ;;
-                 *)           XOPTS="-shadow -mode 0x0117"
-                              ;;
-             esac
-             ;;
-
-    *)       XBINARY="X"
-             XOPTS=""
-             ;;
-esac
 #
 # Setup the DISP variable
 #
@@ -146,7 +62,7 @@ else
     ACC_CTRL=""
 fi
 
-if [ "${XF_ARGS}" = "" ]; then
+if [ -z "${XF_ARGS}" ]; then
     XF_ARGS="-query ${XDM_SERVER}"
 fi
 
@@ -159,13 +75,19 @@ if [ Y = "${USE_XFS}" ] ; then
     XF_ARGS="$XF_ARGS -fp tcp/${XFS_SERVER}:7100"
 fi
 
+# If XFCFG is defined then attempt to use it instead of autoconfiguration
+if [ -e {XFCFG} ]; then
+    XF_ARGS="$XF_ARGS -config ${XFCFG}"
+fi
+
+# Add -terminate to args because it helps to avoid X regeneration bugs
+XF_ARGS="$XF_ARGS -terminate"
+
 while :; do
-    ${XBINARY} ${ACC_CTRL}              \
+    ${XBINARY} ${ACC_CTRL}                             \
                               ${XF_ARGS}               \
-                              -xf86config ${XFCFG}     \
                               vt${TTY} ${DISP}
     if [ $? -ne 0 ]; then
-      echo -n -e "\n\rxserver failed, press <enter> to continue "
-      read CMD
+        error_delay "xserver failed, press <enter> to continue "
     fi
 done
