@@ -1,8 +1,9 @@
 #!/bin/sh
 #
 # Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
+# Copyright (c) 2008 by Warren Togami      (Red Hat, Inc.)
 #
-# This software is licensed under the Gnu General Public License version 2,
+# This software is licensed under the GNU General Public License version 2,
 # the full text of which can be found in the COPYING file.
 #
 
@@ -29,16 +30,17 @@ else
     XF_ARGS=$*
 fi
 
+unset XFCFG
+
 #
 # If X_CONF is defined in the lts.conf file, then
 # it points to an xorg.conf file that is pre-made for a workstation
 #
+# This config overrides any /etc/X11/xorg.conf that might exist.
+#
 if [ -n "${X_CONF}" ]; then
     if [ -f ${X_CONF} ]; then
-        if [ -z "${XFCFG}" ]; then
-            error_delay "X_CONF=$X_CONF defined but XFCFG not defined in lts.conf."
-            exit 1
-        fi
+        XFCFG=/tmp/xorg.conf
         cp ${X_CONF} ${XFCFG}
     else
         echo
@@ -84,9 +86,7 @@ fi
 XF_ARGS="$XF_ARGS -terminate"
 
 while :; do
-    ${XBINARY} ${ACC_CTRL}                             \
-                              ${XF_ARGS}               \
-                              vt${TTY} ${DISP}
+    ${XBINARY} ${ACC_CTRL} ${XF_ARGS} vt${TTY} ${DISP}
     if [ $? -ne 0 ]; then
         error_delay "xserver failed, press <enter> to continue "
     fi
