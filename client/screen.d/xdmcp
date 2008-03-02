@@ -79,7 +79,7 @@ if [ Y = "${USE_XFS}" ] ; then
 fi
 
 # If XFCFG is defined then attempt to use it instead of autoconfiguration
-if [ -e {XFCFG} ]; then
+if [ -e ${XFCFG} ]; then
     XF_ARGS="$XF_ARGS -config ${XFCFG}"
 fi
 
