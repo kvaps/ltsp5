@@ -139,20 +139,6 @@ configure_fstab() {
     fi
 }
 
-# muzso: preseed() has been modified to only collect commands in a variable
-#        and does not pipe them instantly to debconf-communicate
-#        We do this at the end in one batch.
-preseed() {
-    question="$1"
-    value="$2"
-
-    if [ -n "$value" ]; then
-        [ -n "$debconf_commands" ] && debconf_commands="${debconf_commands}\n"
-        debconf_commands="${debconf_commands}set $question $value"
-        debconf_commands="${debconf_commands}\nfset $question seen true"
-    fi
-}
-
 configure_x() {
     # If the user has specified an xorg.conf file, then copy it over.
     xserver_config="/etc/X11/xorg.conf"
@@ -172,10 +158,6 @@ configure_serial_mouse() {
 bind_mounts () {
     # set defaults
     test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
-    test -z "$rw_dirs" && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/discover"
-    test -z "$copy_dirs" && copy_dirs=""
-    test -z "$temp_copy_dirs" && temp_copy_dirs="/var/cache/debconf"
-    test -z "$bindfiles" && bindfiles="/etc/X11/xorg.conf /etc/X11/XF86Config-4"
     mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
     # preserve directory structure
     for d in $rw_dirs ; do

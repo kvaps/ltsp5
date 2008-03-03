@@ -21,7 +21,7 @@ copy_dirs=""
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
-temp_copy_dirs="/var/cache/debconf"
+temp_copy_dirs=""
 
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf"
