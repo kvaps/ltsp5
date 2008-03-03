@@ -132,9 +132,11 @@ EOF
 }
 
 configure_fstab() {
-    echo "/dev/root     /       unionfs defaults        0       0" > /etc/fstab
-    echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
-    mount /tmp
+    if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
+        echo "/dev/root     /       unionfs defaults        0       0" > /etc/fstab
+        echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
+        mount /tmp
+    fi
 }
 
 # muzso: preseed() has been modified to only collect commands in a variable
