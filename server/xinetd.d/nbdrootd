@@ -7,8 +7,6 @@ service nbdrootd
 	socket_type     = stream
 	wait            = no
 	user            = nobody
-	server          = /usr/sbin/tcpd
-	server_args     = /usr/sbin/nbdrootd
-	log_on_failure  += USERID
+	server          = /usr/sbin/nbdrootd
 	port		= 2000
 }

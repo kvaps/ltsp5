@@ -7,8 +7,6 @@ service nbdswapd
 	socket_type     = stream
 	wait            = no
 	user            = nobody
-	server          = /usr/sbin/tcpd
-	server_args     = /usr/sbin/nbdswapd
-	log_on_failure  += USERID
+	server          = /usr/sbin/nbdswapd
 	port		= 9572
 }

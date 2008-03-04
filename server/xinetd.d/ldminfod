@@ -7,8 +7,6 @@ service ldminfod
 	socket_type     = stream
 	wait            = no
 	user            = nobody
-	server          = /usr/sbin/tcpd
-	server_args     = /usr/sbin/ldminfod
-	log_on_failure  += USERID
+	server          = /usr/sbin/ldminfod
 	port		= 9571
 }

@@ -232,10 +232,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/nbdswapd
 %{_sbindir}/chroot-creator
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
-%{_sysconfdir}/xinetd.d/nbdrootd
-%{_sysconfdir}/xinetd.d/nbdswapd
-%{_sysconfdir}/xinetd.d/ldminfod
 %{_sysconfdir}/init.d/ltsp-dhcpd
+%config(noreplace) %{_sysconfdir}/xinetd.d/nbdrootd
+%config(noreplace) %{_sysconfdir}/xinetd.d/nbdswapd
+%config(noreplace) %{_sysconfdir}/xinetd.d/ldminfod
 # Configuration Files
 %dir %{_sysconfdir}/ltsp/
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
