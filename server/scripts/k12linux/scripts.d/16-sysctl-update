@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# bump up the number of file handles
+#
+# Minimum number of file handles
+DEFAULTFH=65536
+
+# Calculate ideal number of file handles
+MEM=`cat /proc/meminfo | grep ^MemTotal: | awk '{print $2}'`
+NEWFH=$[ $MEM/19 ]
+
+# if ideal is less than default, use the default
+if [ $NEWFH -lt $DEFAULTFH ]
+then
+   NEWFH=$DEFAULTFH
+fi
+
+# retrieve the old number of file handles. Set to 1 if no value exists
+OLDFH=`grep fs.file-max /etc/sysctl.conf| cut -d"=" -f2| sed s/\ //| tail -n1`
+if [ ! "$OLDFH" ]
+then
+   OLDFH=1
+fi
+
+# if number of new file handles is more than the old number of file handles,
+# append the new value to /etc/sysctl.conf & load the new values
+if [ $NEWFH -gt $OLDFH ]
+then
+   echo fs.file-max = $NEWFH >> /etc/sysctl.conf
+   echo $NEWFH > /proc/sys/fs/file-max
+fi

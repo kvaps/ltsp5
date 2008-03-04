@@ -6,6 +6,7 @@ TYPE=Bridge
 ONBOOT=yes
 BOOTPROTO=static
 STP=off
+DELAY=0.1
 USERCTL=no
 IPV6INIT=no
 PEERDNS=yes

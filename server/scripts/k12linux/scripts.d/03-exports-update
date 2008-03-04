@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#######################################################
+#
+#    update /etc/exports file, if needed
+#
+#######################################################
+
+[ -f /etc/ltsp/ltsp.conf ] && . /etc/ltsp/ltsp.conf
+[ "$LTSP_DIR" ] || LTSP_DIR=/opt/ltsp
+
+# if there is not a line matching '/opt/ltsp *(ro,async)', add it
+if [ ! "`grep ${LTSP_DIR}[[:space:]]+*[*]\(ro,async\) /etc/exports`" ] ; then
+echo "## LTSP-begin ##
+# export for LTSP version 5
+$LTSP_DIR                 *(ro,async)
+## LTSP-end ## 
+" >> /etc/exports 
+fi
+
