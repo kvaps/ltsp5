@@ -90,6 +90,8 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts.d/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/chkconfig.d/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/ltsp/swapfiles/
@@ -143,10 +145,17 @@ install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-network $RPM_BUILD_RO
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
 install -m 0755 server/scripts/k12linux/ltsp-prepare-kernel $RPM_BUILD_ROOT/%{_sbindir}/
+install -m 0755 server/scripts/k12linux/ltsp-server-initialize $RPM_BUILD_ROOT/%{_sbindir}/
+install -m 0755 server/scripts/k12linux/hosts-update $RPM_BUILD_ROOT/%{_datadir}/ltsp/scripts/
+install -m 0755 server/scripts/k12linux/dhcpd-update $RPM_BUILD_ROOT/%{_datadir}/ltsp/scripts/
+cp -p server/scripts/k12linux/scripts.d/*   $RPM_BUILD_ROOT%{_datadir}/ltsp/scripts.d/
+cp -p server/scripts/k12linux/chkconfig.d/* $RPM_BUILD_ROOT%{_datadir}/ltsp/chkconfig.d/
 
+# configs
 install -m 0644 server/configs/k12linux/dhcpd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 install -m 0644 server/configs/k12linux/ltsp-update-kernels.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/k12linux/ltsp-build-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
+install -m 0644 server/configs/k12linux/ltsp-server.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 
 for arch in i386 x86_64 ppc ppc64; do
     install -m 0644 server/configs/k12linux/lts.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/$arch/
@@ -211,8 +220,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_sbindir}/ltsp-build-client
 %{_sbindir}/ltsp-prepare-kernel
+%{_sbindir}/ltsp-server-initialize
 %{_sbindir}/ltsp-update-kernels
 %{_datadir}/ltsp/scripts/
+%{_datadir}/ltsp/scripts.d/
+%{_datadir}/ltsp/chkconfig.d/
 %{_datadir}/ltsp/plugins/
 %{_sbindir}/ldminfod
 %{_sbindir}/ltsp-update-sshkeys
@@ -228,6 +240,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_sysconfdir}/ltsp/
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client.conf
+%config(noreplace) %{_sysconfdir}/ltsp/ltsp-server.conf
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-update-kernels.conf
 %dir %{_sysconfdir}/ltsp/kickstart/
@@ -242,10 +255,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace)%{_tftpdir}/ltsp/ppc/lts.conf
 %config(noreplace)%{_tftpdir}/ltsp/ppc64/lts.conf
 
-#K12 stuff
-#/usr/sbin/ltsp-initialize
-#/usr/share/ltsp/chkconfig.d
-#/usr/share/ltsp/scripts.d
 
 %ifarch i386 x86_64
 %files vmclient

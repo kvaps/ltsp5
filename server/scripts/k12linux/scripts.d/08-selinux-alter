@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#setsebool -P use_nfs_home_dirs=1        # allow NFS mounted home dirs
+#setsebool -P portmap_disable_trans=1    # disable Portmap protection
+#setsebool -P use_samba_home_dirs=1      # allow Samba shared home dirs
+#setsebool -P samba_enable_home_dirs=1   
+#setsebool -P mysqld_disable_trans=1     # disable MySQL protection
+#setsebool -P squid_disable_trans=1      # disable squid protection
+#setsebool -P dhcpd_disable_trans=1      # disable DHCPD protection
+

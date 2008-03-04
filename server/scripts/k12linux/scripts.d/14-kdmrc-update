@@ -1,0 +1,35 @@
+#!/bin/sh
+# Setup KDM in case somebody wants to use it
+
+FILE=/etc/X11/xdm/kdmrc
+
+if [ -f $FILE ]
+then
+    /usr/bin/perl -i.ltsp -p -e '
+    # turn on XDMCP
+    if ($_ =~ /^\[Xdmcp\]/i) {
+        $xdmcp_section = 1;
+    } elsif ($_ =~ /^\[/) {
+        $xdmcp_section = 0;
+    }
+    if ($xdmcp_section && $_ =~ /Enable=/) {
+        $_ = "Enable=true\n";
+    }
+    # remove ability to halt server
+    if ($_ =~ /^HaltCmd=/i) {
+        $_ = "#" . $_ ; 
+    }
+    # remove ability to reboot server
+    if ($_ =~ /^RebootCmd=/i) {
+        $_ = "#" . $_ ; 
+    }
+    # add ICEwm to the session list
+    if ($_ =~ /^SessionTypes=/i && $_ !~ /icewm/ ) {
+        s/$/,icewm/;
+    }
+    # turn off the clock
+    if ($_ =~ /^LogoArea=Clock/ ) {
+        $_ =  "#" . $_  ;
+    }
+    ' $FILE
+fi

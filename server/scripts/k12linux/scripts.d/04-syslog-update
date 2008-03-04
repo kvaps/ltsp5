@@ -1,0 +1,41 @@
+#!/usr/bin/perl
+# Enable clients to write to syslog on server
+
+$syslog_config_file  = "/etc/sysconfig/syslog";  # F7
+$rsyslog_config_file = "/etc/sysconfig/rsyslog"; # F8
+
+# don't bother to continue unless the target file exists
+if (stat ($rsyslog_config_file)) {
+    $config_file=$rsyslog_config_file;
+} elsif (stat ($syslog_config_file)) {
+    $config_file=$syslog_config_file;
+} else {
+    print "\n    /etc/sysconfig/*syslog not found\n\n";
+    exit;
+}
+
+
+$bkup_file = $config_file . ".ltsp.orig";
+$tmp_file  = $config_file . ".ltsp.tmp";
+
+
+# open target file
+open (IN, "< $config_file");
+open (OUT, "> $tmp_file");
+
+while (<IN>) {
+    if ($_ =~ /SYSLOGD_OPTIONS/ && $_ !~ / -r/) {
+        s/"$/ -r"/g;
+    }
+    print OUT $_;
+} 
+
+# close up the files
+close (IN);
+close (OUT);
+
+# out with the old, in with the new
+`mv $config_file $bkup_file`;
+`mv $tmp_file $config_file`;
+
+exit;
