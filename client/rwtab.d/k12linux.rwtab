@@ -1,7 +1,9 @@
 dirs    /etc/udev/rules.d/
 dirs    /var/lib/dbus/
+dirs    /var/lib/xkb/
 
 files	/etc/lts.conf
 files   /etc/X11/xorg.conf
 files   /var/lib/random-seed
 files   /etc/hosts
+files   /.viminfo
