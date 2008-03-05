@@ -38,6 +38,7 @@ Group:          User Interface/Desktops
 Requires:       livecd-tools
 Requires:       tftp-server
 Requires:       ltspfs
+Requires:       dhcp
 # need to get rid of this dependency before we support RHEL/CentOS
 Requires:       redhat-lsb
 
