@@ -10,14 +10,24 @@ case "$MODE" in
     commandline)
         add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "true" 
         add_option "cachedir"  "`eval_gettext "Path to chroot-creator cachedir"`" "advanced" "true" 
+        add_option "release"  "`eval_gettext "Release version number"`" "advanced" "true" 
+        add_option "distro"  "`eval_gettext "Distro name"`" "advanced" "true" 
     ;;
     configure)
         if [ -n "$option_kickstart_value" ]; then
             KICKSTART_OPT="$option_kickstart_value"
             echo "Manual Kickstart: $KICKSTART_OPT"
         else
-            local RELEASE=$(lsb_release -r |awk {'print $2'})
-            local  DISTRO=$(lsb_release -i |awk {'print $3'})
+            if [ -n "$option_release_value" ]; then
+                RELEASE=$option_release_value
+            else
+                RELEASE=$(lsb_release -r |awk {'print $2'})
+            fi
+            if [ -n "$option_distro_value" ]; then
+                DISTRO=$option_distro_value
+            else
+                DISTRO=$(lsb_release -i |awk {'print $3'})
+            fi
             KICKSTART_OPT="/etc/ltsp/kickstart/$DISTRO/$RELEASE/ltsp-$ARCH.ks"
             echo "Autoconfigured Kickstart: $KICKSTART_OPT"
         fi

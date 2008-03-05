@@ -245,6 +245,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-update-kernels.conf
 %dir %{_sysconfdir}/ltsp/kickstart/
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/
+%config(noreplace) %{_sysconfdir}/ltsp/kickstart/Fedora/common.ks
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/8/
 %dir %{_sysconfdir}/ltsp/kickstart/Fedora/9/
 %config(noreplace) %{_sysconfdir}/ltsp/kickstart/*/*/*.ks
