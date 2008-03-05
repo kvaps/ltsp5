@@ -37,6 +37,9 @@ Group:          User Interface/Desktops
 # needed to install client chroots
 Requires:       livecd-tools
 Requires:       tftp-server
+Requires:       ltspfs
+# need to get rid of this dependency before we support RHEL/CentOS
+Requires:       redhat-lsb
 
 %description server
 LTSP server
@@ -107,6 +110,8 @@ mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc64/
 %ifarch i386 x86_64
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
 %endif
+
+mkdir -p $RPM_BUILD_ROOT/opt/ltsp
 
 ###### client install
 pushd client/xrexecd
@@ -217,6 +222,8 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 %config(noreplace) %{_tftpdir}/ltsp/x86_64/pxelinux.cfg/default
 %endif
+
+%dir /opt/ltsp
 
 %{_sbindir}/ltsp-build-client
 %{_sbindir}/ltsp-prepare-kernel
