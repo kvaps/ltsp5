@@ -165,7 +165,7 @@ neon
 net-snmp-libs
 net-tools
 openldap
-openssh
+openssh-clients
 openssl.i386
 pam
 passwd
