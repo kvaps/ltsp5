@@ -109,18 +109,13 @@ def main():
     else:
         name = imgcreate.build_name(kscfg)
 
-    if options.cachedir:
-        cachedir = options.cachedir
-    else:
-        cachedir = none
-
     if options.target:
         target = options.target
 
     creator = ChrootCreator(ks, name, target)
 
     try:
-        creator.mount(None,cachedir)
+        creator.mount(None,options.cachedir)
         creator.install()
         creator.configure()
         creator.unmount()
