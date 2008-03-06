@@ -158,7 +158,8 @@ cp -p server/scripts/k12linux/scripts.d/*   $RPM_BUILD_ROOT%{_datadir}/ltsp/scri
 cp -p server/scripts/k12linux/chkconfig.d/* $RPM_BUILD_ROOT%{_datadir}/ltsp/chkconfig.d/
 
 # configs
-install -m 0644 server/configs/k12linux/dhcpd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
+install -m 0644 server/configs/k12linux/ifcfg-ltspbr0 $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
+install -m 0644 server/configs/k12linux/ltsp-dhcpd.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/ltsp-dhcpd.conf
 install -m 0644 server/configs/k12linux/ltsp-update-kernels.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/k12linux/ltsp-build-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
 install -m 0644 server/configs/k12linux/ltsp-server.conf $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/
@@ -177,7 +178,6 @@ install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86
 
 %ifarch i386 x86_64
 # vmclient
-install -m 0644 vmclient/ifcfg-ltspbr0 $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
 install -m 0755 vmclient/launch-vmclient         $RPM_BUILD_ROOT%{_sbindir}/
 install -m 0755 vmclient/ltsp-qemu-bridge-ifup   $RPM_BUILD_ROOT%{_sbindir}/
 %endif
