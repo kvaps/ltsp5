@@ -119,6 +119,9 @@ if __name__ == "__main__":
         if lang.endswith('.utf8'):
             # locale returns .utf8 when we want .UTF-8
             lang = lang.replace('.utf8','.UTF-8')
+        else:
+            # if locale did not end with .utf8, do not add to list
+            continue
         if lang != 'POSIX' and lang != 'C' and lang != defaultlocale:
             print "language:" + lang
     try:
