@@ -80,7 +80,7 @@ def parse_options(args):
                       help="Image name and filesystem label")
     parser.add_option("-t", "--target", type="string", dest="target",
                       help="Target directory for chroot")
-    parser.add_option("-c", "--cachedir", type="string", dest="cachedir",
+    parser.add_option("-c", "--cache", type="string", dest="cachedir",
                       help="Location of cachedir")
 
     (options, args) = parser.parse_args()
