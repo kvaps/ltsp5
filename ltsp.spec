@@ -39,6 +39,7 @@ Requires:       livecd-tools
 Requires:       tftp-server
 Requires:       ltspfs
 Requires:       dhcp
+Requires:       gettext
 
 %description server
 LTSP server
@@ -167,6 +168,7 @@ for arch in i386 x86_64 ppc ppc64; do
 done
 
 echo "K12_DIST=%{dist}" | sed 's/\.//' > $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/k12_dist
+cat server/configs/k12linux/k12_dist.template >> $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/k12_dist
 
 %ifarch i386 x86_64
 # PXE

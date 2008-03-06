@@ -18,41 +18,17 @@ case "$MODE" in
             KICKSTART_OPT="$option_kickstart_value"
             echo "Manual Kickstart: $KICKSTART_OPT"
         else
-            . /etc/sysconfig/k12_dist
-            if [ -z "$K12_DIST" ]; then
-                echo "ERROR: K12_DIST not defined in /etc/sysconfig/k12_dist or elsewhere."
-                exit 1
-            fi
-            case "$K12_DIST" in
-                fc8)
-                    DISTRODEF="Fedora"
-                    RELEASEDEF=8
-                ;;
-                fc9)
-                    DISTRODEF="Fedora"
-                    RELEASEDEF=9
-                ;;
-                el5)
-                    DISTRODEF="EL"
-                    RELEASEDEF=5
-                ;;
-                *)
-                    echo "ERROR: $K12_DIST is unsupported."
-                    exit 1
-                ;;
-            esac
-
             if [ -n "$option_release_value" ]; then
                 RELEASE=$option_release_value
             else
                 RELEASE=$RELEASEDEF
             fi
             if [ -n "$option_distro_value" ]; then
-                DISTRO=$option_distro_value
+                VENDOR=$option_distro_value
             else
-                DISTRO=$DISTRODEF
+                VENDOR=$VENDORDEF
             fi
-            KICKSTART_OPT="/etc/ltsp/kickstart/$DISTRO/$RELEASE/ltsp-$ARCH.ks"
+            KICKSTART_OPT="/etc/ltsp/kickstart/$VENDOR/$RELEASE/ltsp-$ARCH.ks"
             echo "Autoconfigured Kickstart: $KICKSTART_OPT"
         fi
 
