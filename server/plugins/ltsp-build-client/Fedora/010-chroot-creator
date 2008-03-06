@@ -9,7 +9,7 @@
 case "$MODE" in
     commandline)
         add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "true" 
-        add_option "cachedir"  "`eval_gettext "Path to chroot-creator cachedir"`" "advanced" "true" 
+        add_option "cache"  "`eval_gettext "Path to chroot-creator cache"`" "advanced" "true" 
         add_option "release"  "`eval_gettext "Release version number"`" "advanced" "true" 
         add_option "distro"  "`eval_gettext "Distro name"`" "advanced" "true" 
     ;;
@@ -61,9 +61,9 @@ case "$MODE" in
             exit 1
         fi
 
-        if [ -n "$option_cachedir_value" ]; then
-            CACHEDIR_OPT="--cachedir=$option_cachedir_value"
-            echo "Cachedir: $option_cachedir_value"
+        if [ -n "$option_cache_value" ]; then
+            CACHEDIR_OPT="--cache=$option_cache_value"
+            echo "Cachedir: $option_cache_value"
         else
             unset CACHEDIR_OPT
         fi
