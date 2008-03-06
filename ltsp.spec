@@ -178,7 +178,7 @@ install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86
 
 %ifarch i386 x86_64
 # vmclient
-install -m 0755 vmclient/launch-vmclient         $RPM_BUILD_ROOT%{_sbindir}/
+install -m 0755 vmclient/ltsp-vmclient           $RPM_BUILD_ROOT%{_sbindir}/
 install -m 0755 vmclient/ltsp-qemu-bridge-ifup   $RPM_BUILD_ROOT%{_sbindir}/
 %endif
 
@@ -269,7 +269,7 @@ rm -rf $RPM_BUILD_ROOT
 %ifarch i386 x86_64
 %files vmclient
 %config(noreplace)%{_sysconfdir}/sysconfig/network-scripts/ifcfg-ltspbr0
-%{_sbindir}/launch-vmclient
+%{_sbindir}/ltsp-vmclient
 %{_sbindir}/ltsp-qemu-bridge-ifup
 %endif
 
