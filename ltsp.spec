@@ -39,8 +39,6 @@ Requires:       livecd-tools
 Requires:       tftp-server
 Requires:       ltspfs
 Requires:       dhcp
-# need to get rid of this dependency before we support RHEL/CentOS
-Requires:       redhat-lsb
 
 %description server
 LTSP server
@@ -168,6 +166,8 @@ for arch in i386 x86_64 ppc ppc64; do
     install -m 0644 server/configs/k12linux/lts.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/$arch/
 done
 
+echo "K12_DIST=%{dist}" | sed 's/\.//' > $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/k12_dist
+
 %ifarch i386 x86_64
 # PXE
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
@@ -241,6 +241,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/chroot-creator
 %{_sysconfdir}/cron.daily/ltsp-swapfile-delete
 %{_sysconfdir}/init.d/ltsp-dhcpd
+%{_sysconfdir}/sysconfig/k12_dist
 %config(noreplace) %{_sysconfdir}/xinetd.d/nbdrootd
 %config(noreplace) %{_sysconfdir}/xinetd.d/nbdswapd
 %config(noreplace) %{_sysconfdir}/xinetd.d/ldminfod
