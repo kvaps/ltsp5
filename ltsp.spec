@@ -247,8 +247,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/xinetd.d/nbdrootd
 %config(noreplace) %{_sysconfdir}/xinetd.d/nbdswapd
 %config(noreplace) %{_sysconfdir}/xinetd.d/ldminfod
-# Configuration Files
 %dir %{_sysconfdir}/ltsp/
+# Configuration Files
+%config(noreplace)%{_sysconfdir}/sysconfig/network-scripts/ifcfg-ltspbr0
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client.conf
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-server.conf
@@ -270,7 +271,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %ifarch i386 x86_64
 %files vmclient
-%config(noreplace)%{_sysconfdir}/sysconfig/network-scripts/ifcfg-ltspbr0
 %{_sbindir}/ltsp-vmclient
 %{_sbindir}/ltsp-qemu-bridge-ifup
 %endif
