@@ -35,7 +35,7 @@ LTSP client
 Summary:        LTSP server
 Group:          User Interface/Desktops
 # needed to install client chroots
-Requires:       livecd-tools
+Requires:       livecd-tools >= 015
 Requires:       tftp-server
 Requires:       ltspfs
 Requires:       dhcp
