@@ -15,10 +15,11 @@ BuildRequires: libX11-devel
 %ifarch %{ix86} x86_64
 # Need pxelinux.0 from syslinux if server is x86
 BuildRequires: syslinux
-# Need location of tftpboot directory from tftp-server
-BuildRequires: tftp-server
-%define _tftpdir %(cat /etc/xinetd.d/tftp |grep server_args | awk -F"-s " {'print $2'} || echo -n "/BOGUS/DIRECTORY")
 %endif
+BuildRequires: tftp-server
+
+# Need location of tftpboot directory from tftp-server
+%define _tftpdir %(cat /etc/xinetd.d/tftp |grep server_args | awk -F"-s " {'print $2'} || echo -n "/BOGUS/DIRECTORY")
 
 %description
 LTSP client and server
@@ -99,6 +100,8 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/ltsp/swapfiles/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
+mkdir -p $RPM_BUILD_ROOT/opt/ltsp
 
 %ifarch %{ix86} x86_64
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/
@@ -106,12 +109,6 @@ mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
 %endif
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc64/
-
-%ifarch %{ix86} x86_64
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
-%endif
-
-mkdir -p $RPM_BUILD_ROOT/opt/ltsp
 
 ###### client install
 pushd client/xrexecd
