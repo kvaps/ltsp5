@@ -12,4 +12,12 @@
 
 echo "tty=" `tty`
 
-exec /usr/bin/openvt -c $SCREEN_NUM -f -w -l /bin/bash
+if [ -x /usr/bin/openvt ]; then
+    openvt=/usr/bin/openvt
+elif [ -x /bin/openvt ]; then
+    openvt=/bin/openvt
+else
+    exec /bin/bash --login
+fi
+
+exec $openvt -c $SCREEN_NUM -f -w -l /bin/bash
