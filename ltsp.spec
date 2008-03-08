@@ -12,7 +12,7 @@ BuildRequires: popt-devel
 BuildRequires: flex bison
 BuildRequires: automake
 BuildRequires: libX11-devel
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 # Need pxelinux.0 from syslinux if server is x86
 BuildRequires: syslinux
 # Need location of tftpboot directory from tftp-server
@@ -44,7 +44,7 @@ Requires:       gettext
 %description server
 LTSP server
 
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 %package vmclient
 Summary:        LTSP Virtual Machine Client
 Group:          Applications/Emulators
@@ -100,14 +100,14 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/ltsp/swapfiles/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
 %endif
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc64/
 
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
 %endif
 
@@ -170,7 +170,7 @@ done
 echo "K12_DIST=%{dist}" | sed 's/\.//' > $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/k12_dist
 cat server/configs/k12linux/k12_dist.template >> $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/k12_dist
 
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 # PXE
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/default
 install -m 0644 server/configs/pxe-default.conf $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/default
@@ -178,7 +178,7 @@ install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i38
 install -m 0644 /usr/lib/syslinux/pxelinux.0 $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64
 %endif
 
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 # vmclient
 install -m 0755 vmclient/ltsp-vmclient           $RPM_BUILD_ROOT%{_sbindir}/
 install -m 0755 vmclient/ltsp-qemu-bridge-ifup   $RPM_BUILD_ROOT%{_sbindir}/
@@ -219,7 +219,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
 %dir %{_tftpdir}/ltsp/ppc/
 %dir %{_tftpdir}/ltsp/ppc64/
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 %{_tftpdir}/ltsp/i386/pxelinux.0
 %{_tftpdir}/ltsp/x86_64/pxelinux.0
 %config(noreplace) %{_tftpdir}/ltsp/i386/pxelinux.cfg/default
@@ -263,13 +263,10 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/ltsp/kickstart/*/*/*.ks
 %dir %{_sysconfdir}/ltsp/mkinitrd/
 %config(noreplace) %{_sysconfdir}/ltsp/mkinitrd/*
-%config(noreplace)%{_tftpdir}/ltsp/i386/lts.conf
-%config(noreplace)%{_tftpdir}/ltsp/x86_64/lts.conf
-%config(noreplace)%{_tftpdir}/ltsp/ppc/lts.conf
-%config(noreplace)%{_tftpdir}/ltsp/ppc64/lts.conf
+%config(noreplace)%{_tftpdir}/ltsp/*/lts.conf
 
 
-%ifarch i386 x86_64
+%ifarch %{ix86} x86_64
 %files vmclient
 %{_sbindir}/ltsp-vmclient
 %{_sbindir}/ltsp-qemu-bridge-ifup
