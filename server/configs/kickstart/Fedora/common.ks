@@ -168,7 +168,6 @@ shadow-utils
 sqlite
 rsyslog
 system-config-display
-sysvinit
 tar
 tftp
 time
