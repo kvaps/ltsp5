@@ -1,7 +1,7 @@
 Name:           ltsp
 Version:        REPLACE_VERSION_HERE
 Release:        unofficial.REPLACE_DATE_HERE%{?dist}
-Summary:        LTSP
+Summary:        Linux Terminal Server Project 5 Server and Client
 
 Group:          User Interface/Desktops
 License:        GPL+
@@ -28,9 +28,11 @@ LTSP client and server
 Summary:        LTSP client
 Group:          User Interface/Desktops
 Requires:       chkconfig
+Requires:       ltspfsd
 
 %description client
-LTSP client
+LTSP client package
+This package contains the scripts necessary to boot as a LTSP5 thin client.
 
 %package server
 Summary:        LTSP server
@@ -43,7 +45,9 @@ Requires:       dhcp
 Requires:       gettext
 
 %description server
-LTSP server
+LTSP server package
+This package contains the scripts and services necessary to install and run
+a Linux Terminal Server.
 
 %ifarch %{ix86} x86_64
 %package vmclient
