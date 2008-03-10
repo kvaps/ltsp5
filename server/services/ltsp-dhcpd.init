@@ -28,10 +28,10 @@ RETVAL=0
 
 prog=dhcpd
 dhcpd=/usr/sbin/dhcpd
-lockfile=/var/lock/subsys/dhcpd
-pidfile=/var/run/dhcpd.pid
+lockfile=/var/lock/subsys/ltsp-dhcpd
+pidfile=/var/run/ltsp-dhcpd.pid
 
-[ -f /etc/sysconfig/dhcpd ] && . /etc/sysconfig/dhcpd
+[ -f /etc/sysconfig/ltsp-dhcpd ] && . /etc/sysconfig/ltsp-dhcpd
 
 # if the user specified a different config file, make sure we reference it
 findConfig() {
@@ -90,7 +90,7 @@ stop() {
         return $RETVAL
     fi
 
-    echo -n $"Shutting down $prog: "
+    echo -n $"Shutting down ltsp-$prog: "
     killproc $prog
     RETVAL=$?
 
@@ -120,7 +120,7 @@ case "$1" in
         RETVAL=$?
         ;;
     restart|force-reload)
-        stop && start
+        stop; start
         RETVAL=$?
         ;;
     try-restart|reload)
