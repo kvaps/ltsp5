@@ -1,10 +1,10 @@
 Name:           ltsp
 Version:        REPLACE_VERSION_HERE
-Release:        unofficial.REPLACE_DATE_HERE%{?dist}
-Summary:        Linux Terminal Server Project 5 Server and Client
-
+Release:        0.1.REPLACE_DATE_HERE%{?dist}
+Summary:        Linux Terminal Server Project Server and Client
 Group:          User Interface/Desktops
-License:        GPL+
+
+License:        GPLv2 and GPLv2+
 URL:            http://www.ltsp.org
 Source0:        ltsp-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -43,6 +43,8 @@ Requires:       tftp-server
 Requires:       ltspfs
 Requires:       dhcp
 Requires:       gettext
+Requires(post): chkconfig
+Requires(preun): chkconfig
 
 %description server
 LTSP server package
@@ -148,6 +150,7 @@ cp -pr server/configs/kickstart/* $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/kickstart/
 install -m 0644 server/configs/k12linux/mkinitrd/ifcfg-eth0 $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
 install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-mkinitrd $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
 install -m 0644 server/configs/k12linux/mkinitrd/sysconfig-network $RPM_BUILD_ROOT%{_sysconfdir}/ltsp/mkinitrd/
+install -m 0644 server/services/sysconfig-ltsp-dhcpd $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/ltsp-dhcpd
 cp -pr server/plugins/* $RPM_BUILD_ROOT%{_datadir}/ltsp/plugins/
 install -m 0755 server/services/ltsp-dhcpd.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/ltsp-dhcpd
 install -m 0755 server/scripts/k12linux/ltsp-prepare-kernel $RPM_BUILD_ROOT/%{_sbindir}/
@@ -188,6 +191,24 @@ install -m 0755 vmclient/ltsp-qemu-bridge-ifup   $RPM_BUILD_ROOT%{_sbindir}/
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post server
+/sbin/chkconfig --add ltsp-dhcpd
+
+%preun server
+if [ $1 = 0 ]; then
+    /sbin/service ltsp-dhcpd status >/dev/null 2>&1
+    if [ $? = 3 ]; then
+        /sbin/service ltsp-dhcpd stop >/dev/null 2>&1
+    fi
+
+    /sbin/chkconfig --del ltsp-dhcpd || :
+    /sbin/service xinetd reload > /dev/null 2>&1 || :
+fi
+
+%postun server
+if [ $1 -ge 1 ]; then
+    /sbin/service ltsp-dhcpd condrestart >/dev/null 2>&1
+fi
 
 %files client
 %defattr(-,root,root,-)
@@ -250,7 +271,8 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/xinetd.d/ldminfod
 %dir %{_sysconfdir}/ltsp/
 # Configuration Files
-%config(noreplace)%{_sysconfdir}/sysconfig/network-scripts/ifcfg-ltspbr0
+%config(noreplace) %{_sysconfdir}/sysconfig/ltsp-dhcpd
+%config(noreplace) %{_sysconfdir}/sysconfig/network-scripts/ifcfg-ltspbr0
 %config(noreplace) %{_sysconfdir}/ltsp/nbdswapd.conf 
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-build-client.conf
 %config(noreplace) %{_sysconfdir}/ltsp/ltsp-server.conf
@@ -269,6 +291,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %ifarch %{ix86} x86_64
 %files vmclient
+%defattr(-,root,root,-)
 %{_sbindir}/ltsp-vmclient
 %{_sbindir}/ltsp-qemu-bridge-ifup
 %endif
