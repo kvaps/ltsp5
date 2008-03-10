@@ -7,3 +7,5 @@ files   /etc/X11/xorg.conf
 files   /var/lib/random-seed
 files   /etc/hosts
 files   /.viminfo
+
+empty   /root
