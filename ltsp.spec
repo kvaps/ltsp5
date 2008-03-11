@@ -109,10 +109,8 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/network-scripts/
 mkdir -p $RPM_BUILD_ROOT/opt/ltsp
 
-%ifarch %{ix86} x86_64
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/i386/pxelinux.cfg/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/x86_64/pxelinux.cfg/
-%endif
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc/
 mkdir -p $RPM_BUILD_ROOT%{_tftpdir}/ltsp/ppc64/
 
