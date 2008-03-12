@@ -3,8 +3,9 @@
 . /usr/share/ltsp/ltsp_config
 
 boolean_is_true(){
-    case "$(echo $1 | tr 'A-Z' 'a-z')" in
-       true|y|yes) return 0 ;;
+    case $1 in
+       # match all cases of true|y|yes
+       [Tt][Rr][Uu][Ee]|[Yy]|[Yy][Ee][Ss]) return 0 ;;
        *) return 1 ;;
     esac
 }
