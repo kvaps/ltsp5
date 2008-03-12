@@ -1,14 +1,7 @@
 # Common functions shared by LTSP init scripts
 
 . /usr/share/ltsp/ltsp_config
-
-boolean_is_true(){
-    case $1 in
-       # match all cases of true|y|yes
-       [Tt][Rr][Uu][Ee]|[Yy]|[Yy][Ee][Ss]) return 0 ;;
-       *) return 1 ;;
-    esac
-}
+. /usr/share/ltsp/ltsp-common-functions
 
 warn() {
     msg="$1"
