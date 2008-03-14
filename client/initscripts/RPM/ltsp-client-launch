@@ -33,6 +33,7 @@ fi
 #      out a better way to detect the tftp server address.
 ROOTSERVER="$(cat /dev/.dhclient-eth0.leases |grep "routers" |awk {'print $3'} |sed 's/;//')"
 ARCH=$(uname -m)
+[ "$ARCH" = "i586" ] && ARCH=i386
 [ "$ARCH" = "i686" ] && ARCH=i386
 TFTPPATH="/ltsp/$ARCH/lts.conf"
 
