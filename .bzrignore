@@ -1,1 +1,6 @@
 po/messages.mo
+*.tar.gz
+*.tar.bz2
+*.rpm
+rpmbuild.log
+ltsp.spec
