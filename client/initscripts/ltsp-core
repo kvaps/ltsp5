@@ -7,7 +7,7 @@
 # Required-Start:    ltsp-client-setup $network $syslog
 # Required-Stop:     ltsp-client-setup $network $syslog
 # Default-Start:     2 3 4 5
-# Default-Stop:      S 0 1 6
+# Default-Stop:      0 1 6
 # Short-Description: Script for LTSP client initialization
 # Description:
 ### END INIT INFO

@@ -35,7 +35,7 @@ load_modules() {
 }
 
 configure_localdev() {
-    boolean_is_true "$LOCALDEV" && mkdir /var/run/drives
+    boolean_is_true "$LOCALDEV" && mkdir -p /var/run/drives
 }
 
 configure_console() {
