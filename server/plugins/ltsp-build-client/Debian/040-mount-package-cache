@@ -1,0 +1,16 @@
+case "$MODE" in
+    commandline)
+        add_option "mount-package-cache" "`eval_gettext "mount package cache dir from server"`" "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_mount_package_cache_value" ]; then
+            MOUNT_PACKAGE_CACHE=true
+        fi
+        ;;
+    before-install)
+        if [ "true" = "$MOUNT_PACKAGE_CACHE" ]; then
+            mkdir -p $ROOT/var/cache/apt/archives/partial
+            chroot_mount /var/cache/apt/archives /var/cache/apt/archives --bind
+        fi
+        ;;
+esac
