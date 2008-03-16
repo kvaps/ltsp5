@@ -30,7 +30,7 @@ if [ -z "$SWAP" ]; then
 fi
 
 # generate the swap file
-dd if=/dev/zero of=$SWAP bs=1024k count=$SIZE 2> /dev/null
+dd if=/dev/zero of=$SWAP bs=1024k count=0 seek=$SIZE 2> /dev/null
 
 if [ "$RUN_MKSWAP" = "true" ]; then
     /sbin/mkswap $SWAP > /dev/null 2>&1
