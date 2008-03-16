@@ -56,7 +56,7 @@ if ! env | grep -q '^SCREEN_'; then
         true
     elif [ -x /usr/sbin/ldm ]; then
         export SCREEN_07=ldm
-    else
+    elif [ -x /usr/bin/X ]; then
         export SCREEN_07=xdmcp
     fi
 fi
