@@ -6,7 +6,7 @@ case "$MODE" in
                 continue
             fi
             echo "Disabling Service: $service"
-            chroot $ROOT /sbin/chkconfig $service off
+            $CHROOTEXEC $ROOT /sbin/chkconfig $service off
         done
         # Enable services we do want
         #for service in foo; do
