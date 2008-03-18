@@ -33,6 +33,13 @@ case "$MODE" in
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
             echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
+            initramfs_scripts=$ROOT/usr/share/initramfs-tools/scripts/
+            if [ -f "$initramfs_scripts/nfs-bottom/ltsp" ] && [ ! -f "$initramfs_scripts/local-bottom/ltsp" ]; then
+                # copy hook so it gets run when boot=local
+                # FIXME: this is a bit hackish
+                mkdir -p $initramfs_scripts/local-bottom/ltsp
+                cp $initramfs_scripts/nfs-bottom/ltsp $initramfs_scripts/local-bottom/
+            fi
         fi
     ;;
     finalization)
