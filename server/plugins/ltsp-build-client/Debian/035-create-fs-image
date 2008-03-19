@@ -23,7 +23,7 @@ case "$MODE" in
             # create a sparse file
             dd if=/dev/zero of=$FS_IMAGE_FILE.new bs=1024k count=0 seek=$FS_IMAGE_SIZE 2> /dev/null
 
-            case $FS_IMAGE_TYPE
+            case $FS_IMAGE_TYPE in
                 ext2|ext3) MKFS_OPTS="-q -F" ;;
             esac
 
