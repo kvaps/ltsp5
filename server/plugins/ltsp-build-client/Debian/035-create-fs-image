@@ -23,7 +23,11 @@ case "$MODE" in
             # create a sparse file
             dd if=/dev/zero of=$FS_IMAGE_FILE.new bs=1024k count=0 seek=$FS_IMAGE_SIZE 2> /dev/null
 
-            mkfs.$FS_IMAGE_TYPE -q -F $FS_IMAGE_FILE.new
+            case $FS_IMAGE_TYPE
+                ext2|ext3) MKFS_OPTS="-q -F" ;;
+            esac
+
+            mkfs.$FS_IMAGE_TYPE $MKFS_OPTS $FS_IMAGE_FILE.new
 
             mount -o loop $FS_IMAGE_FILE.new $ROOT
         fi
