@@ -1,0 +1,2 @@
+# This file is not desired on Fedora.
+# chroot-creator handles /proc mount and unmount itself.
