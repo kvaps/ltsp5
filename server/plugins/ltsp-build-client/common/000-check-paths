@@ -1,7 +1,7 @@
 case "$MODE" in
     configure)
         if [ -z "$CHROOTEXEC" ]; then
-            for c in $(which chroot) /usr/sbin/chroot /usr/bin/chroot; do
+            for c in $(which chroot 2> /dev/null) /usr/sbin/chroot /usr/bin/chroot; do
                 if [ -f "$c" ] && [ -x "$c" ]; then
                     CHROOTEXEC="$c"
                     break
