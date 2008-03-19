@@ -1,31 +1,35 @@
 case "$MODE" in
     commandline)
         add_option "create-ext2-image" "`eval_gettext "create ext2 image for use with NBD"`" "advanced" "false"
+        add_option "create-fs-image" "`eval_gettext "create image for use with NBD of the specified filesystem"`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_create_ext2_image_value" ]; then
-            CREATE_EXT2_IMAGE=true
+            FS_IMAGE_TYPE=ext2 
+        fi
+        if [ -n "$option_create_fs_image_value" ]; then
+            FS_IMAGE_TYPE="$option_create_fs_image_value"
         fi
         ;;
     before-install)
-        if [ "true" = "$CREATE_EXT2_IMAGE" ]; then
-            EXT2_IMAGE_SIZE=${EXT2_IMAGE_SIZE:-"1000"}
-            EXT2_IMAGE_FILE=${EXT2_IMAGE_FILE:-"$BASE/images/$CHROOT.img"}
+        if [ -n "$FS_IMAGE_TYPE" ]; then
+            FS_IMAGE_SIZE=${FS_IMAGE_SIZE:-"1000"}
+            FS_IMAGE_FILE=${FS_IMAGE_FILE:-"$BASE/images/$CHROOT.img"}
 
             # ensure needed directories exist
             mkdir -p $ROOT
             mkdir -p $BASE/images/
 
             # create a sparse file
-            dd if=/dev/zero of=$EXT2_IMAGE_FILE.new bs=1024k count=0 seek=$EXT2_IMAGE_SIZE 2> /dev/null
+            dd if=/dev/zero of=$FS_IMAGE_FILE.new bs=1024k count=0 seek=$FS_IMAGE_SIZE 2> /dev/null
 
-            mkfs.ext2 -q -F $EXT2_IMAGE_FILE.new
+            mkfs.$FS_IMAGE_TYPE -q -F $FS_IMAGE_FILE.new
 
-            mount -o loop $EXT2_IMAGE_FILE.new $ROOT
+            mount -o loop $FS_IMAGE_FILE.new $ROOT
         fi
     ;;
     after-install)
-        if [ "true" = "$CREATE_EXT2_IMAGE" ]; then
+        if [ -n "$FS_IMAGE_TYPE" ]; then
             NBD_ROOT_SERVER=${NBD_ROOT_SERVER:-"192.168.0.1"}
             NBD_ROOT_PORT=${NBD_ROOT_PORT:-"2000"}
             # set to use NBD root from nbd-client package
@@ -43,16 +47,16 @@ case "$MODE" in
         fi
     ;;
     finalization)
-        if [ "true" = "$CREATE_EXT2_IMAGE" ]; then
+        if [ -n "$FS_IMAGE_TYPE" ]; then
             # add $ROOT to list of files to be unmounted.  done in finalization
             # phase so it is the last to be unmounted.
             CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT"
 
-            if [ -f "$EXT2_IMAGE_FILE" ]; then
-                rm "$EXT2_IMAGE_FILE"
+            if [ -f "$FS_IMAGE_FILE" ]; then
+                rm "$FS_IMAGE_FILE"
             fi
-            if [ -f "$EXT2_IMAGE_FILE".new ]; then
-                mv "$EXT2_IMAGE_FILE".new "$EXT2_IMAGE_FILE"
+            if [ -f "$FS_IMAGE_FILE".new ]; then
+                mv "$FS_IMAGE_FILE".new "$FS_IMAGE_FILE"
             fi
         fi
     ;;
