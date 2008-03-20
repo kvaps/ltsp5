@@ -1,0 +1,12 @@
+case "$MODE" in
+    after-install)
+        cat <<EOF > $ROOT/dev/hosts
+#This is a ltsp chroot and this file will be rewritten in boot process
+#of terminal.
+127.0.0.1 localhost
+EOF
+        rm -f $ROOT/etc/hosts
+        ln -s ../dev/hosts $ROOT/etc/hosts
+        cat /usr/share/ltsp/scripts/etchosts.template >> $ROOT/etc/sysconfig/network
+        ;;
+esac
