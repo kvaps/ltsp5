@@ -13,7 +13,9 @@
 # Get the lts.conf entries, and assign them to shell
 # variables.
 #
-. /usr/share/ltsp/ltsp_config
+if [ "True" != "$LTSP_CONFIG" ]; then
+    . /usr/share/ltsp/ltsp_config
+fi
 
 #
 # Get the IP address of the host to telnet into.

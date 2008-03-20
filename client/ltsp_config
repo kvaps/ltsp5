@@ -87,3 +87,6 @@ fi
 if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
     export ENCRYPT_SWAP=True
 fi
+
+# set to determine if ltsp_config has already been sourced
+export LTSP_CONFIG=True
