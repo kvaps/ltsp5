@@ -87,3 +87,5 @@ fi
 if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
     export ENCRYPT_SWAP=True
 fi
+
+export LTSP_CONFIG=True
