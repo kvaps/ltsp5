@@ -9,6 +9,8 @@ SOUND               Y,y,True,true            unset
  (SOUND_DAEMON)     esd , nasd               esd
 ---------------------------------------------------------------------------------------------
 LOCALDEV            Y,y,True,true            unset
+or
+LOCAL_STORAGE (deprecated)
 ---------------------------------------------------------------------------------------------
 DNS_SERVER          A valid IP               unset
  (SEARCH_DOMAIN)    Domainname               unset           required if DNS_SERVER is set
@@ -60,8 +62,9 @@ RCFILE_nn           A custom rc file         unset
 
 |   Variable    |   Possible Values     |   Default value  |       Comment
 ---------------------------------------------------------------------------------------------
-SCREEN_nn           ldm, sdm, shell,        ldm
-                    startx, telnet
+SCREEN_nn           ldm, shell, xdmcp       ldm
+                    telnet, 
+                    startx (deprecated) 
 ---------------------------------------------------------------------------------------------
 SERVER              Server IP               ltsp server
 ---------------------------------------------------------------------------------------------
@@ -71,9 +74,9 @@ SYSLOG_HOST         Server IP               ltsp server      add SYSLOGD="-r" to
 MODULE_nn           Kernel module name      autodetected     use to force loading of specific 
                                                              module
 ---------------------------------------------------------------------------------------------
-XF86CONFIG_FILE     path to a file          autodetected     relative to /opt/ltsp/$ARCH
+X_CONF              full path to a file     autodetected     relative to /opt/ltsp/$ARCH
 or
-X_CONF
+XF86CONFIG_FILE
 ---------------------------------------------------------------------------------------------
 XSERVER             ark                     autodetected
                     ati
@@ -121,7 +124,7 @@ X_HORZSYNC          min-max MHz             autdetected      use for forcing X_M
 ---------------------------------------------------------------------------------------------
 X_VERTREFRESH       min-max Hz              autdetected      use for forcing X_MODE
 ---------------------------------------------------------------------------------------------
-X_COLOR_DEPTH       2, 4, 8, 16, 24, 32     32               set to 16bit to save client mem
+X_COLOR_DEPTH       2, 4, 8, 16, 24, 32     24               set to 16bit to save client mem
 ---------------------------------------------------------------------------------------------
 X_MOUSE_DEVICE      /dev/ttySn              autodetected     serial mice only, 
                                                              all others are autodetected
@@ -151,7 +154,7 @@ X_MOUSE_EMULATE3BTN Y,y,True,true           unset
 ---------------------------------------------------------------------------------------------
 TELNET_HOST         Telnet server IP        ltsp server      for use with SCREEN_nn=telnet
 ---------------------------------------------------------------------------------------------
-XDM_SERVER          XDMCP server IP         ltsp server      for use with SCREEN_nn=startx
+XDM_SERVER          XDMCP server IP         ltsp server      for use with SCREEN_nn=xdmcp
 ---------------------------------------------------------------------------------------------
-SSH_OVERRIDE_PORT   Portnumber              unset            for use wiht a dedicated ssh port
+SSH_OVERRIDE_PORT   Portnumber              unset            for use with a dedicated ssh port
 ---------------------------------------------------------------------------------------------
