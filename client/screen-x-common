@@ -1,0 +1,114 @@
+# common code to ltsp x screen scripts
+
+# Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
+# Copyright (c) 2008 by Warren Togami      (Red Hat, Inc.)
+# Copyright (c) 2008 by Vagrant Cascadian
+#
+# This software is licensed under the GNU General Public License version 2,
+# the full text of which can be found in the COPYING file.
+
+# Copyright 2005, Canonical Ltd.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License with your
+# Debian GNU system, in /usr/share/common-licenses/GPL.  If not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+#
+# Load ltsp config defaults
+#
+
+. /usr/share/ltsp/ltsp-common-functions
+if boolean_is_true "$LTSP_CONFIG" ; then
+    . /usr/share/ltsp/ltsp_config
+fi
+
+#
+# Compute tty and display
+#
+
+TTY=$(tty)
+TTY=${TTY#/dev/tty}
+DISP=":$((${TTY} - 1))"
+
+error_delay() {
+    echo -n -e "\n\rERROR: $1"
+    read CMD
+}
+
+#
+# limit ram percentage.  By default, behaviour is no limit.
+# Use this to stop firefox crashing sites with pathalogically large images,
+# etc.
+#
+
+X_RAMPERC=${X_RAMPERC:-100}
+
+if [ ${X_RAMPERC} -lt 100 ]; then
+    XMEM=0
+    while read TYPE VALUE UNITS; do
+        case ${TYPE} in
+            MemFree:|SwapFree:)
+                XMEM=$((${XMEM} + ${VALUE}))
+                ;;
+        esac
+    done < /proc/meminfo
+    XMEM=$((${XMEM} * ${X_RAMPERC} / 100))
+
+    ulimit -m ${XMEM}
+fi
+
+### configuration file handling
+
+if [ -z "$X_CONF" ] && [ -f /var/run/ltsp-xorg.conf ]; then
+    # use generated X configuration file
+    X_CONF=/var/run/ltsp-xorg.conf
+fi
+
+if [ -f "$X_CONF" ]; then
+    X_ARGS="$X_ARGS -config $X_CONF"
+elif [ -n "$X_CONF" ]; then
+    echo 
+    echo "Error! - ${X_CONF} - File not found!"
+    echo
+fi
+
+### color depth
+
+if [ -z "$X_CONF" ] && [ -n "$X_COLOR_DEPTH" ]; then 
+    X_ARGS="$X_ARGS -depth $X_COLOR_DEPTH"
+fi
+
+# XFS handling
+# implemented as a function so it could be called on sucessive tries
+
+get_xfs_settings() {
+    # set default font path
+    # use XFS_SERVER if defined, otherwise
+    # attempt to use servers passed on commandline
+
+    if boolean_is_true "$USE_XFS" ; then
+        if [ -z "$XFS_SERVER" ]; then
+            # attempt to use other servers
+            for SRV in $@ ; do
+                XFS_SERVER="$XFS_SERVER $SRV"
+            done
+        fi
+        for SRV in $XFS_SERVER ; do
+            xfs_line="tcp/${SRV}:7100"
+            if [ -z "$(echo $X_ARGS | grep $xfs_line)" ]; then
+                if nc -w 5 $SRV 7100 >/dev/null ; then
+                    X_ARGS="$X_ARGS -fp $xfs_line"
+                fi
+            fi
+        done
+    fi
+}
