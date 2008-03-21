@@ -2,94 +2,43 @@
 #
 # Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
 # Copyright (c) 2008 by Warren Togami      (Red Hat, Inc.)
+# Copyright (c) 2008 by Vagrant Cascadian
 #
 # This software is licensed under the GNU General Public License version 2,
 # the full text of which can be found in the COPYING file.
 #
 
 #
-# Get the lts.conf entries
+# Get the common code for X screen scripts
 #
-if [ "True" != "$LTSP_CONFIG" ]; then
-    . /usr/share/ltsp/ltsp_config
-fi
 
-error_delay() {
-    echo -n -e "\n\rERROR: $1"
-    read CMD
-}
-
+. /usr/share/ltsp/screen-x-common
 
 XDM_SERVER=${XDM_SERVER:-${SERVER}}
 
-TTY=$(basename $(tty))
-TTY=${TTY##tty}
-export TTY
-
 if [ $# -lt 1 ]; then
-    XF_ARGS=""
+    X_ARGS="$X_ARGS -query ${XDM_SERVER}"
 else
-    XF_ARGS=$*
-fi
-
-unset XFCFG
-#
-# If X_CONF is defined in the lts.conf file, then
-# it points to an xorg.conf file that is pre-made for a workstation
-#
-if [ -n "${X_CONF}" ]; then
-    if [ -f ${X_CONF} ]; then
-        if [ -e /etc/X11/xorg.conf ]; then
-            cp ${X_CONF} /etc/X11/xorg.conf
-        else
-            XFCFG=/var/run/ltsp-xorg.conf
-            cp ${X_CONF} ${XFCFG}
-        fi
-    else
-        echo
-        echo "Error! - ${X_CONF} - File not found!"
-        echo
-    fi
+    X_ARGS="$X_ARGS $*"
 fi
 
 XBINARY="X"
-OPTS=""
 
-#
-# Setup the DISP variable
-#
-export DISP=:$(expr ${TTY} - 1).0
-
-DISABLE_ACCESS_CONTROL=${DISABLE_ACCESS_CONTROL:-"N"}
-if [ "${DISABLE_ACCESS_CONTROL}" = "Y" ]; then
-    ACC_CTRL="-ac"
-else
-    ACC_CTRL=""
-fi
-
-if [ -z "${XF_ARGS}" ]; then
-    XF_ARGS="-query ${XDM_SERVER}"
-fi
-
-# Do this here instead of updating the configuration file, until
-# Debian bug #323262 is fixed.
-if [ Y = "${USE_XFS}" ] ; then
-    if [ -z "${XFS_SERVER}" ] ; then
-	XFS_SERVER="${SERVER}"
-    fi
-    XF_ARGS="$XF_ARGS -fp tcp/${XFS_SERVER}:7100"
-fi
-
-# If XFCFG is defined then attempt to use it instead of autoconfiguration
-if [ -e ${XFCFG} ]; then
-    XF_ARGS="$XF_ARGS -config ${XFCFG}"
+if boolean_is_true "${DISABLE_ACCESS_CONTROL}" ; then
+    X_ARGS="$X_ARGS -ac"
 fi
 
 # Add -terminate to args because it helps to avoid X regeneration bugs
-XF_ARGS="$XF_ARGS -terminate"
+X_ARGS="$X_ARGS -terminate"
+
+# add -br as a black screen is so much nicer than the grey thatch default
+X_ARGS="$X_ARGS -br"
+
+# set default xfs settings
+get_xfs_settings $XDM_SERVER
 
 while :; do
-    ${XBINARY} ${ACC_CTRL} ${XF_ARGS} vt${TTY} ${DISP}
+    ${XBINARY} ${X_ARGS} vt${TTY} ${DISP}
     if [ $? -ne 0 ]; then
         error_delay "xserver failed, press <enter> to continue "
     fi
