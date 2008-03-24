@@ -6,6 +6,12 @@ case "$MODE" in
         if [ -n "$INCLUDE" ] ; then
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=$INCLUDE"
         fi
+        if [ -f "/usr/lib/debootstrap/scripts/$DIST" ]; then
+            echo "ERROR: invalid distribution: $DIST"
+            echo "you may need to specify the distribution with the --dist argument:"
+            echo "  $0 --dist etch"
+            exit 1
+        fi
         # Install base packages
         LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
         ;;
