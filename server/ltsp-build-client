@@ -6,8 +6,8 @@ export TERM=linux							  # make sure we're using a known terminal type
 export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)
 export TEXTDOMAINDIR=/usr/share/locale        # locale dir for gettext codes
 
-if [ -e /etc/sysconfig/k12_dist ]; then
-    . /etc/sysconfig/k12_dist
+if [ -e /etc/sysconfig/ltspdist ]; then
+    . /etc/sysconfig/ltspdist
     VENDOR=$VENDORDEF
 else
     VENDOR=$(lsb_release -i -s)
