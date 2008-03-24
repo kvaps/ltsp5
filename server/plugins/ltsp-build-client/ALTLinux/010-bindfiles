@@ -1,0 +1,8 @@
+case "$MODE" in
+    after-install)
+	[ -f $ROOT/etc/default/ltsp-client-setup ] && . $ROOT/etc/default/ltsp-client-setup
+	for f in $bindfiles; do
+	    [ -f "$ROOT/$f" ] || touch "$ROOT/$f"
+	done
+        ;;
+esac

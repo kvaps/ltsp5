@@ -1,0 +1,10 @@
+case "$MODE" in
+    after-install)
+	mkdir -p "$ROOT"/etc/udev
+	cat > "$ROOT"/etc/udev/udev.conf <<EOF
+udev_log="err"
+udev_tmpfs="1"
+tmpfs_options="size=192k,nr_inodes=2048"
+EOF
+        ;;
+esac

@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+	echo "# LTSP5 NFS root remount for [partially] rw" >> "$ROOT"/etc/sysconfig/init
+	echo "REMOUNT_ROOTFS_RW_COMMAND=/etc/rc.d/scripts/ltsp-client-bind-mounts" >> "$ROOT"/etc/sysconfig/init
+        ;;
+esac

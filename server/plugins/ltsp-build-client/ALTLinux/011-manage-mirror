@@ -1,0 +1,91 @@
+case "$MODE" in
+    commandline)
+        add_option "mirror" "`eval_gettext "Set the mirror location"`" "regular" "true"
+        add_option "early-mirror" "`eval_gettext "add a mirror, which takes priority over the default mirror"`" "advanced" "true"
+        add_option "extra-mirror" "`eval_gettext "add a mirror, with lower priority than the default mirror"`" "advanced" "true"
+        add_option "security-mirror" "`eval_gettext "add a security mirror"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_mirror_value" ]; then
+            MIRROR="$option_mirror_value"
+        fi
+        if [ -n "$option_early_mirror_value" ]; then
+            EARLY_MIRROR="$option_early_mirror_value"
+        fi
+        if [ -n "$option_extra_mirror_value" ]; then
+            EXTRA_MIRROR="$option_extra_mirror_value"
+        fi
+        if [ -n "$option_security_mirror_value" ]; then
+            SECURITY_MIRROR="$option_security_mirror_value"
+        fi
+        ;;
+    install)
+	add_source() {
+	    if [ "$1" != "${1#rpm[[:blank:]]}" ]; then
+		echo "$1" >> $ROOT/etc/apt/sources.list
+	    elif [ "$1" != "${1#cdrom:}" ]; then
+		echo "rpm $(dirname $1) $(basename $1) $3" >> $ROOT/etc/apt/sources.list
+	    else
+		echo "rpm $1 $2 $3" >> $ROOT/etc/apt/sources.list
+	    fi
+	}
+	
+        add_mirror() {
+            # add a mirror to the chroot's sources.list
+            mirror="$1"
+            type="$2"
+            if [ -n "$mirror" ]; then
+		if [ -z "$(echo $mirror | sed -r -e 's/^[[:blank:]]+//' -e 's/[[:blank:]]+/\t/g' | cut -sf2)" ]; then
+		    for D in $DIST; do
+                	if [ "$type" = "security" ]; then
+			    add_source "$mirror" "$D/updates" "$COMPONENTS"
+                	else
+			    add_source "$mirror" "$D" "$COMPONENTS"
+                	fi
+		    done
+		else
+		    add_source "$mirror"
+		fi
+                case $mirror in
+                    file:/*|copy:/*)
+			dir="$(echo $mirror | sed -r -e 's/^[[:blank:]]+//' -e 's/^file://' -e 's/^copy://' -e 's/[[:blank:]]+/\t/g' | cut -f1)"
+                        mkdir -p $ROOT/$dir
+                        chroot_mount $dir $dir --bind
+                        ;;
+		    rpm*file:/*|rpm*copy:/*)
+			dir="$(echo $mirror | sed -r -e 's/^[[:blank:]]+//' -e 's/[[:blank:]]+/\t/g' | cut -sf2 | sed -e 's/^file://' -e 's/^copy://')"
+                        mkdir -p $ROOT/$dir
+                        chroot_mount $dir $dir --bind
+			;;
+                esac
+            fi
+        }
+        
+        add_multiple_mirrors() {
+            # feed a list of comma-separated mirrors, add them to sources.list
+            mirror_list="$1"
+            if [ -z "$(echo $mirror_list | grep '[,;]')" ] ; then
+                # only one mirror specified
+                add_mirror "$mirror_list"
+            else
+                # TODO: support an arbitrary number of mirrors
+                for number in `seq 1 9` ; do
+                    mirror="$(echo "$mirror_list" | sed 's/;/,/g' | cut -d, -f $number)"
+                    if [ -n "$mirror" ]; then
+                        add_mirror "$mirror"
+                    fi
+                done
+            fi
+        }
+
+        sources_list="$ROOT/etc/apt/sources.list"
+	mkdir -p "$ROOT/etc/apt"
+        if [ -f "$sources_list" ]; then
+            debug "    - moving aside sources.list"
+            mv -vf "$sources_list" "$sources_list".old
+        fi
+        add_multiple_mirrors "$EARLY_MIRROR"
+        add_mirror "$MIRROR" 
+        add_multiple_mirrors "$EXTRA_MIRROR"
+        add_mirror "$SECURITY_MIRROR" security
+esac

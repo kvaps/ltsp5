@@ -1,0 +1,11 @@
+case $MODE in
+    commandline)
+        add_option "locale" "`eval_gettext "Set the default locale"`" "advanced" "true"
+        ;;
+    configure)
+        [ -z "$option_locale_value" ] || LOCALE="$option_locale_value"
+        ;;
+    after-install)
+	[ -z "$LOCALE" ] || echo "LANG=$LOCALE" >> "$ROOT"/etc/sysconfig/i18n
+        ;;
+esac

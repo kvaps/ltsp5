@@ -1,0 +1,5 @@
+case "$MODE" in
+    after-install)
+        sed -i 's/^[3-9]:.*:respawn:.*getty[[:blank:]]/#&/' $ROOT/etc/inittab
+        ;;
+esac

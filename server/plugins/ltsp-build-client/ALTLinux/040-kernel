@@ -1,0 +1,27 @@
+case "$MODE" in
+    commandline)
+        add_option "kernel" "`eval_gettext "set the kernel package to install."`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_kernel_packages_value" ]; then
+            KERNEL="$(echo $option_kernel_value | tr ',' ' ')"
+        fi
+	if [ -z "$KERNEL" -o "$KERNEL" = "kernel-image" ]; then
+	    KERNEL="kernel-image-std-smp"
+	elif [ "$KERNEL" = "${KERNEL#kernel-image-}" ]; then
+	    KERNEL="kernel-image-$KERNEL"
+	fi
+	;;
+    install)
+	if [ "$KERNEL" = "${KERNEL/\#}" ]; then
+	    KERNEL_PACKAGES=$($SETARCH chroot $ROOT apt-cache -qq pkgnames "${KERNEL}#")
+	    KERNEL_VER=""
+	    for K in $KERNEL_PACKAGES; do
+	        KV="${K#*\#}"
+	        [ $(rpmvercmp "$KERNEL_VER" "$KV") = "1" ] || KERNEL_VER="$KV"
+	    done
+	    KERNEL="$KERNEL#$KERNEL_VER"
+	fi
+	$SETARCH chroot $ROOT apt-get $APT_GET_OPTS install "$KERNEL"
+        ;;
+esac

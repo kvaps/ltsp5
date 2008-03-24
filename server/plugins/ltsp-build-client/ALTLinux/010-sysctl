@@ -1,0 +1,12 @@
+case "$MODE" in
+    after-install)
+	if [ -f "$ROOT"/etc/sysctl.conf ];then
+	    if grep -q '^[[:blank:]]*vm.swappiness=' "$ROOT"/etc/sysctl.conf; then
+		sed -i -e 's/^\([[:blank:]]*vm.swappiness=\).*$/\1100/'
+	    else
+		echo "# to avoid swap-related race when X server RSS is sharply increasing" >> "$ROOT"/etc/sysctl.conf
+		echo "vm.swappiness=100" >> "$ROOT"/etc/sysctl.conf
+	    fi
+	fi
+        ;;
+esac

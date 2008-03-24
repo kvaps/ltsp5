@@ -1,0 +1,6 @@
+case "$MODE" in
+    install)
+	[ -f /etc/ltsp/nbdswapd.conf ] && . /etc/ltsp/nbdswapd.conf
+	install -d -m 0755 "${SWAPDIR:-/var/spool/swaps}"
+	;;
+esac

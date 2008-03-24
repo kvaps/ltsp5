@@ -1,0 +1,5 @@
+case "$MODE" in
+    install)
+	$SETARCH chroot $ROOT /sbin/installkernel -n ${KERNEL_VER/-/-$KERNEL_FLAVOUR-}
+        ;;
+esac
