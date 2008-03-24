@@ -1,0 +1,12 @@
+case "$MODE" in
+    install)
+        # Install everything, after /etc/sysconfig/kiwi-ltsp is configured
+	if [ -e /usr/sbin/kiwi-ltsp-setup ]
+     	then
+		kiwi-ltsp-setup -s
+	else
+		echo "Please install kiwi-desc-ltsp package before continuing"
+		exit 1
+	fi
+        ;;
+esac
