@@ -1,8 +1,8 @@
-if [ -z "$K12_DIST" ]; then
-    echo "ERROR: K12_DIST not defined in /etc/sysconfig/k12_dist."
+if [ -z "$LTSPDIST" ]; then
+    echo "ERROR: LTSPDIST not defined in /etc/sysconfig/ltspdist."
     exit 1
 fi
-case "$K12_DIST" in
+case "$LTSPDIST" in
     fc8)
         export VENDORDEF="Fedora"
         export RELEASEDEF=8
@@ -19,7 +19,7 @@ case "$K12_DIST" in
         export TFTPDIR=/tftpboot
     ;;
     *)
-        echo "ERROR: $K12_DIST is unsupported."
+        echo "ERROR: $LTSPDIST is unsupported."
         exit 1
     ;;
 esac

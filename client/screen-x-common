@@ -27,7 +27,7 @@
 #
 
 . /usr/share/ltsp/ltsp-common-functions
-if boolean_is_true "$LTSP_CONFIG" ; then
+if ! boolean_is_true "$LTSP_CONFIG" ; then
     . /usr/share/ltsp/ltsp_config
 fi
 
