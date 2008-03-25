@@ -7,13 +7,13 @@ case "$MODE" in
         if [ -n "$option_config_value" ]; then
             CONFIG="$option_config_value"
 
-            if [ ! -e "$CONFIG" ]; then
+            if [ ! -f "$CONFIG" ]; then
                 echo "Failed to read file. '$CONFIG' cannot be found."
                 exit 1
             fi
         fi
         
-        if [ -e "$CONFIG" ]; then
+        if [ -f "$CONFIG" ]; then
             debug "Loading configuration file '$CONFIG'."
             . $CONFIG
         fi
