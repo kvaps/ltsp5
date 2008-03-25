@@ -13,6 +13,7 @@ case "$MODE" in
 	fi
 	;;
     install)
+	$PROGRESS plugin
 	if [ "$KERNEL" = "${KERNEL/\#}" ]; then
 	    KERNEL_PACKAGES=$($SETARCH chroot $ROOT apt-cache -qq pkgnames "${KERNEL}#")
 	    KERNEL_VER=""
@@ -22,6 +23,7 @@ case "$MODE" in
 	    done
 	    KERNEL="$KERNEL#$KERNEL_VER"
 	fi
-	$SETARCH chroot $ROOT apt-get $APT_GET_OPTS install "$KERNEL"
+	$SETARCH chroot $ROOT apt-get $APT_VERBOSE $APT_GET_OPTS install "$KERNEL" >&2
+	$PROGRESS 820
         ;;
 esac

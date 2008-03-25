@@ -1,6 +1,8 @@
 case "$MODE" in
     install)
-        $SETARCH chroot $ROOT apt-get update
+	$PROGRESS plugin
+        $SETARCH chroot $ROOT apt-get $APT_VERBOSE update >&2
         export APT_GET_OPTS="$APT_GET_OPTS -o Acquire::gpgv::Options::=--ignore-time-conflict"
+        $PROGRESS 200
         ;;
 esac

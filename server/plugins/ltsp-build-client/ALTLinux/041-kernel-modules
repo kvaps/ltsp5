@@ -8,6 +8,7 @@ case "$MODE" in
         fi
 	;;
     install)
+	$PROGRESS plugin
 	KERNEL_VER=${KERNEL#*\#}
 	KERNEL_PKGNAME=${KERNEL%\#*}
 	KERNEL_FLAVOUR=${KERNEL_PKGNAME#kernel-image-}
@@ -41,6 +42,7 @@ case "$MODE" in
 		MODULES="$MODULES kernel-modules-$MODULE_NAME-${KERNEL_FLAVOUR}#$MODULE_VER"
 	    fi
 	done
-	$SETARCH chroot $ROOT apt-get $APT_GET_OPTS install $MODULES
+	$SETARCH chroot $ROOT apt-get $APT_VERBOSE $APT_GET_OPTS install $MODULES >&2
+	$PROGRESS 860
         ;;
 esac

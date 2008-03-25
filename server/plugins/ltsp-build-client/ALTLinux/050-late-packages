@@ -8,6 +8,6 @@ case "$MODE" in
         fi
         ;;
     after-install)
-        $SETARCH chroot $ROOT apt-get $APT_GET_OPTS install $LATE_PACKAGES
+        $SETARCH chroot $ROOT apt-get $APT_VERBOSE $APT_GET_OPTS install $LATE_PACKAGES >&2
         ;;
 esac

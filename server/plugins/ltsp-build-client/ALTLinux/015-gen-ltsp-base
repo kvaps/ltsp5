@@ -1,36 +1,3 @@
-scratch_build()
-{
-    EtcAptDir=$(mktemp -d -t apt.XXXXXXXX)
-    cat > "$EtcAptDir/apt.conf" <<EOF
-    Dir::Etc::main "/dev/null";
-    Dir::Etc::parts "/var/empty";
-    Dir::Etc::SourceParts "/var/empty";
-EOF
-    echo "Dir::Etc::sourcelist \"$sources_list\";" >> "$EtcAptDir/apt.conf"
-    mkdir -p "$ROOT"/{etc,var/lib}/rpm
-    rpm --initdb --root "$ROOT"
-    $SETARCH apt-get update --config-file="$EtcAptDir/apt.conf" -o RPM::RootDir="$ROOT"
-    $SETARCH apt-get -y -q install --config-file="$EtcAptDir/apt.conf" -o RPM::RootDir="$ROOT" apt chrooted-resolv
-    rm -rf "$EtcAptDir"
-    if echo "$MIRROR $EXTRA_MIRROR" | egrep -q '(ftp|http|ssh|rsh)://'; then
-	if cp --preserve=mode,ownership /etc/resolv.conf "$ROOT"/etc/; then
-	    $SETARCH chroot "$ROOT" update_chrooted -f conf
-	fi
-    fi
-}
-
-tar_build()
-{
-    tar -C "$ROOT" -x${1}f "$CHROOT_IMAGE"
-}
-
-cpio_build()
-{
-    pushd "$ROOT"
-    ${1}cat "$CHROOT_IMAGE" | cpio -i -m --no-absolute-filenames -d
-    popd
-}
-
 case "$MODE" in
     install)
 	if [ -n "$CHROOT_IMAGE" -a -r "$CHROOT_IMAGE" ]; then
@@ -54,7 +21,7 @@ case "$MODE" in
 		    cpio_build bz
 		    ;;
 		*)
-		    echo "Usupported image file format. Trying buld chroot from scratch." >&2
+		    echo "Usupported image file format. Trying buld chroot from scratch."
 		    scratch_build
 		    ;;
 	    esac

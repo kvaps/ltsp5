@@ -1,9 +1,9 @@
 case "$MODE" in
     configure)
-        ARCH=${ARCH:-"$(arch)"}
-        APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
-        MIRROR=${MIRROR:-"ftp://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus"}
-        COMPONENTS=${COMPONENTS:-"classic"}
+	ARCH=${ARCH:-"$(arch)"}
+	APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
+	MIRROR=${MIRROR:-"ftp://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus"}
+	COMPONENTS=${COMPONENTS:-"classic"}
 	if [ -f /usr/share/ltsp/lists/early-packages.list ]; then
 	    for pkg in `grep -v '^[[:blank:]]*#' /usr/share/ltsp/lists/early-packages.list`; do
 		EARLY_PACKAGES="$EARLY_PACKAGES $pkg"
@@ -27,6 +27,7 @@ case "$MODE" in
 	    done
 	fi
 	EARLY_PACKAGES=$(echo "$EARLY_PACKAGES" | sed -r -e 's/^[[:blank:]]*//' -e 's/[[:blank:]]+/ /g' -e 's/[[:blank:]]*$//')
-        RC2_WHITELIST=${RC2_WHITELIST:-"local ltsp-client-setup acpid random sound udevd udevd-final x11presetdrv ltsp-client-swap ltsp-client"}
+	RC2_WHITELIST=${RC2_WHITELIST:-"local ltsp-client-setup acpid random sound udevd udevd-final x11presetdrv ltsp-client-swap ltsp-client"}
+	. $PLUGINS_BASE/functions-altlinux
         ;;
 esac

@@ -9,7 +9,7 @@ case "$MODE" in
         ;;
     finalization)
         if [ "true" != "$KEEP_PACKAGES" ]; then
-            $SETARCH chroot $ROOT apt-get clean
+            $SETARCH chroot $ROOT apt-get $APT_VERBOSE clean >&2
         fi
         ;;
 esac
