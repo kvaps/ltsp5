@@ -1,0 +1,230 @@
+#!/bin/sh
+#
+# ltsp-client-swap  Setup/Turn on swaps for the LTSP client.
+#
+# chkconfig: 2345 01 64
+# description: LTSP client's swap initialization
+# config: /usr/share/ltsp/ltsp_config
+# pidfile: /var/run/ltsp-client-setip.pid
+
+# Do not load RH compatibility interface.
+WITHOUT_RC_COMPAT=1
+
+# Source function library.
+. /etc/init.d/functions
+
+# Source configuration.
+SourceIfNotEmpty /etc/default/ltsp-client-setup
+
+LOCKFILE=/var/lock/subsys/ltsp-client-swap
+RETVAL=0
+
+[ -f /etc/ltsp_chroot ] && SourceIfNotEmpty /usr/share/ltsp/ltsp_config || exit 0
+
+FST=`which fstyp 2>/dev/null` || FST=`which fstype 2>/dev/null` || FST=`which sfdisk 2>/dev/null` || FST=`which fdisk 2>/dev/null` || FST=`which file 2>/dev/null`
+
+make_dev()
+{
+    local dev type major minor
+    dev=$1
+    type=$2
+    major=$3
+    minor=$4
+    if service udevd status >/dev/null; then
+	udevsettle --timeout=5 && test -$type $dev
+	return $?
+    else
+	mknod -m 640 $dev $type $major $minor && chgrp disk $dev
+	return $?
+    fi
+}
+
+compcache()
+{
+    local K Size Free MinFree MemRes
+    is_no $1 && return 0
+    K=1024
+    MinFree=$((16 * $K))
+    MemRes=$((2 * $K))
+    Free=$(($(MemInfo MemFree) + $(MemInfo Cached)))
+    case $1 in
+	*[0-9])
+	    Size=$1
+	    ;;
+	*[kK])
+	    Size=${1%[kK]}
+	    ;;
+	*[mM])
+	    Size=$((${1%[mM]} * $K))
+	    ;;
+	*%)
+	    Size=$(($(MemInfo MemTotal) * 100 / ${1%\%}))
+	    ;;
+	*)
+	    Size=$(($Free / 2))
+	    ;;
+    esac
+    if [ -n "$Size" ]; then
+	[ $(($Free - $Size)) -lt $MinFree ] && Size=$(($Free - $MinFree))
+	Free=$(MemInfo MemFree)
+	[ $Free -lt $(($Size + $MemRes)) ] && Size=$(($Free - $MemRes))
+	modprobe -q compcache compcache_size_kbytes=$Size &&
+	    make_dev /dev/ramzswap0 b 251 0 &&
+		echo "/dev/ramzswap0 swap swap pri=255 0 0" >> /etc/fstab
+    fi
+}
+
+is_swap()
+{
+    if [ -n "$FST" -a -n "$1" ]; then
+	case "$FST" in
+	    */fstyp)
+		FSTYPE=`$FST /dev/$1 2>/dev/null`
+		[ -n "$FSTYPE" -a "$FSTYPE" = "swap" ] && return 0
+		;;
+	    */fstype)
+		FSTYPE=`$FST -d /dev/$1 2>/dev/null`
+		[ -n "$FSTYPE" -a "$FSTYPE" = "swap" ] && return 0
+		;;
+	    */*fdisk)
+		$FST -l 2>/dev/null | egrep '^/dev/$1 [[:blank:]]+.*[[:blank:]]+Linux swap' && return 0
+		;;
+	    */file)
+		file -s /dev/$1 2>/dev/null | grep -q 'Linux.*swap' && return 0
+		;;
+	esac
+    fi
+    return 1;
+}
+
+get_ip()
+{
+    ip addr show ${1:-eth0} | sed -n -r '/^[[:blank:]]*inet /s|^[[:blank:]]*inet[[:blank:]]*(.*)/.*$|\1|p'
+}
+
+add_swap()
+{
+    [ -z "$1" ] || mkswap $1 && echo "$1 swap swap ${2:-defaults} 0 0" >> /etc/fstab
+}
+
+nfs_swap()
+{
+    local nswap
+    if mkdir -p /mnt/nfsswap; then
+	if mount -n -o nolock,proto=udp ${SWAP_SERVER:-$SERVER}:${SWAP_DIR:-/var/spool/ltspswap} /mnt/nfsswap; then
+	    nswap="/mnt/nfsswap/$(get_ip).swap"
+	    rm -f $nswap
+	    dd if=/dev/zero of=$nswap bs=1M count=${SWAP_SIZE:-128} && add_swap $nswap
+	else
+	    rmdir /mnt/nfsswap
+	fi
+    fi
+}
+
+nbd_swap()
+{
+    local nswap i
+    if modprobe -q nbd nbds_max=2; then
+	make_dev /dev/nbd1 b 43 1 && nswap=nbd1 || nswap=
+	if [ -n "$nswap" ] && nbd-client ${SWAP_SERVER:-$SERVER} ${NBD_PORT:-9210} /dev/$nswap; then
+	    if is_yes "$ENCRYPT_SWAP"; then
+		if [ -x /usr/sbin/cryptsetup ]; then
+		    if modprobe -q dm_crypt; then
+			if cryptsetup -d /dev/urandom create cswap $nswap; then
+			    nswap="mapper/cswap"
+			else
+			    modprobe -qr dm_crypt
+			    echo "ERROR: ENCRYPT_SWAP=Y, but can't cteate encryptrd swap. Disabling encryption."
+			    ENCRYPT_SWAP="N"
+			fi
+		    else
+			echo "ERROR: ENCRYPT_SWAP=Y, but dm_crypt module not found. Disabling encryption."
+			ENCRYPT_SWAP="N"
+		    fi
+		else
+		    echo "ERROR: ENCRYPT_SWAP=Y, but cryptsetup not found. Disabling encryption."
+		    ENCRYPT_SWAP="N"
+		fi
+	    fi
+	    is_yes "$ENCRYPT_SWAP" || modprobe -qr dm_mod 
+	    add_swap /dev/$nswap
+	else
+	    modprobe -qr nbd
+	fi
+    fi
+}
+
+local_swap()
+{
+    # Enable local swap partition if found on local disk
+    for part in `grep '[[:digit:]]$' /proc/partitions | sed -r -e 's/.*[[:blank:]]+([[:graph:]]+)$/\1/'`; do
+	is_swap $part && add_swap /dev/$part
+    done
+}
+
+start()
+{
+    if [ -f "$LOCKFILE" ]; then
+	msg_already_running "ltsp-client-swap"
+	RETVAL=1
+    else
+	msg_starting $"Starting LTSP swaps"
+	[ -z "$COMPCACHE" ] || compcache $COMPCACHE
+	is_yes "$USE_LOCAL_SWAP" && local_swap
+	is_yes "$NBD_SWAP" && nbd_swap
+	is_yes "$NFS_SWAP" && nfs_swap
+	swapon -a
+	RETVAL=$?
+    fi
+    touch "$LOCKFILE"
+    return $RETVAL
+}
+
+stop()
+{
+    swapoff -a
+    RETVAL=$?
+    rm -f "$LOCKFILE"
+    return $RETVAL
+}
+
+status()
+{
+    if [ -f "$LOCKFILE" ]; then
+	swapon -s
+    else
+	echo "This service hasn't been started since stopped last time."
+    fi
+    RETVAL=$?
+    return $RETVAL
+}
+
+condrestart()
+{
+    stop
+    swapon -a
+    RETVAL=$?
+    return $RETVAL
+}
+
+case "$1" in
+    start|restart|reload)
+	start
+	;;
+    condrestart|condreload)
+	# Nothing to do on condrestart
+	condrestart
+	;;
+    stop|condstop)
+	stop
+	;;
+    status)
+	status
+	;;
+    *)
+	msg_usage "${0##*/} {start|stop|restart|reload|status|condrestart|condreload|condstop}"
+	RETVAL=1
+	;;
+esac
+
+exit $RETVAL

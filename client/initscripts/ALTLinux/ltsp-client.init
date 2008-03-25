@@ -1,0 +1,184 @@
+#!/bin/sh
+#
+# ltsp-client   Start/Stop the LTSP client.
+#
+# chkconfig: 2345 45 05
+# description: LTSP client initialization
+# config: /usr/share/ltsp/ltsp_config
+# pidfile: /var/run/ltsp-client.pid
+
+# Do not load RH compatibility interface.
+WITHOUT_RC_COMPAT=1
+
+# Source function library.
+. /etc/init.d/functions
+
+# Source configuration.
+SourceIfNotEmpty /etc/sysconfig/ltsp-client
+
+LOCKFILE=/var/lock/subsys/ltsp-client
+RETVAL=0
+
+[ -f /etc/ltsp_chroot ] && SourceIfNotEmpty /usr/share/ltsp/ltsp_config || exit 0
+
+# Set variable
+set_info()
+{
+    [ -d /tmp/info ] || mkdir /tmp/info
+    echo "$2" >"/tmp/info/$1"
+}
+
+start_pulseaudio()
+{
+    local PA_SCRIPT PA_SINK
+    if [ -x /usr/bin/pulseaudio ]; then
+	AUDIO_PORT=${SOUND_PORT:-4713}
+	PA_SCRIPT=/etc/ltsp/ltsp.pa
+	[ -r $PA_SCRIPT ] && PA_SCRIPT="-n -F $PA_SCRIPT" || PA_SCRIPT=
+	if [ -d /proc/asound ]; then
+	    PA_SINK=alsa-sink
+	elif [ -c /dev/dsp ]; then
+	    PA_SINK=oss-sink
+	else
+	    PA_SINK=detect
+	fi
+	/usr/bin/pulseaudio --system -D --use-pid-file --disallow-module-loading $PA_SCRIPT \
+	    -L "module-native-protocol-tcp auth-ip-acl=$SERVER" \
+	    -L "module-esound-protocol-tcp auth-ip-acl=$SERVER" \
+	    -L "module-$PA_SINK"
+	AUDIO_SERVER="PULSEAUDIO"
+    fi
+}
+
+start_esound()
+{
+    if [ -x /usr/bin/esd ]; then
+	AUDIO_PORT=${SOUND_PORT:16001}
+	/usr/bin/esd -nobeeps -tcp -port $AUDIO_PORT -public &
+	#/usr/bin/esd -nobeeps -tcp -port $AUDIO_PORT -bind 0.0.0.0 &
+	AUDIO_SERVER="ESOUND"
+    fi
+}
+
+start_nasd()
+{
+    if [ -x /usr/bin/nasd ]; then
+	# load ALSA's OSS-compat module if needed
+	grep -q '^snd_pcm ' /proc/modules && modprobe -q snd-pcm-oss
+	AUDIO_PORT=${SOUND_PORT:8000}
+	/usr/bin/nasd -aa -b
+	# Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
+	#aumix-minimal -v100 -w100 -c90 -m10
+	AUDIO_SERVER="NAS"
+    fi
+}
+
+set_sound_volume()
+{
+    [ -x /usr/bin/amixer ] && /usr/bin/amixer -q set Front 100% unmute 2>/dev/null
+    if [ -n "$SOUND_VOL" ]; then
+	if [ -x /usr/bin/amixer ]; then
+	    /usr/bin/amixer -q set Master ${SOUND_VOL}% unmute 2>/dev/null &&
+	    /usr/bin/amixer -q set PCM 90% unmute 2>/dev/null ||
+	    /usr/bin/amixer -q set PCM ${SOUND_VOL}% unmute 2>/dev/null
+	fi
+    fi
+    [ -x /bin/aumix-minimal ] && /bin/aumix-minimal -v100 -w${SOUND_VOL:-80} >/dev/null 2>&1
+}
+
+start_sound()
+{
+    if is_yes "$SOUND"; then
+	AUDIO_SERVER="none"
+	AUDIO_PORT=${SOUND_PORT:-none}
+	case "$SOUND_DAEMON" in
+	    pulse|pulseaudio) start_pulseaudio ;;
+	    esd|esound) start_esound ;;
+	    nas|nasd) start_nasd ;;
+	    '') grep -q '^snd_pcm ' /proc/modules && start_esound || start_nasd ;;
+	    *) echo "Unable to start unsupported sound daemon: '$SOUND_DAEMON'" >&2	;;
+	esac
+	if is_yes "$INFO"; then
+	    set_info AUDIO_SERVER $AUDIO_SERVER
+	    set_info AUDIO_PORT $AUDIO_PORT
+	fi
+	set_sound_volume
+    fi
+}
+
+start_info()
+{
+    is_yes "$INFO" && [ -x /usr/sbin/ltspinfod ] && /usr/sbin/ltspinfod -s
+}
+
+start_printer()
+{
+    local P
+    for P in $(env | egrep '^PRINTER_[[:digit:]]+_DEVICE'); do
+	[ -n "${P#*=}" ] && /usr/share/ltsp/start_printer $(echo $P | cut -d_ -f2) &
+    done
+}
+
+stop_udevd()
+{
+    LIVE_UDEVD=${LIVE_UDEVD:-auto}
+    if [ "$LIVE_UDEVD" = "auto" -o "$LIVE_UDEVD" = "AUTO" ]; then
+	[ $(MemInfo MemTotal) -ge $((1024 * 28)) ] || LIVE_UDEVD=N
+    fi
+    is_no "$LIVE_UDEVD" && service udevd stop
+    return 0
+}
+
+start()
+{
+    msg_starting $"LTSP client"
+    touch "$LOCKFILE"
+    stop_udevd
+    start_info || true
+    start_printer || true
+    start_sound || true
+    for screen in $(env | grep '^SCREEN_' | cut -d= -f1); do
+        start-stop-daemon --start -b --exec /usr/share/ltsp/screen_session -- "${screen##SCREEN_}"
+    done
+    RETVAL=$?
+    return $RETVAL
+}
+
+stop()
+{
+    rm -f "$LOCKFILE"
+}
+
+restart()
+{
+    stop
+    start
+}
+
+case "$1" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    reload|restart)
+	restart
+	;;
+    condstop)
+	[ -e "$LOCKFILE" ] && stop
+	;;
+    condreload|condrestart)
+	[ -e "$LOCKFILE" ] && restart
+	;;
+    status)
+	RETVAL=$?
+	;;
+    *)
+	msg_usage "${0##*/} {start|stop|restart|condstop|condrestart|status}"
+	RETVAL=1
+	;;
+esac
+
+echo
+exit $RETVAL

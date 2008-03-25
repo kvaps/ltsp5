@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+# /etc/rc.d/scripts/ltsp-client-bind-mounts - run once at boot time from rc.sysinit
+#
+
+WITHOUT_RC_COMPAT=1
+
+# Source function library.
+. /etc/init.d/functions
+# Source configuration.
+SourceIfNotEmpty /etc/default/ltsp-client-setup
+
+
+bind_mounts ()
+{
+    # set defaults
+    [ -z "$tmpfs_dir" ] && tmpfs_dir=/var/lib/ltsp-client-setup
+    [ -z "$rw_dirs" ] && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/nfs"
+    [ -z "$copy_dirs" ] && copy_dirs="/etc/net/ifaces"
+    [ -z "$temp_copy_dirs" ] && temp_copy_dirs="/var/cache/ltspconf"
+    [ -z "$bindfiles" ] && bindfiles="/etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf /etc/X11/xinit/Xkbmap"
+    mount -t tmpfs -o mode=0755,size=${tmpfs_size:-4m} tmpfs $tmpfs_dir
+    # preserve directory structure
+    for d in $rw_dirs; do
+	if [ -d "$d" ]; then
+	    cd $tmpfs_dir
+    	    tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
+	else
+    	    echo "WARNING: $d does not exist"
+	fi
+    done
+    # copy contents into tmpfs
+    for d in $copy_dirs $temp_copy_dirs; do
+    	if [ -d "$d" ]; then
+    	    cd $tmpfs_dir
+    	    tar -cpf - $d 2> /dev/null | tar xpf -
+	else
+    	    echo "WARNING: $d does not exist"
+	fi
+    done
+    # bind dirs into tmpfs
+    for d in $rw_dirs $copy_dirs $temp_copy_dirs; do
+        if [ -d "$d" ]; then
+    	    mount --bind $tmpfs_dir/$d $d
+	else
+    	    echo "WARNING: $d does not exist"
+	fi
+    done
+    # mount one file on top of another
+    for f in $bindfiles; do
+	if [ -e "$f" ]; then
+	    mkdir -p "$(dirname $tmpfs_dir/$f)"
+    	    cp $f $tmpfs_dir/$f
+    	    mount --bind $tmpfs_dir/$f $f
+	else
+    	    echo "WARNING: $f does not exist"
+	fi
+    done
+}
+
+[ "$root_write_method" = "bind_mounts" ] && bind_mounts
