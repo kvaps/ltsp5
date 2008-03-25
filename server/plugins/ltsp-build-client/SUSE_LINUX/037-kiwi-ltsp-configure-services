@@ -1,0 +1,13 @@
+case "$MODE" in
+    finalization)
+       echo "creating images"
+        if [ -e /usr/sbin/kiwi-ltsp-setup ]
+        then
+                kiwi-ltsp-setup -c
+        else
+                echo "Please install kiwi-desc-ltsp package before continuing"
+                exit 1
+        fi
+        ;;
+esac
+
