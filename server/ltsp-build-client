@@ -131,13 +131,6 @@ if ! TEMP=`getopt -o '' --long $PARAMS -n "$0" -- "$@"`; then
 fi
 eval set -- "$TEMP"
 
-if [ "--config" = "$1" ] && [ -n "$2" ]; then
-    . "$2"
-    test "$#" -gt 1 && shift 2
-elif [ -f /etc/ltsp/ltsp-build-client.conf ]; then
-    . /etc/ltsp/ltsp-build-client.conf
-fi
-
 while [ ! -z "$1" ] && [ "$1" != "--" ]; do
     OPTION=$(echo ${1:2} | tr "-" "_") # remove -- from variable name
     shift
