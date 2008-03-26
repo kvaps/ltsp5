@@ -16,15 +16,16 @@ if [ -n "$X_SERVER" -a "$X_SERVER" != "localhost" ]; then
 		    ;;
 	    esac
 	fi
+	unset LTSP_AUDIO_SERVER LTSP_AUDIO_PORT
     else
 	export ESPEAKER="$X_SERVER:16001"
 	export AUDIOSERVER="tcp/$X_SERVER:8000"
-	export PULSE_SERVER="tcp:$X_SERVER:4713"
+	#export PULSE_SERVER="tcp:$X_SERVER:4713"
     fi
+    if [ -n "$PULSE_SERVER" -a -f /etc/ltsp/asound-pulse.conf -a -f /usr/share/ltsp/alsa-pulse.conf -a -f /usr/lib/alsa-lib/l
+	export ALSA_CONFIG_PATH=/usr/share/ltsp/alsa-pulse.conf
+    elif [ -f /etc/ltsp/asound-null.conf ]; then
+	export -rx ALSA_CONFIG_PATH=/usr/share/ltsp/alsa-null.conf
+    fi                                                f
 fi
 unset X_SERVER
-if [ -n "$PULSE_SERVER" -a -f /etc/ltsp/asound-pulse.conf -a -f /usr/share/ltsp/alsa-pulse.conf -a -f @LIBDIR@/alsa-lib/libasound_module_ctl_pulse.so ]; then
-    export ALSA_CONFIG_PATH=/usr/share/ltsp/alsa-pulse.conf
-else
-    export ALSA_CONFIG_PATH=/usr/share/ltsp/alsa-null.conf
-fi
