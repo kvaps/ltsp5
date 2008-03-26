@@ -11,5 +11,5 @@ if [ -s /etc/ltsp/ltsp-client-eth-modules.list ]; then
     fi
 fi
 export MKINITRD_OPTIONS="$MKINITRD_OPTIONS_DISKLESS $MKINITRD_OPTIONS_NFSROOT$MKINITRD_OPTIONS_MODULES"
-[ -x /usr/share/ltsp/ltsp-client-mkinitrd ] && MKINITRD=/usr/lib/ltsp/ltsp-client-mkinitrd
+[ -x /usr/share/ltsp/ltsp-client-mkinitrd ] && MKINITRD=/usr/share/ltsp/ltsp-client-mkinitrd
 # unset MKINITRD_OPTIONS_DISKLESS MKINITRD_OPTIONS_NFSROOT
