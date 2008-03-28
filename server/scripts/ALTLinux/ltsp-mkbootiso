@@ -1,0 +1,86 @@
+#!/bin/bash
+
+Usage()
+{
+cat <<__USAGE__
+Usage: ltsp-mkbootiso [OPTIONS]
+Make boot iso image with kernel and initrd for boot LTSP5 client via CD-ROM
+  -h, --help             display this help and exit
+  -,  --stdout           write iso file to stdout
+  -o, --output ISO_FILE  write iso to ISO_FILE (./ltsp-boot.iso)
+  -c, --conf CONF_FILE   use CONF_FILE as isolinux.cfg (/boot/pxelinux.cfg/default)
+  -b, --boot BOOT_FILE   use BOOT_FILE as isolinux.bin (/usr/lib/syslinux/isolinux.bin)
+  -v, --version VER      use kernel version VER
+  -r, --root DIR         LTSP-client root directory
+__USAGE__
+exit 0
+}
+
+VER=
+CONF_FILE=/boot/pxelinux.cfg/default
+BOOT_FILE=/usr/lib/syslinux/isolinux.bin
+ISO_FILE=ltsp-boot.iso
+CHROOT=
+
+while [ $# -ne 0 ]; do
+    case "$1" in
+	-h|--help) Usage ;;
+	-v|--version)
+	    VER=$2
+	    shift 2
+	    ;;
+	-b|--boot)
+	    BOOT_FILE=$2
+	    shift 2
+	    ;;
+	-c|--conf)
+	    CONF_FILE=$2
+	    shift 2
+	    ;;
+	-|--stdout)
+	    ISO_FILE=
+	    shift
+	    ;;
+	-o|--output)
+	    ISO_FILE=$2
+	    shift 2
+	    ;;
+	-r|--root)
+	    CHROOT=$2
+	    shift 2
+	    ;;
+	*)
+	    echo "Unknown key $1 !" >&2
+	    exit 2
+	    ;;
+    esac
+done
+
+if [ -f /etc/ltsp_chroot ]; then
+    CHROOT=
+elif [ -z "$CHROOT" -a -r /etc/ltsp/ltsp-build-client.conf ]; then
+    . /etc/ltsp/ltsp-build-client.conf
+    CHROOT=$BASE/$ARCH
+fi
+
+KERNEL=$CHROOT/boot/vmlinuz${VER:+-}$VER
+INITRD=$CHROOT/boot/initrd${VER:+-}$VER.img
+CONF_FILE=$CHROOT${CHROOT:+/}$CONF_FILE
+FILES="$BOOT_FILE $KERNEL $INITRD $CONF_FILE"
+
+for f in $FILES; do
+    if ! [ -f "$f" ]; then
+	echo "Can't found $f !" >&2
+	exit 1
+    fi
+done
+
+Dir=`mktemp -t -d ltsp5-iso.XXXX`
+cp -L "$BOOT_FILE" "$Dir"/isolinux.bin
+cp -L "$KERNEL" "$Dir"/vmlinuz
+cp -L "$INITRD" "$Dir"/initrd.img
+cp -L "$CONF_FILE" "$Dir"/isolinux.cfg
+
+mkisofs ${ISO_FILE:+-o }"$ISO_FILE" -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table "$Dir"
+
+rm -rf "$Dir"

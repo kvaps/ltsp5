@@ -1,0 +1,28 @@
+case "$MODE" in
+    finalization)
+        rc_cleanup() {
+            LEVEL=$1; shift
+        
+            if echo $LEVEL | grep -q '[2-5]' ; then
+                suffix="2345"
+                debug "Cleaning up startup services in init levels: $suffix ..."
+            else
+                suffix=$LEVEL
+                debug "Cleaning up startup services in rc$suffix.d ..."
+            fi
+        
+            RC_DIR=$(cd $ROOT/etc/rc.d/rc$LEVEL.d/; ls S*)
+        
+            for match in $@; do
+                RC_DIR=$(echo "$RC_DIR" | sed "s/S[0-9]*$match$//g")
+            done
+        
+            for link in $RC_DIR; do
+                name=$(echo $link | sed 's/^S[0-9]*//')
+		chroot $ROOT chkconfig --level $suffix $name off
+                [ -f $ROOT/etc/rc.d/init.d/$name ] && chroot $ROOT chkconfig --del $name
+            done
+        }
+        [ -n "$RC2_WHITELIST" ] && rc_cleanup 3 $RC2_WHITELIST
+        ;;
+esac

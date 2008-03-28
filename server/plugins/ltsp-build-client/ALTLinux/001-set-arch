@@ -1,0 +1,11 @@
+case "$MODE" in
+    commandline)
+        add_option "arch" "`eval_gettext "set the target architecture"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_arch_value" ]; then
+            ARCH="$option_arch_value"
+        fi
+	[ $(arch) = "x86_64" -a "$DIST" = "${DIST/x86_64}" ] && SETARCH="setarch i586" || SETARCH=
+        ;;
+esac

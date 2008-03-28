@@ -1,0 +1,23 @@
+case "$MODE" in
+    commandline)
+	    add_option "progress" "`eval_gettext "Enable progress reporting"`" "advanced" "false"
+	    add_option "timestamp" "`eval_gettext "Print stage times (seconds)"`" "advanced" "false"
+	    add_option "progressbar" "`eval_gettext "Draw progress bar"`" "advanced" "false"
+	;;
+    configure)
+	PROGRESS=true
+	if [ -n "$option_progress_value" ]; then
+	    exec 2>/dev/null
+	    [ -t 1 ] && PROGRESS=progress_norm || PROGRESS=progress_ext
+	    $PROGRESS 0
+	elif [ -n "$option_timestamp_value" ]; then
+	    PROGRESS=progress_timestamp
+	elif [ -n "$option_progressbar_value" ]; then
+	    progressbar_init && PROGRESS=progressbar
+	fi
+	$PROGRESS stage
+        ;;
+    *)
+	$PROGRESS stage
+	;;
+esac

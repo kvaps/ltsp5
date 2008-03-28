@@ -1,0 +1,8 @@
+case "$MODE" in
+    after-install)
+	if [ -d /var/lib/tftpboot/ltsp5 -a -f /etc/xinetd.d/tftp ]; then
+	    TFTPD_USER=$(sed -n '/^[[:blank:]]*server_args[[:blank:]]*=/ s/^.*=.*-u[[:blank:]]*\([[:alnum:]_]*\).*$/\1/p' /etc/xinetd.d/tftp)
+	    [ -n "$TFTPD_USER" ] && chown -R "$TFTPD_USER" /var/lib/tftpboot/ltsp5 ||:
+	fi
+        ;;
+esac

@@ -1,0 +1,28 @@
+case "$MODE" in
+    configure)
+        OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"false"}
+        ;;
+    finalization)
+        # Export LTSP chroot using NFS to the LTSP client network
+        if ! egrep -q "^$ROOT[[:blank:]]+" /etc/exports ; then
+            if [ "$OVERRIDE_EXPORTS" = "true" ]; then
+                cat <<EOF >> /etc/exports
+# Automatically added by ltsp-server
+$ROOT       (ro,no_root_squash,async)
+EOF
+                #service nfs restart
+            else
+                cat <<EOF
+WARNING: no entry for $ROOT in /etc/exports,
+you may want to add the following line to /etc/exports:
+
+$ROOT       (ro,no_root_squash,async)
+
+and then run the command:
+
+service nfs restart
+EOF
+            fi
+        fi
+        ;;
+esac

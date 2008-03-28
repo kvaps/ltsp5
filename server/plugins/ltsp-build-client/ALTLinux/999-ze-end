@@ -1,0 +1,18 @@
+case "$MODE" in
+    configure)
+	$PROGRESS 0
+	;;
+    before-install)
+	$PROGRESS 10
+	;;
+    install)
+	$PROGRESS 920
+	;;
+    after-install)
+	$PROGRESS 990
+	;;
+    finalization)
+	$PROGRESS 1000
+	$PROGRESS done
+	;;
+esac

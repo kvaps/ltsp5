@@ -1,0 +1,48 @@
+case "$MODE" in
+    commandline)
+        add_option "kernel-modules" "`eval_gettext "set the kernel modules packages to install."`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_kernel_modules_packages_value" ]; then
+            KERNEL_MODULES="$(echo $option_kernel_value | tr ',' ' ')"
+        fi
+	;;
+    install)
+	$PROGRESS plugin
+	KERNEL_VER=${KERNEL#*\#}
+	KERNEL_PKGNAME=${KERNEL%\#*}
+	KERNEL_FLAVOUR=${KERNEL_PKGNAME#kernel-image-}
+	KERNEL_REL=$(($(echo ${KERNEL_VER%-*} | sed -e 's/\./*65536+/' -e 's/\./*256+/'))).${KERNEL_VER#*-alt}
+	MODULES=
+	for MODULE in $KERNEL_MODULES; do
+	    MODULE_PKGNAME=${MODULE%\#*}
+	    MODULE_VER_REL=${MODULE#*\#}
+	    if [ "$MODULE_VER_REL" != "$MODULE" ]; then
+		MODULE_VER=${MODULE_VER_REL%-*}
+		MODULE_REL=${MODULE_VER_REL#*-}; MODULE_REL=${MODULE_REL%%.*}
+		MODULE_NAME_FLAVOR=${MODULE_PKGNAME#kernel-modules-}
+		MODULE_NAME=${MODULE_NAME_FLAVOR%-*-*}
+	    else
+		MODULE_VER=
+		MODULE_REL=
+	    fi
+	    MODULE_NAME_FLAVOR=${MODULE_PKGNAME#kernel-modules-}
+	    MODULE_NAME=${MODULE_NAME_FLAVOR%-*-*}
+	    MODULE_PACKAGES=$($SETARCH chroot $ROOT apt-cache -qq pkgnames "kernel-modules-$MODULE_NAME-${KERNEL_FLAVOUR}#${MODULE_VER:+$MODULE_VER${MODULE_REL:+-$MODULE_REL}.$KERNEL_REL}")
+	    if [ -z "$MODULE_PACKAGES" ]; then
+		debug "Could't find package $MODULE"
+	    elif [ $(echo "$MODULE_PACKAGES" | wc -l) -eq 1 ]; then
+		MODULES="$MODULES $MODULE_PACKAGES"
+	    else
+		MODULE_VER=""
+		for M in $MODULE_PACKAGES; do
+	    	    MV="${M#*\#}"
+	    	    [ $(rpmvercmp "$MODULE_VER" "$MV") = "1" ] || MODULE_VER="$MV"
+		done
+		MODULES="$MODULES kernel-modules-$MODULE_NAME-${KERNEL_FLAVOUR}#$MODULE_VER"
+	    fi
+	done
+	$SETARCH chroot $ROOT apt-get $APT_VERBOSE $APT_GET_OPTS install $MODULES >&2
+	$PROGRESS 860
+        ;;
+esac

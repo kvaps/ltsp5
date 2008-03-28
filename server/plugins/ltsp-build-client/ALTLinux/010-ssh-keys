@@ -1,0 +1,13 @@
+case "$MODE" in
+    after-install)
+	if [ -x /usr/bin/ssh-keygen ]; then
+	    mkdir -p "$ROOT"/etc/openssh && chmod 751 "$ROOT"/etc/openssh
+	    ssh-keygen -f "$ROOT"/etc/openssh/ssh_host_rsa_key -t rsa -C '' -N '' >&2
+	    ssh-keygen -f "$ROOT"/etc/openssh/ssh_host_dsa_key -t dsa -C '' -N '' >&2
+	    ssh-keygen -f "$ROOT"/etc/openssh/ssh_host_key -t rsa1 -C '' -N '' >&2
+	    debug "Generated SSH host keys: RSA, DSA and RSA1"
+	else
+	    debug "Can't generate SSH host keys: ssh-keygen not found"
+	fi
+        ;;
+esac

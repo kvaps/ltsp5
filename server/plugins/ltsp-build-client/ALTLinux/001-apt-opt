@@ -1,0 +1,5 @@
+case "$MODE" in
+    configure)
+	[ -n "$DEBUG" ] && APT_VERBOSE="" || APT_VERBOSE="-qqq"
+        ;;
+esac

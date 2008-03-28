@@ -1,0 +1,17 @@
+case $MODE in
+    commandline)
+        add_option "langs" "`eval_gettext "Set the i18n langs"`" "advanced" "true"
+        ;;
+    configure)
+        [ -z "$option_langs_value" ] || LANGS="$option_langs_value"
+        ;;
+    before-install)
+	if [ -n "$LANGS" ]; then
+	    mkdir -p "$ROOT"/etc/rpm
+	    echo "%_install_langs $LANGS" > "$ROOT"/etc/rpm/macros
+	fi
+        ;;
+    after-install)
+	[ -z "$LANGS" ] || echo "SUPPORTED=$LANGS" >> "$ROOT"/etc/sysconfig/i18n 
+        ;;
+esac

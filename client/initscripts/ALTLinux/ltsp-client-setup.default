@@ -1,0 +1,30 @@
+# /etc/default/ltsp-client-setup
+
+# bind_mounts or unionfs
+# NOTE: if you change this parameter, you must regenerate the initramfs
+root_write_method="bind_mounts"
+
+# tmpfs directory mounted when using tmpfs/bind
+tmpfs_dir=/var/lib/ltsp-client-setup
+
+# size of tmpfs mount
+tmpfs_size=2m
+
+# tmpfs/bind directions that get mounted with only directory structure
+# preserved
+rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/nfs /var/resolv /mnt /var/lib/pulse"
+
+# tmpfs/bind directions that get mounted with directory structure and data
+# copied
+copy_dirs="/etc/net/ifaces /etc/X11/lib /etc/X11/lib_nvidia"
+
+# tmpfs/bind directories that are mounted and copied, but then unmounted after
+# ltsp-client-setup finishes
+temp_copy_dirs="/var/cache/ltspconf"
+
+# tmpfs/bind files that mounted on top of other files
+bindfiles="/etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/HOSTNAME /etc/issue /etc/issue.net /etc/X11/xinit/Xkbmap"
+
+if [ -x /usr/bin/x11_autosetup -o -x /usr/bin/x11createconfig ]; then
+    bindfiles="$bindfiles /etc/X11/xorg.conf"
+fi

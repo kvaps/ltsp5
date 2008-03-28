@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+    [ -s /etc/ltsp/clients.conf ] && . /etc/ltsp/clients.conf
+    if [ -z "$2" ]; then
+	[ -s /etc/ltsp/clients.conf ] && . /etc/ltsp/clients.conf
+    else
+	SWAP_SIZE=$2
+    fi
+    [ -f "$1" ] && [ "${1:0:1}" = "/" ] ||
+	mkdir -p "$(dirname "$1")" &&
+	dd if=/dev/zero of="$1" bs=1M count=${SWAP_SIZE:-128} &&
+	/sbin/mkswap -v1 "$1"
+else
+    echo "Usage: $0 <filename> <sizeM>"
+    exit 1
+fi

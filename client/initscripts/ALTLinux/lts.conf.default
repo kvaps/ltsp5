@@ -1,0 +1,19 @@
+# Global defaults for all clients
+# if you refer to the local server, just use the
+# "server" keyword as value 
+# see lts_parameters.txt for valid values
+################
+[default]
+    USE_XFS=Y
+    XKBLAYOUT="us,ru,uk"
+    XKBVARIANT=",winkeys,winkeys"
+    XKBOPTIONS="grp:ctrl_shift_toggle"
+    X_COLOR_DEPTH=16
+    NBD_SWAP=Y
+    ENCRYPT_SWAP=N
+    SOUND=Y
+    SOUND_DAEMON=pulseaudio
+    SOUND_VOL=80
+    LOCALDEV=Y
+    INFO=Y
+    POWER_BUTTON=Y

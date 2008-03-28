@@ -1,0 +1,21 @@
+case "$MODE" in
+    after-install)
+	if [ -f "$ROOT"/etc/passwdqc.conf ]; then
+	    cp --preserve=mode,ownership "$ROOT"/etc/passwdqc.conf "$ROOT"/etc/passwdqc.conf.ltspsave
+	    sed -i -r \
+		-e 's/^min=.*$/min=1,1,1,1,1/' \
+		-e 's/^(passphrase=).*$/\11/' \
+		-e 's/^(match=).*$/\10/' \
+		"$ROOT"/etc/passwdqc.conf
+	else
+	    cat > "$ROOT"/etc/passwdqc.conf <<EOF
+min=1,1,1,1,1
+passphrase=1
+match=0
+EOF
+	fi
+        ;;
+    finalization)
+	[ -f "$ROOT"/etc/passwdqc.conf.ltspsave ] && mv -f "$ROOT"/etc/passwdqc.conf{.ltspsave,} || rm -f "$ROOT"/etc/passwdqc.conf
+	;;
+esac

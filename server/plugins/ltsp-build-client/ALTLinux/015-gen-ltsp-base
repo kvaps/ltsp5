@@ -1,0 +1,32 @@
+case "$MODE" in
+    install)
+	if [ -n "$CHROOT_IMAGE" -a -r "$CHROOT_IMAGE" ]; then
+	    case "$CHROOT_IMAGE" in
+		*.tar.gz|*.tgz|*.tar.Z|*.tZ)
+		    tar_build z
+		    ;;
+		*.tar.bz2|*.tbz2|*.tbz)
+		    tar_build j
+		    ;;
+		*.tar)
+		    tar_build
+		    ;;
+		*.cpio)
+		    build_cpio
+		    ;;
+		*.cpio.gz|*.cpio.Z)
+		    cpio_build z
+		    ;;
+		*.cpio.bz2)
+		    cpio_build bz
+		    ;;
+		*)
+		    echo "Usupported image file format. Trying buld chroot from scratch."
+		    scratch_build
+		    ;;
+	    esac
+	else
+	    scratch_build
+	fi
+        ;;
+esac
