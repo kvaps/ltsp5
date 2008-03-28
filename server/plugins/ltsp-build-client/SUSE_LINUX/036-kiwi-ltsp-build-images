@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# install a LTSP chroot to /srv/kiwi-ltsp-nfs for nfs and creates squashfs image for nbdroot in /srv/kiwi-ltsp
+# requires kiwi-desc-ltsp package installed
+#
+
+case "$MODE" in
+    install)
+        echo "creating images"
+	if [ -e /usr/sbin/kiwi-ltsp-setup ]
+     	then
+		kiwi-ltsp-setup -l
+	else
+		echo "Please install kiwi-desc-ltsp package before continuing"
+		exit 1
+	fi
+    ;;
+esac
+

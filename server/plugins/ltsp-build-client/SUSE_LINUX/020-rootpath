@@ -1,0 +1,6 @@
+#TODO: Handle this more gracefully
+case "$MODE" in
+    before-install)
+        ROOT=$LTSNFSPATH
+        ;;
+esac

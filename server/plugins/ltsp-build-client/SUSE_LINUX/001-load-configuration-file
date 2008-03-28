@@ -1,0 +1,23 @@
+case "$MODE" in
+    commandline)
+        add_option "config" "`eval_gettext "Load a user specific configuration file"`" "advanced" "false"
+        ;;
+    configure)
+        CONFIG="/etc/sysconfig/kiwi-ltsp"
+	KIWI_LTSP_FUNCTIONS="/etc/sysconfig/kiwi-ltsp-functions.sh"
+        if [ -n "$option_config_value" ]; then
+            CONFIG="$option_config_value"
+
+            if [ ! -e "$CONFIG" ]; then
+                echo "Failed to read file. '$CONFIG' cannot be found."
+                exit 1
+            fi
+        fi
+        
+        if [ -e "$CONFIG" ]; then
+            debug "Loading configuration files '$CONFIG' and $KIWI_LTSP_FUNCTIONS."
+            . $CONFIG
+	    . $KIWI_LTSP_FUNCTIONS
+        fi
+        ;;
+esac
