@@ -11,7 +11,7 @@ case "$LTSPDIST" in
     fc9)
         export VENDORDEF="Fedora"
         export RELEASEDEF=9
-        export TFTPDIR=/var/lib/tftp
+        export TFTPDIR=/var/lib/tftpboot
     ;;
     el5)
         export VENDORDEF="EL"

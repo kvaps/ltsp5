@@ -4,7 +4,7 @@ case "$MODE" in
         TFTPCONF=$(cat /etc/xinetd.d/tftp |grep server_args | awk -F"-s " {'print $2'})
         if [ "$TFTPCONF" != "$TFTPDIR" ]; then
             echo "ERROR: /etc/xinetd.d/tftp is configured to $TFTPCONF while $TFTPDIR is expected."
-            echo "       /tftpboot was the old location, while /var/lib/tftp is default in Fedora 9+."
+            echo "       /tftpboot was the old location, while /var/lib/tftpboot is default in Fedora 9+."
             echo "       You may need to edit /etc/xinetd.d/tftp manually."
             exit 1
         fi
