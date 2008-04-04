@@ -1,5 +1,0 @@
-case "$MODE" in
-    after-install)
-        echo 'HOSTNAME="ltsp"' > $ROOT/etc/conf.d/hostname
-        ;;
-esac
