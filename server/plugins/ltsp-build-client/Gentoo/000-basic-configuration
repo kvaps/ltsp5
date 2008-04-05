@@ -4,23 +4,19 @@ case "$MODE" in
         add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "regular" "true"
         add_option "mirror" "`eval_gettext "Set extra mirror locations (space-separated)"`" "regular" "true"
         add_option "locale" "`eval_gettext "Set the default locale"`" "advanced" "false"
-        add_option "early-packages" "`eval_gettext "list of extra packages to install as part of the initial installation."`" "advanced" "true"
+        add_option "packages" "`eval_gettext "list of extra packages to install as part of the initial installation."`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_locale_value" ]; then
             LOCALE="$option_locale_value"
         fi
 
-        if [ -n "$option_early_packages_value" ]; then
-            PACKAGES="$option_early_packages_value"
+        if [ -n "$option_packages_value" ]; then
+            PACKAGES="$option_packages_value"
         fi
 
         if [ -n "$option_mirror_value" ]; then
             MIRRORS="$option_mirror_value"
-        fi
-
-        if [ -n "$option_early_packages_value" ]; then
-            OVERLAYS="$option_extra_overlays_value"
         fi
 
         if [ -n "$option_stage_uri_value" ]; then
