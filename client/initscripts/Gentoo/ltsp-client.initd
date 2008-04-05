@@ -1,0 +1,65 @@
+#!/sbin/runscript
+# Copyright 1999-2008 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+        need ltsp-client-setup
+}
+
+checkconfig() {
+        if [ ! -f  /etc/ltsp_chroot ] ; then
+                eerror "You are not an in LTSP chroot"
+                return 1
+        fi
+}
+
+start() {
+	checkconfig || return 1
+	ebegin "Starting LTSP Client"
+	. /usr/share/ltsp/ltsp-init-common
+
+        # if usplash is running, make sure to stop it now 
+        # (yes "start" is the right arg to do it ... even it looks silly)
+        if pidof usplash > /dev/null; then
+            usplash=:
+            orig_console="$(fgconsole)"
+            chvt 7 # avoid tty1 flashing before switching to X
+            /etc/init.d/usplash start
+            # We've just shut down usplash, so don't log success as it will
+            # look weird on the console.
+            log_end_msg=:
+        else
+            usplash=false
+            log_end_msg=log_end_msg
+        fi
+        if boolean_is_true "$CONFIGURE_X" ; then
+            ${CONFIGURE_X_COMMAND:-/usr/share/ltsp/configure-x.sh}
+        fi
+
+        for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
+            eval num=\$SCREEN_$screen
+            if [ -n "$num" ]; then
+                start-stop-daemon --start -b --exec /usr/share/ltsp/screen_session -- "$screen"
+            fi
+        done
+
+        start_sound || true
+        configure_localdev || true
+
+        $log_end_msg 0
+
+        if $usplash && [ "$orig_console" != serial ]; then
+            # Wait a short while for the active console to change, to try to
+            # avoid visible console noise from later init scripts.
+            i=0
+            while [ "$(fgconsole)" = "$orig_console" ]; do
+                i="$(($i + 1))"
+                if [ "$i" -gt 5 ]; then
+                    break
+                fi
+                sleep 1
+            done
+        fi
+}
+

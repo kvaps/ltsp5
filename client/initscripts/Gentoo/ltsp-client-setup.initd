@@ -1,0 +1,214 @@
+#!/sbin/runscript
+# Copyright 1999-2008 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    before root
+}
+
+checkconfig() {
+        if [ ! -f  /etc/ltsp_chroot ] ; then
+                eerror "You are not an in LTSP chroot"
+                return 1
+        fi
+}
+
+start() {
+	checkconfig || return 1
+	ebegin "Setting up LTSP client"
+	. /usr/share/ltsp/ltsp_config
+	. /usr/share/ltsp/ltsp-common-functions
+
+	type usplash_write >/dev/null 2>/dev/null && \
+        usplash_write "TIMEOUT 120" || true
+        if [ -z "$root_write_method" ]; then
+            touch / 2> /dev/null || root_write_method="bind_mounts"
+        fi
+        [ "$root_write_method" = "bind_mounts" ] && bind_mounts
+        load_modules || true
+        configure_console || true
+        configure_resolver || true
+        configure_swap || true
+        configure_syslog || true
+        configure_fstab || true
+        run_rcfiles || true
+        configure_x || true
+        configure_serial_mouse || true
+        configure_localdev || true
+        configure_printer || true
+	[ "$root_write_method" = "bind_mounts" ] && bind_unmounts
+}
+
+load_modules() {
+    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/);do
+        modprobe $(echo $module|tr "*" " ")
+    done
+}
+
+configure_localdev() {
+    boolean_is_true "$LOCALDEV" && mkdir -p /var/run/drives
+}
+
+configure_console() {
+    if [ -n "$CONSOLE_KEYMAP" ]; then
+        ckbcomp -model pc105 "$CONSOLE_KEYMAP" | loadkeys
+    fi
+}
+
+configure_swap() {
+    if boolean_is_true "$USE_LOCAL_SWAP" ; then
+        # Enable local swap partition if found on local disk
+        for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
+            swap_devices="$swap_devices $part"
+        done
+    fi
+
+    if boolean_is_true "$NBD_SWAP" ; then
+        SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
+        NBD_PORT=${NBD_PORT:-"9210"}
+        modprobe nbd
+        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && \
+            swap_devices="$swap_devices /dev/nbd0"
+    fi
+
+    if boolean_is_true "$ENCRYPT_SWAP" ; then
+        if [ -x /sbin/cryptsetup ]; then
+            modprobe dm_crypt
+        else
+            echo "ERROR: ENCRYPT_SWAP=Y, but /sbin/cryptsetup not found. disabling swap."
+            swap_devices=""
+        fi
+    fi
+
+    num=0
+    for device in $swap_devices ; do
+        swap="$device"
+        if boolean_is_true "$ENCRYPT_SWAP" ; then
+            if [ -x /sbin/cryptsetup ]; then
+                cryptsetup -d /dev/urandom create swap$num $swap && swap="/dev/mapper/swap$num"
+                num=$(($num+1))
+            fi
+        fi
+        mkswap $swap
+        swapon $swap
+    done
+}
+
+configure_resolver() {
+    hostname=$(hostname)
+    if [ "(none)" = "$hostname" ] ; then
+        /etc/init.d/hostname start
+        hostname="$(hostname)"
+    else
+        echo $hostname > /etc/hostname
+    fi
+    cat <<EOF > /etc/hosts
+127.0.0.1 localhost
+127.0.0.2 $hostname
+$SERVER server
+EOF
+    if [ -f /etc/hosts.ltsp ]; then
+        cat /etc/hosts.ltsp >> /etc/hosts
+    fi
+
+    if [ -n "$DNS_SERVER" ] && [ -n "$SEARCH_DOMAIN" ]; then
+        cat <<EOF > /etc/resolv.conf
+search $SEARCH_DOMAIN
+nameserver $DNS_SERVER
+EOF
+    fi
+}
+
+configure_printer() {
+    for I in 0 1 2; do
+        eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
+        [ -n "${DEVICE}" ] && \
+            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} && \
+            /usr/sbin/jetpipe ${DEVICE} ${PORT}
+    done
+}
+
+configure_syslog() {
+    if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
+        SYSLOG_HOST=${SYSLOG_HOST:-"SERVER"}
+        cat <<EOF > /etc/syslog-ng/syslog-ng.conf
+destination remote {tcp("$SYSLOG_HOST" port(1999));};
+log {source(src);destination(remote);};
+
+EOF
+    fi
+}
+
+configure_fstab() {
+    if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
+        echo "/dev/root     /       unionfs defaults        0       0" > /etc/fstab
+        echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
+        mount /tmp
+    fi
+}
+
+configure_x() {
+    # If the user has specified an xorg.conf file, then copy it over.
+    xserver_config="/etc/X11/xorg.conf"
+    [ -n "$X_CONF" ] && [ -f "$X_CONF" ] && \
+        cp "$X_CONF" "$xserver_config"
+}
+
+configure_serial_mouse() {
+      if [ -n "$X_MOUSE_DEVICE" ] && \
+          [ -n "$X_MOUSE_PROTOCOL" ] && \
+          type inputattach >/dev/null 2>/dev/null && \
+          [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
+          inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+      fi
+}
+
+bind_mounts () {
+    # set defaults
+    test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
+    mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
+    # preserve directory structure
+    for d in $rw_dirs ; do
+        if [ -d "$d" ]; then
+            cd $tmpfs_dir
+            tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist"
+        fi
+    done
+    # copy contents into tmpfs
+    for d in $copy_dirs $temp_copy_dirs; do
+        if [ -d "$d" ]; then
+            cd $tmpfs_dir
+            tar -cpf - $d 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist"
+        fi
+    done
+    # mount one file on top of another
+    for f in $bindfiles ; do
+        if [ -e "$f" ]; then
+            mkdir -p "$(dirname $tmpfs_dir/$f)"
+            cp $f $tmpfs_dir/$f
+            mount --bind $tmpfs_dir/$f $f
+        else
+            echo "WARNING: $f does not exist"
+        fi
+    done
+}
+
+bind_unmounts() {
+    for dir in $temp_copy_dirs; do
+        umount $dir
+        rm -rf $tmpfs_dir/${dir#/}
+    done
+}
+
+run_rcfiles() {
+    for rcfile in $(env | sort | awk -F= '$1 ~ /^RCFILE_/ { print $2 }'); do
+        [ -x "$rcfile" ] && "$rcfile" $@
+    done
+}
