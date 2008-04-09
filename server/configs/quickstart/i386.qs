@@ -1,7 +1,10 @@
 use_linux32
 chroot_dir /opt/ltsp/i386
 
-pre_sanity_check_config () { 
+# TODO: most of this shell code can go into a pre install or post install script
+#       seperate from the profile
+
+pre_sanity_check_config () {
     # Get variables we need (we could use a seperate pre install script)
     # As far as i can tell, we can't inject into the quickstart configuration
     # with our own environment variables any other place than here, since
@@ -13,10 +16,17 @@ pre_sanity_check_config () {
         stage_uri="${STAGE_URI}"
     fi
     
-    timezone="${TZ}"
-    extra_packages="joystick ltspfs ldm ltsp-client pulseaudio xorg-server ${PACKAGES}"
-    
-        
+    if [ -z "${TIMEZONE}" ]; then
+        # For OpenRC
+        if [ -e /etc/timezone ]; then
+            TIMEZONE="$(</etc/timezone)"
+        else
+            . /etc/conf.d/clock
+        fi
+    fi
+
+    timezone="${TIMEZONE}"
+    extra_packages="joystick ltspfs ldm ltsp-client ${PACKAGES}"
 }
 # Skip all this
 skip partition
@@ -41,10 +51,6 @@ skip build_kernel
 #genkernel_opts
 
 post_unpack_stage_tarball() {
-    if [ -f /etc/localtime ]; then
-        cp /etc/localtime ${chroot_dir}/etc/localtime
-    fi
-
     if [ -n "$LOCALE" ]; then
         if [ -f /etc/env.d/02locale ]; then
             cp /etc/env.d/02locale ${chroot_dir}/etc/env.d/
@@ -68,29 +74,56 @@ source /usr/portage/local/layman/make.conf
 EOF
 
     cat > ${chroot_dir}/etc/fstab <<EOF
-#Dynamically replaced on client boot
+# DO NOT DELETE
+EOF
+   
+    # TODO: copy the contents of /etc/portage from elsewhere
+    spawn "mkdir -p ${chroot_dir}/etc/portage/package.keywords"
+    spawn "mkdir -p ${chroot_dir}/etc/portage/package.use"
+
+    cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<EOF
+net-misc/ltsp-client
+x11-misc/ldm
+sys-fs/ltspfs
+sys-apps/openrc
+sys-apps/baselayout
+=sys-fs/udev-118*
+=sys-fs/fuse-2.7.2*
+x11-themes/gtk-engines-ubuntulooks
 EOF
 
-    mkdir ${chroot_dir}/etc/portage
+cat >> ${chroot_dir}/etc/portage/package.unmask/ltsp <<EOF
+sys-apps/openrc
+sys-apps/baselayout
+EOF
+
+     cat >> ${chroot_dir}/etc/portage/package.use/ltsp <<EOF
+EOF
 }
 
 pre_install_extra_packages() {
     spawn_chroot "emerge --update --deep world"
-    # TODO: should layman have a pkg_config in the ebuild?
 }
 
 post_install_extra_packages() {
     # point /etc/mtab to /proc/mounts
     ln -sf /proc/mounts ${chroot_dir}/etc/mtab
 
-    # Avoid fsck
-    touch ${chroot_dir}/fastboot
-
     # make sure this is really existing before bind mounting it
     mkdir ${chroot_dir}/var/lib/nfs
 
     # Set a default hostname
     echo 'HOSTNAME="ltsp"' > $ROOT/etc/conf.d/hostname
+
+    cat <<EOF > ${chroot_dir}/etc/lts.conf
+# TODO: remove this file 
+#       put it in /var/lib/tftpboot/ltsp/arch/lts.conf
+[default]
+CONFIGURE_X=F
+LDM_SESSION=/etc/X11/Sessions/Gnome
+LDM_THEME=ltsp
+EOF
+
 }
 
 rcadd ltsp-client-setup boot
