@@ -89,6 +89,7 @@ sys-apps/openrc
 sys-apps/baselayout
 =sys-fs/udev-118*
 =sys-fs/fuse-2.7.2*
+=sys-block/nbd-2.9.2
 x11-themes/gtk-engines-ubuntulooks
 EOF
 
