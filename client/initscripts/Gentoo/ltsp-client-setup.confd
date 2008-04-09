@@ -10,15 +10,15 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/lib/discover"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs="/root"
+copy_dirs="/root /etc/udev/rules.d"
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
 temp_copy_dirs=""
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/conf.d/net /etc/conf.d/hostname /etc/hosts /etc/syslog-ng/syslog-ng.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf"
+bindfiles="/etc/conf.d/hostname /etc/hosts /etc/syslog-ng/syslog-ng.conf /etc/fstab /etc/resolv.conf"

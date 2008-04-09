@@ -31,23 +31,17 @@ start() {
             log_end_msg=:
         else
             usplash=false
-            log_end_msg=log_end_msg
+            #log_end_msg=log_end_msg
         fi
-        if boolean_is_true "$CONFIGURE_X" ; then
-            ${CONFIGURE_X_COMMAND:-/usr/share/ltsp/configure-x.sh}
-        fi
-
+        configure_x || true
         for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
             eval num=\$SCREEN_$screen
             if [ -n "$num" ]; then
-                start-stop-daemon --start -b --exec /usr/share/ltsp/screen_session -- "$screen"
+                start-stop-daemon --start -b --exec /bin/sh /usr/share/ltsp/screen_session -- "$screen"
             fi
         done
 
-        start_sound || true
-        configure_localdev || true
-
-        $log_end_msg 0
+        eend 0
 
         if $usplash && [ "$orig_console" != serial ]; then
             # Wait a short while for the active console to change, to try to

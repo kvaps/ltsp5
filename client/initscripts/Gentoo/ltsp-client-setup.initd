@@ -15,12 +15,13 @@ checkconfig() {
 }
 
 start() {
-	checkconfig || return 1
-	ebegin "Setting up LTSP client"
-	. /usr/share/ltsp/ltsp_config
-	. /usr/share/ltsp/ltsp-common-functions
+        checkconfig || return 1
+        ebegin "Setting up LTSP client"
+        
+        . /usr/share/ltsp/ltsp_config
+        . /usr/share/ltsp/ltsp-common-functions
 
-	type usplash_write >/dev/null 2>/dev/null && \
+        type usplash_write >/dev/null 2>/dev/null && \
         usplash_write "TIMEOUT 120" || true
         if [ -z "$root_write_method" ]; then
             touch / 2> /dev/null || root_write_method="bind_mounts"
@@ -37,7 +38,7 @@ start() {
         configure_serial_mouse || true
         configure_localdev || true
         configure_printer || true
-	[ "$root_write_method" = "bind_mounts" ] && bind_unmounts
+        [ "$root_write_method" = "bind_mounts" ] && bind_unmounts
 }
 
 load_modules() {
@@ -131,9 +132,10 @@ configure_printer() {
 
 configure_syslog() {
     if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
-        SYSLOG_HOST=${SYSLOG_HOST:-"SERVER"}
+        SYSLOG_HOST=${SYSLOG_HOST:-"${SERVER}"}
         cat <<EOF > /etc/syslog-ng/syslog-ng.conf
-destination remote {tcp("$SYSLOG_HOST" port(1999));};
+source src { unix-stream("/dev/log"); internal(); };
+destination remote {tcp("$SYSLOG_HOST");};
 log {source(src);destination(remote);};
 
 EOF
