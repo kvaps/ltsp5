@@ -23,8 +23,8 @@ case "$MODE" in
         # Set ltsp-launch-client as DM
         echo "DISPLAYMANAGER=/usr/sbin/ltsp-client-launch" > $ROOT/etc/sysconfig/desktop
 
-        # Ugly hacks so yum will work in the chroot without mounting /proc
-        cp /proc/cpuinfo $ROOT/proc/cpuinfo
+        # Ugly hack: Allow yum to work when chrooted on server
+        # You still need to mount /proc manually though
         cp /etc/resolv.conf $ROOT/etc/resolv.conf
         ;;
 esac
