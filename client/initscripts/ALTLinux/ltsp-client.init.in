@@ -43,7 +43,10 @@ start_pulseaudio()
 	else
 	    PA_SINK=detect
 	fi
-	/usr/bin/pulseaudio --system -D --use-pid-file --disallow-module-loading $PA_SCRIPT \
+	/usr/bin/pulseaudio --system -D --use-pid-file \
+	    $PULSE_OPTS \
+	    --disallow-module-loading \
+	    $PA_SCRIPT \
 	    -L "module-native-protocol-tcp auth-ip-acl=$SERVER" \
 	    -L "module-esound-protocol-tcp auth-ip-acl=$SERVER" \
 	    -L "module-$PA_SINK"
