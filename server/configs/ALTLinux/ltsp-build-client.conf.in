@@ -1,9 +1,9 @@
-VENDOR=@VENDOR@
-BASE=/var/lib/ltsp5
+VENDOR=ALTLinux
+BASE=/var/lib/ltsp
 ARCH=@ARCH@
 MIRROR=ftp://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus
 COMPONENTS=classic
 KERNEL="led-tc"
-KERNEL_MODULES="alsa atl2 r8168 sk98lin"
-EARLY_PACKAGES="ltsp5-client-full"
+KERNEL_MODULES="alsa"
+EARLY_PACKAGES="ltsp-client-full"
 OVERRIDE_EXPORTS=true

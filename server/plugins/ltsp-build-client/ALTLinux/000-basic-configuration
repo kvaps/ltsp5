@@ -28,6 +28,5 @@ case "$MODE" in
 	fi
 	EARLY_PACKAGES=$(echo "$EARLY_PACKAGES" | sed -r -e 's/^[[:blank:]]*//' -e 's/[[:blank:]]+/ /g' -e 's/[[:blank:]]*$//')
 	RC2_WHITELIST=${RC2_WHITELIST:-"local ltsp-client-setup acpid random sound udevd udevd-final x11presetdrv ltsp-client-swap ltsp-client"}
-	. $PLUGINS_BASE/functions-altlinux
         ;;
 esac

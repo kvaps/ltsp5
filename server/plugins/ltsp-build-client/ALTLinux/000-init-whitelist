@@ -5,10 +5,10 @@ case "$MODE" in
         
             if echo $LEVEL | grep -q '[2-5]' ; then
                 suffix="2345"
-                echo "Cleaning up startup services in init levels: $suffix ..."
+                debug "Cleaning up startup services in init levels: $suffix ..."
             else
                 suffix=$LEVEL
-                echo "Cleaning up startup services in rc$suffix.d ..."
+                debug "Cleaning up startup services in rc$suffix.d ..."
             fi
         
             RC_DIR=$(cd $ROOT/etc/rc.d/rc$LEVEL.d/; ls S*)

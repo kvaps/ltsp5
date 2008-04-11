@@ -4,7 +4,120 @@ case "$MODE" in
 	    add_option "timestamp" "`eval_gettext "Print stage times (seconds)"`" "advanced" "false"
 	    add_option "progressbar" "`eval_gettext "Draw progress bar"`" "advanced" "false"
 	;;
+
     configure)
+	progress_timestamp()
+	{
+	    local p s
+	    s="$hook"
+	    if [ "x$2" != "xstage" ]; then
+		p=$(basename "$filename")
+		s="$s ${p:4}"
+	    fi
+	    echo "progress: $(($(date +%s) - $start_time)) $s"
+	}
+
+	progress_ext()
+	{
+	    local n plugin
+	    plugin="$(basename "$filename")"
+	    n=${plugin:0:3}
+	    if [ "x$n" = "x000" -o "x$n" = "x999" ]; then
+		plugin=""
+	    fi
+	    case "$1" in
+		[[:digit:]]*)
+		    PROGRESS_VALUE=$1
+		    echo "progress: $PROGRESS_VALUE $hook:$plugin"
+		    ;;
+		plugin)
+		    echo "progress: $PROGRESS_VALUE $hook:$plugin"
+		    ;;
+		stage)
+		    echo "progress: $PROGRESS_VALUE $hook:$plugin"
+		    ;;
+		done)
+		    echo
+		    echo "$(basename "$0") done"
+		    echo
+		    echo "progress: 1000 done"
+		    ;;
+		init)
+		    echo "progress: 0 configure"
+		    ;;
+	    esac
+	}
+
+	progress_norm()
+	{
+	    local n plugin
+	    plugin="$(basename "$filename")"
+	    n=${plugin:0:3}
+	    if [ "x$n" = "x000" -o "x$n" = "x999" ]; then
+		plugin=" "
+	    fi
+	    case "$1" in
+		[[:digit:]]*)
+		    PROGRESS_VALUE=$((($1+5)/10))
+		    printf "\r%-16s %-24s %3d%%" "$hook:" "$plugin" $PROGRESS_VALUE
+		    ;;
+		plugin)
+		    printf "\r%-16s %-24s %3d%%" "$hook:" "$plugin" $PROGRESS_VALUE
+		    ;;
+		stage)
+		    printf "\r%-16s %-24s %3d%%" "$hook:" "$plugin" $PROGRESS_VALUE
+		    ;;
+		done)
+		    echo
+		    echo "$(basename "$0") done"
+		    echo
+		    ;;
+		init)
+		    echo
+		    printf "\r%-16s %-24s %3d%%" "$hook:" "$plugin" 0
+		    ;;
+	    esac
+	}
+
+	progressbar_init()
+	{
+	    local KDIALOG
+	    if KDIALOG=$(kdialog --geometry 600x10 --progressbar "ltsp-build-client" 1000 2>/dev/null); then
+		KDIALOG_CLIENT=$(dcopclient $KDIALOG)
+		KDIALOG_OBJECT=$(dcopobject $KDIALOG)
+		dcop $KDIALOG_CLIENT $KDIALOG_OBJECT showCancelButton true
+		return 0
+	    else
+		return 1
+	    fi
+	}
+
+	progressbar()
+	{
+	    if [ -n "$KDIALOG_CLIENT" -a "x$(dcop $KDIALOG_CLIENT $KDIALOG_OBJECT wasCancelled)" = "xtrue" ]; then
+		dcop $KDIALOG_CLIENT $KDIALOG_OBJECT close
+		echo >&2
+		exit 255
+	    fi
+	    case "$1" in
+		[[:digit:]]*)
+		    dcop $KDIALOG_CLIENT $KDIALOG_OBJECT setProgress $1
+		    ;;
+		plugin)
+		    dcop $KDIALOG_CLIENT $KDIALOG_OBJECT setLabel "$hook: $(basename "$filename")"
+		    ;;
+		stage)
+		    dcop $KDIALOG_CLIENT $KDIALOG_OBJECT setLabel "$hook"
+		    ;;
+		done)
+		    dcop $KDIALOG_CLIENT $KDIALOG_OBJECT close
+		    ;;
+		init)
+		    progressbar_init || PROGRESS=true
+		    ;;
+	    esac
+	}
+
 	PROGRESS=true
 	if [ -n "$option_progress_value" ]; then
 	    exec 2>/dev/null
@@ -17,6 +130,7 @@ case "$MODE" in
 	fi
 	$PROGRESS stage
         ;;
+
     *)
 	$PROGRESS stage
 	;;

@@ -1,5 +1,36 @@
 case "$MODE" in
     install)
+	scratch_build()
+	{
+	    EtcAptDir=$(mktemp -d -t apt.XXXXXXXX)
+	    echo "Dir::Etc::main \"/dev/null\";" > "$EtcAptDir/apt.conf"
+	    echo "Dir::Etc::parts \"/var/empty\";" >> "$EtcAptDir/apt.conf"
+	    echo "Dir::Etc::SourceParts \"/var/empty\";" >> "$EtcAptDir/apt.conf"
+	    echo "Dir::Etc::sourcelist \"$sources_list\";" >> "$EtcAptDir/apt.conf"
+	    mkdir -p "$ROOT"/{etc,var/lib}/rpm
+	    rpm --initdb --root "$ROOT" >&2
+	    $SETARCH apt-get $APT_VERBOSE update --config-file="$EtcAptDir/apt.conf" -o RPM::RootDir="$ROOT" >&2
+	    $SETARCH apt-get -y $APT_VERBOSE install --config-file="$EtcAptDir/apt.conf" -o RPM::RootDir="$ROOT" apt chrooted-resolv >&2
+	    rm -rf "$EtcAptDir"
+	    if echo "$MIRROR $EXTRA_MIRROR" | egrep -q '(ftp|http|ssh|rsh)://'; then
+		if cp --preserve=mode,ownership /etc/resolv.conf "$ROOT"/etc/; then
+		    $SETARCH chroot "$ROOT" update_chrooted -f conf
+		fi
+	    fi
+	}
+
+	tar_build()
+	{
+	    tar -C "$ROOT" -x${1}f "$CHROOT_IMAGE"
+	}
+
+	cpio_build()
+	{
+	    pushd "$ROOT"
+	    ${1}cat "$CHROOT_IMAGE" | cpio -i -m --no-absolute-filenames -d
+	    popd
+	}
+
 	if [ -n "$CHROOT_IMAGE" -a -r "$CHROOT_IMAGE" ]; then
 	    case "$CHROOT_IMAGE" in
 		*.tar.gz|*.tgz|*.tar.Z|*.tZ)

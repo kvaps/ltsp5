@@ -1,7 +1,9 @@
 case "$MODE" in
     install)
 	$PROGRESS plugin
-	$SETARCH chroot $ROOT /sbin/installkernel -n ${KERNEL_VER/-/-$KERNEL_FLAVOUR-} >&2
+	DURING_INSTALL= \
+	    $SETARCH chroot $ROOT \
+		/sbin/installkernel -n ${KERNEL_VER/-/-$KERNEL_FLAVOUR-} >&2
 	$PROGRESS 910
         ;;
 esac
