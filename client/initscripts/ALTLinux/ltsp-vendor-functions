@@ -1,0 +1,12 @@
+is_yes(){
+    boolean_is_true $1
+}
+
+is_no(){
+    boolean_is_false $1
+}
+
+MemInfo()
+{
+    sed -n '/^'$1':/ s/^'$1': *\([[:digit:]]*\).*$/\1/p' /proc/meminfo
+}

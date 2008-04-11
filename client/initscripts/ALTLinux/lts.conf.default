@@ -4,11 +4,12 @@
 # see lts_parameters.txt for valid values
 ################
 [default]
-    USE_XFS=Y
+    USE_XFS=N
     XKBLAYOUT="us,ru,uk"
     XKBVARIANT=",winkeys,winkeys"
     XKBOPTIONS="grp:ctrl_shift_toggle"
     X_COLOR_DEPTH=16
+    X_FONTS=/usr/share/fonts/bitmap/misc:unscaled
     NBD_SWAP=Y
     ENCRYPT_SWAP=N
     SOUND=Y

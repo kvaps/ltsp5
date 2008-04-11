@@ -1,5 +1,5 @@
 MKINITRD_OPTIONS_DISKLESS="--omit-scsi-modules --omit-ide-modules --omit-raid-modules"
-MKINITRD_OPTIONS_NFSROOT="--$with_key nfs --$with_key af_packet"
+MKINITRD_OPTIONS_NFSROOT="--with nfs --with af_packet"
 if [ -s /etc/ltsp/ltsp-client-eth-modules.list ]; then
     if /sbin/mkinitrd --help 2>&1 | egrep -q '^[[:blank:]]*--extra[[:blank:]]+.*@'; then
 	MKINITRD_OPTIONS_MODULES=" --extra @/etc/ltsp/ltsp-client-eth-modules.list"

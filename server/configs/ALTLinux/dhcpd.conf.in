@@ -17,14 +17,14 @@ subnet 192.168.0.0 netmask 255.255.255.0 {
     option broadcast-address 192.168.0.255;
     option routers 192.168.0.1;
     option subnet-mask 255.255.255.0;
-    option root-path "192.168.0.1:/var/lib/ltsp5/@ARCH@";
+    option root-path "192.168.0.1:/var/lib/ltsp/@ARCH@";
     if substring( option vendor-class-identifier, 0, 9 ) = "PXEClient" {
-	filename "/ltsp5/@ARCH@/pxelinux.0";
+	filename "/ltsp/@ARCH@/pxelinux.0";
     } else if substring( option vendor-class-identifier, 0, 9 ) = "Etherboot" {
-	filename "/ltsp5/@ARCH@/nbi.img";
-	#filename "/ltsp5/@ARCH@/pxelinux.0";
+	filename "/ltsp/@ARCH@/nbi.img";
+	#filename "/ltsp/@ARCH@/pxelinux.0";
     } else {
-	option-129 = " initrd=/ltsp5/@ARCH@/initrd.img";
-	filename "/ltsp5/@ARCH@/vmlinuz";
+	option-129 = " initrd=/ltsp/@ARCH@/initrd.img";
+	filename "/ltsp/@ARCH@/vmlinuz";
     }
 }
