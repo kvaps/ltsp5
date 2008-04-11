@@ -96,32 +96,17 @@ configure_fstab()
 
 configure_x()
 {
-    if [ -z "$xserver_package" ]; then
-	# set default xserver
-	XSERVER_TYPE=$(basename $(readlink /usr/bin/X))
-	XSERVER_TYPE=${XSERVER_TYPE:-$(basename $(readlink /usr/bin/X))}
-	case "$XSERVER_TYPE" in
-	    Xorg) xserver_config=/etc/X11/xorg.conf ;;
-	    XFree86) xserver_config=/etc/X11/XF86Config-4 ;;
-	    *) echo "WARNING: no known X server detected" >&2 ;;
-	esac
-    fi
     # set default configuration file
-    case $xserver_package in
-	xserver-xfree86) xserver_config="/etc/X11/XF86Config-4" ;;
-	xserver-xorg) xserver_config="/etc/X11/xorg.conf" ;;
-    esac
-    if [ -n "$XF86CONFIG_FILE" ]; then
-	# User has specified a custom config
-	cp "$XF86CONFIG_FILE" "$xserver_config"
-    elif [ -n "$X_CONF" ]; then
+    xserver_config="/etc/X11/xorg.conf"
+    X_CONF="${X_CONF:-$XF86CONFIG_FILE}"
+    if [ -n "$X_CONF" ]; then
 	cp "$X_CONF" "$xserver_config"
     else
 	# Autoconfigure
 	if [ -x /usr/bin/x11_autosetup ]; then
 	    XORG_CONF=$xserver_config /usr/bin/x11_autosetup
 	elif [ -x /usr/bin/x11createconfig ]; then
-	    /usr/bin/x11createconfig  > /var/cache/ltspconf/xorg.conf
+	    /usr/bin/x11createconfig  > $xserver_config
 	    [ -x /usr/bin/x11setupdrv ] && /usr/bin/x11setupdrv
 	fi
 	# Handle overrides of specific parameters
@@ -132,21 +117,21 @@ configure_x()
 	if is_yes "$X_DISPLAYSIZE"; then
 	    true
 	elif is_no "$X_DISPLAYSIZE"; then
-	    sed -i -e 's/^\([[:blank:]]*\)\(DisplaySize[[:blank:]]\)/\1#\2/' /var/cache/ltspconf/xorg.conf
+	    sed -i -e 's/^\([[:blank:]]*\)\(DisplaySize[[:blank:]]\)/\1#\2/' $xserver_config
 	else
-	    sed -i -e "s/^\([[:blank:]]*DisplaySize[[:blank:]]*\).*$/\1$X_DISPLAYSIZE/" /var/cache/ltspconf/xorg.conf
+	    sed -i -e "s/^\([[:blank:]]*DisplaySize[[:blank:]]*\).*$/\1$X_DISPLAYSIZE/" $xserver_config
 	fi
 	X_USE_SYNC_RANGES=${X_USE_SYNC_RANGES:-Y}
 	if [ -n "$X_HORIZSYNC" -a -n "$X_VERTREFRESH" ]; then
-	    sed -i -r -e "s|^([[:blank:]]*HorizSync[[:blank:]]+).*$|\1$X_HORIZSYNC|" /var/cache/ltspconf/xorg.conf
-	    sed -i -r -e "s|^([[:blank:]]*VertRefresh[[:blank:]]+).*$|\1$X_VERTREFRESH|" /var/cache/ltspconf/xorg.conf
+	    sed -i -r -e "s|^([[:blank:]]*HorizSync[[:blank:]]+).*$|\1$X_HORIZSYNC|" $xserver_config
+	    sed -i -r -e "s|^([[:blank:]]*VertRefresh[[:blank:]]+).*$|\1$X_VERTREFRESH|" $xserver_config
 	fi
 	# Color depth preseeding
-	[ -n "$X_COLOR_DEPTH" ] && sed -i -r -e "s|^([[:blank:]]*DefaultColorDepth[[:blank:]]+).*$|\1$X_COLOR_DEPTH|" /var/cache/ltspconf/xorg.conf
+	[ -n "$X_COLOR_DEPTH" ] && sed -i -r -e "s|^([[:blank:]]*DefaultColorDepth[[:blank:]]+).*$|\1$X_COLOR_DEPTH|" $xserver_config
 	# set compatbility for X_VIDEORAM with ltsp 4.x
 	X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
 	# set video ram
-	[ -n "$X_VIDEO_RAM" ] && sed -i -r -e "s|^([[:blank:]]*VideoRam[[:blank:]]+).*$|\1$X_VIDEO_RAM|" /var/cache/ltspconf/xorg.conf
+	[ -n "$X_VIDEO_RAM" ] && sed -i -r -e "s|^([[:blank:]]*VideoRam[[:blank:]]+).*$|\1$X_VIDEO_RAM|" $xserver_config
 	# Mouse preseeding options.  Use inputattach if available
 	[ -n "$X_MOUSE_DEVICE" ]
 	[ -n "$X_MOUSE_PROTOCOL" ]
@@ -157,7 +142,7 @@ configure_x()
 	if [ Y = "${USE_XFS}" ]; then
 	    [ -z "$XFS_SERVER" ] && XFS_SERVER="$SERVER"
 	    [ -z "$XFS_PORT" ] && XFS_PORT=7100
-	    sed -i -r -e 's|^([[:blank:]]*FontPath[[:blank:]]+).*$|\1"/usr/share/fonts/bitmap/misc:unscaled\;tcp/'$XFS_SERVER':'$XFS_PORT'"|' /var/cache/ltspconf/xorg.conf
+	    sed -i -r -e 's|^([[:blank:]]*FontPath[[:blank:]]+).*$|\1"/usr/share/fonts/bitmap/misc:unscaled\;tcp/'$XFS_SERVER':'$XFS_PORT'"|' $xserver_config
 	fi
 
 	# Make sure xkb values only get preseeded if the variables are actually set
@@ -172,7 +157,6 @@ configure_x()
 	    done
 	fi
 	[ -n "$XKBOPTION" ] && echo "-option $XKBOPTION" >> /etc/X11/xinit/Xkbmap
-	cp -f /var/cache/ltspconf/xorg.conf "$xserver_config"
 	[ -x /usr/bin/x11_autosetup ] || [ -x /usr/bin/x11setupdrv ] && /usr/bin/x11setupdrv
     fi
 }

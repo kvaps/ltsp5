@@ -19,6 +19,7 @@ SourceIfNotEmpty /etc/sysconfig/ltsp-client
 LOCKFILE=/var/lock/subsys/ltsp-client
 RETVAL=0
 
+SourceIfNotEmpty /usr/share/ltsp/ltsp-common-functions
 [ -f /etc/ltsp_chroot ] && SourceIfNotEmpty /usr/share/ltsp/ltsp_config || exit 0
 
 # Set variable
@@ -73,6 +74,14 @@ start_nasd()
     fi
 }
 
+xaudio_on()
+{
+    [ -f @XORGEXTDIR@/libaudio.so ] &&
+	xconf -Laudio /etc/X11/xorg.conf /etc/X11/xorg.conf &&
+	    AUDIO_SERVER="XAUDIO"
+    return 0
+}
+
 set_sound_volume()
 {
     [ -x /usr/bin/amixer ] && /usr/bin/amixer -q set Front 100% unmute 2>/dev/null
@@ -95,12 +104,13 @@ start_sound()
 	    pulse|pulseaudio) start_pulseaudio ;;
 	    esd|esound) start_esound ;;
 	    nas|nasd) start_nasd ;;
+	    xaudio) xaudio_on ;;
 	    '') grep -q '^snd_pcm ' /proc/modules && start_esound || start_nasd ;;
 	    *) echo "Unable to start unsupported sound daemon: '$SOUND_DAEMON'" >&2	;;
 	esac
 	if is_yes "$INFO"; then
-	    set_info AUDIO_SERVER $AUDIO_SERVER
-	    set_info AUDIO_PORT $AUDIO_PORT
+	    [ -z "$AUDIO_SERVER" ] || set_info AUDIO_SERVER $AUDIO_SERVER
+	    [ -z "$AUDIO_PORT" ] || set_info AUDIO_PORT $AUDIO_PORT
 	fi
 	set_sound_volume
     fi
