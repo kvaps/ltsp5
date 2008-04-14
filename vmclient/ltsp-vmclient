@@ -1,8 +1,10 @@
 #!/bin/sh
 
 # vmwarevga is better than cirrus or vesa
-strings /usr/bin/qemu-kvm |grep vmwarevga > /dev/null
-[ $? -eq 0 ] && VGAOPTION="-vmwarevga"
+# but it is pretty broken
+# TODO: Split this out into a config file
+#strings /usr/bin/qemu-kvm |grep vmwarevga > /dev/null
+#[ $? -eq 0 ] && VGAOPTION="-vmwarevga"
 
 # e1000 is much better than the default rtl8139
 [ -e /usr/share/kvm/pxe-e1000.bin ] && NICMODEL=",model=e1000" 
