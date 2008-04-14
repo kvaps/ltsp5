@@ -21,6 +21,7 @@ reboot
 ltsp-client
 ltspfsd
 ldm
+alsa-utils
 aspell
 aspell-en
 atk
@@ -153,6 +154,8 @@ popt
 rpcbind
 procps
 psmisc
+pulseaudio-utils
+pulseaudio-module-x11
 python
 python-sqlite2
 python-urlgrabber

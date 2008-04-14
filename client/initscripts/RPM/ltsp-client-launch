@@ -56,6 +56,8 @@ if [ -n "$num" ]; then
 fi
 done
 
+# /dev/dsp must be owned by pulse
+chown pulse /dev/dsp
 start_sound
 configure_localdev
 
