@@ -9,6 +9,4 @@ repo --name=updates-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?r
 repo --name=temporary-9 --baseurl=http://togami.com/~k12linux-temporary/fedora/9/i386/
 
 %include ../common.ks
-# TODO: This is a temporary hack, it should be a dep from initscripts instead.
-event-compat-sysv
 %end
