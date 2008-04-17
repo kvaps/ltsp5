@@ -84,13 +84,6 @@ configure_fstab() {
     fi
 }
 
-configure_x() {
-    # If the user has specified an xorg.conf file, then copy it over.
-    xserver_config="/etc/X11/xorg.conf"
-    [ -n "$X_CONF" ] && [ -f "$X_CONF" ] && \
-        cp "$X_CONF" "$xserver_config"
-}
-
 bind_mounts () {
     # set defaults
     test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
