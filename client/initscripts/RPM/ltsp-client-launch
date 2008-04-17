@@ -56,10 +56,15 @@ if [ -n "$num" ]; then
 fi
 done
 
+# TODO: Move these into service ltsp-client-setup
+configure_localdev
+configure_swap 
+configure_serial_mouse
+configure_printer
+
 # /dev/dsp must be owned by pulse
 chown pulse /dev/dsp
 start_sound
-configure_localdev
 
 while :; do
     sleep 365d
