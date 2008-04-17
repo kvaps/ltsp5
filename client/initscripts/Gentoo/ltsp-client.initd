@@ -4,19 +4,15 @@
 # $Header: $
 
 depend() {
-        need ltsp-client-setup
-}
-
-checkconfig() {
-        if [ ! -f  /etc/ltsp_chroot ] ; then
-                eerror "You are not an in LTSP chroot"
-                return 1
-        fi
+    need ltsp-client-setup
 }
 
 start() {
-	checkconfig || return 1
 	ebegin "Starting LTSP Client"
+    # CONFIGURE_X does not seem to work atm, and since X can configure itself
+    # pretty well, we may remove it some day, force it off
+    CONFIGURE_X=${CONFIGURE_X:-F}
+    export CONFIGURE_X
 	. /usr/share/ltsp/ltsp-init-common
 
         # if usplash is running, make sure to stop it now 
@@ -33,6 +29,7 @@ start() {
             usplash=false
             #log_end_msg=log_end_msg
         fi
+        #CONFIGURE
         configure_x || true
         for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
             eval num=\$SCREEN_$screen
@@ -56,4 +53,3 @@ start() {
             done
         fi
 }
-
