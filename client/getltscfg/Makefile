@@ -25,7 +25,7 @@ getltscfg.o:	getltscfg.c		\
 parser.tab.o:	parser.tab.c
 	cc -c parser.tab.c $(CCFLAGS) -o parser.tab.o
 
-lexer.o:	lexer.c
+lexer.o:	lexer.c parser.tab.c
 	cc -c lexer.c $(CCFLAGS) -o lexer.o
 
 parser.tab.c:	parser.y		\
