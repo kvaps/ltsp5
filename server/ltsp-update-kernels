@@ -79,7 +79,7 @@ for TFTPDIR in $TFTPDIRS ; do
         fi
     done
     # Update selinux file contexts if necessary
-    [ -f /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR &> /dev/null
+    [ -f /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR > /dev/null
 done
 
 exit 0
