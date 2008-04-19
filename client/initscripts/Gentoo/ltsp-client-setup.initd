@@ -18,8 +18,7 @@ start() {
         checkconfig || return 1
         ebegin "Setting up LTSP client"
         
-        . /usr/share/ltsp/ltsp_config
-        . /usr/share/ltsp/ltsp-common-functions
+        . /usr/share/ltsp/ltsp-init-common
 
         type usplash_write >/dev/null 2>/dev/null && \
         usplash_write "TIMEOUT 120" || true
@@ -57,45 +56,6 @@ configure_console() {
     fi
 }
 
-configure_swap() {
-    if boolean_is_true "$USE_LOCAL_SWAP" ; then
-        # Enable local swap partition if found on local disk
-        for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
-            swap_devices="$swap_devices $part"
-        done
-    fi
-
-    if boolean_is_true "$NBD_SWAP" ; then
-        SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
-        NBD_PORT=${NBD_PORT:-"9210"}
-        modprobe nbd
-        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd0 && \
-            swap_devices="$swap_devices /dev/nbd0"
-    fi
-
-    if boolean_is_true "$ENCRYPT_SWAP" ; then
-        if [ -x /sbin/cryptsetup ]; then
-            modprobe dm_crypt
-        else
-            echo "ERROR: ENCRYPT_SWAP=Y, but /sbin/cryptsetup not found. disabling swap."
-            swap_devices=""
-        fi
-    fi
-
-    num=0
-    for device in $swap_devices ; do
-        swap="$device"
-        if boolean_is_true "$ENCRYPT_SWAP" ; then
-            if [ -x /sbin/cryptsetup ]; then
-                cryptsetup -d /dev/urandom create swap$num $swap && swap="/dev/mapper/swap$num"
-                num=$(($num+1))
-            fi
-        fi
-        mkswap $swap
-        swapon $swap
-    done
-}
-
 configure_resolver() {
     hostname=$(hostname)
     if [ "(none)" = "$hostname" ] ; then
@@ -121,15 +81,6 @@ EOF
     fi
 }
 
-configure_printer() {
-    for I in 0 1 2; do
-        eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
-        [ -n "${DEVICE}" ] && \
-            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} && \
-            /usr/sbin/jetpipe ${DEVICE} ${PORT}
-    done
-}
-
 configure_syslog() {
     if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
         SYSLOG_HOST=${SYSLOG_HOST:-"${SERVER}"}
@@ -148,22 +99,6 @@ configure_fstab() {
         echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
         mount /tmp
     fi
-}
-
-configure_x() {
-    # If the user has specified an xorg.conf file, then copy it over.
-    xserver_config="/etc/X11/xorg.conf"
-    [ -n "$X_CONF" ] && [ -f "$X_CONF" ] && \
-        cp "$X_CONF" "$xserver_config"
-}
-
-configure_serial_mouse() {
-      if [ -n "$X_MOUSE_DEVICE" ] && \
-          [ -n "$X_MOUSE_PROTOCOL" ] && \
-          type inputattach >/dev/null 2>/dev/null && \
-          [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
-          inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
-      fi
 }
 
 bind_mounts () {
