@@ -7,3 +7,7 @@ boolean_is_true(){
        *) return 1 ;;
     esac
 }
+
+if [ -f /usr/share/ltsp/ltsp-vendor-functions ]; then
+    . /usr/share/ltsp/ltsp-vendor-functions
+fi

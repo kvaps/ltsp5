@@ -10,7 +10,7 @@ x_login_num()
 DIALOG=
 TIMEOUT=30
 
-. /usr/share/ltsp/functions
+. /usr/share/ltsp/ltsp-common-functions
 
 UVer()
 {

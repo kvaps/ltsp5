@@ -71,6 +71,9 @@ debug() {
     if [ -n "$DEBUG" ]; then
         echo "DEBUG: $@" > /dev/stderr
     fi
+    if [ -n "$DEBUG_FILE" ]; then
+        echo "DEBUG: $@" >> $DEBUG_FILE
+    fi
 }
 
 # Use it to mount thing on chroot and those will be automaticaly

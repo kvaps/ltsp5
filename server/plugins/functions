@@ -49,7 +49,7 @@ load_plugins() {
         for dir in $PLUGIN_DIRS ; do
             filename="$dir/$name"
             if [ -f "$filename" ]; then 
-                debug "Loading plugin: $filename"
+                debug "Loading plugin: $MODE: $filename"
                 . "$filename"
                 break
             fi

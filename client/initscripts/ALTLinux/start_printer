@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# Copyright (c) 2002 by James A. McQuillan (McQuillan Systems, LLC)
+# Copyright (c) 2008 by Led <ledest at gmail.com>
+#
+# This software is licensed under the Gnu General Public License version 2,
+# the full text of which can be found in the COPYING file.
+
+PNUM=$1
+
+. /usr/share/ltsp/ltsp-common-functions
+
+eval DEVICE=\$PRINTER_${PNUM}_DEVICE
+
+# Either we run the print server, or we sleep for a while.
+# we need sleep, because init is going to continue respawning
+# if we don't do something.
+if [ -z "$DEVICE" ]; then
+    exec sleep 300
+else
+    eval TYPE=\$PRINTER_${PNUM}_TYPE
+    eval PORT=\$PRINTER_${PNUM}_PORT; PORT=${PORT:-910$PNUM}
+
+    # Check the Write-Only option
+    eval DEVWO=\$PRINTER_${PNUM}_WRITE_ONLY
+    is_yes $DEVWO && WO_OPT="-w" || WO_OPT=""
+
+    # serial printer
+    if [ "x$TYPE" = "xS" ]; then
+	eval SPEED=\$PRINTER_${PNUM}_SPEED
+	eval FLOWCTRL=\$PRINTER_${PNUM}_FLOWCTRL
+	eval PARITY=\$PRINTER_${PNUM}_PARITY
+	eval DATABITS=\$PRINTER_${PNUM}_DATABITS
+	SERIAL_OPTS=${SPEED:-9600}
+	[ "x$FLOWCTRL" = "xS" ] && SERIAL_OPTS="$SERIAL_OPTS ixon ixoff -crtscts" || SERIAL_OPTS="$SERIAL_OPTS -ixon -ixoff crtscts"
+	case "x$PARITY" in
+	    xE)	SERIAL_OPTS="$SERIAL_OPTS parenb -parodd" ;;
+	    xO)	SERIAL_OPTS="$SERIAL_OPTS parenb parodd" ;;
+	    *)	SERIAL_OPTS="$SERIAL_OPTS -parity" ;;
+	esac
+	[ "x$DATABITS" = "x7" ] && SERIAL_OPTS="$SERIAL_OPTS cs7" || SERIAL_OPTS="$SERIAL_OPTS cs8"
+    fi
+
+    # Get printer options
+    eval PRT_OPTIONS=\$PRINTER_${PNUM}_OPTIONS
+    PRT_OPTS="$SERIAL_OPTS $PRT_OPTIONS"
+
+    if which lp_server >/dev/null 2>&1; then
+	if [ -n "${PRT_OPTS//[[:blank:]]}" ]; then
+	    logger -t lp_server "Started with: -n $PORT $WO_OPT -d $DEVICE -t \"$PRT_OPTS\""
+	    exec lp_server -n $PORT $WO_OPT -d $DEVICE -t "$PRT_OPTS" >/dev/null 2>&1
+	else
+	    logger -t lp_server "Started with: -n $PORT $WO_OPT -d $DEVICE"
+	    exec lp_server -n $PORT $WO_OPT -d $DEVICE >/dev/null 2>&1
+	fi
+    elif which jetpipe >/dev/null 2>&1; then
+	logger -t jetpipe "Started with: $PORT $DEVICE"
+	jetpipe $DEVICE $PORT >/dev/null 2>&1
+    fi
+fi

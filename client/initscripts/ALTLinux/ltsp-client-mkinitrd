@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ $# -ge 2 ] && /sbin/mkinitrd $@; then
+    shift $(($#-2))
+    chmod a+r $1
+    if [ -x /usr/sbin/mkelfImage ]; then
+	BOOT_DIR="$(dirname $1)"
+	for p in `grep '^DEFAULT[[:blank:]]' "$BOOT_DIR/pxelinux.cfg/default"`; do
+	    case $p in
+		DEFAULT|vmlinu*|ro|rw|initrd=*) continue ;;
+		*) CMD_LINE="${CMD_LINE:+$CMD_LINE }$p" ;;
+	    esac
+	done
+	rm -f "$BOOT_DIR/nbi-$2.img"
+	if /usr/sbin/mkelfImage --output="$BOOT_DIR/nbi-$2.img" --initrd="$1" --type=bzImage-i386 --kernel="$BOOT_DIR/vmlinuz-$2" ${CMD_LINE:+--command-line="$CMD_LINE"}; then
+	    chmod u+w "$BOOT_DIR/nbi-$2.img"
+	    ln -sf "nbi-$2.img" "$BOOT_DIR/nbi.img"
+	fi
+    fi
+fi
