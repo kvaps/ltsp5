@@ -1,5 +1,14 @@
-use_linux32
-chroot_dir /opt/ltsp/i386
+install_mode chroot
+
+# TODO: support other arches
+if [ -z "${LTSP_ARCH}" ]; then
+    LTSP_ARCH="x86"
+fi
+
+if [ "${LTSP_ARCH}" = "x86" ]; then
+    use_linux32
+fi
+chroot_dir /opt/ltsp/${LTSP_ARCH}
 
 # TODO: most of this shell code can go into a pre install or post install script
 #       seperate from the profile
@@ -15,19 +24,17 @@ pre_sanity_check_config () {
     else 
         stage_uri="${STAGE_URI}"
     fi
-    
-    if [ -z "${TIMEZONE}" ]; then
-        # For OpenRC
-        if [ -e /etc/timezone ]; then
-            TIMEZONE="$(</etc/timezone)"
-        else
-            . /etc/conf.d/clock
-        fi
-    fi
-
-    timezone="${TIMEZONE}"
-    extra_packages="joystick ltspfs ldm ltsp-client xdm ${PACKAGES}"
 }
+if [ -z "${TIMEZONE}" ]; then
+    # For OpenRC
+    if [ -e /etc/timezone ]; then
+        TIMEZONE="$(</etc/timezone)"
+    else
+        . /etc/conf.d/clock
+    fi
+fi
+timezone ${TIMEZONE}
+
 # Skip all this
 skip partition
 skip setup_md_raid
@@ -92,21 +99,21 @@ EOF
 net-misc/ltsp-client
 x11-misc/ldm
 sys-fs/ltspfs
-sys-apps/openrc
-sys-apps/baselayout
-x11-themes/gtk-engines-ubuntulooks
+# needed for ldm
+=x11-themes/gtk-engines-ubuntulooks-0.9.12*
 EOF
 
 # temporary overrides (hopefully)
     cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<EOF
+sys-apps/openrc
+sys-apps/baselayout
+=sys-kernel/genkernel-3.4.10*
 # needed for baselayout2
-=sys-fs/udev-118*
+=sys-fs/udev-118-r2
 # stable fails on 2.6.24 kernel
 =sys-fs/fuse-2.7.2*
 # stable version didn't compile
 =sys-block/nbd-2.9.2
-# needed for ldm
-x11-themes/gtk-engines-ubuntulooks
 EOF
 
     cat >> ${chroot_dir}/etc/portage/package.unmask/ltsp <<EOF
@@ -119,6 +126,8 @@ EOF
 pre_install_extra_packages() {
     spawn_chroot "emerge --update --deep world"
 }
+
+extra_packages joystick ltspfs ldm ltsp-client xdm ${PACKAGES}
 
 post_install_extra_packages() {
     # point /etc/mtab to /proc/mounts
