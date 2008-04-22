@@ -23,7 +23,9 @@ case "$MODE" in
             STAGE_URI="$option_stage_uri_value"
         fi
 
-        RCS_WHITELIST="bootmisc checkfs root clock consolefont hostname keymaps localmount ltsp-client-setup modules net.lo rmnologin urandom"
+        RCS_WHITELIST="bootmisc fsck root hwclock consolefont hostname \
+                       keymaps localmount ltsp-client-setup modules mtab \
+                       net.lo procfs rmnologin sysctl termencoding urandom"
         RC2_WHITELIST="nbd-client splash local ltsp-client syslog-ng"
         OVERRIDE_EXPORTS="true"
 
