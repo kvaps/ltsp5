@@ -35,7 +35,7 @@ case "$MODE" in
         printf "`eval_gettext "Installing into: %s"`\n" $ROOT
         
         PACKAGES="${PACKAGES}" STAGE_URI="${STAGE_URI}" MIRRORS="${MIRRORS}" \
-        MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" LTSP_ARCH="${ARCH} \
+        MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" LTSP_ARCH="${ARCH}" \
         quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
     ;;
 esac
