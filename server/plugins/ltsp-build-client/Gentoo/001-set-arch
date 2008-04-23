@@ -1,0 +1,36 @@
+# Set Architecture for Chroot Install
+# 32bit and 64bit x86 architectures assume you want a x86 chroot because that is the most common.
+# Use ltsp-build-client --arch amd64 to override.
+# Similarly ppc64 assumes you want a ppc chroot.
+# Use ltsp-build-client --arch ppc64  to override.
+
+case "$MODE" in
+    commandline)
+        add_option "arch" "`eval_gettext "set the target architecture"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_arch_value" ]; then
+            ARCH_OPT="$option_arch_value"
+        else
+            # ARCH is not explicitly set by config or command line, get it from the environment
+            ARCH_OPT=$(uname -m | sed -e 's:i[3-6]86:x86:' -e 's:x86_64:amd64:')
+            # If amd64 then default to x86 chroot.
+            [ "$ARCH_OPT" == "amd64" ] && ARCH_OPT=x86
+            # If ppc64 then default to ppc chroot.
+            #[ "$ARCH_OPT" == "ppc64" ] && ARCH_OPT=ppc
+        fi
+
+        # Validate the proposed architecture value.
+        case "$ARCH_OPT" in
+            x86|amd64)
+                ARCH=$ARCH_OPT
+            ;;
+
+            *)
+            printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
+            printf "`eval_gettext "       supported values are: %s"`", "x86 amd64"
+            exit 1
+            ;;
+        esac      
+        ;;
+esac
