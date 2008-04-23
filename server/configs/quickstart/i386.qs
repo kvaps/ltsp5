@@ -1,14 +1,13 @@
 install_mode chroot
 
-# TODO: support other arches
-if [ -z "${LTSP_ARCH}" ]; then
-    LTSP_ARCH="x86"
+if [ -z "${CHROOT}" ]; then
+    CHROOT="x86"
 fi
 
-if [ "${LTSP_ARCH}" = "x86" ]; then
+if [ "${CHROOT}" = "x86" ]; then
     use_linux32
 fi
-chroot_dir /opt/ltsp/${LTSP_ARCH}
+chroot_dir /opt/ltsp/${CHROOT}
 
 # TODO: most of this shell code can go into a pre install or post install script
 #       seperate from the profile
