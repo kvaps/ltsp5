@@ -6,7 +6,7 @@
 # conf-file=/etc/ltsp/dhcpd-dnsmasq
 
 # ip ranges to hand out
-dhcp-range=192.168.1.100,192.168.1.250,1h
+dhcp-range=192.168.0.20,192.168.0.250,1h
 
 # rootpath option
 dhcp-option=17,/opt/ltsp/i386
