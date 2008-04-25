@@ -11,7 +11,7 @@ case "$MODE" in
             QUICKSTART_PROFILE="$option_quickstart_profile_value"
             printf "`eval_gettext "Manual Quickstart: %s"`\n" $QUICKSTART_PROFILE
         else
-            QUICKSTART_PROFILE="/etc/ltsp/quickstart/$ARCH.qs"
+            QUICKSTART_PROFILE="/etc/ltsp/quickstart/profile.qs"
             printf "`eval_gettext "Default Quickstart profile: %s"`\n" $QUICKSTART_PROFILE
         fi
 
@@ -35,7 +35,7 @@ case "$MODE" in
         printf "`eval_gettext "Installing into: %s"`\n" $ROOT
         
         PACKAGES="${PACKAGES}" STAGE_URI="${STAGE_URI}" MIRRORS="${MIRRORS}" \
-        MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" ROOT="${ROOT}" \
+        MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" ARCH="${ARCH}" \
         quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
     ;;
 esac
