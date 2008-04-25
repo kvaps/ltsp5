@@ -1,22 +1,24 @@
 install_mode chroot
 
-if [ -z "${CHROOT}" ]; then
-    CHROOT="x86"
+if [ -z "${ARCH}" ]; then
+    ARCH="x86"
 fi
 
-if [ "${CHROOT}" = "x86" ]; then
+if [ "${ARCH}" = "x86" ]; then
     use_linux32
 fi
-chroot_dir /opt/ltsp/${CHROOT}
+
+if [ -z "${BASE}" ]; then
+    BASE="/opt/ltsp"
+fi
+
+chroot_dir ${BASE}/${CHROOT}
 
 # TODO: most of this shell code can go into a pre install or post install script
 #       seperate from the profile
 
 pre_sanity_check_config () {
-    # Get variables we need (we could use a seperate pre install script)
-    # As far as i can tell, we can't inject into the quickstart configuration
-    # with our own environment variables any other place than here, since
-    # many variables are evaluated before the script is actually ran
+    # we can't use the wrapper stage_uri due the way the sanity check is done in quickstart
     if [ -z "${STAGE_URI}" ]; then
         # TODO: switch this to current when 2008.0 leaves beta
         stage_uri="http://distfiles.gentoo.org/releases/${arch}/2008.0_beta1/stage3-${arch}-2008.0_beta1.tar.bz2"
@@ -108,11 +110,8 @@ sys-apps/openrc
 sys-apps/baselayout
 =sys-kernel/genkernel-3.4.10*
 # needed for baselayout2
-=sys-fs/udev-118-r2
 # stable fails on 2.6.24 kernel
 =sys-fs/fuse-2.7.2*
-# stable version didn't compile
-=sys-block/nbd-2.9.2
 EOF
 
     cat >> ${chroot_dir}/etc/portage/package.unmask/ltsp <<EOF
