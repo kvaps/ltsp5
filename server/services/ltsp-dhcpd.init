@@ -18,7 +18,7 @@
 # description: dhcpd provides the Dynamic Host Configuration Protocol (DHCP) \
 #              server
 # processname: dhcpd
-# config: /etc/ltsp/ltsp-dhcpd.conf
+# config: /etc/ltsp/dhcpd.conf
 # config: /var/lib/dhcpd/dhcpd.leases
 # pidfile: /var/run/dhcpd.pid
 
@@ -45,7 +45,7 @@ findConfig() {
             continue
         fi
     done
-    echo "/etc/ltsp/ltsp-dhcpd.conf"
+    echo "/etc/ltsp/dhcpd.conf"
 }
 
 conf="$(findConfig "$DHCPDARGS")"
