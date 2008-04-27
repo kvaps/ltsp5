@@ -12,9 +12,9 @@ test -f /etc/ltsp_chroot || exit 0
 # Make sure LANG is set
 if [ -z "$LANG" ]
 then
-  if [ -f /etc/sysconfig/language ]
+  if [ -f /etc/sysconfig/i18n ]
   then
-    LANG=`. /etc/sysconfig/language; echo $RC_LANG`
+    . /etc/sysconfig/i18n
     export LANG
   fi
 fi
