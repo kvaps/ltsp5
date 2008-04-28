@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # XXX: Not sure if this script is needed anymore.
-exit
+exit;
 
 $config_file = "/etc/X11/xdm/Xaccess";
 $bkup_file = $config_file . ".ltsp.orig";

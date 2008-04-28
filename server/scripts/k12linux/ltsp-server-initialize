@@ -59,7 +59,7 @@ fi
 # get the network settings, exit if the config files are not found
 #######################################################################
 
-if [ ! -f /etc/sysconfig/network-scripts/ifcfg-$DEV ];
+if [ ! -f /etc/sysconfig/network-scripts/ifcfg-$DEV ]; then
     echo
     echo "ERROR: File not found: /etc/sysconfig/network-scripts/ifcfg-$DEV"
     exit 1
