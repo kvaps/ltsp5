@@ -26,5 +26,10 @@ case "$MODE" in
         # Ugly hack: Allow yum to work when chrooted on server
         # You still need to mount /proc manually though
         cp /etc/resolv.conf $ROOT/etc/resolv.conf
+
+        # Hack: ltspfsd fails to mount anything if /etc/mtab is missing
+        # Even a blank /etc/mtab works but this is a bit more tested
+        # so we will use it for now.
+        echo "/dev/root / auto rw,noatime 0 0" > $ROOT/etc/mtab
         ;;
 esac
