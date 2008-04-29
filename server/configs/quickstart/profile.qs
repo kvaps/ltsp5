@@ -21,7 +21,7 @@ pre_sanity_check_config () {
     # we can't use the wrapper stage_uri due the way the sanity check is done in quickstart
     if [ -z "${STAGE_URI}" ]; then
         # TODO: switch this to current when 2008.0 leaves beta
-        stage_uri="http://distfiles.gentoo.org/releases/${arch}/2008.0_beta1/stage3-${arch}-2008.0_beta1.tar.bz2"
+        stage_uri="http://distfiles.gentoo.org/releases/${arch}/2008.0_beta2/stage3-${arch}-2008.0_beta2.tar.bz2"
     else 
         stage_uri="${STAGE_URI}"
     fi
