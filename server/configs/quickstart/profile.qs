@@ -12,7 +12,12 @@ if [ -z "${BASE}" ]; then
     BASE="/opt/ltsp"
 fi
 
-chroot_dir ${BASE}/${CHROOT}
+if [ -z "$CHROOT" ]; then
+    CHROOT="${BASE}/${ARCH}"
+fi
+
+chroot_dir $CHROOT
+
 
 # TODO: most of this shell code can go into a pre install or post install script
 #       seperate from the profile
@@ -21,7 +26,7 @@ pre_sanity_check_config () {
     # we can't use the wrapper stage_uri due the way the sanity check is done in quickstart
     if [ -z "${STAGE_URI}" ]; then
         # TODO: switch this to current when 2008.0 leaves beta
-        stage_uri="http://distfiles.gentoo.org/releases/${arch}/2008.0_beta2/stage3-${arch}-2008.0_beta2.tar.bz2"
+        stage_uri="http://distfiles.gentoo.org/releases/${arch}/2008.0_beta2/stages/stage3-${arch}-2008.0_beta2.tar.bz2"
     else 
         stage_uri="${STAGE_URI}"
     fi
@@ -111,7 +116,7 @@ sys-apps/baselayout
 =sys-kernel/genkernel-3.4.10*
 # needed for baselayout2
 # stable fails on 2.6.24 kernel
-=sys-fs/fuse-2.7.2*
+=sys-fs/fuse-2.7.3*
 EOF
 
     cat >> ${chroot_dir}/etc/portage/package.unmask/ltsp <<EOF
@@ -122,6 +127,9 @@ EOF
 }
 
 pre_install_extra_packages() {
+    # TODO: remove this hack
+    spawn_chroot "emerge --unmerge mktemp"
+
     spawn_chroot "emerge --update --deep world"
 }
 
@@ -135,7 +143,7 @@ post_install_extra_packages() {
     mkdir ${chroot_dir}/var/lib/nfs
 
     # Set a default hostname
-    echo 'HOSTNAME="ltsp"' > $ROOT/etc/conf.d/hostname
+    echo 'HOSTNAME="ltsp"' > ${chroot_dir}/etc/conf.d/hostname
  
     spawn_chroot "rm /etc/init.d/net.eth0"
 
