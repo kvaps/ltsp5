@@ -12,11 +12,15 @@ if [ -z "${BASE}" ]; then
     BASE="/opt/ltsp"
 fi
 
-if [ -z "$CHROOT" ]; then
-    CHROOT="${BASE}/${ARCH}"
+if [ -z "${CHROOT}" ]; then
+    CHROOT=ARCH
 fi
 
-chroot_dir $CHROOT
+if [ -z "${ROOT}" ]; then
+    ROOT="${BASE}/${CHROOT}"
+fi
+
+chroot_dir $ROOT
 
 
 # TODO: most of this shell code can go into a pre install or post install script
