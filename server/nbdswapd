@@ -18,7 +18,7 @@ fi
 
 if [ -n "$SWAPDIR" ]; then
     if [ -d "$SWAPDIR" ] && [ -w "$SWAPDIR" ]; then
-        TEMPFILE_OPTS="${SWAPDIR}XXXXXX"
+        TEMPFILE_OPTS="${SWAPDIR}/XXXXXX"
     else
         echo "ERROR: not a directory or not writeable: $SWAPDIR" > /dev/stderr
         exit 1
