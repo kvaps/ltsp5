@@ -36,7 +36,7 @@ case "$MODE" in
         
         PACKAGES="${PACKAGES}" STAGE_URI="${STAGE_URI}" MIRRORS="${MIRRORS}" \
         MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" \
-        ARCH="${ARCH}" ROOT="${ROOT}" CHROOT="${CHROOT}" \
+        ARCH="${ARCH}" NAME="${CHROOT}" \
         quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
     ;;
 esac
