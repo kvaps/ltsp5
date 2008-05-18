@@ -12,15 +12,15 @@ if [ -z "${BASE}" ]; then
     BASE="/opt/ltsp"
 fi
 
+if [ -z "${NAME}" ]; then
+    NAME="${ARCH}"
+fi
+
 if [ -z "${CHROOT}" ]; then
-    CHROOT=ARCH
+    CHROOT="${BASE}/${NAME}"
 fi
 
-if [ -z "${ROOT}" ]; then
-    ROOT="${BASE}/${CHROOT}"
-fi
-
-chroot_dir $ROOT
+chroot_dir $CHROOT
 
 
 # TODO: most of this shell code can go into a pre install or post install script
@@ -80,6 +80,7 @@ post_unpack_stage_tarball() {
 pre_install_portage_tree() {
     spawn "mkdir ${chroot_dir}/usr/portage"
     spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
+    echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
 
     if [ -n "${MIRRORS}" ]; then
         echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
@@ -107,20 +108,22 @@ EOF
 
     cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<EOF
 net-misc/ltsp-client
-x11-misc/ldm
+sys-apps/openrc
+sys-apps/baselayout
 sys-fs/ltspfs
+x11-misc/ldm
 # needed for ldm
 =x11-themes/gtk-engines-ubuntulooks-0.9.12*
+
 EOF
 
 # temporary overrides (hopefully)
     cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<EOF
-sys-apps/openrc
-sys-apps/baselayout
 =sys-kernel/genkernel-3.4.10*
 # needed for baselayout2
 # stable fails on 2.6.24 kernel
-=sys-fs/fuse-2.7.3*
+~sys-fs/fuse-2.7.3
+~sys-fs/udev-118
 EOF
 
     cat >> ${chroot_dir}/etc/portage/package.unmask/ltsp <<EOF
@@ -130,10 +133,14 @@ EOF
 EOF
 }
 
-pre_install_extra_packages() {
-    # TODO: remove this hack
-    spawn_chroot "emerge --unmerge mktemp"
+pre_build_kernel() {
+    export CONFIG_PROTECT_MASK=""
+    # TODO: remove this hack when 2008.0 comes out
+    spawn_chroot "emerge --unmerge sys-apps/mktemp"
+    spawn_chroot "emerge sys-apps/coreutils"
+}
 
+pre_install_extra_packages() {
     spawn_chroot "emerge --update --deep world"
 }
 
