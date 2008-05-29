@@ -78,7 +78,7 @@ mountroot()
     nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 && mount -o ro -t squashfs /dev/nbd0 /rofs
 
     # merge ro and rw filesystems
-    mount -t unionfs -o dirs=/cow=rw:/rofs=ro unionfs ${rootmnt}
+    mount -t aufs -o dirs=/cow=rw:/rofs=ro aufs ${rootmnt}
 
     # make the filesystems accessible
     mkdir -p ${rootmnt}/cow

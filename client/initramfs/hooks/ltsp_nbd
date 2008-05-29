@@ -20,14 +20,14 @@ esac
 
 . /usr/share/initramfs-tools/hook-functions
 
-for X in squashfs unionfs nbd; do 
+for X in squashfs aufs nbd; do 
     manual_add_modules "${x}"
 done
 
 # make sure all our modules are there
 force_load nbd
 force_load squashfs
-force_load unionfs
+force_load aufs
 
 # Copy across the binaries
 copy_exec /sbin/nbd-client /sbin
