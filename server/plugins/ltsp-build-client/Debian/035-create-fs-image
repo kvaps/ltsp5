@@ -39,7 +39,7 @@ case "$MODE" in
             NBD_ROOT_SERVER=${NBD_ROOT_SERVER:-"192.168.0.1"}
             NBD_ROOT_PORT=${NBD_ROOT_PORT:-"2000"}
             # set to use NBD root from nbd-client package
-            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"root=/dev/nbd0 ip=dhcp boot=local nbdroot=$NBD_ROOT_SERVER,$NBD_ROOT_PORT"}
+            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp boot=local nbdroot=$NBD_ROOT_SERVER,$NBD_ROOT_PORT"}
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
             echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf

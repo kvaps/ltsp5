@@ -20,7 +20,7 @@ case "$MODE" in
                 LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${KERNEL_VERSION}-${KERNEL_ARCH}"
             done
 
-            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"ip=dhcp boot=ltsp_nbd"}
+            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet ip=dhcp boot=ltsp_nbd"}
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
             echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
