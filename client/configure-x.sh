@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # If someone's overridden the config with their own custom config, then
