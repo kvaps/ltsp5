@@ -75,7 +75,7 @@ fi
 # Find out if we are really an nbd client and if so, build the image.
 # Check and see if user's left /proc mounted in chroot.  If so, issue
 # a warning, and unmount it
-PROC_MOUNTED=$(chroot /opt/ltsp/i386 test -f /proc/cpuinfo && echo True)
+PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
 if [ -n "${PROC_MOUNTED}" ]; then
     echo "/proc mounted in chroot ${CHROOT}, Unmounting."
     umount ${CHROOT}/proc
@@ -89,7 +89,8 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
     fi
 
     IMAGE="${IMGDIR}/${ARCH}.img"
-    rm "${IMAGE}"
+    rm -f "${IMAGE}" >/dev/null 2>&1
+    rm -f "${IMAGE}.tmp" >/dev/null 2>&1
     mksquashfs "${CHROOT}" "${IMAGE}.tmp" -e cdrom
     mv "${IMAGE}.tmp" "${IMAGE}"
     chmod 0744 "${IMAGE}"
