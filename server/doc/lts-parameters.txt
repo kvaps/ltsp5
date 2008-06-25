@@ -1,4 +1,4 @@
-
+This file lists parameters that can go into your lts.conf file
 
                     ***** Switch on/off features (and dependant optional options) *****
 
