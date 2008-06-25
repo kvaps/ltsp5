@@ -1,2 +1,14 @@
 MODULES="netboot"
 BOOT="ltsp_nbd"
+
+# DHCPPORT: tell ipconfig from klibc-utils) to use an alternate DHCP port
+# Default: 68
+# example: if you want to use alternate DHCP ports, use something like
+# DHCPPORT="1068"
+# this variable can be overridden using the dhcpport= boot option
+# Your DHCP server will have to listen on $DHCPPORT - 1
+# Note: for alternate DHCP ports, see
+# http://www.mail-archive.com/ltsp-discuss@lists.sourceforge.net/msg31182.html
+# That mail might be a bit outdated but it still gives a nice overview
+# DHCPPORT=""
+
