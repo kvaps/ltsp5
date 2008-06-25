@@ -61,7 +61,7 @@ for TFTPDIR in $TFTPDIRS ; do
     fi
 
     ALL_CHROOTS="$@"
-    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE -mindepth 1 -maxdepth 1 -type d | \
+    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE/ -mindepth 1 -maxdepth 1 -type d | \
                                   grep -v images)"}
 
     for CHROOT in $ALL_CHROOTS ; do

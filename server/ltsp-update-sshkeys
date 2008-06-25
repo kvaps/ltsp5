@@ -33,7 +33,7 @@ done
 # Set up variables
 BASE=${BASE:-"/opt/ltsp"}
 if [ -z "${CHROOTS}" ]; then
-    CHROOTS=$(find ${BASE} -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
+    CHROOTS=$(find ${BASE}/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
               grep -v images)
 fi
 HOSTNAME=$(hostname)
