@@ -171,6 +171,7 @@ shadow-utils
 sqlite
 rsyslog
 system-config-display
+system-config-firewall-tui
 tar
 tftp
 time
