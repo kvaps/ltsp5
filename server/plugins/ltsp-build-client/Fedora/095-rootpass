@@ -21,6 +21,5 @@
 #
 # FIXME
 # Nullify this entire file.  For some reason "/usr/sbin/chroot $ROOT passwd -l root" 
-# fails with "Only root can do that." while it succeeds if you run it manually.
-# In any case our kickstart file has already disabled root password so we don't
-# need this.  It would be nice if somebody figures out the fix for this later though.
+# fails with "Only root can do that." because we do not have a valid or fake /selinux
+# This is not important to set because kickstart already disallowed root logins. 
