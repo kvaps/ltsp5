@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Disable services we don't want
+for service in ConsoleKit gpm haldaemon iptables ip6tables kudzu mcstrans mdmonitor messagebus netfs network pcscd rpcbind; do
+    if [ ! -e /etc/init.d/$service ]; then
+        continue
+    fi
+    echo "Disabling Service: $service"
+    /sbin/chkconfig $service off
+done
+
+# Enable services we do want
+#for service in foo; do
+#    if [ ! -e /etc/init.d/$service ]; then
+#        continue
+#    fi
+#    echo "Enabling Service: $service"
+#    /sbin/chkconfig $service on
+#done
+
+# Setup readonly-root Mode
+sed -i 's/READONLY=no/READONLY=yes/' /etc/sysconfig/readonly-root
+
+# Set ltsp-launch-client as DM
+echo "DISPLAYMANAGER=/usr/sbin/ltsp-client-launch" > /etc/sysconfig/desktop
+
+# Hack: ltspfsd fails to mount anything if /etc/mtab is missing
+# Even a blank /etc/mtab works but this is a bit more tested
+# so we will use it for now.
+echo "/dev/root / auto rw,noatime 0 0" > /etc/mtab
