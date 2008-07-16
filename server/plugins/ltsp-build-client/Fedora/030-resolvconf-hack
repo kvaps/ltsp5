@@ -1,6 +1,5 @@
 case "$MODE" in
     after-install)
-        echo "RUNNING!!!!!!!!!!!!!"
         # Ugly hack: Allow yum to work when chrooted on server
         # You still need to mount /proc manually though
         cp /etc/resolv.conf $ROOT/etc/resolv.conf

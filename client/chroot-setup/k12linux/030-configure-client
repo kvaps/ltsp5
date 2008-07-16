@@ -5,7 +5,7 @@ for service in ConsoleKit gpm haldaemon iptables ip6tables kudzu mcstrans mdmoni
     if [ ! -e /etc/init.d/$service ]; then
         continue
     fi
-    echo "Disabling Service: $service"
+    #echo "Disabling Service: $service"
     /sbin/chkconfig $service off
 done
 
