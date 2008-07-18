@@ -1,6 +1,6 @@
 case "$MODE" in
     after-install)
-        # Build initrd
+        # Copy kernel/initrd from client into tftpboot directory
         ARCH="$ARCH" /usr/sbin/ltsp-prepare-kernel
         ;;
 esac
