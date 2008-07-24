@@ -23,14 +23,13 @@ fi
 chroot_dir $CHROOT
 
 
-# TODO: most of this shell code can go into a pre install or post install script
+# TODO: much of this shell code can go into a pre install or post install script
 #       seperate from the profile
 
 pre_sanity_check_config () {
     # we can't use the wrapper stage_uri due the way the sanity check is done in quickstart
     if [ -z "${STAGE_URI}" ]; then
-        # TODO: switch this to current when 2008.0 leaves beta
-        stage_uri="http://distfiles.gentoo.org/releases/${arch}/2008.0_beta2/stages/stage3-${arch}-2008.0_beta2.tar.bz2"
+        stage_uri="http://distfiles.gentoo.org/releases/${arch}/current/stages/stage3-${arch}-2008.0.tar.bz2"
     else 
         stage_uri="${STAGE_URI}"
     fi
@@ -79,8 +78,12 @@ post_unpack_stage_tarball() {
 }
 pre_install_portage_tree() {
     spawn "mkdir ${chroot_dir}/usr/portage"
+    # TODO: remove this mounting when the ltsp ebuilds are in the tree
+    spawn "mkdir ${chroot_dir}/usr/local/portage"
     spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
+    spawn "mount /usr/local/portage ${chroot_dir}/usr/local/portage -o bind"
     echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
+    echo "${chroot_dir}/usr/local/portage" >> /tmp/install.umount
 
     if [ -n "${MIRRORS}" ]; then
         echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
@@ -94,17 +97,16 @@ VIDEO_CARDS="vesa"
 
 EMERGE_DEFAULT_OPTS="--usepkg"
 # TODO: don't add this by default
-source /usr/portage/local/layman/make.conf
+source /usr/local/portage/layman/make.conf
 EOF
 
     cat > ${chroot_dir}/etc/fstab <<EOF
 # DO NOT DELETE
 EOF
    
-    # TODO: copy the contents of /etc/portage from elsewhere
+    # TODO: copy the preset version of /etc/portage from elsewhere
+    #       instead of making it here
     spawn "mkdir -p ${chroot_dir}/etc/portage/package.keywords"
-    spawn "mkdir -p ${chroot_dir}/etc/portage/package.unmask"
-    spawn "mkdir -p ${chroot_dir}/etc/portage/package.use"
 
     cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<EOF
 net-misc/ltsp-client
@@ -119,25 +121,13 @@ EOF
 
 # temporary overrides (hopefully)
     cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<EOF
-=sys-kernel/genkernel-3.4.10*
-# needed for baselayout2
 # stable fails on 2.6.24 kernel
 ~sys-fs/fuse-2.7.3
-~sys-fs/udev-118
-EOF
-
-    cat >> ${chroot_dir}/etc/portage/package.unmask/ltsp <<EOF
-EOF
-
-    cat >> ${chroot_dir}/etc/portage/package.use/ltsp <<EOF
 EOF
 }
 
 pre_build_kernel() {
     export CONFIG_PROTECT_MASK=""
-    # TODO: remove this hack when 2008.0 comes out
-    spawn_chroot "emerge --unmerge sys-apps/mktemp"
-    spawn_chroot "emerge sys-apps/coreutils"
 }
 
 pre_install_extra_packages() {
