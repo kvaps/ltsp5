@@ -1,4 +1,3 @@
 #!/bin/sh
 
-xprop -root -f LTSP_USERNAME 8s -set LTSP_USERNAME "${USER}"
 xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "$1"

@@ -3,4 +3,5 @@
 bin_PROGRAMS = xrexecd
 xrexecd_SOURCES = xrexecd.c
 
-xrexecd_LDADD = $(XREXECD_LIBS)
+xrexecd_LDADD = $(XREXECD_LIBS) $(GLIB_LIBS)
+AM_CPPFLAGS = $(GLIB_CFLAGS)

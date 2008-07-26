@@ -11,6 +11,7 @@ AC_PROG_INSTALL
 
 # Checks for libraries.
 PKG_CHECK_MODULES(XREXECD, [x11])
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.6.0)
 
 # Checks for header files.
 AC_HEADER_STDC
