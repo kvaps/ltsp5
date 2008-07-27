@@ -24,7 +24,7 @@ sed -i 's/READONLY=no/READONLY=yes/' /etc/sysconfig/readonly-root
 # Set ltsp-launch-client as DM
 echo "DISPLAYMANAGER=/usr/sbin/ltsp-client-launch" > /etc/sysconfig/desktop
 
-# Hack: ltspfsd fails to mount anything if /etc/mtab is missing
-# Even a blank /etc/mtab works but this is a bit more tested
-# so we will use it for now.
-echo "/dev/root / auto rw,noatime 0 0" > /etc/mtab
+# Link /etc/mtab to /proc/mounts
+# This is not perfect, but it enables fuse mounts to work.
+rm -f /etc/mtab
+ln -sf ../proc/mounts /etc/mtab
