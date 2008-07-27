@@ -88,5 +88,10 @@ if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
     export ENCRYPT_SWAP=True
 fi
 
+# set defaults for local apps support
+if [ -z "$LOCAL_APPS" ]; then
+    export LOCAL_APPS=True
+fi
+
 # set to determine if ltsp_config has already been sourced
 export LTSP_CONFIG=True
