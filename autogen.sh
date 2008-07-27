@@ -1,4 +1,4 @@
 #!/bin/sh
-pushd client/xrexecd/
+cd client/xrexecd/
 ./autogen.sh
-popd 
+cd ../.. 
