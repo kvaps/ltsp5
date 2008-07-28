@@ -80,6 +80,13 @@ start() {
     RETVAL=$?
     echo
     [ $RETVAL = 0 ] && touch $lockfile
+
+    # Ugly Hack!  Live LTSP Server needs something to copy ssh keys into the client chroot *once* after sshd generated its keys on first boot.
+    # Putting this here for now because we have nowhere else to put it at the moment, and it is harmless.
+    if [ -e /etc/ltsp/DELETE-ME-WHEN-DONE-need-to-copy-sshkeys ]; then
+        /usr/sbin/ltsp-update-sshkeys
+        rm -f /etc/ltsp/DELETE-ME-WHEN-DONE-need-to-copy-sshkeys
+    fi
     return $RETVAL
 }
 
