@@ -4,4 +4,4 @@
 [ -f /etc/ltsp/vmclient ] && . /etc/ltsp/vmclient
 
 set -x
-qemu-kvm -soundhw all -hda /dev/null -boot n -m 256 $VGAOPTION $NICMODEL -net tap,script=/usr/sbin/ltsp-qemu-bridge-ifup
+qemu-kvm $SOUNDDEV -hda /dev/null -boot n -m 256 $VGAOPTION $NICMODEL -net tap,script=/usr/sbin/ltsp-qemu-bridge-ifup

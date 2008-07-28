@@ -1,5 +1,8 @@
 #!/bin/sh
+# Read options from /etc/ltsp/vmclient
+[ -f /etc/ltsp/vmclient ] && . /etc/ltsp/vmclient
+
 export PATH=/sbin:/usr/sbin:$PATH
-switch=ltspbr0
+[ -z "$BRIDGEDEV" ] && BRIDGEDEV=ltspbr0
 ifconfig $1 0.0.0.0 up
-brctl addif ${switch} $1
+brctl addif ${BRIDGEDEV} $1
