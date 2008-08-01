@@ -11,6 +11,7 @@ services --enabled=network,xinetd,rpcbind,nfs,ltsp-dhcpd,nbdrootd,nbdswapd,tftp,
 
 repo --name=released-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-9&arch=i386
 repo --name=updates-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9&arch=i386
+repo --name=temporary-9 --baseurl=http://togami.com/~k12linux-temporary/fedora/9/i386/
 
 %packages
 @base-x
@@ -219,7 +220,7 @@ cp $INSTALL_ROOT/usr/share/doc/HTML/readme-live-image/en_US/readme-live-image-en
 # Needed by ltsp-build-client to create client chroot
 cp -v /etc/resolv.conf $INSTALL_ROOT/etc/resolv.conf
 # sshd generates its keys only at first boot, so tell a later init script to copy ssh keys at that time
-touch /etc/ltsp/DELETE-ME-WHEN-DONE-need-to-copy-sshkeys
+touch $INSTALL_ROOT/etc/ltsp/DELETE-ME-WHEN-DONE-need-to-copy-sshkeys
 
 # only works on x86, x86_64
 if [ "$(uname -i)" = "i386" -o "$(uname -i)" = "x86_64" ]; then

@@ -15,7 +15,5 @@ rm -f /etc/resolv.conf
 touch /etc/resolv.conf
 
 # Setup LTSP server
-/sbin/chkconfig NetworkManager off
-/sbin/chkconfig network on
 echo "/opt/ltsp *(ro,async,no_root_squash)" > /etc/exports
 %end
