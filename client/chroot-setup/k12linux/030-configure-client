@@ -41,5 +41,6 @@ touch /etc/alsa/asound.state
 # Silence /etc/mtab rwtab error message during bootup
 sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
 
-# Silence sysfs already mounted error during bootup
+# Silence local filesystems mount errors during bootup
+sed -i '/^proc/d' /etc/fstab
 sed -i '/^sysfs/d' /etc/fstab
