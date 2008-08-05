@@ -34,3 +34,6 @@ ln -sf ../proc/mounts /etc/mtab
 if [ $? -ne 0 ]; then
     echo "blacklist pcspkr" >> /etc/modprobe.conf
 fi
+
+# Files to silence warning messages
+touch /etc/alsa/asound.state
