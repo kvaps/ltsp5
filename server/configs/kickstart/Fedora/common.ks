@@ -60,7 +60,7 @@ filesystem
 findutils
 fontconfig
 freetype
-fuse-sshsfs
+fuse-sshfs
 gawk
 gdbm
 glib2
