@@ -37,3 +37,6 @@ fi
 
 # Files to silence warning messages
 touch /etc/alsa/asound.state
+
+# Silence /etc/mtab rwtab error message during bootup
+sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
