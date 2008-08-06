@@ -3,6 +3,7 @@ dirs    /var/lib/dbus/
 dirs    /var/lib/xkb/
 dirs    /var/cache/ldm/
 dirs    /home
+dirs	/var/cache/hald/
 
 files	/etc/lts.conf
 files   /etc/X11/xorg.conf
