@@ -44,3 +44,6 @@ sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
 # Silence local filesystems mount errors during bootup
 sed -i '/^proc/d' /etc/fstab
 sed -i '/^sysfs/d' /etc/fstab
+
+# TEMPORARY: /var/lib/pulse/ must exist (we can remove this soon)
+mkdir -p /var/lib/pulse/
