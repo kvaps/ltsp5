@@ -17,6 +17,7 @@ start_sound() {
         case "$SOUND_DAEMON" in
             pulse|'') # The default when no value is set
                 /usr/bin/pulseaudio --system \
+                --exit-idle-time=0 \
                 --disable-shm \
                 --no-cpu-limit \
                 --resample-method=trivial \
