@@ -13,5 +13,6 @@ files   /.viminfo
 files   /etc/passwd
 files   /etc/group
 files   /etc/alsa/asound.state
+files	/var/lib/random-seed
 
 empty   /root

@@ -14,7 +14,7 @@ for service in haldaemon messagebus rsyslog udev-post; do
     if [ ! -e /etc/init.d/$service ]; then
         continue
     fi
-    echo "Enabling Service: $service"
+    #echo "Enabling Service: $service"
     /sbin/chkconfig $service on
 done
 
