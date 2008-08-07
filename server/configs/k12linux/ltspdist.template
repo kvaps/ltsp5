@@ -1,6 +1,9 @@
+if [ -e /etc/rpm/macros.dist ]; then
+    LTSPDIST=`cat /etc/rpm/macros.dist |grep %dist |awk {'print $2'} | sed 's/\.//'`
+fi
 if [ -z "$LTSPDIST" ]; then
-    echo "ERROR: LTSPDIST not defined in /etc/sysconfig/ltspdist."
-    exit 1
+    # Fallback to Fedora 9 chroot if host OS is not detected.
+    LTSPDIST=fc9
 fi
 case "$LTSPDIST" in
     fc8)
