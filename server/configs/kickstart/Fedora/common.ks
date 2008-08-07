@@ -191,6 +191,7 @@ xorg-x11-xauth
 xorg-x11-xfs
 xorg-x11-xkb-utils
 xorg-x11-xinit
+xterm
 ypbind
 yp-tools
 yum
