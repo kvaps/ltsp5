@@ -73,8 +73,8 @@ fi
 [ "$IPADDR" ]    || export IPADDR=$DEFAULTIP
 [ "$NETMASK" ]   || export NETMASK=$DEFAULTMASK
 [ "$GATEWAY" ]   || export GATEWAY=$DEFAULTIP
-[ "$BROADCAST" ] || export BROADCAST=`/bin/ipcalc -b $IPADDR $NETMASK`
-[ "$NETWORK" ]   || export NETWORK=`/bin/ipcalc -n $IPADDR $NETMASK`
+[ "$BROADCAST" ] || export `/bin/ipcalc -b $IPADDR $NETMASK`
+[ "$NETWORK" ]   || export `/bin/ipcalc -n $IPADDR $NETMASK`
 
 #######################################################################
 # update various configuration files
