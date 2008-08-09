@@ -38,7 +38,7 @@ while :; do
     if [ -n "${LTSP_COMMAND}" ]; then
         logit "Executing the following command as ${LDM_USERNAME}: ${LTSP_COMMAND} "
 
-        su - ${LDM_USERNAME} -c "XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
+        su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
 
         xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND ""
     fi
