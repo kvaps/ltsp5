@@ -7,7 +7,7 @@ firewall --disabled
 xconfig --startxonboot
 part / --size 4096
 #services --enabled=NetworkManager --disabled=network,sshd
-services --enabled=network,xinetd,rpcbind,nfs,ltsp-dhcpd,nbdrootd,nbdswapd,tftp,sshd --disabled=NetworkManager,iptables
+services --enabled=network,NetworkManager,xinetd,rpcbind,nfs,ltsp-dhcpd,nbdrootd,nbdswapd,tftp,sshd --disabled=iptables
 
 repo --name=released-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-9&arch=i386
 repo --name=updates-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9&arch=i386
@@ -210,6 +210,10 @@ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora
 rm -f /boot/initrd*
 # make sure there aren't core files lying around
 rm -f /core*
+
+# Put README-LIVE-LTSP-SERVER-SETUP onto the Desktop
+mkdir -p -m 0755 /etc/skel/Desktop
+cp -v /etc/ltsp/live-config/fedora9/README-LIVE-LTSP-SERVER-SETUP /etc/skel/Desktop/
 
 %end
 
