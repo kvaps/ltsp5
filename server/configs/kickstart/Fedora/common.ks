@@ -136,6 +136,7 @@ MAKEDEV
 mcstrans
 mesa-libGL
 mingetty
+mkelfimage
 mkinitrd
 module-init-tools
 nash
