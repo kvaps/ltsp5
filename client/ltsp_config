@@ -89,7 +89,7 @@ if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
 fi
 
 # set defaults for local apps support
-if [ -z "$LOCAL_APPS" ]; then
+if [ -z "$LOCAL_APPS" ] && [ -x /usr/bin/sshfs ]; then
     export LOCAL_APPS=True
 fi
 
