@@ -13,7 +13,7 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/lib/discover /etc/console-setup"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
