@@ -70,8 +70,13 @@ EOF
 
 configure_syslog() {
     if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
-        if [ -f /etc/syslog.conf ]; then
-            cat <<EOF > /etc/syslog.conf
+        syslog_conf=/etc/syslog.conf
+        if [ -d /etc/rsyslog.d ]; then
+            syslog_conf=/etc/rsyslog.d/ltsp.conf   
+            touch $syslog_conf
+        fi
+        if [ -f "$syslog_conf" ]; then
+            cat <<EOF > "$syslog_conf"
 *.* @${SYSLOG_HOST:-$SERVER}
 EOF
         fi
