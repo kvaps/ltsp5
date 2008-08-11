@@ -17,6 +17,15 @@ if boolean_is_true "$LOCAL_APPS"; then
     LDM_CACHE=/var/cache/ldm
     mkdir -p ${LDM_CACHE} 2>/dev/null
 
+    # Cleanup 
+    XREXECD_PIDFILE=/var/run/xrexecd
+    [ -r "$XREXECD_PIDFILE" ] && XREXECD_PID=$(cat $XREXECD_PIDFILE)
+    # Kill PID
+    if [ -n "$XREXECD_PID" ]; then
+        pkill -P $XREXECD_PID
+        rm $XREXECD_PIDFILE
+    fi
+
     # Copy /etc/passwd and /etc/group to cache if it does not exist (should only happen on first login)
     for i in passwd group; do
         if [ ! -e "${LDM_CACHE}/${i}" ]; then
@@ -76,6 +85,19 @@ if boolean_is_true "$LOCAL_APPS"; then
     sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
     #Launch the xrexecd to handle the apps
-    xrexecd.sh &
+    (
+    echo $! > $XREXECD_PIDFILE
+    xrexecd.sh 
+
+    # Copy back passwd and group
+    for i in passwd group; do
+        cp "${LDM_CACHE}/${i}" /etc/${i}
+    done
+    
+    # Unmount sshfs and remove the mount dir
+    fusermount -uqz ${LDM_HOME}
+    rmdir ${LDM_HOME}
+    rm $XREXECD_PIDFILE
+    )&
 
 fi
