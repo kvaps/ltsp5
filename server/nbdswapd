@@ -37,7 +37,11 @@ if [ "$RUN_MKSWAP" = "true" ]; then
 fi
 
 # start the swap server
-/bin/nbd-server 0 $SWAP $NBD_SERVER_OPTS -C /dev/null > /dev/null 2>&1
+for NBDSERVER in /usr/bin/nbd-server /bin/nbd-server; do
+    [ -x $NBDSERVER ] && break
+done
+
+$NBDSERVER 0 $SWAP $NBD_SERVER_OPTS -C /dev/null > /dev/null 2>&1
 
 # clean up the swap file
 rm -f $SWAP
