@@ -1,10 +1,17 @@
 case "$MODE" in
+    configure)
+        if [ -z "$DEBOOTSTRAP_KEYRING" ] && [ -f /etc/apt/trusted.gpg ]; then
+            DEBOOTSTRAP_KEYRING="/etc/apt/trusted.gpg"
+        fi
     install)
         if [ -n "$EXCLUDE" ] ; then
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
         fi
         if [ -n "$INCLUDE" ] ; then
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=$INCLUDE"
+        fi
+        if [ -n "$DEBOOTSTRAP_KEYRING" ]; then
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --keyring $DEBOOTSTRAP_KEYRING"
         fi
         if [ ! -f "/usr/lib/debootstrap/scripts/$DIST" ] && [ ! -f "/usr/share/debootstrap/scripts/$DIST" ]; then
             echo "ERROR: invalid distribution: $DIST"
