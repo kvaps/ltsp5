@@ -6,6 +6,8 @@ case "$MODE" in
         if [ -n "$option_accept_unsigned_packages_value" ]; then
             # FIXME: handle if APT_GET_OPTS has other values set.
             APT_GET_OPTS="$APT_GET_OPTS --force-yes"
+        elif [ -f /etc/apt/trusted.gpg ]; then
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --keyring /etc/apt/trusted.gpg"
         fi
         ;;
 esac
