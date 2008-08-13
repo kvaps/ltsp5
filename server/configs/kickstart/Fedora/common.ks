@@ -140,6 +140,7 @@ mkelfimage
 mkinitrd
 module-init-tools
 nash
+nbd
 nc
 ncurses
 neon
