@@ -69,8 +69,11 @@ class ChrootCreator(imgcreate.ImageCreator):
         imgcreate.fs.makedirs(self._instroot + "/etc/kernel/postinst.d")
         shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-mkinitrd",self._instroot + "/etc/sysconfig/mkinitrd")
         shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-network",self._instroot + "/etc/sysconfig/network")
-        shutil.copyfile("/etc/ltsp/mkinitrd/ltsp-postinst.d",self._instroot + "/etc/kernel/postinst.d/ltsp")
         shutil.copyfile("/etc/ltsp/mkinitrd/ifcfg-eth0",self._instroot + "/etc/sysconfig/network-scripts/ifcfg-eth0")
+        shutil.copyfile("/etc/ltsp/mkinitrd/ltsp-postinst.d",self._instroot + "/etc/kernel/postinst.d/ltsp")
+        os.chmod(self._instroot + "/etc/kernel/postinst.d/ltsp",0755)
+        # Create empty file to mark that this is a LTSP chroot
+        open(self._instroot + "/etc/ltsp_chroot", 'w').write('')
 
     def _unmount_instroot(self):
         if not self.__bindroot is None:
