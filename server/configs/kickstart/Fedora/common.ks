@@ -136,6 +136,7 @@ mesa-libGL
 mingetty
 mkelfimage
 mkinitrd
+mknbi
 module-init-tools
 nash
 nbd
