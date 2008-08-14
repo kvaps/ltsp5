@@ -4,10 +4,13 @@
 install
 
 # rev #2 will be configurable (i.e. http or ftp or cdrom/dvd or nfs, etc, etc)
-repo --name=released-8 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-8&arch=i386
-repo --name=updates-8 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f8&arch=i386
-repo --name=temporary-8 --baseurl=http://togami.com/~k12linux-temporary/fedora/8/i386/
-repo --name=temporary-client-8  --baseurl=http://togami.com/~k12linux-temporary/fedora/8-client/i386/
+repo --name=released-8-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-8&arch=i386
+repo --name=updates-8-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f8&arch=i386
+repo --name=temporary-8-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/8/i386/
+repo --name=temporary-client-8-i386  --baseurl=http://togami.com/~k12linux-temporary/fedora/8-client/i386/
 
 %include ../common.ks
-%end
+%include ../common-i386.ks
+
+# No i586 clients?  Try this instead.
+#%include ../common-i686.ks

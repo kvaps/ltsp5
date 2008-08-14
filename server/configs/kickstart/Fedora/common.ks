@@ -64,7 +64,6 @@ fuse-sshfs
 gawk
 gdbm
 glib2
-glibc.i386
 glibc-common
 gnutls
 gphoto2
@@ -76,7 +75,6 @@ info
 initscripts
 iproute
 iputils
-kernel.i586
 kpartx
 krb5-libs
 kudzu
@@ -148,7 +146,6 @@ net-snmp-libs
 net-tools
 openldap
 openssh-clients
-openssl.i386
 pam
 passwd
 pcre
@@ -389,3 +386,4 @@ zlib
 -xinetd
 -zip
 -zlib-devel
+%end
