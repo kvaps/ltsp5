@@ -136,7 +136,6 @@ mesa-libGL
 mingetty
 mkelfimage
 mkinitrd
-mknbi
 module-init-tools
 nash
 nbd
@@ -181,6 +180,7 @@ tzdata
 udev
 util-linux-ng
 which
+wraplinux
 xkeyboard-config
 xorg-x11-drivers
 xorg-x11-drv-openchrome
