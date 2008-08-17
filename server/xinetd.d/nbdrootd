@@ -4,6 +4,7 @@ service nbdrootd
 {
 	disable		= yes
 	type		= UNLISTED
+	flags		= KEEPALIVE
 	socket_type     = stream
 	wait            = no
 	user            = nobody
