@@ -31,7 +31,7 @@ chown ${LDM_USERNAME} $XAUTHORITY
 
 # Poll for LTSP_COMMAND changes and execute
 while :; do
-    LTSP_COMMAND="$(xprop -root -notype LTSP_COMMAND)"
+    LTSP_COMMAND="$(xatomwait LTSP_COMMAND)"
     [ "$?" != 0 ] && exit 
 
     LTSP_COMMAND=$(echo "${LTSP_COMMAND}"|sed -e 's/^LTSP_COMMAND = //' -e 's/^"//' -e 's/"$//')
@@ -42,5 +42,4 @@ while :; do
 
         xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND ""
     fi
-    sleep 1
 done
