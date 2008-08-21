@@ -7,6 +7,7 @@ case "$MODE" in
             # FIXME: handle if APT_GET_OPTS has other values set.
             APT_GET_OPTS="$APT_GET_OPTS --force-yes"
         fi
+        ;;
     before-install)
         if [ -n "$option_accept_unsigned_packages_value" ]; then
             # unset keyring for debootstrap

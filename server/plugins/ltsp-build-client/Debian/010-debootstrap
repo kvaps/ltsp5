@@ -3,6 +3,7 @@ case "$MODE" in
         if [ -z "$DEBOOTSTRAP_KEYRING" ] && [ -f /etc/apt/trusted.gpg ]; then
             DEBOOTSTRAP_KEYRING="/etc/apt/trusted.gpg"
         fi
+        ;;
     install)
         if [ -n "$EXCLUDE" ] ; then
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --exclude=$EXCLUDE"
