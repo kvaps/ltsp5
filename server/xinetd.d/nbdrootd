@@ -9,6 +9,6 @@ service nbdrootd
 	wait            = no
 	user            = nobody
 	server          = /usr/sbin/nbdrootd
-	server_args	= i386.img
+	server_args	= /opt/ltsp/images/i386.img
 	port		= 2000
 }
