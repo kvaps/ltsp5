@@ -2,7 +2,10 @@
 #--with-avail==networking --net-dev=eth0 --rootfs nfs --rootdev=192.168.0.254:/opt/ltsp/i386 --rootopts=noatime,dhcp
 availmodules="=networking"
 NET_LIST="eth0"
+# These parameters are overridden by root="dhcp" in newer versions of mkinitrd
 rootfs="nfs"
 rootdev="192.168.0.254:/opt/ltsp/i386"
 rootopts="noatime,dhcp"
 BOOTPROTO="dhcp"
+# This option is recognized only by newer mkinitrd, but it doesn't harm older versions.
+root="dhcp"
