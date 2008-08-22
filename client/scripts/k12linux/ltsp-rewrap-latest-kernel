@@ -1,0 +1,6 @@
+#!/bin/bash
+# Run mkinitrd and postinst.d/* on the latest installed kernel again
+
+NAME=`ls -d /lib/modules/2* | sort -nr | head -n1 | xargs basename`
+/sbin/new-kernel-pkg --mkinitrd --install $NAME
+/sbin/new-kernel-pkg --rpmposttrans $NAME
