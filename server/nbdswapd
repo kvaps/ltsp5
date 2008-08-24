@@ -13,6 +13,10 @@ if [ -f /etc/ltsp/nbdswapd.conf ]; then
     . /etc/ltsp/nbdswapd.conf
 fi
 
+# Abort if liveimg
+cat /proc/cmdline |/bin/grep -q "liveimg"
+[ $? -eq 0 ] && exit 0
+
 # swapfile size (in MB)
 SIZE=${SIZE:-"32"}
 
