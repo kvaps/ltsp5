@@ -3,3 +3,5 @@ boot/initrd*
 boot/elf*
 boot/config*
 boot/System.map*
+proc/*
+sys/*
