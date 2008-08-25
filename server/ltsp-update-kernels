@@ -80,6 +80,39 @@ for TFTPDIR in $TFTPDIRS ; do
     done
     # Update selinux file contexts if necessary
     [ -f /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR > /dev/null
-done
 
+    ### Cleanup old kernels and images from tftpboot directory ###
+    # Find $version from vmlinuz-* filename
+    # if corresponding /opt/ltsp/$arch/lib/modules/$version is missing
+    # then delete kernel and images from tftpboot directory
+    #
+    # Some distros wont match vmlinuz-*, but this is at least safe
+    # because it will simply cleanup nothing.
+    removefiles() {
+        # Common
+        rm -f $archpath/vmlinuz-$version
+        rm -f $archpath/config-$version
+        rm -f $archpath/System.map-$version
+        # Fedora
+        rm -f $archpath/initrd-$version.img
+        rm -f $archpath/elf-$version.img
+        rm -f $archpath/wraplinux-nbi-$version.img
+        # Debian
+        rm -f $archpath/initrd.img-$version
+        rm -f $archpath/nbi.img-$version
+    }
+    # Loop through every arch
+    for archpath in $(find $TFTPDIR/$TFTPBOOTDIR -mindepth 1 -maxdepth 1 -type d); do
+        arch=`basename $archpath`
+        # Loop through every vmlinuz-* file
+        for kernelpath in $(find $TFTPDIR/$TFTPBOOTDIR/$arch -name 'vmlinuz-*'); do
+            kernel=`basename $kernelpath`
+            version=${kernel##vmlinuz-}
+            if [ ! -d /opt/ltsp/$arch/lib/modules/$version ]; then
+                echo "Removing $kernelpath"
+                removefiles
+            fi
+        done
+    done
+done
 exit 0
