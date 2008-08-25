@@ -5,3 +5,4 @@ boot/config*
 boot/System.map*
 proc/*
 sys/*
+var/cache/yum/*
