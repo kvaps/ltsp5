@@ -1,13 +1,13 @@
 case "$MODE" in
     configure)
         ARCH=$(dpkg --print-architecture)
-        APT_GET_OPTS="-y"
+        APT_GET_OPTS="--no-install-recommends -y"
         DIST=${DIST:-"$(lsb_release -s -c)"}
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted"
-        EARLY_PACKAGES="ltsp-client ldm"
+        EARLY_PACKAGES="ltsp-client ldm hal dbus"
         RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh hostname.sh loopback udev module-init-tools procps.sh etc-setserial ltsp-client-setup setserial"
-        RC2_WHITELIST="klogd sysklogd ltsp-client-core usplash rmnologin"
+        RC2_WHITELIST="klogd sysklogd ltsp-client-core usplash rmnologin hal dbus"
         RC6_WHITELIST="reboot"
         RC0_WHITELIST="halt"
         OVERRIDE_EXPORTS="true"
