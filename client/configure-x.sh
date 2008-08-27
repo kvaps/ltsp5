@@ -112,8 +112,22 @@ set_options() {
     done
 }
 
-# FIXME
 # Handle Monitor settings
+set_monitor_options() {
+    for OPT in 01 02 03 04 05 06 07 08 09 10; do
+        eval CURROPT=\$X_MONITOR_OPTION_${OPT}
+        if [ -n "${CURROPT}" ]; then
+            OPTLINE="\tOption\t"
+            for O in ${CURROPT}; do
+                OPTLINE="${OPTLINE}\t${O}"
+            done
+            OPTLINE="${OPTLINE}\nEndSection"
+            sed -i /'Section "Monitor"'/,/'EndSection'/s/'EndSection'/${OPTLINE}/g $INPUT_FILE
+        fi
+    done
+}
+
+
 set_sync_ranges(){
     # beware, Xorg -configure sometimes writes these values in the bootstrapped file,
     # so we need replacement code as well
@@ -259,6 +273,7 @@ handle_mouse_settings || true
 handle_driver || true
 set_videoram || true
 set_options || true
+set_monitor_options || true
 handle_modes || true
 set_default_depth || true
 hardcoded_devices || true
