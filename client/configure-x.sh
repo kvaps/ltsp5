@@ -68,7 +68,7 @@ handle_mouse_settings() {
         [ -z "$(echo $X_MOUSE_DEVICE | grep '/dev/psaux')" ];then
         X_MOUSE_DEVICE=$(echo $X_MOUSE_DEVICE |sed -e s/'\/'/'\\\/'/g)
         test -z $X_MOUSE_PROTOCOL && X_MOUSE_PROTOCOL="auto"
-        EXTRAMOUSE="EndSection\n\nSection \"InputDevice\"\n\tIdentifier\t\"Mouse1\"\n\tDriver\t\"mouse\"\n\tOption\t"Device"\t$X_MOUSE_DEVICE\n\tOption\t\"Protocol\"\t$X_MOUSE_PROTOCOL\nEndSection"
+        EXTRAMOUSE="EndSection\n\nSection \"InputDevice\"\n\tIdentifier\t\"Mouse1\"\n\tDriver\t\"mouse\"\n\tOption\t"Device"\t\"$X_MOUSE_DEVICE\"\n\tOption\t\"Protocol\"\t$X_MOUSE_PROTOCOL\nEndSection"
         sed -i /'Identifier  "Mouse0"'/,/'EndSection'/s/'EndSection'/"$EXTRAMOUSE"/g $INPUT_FILE
         sed -i /'Section "ServerLayout"'/,/'EndSection'/s/'EndSection'/"\tInputDevice\t\"Mouse1\"\nEndSection"/g $INPUT_FILE
     fi
