@@ -92,10 +92,10 @@ pre_install_portage_tree() {
     # TODO: allow overriding of all these variables
     cat >> ${chroot_dir}/etc/make.conf <<EOF
 MAKEOPTS="${MAKEOPTS}"
-USE="xml X -cups"
+USE="alsa xml X -cups"
 VIDEO_CARDS="vesa"
 
-EMERGE_DEFAULT_OPTS="--usepkg"
+EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
 # TODO: don't add this by default
 source /usr/local/portage/layman/make.conf
 EOF
