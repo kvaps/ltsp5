@@ -3,10 +3,6 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-depend() {
-    before root
-}
-
 checkconfig() {
         if [ ! -f  /etc/ltsp_chroot ] ; then
                 eerror "You are not an in LTSP chroot"
@@ -62,7 +58,7 @@ configure_resolver() {
         /etc/init.d/hostname start
         hostname="$(hostname)"
     else
-        echo $hostname > /etc/hostname
+        echo "hostname="$hostname"" > /etc/conf.d/hostname
     fi
     cat <<EOF > /etc/hosts
 127.0.0.1 localhost
