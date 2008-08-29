@@ -90,40 +90,40 @@ pre_install_portage_tree() {
 	fi
 
 	# TODO: allow overriding of all these variables
-	cat >> ${chroot_dir}/etc/make.conf <<EOF
-MAKEOPTS="${MAKEOPTS}"
-USE="alsa xml X -cups"
-VIDEO_CARDS="vesa"
+	cat >> ${chroot_dir}/etc/make.conf <<- EOF
+	MAKEOPTS="${MAKEOPTS}"
+	USE="alsa xml X -cups"
+	VIDEO_CARDS="vesa"
 
-EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
-# TODO: don't add this by default
-source /usr/local/portage/layman/make.conf
-EOF
+	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
+	# TODO: don't add this by default
+	source /usr/local/portage/layman/make.conf
+	EOF
 
-	cat > ${chroot_dir}/etc/fstab <<EOF
-# DO NOT DELETE
-EOF
+	cat > ${chroot_dir}/etc/fstab <<- EOF
+	# DO NOT DELETE
+	EOF
    
 	# TODO: copy the preset version of /etc/portage from elsewhere
 	#	   instead of making it here
 	spawn "mkdir -p ${chroot_dir}/etc/portage/package.keywords"
 
-	cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<EOF
-net-misc/ltsp-client
-sys-apps/openrc
-sys-apps/baselayout
-sys-fs/ltspfs
-x11-misc/ldm
-# needed for ldm
-=x11-themes/gtk-engines-ubuntulooks-0.9.12*
+	cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<- EOF
+	net-misc/ltsp-client
+	sys-apps/openrc
+	sys-apps/baselayout
+	sys-fs/ltspfs
+	x11-misc/ldm
+	# needed for ldm
+	=x11-themes/gtk-engines-ubuntulooks-0.9.12*
 
-EOF
+	EOF
 
-# temporary overrides (hopefully)
-	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<EOF
-# stable fails on 2.6.24 kernel
-~sys-fs/fuse-2.7.3
-EOF
+	# temporary overrides (hopefully)
+	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<- EOF
+	# stable fails on 2.6.24 kernel
+	~sys-fs/fuse-2.7.3
+	EOF
 }
 
 pre_build_kernel() {
@@ -148,12 +148,12 @@ post_install_extra_packages() {
  
 	spawn_chroot "rm /etc/init.d/net.eth0"
 
-	cat <<EOF > ${chroot_dir}/etc/lts.conf
-# see /usr/share/doc/ltsp-client-$version/lts-parameters.txt.bz2 for a listing 
-# of all possible options (Don't forget to include a [default] section)
-# TODO: dont serve this file from here
-#	   put it in /var/lib/tftpboot/ltsp/arch/lts.conf
-EOF
+	cat >> ${chroot_dir}/etc/lts.conf <<- EOF
+	# see /usr/share/doc/ltsp-client-$version/lts-parameters.txt.bz2 for a listing 
+	# of all possible options (Don't forget to include a [default] section)
+	# TODO: dont serve this file from here
+	#	   put it in /var/lib/tftpboot/ltsp/arch/lts.conf
+	EOF
 }
 
 rcadd ltsp-client-setup boot
