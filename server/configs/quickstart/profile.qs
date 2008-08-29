@@ -64,7 +64,7 @@ tree_type none
 # TODO: do these
 #kernel_config_uri
 #kernel_sources (defaults to gentoo sources)
-#genkernel_opts
+genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
 
 post_unpack_stage_tarball() {
 	if [ -n "$LOCALE" ]; then
@@ -78,11 +78,17 @@ post_unpack_stage_tarball() {
 }
 pre_install_portage_tree() {
 	spawn "mkdir ${chroot_dir}/usr/portage"
+	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
+	echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
+
+	spawn "mkdir -p /usr/portage/packages/$ARCH"
+	spawn_chroot "mkdir -p /usr/portage/packages"
+	spawn "mount /usr/portage/packages/$ARCH ${chroot_dir}/usr/portage/packages -o bind"
+	echo "${chroot_dir}/usr/portage/packages" >> /tmp/install.umount
+
 	# TODO: remove this mounting when the ltsp ebuilds are in the tree
 	spawn "mkdir ${chroot_dir}/usr/local/portage"
-	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
 	spawn "mount /usr/local/portage ${chroot_dir}/usr/local/portage -o bind"
-	echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
 	echo "${chroot_dir}/usr/local/portage" >> /tmp/install.umount
 
 	if [ -n "${MIRRORS}" ]; then
@@ -94,6 +100,7 @@ pre_install_portage_tree() {
 	MAKEOPTS="${MAKEOPTS}"
 	USE="alsa xml X -cups"
 	VIDEO_CARDS="vesa"
+	FEATURES="ccache"
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
 	# TODO: don't add this by default
@@ -128,6 +135,16 @@ pre_install_portage_tree() {
 
 pre_build_kernel() {
 	export CONFIG_PROTECT_MASK=""
+	export CCACHE_DIR="/var/tmp/ccache"
+	export CCACHE_SIZE="4G"
+
+	spawn_chroot "mkdir -p $TMP"
+
+	spawn_chroot "emerge ccache"
+	spawn_chroot "mkdir -p /var/tmp/ccache"
+	spawn "mkdir -p /var/tmp/ccache/${ARCH}"
+	spawn "mount /var/tmp/ccache/${ARCH} ${chroot_dir}/var/tmp/ccache -o bind"
+	echo "${chroot_dir}/var/tmp/ccache" >> /tmp/install.umount
 }
 
 pre_install_extra_packages() {
