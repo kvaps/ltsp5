@@ -38,6 +38,9 @@ start() {
             fi
         done
 
+        start_sound || true
+        configure_localdev || true
+
         eend 0
 
         if $usplash && [ "$orig_console" != serial ]; then
