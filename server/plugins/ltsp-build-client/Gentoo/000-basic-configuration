@@ -1,18 +1,40 @@
 case "$MODE" in
     commandline)
+        add_option "stage-uri" "`eval_gettext "Stage 3 URI"`" "advanced" "true"
         add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "regular" "true"
+        add_option "mirror" "`eval_gettext "Set extra mirror locations (space-separated)"`" "regular" "true"
+        add_option "locale" "`eval_gettext "Set the default locale"`" "advanced" "false"
+        add_option "packages" "`eval_gettext "list of extra packages to install as part of the initial installation."`" "advanced" "true"
         ;;
     configure)
-        ARCH=$(uname -m)
-        EMERGE="emerge"
-        EMERGE_OPTS="--usepkg"
-        EARLY_PACKAGES="xorg-server ltsp pulseaudio joystick splashutils ltspfs"
-        RCS_WHITELIST="bootmisc checkfs checkroot clock consolefont hostname keymaps localmount modules net.lo rmnologin urandom ltsp-client-setup"
-        RC2_WHITELIST="ltsp-client nbd-client splash local syslog-ng"
+        if [ -n "$option_locale_value" ]; then
+            LOCALE="$option_locale_value"
+        fi
+
+        if [ -n "$option_packages_value" ]; then
+            PACKAGES="$option_packages_value"
+        fi
+
+        if [ -n "$option_mirror_value" ]; then
+            MIRRORS="$option_mirror_value"
+        fi
+
+        if [ -n "$option_stage_uri_value" ]; then
+            STAGE_URI="$option_stage_uri_value"
+        fi
+
+        RCS_WHITELIST="bootmisc fsck root hwclock consolefont hostname \
+                       keymaps localmount ltsp-client-setup modules mtab \
+                       net.lo procfs rmnologin sysctl termencoding urandom"
+        RC2_WHITELIST="nbd-client splash local ltsp-client syslog-ng"
         OVERRIDE_EXPORTS="true"
 
         if [ -n "$option_jobs_value" ]; then
             JOBS="$option_jobs_value"
+        else
+            JOBS=2
         fi
+        # TODO: other MAKEOPTS?
+        MAKEOPTS="-j${JOBS}"
         ;;
 esac

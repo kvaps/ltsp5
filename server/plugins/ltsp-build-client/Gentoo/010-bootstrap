@@ -1,26 +1,42 @@
 case "$MODE" in
-	install)
-		# Install base packages
-		BASE_PACKAGES="glibc dhcpcd udev coreutils gzip gcc less openssh nano
-			util-linux psmisc procps debianutils diffutils findutils gawk grep
-			kbd net-tools iputils wget tar cpio bzip2 virtual/modutils
-			syslog-ng which"
-		if [ -n "$EXCLUDE" ] ; then
-			for i in $BASE_PACKAGES; do
-				for j in $EXCLUDE; do
-					if [ "$i" = "$j" ]; then
-						continue 2
-					fi
-				done
-				BASE_PACKAGES_FINAL="$BASE_PACKAGES_FINAL $i"
-			done
-		fi
-		if [ -n "$INCLUDE" ] ; then
-			for i in $INCLUDE; do
-				BASE_PACKAGES_FINAL="$BASE_PACKAGES_FINAL $i"
-			done
-		fi
-		$EMERGE $BASE_PACKAGES_FINAL
-		USE="bootstrap" $EMERGE baselayout
-		;;
+    commandline)
+        add_option "quickstart-profile" "`eval_gettext "Path to Quickstart profile"`" "advanced" "true"
+        add_option "quickstart-debug" "`eval_gettext "Debug Quickstart"`" "advanced" "false"
+        add_option "quickstart-verbose" "`eval_gettext "Show external command output"`" "advanced" "false"
+        add_option "quickstart-host" "`eval_gettext "Get profile from a Quickstart server"`" "advanced" "true"
+    ;;
+
+    configure)
+        if [ -n "$option_quickstart_profile_value" ]; then
+            QUICKSTART_PROFILE="$option_quickstart_profile_value"
+            printf "`eval_gettext "Manual Quickstart: %s"`\n" $QUICKSTART_PROFILE
+        else
+            QUICKSTART_PROFILE="/etc/ltsp/quickstart/profile.qs"
+            printf "`eval_gettext "Default Quickstart profile: %s"`\n" $QUICKSTART_PROFILE
+        fi
+
+        if [ ! -e $QUICKSTART_PROFILE ]; then
+            printf "`eval_gettext "ERROR: %s does not exist"`\n" $QUICKSTART_PROFILE
+            exit 1
+        fi
+
+        QUICKSTART_ARGS=""
+        if [ -n "$option_quickstart_debug_value" ]; then
+            QUICKSTART_ARGS="$QUICKSTART_ARGS --debug"
+        fi
+        if [ -n "$option_quickstart_verbose_value" ]; then
+            QUICKSTART_ARGS="$QUICKSTART_ARGS --verbose"
+        fi
+        if [ -n "$option_quickstart_host_value" ]; then
+            QUICKSTART_ARGS="$QUICKSTART_ARGS --client=$option_quickstart_host_value"
+        fi
+    ;;
+    install)
+        printf "`eval_gettext "Installing into: %s"`\n" $ROOT
+        
+        PACKAGES="${PACKAGES}" STAGE_URI="${STAGE_URI}" MIRRORS="${MIRRORS}" \
+        MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" \
+        ARCH="${ARCH}" NAME="${CHROOT}" \
+        quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
+    ;;
 esac

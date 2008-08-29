@@ -1,6 +1,0 @@
-case "$MODE" in
-    after-install)
-        # point /etc/mtab to /proc/mounts
-        ln -sf /proc/mounts $ROOT/etc/mtab
-        ;;
-esac
