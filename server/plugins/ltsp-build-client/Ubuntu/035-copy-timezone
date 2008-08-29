@@ -3,6 +3,7 @@ case "$MODE" in
         # Set default timezone to that of server Bug #126443
         if [ -f /etc/timezone ]; then
             cp /etc/timezone $ROOT/etc/timezone
+            cp /etc/localtime $ROOT/etc/localtime
         fi
         ;;
 esac

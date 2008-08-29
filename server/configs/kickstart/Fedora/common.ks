@@ -60,10 +60,10 @@ filesystem
 findutils
 fontconfig
 freetype
+fuse-sshfs
 gawk
 gdbm
 glib2
-glibc.i386
 glibc-common
 gnutls
 gphoto2
@@ -75,7 +75,6 @@ info
 initscripts
 iproute
 iputils
-kernel.i586
 kpartx
 krb5-libs
 kudzu
@@ -135,9 +134,11 @@ MAKEDEV
 mcstrans
 mesa-libGL
 mingetty
+mkelfimage
 mkinitrd
 module-init-tools
 nash
+nbd
 nc
 ncurses
 neon
@@ -145,7 +146,6 @@ net-snmp-libs
 net-tools
 openldap
 openssh-clients
-openssl.i386
 pam
 passwd
 pcre
@@ -171,6 +171,7 @@ shadow-utils
 sqlite
 rsyslog
 system-config-display
+system-config-firewall-tui
 tar
 tftp
 time
@@ -179,6 +180,7 @@ tzdata
 udev
 util-linux-ng
 which
+wraplinux
 xkeyboard-config
 xorg-x11-drivers
 xorg-x11-drv-openchrome
@@ -189,6 +191,7 @@ xorg-x11-xauth
 xorg-x11-xfs
 xorg-x11-xkb-utils
 xorg-x11-xinit
+xterm
 ypbind
 yp-tools
 yum
@@ -384,3 +387,4 @@ zlib
 -xinetd
 -zip
 -zlib-devel
+%end

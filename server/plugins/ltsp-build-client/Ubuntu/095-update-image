@@ -19,6 +19,7 @@ case "$MODE" in
             DEBIAN_FRONTEND=noninteractive
             export DEBIAN_FRONTEND
 
+            chroot $ROOT /etc/kernel/postinst.d/ltsp-update-kernels
             umount $ROOT/proc || true
 
             /usr/sbin/ltsp-update-image ${UPDATE_IMAGE_OPTIONS}

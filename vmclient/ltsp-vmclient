@@ -1,12 +1,7 @@
 #!/bin/sh
 
-# vmwarevga is better than cirrus or vesa
-# but it is pretty broken
-# TODO: Split this out into a config file
-#strings /usr/bin/qemu-kvm |grep vmwarevga > /dev/null
-#[ $? -eq 0 ] && VGAOPTION="-vmwarevga"
+# Read options from /etc/ltsp/vmclient
+[ -f /etc/ltsp/vmclient ] && . /etc/ltsp/vmclient
 
-# e1000 is much better than the default rtl8139
-[ -e /usr/share/kvm/pxe-e1000.bin ] && NICMODEL=",model=e1000" 
-
-qemu-kvm -hda /dev/null -boot n -m 256 $VGAOPTION -net nic$NICMODEL -net tap,script=/usr/sbin/ltsp-qemu-bridge-ifup
+set -x
+qemu-kvm $SOUNDDEV -hda /dev/null -boot n -m 256 $VGAOPTION $NICMODEL -net tap,script=/usr/sbin/ltsp-qemu-bridge-ifup

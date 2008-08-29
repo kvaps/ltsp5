@@ -33,11 +33,11 @@ done
 # Set up variables
 BASE=${BASE:-"/opt/ltsp"}
 if [ -z "${CHROOTS}" ]; then
-    CHROOTS=$(find ${BASE} -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
+    CHROOTS=$(find ${BASE}/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
               grep -v images)
 fi
 HOSTNAME=$(hostname)
-IPS=$(ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
+IPS=$(/sbin/ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
 OUTPUT=$(mktemp)
 ENC="dsa rsa"
 NAMES="${HOSTNAME} ${IPS}"

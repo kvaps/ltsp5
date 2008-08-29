@@ -5,7 +5,7 @@ $orignetwork="192.168.0.0";
 $orignetmask="255.255.255.0";
 $origbroadcast = `/bin/ipcalc -b $orignetwork $orignetmask`;
 
-$config_file = "/etc/ltsp/ltsp-dhcpd.conf";
+$config_file = "/etc/ltsp/dhcpd.conf";
 $bkup_file = $config_file . ".ltsp.orig";
 $tmp_file = $config_file . ".ltsp.tmp";
 

@@ -7,8 +7,8 @@ if ( $ARGV[2] ) {
     $network = $ARGV[1];
     $netmask = $ARGV[2];
 } else {
-    $server="192.168.0.254";
-    $network="192.168.0.0";
+    $server="172.31.100.254";
+    $network="172.31.100.0";
     $netmask="255.255.255.0";
 }
 

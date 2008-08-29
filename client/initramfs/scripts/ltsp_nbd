@@ -7,6 +7,10 @@ mountroot()
 	run_scripts /scripts/nfs-top
 	[ "$quiet" != "y" ] && log_end_msg
 
+    if [ -n "$dhcpport" ]; then
+       DHCPPORT="$dhcpport"
+    fi
+
 	# For DHCP
 	modprobe -q af_packet
 
@@ -19,6 +23,9 @@ mountroot()
 			ipconfig ${DEVICE}
 			;;
 		dhcp|bootp|rarp|both)
+            if [ ${IPOPTS} == "dhcp"] && [ -n "$DHCPPORT" ]; then
+                IPOPTS="${IPOPTS} -p ${DHCPPORT}"
+            fi
 			ipconfig -c ${IPOPTS} -d ${DEVICE}
 			;;
 		*)
@@ -78,7 +85,7 @@ mountroot()
     nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 && mount -o ro -t squashfs /dev/nbd0 /rofs
 
     # merge ro and rw filesystems
-    mount -t unionfs -o dirs=/cow=rw:/rofs=ro unionfs ${rootmnt}
+    mount -t aufs -o dirs=/cow=rw:/rofs=ro aufs ${rootmnt}
 
     # make the filesystems accessible
     mkdir -p ${rootmnt}/cow

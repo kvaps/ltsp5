@@ -6,7 +6,7 @@
 # conf-file=/etc/ltsp/dhcpd-dnsmasq
 
 # ip ranges to hand out
-dhcp-range=192.168.1.100,192.168.1.250,1h
+dhcp-range=192.168.0.20,192.168.0.250,1h
 
 # rootpath option
 dhcp-option=17,/opt/ltsp/i386
@@ -18,3 +18,7 @@ dhcp-vendorclass=pxe,PXEClient
 # Set the boot filename for BOOTP. 
 dhcp-boot=net:pxe,/ltsp/i386/pxelinux.0
 dhcp-boot=net:etherboot,/ltsp/i386/nbi.img
+
+# enable the TFTP server (needs dnsmasq 2.36+)
+enable-tftp
+tftp-root=/var/lib/tftpboot/

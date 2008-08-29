@@ -3,13 +3,17 @@ case "$MODE" in
         add_option "prompt-rootpass" "`eval_gettext "prompt to set the root password, defaults to disabled"`" "advanced" "false"
         ;;
     configure)
+        ROOTPASS=""
         if [ -n "$option_prompt_rootpass_value" ]; then
             ROOTPASS=prompt
         fi
         ;;
     after-install)
         # Root password is empty by default, lock it
-        $CHROOTEXEC $ROOT passwd -l root
+        # but make sure to not do that if the user requested prompting
+        if [ -z "$ROOTPASS" ]; then
+            $CHROOTEXEC $ROOT passwd -l root
+        fi
         ;;
     finalization)
         if [ "$ROOTPASS" = "prompt" ]; then

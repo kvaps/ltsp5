@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # If someone's overridden the config with their own custom config, then
@@ -68,7 +68,7 @@ handle_mouse_settings() {
         [ -z "$(echo $X_MOUSE_DEVICE | grep '/dev/psaux')" ];then
         X_MOUSE_DEVICE=$(echo $X_MOUSE_DEVICE |sed -e s/'\/'/'\\\/'/g)
         test -z $X_MOUSE_PROTOCOL && X_MOUSE_PROTOCOL="auto"
-        EXTRAMOUSE="EndSection\n\nSection \"InputDevice\"\n\tIdentifier\t\"Mouse1\"\n\tDriver\t\"mouse\"\n\tOption\t"Device"\t$X_MOUSE_DEVICE\n\tOption\t\"Protocol\"\t$X_MOUSE_PROTOCOL\nEndSection"
+        EXTRAMOUSE="EndSection\n\nSection \"InputDevice\"\n\tIdentifier\t\"Mouse1\"\n\tDriver\t\"mouse\"\n\tOption\t"Device"\t\"$X_MOUSE_DEVICE\"\n\tOption\t\"Protocol\"\t$X_MOUSE_PROTOCOL\nEndSection"
         sed -i /'Identifier  "Mouse0"'/,/'EndSection'/s/'EndSection'/"$EXTRAMOUSE"/g $INPUT_FILE
         sed -i /'Section "ServerLayout"'/,/'EndSection'/s/'EndSection'/"\tInputDevice\t\"Mouse1\"\nEndSection"/g $INPUT_FILE
     fi
@@ -112,8 +112,22 @@ set_options() {
     done
 }
 
-# FIXME
 # Handle Monitor settings
+set_monitor_options() {
+    for OPT in 01 02 03 04 05 06 07 08 09 10; do
+        eval CURROPT=\$X_MONITOR_OPTION_${OPT}
+        if [ -n "${CURROPT}" ]; then
+            OPTLINE="\tOption\t"
+            for O in ${CURROPT}; do
+                OPTLINE="${OPTLINE}\t${O}"
+            done
+            OPTLINE="${OPTLINE}\nEndSection"
+            sed -i /'Section "Monitor"'/,/'EndSection'/s/'EndSection'/${OPTLINE}/g $INPUT_FILE
+        fi
+    done
+}
+
+
 set_sync_ranges(){
     # beware, Xorg -configure sometimes writes these values in the bootstrapped file,
     # so we need replacement code as well
@@ -259,6 +273,7 @@ handle_mouse_settings || true
 handle_driver || true
 set_videoram || true
 set_options || true
+set_monitor_options || true
 handle_modes || true
 set_default_depth || true
 hardcoded_devices || true

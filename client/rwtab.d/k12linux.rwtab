@@ -1,10 +1,17 @@
 dirs    /etc/udev/rules.d/
 dirs    /var/lib/dbus/
 dirs    /var/lib/xkb/
+dirs    /var/cache/ldm/
+dirs    /home
+dirs	/var/cache/hald/
+dirs	/var/lib/pulse/
 
 files	/etc/lts.conf
 files   /etc/X11/xorg.conf
 files   /var/lib/random-seed
 files   /.viminfo
+files   /etc/passwd
+files   /etc/group
+files   /etc/alsa/asound.state
 
 empty   /root

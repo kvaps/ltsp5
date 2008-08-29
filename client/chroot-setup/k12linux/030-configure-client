@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# Disable services we don't want
+for service in ConsoleKit avahi-daemon gpm iptables ip6tables kudzu mcstrans mdmonitor netfs network pcscd rpcbind; do
+    if [ ! -e /etc/init.d/$service ]; then
+        continue
+    fi
+    #echo "Disabling Service: $service"
+    /sbin/chkconfig $service off
+done
+
+# Enable services we do want
+for service in haldaemon messagebus rsyslog udev-post; do
+    if [ ! -e /etc/init.d/$service ]; then
+        continue
+    fi
+    #echo "Enabling Service: $service"
+    /sbin/chkconfig $service on
+done
+
+# Setup readonly-root Mode
+sed -i 's/READONLY=no/READONLY=yes/' /etc/sysconfig/readonly-root
+
+# Set ltsp-launch-client as DM
+echo "DISPLAYMANAGER=/usr/sbin/ltsp-client-launch" > /etc/sysconfig/desktop
+
+# Link /etc/mtab to /proc/mounts
+# This is not perfect, but it enables fuse mounts to work.
+rm -f /etc/mtab
+ln -sf ../proc/mounts /etc/mtab
+
+# Blacklist pcspkr
+/bin/grep -q "blacklist pcspkr" /etc/modprobe.conf 2> /dev/null
+if [ $? -ne 0 ]; then
+    echo "blacklist pcspkr" >> /etc/modprobe.conf
+fi
+
+# Files to silence warning messages
+touch /etc/alsa/asound.state
+
+# Silence /etc/mtab rwtab error message during bootup
+sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
+
+# Silence /etc/mtab* removal errors
+sed -i 's/^rm -f \/etc\/mtab/#rm -f \/etc\/mtab/' /etc/rc.sysinit
+
+# Silence local filesystems mount errors during bootup
+sed -i '/^sysfs/d' /etc/fstab
+
+# TEMPORARY: /var/lib/pulse/ must exist (we can remove this soon)
+mkdir -p /var/lib/pulse/

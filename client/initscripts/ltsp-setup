@@ -70,15 +70,22 @@ EOF
 
 configure_syslog() {
     if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
-        cat <<EOF > /etc/syslog.conf
+        syslog_conf=/etc/syslog.conf
+        if [ -d /etc/rsyslog.d ]; then
+            syslog_conf=/etc/rsyslog.d/ltsp.conf   
+            touch $syslog_conf
+        fi
+        if [ -f "$syslog_conf" ]; then
+            cat <<EOF > "$syslog_conf"
 *.* @${SYSLOG_HOST:-$SERVER}
 EOF
+        fi
     fi
 }
 
 configure_fstab() {
     if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
-        echo "/dev/root     /       unionfs defaults        0       0" > /etc/fstab
+        echo "/dev/root     /       rootfs defaults        0       0" > /etc/fstab
         echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
         mount /tmp
     fi

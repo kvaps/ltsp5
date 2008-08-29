@@ -12,9 +12,9 @@ test -f /etc/ltsp_chroot || exit 0
 # Make sure LANG is set
 if [ -z "$LANG" ]
 then
-  if [ -f /etc/sysconfig/language ]
+  if [ -f /etc/sysconfig/i18n ]
   then
-    LANG=`. /etc/sysconfig/language; echo $RC_LANG`
+    . /etc/sysconfig/i18n
     export LANG
   fi
 fi
@@ -28,10 +28,24 @@ then
   fi
 fi
 
-# Find tftp server
-# XXX: option routers is not guaranteed to be the tftp server.  Need to figure
-#      out a better way to detect the tftp server address.
-ROOTSERVER="$(cat /dev/.dhclient-eth0.leases |grep "routers" |awk {'print $3'} |sed 's/;//')"
+# Grab lts.conf from the same IP address as the mount server.
+# (TODO: This is duplicated from ltsp_config because we don't want to run that entire script at this point.)
+
+# check for NBD devices
+NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/rofs /{print $1}' /proc/mounts)
+if [ -n "$NBD_DEVICES" ]; then
+    for DEVICE in $NBD_DEVICES ; do
+        SERVER=$(pgrep -f -l $DEVICE | awk '{print $3}')
+        test -n "$SERVER" && break
+    done
+else
+    # check for NFS root
+    SERVER=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
+fi
+
+SERVER="${SERVER:-172.31.100.254}"
+export SERVER
+
 ARCH=$(uname -m)
 [ "$ARCH" = "i586" ] && ARCH=i386
 [ "$ARCH" = "i686" ] && ARCH=i386
@@ -39,7 +53,7 @@ TFTPPATH="/ltsp/$ARCH/lts.conf"
 
 # Attempt to get lts.conf via tftp
 cd /var/run
-(echo "get ${TFTPPATH}"|tftp ${ROOTSERVER} >/dev/null 2>&1)
+(echo "get ${TFTPPATH}"|tftp ${SERVER} >/dev/null 2>&1)
 if [ -s ./lts.conf ];then
     cp ./lts.conf /etc/lts.conf
 fi

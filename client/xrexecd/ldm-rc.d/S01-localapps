@@ -1,0 +1,103 @@
+#!/bin/sh
+#
+# The following is a script to set up local apps support on LTSP through LDM
+#
+# The presumption is that the environment is set up such that NSS will look
+# at extrafiles, ie. additional local files for passwd and group beyond
+# those found in /etc.
+#
+# This will enable us to easily bypass the need for setting up local user
+# authentication, and instead leverage the authentication already set up on
+# the server.
+
+if boolean_is_true "$LOCAL_APPS"; then
+
+    # Set up local uids/gids
+
+    LDM_CACHE=/var/cache/ldm
+    mkdir -p ${LDM_CACHE} 2>/dev/null
+
+    # Cleanup 
+    XREXECD_PIDFILE=/var/run/xrexecd
+    [ -r "$XREXECD_PIDFILE" ] && XREXECD_PID=$(cat $XREXECD_PIDFILE)
+    # Kill PID
+    if [ -n "$XREXECD_PID" ]; then
+        pkill -P $XREXECD_PID
+        rm $XREXECD_PIDFILE
+    fi
+
+    # Copy /etc/passwd and /etc/group to cache if it does not exist (should only happen on first login)
+    for i in passwd group; do
+        if [ ! -e "${LDM_CACHE}/${i}" ]; then
+            cp /etc/${i} "${LDM_CACHE}/${i}"
+        else
+            cp "${LDM_CACHE}/${i}" /etc/${i}
+        fi
+    done
+
+    # Get logged in username
+    # (below - no longer needed, as we export LDM_USERNAME to the env from ldm.c)
+    #LDM_USERNAME=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} 'echo ${USER}')
+
+    # Get passwd info *just* for that user
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent passwd ${LDM_USERNAME}" >>/etc/passwd
+
+    # Get all group info and copy to TMPGROUP
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent group" >>/etc/group
+
+    # Now, some groups may have different gids on the server than the client chroot
+    # So, let's prune out all the dups
+    TMPGROUP="${LDM_CACHE}/tmpgroup"
+    gnames=""
+    while read line; do
+        gname=$(echo $line|cut -d: -f1)
+        match=
+        for e in $gnames; do
+            if [ "$gname" = "$e" ]; then
+                match=1
+            fi
+        done
+        if [ -z "$match" ]; then
+            echo "$line" >>${TMPGROUP}
+            gnames="$gnames $gname"
+        fi
+    done </etc/group
+    mv ${TMPGROUP} /etc/group
+    chmod 644 /etc/group
+
+    # Get the system groups that the user belongs to, so we can add him back in
+    myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/getent group|egrep "[,:]${LDM_USERNAME}(,|$)"|cut -d: -f1| tr '\n' ',' | sed -e 's/,$//g')
+    if [ -n "$myGroups" ]; then
+        usermod -G "$myGroups" "${LDM_USERNAME}"
+    fi
+
+    # Now, let's mount the home directory
+
+    # First, make the mountpoint
+    LDM_HOME=$(getent passwd ${LDM_USERNAME}|cut -d: -f6)
+    mkdir -p ${LDM_HOME}
+    chown ${LDM_USERNAME}.${LDM_USERNAME} ${LDM_HOME}
+
+    ## Maybe do this:
+    ## export HOME=${LDM_CACHE}
+
+    # Mount the home directory
+    sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+
+    #Launch the xrexecd to handle the apps
+    (
+    echo $! > $XREXECD_PIDFILE
+    xrexecd.sh 
+
+    # Copy back passwd and group
+    for i in passwd group; do
+        cp "${LDM_CACHE}/${i}" /etc/${i}
+    done
+    
+    # Unmount sshfs and remove the mount dir
+    fusermount -uqz ${LDM_HOME}
+    rmdir ${LDM_HOME}
+    rm $XREXECD_PIDFILE
+    )&
+
+fi

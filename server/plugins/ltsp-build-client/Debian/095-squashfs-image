@@ -1,0 +1,49 @@
+case "$MODE" in
+    commandline)
+        add_option "squashfs-image" "`eval_gettext "create squashfs image for use with NBD."`" "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_squashfs_image_value" ]; then
+            # set an environment variable we can pick up later
+            SQUASHFS_IMAGE="True"
+        fi
+        if [ "True" = "$SQUASHFS_IMAGE" ]; then
+            # need to use versioned linux-image metapackages, as kernel modules
+            # do not appear to have corresponding unversioned ones
+            KERNEL_VERSION="2.6"
+        fi
+        ;;
+    before-install)
+        if [ "True" = "$SQUASHFS_IMAGE" ]; then
+            for fs in aufs squashfs ; do
+                # add appropriate module packages to list of packages to be installed
+                LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${KERNEL_VERSION}-${KERNEL_ARCH}"
+            done
+
+            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet ip=dhcp boot=ltsp_nbd"}
+            export BOOTPROMPT_OPTS
+            mkdir -p $ROOT/etc/ltsp/
+            echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
+        fi
+        ;;
+    finalization)
+        if [ "True" = "$SQUASHFS_IMAGE" ]; then
+            DEBIAN_OLD_FRONTEND=$DEBIAN_FRONTEND
+
+            if [ -n "$CHROOT" ]; then
+                UPDATE_IMAGE_OPTIONS="-a ${CHROOT}"
+            fi
+
+            DEBIAN_FRONTEND=noninteractive
+            export DEBIAN_FRONTEND
+
+            umount $ROOT/proc || true
+
+            /usr/sbin/ltsp-update-image ${UPDATE_IMAGE_OPTIONS}
+            chroot $ROOT mount -t proc proc /proc || true
+
+            DEBIAN_FRONTEND=$DEBIAN_OLD_FRONTEND
+            export DEBIAN_FRONTEND
+        fi
+        ;;
+esac

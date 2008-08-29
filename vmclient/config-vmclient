@@ -1,0 +1,12 @@
+# e1000 is much better than the default rtl8139
+[ -e /usr/share/kvm/pxe-e1000.bin ] && NICMODEL="-net nic,model=e1000"
+# Bridge device for qemu-kvm to connect itself
+BRIDGEDEV=ltspbr0
+# Sound Device (Comment out to disable sound)
+SOUNDDEV="-soundhw all"
+
+### SET YOUR OWN OPTIONS BELOW HERE ###
+## VESA video
+#VGAOPTION=-std-vga
+## VMWare video
+#VGAOPTION=-vmwarevga

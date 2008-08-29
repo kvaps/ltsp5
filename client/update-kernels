@@ -31,7 +31,7 @@ if [ -z "$BOOTPROMPT_OPTS" ]; then
     if [ "$VENDOR" = "Ubuntu" ]; then
         BOOTPROMPT_OPTS="quiet splash"
     elif [ "$VENDOR" = "Debian" ]; then
-        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp boot=nfs"
+        BOOTPROMPT_OPTS="quiet root=/dev/nfs ip=dhcp boot=nfs"
     else
         BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp"
     fi

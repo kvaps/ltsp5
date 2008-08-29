@@ -1,0 +1,19 @@
+#!/bin/sh
+# Generate nbd root images for LTSP
+
+for path in /opt/ltsp/*; do
+    arch=`basename $path`
+    targetimg="/opt/ltsp/images/$arch.img"
+    # Skip "images" dir
+    [ "$arch" == "images" ] && continue
+    TMPNAME=`/bin/mktemp -u /opt/ltsp/images/$arch.XXXXXXX`
+    mksquashfs /opt/ltsp/$arch/ $TMPNAME -ef /usr/share/ltsp/mksquashfs-exclude -wildcards
+    if [ $? -ne 0 ]; then
+        echo "ERROR during mksquashfs creation of $targetimg.  Aborting..."
+        exit 1
+    fi
+    rm -f $targetimg
+    mv $TMPNAME $targetimg
+    chmod 0644 $targetimg
+    echo "$targetimg complete."
+done

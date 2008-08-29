@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = xrexecd
-xrexecd_SOURCES = xrexecd.c
+bin_PROGRAMS = xatomwait
+xatomwait_SOURCES = xatomwait.c
 
-xrexecd_LDADD = $(XREXECD_LIBS)
+xatomwait_LDADD = $(XATOMWAIT_LIBS)

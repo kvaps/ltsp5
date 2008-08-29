@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+        # Run ltsp-chroot-setup in client
+        setarch $ARCH $CHROOTEXEC $ROOT /usr/share/ltsp/ltsp-chroot-setup
+        ;;
+esac

@@ -6,9 +6,6 @@
 # generates a swap file and configures nbd-server to export it
 # to stdout. should usually be run from an inetd.
 
-# default swapfile size (in MB)
-SIZE=32
-
 # default to running mkswap 
 RUN_MKSWAP=true
 
@@ -16,11 +13,18 @@ if [ -f /etc/ltsp/nbdswapd.conf ]; then
     . /etc/ltsp/nbdswapd.conf
 fi
 
+# Abort if liveimg
+cat /proc/cmdline |/bin/grep -q "liveimg"
+[ $? -eq 0 ] && exit 0
+
+# swapfile size (in MB)
+SIZE=${SIZE:-"32"}
+
 if [ -n "$SWAPDIR" ]; then
     if [ -d "$SWAPDIR" ] && [ -w "$SWAPDIR" ]; then
-        TEMPFILE_OPTS="${SWAPDIR}XXXXXX"
+        TEMPFILE_OPTS="${SWAPDIR}/XXXXXX"
     else
-        echo "ERROR: not a directory or not writeable: $SWAPDIR" > /dev/stderr
+        echo "ERROR: not a directory or not writeable: $SWAPDIR" >&2
         exit 1
     fi
 fi
@@ -37,7 +41,7 @@ if [ "$RUN_MKSWAP" = "true" ]; then
 fi
 
 # start the swap server
-/bin/nbd-server 0 $SWAP $NBD_SERVER_OPTS -C /dev/null > /dev/null 2>&1
+PATH=/usr/bin:/bin:$PATH nbd-server 0 $SWAP $NBD_SERVER_OPTS -C /dev/null > /dev/null 2>&1
 
 # clean up the swap file
 rm -f $SWAP

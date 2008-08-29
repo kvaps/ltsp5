@@ -10,13 +10,14 @@ case "$MODE" in
         if [ -n "$option_kiosk_value" ]; then
             # set an environment variable we can pick up later
             KIOSK="True"
+            COMPONENTS="main restricted universe multiverse"
         fi
         ;;
     after-install)
         if [ -n "$KIOSK" ]; then
             # install the webbrowser and a display manager that 
             # is capable to do a timed autologin in the client environment
-            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox feisty-gdm-themes firefox-themes-ubuntu human-gtk-theme metacity
+            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox ubuntu-gdm-themes human-gtk-theme metacity devilspie ubufox
 
             # make the necessary directories writeable to the booted client
             echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
@@ -31,10 +32,17 @@ case "$MODE" in
             echo "pulseaudio -L module-detect -L module-rescue-streams -L module-native-protocol-unix -L module-volume-restore -n &" >> $ROOT/home/kiosk/.xsession
             # make sure we have a wm
             echo "metacity &" >> $ROOT/home/kiosk/.xsession
-            echo "/usr/bin/firefox --fullscreen" >> $ROOT/home/kiosk/.xsession
 
             # switch to the proper theme 
             echo "include \"/usr/share/themes/Human/gtk-2.0/gtkrc\"" >$ROOT/home/kiosk/.gtkrc-2.0
+
+            # set up devilspie for fullscreen firefox
+            echo "devilspie &" >> $ROOT/home/kiosk/.xsession
+            mkdir -p $ROOT/home/kiosk/.devilspie
+            echo "(if (matches (window_name) \"fox\") (undecorate) (fullscreen))" >$ROOT/home/kiosk/.devilspie/default.ds
+
+            # add firefox
+            echo "/usr/bin/firefox" >> $ROOT/home/kiosk/.xsession
 
             # create a custom configuration for gdm
             cp $ROOT/etc/gdm/gdm.conf $ROOT/etc/gdm/gdm-kiosk.conf
@@ -54,7 +62,7 @@ case "$MODE" in
         # make sure gdm actually starts
         if [ -n "$KIOSK" ]; then
             if [ -e $ROOT/etc/init.d/gdm ]; then
-                chroot $ROOT mv /etc/rc2.d/K13gdm /etc/rc2.d/S13gdm
+                chroot $ROOT mv /etc/rc2.d/K30gdm /etc/rc2.d/S30gdm
             fi
         fi
 esac
