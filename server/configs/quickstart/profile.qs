@@ -122,7 +122,7 @@ pre_install_portage_tree() {
 	sys-fs/ltspfs
 	x11-misc/ldm
 	# needed for ldm
-	=x11-themes/gtk-engines-ubuntulooks-0.9.12*
+	~x11-themes/gtk-engines-ubuntulooks-0.9.12
 
 	EOF
 
@@ -130,6 +130,9 @@ pre_install_portage_tree() {
 	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<- EOF
 	# stable fails on 2.6.24 kernel
 	~sys-fs/fuse-2.7.3
+	~sys-fs/sshfs-fuse-2.1
+	~net-misc/openssh-5.1_p1
+
 	EOF
 }
 
@@ -159,17 +162,14 @@ post_install_extra_packages() {
 
 	# make sure this is really existing before bind mounting it
 	mkdir ${chroot_dir}/var/lib/nfs
-
-	# Set a default hostname
-	echo 'HOSTNAME="ltsp"' > ${chroot_dir}/etc/conf.d/hostname
  
 	spawn_chroot "rm /etc/init.d/net.eth0"
 
 	cat >> ${chroot_dir}/etc/lts.conf <<- EOF
 	# see /usr/share/doc/ltsp-client-$version/lts-parameters.txt.bz2 for a listing 
 	# of all possible options (Don't forget to include a [default] section)
-	# TODO: dont serve this file from here
-	#	   put it in /var/lib/tftpboot/ltsp/arch/lts.conf
+	# This file will be overwitten by an lts.conf from the tftp server 
+	# from /var/lib/tftpboot/ltsp/${ARCH}/lts.conf if it is available
 	EOF
 }
 
