@@ -5,7 +5,7 @@ install
 
 # rev #2 will be configurable (i.e. http or ftp or cdrom/dvd or nfs, etc, etc)
 repo --name=released-9-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-9&arch=i386
-repo --name=updates-9-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9&arch=i386
+repo --name=updates-9-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9.newkey&arch=i386
 repo --name=temporary-9-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/9/i386/
 
 %include ../common.ks
