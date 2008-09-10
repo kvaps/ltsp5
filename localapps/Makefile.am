@@ -1,2 +1,2 @@
-EXTRA_DIST = autogen.sh localapps
+EXTRA_DIST = autogen.sh ltsp-localapps
 SUBDIRS = src

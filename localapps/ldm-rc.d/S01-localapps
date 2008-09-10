@@ -14,11 +14,11 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Set up local uids/gids
 
-    LOCALAPPS_CACHE=/var/cache/localapps
+    LOCALAPPS_CACHE=/var/cache/ltsp-localapps
     mkdir -p ${LOCALAPPS_CACHE} 2>/dev/null
 
     # Cleanup 
-    LOCALAPPSD_PIDFILE=/var/run/ltsp/localappsd
+    LOCALAPPSD_PIDFILE=/var/run/ltsp/ltsp-localappsd
     [ -r "$LOCALAPPSD_PIDFILE" ] && LOCALAPPSD_PID=$(cat $LOCALAPPSD_PIDFILE)
     # Kill PID
     if [ -n "$LOCALAPPSD_PID" ]; then
@@ -84,10 +84,10 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Mount the home directory
     sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
-    #Launch the localappsd to handle the apps
+    #Launch the ltsp-localappsd to handle the apps
     (
     echo $! > $LOCALAPPSD_PIDFILE
-    localappsd
+    ltsp-localappsd
 
     # Copy back passwd and group
     for i in passwd group; do
