@@ -14,24 +14,24 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Set up local uids/gids
 
-    LDM_CACHE=/var/cache/ldm
-    mkdir -p ${LDM_CACHE} 2>/dev/null
+    LOCALAPPS_CACHE=/var/cache/localapps
+    mkdir -p ${LOCALAPPS_CACHE} 2>/dev/null
 
     # Cleanup 
-    XREXECD_PIDFILE=/var/run/xrexecd
-    [ -r "$XREXECD_PIDFILE" ] && XREXECD_PID=$(cat $XREXECD_PIDFILE)
+    LOCALAPPSD_PIDFILE=/var/run/ltsp/localappsd
+    [ -r "$LOCALAPPSD_PIDFILE" ] && LOCALAPPSD_PID=$(cat $LOCALAPPSD_PIDFILE)
     # Kill PID
-    if [ -n "$XREXECD_PID" ]; then
-        pkill -P $XREXECD_PID
-        rm $XREXECD_PIDFILE
+    if [ -n "$LOCALAPPSD_PID" ]; then
+        pkill -P $LOCALAPPSD_PID
+        rm $LOCALAPPSD_PIDFILE
     fi
 
     # Copy /etc/passwd and /etc/group to cache if it does not exist (should only happen on first login)
     for i in passwd group; do
-        if [ ! -e "${LDM_CACHE}/${i}" ]; then
-            cp /etc/${i} "${LDM_CACHE}/${i}"
+        if [ ! -e "${LOCALAPPS_CACHE}/${i}" ]; then
+            cp /etc/${i} "${LOCALAPPS_CACHE}/${i}"
         else
-            cp "${LDM_CACHE}/${i}" /etc/${i}
+            cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
         fi
     done
 
@@ -47,7 +47,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Now, some groups may have different gids on the server than the client chroot
     # So, let's prune out all the dups
-    TMPGROUP="${LDM_CACHE}/tmpgroup"
+    TMPGROUP="${LOCALAPPS_CACHE}/tmpgroup"
     gnames=""
     while read line; do
         gname=$(echo $line|cut -d: -f1)
@@ -79,25 +79,25 @@ if boolean_is_true "$LOCAL_APPS"; then
     chown ${LDM_USERNAME}.${LDM_USERNAME} ${LDM_HOME}
 
     ## Maybe do this:
-    ## export HOME=${LDM_CACHE}
+    ## export HOME=${LOCALAPPS_CACHE}
 
     # Mount the home directory
     sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
-    #Launch the xrexecd to handle the apps
+    #Launch the localappsd to handle the apps
     (
-    echo $! > $XREXECD_PIDFILE
-    xrexecd.sh 
+    echo $! > $LOCALAPPSD_PIDFILE
+    localappsd
 
     # Copy back passwd and group
     for i in passwd group; do
-        cp "${LDM_CACHE}/${i}" /etc/${i}
+        cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
     done
     
     # Unmount sshfs and remove the mount dir
     fusermount -uqz ${LDM_HOME}
     rmdir ${LDM_HOME}
-    rm $XREXECD_PIDFILE
+    rm $LOCALAPPSD_PIDFILE
     )&
 
 fi

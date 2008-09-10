@@ -1,4 +1,4 @@
 #!/bin/sh
-cd client/xrexecd/
+cd localapps/
 ./autogen.sh
 cd -
