@@ -14,11 +14,11 @@ rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs="/root /etc/udev/rules.d"
+copy_dirs="/root /home /etc/conf.d /etc/udev/rules.d /var/cache/localapps"
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
 temp_copy_dirs=""
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/conf.d/hostname /etc/hosts /etc/syslog-ng/syslog-ng.conf /etc/fstab /etc/resolv.conf"
+bindfiles="/etc/hosts /etc/syslog-ng/syslog-ng.conf /etc/fstab /etc/resolv.conf /etc/passwd /etc/group"
