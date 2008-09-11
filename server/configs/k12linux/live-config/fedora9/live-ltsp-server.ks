@@ -3,6 +3,7 @@
 %packages
 ltsp-server
 ltsp-vmclient
+ltsp-server-livesetupdocs
 %end
 
 %post

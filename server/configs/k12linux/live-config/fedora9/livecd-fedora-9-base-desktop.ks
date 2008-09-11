@@ -10,7 +10,7 @@ part / --size 4096
 services --enabled=network,NetworkManager,xinetd,rpcbind,nfs,ltsp-dhcpd,nbdrootd,nbdswapd,tftp,sshd --disabled=iptables
 
 repo --name=released-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-9&arch=i386
-repo --name=updates-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9&arch=i386
+repo --name=updates-9 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9.newkey&arch=i386
 repo --name=temporary-9 --baseurl=http://togami.com/~k12linux-temporary/fedora/9/i386/
 
 %packages
