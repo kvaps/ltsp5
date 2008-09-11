@@ -4,7 +4,8 @@
 # $Header: $
 
 depend() {
-	need ltsp-client-setup
+    need ltsp-client-setup
+    after alsasound
 }
 
 start() {
@@ -24,5 +25,6 @@ start() {
 	done
 
 	start_sound || true
+	configure_sound_volume || true 
 	configure_localdev || true
 }

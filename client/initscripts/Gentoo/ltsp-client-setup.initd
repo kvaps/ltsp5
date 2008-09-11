@@ -4,14 +4,14 @@
 # $Header: $
 
 depend() {
-	before clock
+    before modules
 }
 
 checkconfig() {
-        if [ ! -f  /etc/ltsp_chroot ] ; then
-                eerror "You are not in an LTSP chroot"
-                return 1
-        fi
+    if [ ! -f  /etc/ltsp_chroot ] ; then
+        eerror "You are not in an LTSP chroot"
+        eend 1
+    fi
 }
 
 start() {
