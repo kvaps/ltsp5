@@ -262,7 +262,6 @@ EOF
        Option      "ReportDelay"      "${X_TOUCH_RPTDELAY:-10}"
 EOF
         cat <<-EOF >> $INPUT_FILE
-       Option      "AlwaysCore"
 EndSection
 EOF
 fi
