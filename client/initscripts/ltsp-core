@@ -54,6 +54,7 @@ case "$1" in
         done
 
         start_sound || true
+        configure_sound_volume || true
         configure_localdev || true
 
         $log_end_msg 0
