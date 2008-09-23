@@ -85,7 +85,14 @@ if boolean_is_true "$LOCAL_APPS"; then
     #Launch the ltsp-localappsd to handle the apps
     (
     echo $! > $LOCALAPPSD_PIDFILE
+
+    # if cups is installed in the chroot, use LDM_SERVER for printing
+    [ -d "/etc/cups" ] && echo "ServerName ${LDM_SERVER}" > /etc/cups/client.conf
+
     ltsp-localappsd
+
+    # Clean up cups config
+    [ -r "/etc/cups/client.conf" ] && rm -f /etc/cups/client.conf
 
     # Copy back passwd and group
     for i in passwd group; do
