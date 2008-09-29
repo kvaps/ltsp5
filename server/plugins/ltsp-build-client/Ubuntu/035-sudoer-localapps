@@ -1,6 +1,0 @@
-#!/bin/sh
-# Update /etc/sudoers to allow everyone to start shutdown or eject through sudo
-if [ -z "$(grep shutdown /etc/sudoers)" ]
-then
-    echo "ALL    ALL=(ALL) NOPASSWD:/sbin/shutdown, /usr/bin/eject" >> /etc/sudoers
-fi
