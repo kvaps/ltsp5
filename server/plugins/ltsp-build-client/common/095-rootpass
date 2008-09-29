@@ -18,7 +18,13 @@ case "$MODE" in
     finalization)
         if [ "$ROOTPASS" = "prompt" ]; then
             # prompt for root password
+            set +e
             $CHROOTEXEC $ROOT passwd root
+            while [ "$?" != "0" ]
+            do
+                $CHROOTEXEC $ROOT passwd root
+            done
+            set -e
         fi
         ;;
 esac
