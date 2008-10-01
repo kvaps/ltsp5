@@ -2,6 +2,8 @@
 
 LOGFILE=/var/log/ldm.log
 
+. /usr/share/ltsp/ltsp-common-functions
+
 logit() {
     if [ -n "${LOGFILE}" ]; then
         echo "$1" >> ${LOGFILE}
@@ -29,6 +31,10 @@ xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND ""
 # Make sure the local user has access to X
 chown ${LDM_USERNAME} $XAUTHORITY
 
+if boolean_is_true "$SOUND" ; then
+    PULSE_SERVER="PULSE_SERVER=127.0.0.1"
+fi
+
 # Poll for LTSP_COMMAND changes and execute
 while :; do
     LTSP_COMMAND="$(xatomwait LTSP_COMMAND)"
@@ -38,7 +44,7 @@ while :; do
     if [ -n "${LTSP_COMMAND}" ]; then
         logit "Executing the following command as ${LDM_USERNAME}: ${LTSP_COMMAND} "
 
-        su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
+        su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
 
         xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND ""
     fi
