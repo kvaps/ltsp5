@@ -1,0 +1,31 @@
+case "$MODE" in
+    commandline)
+        add_option "ltsp-cluster" "`eval_gettext "Enable LTSP-Cluster"`" "advanced" "false"
+        add_option "ltsp-cluster-control" "`eval_gettext "The IP of the LTSP Cluster Control Center"`" "advanced" "true"
+        add_option "ltsp-cluster-lbserver" "`eval_gettext "The IP of the LTSP Cluster load balancer"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_ltsp_cluster_value" ]; then
+            CLUSTER="True"
+        fi
+        if [ -n "$option_ltsp_cluster_control_value" ]; then
+            CLUSTER_CONTROL="$option_ltsp_cluster_control_value"
+        fi
+        if [ -n "$option_ltsp_cluster_lbserver_value" ]; then
+            CLUSTER_LBSERVER="$option_ltsp_cluster_lbserver_value"
+        fi
+        ;;
+    finalization)
+        if [ -n "$CLUSTER" ]; then
+            echo "deb http://ppa.launchpad.net/ltsp-cluster-team/ubuntu intrepid main restricted universe multiverse" >> $ROOT/etc/apt/sources.list
+            chroot $ROOT apt-get update
+            chroot $ROOT apt-get --force-yes -y --no-install-recommends install ltsp-cluster-client
+            if [ -n "$CLUSTER_CONTROL" ]; then
+                echo "http://$CLUSTER_CONTROL/ltsp-cluster-control/Terminal" > $ROOT/etc/ltsp/directory.conf
+            fi
+            if [ -n "$CLUSTER_LBSERVER" ]; then
+                sed -i "s/#SERVER=localhost/SERVER=$CLUSTER_LBSERVER/" $ROOT/etc/ltsp/loadbalancer-client.conf
+            fi
+        fi
+        ;;
+esac
