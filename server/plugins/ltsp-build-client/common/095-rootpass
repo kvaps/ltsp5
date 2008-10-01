@@ -17,8 +17,12 @@ case "$MODE" in
         ;;
     finalization)
         if [ "$ROOTPASS" = "prompt" ]; then
-            # prompt for root password
-            $CHROOTEXEC $ROOT passwd root
+            # prompt for root password, give at least 3 tries.
+            count=0
+            while [ "$count" -lt "3" ]; do
+                count=$(($count+1))
+                $CHROOTEXEC $ROOT passwd root && break || true
+            done
         fi
         ;;
 esac
