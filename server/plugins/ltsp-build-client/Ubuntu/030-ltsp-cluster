@@ -19,7 +19,7 @@ case "$MODE" in
         if [ -n "$CLUSTER" ]; then
             echo "deb http://ppa.launchpad.net/ltsp-cluster-team/ubuntu intrepid main restricted universe multiverse" >> $ROOT/etc/apt/sources.list
             chroot $ROOT apt-get update
-            chroot $ROOT apt-get --force-yes -y --no-install-recommends install ltsp-cluster-client
+            chroot $ROOT apt-get --force-yes -y install ltsp-cluster-client
             if [ -n "$CLUSTER_CONTROL" ]; then
                 echo "http://$CLUSTER_CONTROL/ltsp-cluster-control/Terminal" > $ROOT/etc/ltsp/directory.conf
             fi
