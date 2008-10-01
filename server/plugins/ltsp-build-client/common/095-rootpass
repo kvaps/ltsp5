@@ -22,6 +22,10 @@ case "$MODE" in
             while [ "$count" -lt "3" ]; do
                 count=$(($count+1))
                 $CHROOTEXEC $ROOT passwd root && break || true
+                if [ "$count" = "3" ]; then
+                    echo "ERROR: failed to set password"
+                    exit 1
+                fi
             done
         fi
         ;;
