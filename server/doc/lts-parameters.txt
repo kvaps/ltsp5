@@ -33,6 +33,8 @@ LDM_PASSWORD        A valid password	     unset	     use this password for autol
 ---------------------------------------------------------------------------------------------
 LDM_GUESTLOGIN      boolean		     unset	     Add "Guest login" button to greeter (autologin when pressed by user)
 ---------------------------------------------------------------------------------------------
+LDM_RUNONCE         boolean		     unset	     Make LDM to run once and exit (used by ltsp-cluster)
+---------------------------------------------------------------------------------------------
 LOCAL_APPS          boolean	             True
 ---------------------------------------------------------------------------------------------
 LOCALDEV            boolean	             True    	     Honors LOCAL_STORAGE (deprecated)
