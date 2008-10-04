@@ -82,7 +82,7 @@ mountroot()
     mount -t tmpfs tmpfs /cow
 
     # mount the readonly root
-    nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 && mount -o ro -t squashfs /dev/nbd0 /rofs
+    nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 -persist && mount -o ro -t squashfs /dev/nbd0 /rofs
 
     # merge ro and rw filesystems
     mount -t aufs -o dirs=/cow=rw:/rofs=ro aufs ${rootmnt}
