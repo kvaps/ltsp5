@@ -49,3 +49,6 @@ sed -i '/^sysfs/d' /etc/fstab
 
 # TEMPORARY: /var/lib/pulse/ must exist (we can remove this soon)
 mkdir -p /var/lib/pulse/
+
+# install /etc/sysconfig/mkinitrd for client kernel upgrades
+cp -f /etc/sysconfig/mkinitrd.ltsp-template /etc/sysconfig/mkinitrd
