@@ -31,6 +31,7 @@ reset_xprop(){
 }
 
 reset_xprop LTSP_COMMAND
+reset_xprop LTSP_COMMAND_WAIT
 
 # Make sure the local user has access to X
 chown ${LDM_USERNAME} $XAUTHORITY
@@ -45,11 +46,17 @@ while :; do
     [ "$?" != 0 ] && exit 
 
     LTSP_COMMAND=$(echo "${LTSP_COMMAND}"|sed -e 's/^LTSP_COMMAND = //' -e 's/^"//' -e 's/"$//')
+    LTSP_COMMAND_WAIT=$(xprop -root -notype LTSP_COMMAND_WAIT |sed -e 's/^LTSP_COMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
     if [ -n "${LTSP_COMMAND}" ]; then
         logit "Executing the following command as ${LDM_USERNAME}: ${LTSP_COMMAND} "
 
-        su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
+        if [ "$LTSP_COMMAND_WAIT" = "true" ]; then
+            su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
+        else
+            su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
+        fi
 
         reset_xprop LTSP_COMMAND
+        reset_xprop LTSP_COMMAND_WAIT
     fi
 done
