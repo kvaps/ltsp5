@@ -1,5 +1,6 @@
 MODULES="netboot"
 BOOT="ltsp_nbd"
+COMPCACHE_SIZE="25%"
 
 # DHCPPORT: tell ipconfig from klibc-utils) to use an alternate DHCP port
 # Default: 68
