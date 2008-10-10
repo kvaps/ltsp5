@@ -26,7 +26,11 @@ if [ -z "$DISPLAY" ];then
 fi
 
 # Initialize LTSP_COMMAND as blank
-xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND ""
+reset_xprop(){
+    xprop -root -f $1 8s -set $1 ""
+}
+
+reset_xprop LTSP_COMMAND
 
 # Make sure the local user has access to X
 chown ${LDM_USERNAME} $XAUTHORITY
@@ -46,6 +50,6 @@ while :; do
 
         su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
 
-        xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND ""
+        reset_xprop LTSP_COMMAND
     fi
 done
