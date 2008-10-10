@@ -8,6 +8,9 @@
 if [ -f /etc/lts.conf ] && [ -n "$(grep -v ^# /etc/lts.conf)" ]; then
     eval $(getltscfg -a) || true
 fi
+if [ -x /usr/bin/getltscfg-cluster ]; then
+    eval $(getltscfg-cluster -a) || true
+fi
 
 # set compatbility for ltsp 4.x variables
 X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
