@@ -11,7 +11,7 @@ case "$MODE" in
     after-install)
         # Root password is empty by default, lock it
         # but make sure to not do that if the user requested prompting
-        if [ -z "$ROOTPASS" ]; then
+        if [ "$ROOTPASS" = "prompt" ]; then
             $CHROOTEXEC $ROOT passwd -l root
         fi
         ;;
