@@ -22,6 +22,15 @@ SCRIPTNAME=/etc/init.d/$NAME
 # Gracefully exit if ltsp_chroot file is not present
 test -f /etc/ltsp_chroot || exit 0
 
+# handle localization settings
+if [ -r /etc/default/locale ]; then
+  . /etc/default/locale
+  export LANG LANGUAGE
+elif [ -r /etc/environment ]; then
+  . /etc/environment
+  export LANG LANGUAGE
+fi
+
 . /lib/lsb/init-functions
 . /usr/share/ltsp/ltsp-init-common
 
