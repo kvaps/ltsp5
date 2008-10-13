@@ -211,10 +211,6 @@ rm -f /boot/initrd*
 # make sure there aren't core files lying around
 rm -f /core*
 
-# Put README-LIVE-LTSP-SERVER-SETUP onto the Desktop
-mkdir -p -m 0755 /etc/skel/Desktop
-cp -v /etc/ltsp/live-config/fedora9/README-LIVE-LTSP-SERVER-SETUP /etc/skel/Desktop/
-
 %end
 
 
