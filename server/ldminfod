@@ -92,6 +92,18 @@ def get_sessions (dir):
                     sessions.append(x['Exec'].rstrip())
     return sessions
 
+def get_xsession():
+    """Return the full path to the default Xsession script"""
+    xsessionlist=("/etc/X11/xinit/Xsession",
+             "/etc/X11/Xsession",
+             "/usr/lib/X11/xdm/Xsession",
+             "/etc/X11/xdm/Xsession")
+    for xsession in xsessionlist:
+        # check if file exists and is executable
+        if os.access(xsession, 5):
+            return xsession
+    return None
+
 if __name__ == "__main__":
     # Get the server's default locale
     # We want it to appear first in the list
@@ -132,6 +144,14 @@ if __name__ == "__main__":
         sys.exit(0)
     for line in lines:
         print "session:" + line
+
+    try:
+        xsession = get_xsession()
+    except:
+        print "ERROR"
+        sys.exit(0)
+    if xsession:
+        print "xsession:" + xsession
 
     # Get the rating of this server
     rate = 0
