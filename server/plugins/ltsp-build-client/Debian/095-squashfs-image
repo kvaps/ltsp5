@@ -10,19 +10,14 @@ case "$MODE" in
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
             # need to use versioned linux-image metapackages, as kernel modules
             # do not appear to have corresponding unversioned ones
-            KERNEL_VERSION="2.6"
+            test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
         fi
         ;;
     before-install)
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
-            if [ -n "$KERNEL_ARCH" ]; then
-                MODULES_VERSION="${KERNEL_VERSION}-${KERNEL_ARCH}"
-            else
-                MODULES_VERSION="$(uname -r)"
-            fi
             for fs in aufs squashfs ; do
                 # add appropriate module packages to list of packages to be installed
-                LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${MODULES_VERSION}"
+                LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${KERNEL_VERSION}"
             done
 
             BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet ip=dhcp boot=ltsp_nbd"}
