@@ -23,12 +23,16 @@ case "$MODE" in
                alpha)
                    KERNEL_ARCH="alpha-generic"
                    ;;
-               *)
+               powerpc|amd64) 
                    KERNEL_ARCH="$ARCH"
+                   ;;
+               *)
+                   KERNEL_PACKAGES="$KERNEL_BASE-$(uname -r)"
                    ;;
            esac
            test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
-           LATE_PACKAGES="$LATE_PACKAGES $KERNEL_BASE-$KERNEL_ARCH"
+           test -n "$KERNEL_PACKAGES" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH""
+           LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
         fi
         ;;
 esac
