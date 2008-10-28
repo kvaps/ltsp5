@@ -22,6 +22,7 @@ ltsp-client
 ltspfsd
 ldm
 alsa-utils
+alsa-plugins-pulseaudio
 aspell
 aspell-en
 atk
