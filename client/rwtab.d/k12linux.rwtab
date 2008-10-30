@@ -8,7 +8,6 @@ dirs	/var/lib/pulse/
 
 files	/etc/lts.conf
 files   /etc/X11/xorg.conf
-files   /var/lib/random-seed
 files   /.viminfo
 files   /etc/passwd
 files   /etc/group
