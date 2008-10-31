@@ -25,7 +25,6 @@ start_sound() {
                 -L module-detect \
                 -L "module-esound-protocol-tcp auth-anonymous=1" \
                 -L "module-native-protocol-tcp auth-anonymous=1" \
-                -L module-suspend-on-idle \
                 -L module-volume-restore \
                 -L module-rescue-streams \
                 -L module-native-protocol-unix \
