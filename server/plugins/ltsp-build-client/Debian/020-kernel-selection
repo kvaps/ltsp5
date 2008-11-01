@@ -31,7 +31,7 @@ case "$MODE" in
                    ;;
            esac
            test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
-           test -n "$KERNEL_ARCH" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH""
+           test -n "$KERNEL_ARCH" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
            LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
         fi
         ;;
