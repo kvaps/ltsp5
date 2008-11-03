@@ -131,8 +131,6 @@ pre_install_portage_tree() {
 	# stable fails on 2.6.24 kernel
 	~sys-fs/fuse-2.7.3
 	~sys-fs/sshfs-fuse-2.1
-	~net-misc/openssh-5.1_p1
-
 	EOF
 }
 
