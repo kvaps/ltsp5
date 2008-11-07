@@ -1,20 +1,13 @@
 #!/bin/sh
 
-LOGFILE=/var/log/ldm.log
-
 . /usr/share/ltsp/ltsp-common-functions
 
 logit() {
-    if [ -n "${LOGFILE}" ]; then
-        echo "$1" >> ${LOGFILE}
-    else
-        echo "$1"
-    fi 
+    logger -t ltsp-localappsd -p daemon.info $1
 }
 
 if [ -n "${LDM_USERNAME}" -a -n "$(/usr/bin/id ${LDM_USERNAME})" ]; then
     true
-    #logit "LDM_USERNAME is valid"
 else
     logit "Unknown user:  $LDM_USERNAME"
     exit 1
