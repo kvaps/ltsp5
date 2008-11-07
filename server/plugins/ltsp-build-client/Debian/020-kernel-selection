@@ -8,9 +8,7 @@ case "$MODE" in
         fi
         ;;
     before-install)
-        if [ -n "$KERNEL_PACKAGES" ]; then
-            LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
-        else
+        if [ -z "$KERNEL_PACKAGES" ]; then
            # select a kernel
            KERNEL_BASE="linux-image"
            case $ARCH in
@@ -27,12 +25,16 @@ case "$MODE" in
                    KERNEL_ARCH="$ARCH"
                    ;;
                *)
+                   # generic kernel unknown, select the running kernel
                    KERNEL_VERSION="$(uname -r)"
+                   KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_VERSION"
                    ;;
            esac
-           test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
-           test -n "$KERNEL_ARCH" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
-           LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
+           if [ -z "$KERNEL_PACKAGES" ]; then
+                test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
+                test -n "$KERNEL_ARCH" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
+           fi
         fi
+        test -n "$KERNEL_PACKAGES" && LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
         ;;
 esac
