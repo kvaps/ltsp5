@@ -33,8 +33,8 @@ while :; do
                             -u "" \
                           ${RDESKTOP_OPTIONS}         \
                           -- \
-                          ${DISP}                     \
+                          ${DISPLAY}                     \
                           vt${TTY}
-#/usr/bin/x11vnc -display ${DISP} -passwd password -httpport 5800
+#/usr/bin/x11vnc -display ${DISPLAY} -passwd password -httpport 5800
 
 done

@@ -37,7 +37,7 @@ fi
 
 TTY=$(tty)
 TTY=${TTY#/dev/tty}
-DISP=":$TTY"
+DISPLAY=":$TTY"
 
 error_delay() {
     echo -n -e "\n\rERROR: $1"

@@ -38,7 +38,7 @@ X_ARGS="$X_ARGS -br"
 get_xfs_settings $XDM_SERVER
 
 while :; do
-    ${XBINARY} ${X_ARGS} vt${TTY} ${DISP}
+    ${XBINARY} ${X_ARGS} vt${TTY} ${DISPLAY}
     if [ $? -ne 0 ]; then
         error_delay "xserver failed, press <enter> to continue "
     fi
