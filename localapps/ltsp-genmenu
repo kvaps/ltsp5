@@ -1,0 +1,81 @@
+#!/bin/sh
+LANG=C
+if [ ! -f /etc/ltsp/localapps-menu/directory ]
+then
+    echo "You need /etc/ltsp/localapps-menu/directory to generate the localapp menu"
+    exit 1
+fi
+generate() {
+    mkdir -p ~/.config/menus/applications-merged/
+    mkdir -p ~/.local/share/applications/
+    mkdir -p ~/.local/share/desktop-directories/
+    mkdir -p ~/.local/share/icons/
+    cp /etc/ltsp/localapps-menu/directory ~/.local/share/desktop-directories/ltsp-localapps.directory
+    (
+    cat << 'EOF'
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN" "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+<Menu>
+    <Name>Applications</Name>
+    <DefaultLayout inline="false"/>
+    <Menu>
+        <Name>ltsp-localapps</Name>
+        <Directory>ltsp-localapps.directory</Directory>
+        <Include>
+EOF
+    ) > ~/.config/menus/applications-merged/localapp.menu
+    for entry in /etc/ltsp/localapps-menu/*.desktop
+    do
+        file=`echo $entry | sed "s/\/etc\/ltsp\/localapps-menu\/[0-9][0-9]/localapp/"`
+        echo "            <Filename>$file</Filename>" >> ~/.config/menus/applications-merged/localapp.menu
+        cp $entry ~/.local/share/applications/$file
+        icon=`grep "X-Localapp-Icon=" $entry | sed "s/.*=//"`
+        if [ -n "$icon" ]
+        then
+           cp $icon ~/.local/share/icons/ 
+        fi
+    done
+    (
+    cat << 'EOF'
+        </Include>
+        <Layout>
+EOF
+    ) >> ~/.config/menus/applications-merged/localapp.menu
+    for entry in `find /etc/ltsp/localapps-menu/*.desktop /etc/ltsp/localapps-menu/*.separator -type f | sort`
+    do
+        file=`echo $entry | sed "s/\/etc\/ltsp\/localapps-menu\/[0-9][0-9]/localapp/"`
+        if [ -n "`echo $file | grep ".separator$"`" ]
+        then
+            echo "            <Separator />" >> ~/.config/menus/applications-merged/localapp.menu
+        else
+            echo "            <Filename>$file</Filename>" >> ~/.config/menus/applications-merged/localapp.menu
+            cp $entry ~/.local/share/applications/$file
+        fi
+    done
+    (
+    cat << 'EOF'
+        </Layout>
+    </Menu>
+</Menu>
+EOF
+    ) >> ~/.config/menus/applications-merged/localapp.menu
+}
+
+remove() {
+    rm -f ~/.local/share/desktop-directories/ltsp-localapps.directory
+    rm -f ~/.local/share/applications/localapp-*
+    rm -f ~/.config/menus/applications-merged/localapp.menu
+}
+
+case "$1" in
+    install)
+        remove
+        generate
+    ;;
+    remove)
+        remove
+    ;;
+    *)
+        echo "Usage: $0 install|remove"
+        exit
+    ;;
+esac
