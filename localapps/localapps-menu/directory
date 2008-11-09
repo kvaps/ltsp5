@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Directory
+Name=Local applications
+Comment=Applications installed on the thin client
+Icon=network_local
