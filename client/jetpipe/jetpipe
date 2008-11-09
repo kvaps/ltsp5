@@ -5,51 +5,128 @@
 # TODO: 
 #   * add read for bidirectional comm ?
 #   * add writeonly opts
-#   * serial device support ?
 #
 # Copyright 2006, Canonical Ltd.
-# 
+#
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License with your
 # Debian GNU system, in /usr/share/common-licenses/GPL.  If not, write to the
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA
+#
+#Serial redirection code adapted from work by:
+#(C)2002-2003 Chris Liechti <cliechti@gmx.net>
+#redirect data from a TCP/IP connection to a serial port and vice versa
+#requires Python 2.2 'cause socket.sendall is used
+#
+"""
+usage: jetpipe [options] <device> <port>
+Note: no security measures are implemeted. Anyone can remotely connect
+to this service over the network.
+Only one connection at once is supported. If the connection is terminaed
+it waits for the next connect.
+"""
 
 import os
 import sys
 import socket
+import serial
+import threading
+import getopt
 import resource      # Resource usage information.
 
-# Print usage information
-if len(sys.argv) != 3:
-    print 'Usage: jetpipe <printerdevice> <port>'
-    sys.exit(0)
+class Redirector:
+    def __init__(self, devicename, socket):
+        self.socket = socket
+        if devicename[:8] == '/dev/tty':    # This should catch regular serial and USB serial
+            self.device = serial.Serial(devicename)
+            self.device.baudrate = 9600
+            self.device.bytesize = 8
+            self.device.parity = 'N'
+            self.device.stopbits = 1
+            self.device.timeout = 1     #required so that the reader thread can exit
+            self.device.rtscts  = False
+            self.device.xonxoff = False
+            self.devicetype = 'S'
+        else:
+            self.device = open(devicename, 'wb')
+            self.devicetype = 'P'
 
-# Wait for a job on <port> to forward to <printerdevice>
-def listen(s):
-    conn, addr = s.accept()
-    p = open(sys.argv[1], 'wb')
-    while 1:
-        data = conn.recv(1024)
-        if not data: break
-        p.write(data)
-        p.flush()
-    conn.close()
-    p.close()
+    def shortcut(self):
+        """connect the serial port to the tcp port by copying everything
+           from one side to the other"""
+        self.writer()
 
-# Rewspawn eternally
-if __name__ == "__main__":
+    def writer(self):
+        """loop forever and copy socket->serial"""
+
+        print 'in writer loop'
+        self.alive = True
+
+        while self.alive:
+            try:
+                data = self.socket.recv(1024)
+                if not data:
+                    break
+            except socket.error, msg:
+                print "error receiving from socket: ", msg
+             
+            self.device.write(data)     
+            if self.devicetype == 'P':
+                self.device.flush()                              # parallel device
+        self.device.close()
+        self.alive = False
+
+if __name__ == '__main__':
+
+    #parse command line options
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],
+                "hb:p:rs:xy:",
+                ["help", "baud=", "rtscts", "xonxoff"])
+    except getopt.GetoptError:
+        # print help information and exit:
+        print >>sys.stderr, __doc__
+        sys.exit(2)
+
+    for o, a in opts:
+        if o in ("-h", "--help"):   #help text
+            usage()
+            sys.exit()
+        elif o in ("-b", "--baud"):   #specified baudrate
+            try:
+                baudrate = int(a)
+            except ValueError:
+                raise ValueError, "Baudrate must be a integer number"
+        elif o in ("-y", "--bytesize"):   #specified bytesize
+            bytesize = int(a)
+        elif o in ("-p", "--parity"):   #specified parity
+            parity = a
+        elif o in ("-s", "--stopbits"):   #specified stopbits
+            stopbits = int(a)
+        elif o in ("-r", "--rtscts"):
+            rtscts = True
+        elif o in ("-x", "--xonxoff"):
+            xonxoff = True
+
+    devicename = args[0]
+    port   =     args[1]
+
+
+
     # do the UNIX double-fork magic, see Stevens' "Advanced
     # Programming in the UNIX Environment" for details (ISBN 0201563177)
+#    try:    # do the UNIX double-fork magic, see Stevens' "Advanced
     try:
         pid = os.fork()
+
         if pid > 0:
             # exit first parent
             sys.exit(0)
@@ -74,7 +151,7 @@ if __name__ == "__main__":
     maxfd = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
     if (maxfd == resource.RLIM_INFINITY):
         maxfd = MAXFD
-  
+
     # Iterate through and close all file descriptors.
     for fd in range(0, maxfd):
         try:
@@ -95,9 +172,41 @@ if __name__ == "__main__":
     os.dup2(0, 1)            # standard output (1)
     os.dup2(0, 2)            # standard error (2)
 
-    jetpipe = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    jetpipe.bind(('', int(sys.argv[2])))
-    jetpipe.listen(1)
+    print devicename, port
+    srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    srv.bind( ('', int(port)) )
+    srv.listen(1)
 
     while 1:
-        listen(jetpipe)
+        try:
+            print "Waiting for connection...."
+            connection, addr = srv.accept()
+            print 'Connected by', addr
+            #enter console->serial loop
+            redir = Redirector(devicename, connection)
+            if redir.devicetype == 'S':
+                if locals().has_key('baudrate'):
+                    redir.device.baudrate = baudrate
+                if locals().has_key('bytesize'):
+                    redir.device.bytesize = bytesize
+                if locals().has_key('parity'):
+                    redir.device.parity = parity
+                if locals().has_key('stopbits'):
+                    redir.device.stopbits = stopbits
+                if locals().has_key('rtscts'):
+                    redir.device.rtscts = rtscts
+                if locals().has_key('xonxoff'):
+                    redir.device.xonxoff = xonxoff
+                try:
+                    redir.device.open()
+                except serial.SerialException, e:
+                    print "Could not open serial port %s: %s" % (devicename.port, e)
+                    sys.exit(1)
+
+            redir.shortcut()
+            print 'Disconnected'
+            connection.close()
+        except socket.error, msg:
+            print msg
+
+    print "\n--- exit ---"
