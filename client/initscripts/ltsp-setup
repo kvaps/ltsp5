@@ -150,6 +150,7 @@ case "$1" in
         fi
         [ "$root_write_method" = "bind_mounts" ] && bind_mounts
         load_modules || true
+        set_time || true
         configure_console || true
         configure_resolver || true
         configure_swap || true

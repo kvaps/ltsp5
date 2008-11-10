@@ -182,3 +182,12 @@ configure_serial_mouse() {
           inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
       fi
 }
+
+set_time() {
+    # Set up timezone
+    [ -n "$TIMEZONE" ] && [ -e "/usr/share/zoneinfo/$TIMEZONE" ] && \
+        cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
+
+    # Set up timeserver
+    [ -n "$TIMESERVER" ] && ntpdate $TIMESERVER &
+}
