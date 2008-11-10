@@ -37,9 +37,12 @@ SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
 SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
 if [ "${SCREEN_NUM}" = "01" ]; then
-    logger -t LTSP "Screen scripts should not be run on SCREEN_01"
-    echo "SCREEN_01 Contains a screen script ${SCREEN_SCRIPT} ${SCREEN_ARGS} Please change to another screen"
-    exit 1
+    # This is not an error on Fedora.
+    if [ ! -e /etc/rwtab ]; then
+        logger -t LTSP "Screen scripts should not be run on SCREEN_01"
+        echo "SCREEN_01 Contains a screen script ${SCREEN_SCRIPT} ${SCREEN_ARGS} Please change to another screen"
+        exit 1
+    fi
 fi
 
 for SCRIPT_DIR in ${SCRIPT_DIRS}; do
