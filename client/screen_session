@@ -60,7 +60,7 @@ for SCRIPT_DIR in ${SCRIPT_DIRS}; do
         fi
 
         while :; do
-            ${openvt} -w -c ${TTY} ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+            ${openvt} -f -w -c ${TTY_NUM} ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
         done
     fi
 done
