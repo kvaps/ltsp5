@@ -42,7 +42,6 @@ if [ "${TTY}" = "console" ]; then
     TTY="tty1"              # Special case for first screen
 fi
 
-while :; do
     # Clear the screen, to place cursor at the top
     clear
 
@@ -58,4 +57,3 @@ while :; do
     # Brief pause, in case telnet had errors to report
     echo -n "Please wait..."
     sleep 1
-done

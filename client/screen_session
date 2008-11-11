@@ -51,7 +51,17 @@ for SCRIPT_DIR in ${SCRIPT_DIRS}; do
             echo "Warning: /usr/lib/ltsp/screen.d is deprecated and will be removed in the future."
             echo "         ${SCREEN_SCRIPT} requires updating to use /usr/share/ltsp."
         fi
-        exec ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+        if [ -x /usr/bin/openvt ]; then
+            openvt=/usr/bin/openvt
+        elif [ -x /bin/openvt ]; then
+            openvt=/bin/openvt
+        else
+            echo "openvt not found!  openvt is required for proper operation"
+        fi
+
+        while :; do
+            ${openvt} -w -c ${TTY} ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+        done
     fi
 done
 
