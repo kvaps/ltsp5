@@ -54,4 +54,6 @@ mkdir -p /var/lib/pulse/
 cp -f /etc/sysconfig/mkinitrd.ltsp-template /etc/sysconfig/mkinitrd
 
 # F10+: install default boot-duration so plymouth can guess the startup progress bar better
-[ -e /var/lib/plymouth/boot-duration ] && cp /usr/share/ltsp/template/plymouth-default-boot-duration /var/lib/plymouth/boot-duration
+if [ -e /var/lib/plymouth/boot-duration ]; then
+    cp /usr/share/ltsp/template/plymouth-default-boot-duration /var/lib/plymouth/boot-duration
+fi
