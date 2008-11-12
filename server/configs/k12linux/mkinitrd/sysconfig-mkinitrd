@@ -1,6 +1,11 @@
 # /etc/sysconfig/mkinitrd configuration directs mkinitrd to generate a netboot capable image
 # initrd obtains from netboot the IP address and rootfs type 
-availmodules="=networking radeon"
+if [ -e /lib/modules/`ls /boot/vmlinuz-* |sed 's/vmlinuz-//' | sort -nr | head -n1 | xargs basename`/modules.modesetting ]; then
+    # F10 has modesetting drivers, include them if modules.modesetting exists
+    availmodules="=networking =modesetting"
+else
+    availmodules="=networking"
+fi
 # exclude wireless drivers because they cannot netboot, and they can often cause boot problems because of missing firmware
 excludemodules="rtl8187 iwl3945 iwlcore iwl4965 p54pci p54common p54usb zd1201 netwave_cs atmel zd1211rw hermes wl3501_cs rtl8180 libertas_cs libertas usb8xxx libertas_sdio spectrum_cs b43 airo_cs orinoco_nortel b43legacy atmel_pci mac80211_hwsim adm8211 hostap hostap_cs hostap_pci hostap_plx ipw2200 rndis_wlan orinoco_pci orinoco_plx orinoco_tmd orinoco airo at76_usb wavelan_cs ipw2100 rt2500usb rt61pci rt73usb rt2400pci rt2x00lib rt2x00usb rt2x00pci rt2500pci orinoco_cs ath5k atmel_cs prism54"
 NET_LIST="eth0"
