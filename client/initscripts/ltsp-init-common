@@ -153,10 +153,10 @@ configure_printer() {
         eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
         if [ -n "${DEVICE}" ]; then
             eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} 
-            eval BAUD=\$\{PRINTER_${I}_SPEED:-9600}
-            eval SIZE=\$\{PRINTER_${I}_DATABITS:-8}
-            eval PARITY=\$\{PRINTER_${I}_PARITY:-none}
-            eval FLOW=\$\{PRINTER_${I}_FLOWCTRL:-soft}
+            eval BAUD=\$\{PRINTER_${I}_SPEED:-"9600"\}
+            eval SIZE=\$\{PRINTER_${I}_DATABITS:-"8"\}
+            eval PARITY=\$\{PRINTER_${I}_PARITY:-"none"\}
+            eval FLOW=\$\{PRINTER_${I}_FLOWCTRL:-"soft"\}
 
             JETPIPE_ARGS=
             [ -n "$BAUD" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -b ${BAUD}"
