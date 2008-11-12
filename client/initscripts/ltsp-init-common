@@ -151,7 +151,7 @@ configure_swap() {
 configure_printer() {
     for I in 0 1 2; do
         eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
-        [ -n "${DEVICE}" ] && \
+        if [ -n "${DEVICE}" ]; then
             eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} && \
             eval BAUD=\$\{PRINTER_${I}_SPEED:-9600}
             eval SIZE=\$\{PRINTER_${I}_DATABITS:-8}
@@ -171,6 +171,7 @@ configure_printer() {
             fi
 
             /usr/sbin/jetpipe ${DEVICE} ${PORT}
+        fi
     done
 }
 
