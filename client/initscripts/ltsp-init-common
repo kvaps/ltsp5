@@ -152,7 +152,7 @@ configure_printer() {
     for I in 0 1 2; do
         eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
         if [ -n "${DEVICE}" ]; then
-            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} && \
+            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} 
             eval BAUD=\$\{PRINTER_${I}_SPEED:-9600}
             eval SIZE=\$\{PRINTER_${I}_DATABITS:-8}
             eval PARITY=\$\{PRINTER_${I}_PARITY:-none}
@@ -170,7 +170,7 @@ configure_printer() {
                 fi
             fi
 
-            /usr/sbin/jetpipe ${DEVICE} ${PORT}
+            /usr/sbin/jetpipe ${JETPIPE_ARGS} ${DEVICE} ${PORT}
         fi
     done
 }
