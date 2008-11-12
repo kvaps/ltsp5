@@ -1,0 +1,19 @@
+#!/bin/sh
+
+XINITRCDIR=/usr/share/ltsp/xinitrc.d
+
+# use run-parts to source every file in the xinitrc directory; we source
+# instead of executing so that the variables and functions defined above
+# are available to the scripts, and so that they can pass variables to each
+# other
+XINITRCFILES=$(run-parts --list $XINITRCDIR)
+if [ -n "$XINITRCFILES" ]; then
+  set +e
+  for XINITRCFILE in $XINITRCFILES; do
+    . $XINITRCFILE
+  done
+  set -e
+fi
+
+exit 0
+

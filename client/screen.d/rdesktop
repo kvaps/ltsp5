@@ -7,10 +7,6 @@
 # This software is licensed under the Gnu General Public License.
 # The full text of which can be found at http://www.LTSP.org/license.txt
 #
-#
-#
-# /opt/ltsp/i386/etc/screen.d/rdesktop
-#
 # Call this through /opt/ltsp/i386/etc/lts.conf like this:
 #           RDP_OPTIONS  = "-a 16"
 #           RDP_SERVER   = w2k3.terminal.server.ip
@@ -24,17 +20,19 @@ RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
 
 RDESKTOP_OPTIONS="${RDP_OPTIONS} -f $* ${RDP_SERVER}"
 
-################################################################################
-#
-# Setup the XF86Config file
-#
-while :; do
-/usr/bin/xinit      /usr/bin/rdesktop           \
-                            -u "" \
-                          ${RDESKTOP_OPTIONS}         \
-                          -- \
-                          ${DISPLAY}                     \
-                          vt${TTY}
-#/usr/bin/x11vnc -display ${DISPLAY} -passwd password -httpport 5800
+XINITRC=`mktemp -u /var/run/xinitrc-rdesktop-XXXXXXXXX`
+export XINITRC
 
+# Call our global xinitrc script before ldm to run through 
+# the init scripts in the xinitrc.d directory
+cat <<EOF >${XINITRC}
+/usr/share/ltsp/xinitrc
+while :; do
+    /usr/bin/rdesktop -u "" ${RDESKTOP_OPTIONS} 
 done
+EOF
+
+/usr/bin/xinit -- ${DISPLAY} vt${TTY} -br >/dev/null
+
+rm -f ${XINITRC}
+
