@@ -20,19 +20,11 @@ RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
 
 RDESKTOP_OPTIONS="${RDP_OPTIONS} -f $* ${RDP_SERVER}"
 
-XINITRC=`mktemp -u /var/run/xinitrc-rdesktop-XXXXXXXXX`
-export XINITRC
+if [ -x /usr/share/ltsp/xinitrc ]; then
+    xinitrc=/usr/share/ltsp/xinitrc
+fi
 
-# Call our global xinitrc script before ldm to run through 
-# the init scripts in the xinitrc.d directory
-cat <<EOF >${XINITRC}
-/usr/share/ltsp/xinitrc
-while :; do
-    /usr/bin/rdesktop -u "" ${RDESKTOP_OPTIONS} 
-done
-EOF
-
-/usr/bin/xinit -- ${DISPLAY} vt${TTY} -br >/dev/null
+/usr/bin/xinit $xinitrc /usr/bin/rdesktop -u "" ${RDESKTOP_OPTIONS} -- ${DISPLAY} vt${TTY} -br >/dev/null
 
 rm -f ${XINITRC}
 
