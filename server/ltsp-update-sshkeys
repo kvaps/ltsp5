@@ -50,8 +50,9 @@ if [ -z "$LOGFILE" ]; then
     exit 0
 fi
 
-# Any chroots found?
-if [ -z "${CHROOTS}" ]; then
+# Any chroots found, and not exporting?
+# fixes bug #207485 per Andy Rabagliati
+if [ -z "${CHROOTS}" -a -z "${EXPORTFILE}" ]; then
 	logger -f $LOGFILE -t ltsp \
         "No client chroots found, please run ltsp-build-client"
 	exit 0
