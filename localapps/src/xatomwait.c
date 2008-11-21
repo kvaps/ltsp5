@@ -107,12 +107,17 @@ main(int argc, char *argv[])
      */
 
     for (;;) {
-        XNextEvent(dpy, &ev);
-        if (ev.type == PropertyNotify) {
-            if (ev.xproperty.atom == prog_atom) {
-                handle_propchange(dpy, root, prog_atom);
-                break;
+        if (XPending(dpy)){
+            XNextEvent(dpy, &ev);
+            if (ev.type == PropertyNotify) {
+                if (ev.xproperty.atom == prog_atom) {
+                    handle_propchange(dpy, root, prog_atom);
+                    break;
+                }
             }
+        }
+        else {
+            usleep(10000);
         }
     }
 
