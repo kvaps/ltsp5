@@ -1,0 +1,244 @@
+#!/bin/sh
+# Copyright 2008, Revolution Linux Inc.
+#
+# Authors : Francis Giraldeau <francis.giraldeau@revolutionlinux.com>
+#
+# This program is covered by the GNU General Public License.
+#
+# -------------------------------------------------------------------------
+
+usage() {
+cat 1>&2 <<EOF
+$0 [OPTION]
+
+   Get the configuration for the thin-client from ltsp-directory server. 
+
+  -s, --server          Address of the load-balancer server.
+  -p, --port            Port that server runs.  (Default: 80)
+  -t, --timeout         Connection timeout in seconds. (Default: 10 seconds)
+  -l, --log             Log state : boot, login, logout (Default: boot)
+  -i, --with-inventory  Send inventory of the thin-client.
+  -d, --drop-cache      Force to reload configuration cache.
+  -e, --enable-ssl      Use https for query (default: disabled)
+  -a                    Export all configuration keys
+  -h, --help            This help.
+  
+EOF
+}
+
+# This is a hardware specific hack that should be relocated, but it's put here
+# until we have a better place to put it. Yes, We know that's terribly ugly,
+# but we have to just make it work meanwhile. 
+fixxorg() {
+    vendor=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.vendor)
+    product=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.product)
+
+    # Fix AMD Geode GX2 support, will probably break the other GX2 chips though
+    if [ "$vendor" = "4107" ]
+    then
+(
+cat << 'EOF'
+Section "Device"
+    Identifier "Card0"
+    Driver "geode"
+    Option "AccelMethod" "XAA"
+EndSection
+EOF
+) > /etc/X11/xorg.conf
+    fi
+
+    # Fix VIA [S3 UniChrome Pro] [1106:3344]
+    if [ "$vendor" = "4358" ] && [ "$product" = "13124" ]
+    then
+(
+cat << 'EOF'
+Section "Device"
+    Identifier "Card0"
+    Option     "VBEModes" "true"
+EndSection
+EOF
+) > /etc/X11/xorg.conf
+    fi
+
+    # Fix VIA CastleRock graphics [1106:3122]
+    if [ "$vendor" = "4358" ] && [ "$product" = "12578" ]
+    then
+(
+cat << 'EOF'
+Section "Device"
+    Identifier "Card0"
+    Driver     "openchrome"
+EndSection
+EOF
+) > /etc/X11/xorg.conf
+    fi
+
+    # Fix Matrox video card memory detection and video corruption
+    if [ "$vendor" = "4139" ] && [ "$product" = "1307" ]
+    then
+(
+cat << 'EOF'
+Section "Device"
+    Identifier "Card0"
+    VideoRam    8192
+    Option      "ShadowFB" "True"
+EndSection
+EOF
+) > /etc/X11/xorg.conf
+    fi
+}
+
+# Source global configuration file
+if [ -f /etc/ltsp/directory.conf ]; then
+    SERVER=`cat /etc/ltsp/directory.conf | awk -F / '{print \$3}'`
+fi
+if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
+    . /etc/ltsp/getltscfg-cluster.conf
+fi
+
+#
+# Handle command line args
+#
+
+ARGS=$(getopt -o s:p:t:l:idhea --long server:,port:,timeout:,log:,with-inventory,drop-cache,enable-ssl,help -n $0 -- "$@")
+
+if [ $? != 0 ]; then
+    echo "Error : getopt failed"
+    usage
+    exit 1
+fi
+
+eval set -- "${ARGS}"
+
+while true ; do
+    case "$1" in
+        -s|--server) SERVER=$2 ; shift 2 ;;
+        -p|--port) PORT=$2 ; shift 2 ;;
+        -t|--timeout) TIMEOUT=$2 ; shift 2 ;;
+        -l|--log) LOG=$2 ; shift 2 ;;
+        -i|--with-inventory) INVENTORY="Y"; shift;;
+        -d|--drop-cache) DROP_CACHE="Y"; shift;;
+        -e|--enable-ssl) ENABLE_SSL="Y"; shift;;
+        -a) EXPORT_CONF="Y"; shift;;
+        -h|--help) usage ; exit 0 ;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+done
+
+# defaults
+PORT=${PORT:-"80"}
+TIMEOUT=${TIMEOUT:-"10"}
+INVENTORY=${INVENTORY:-"N"}
+DROP_CACHE=${DROP_CACHE:-"N"}
+ENABLE_SSL=${ENABLE_SSL:-"N"}
+EXPORT_CONF=${EXPORT_CONF:-"N"}
+LOG=${LOG:-"boot"}
+
+if [ -z "$SERVER" ]; then
+    echo "Error : --server option is mandatory"
+    usage
+    exit 1
+fi
+if [ -z "$LOG" ]; then
+    echo "Error : --log option is mandatory"
+    usage
+    exit 1
+fi
+
+if [ "$LOG" = "login" ] && [ -z "$LDM_SERVER" ]; then
+    echo "Error : LDM_SERVER env variable is not set, and is mandatory when log=login"
+    usage
+    exit 1
+fi
+
+# Manage cache files
+cache_dir=/var/cache/getltscfg-cluster
+if [ "$DROP_CACHE" = "Y" ]; then
+    if [ -d $cache_dir ]; then
+        rm -rf $cache_dir
+    fi
+fi
+
+mkdir -p $cache_dir
+[ "$?" = "1" ] && echo "Unable to create the cache directory." && exit 1
+cache_lts=$cache_dir/lts.conf
+cache_info=$cache_dir/info.cache
+cache_inventory=$cache_dir/inventory.cache
+
+if [ ! -f "$cache_info" ]; then
+    echo ETH0_MAC=$(ifconfig | grep eth0 | cut -f11 -d" ") >> $cache_info
+    echo ETH0_IP=$(ifconfig eth0 | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
+    nbd_device=$(cat /proc/mounts|grep /rofs|grep nbd|cut -d" " -f1) 2>/dev/null
+    if [ -n "$nbd_device" ]; then
+        nbd_pid=$(pgrep -f $nbd_device)
+        nbd_command=$(ps -o cmd $nbd_pid|grep -v CMD)
+        server=$(echo $nbd_command|sed 's/[a-z\-]*. //'|sed 's/ .*//')
+    else
+        server=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
+    fi
+    echo ROOT_SRV=$server >> $cache_info
+fi
+
+. $cache_info
+
+if [ ! -f "$cache_inventory" ] && [ "$INVENTORY" = "Y" ]; then
+    inventory | sed -e "s/%/%25/g" | sed -e "s/\//%2F/g" | sed -e "s/&/%26/g" | sed -e "s/=/%3D/g" >> $cache_inventory 
+fi
+
+# do the request
+if [ "$ENABLE_SSL" = "Y" ]; then
+    PROTO="https"
+    if [ "$PORT" = "80" ]; then
+        PORT=443
+    fi
+    OPTIONS="--no-check-certificate"
+else
+    PROTO="http"
+fi
+
+URL="$PROTO://$SERVER:$PORT/ltsp-cluster-control/Terminal"
+
+# -q : quiet
+# -O - : output to stdout
+# --timeout : combined timeout
+# -t : number of retry
+OPTIONS="$OPTIONS -q -O $cache_lts -T $TIMEOUT -t 1"
+
+QUERY=""
+# Make sure that configuration if fetch only once in the boot process
+if [ "$LOG" = "boot" ]; then
+    if [ ! -f $cache_lts ] || [ "$DROP_CACHE" = "Y" ]
+    then
+        QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/bootservip=$ROOT_SRV/code=1"
+        if [ "$INVENTORY" = "Y" ]; then
+            QUERY="$QUERY --post-file=$cache_inventory"
+        fi
+    fi
+elif [ "$LOG" = "login" ]; then 
+    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$DISPLAY/code=3"
+elif [ "$LOG" = "logout" ]; then
+    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$DISPLAY/code=4"
+elif [ "$LOG" = "refresh" ]; then
+    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/bootservip=$ROOT_SRV/code=0"
+else
+    echo "Error : Unknown log operation" 
+    usage
+    exit 1
+fi
+
+if [ -n "$QUERY" ]; then
+    logger "wget $OPTIONS $URL/$QUERY"
+    wget $OPTIONS $URL/$QUERY
+
+    if [ $? -ne 0 ]; then
+        echo "An error occured while contacting server" 1>&2
+        usage
+        exit 1
+    fi
+fi
+
+if [ "$EXPORT_CONF" = "Y" ]; then 
+    getltscfg -a -c $cache_lts
+fi
+fixxorg

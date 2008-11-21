@@ -8,7 +8,7 @@
 if [ -f /etc/lts.conf ] && [ -n "$(grep -v ^# /etc/lts.conf)" ]; then
     eval $(getltscfg -a) || true
 fi
-if [ -x /usr/bin/getltscfg-cluster ]; then
+if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
     eval $(getltscfg-cluster -a) || true
 fi
 
