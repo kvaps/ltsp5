@@ -1,9 +1,6 @@
 # sourced
 
 if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
-    # Get the configuration from the control center
-    eval $(getltscfg-cluster -a -l refresh)
-
     # Initialize ssh
     mkdir -p /root/.ssh
     rm -f /root/.ssh/*
