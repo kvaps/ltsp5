@@ -31,10 +31,6 @@ else
 fi
 
 export SCREEN_NUM
-eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
-
-SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
-SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
 if [ "${SCREEN_NUM}" = "01" ]; then
     # This is not an error on Fedora.
@@ -45,25 +41,50 @@ if [ "${SCREEN_NUM}" = "01" ]; then
     fi
 fi
 
-for SCRIPT_DIR in ${SCRIPT_DIRS}; do
-    if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
-        if [ "${SCRIPT_DIR}" = "/usr/lib/ltsp/screen.d" ]; then
-            echo "Warning: /usr/lib/ltsp/screen.d is deprecated and will be removed in the future."
-            echo "         ${SCREEN_SCRIPT} requires updating to use /usr/share/ltsp."
-        fi
-        if [ -x /usr/bin/openvt ]; then
-            openvt=/usr/bin/openvt
-        elif [ -x /bin/openvt ]; then
-            openvt=/bin/openvt
-        else
-            echo "openvt not found!  openvt is required for proper operation"
-        fi
-
-        while :; do
-            ${openvt} -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
-        done
+main() {
+    if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
+        # Reset the environement
+        unset $(env | egrep '^(\w+)=(.*)$' | egrep -vw 'PWD|USER|PATH|HOME|SCREEN_NUM|SCREEN_DIRS|TTY_NUM' | /usr/bin/cut -d= -f1)
+        . /usr/share/ltsp/ltsp_config
+        eval $(getltscfg-cluster -a -l refresh)
     fi
-done
+    eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
+    SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
+    SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
-logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
-echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+    for SCRIPT_DIR in ${SCRIPT_DIRS}; do
+        if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
+            if [ "${SCRIPT_DIR}" = "/usr/lib/ltsp/screen.d" ]; then
+                echo "Warning: /usr/lib/ltsp/screen.d is deprecated and will be removed in the future."
+                echo "         ${SCREEN_SCRIPT} requires updating to use /usr/share/ltsp."
+            fi
+            if [ -x /usr/bin/openvt ]; then
+                openvt=/usr/bin/openvt
+            elif [ -x /bin/openvt ]; then
+                openvt=/bin/openvt
+            else
+                return 2
+            fi
+            ${openvt} -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+            return 0
+        fi
+    done
+    return 1
+}
+
+while :;
+do
+    main
+    case "$?" in
+        1)
+            logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+            echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+            exit 1
+            ;;
+        2)
+            logger -t LTSP "Screen:${TTY} - openvt not found!  openvt is required for proper operation"
+            echo "Screen:${TTY} - openvt not found!  openvt is required for proper operation"
+            exit 1
+            ;;
+    esac
+done
