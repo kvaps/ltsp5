@@ -58,15 +58,15 @@ for i in 0 1 2 3 4 5 6 7 8; do
 
     ########### Xrandr > 1.2 Values (preferred)
     [ -n "${XRANDR_OUTPUT}" ] && XRANDR_ARGS="${XRANDR_ARGS} --output ${XRANDR_OUTPUT}"
-    [ -n "${XRANDR_RATE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --rate \"${XRANDR_RATE}\""
-    [ -n "${XRANDR_MODE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --mode \"${XRANDR_MODE}\""
-    [ -n "${XRANDR_NEWMODE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --newmode \"${XRANDR_NEWMODE}\""
-    [ -n "${XRANDR_ROTATE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --rotate \"${XRANDR_ROTATE}\""
-    [ -n "${XRANDR_REFLECT}" ] && XRANDR_ARGS="${XRANDR_ARGS} --reflect \"${XRANDR_REFLECT}\""
-    [ -n "${XRANDR_DPI}" ] && XRANDR_ARGS="${XRANDR_ARGS} --dpi \"${XRANDR_DPI}\""
+    [ -n "${XRANDR_RATE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --rate ${XRANDR_RATE}"
+    [ -n "${XRANDR_MODE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --mode ${XRANDR_MODE}"
+    [ -n "${XRANDR_NEWMODE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --newmode ${XRANDR_NEWMODE}"
+    [ -n "${XRANDR_ROTATE}" ] && XRANDR_ARGS="${XRANDR_ARGS} --rotate ${XRANDR_ROTATE}"
+    [ -n "${XRANDR_REFLECT}" ] && XRANDR_ARGS="${XRANDR_ARGS} --reflect ${XRANDR_REFLECT}"
+    [ -n "${XRANDR_DPI}" ] && XRANDR_ARGS="${XRANDR_ARGS} --dpi ${XRANDR_DPI}"
     ############ Support these for xrandr < 1.2
-    [ -n "${XRANDR_SIZE}" ] && XRANDR_ARGS="${XRANDR_ARGS} -s \"${XRANDR_SIZE}\""
-    [ -n "${XRANDR_ORIENTATION}" ] && XRANDR_ARGS="${XRANDR_ARGS} -o \"${XRANDR_ORIENTATION}\""
+    [ -n "${XRANDR_SIZE}" ] && XRANDR_ARGS="${XRANDR_ARGS} -s ${XRANDR_SIZE}"
+    [ -n "${XRANDR_ORIENTATION}" ] && XRANDR_ARGS="${XRANDR_ARGS} -o ${XRANDR_ORIENTATION}"
 
 done
 
