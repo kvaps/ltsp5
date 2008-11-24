@@ -64,7 +64,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     chmod 644 /etc/group
 
     # Get the system groups that the user belongs to, so we can add him back in
-    myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/getent group|egrep "[,:]${LDM_USERNAME}(,|$)"|cut -d: -f1| tr '\n' ',' | sed -e 's/,$//g')
+    myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} groups | tr ' ' ',')
     if [ -n "$myGroups" ]; then
         usermod -G "$myGroups" "${LDM_USERNAME}"
     fi
