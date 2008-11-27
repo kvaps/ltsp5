@@ -1,0 +1,10 @@
+case "$MODE" in
+    after-install)
+        mkdir -p $ROOT/dev/pts
+        chroot $ROOT mount -t devpts devpts -o noexec,nosuid,gid=5,mode=620 /dev/pts
+        ;;
+    finalization)
+        umount $ROOT/dev/pts
+        rm -rf $ROOT/dev/pts
+        ;;
+esac
