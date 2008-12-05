@@ -1,0 +1,31 @@
+#This script implements the support for the Virtual parameter
+#It'll need to be updated to use the new script structure for xorg modification (to be implemented)
+#For now, it'll only be applied for Intel video cards
+
+vendor=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.vendor)
+if [ "$vendor" = "32902" ]; then
+    for i in 0 1 2 3 4 5 6 7 8; do
+        eval XRANDR_MODE=\$XRANDR_MODE_${i}
+        XRANDR_MODE=`echo $XRANDR_MODE | sed "s/ .*//g"`
+        if [ -n "$XRANDR_MODE" ]; then
+            VERTICAL=`echo $XRANDR_MODE | cut -d x -f 1`
+            HORIZONTAL=`echo $XRANDR_MODE | cut -d x -f 2`
+            R_VERT=$(( $R_VERT + $VERTICAL ))
+            R_HORIZ=$(( $R_HORIZ + $HORIZONTAL ))
+        fi
+    done
+    (
+    cat << 'EOF'
+Section "Screen"
+    Identifier  "Default Screen"
+    SubSection "Display"
+EOF
+    ) >> /etc/X11/xorg.conf
+    echo "       Virtual ${R_VERT} ${R_HORIZ}" >> /etc/X11/xorg.conf
+    (
+    cat << 'EOF'
+    EndSubSection
+EndSection
+EOF
+    ) >> /etc/X11/xorg.conf
+fi
