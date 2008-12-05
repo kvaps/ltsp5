@@ -52,6 +52,12 @@ main() {
     SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
     SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
+    if [ -d "/usr/share/ltsp/screen-session.d/" ]; then
+        for script in `find -L /usr/share/ltsp/screen-session.d/ -type f -name 'S*'`; do
+            . $script
+        done
+    fi
+
     for SCRIPT_DIR in ${SCRIPT_DIRS}; do
         if [ -x ${SCRIPT_DIR}/${SCREEN_SCRIPT} ]; then
             if [ "${SCRIPT_DIR}" = "/usr/lib/ltsp/screen.d" ]; then
@@ -69,6 +75,13 @@ main() {
             return 0
         fi
     done
+
+    if [ -d "/usr/share/ltsp/screen-session.d/" ]; then
+        for script in `find -L /usr/share/ltsp/screen-session.d/ -type f -name 'K*'`; do
+            . $script
+        done
+    fi
+
     return 1
 }
 
