@@ -26,5 +26,4 @@ start() {
 
 	start_sound || true
 	configure_sound_volume || true 
-	configure_localdev || true
 }
