@@ -131,10 +131,16 @@ pre_install_portage_tree() {
 	# stable fails on 2.6.24 kernel
 	~sys-fs/fuse-2.7.3
 	~sys-fs/sshfs-fuse-2.1
+	=sys-apps/portage-2.2*
+	app-admin/eselect-news
+	=app-admin/eselect-1.0*
 	EOF
 }
 
 pre_build_kernel() {
+	# FIXME: upgrade to porage 2.2 to resolve blockers since 2008.0
+	spawn_chroot "emerge -1 portage"
+
 	export CONFIG_PROTECT_MASK=""
 	export CCACHE_DIR="/var/tmp/ccache"
 	export CCACHE_SIZE="4G"
