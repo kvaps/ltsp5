@@ -62,6 +62,7 @@ start() {
         . /usr/share/ltsp/ltsp-init-common
 
         load_modules || true
+        set_time || true
         configure_console || true
         configure_resolver || true
         configure_swap || true
