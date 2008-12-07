@@ -1,0 +1,25 @@
+# This screen hack adds a Virtual line to xorg.conf
+# Virtual can be set with X_VIRTUAL in lts.conf OR
+# if X_VIRTUAL_AUTO is set to true, then the Virtual
+# will be calculated from XRANDR_MODEs set 
+
+screen_hacks="$screen_hacks x_virtual"
+
+x_virtual() {
+    if boolean_is_true "${X_VIRTUAL_AUTO}"; then
+        for i in 0 1 2 3 4 5 6 7 8; do
+            eval XRANDR_MODE=\$XRANDR_MODE_${i}
+            XRANDR_MODE=`echo $XRANDR_MODE | sed "s/ .*//g"`
+            if [ -n "$XRANDR_MODE" ]; then
+                VERTICAL=`echo $XRANDR_MODE | cut -d x -f 1`
+                HORIZONTAL=`echo $XRANDR_MODE | cut -d x -f 2`
+                R_VERT=$(( $R_VERT + $VERTICAL ))
+                R_HORIZ=$(( $R_HORIZ + $HORIZONTAL ))
+            fi
+        done
+   
+        [ -n "${R_VERT}" ] && [ -n "${R_HORIZ}" ] && X_VIRTUAL="${R_VERT} ${R_HORIZ}" 
+    fi
+
+    [ -n "${X_VIRTUAL}" ] && echo "       Virtual ${X_VIRTUAL}" >> ${XCONF}
+}

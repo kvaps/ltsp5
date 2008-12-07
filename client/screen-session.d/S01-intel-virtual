@@ -1,0 +1,9 @@
+#This script implements the support for the Virtual parameter
+#It'll need to be updated to use the new script structure for xorg modification (to be implemented)
+#For now, it'll only be applied for Intel video cards
+
+vendor=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.vendor)
+
+if [ "$vendor" = "32902" ]; then
+    X_VIRTUAL_AUTO=True
+fi
