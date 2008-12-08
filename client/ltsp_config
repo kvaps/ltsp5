@@ -88,4 +88,4 @@ if [ -z "$LOCAL_APPS" ] && [ -x /usr/bin/sshfs ]; then
 fi
 
 # set to determine if ltsp_config has already been sourced
-export LTSP_CONFIG=True
+export LTSP_CONFIG=${LTSP_CONFIG:-"True"}
