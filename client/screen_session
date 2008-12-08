@@ -53,7 +53,7 @@ main() {
     SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
     if [ -d "/usr/share/ltsp/screen-session.d/" ]; then
-        for script in `find -L /usr/share/ltsp/screen-session.d/ -type f -name 'S*'`; do
+        for script in $(run_parts_list /usr/share/ltsp/screen-session.d/ S); do
             . $script
         done
     fi
@@ -77,7 +77,7 @@ main() {
     done
 
     if [ -d "/usr/share/ltsp/screen-session.d/" ]; then
-        for script in `find -L /usr/share/ltsp/screen-session.d/ -type f -name 'K*'`; do
+        for script in $(run_parts_list /usr/share/ltsp/screen-session.d/ K); do
             . $script
         done
     fi
