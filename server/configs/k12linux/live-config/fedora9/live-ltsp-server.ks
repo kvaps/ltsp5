@@ -3,7 +3,7 @@
 %packages
 ltsp-server
 ltsp-vmclient
-ltsp-server-livesetupdocs
+k12linux-quick-start-guide
 %end
 
 %post
