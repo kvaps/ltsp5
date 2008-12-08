@@ -99,7 +99,6 @@ pre_install_portage_tree() {
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
 	USE="alsa xml X -cups"
-	VIDEO_CARDS="vesa"
 	FEATURES="ccache"
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
