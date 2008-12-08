@@ -11,6 +11,7 @@ boolean_is_true(){
 # list files in a directory consisting only of alphanumerics, hyphens and
 # underscores
 # $1 - directory to list
+# $2 - optional prefix to limit which files are selected
 run_parts_list() {
     if [ $# -lt 1 ]; then
         echo "ERROR: Usage: run_parts_list <dir>" > /dev/stderr
@@ -22,7 +23,10 @@ run_parts_list() {
     fi
 
     if [ -d "$1" ]; then
-        for file in $(find -L $1 -mindepth 1 -maxdepth 1 -type f | sort -n) ; do
+        if [ -n "$2" ]; then
+            find_opts="-name $2*"
+        fi
+        for file in $(find -L $1 -mindepth 1 -maxdepth 1 -type f $find_opts | sort -n) ; do
             basefile=$(basename $file)
             if [ -n "$(echo "$basefile" | egrep ^[0-9a-zA-Z_\-]*$)" ]; then
                 echo $file
