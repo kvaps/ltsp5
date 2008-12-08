@@ -8,6 +8,7 @@ case "$MODE" in
 # in the client environment
 
 [default] 
+    LTSP_CONFIG=True
     #SOUND=False
     #LOCALDEV=False
     #CONFIGURE_X=False
