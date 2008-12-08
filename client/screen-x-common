@@ -46,49 +46,6 @@ error_delay() {
     read CMD
 }
 
-#
-# limit ram percentage.  By default, behaviour is no limit.
-# Use this to stop firefox crashing sites with pathalogically large images,
-# etc.
-#
-
-X_RAMPERC=${X_RAMPERC:-100}
-
-if [ ${X_RAMPERC} -lt 100 ]; then
-    XMEM=0
-    while read TYPE VALUE UNITS; do
-        case ${TYPE} in
-            MemFree:|SwapFree:)
-                XMEM=$((${XMEM} + ${VALUE}))
-                ;;
-        esac
-    done < /proc/meminfo
-    XMEM=$((${XMEM} * ${X_RAMPERC} / 100))
-
-    ulimit -m ${XMEM}
-fi
-
-### configuration file handling
-
-if [ -z "$X_CONF" ] && [ -f /var/run/ltsp-xorg.conf ]; then
-    # use generated X configuration file
-    X_CONF=/var/run/ltsp-xorg.conf
-fi
-
-if [ -f "$X_CONF" ]; then
-    X_ARGS="$X_ARGS -config $X_CONF"
-elif [ -n "$X_CONF" ]; then
-    echo 
-    echo "Error! - ${X_CONF} - File not found!"
-    echo
-fi
-
-### color depth
-
-if [ -z "$X_CONF" ] && [ -n "$X_COLOR_DEPTH" ]; then 
-    X_ARGS="$X_ARGS -depth $X_COLOR_DEPTH"
-fi
-
 # XFS handling
 # implemented as a function so it could be called on sucessive tries
 
@@ -114,3 +71,21 @@ get_xfs_settings() {
         done
     fi
 }
+
+# Implemented as a function so it can be called within X screen scripts 
+# as needed
+run_xk_scripts() {
+    # Run files prefixed with XK* in /usr/share/ltsp/screen-session.d/
+    if [ -d "/usr/share/ltsp/screen-session.d/" ]; then
+        for script in `find -L /usr/share/ltsp/screen-session.d/ -type f -name 'XK*'`; do
+            . $script
+        done
+    fi
+}
+
+# Run files prefixed with XS* in /usr/share/ltsp/screen-session.d/
+if [ -d "/usr/share/ltsp/screen-session.d/" ]; then
+    for script in `find -L /usr/share/ltsp/screen-session.d/ -type f -name 'XS*'`; do
+        . $script
+    done
+fi

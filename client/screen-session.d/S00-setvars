@@ -1,9 +1,0 @@
-# This script just sets some vars for subsequent scripts
-
-XCONF=/etc/X11/xorg.conf
-
-unset screen_hacks
-unset monitor_hacks
-unset device_hacks
-unset module_hacks
-

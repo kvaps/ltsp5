@@ -1,0 +1,6 @@
+### color depth
+
+if [ -z "$X_CONF" ] && [ -n "$X_COLOR_DEPTH" ]; then
+    X_ARGS="$X_ARGS -depth $X_COLOR_DEPTH"
+fi  
+
