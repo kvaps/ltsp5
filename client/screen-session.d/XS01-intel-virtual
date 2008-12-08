@@ -4,6 +4,6 @@
 
 vendor=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.vendor)
 
-if [ "$vendor" = "32902" ]; then
+if [ "$vendor" = "32902" ] && [ -z "$X_VIRTUAL_AUTO" ]; then
     X_VIRTUAL_AUTO=True
 fi
