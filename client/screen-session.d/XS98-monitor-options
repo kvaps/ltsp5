@@ -1,0 +1,15 @@
+# This script sets monitor options 
+# using the X_MONITOR_OPTION_01 .. X_MONITOR_OPTION_10 lts.conf vars
+#
+monitor_hacks="$monitor_hacks set_mon_options"
+
+set_mon_options() {
+    unset X_MONITOR_OPTION
+    if [ -n "$(env|grep X_MONITOR_OPTION)" ]; then
+        for i in 01 02 03 04 05 06 07 08 09 10; do
+            eval X_MONITOR_OPTION="\$X_MONITOR_OPTION_$i"
+            [ -n "${X_MONITOR_OPTION}" ] && \
+                echo "        Option ${X_MONITOR_OPTION}" >> ${XCONF} 
+        done
+    fi
+}

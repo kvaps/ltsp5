@@ -1,0 +1,78 @@
+# Sourced with .
+
+XCONF=${XCONF:-/etc/X11/xorg.conf}
+
+write_screen() {
+    num=${1:-0}
+    #eval screen_hacks=\$screen_hacks_$num
+    [ -z "$screen_hacks" ] && return
+    echo "Section \"Screen\"" >> ${XCONF}
+    echo "    Identifier \"Screen${num}\"" >> ${XCONF}
+
+    for i in ${screen_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection" >> ${XCONF}
+}
+
+write_monitor() {
+    num=${1:-0}
+    #eval monitor_hacks=\$monitor_hacks_$num
+    [ -z "$monitor_hacks" ] && return
+    echo "Section \"Monitor\"" >> ${XCONF}
+    echo "    Identifier \"Monitor${num}\"" >> ${XCONF}
+
+    for i in ${monitor_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection" >> ${XCONF}
+}
+
+write_device() {
+    num=${1:-0}
+    #eval device_hacks=\$device_hacks_$num
+    [ -z "$device_hacks" ] && return
+    echo "Section \"Device\"" >> ${XCONF}
+    echo "    Identifier \"Device${num}\"" >> ${XCONF}
+
+    for i in ${device_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection" >> ${XCONF}
+}
+
+write_module() {
+    [ -z "$module_hacks" ] && return
+    echo "Section \"Module\"" >> ${XCONF}
+
+    for i in ${module_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection" >> ${XCONF}
+}
+
+# Only assemble a xorg.conf is CONFIGURE_X=False
+if ! boolean_is_true "${CONFIGURE_X}"; then
+
+# Clear pre-exisitng config, if it exists
+[ -w "${XCONF}" ] && :>${XCONF} 
+
+# For now, we will only do one screen, monitor, and device
+# under the assumption that multiple-head issues should
+# be handled exclusively by xrandr
+#
+# I'll keep the code commented out and handy in case we need it
+#
+#for i in 0 1 2 3 4 5 6 7 8; do
+    write_screen $i 	|| true
+    write_monitor $i	|| true
+    write_device $i	|| true
+#done
+
+    write_module 	|| true
+
+fi # end CONFIGURE_X=False

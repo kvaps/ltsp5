@@ -1,0 +1,15 @@
+# This script sets Xserver module options for the specified driver
+# using the X_MODULE_01 .. X_MODULE_10 lts.conf vars
+#
+module_hacks="$module_hacks set_xmodules"
+
+set_xmodules() {
+    unset X_MODULE
+    if [ -n "$(env|grep X_MODULE)" ]; then
+        for i in 01 02 03 04 05 06 07 08 09 10; do
+            eval X_MODULE="\$X_MODULE_$i"
+            [ -n "${X_MODULE}" ] && \
+                echo "        Load ${X_MODULE}" >> ${XCONF} 
+        done
+    fi
+}

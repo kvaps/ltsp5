@@ -1,0 +1,17 @@
+# This script restricts the sync ranges of the monitor
+# using the X_HORZSYNC and X_VERTREFRESH lts.conf params
+#
+# NOTE: This is only to fix buggy monitors that do not support proper
+#       DDC probing, in combination with drivers that have bad default
+#       ranges when none are probed
+
+monitor_hacks="$monitor_hacks set_sync_ranges"
+
+set_sync_ranges() {
+    if [ -n "X_HORZSYNC" ]; then
+        echo "        Horizsync ${X_HORZSYNC}" >> ${XCONF}
+    fi
+    if [ -n "X_VERTREFRESH" ]; then
+        echo "        Vertrefresh ${X_VERTREFRESH}" >> ${XCONF}
+    fi
+}
