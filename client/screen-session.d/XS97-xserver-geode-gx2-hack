@@ -5,6 +5,6 @@ device_hacks="$device_hacks set_xserver_geode_gx2"
 
 set_xserver_geode_gx2() {
     if [ -n "$(/sbin/lspci -n |grep 100b:0030)" ]; then
-        XSERVER=geode
+        [ -z "$XSERVER" ] && XSERVER=geode
     fi
 }
