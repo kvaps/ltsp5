@@ -1,3 +1,5 @@
 #!/bin/sh
-
-aclocal && autoconf && automake -a -c
+set -e
+aclocal
+autoconf
+automake -a -c
