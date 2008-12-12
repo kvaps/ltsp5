@@ -26,68 +26,6 @@ $0 [OPTION]
 EOF
 }
 
-# This is a hardware specific hack that should be relocated, but it's put here
-# until we have a better place to put it. Yes, We know that's terribly ugly,
-# but we have to just make it work meanwhile. 
-fixxorg() {
-    vendor=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.vendor)
-    product=$(hal-get-property --udi /org/freedesktop/Hal/devices/computer --key system.hardware.primary_video.product)
-
-    # Fix AMD Geode GX2 support, will probably break the other GX2 chips though
-    if [ "$vendor" = "4107" ]
-    then
-(
-cat << 'EOF'
-Section "Device"
-    Identifier "Card0"
-    Driver "geode"
-    Option "AccelMethod" "XAA"
-EndSection
-EOF
-) > /etc/X11/xorg.conf
-    fi
-
-    # Fix VIA [S3 UniChrome Pro] [1106:3344]
-    if [ "$vendor" = "4358" ] && [ "$product" = "13124" ]
-    then
-(
-cat << 'EOF'
-Section "Device"
-    Identifier "Card0"
-    Option     "VBEModes" "true"
-EndSection
-EOF
-) > /etc/X11/xorg.conf
-    fi
-
-    # Fix VIA CastleRock graphics [1106:3122]
-    if [ "$vendor" = "4358" ] && [ "$product" = "12578" ]
-    then
-(
-cat << 'EOF'
-Section "Device"
-    Identifier "Card0"
-    Driver     "openchrome"
-EndSection
-EOF
-) > /etc/X11/xorg.conf
-    fi
-
-    # Fix Matrox video card memory detection and video corruption
-    if [ "$vendor" = "4139" ] && [ "$product" = "1307" ]
-    then
-(
-cat << 'EOF'
-Section "Device"
-    Identifier "Card0"
-    VideoRam    8192
-    Option      "ShadowFB" "True"
-EndSection
-EOF
-) > /etc/X11/xorg.conf
-    fi
-}
-
 # Source global configuration file
 if [ -f /etc/ltsp/directory.conf ]; then
     SERVER=`cat /etc/ltsp/directory.conf | awk -F / '{print \$3}'`
@@ -241,4 +179,3 @@ fi
 if [ "$EXPORT_CONF" = "Y" ]; then 
     getltscfg -a -c $cache_lts
 fi
-fixxorg
