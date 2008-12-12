@@ -35,6 +35,9 @@ LDM_GUESTLOGIN      boolean		     unset	     Add "Guest login" button to greeter
 ---------------------------------------------------------------------------------------------
 LOCAL_APPS          boolean	             True
 ---------------------------------------------------------------------------------------------
+LOCAL_APPS_WHITELIST list of commands	     unset           Use to allow only specified space-separated commands to be run as local apps, allow all is default if unset
+                                                             Full-paths are required for each command.  No spaces in names are allowed.
+---------------------------------------------------------------------------------------------
 LOCALDEV            boolean	             True    	     Honors LOCAL_STORAGE (deprecated)
 ---------------------------------------------------------------------------------------------
 MODULE_nn           Kernel module name       autodetected    use to force loading of specific 

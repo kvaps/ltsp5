@@ -41,27 +41,28 @@ while :; do
     LTSP_COMMAND=$(echo "${LTSP_COMMAND}"|sed -e 's/^LTSP_COMMAND = //' -e 's/^"//' -e 's/"$//')
     LTSP_COMMAND_WAIT=$(xprop -root -notype LTSP_COMMAND_WAIT |sed -e 's/^LTSP_COMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
     if [ -n "${LTSP_COMMAND}" ]; then
-        # If LOCAL_APPS_APPS_WHITELIST is defined, reject anything not listed.  Otherwise allow.
-        unset TEMP_ALLOW_EXEC
+        # If LOCAL_APPS_APPS_WHITELIST is defined, reject anything not listed.  Otherwise allow by default.
         if [ -n "${LOCAL_APPS_WHITELIST}" ]; then
+            unset TEMP_ALLOW_EXEC
             for cmd in $LOCAL_APPS_WHITELIST; do
                 if [ "$cmd" = "$(echo $LTSP_COMMAND|cut -d\  -f1)" ]; then
                     TEMP_ALLOW_EXEC=1
-                else
-                    logit "Rejecting command because it is not listed in LOCAL_APPS_WHITELIST: $LTSP_COMMAND"
+                    break
                 fi
             done
-        else
-            TEMP_ALLOW_EXEC=1
+            if [ -z "${TEMP_ALLOW_EXEC}" ]; then
+                logit "Rejecting command not listed in LOCAL_APPS_WHITELIST: $LTSP_COMMAND"
+                reset_xprop LTSP_COMMAND
+                reset_xprop LTSP_COMMAND_WAIT
+                continue
+            fi
         fi
     
-        if [ -n "${TEMP_ALLOW_EXEC}" ]; then
-            logit "Executing the following command as ${LDM_USERNAME}: ${LTSP_COMMAND} "
-            if [ "$LTSP_COMMAND_WAIT" = "true" ]; then
-                su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
-            else
-                su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
-            fi
+        logit "Executing command as username ${LDM_USERNAME}: ${LTSP_COMMAND} "
+        if [ "$LTSP_COMMAND_WAIT" = "true" ]; then
+            su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
+        else
+            su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
         fi
     fi
     reset_xprop LTSP_COMMAND
