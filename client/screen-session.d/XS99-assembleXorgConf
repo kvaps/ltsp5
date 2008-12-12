@@ -65,13 +65,11 @@ if ! boolean_is_true "${CONFIGURE_X}"; then
 # under the assumption that multiple-head issues should
 # be handled exclusively by xrandr
 #
-# I'll keep the code commented out and handy in case we need it
-#
-#for i in 0 1 2 3 4 5 6 7 8; do
+for i in 0; do
     write_screen $i 	|| true
     write_monitor $i	|| true
     write_device $i	|| true
-#done
+done
 
     write_module 	|| true
 
