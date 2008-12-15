@@ -10,6 +10,7 @@
 SCRIPT_DIRS="/etc/ltsp/screen.d /usr/share/ltsp/screen.d /usr/lib/ltsp/screen.d"
 
 # Load LTSP configuration
+. /usr/share/ltsp/ltsp-common-functions
 if [ "True" != "$LTSP_CONFIG" ]; then
     . /usr/share/ltsp/ltsp_config
 fi
