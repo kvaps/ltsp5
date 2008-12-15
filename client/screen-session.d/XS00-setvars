@@ -3,19 +3,6 @@
 # 
 XCONF=/var/run/ltsp-xorg.conf
 
-if [ -z "$X_CONF" ] && [ -f /var/run/ltsp-xorg.conf ]; then
-    # use generated X configuration file
-    X_CONF=${XCONF}
-fi
-
-if [ -f "$X_CONF" ]; then
-    X_ARGS="$X_ARGS -config $X_CONF"
-elif [ -n "$X_CONF" ]; then
-    echo
-    echo "Error! - ${X_CONF} - File not found!"
-    echo
-fi
-
 unset screen_hacks
 unset monitor_hacks
 unset device_hacks
