@@ -19,6 +19,12 @@ if [ -x /usr/bin/wraplinux ]; then
   ln -sf wraplinux-nbi-$1.img /boot/wraplinux-nbi.ltsp
 fi
 
+# PPC: Copy yaboot into /boot
+if [ -e /usr/lib/yaboot/yaboot ]; then
+  cp /usr/lib/yaboot/yaboot /boot/yaboot
+  chmod 644 /boot/yaboot
+fi
+
 # Symlink vmlinuz.ltsp and initrd.ltsp and set permissions for tftp server
 ln -sf vmlinuz-$1    /boot/vmlinuz.ltsp
 ln -sf initrd-$1.img /boot/initrd.ltsp
