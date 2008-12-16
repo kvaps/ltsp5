@@ -97,6 +97,7 @@ for TFTPDIR in $TFTPDIRS ; do
         rm -f $archpath/initrd-$version.img
         rm -f $archpath/elf-$version.img
         rm -f $archpath/wraplinux-nbi-$version.img
+        rm -f $archpath/aout-$version.img
         # Debian
         rm -f $archpath/initrd.img-$version
         rm -f $archpath/nbi.img-$version

@@ -25,6 +25,19 @@ if [ -e /usr/lib/yaboot/yaboot ]; then
   chmod 644 /boot/yaboot
 fi
 
+# SPARC: Convert ELF to AOUT for OFW netboot, and use piggyback to add System.map and initrd to the image
+if [ -x /usr/bin/elftoaout ]; then
+  elftoaout /boot/vmlinuz-$1 -o /boot/aout-$1
+fi
+if [ -x /usr/bin/piggyback64 ]; then
+  if file /boot/vmlinuz-$1 |grep -q "ELF 64-bit"; then
+    PIGGY=/usr/bin/piggyback64
+  else
+    PIGGY=/usr/bin/piggyback
+  fi
+  $PIGGY /boot/aout-$1 /boot/System.map-$1 /boot/initrd-$1.img
+fi
+
 # Symlink vmlinuz.ltsp and initrd.ltsp and set permissions for tftp server
 ln -sf vmlinuz-$1    /boot/vmlinuz.ltsp
 ln -sf initrd-$1.img /boot/initrd.ltsp
