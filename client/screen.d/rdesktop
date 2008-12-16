@@ -24,7 +24,6 @@ if [ -x /usr/share/ltsp/xinitrc ]; then
     xinitrc=/usr/share/ltsp/xinitrc
 fi
 
-/usr/bin/xinit $xinitrc /usr/bin/rdesktop -u "" ${RDESKTOP_OPTIONS} -- ${DISPLAY} vt${TTY} -br >/dev/null
+xinit $xinitrc /usr/bin/rdesktop ${RDESKTOP_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br >/dev/null
 
 rm -f ${XINITRC}
-
