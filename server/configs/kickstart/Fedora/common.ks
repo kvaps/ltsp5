@@ -184,7 +184,6 @@ which
 wraplinux
 xkeyboard-config
 xorg-x11-drivers
-xorg-x11-drv-openchrome
 xorg-x11-fonts-100dpi
 xorg-x11-server-utils
 xorg-x11-server-Xorg
