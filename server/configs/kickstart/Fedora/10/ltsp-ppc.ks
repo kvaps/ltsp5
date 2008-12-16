@@ -1,6 +1,6 @@
 # Kickstart Definition for Client Chroot for generic ppc
 
-# we are going to install into a chroot, such as /opt/ltps/ppc
+# we are going to install into a chroot, such as /opt/ltsp/ppc
 install
 
 # rev #2 will be configurable (i.e. http or ftp or cdrom/dvd or nfs, etc, etc)
