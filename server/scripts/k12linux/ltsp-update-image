@@ -1,9 +1,17 @@
 #!/bin/sh
 # Generate nbd root images for LTSP
 
-for path in /opt/ltsp/*; do
+if [ -n "$1" ]; then
+    paths="/opt/ltsp/$1"
+else
+    paths=/opt/ltsp/*
+fi
+
+for path in $paths; do
     arch=`basename $path`
     targetimg="/opt/ltsp/images/$arch.img"
+    # Skip if not a directory
+    [ ! -d "$path" ] && continue
     # Skip "images" dir
     [ "$arch" == "images" ] && continue
     TMPNAME=`/bin/mktemp -u /opt/ltsp/images/$arch.XXXXXXX`
