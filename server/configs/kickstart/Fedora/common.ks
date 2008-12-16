@@ -135,7 +135,6 @@ MAKEDEV
 mcstrans
 mesa-libGL
 mingetty
-mkelfimage
 mkinitrd
 module-init-tools
 nash
@@ -181,7 +180,6 @@ tzdata
 udev
 util-linux-ng
 which
-wraplinux
 xkeyboard-config
 xorg-x11-drivers
 xorg-x11-fonts-100dpi
