@@ -73,6 +73,12 @@ for TFTPDIR in $TFTPDIRS ; do
                 mkdir -p $TFTPBOOT/$CHROOT_NAME
                 cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
             fi
+
+            # OFW on Mac is lame, they cannot tftp from directories
+            if [ -e $TFTPBOOT/$CHROOT_NAME/yaboot ]; then
+                ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPBOOT/yaboot
+                ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPBOOT/yaboot
+            fi
         else
             # not a valid chroot
             echo "Skipping invalid chroot: $CHROOT"
