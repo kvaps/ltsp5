@@ -1,5 +1,8 @@
 # This directory contains "S" and "K" scripts that are sourced before 
-# and after a screen script is executed (respectively).  
+# and after a screen script is executed (respectively).
+#
+# This directory also contains "XS" and "XK" scripts which are sourced (in
+# screen-x-common) by screen scripts that start an X server.
 # 
 # While for the most part a xorg.conf is no longer needed and most 
 # functionality can be achieved with a combination of Xserver arguments, 
@@ -10,9 +13,9 @@
 # In order to provide a drop-in file-based system for custom hacks,
 # we created a mechanism whereby a monitor, screen, device, or module 
 # hack for Xorg can be introduced in a file as a function and registered with 
-# the S99-assembleXorgConf file for execution.
+# the XS90-assembleXorgConf file for execution.
 #
-# An example would be:
+# An example would be XS75-myFunction:
 # 
 # screen_hacks="$screen_hacks myFunction"
 #
