@@ -154,9 +154,9 @@ if [ "$LOG" = "boot" ]; then
         fi
     fi
 elif [ "$LOG" = "login" ]; then 
-    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$DISPLAY/code=3"
+    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/code=3"
 elif [ "$LOG" = "logout" ]; then
-    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$DISPLAY/code=4"
+    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/code=4"
 elif [ "$LOG" = "refresh" ]; then
     QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/bootservip=$ROOT_SRV/code=0"
 else
