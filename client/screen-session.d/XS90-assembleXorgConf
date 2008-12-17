@@ -71,17 +71,3 @@ if ! boolean_is_true "${CONFIGURE_X}"; then
     write_module || true
 
 fi
-
-if [ -z "$X_CONF" ] && [ -f "$XCONF" ]; then
-    # use generated X configuration file
-    X_CONF=${XCONF}
-fi
-
-if [ -f "$X_CONF" ]; then
-    X_ARGS="$X_ARGS -config $X_CONF"
-elif [ -n "$X_CONF" ]; then
-    echo
-    echo "Error! - ${X_CONF} - File not found!"
-    echo
-fi
-
