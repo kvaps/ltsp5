@@ -9,6 +9,13 @@ ltsp\-update\-image \(em Updates the LTSP server image to be shared by nbd
 \fBltsp\-update\-image\fR updates the current ltsp client
 chroot image by using squashfs to create a compressed image of the
 chroot in /opt/ltsp/arch.  This can then be shared out by nbdrootd(8).
+.PP
+.SH "OPTIONS"
+.IP "\fB\-p\fP \fB\-\-port\fP \fIPort you wish this nbd image to communicate on.  Default is 2000.\fR" 10 
+.IP "\fB\-b\fP \fB\-\-base\fP \fIBase of ltsp chroot.  Default is /opt/ltsp if unspecified.\fR" 10 
+.IP "\fB\-a\fP \fB\-\-arch\fP \fIArchitecture of this image.  Default is arch of the host.\fR" 10 
+.IP "\fB\-h\fP \fB\-\-help\fP \fIThe applications help page.\fR" 10 
+.PP
 .SH "SEE ALSO"
 .PP
 \fBltsp\-build\-client\fP\fB(8)\fP,
