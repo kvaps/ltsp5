@@ -1,0 +1,14 @@
+# Forces fbdev on ppc with ATI Rage 128
+# This driver was broken on ppc since at least 2004, perhaps earlier.
+
+device_hacks="$device_hacks set_xserver_ppc_r128"
+
+if [ -z "$XSERVER" ] && \
+   [ "$(uname -m)" = "ppc" ] && \
+   [ -n "$(PATH=/sbin:/usr/sbin:/bin:/usr/bin lspci |grep 'ATI Technologies Inc Rage 128')" ]; then
+    CONFIGURE_X=True
+
+    set_xserver_ppc_r128() {
+       XSERVER=fbdev
+    }
+fi
