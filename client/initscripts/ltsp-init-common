@@ -98,12 +98,6 @@ configure_localdev() {
     fi
 }
 
-configure_x() {
-    if boolean_is_true "$CONFIGURE_X" ; then
-        ${CONFIGURE_X_COMMAND:-/usr/share/ltsp/configure-x.sh}
-    fi
-}
-
 configure_swap() {
     if boolean_is_true "$USE_LOCAL_SWAP" ; then
         # Enable local swap partition if found on local disk

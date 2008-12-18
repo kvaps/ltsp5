@@ -3,6 +3,10 @@
 #
 device_hacks="$device_hacks set_dev_options"
 
+if [ -n "$(env|grep X_DEVICE_OPTION)" ]; then
+    CONFIGURE_X="True"
+fi
+
 set_dev_options() {
     unset X_DEVICE_OPTION
     if [ -n "$(env|grep X_DEVICE_OPTION)" ]; then

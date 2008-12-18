@@ -3,6 +3,9 @@
 #
 monitor_hacks="$monitor_hacks set_mon_options"
 
+# Auto-set CONFIGURE_X
+[ -n "$(env|grep X_MONITOR_OPTION)" ] && CONFIGURE_X="True"
+
 set_mon_options() {
     unset X_MONITOR_OPTION
     if [ -n "$(env|grep X_MONITOR_OPTION)" ]; then

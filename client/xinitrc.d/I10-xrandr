@@ -2,8 +2,8 @@
 # This script will implement xrandr support based on lts.conf vars
 #
 
-# Only execute xrandr code if CONFIGURE_X=False
-if ! boolean_is_true "${CONFIGURE_X}"; then
+# Only execute xrandr code if XRANDR_DISABLE=False
+if ! boolean_is_true "${XRANDR_DISABLE}"; then
 
 #
 # Backward compatibility for X_MODE_0:
@@ -76,4 +76,4 @@ done
 
 [ -n "${XRANDR_ARGS}" ] && ${XRANDR} ${XRANDR_ARGS}
 
-fi # end of CONFIGURE_X=False conditional
+fi # end of XRANDR_DISABLE=False conditional

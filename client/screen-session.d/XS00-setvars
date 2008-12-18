@@ -3,6 +3,9 @@
 # 
 XCONF=/var/run/ltsp-xorg.conf
 
+# Remove XCONF generated last go around
+[ -f "$XCONF" ] && rm -f $XCONF
+
 unset screen_hacks
 unset monitor_hacks
 unset device_hacks

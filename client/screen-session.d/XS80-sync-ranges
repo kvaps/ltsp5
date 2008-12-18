@@ -7,6 +7,10 @@
 
 monitor_hacks="$monitor_hacks set_sync_ranges"
 
+if [ -n "$X_HORZSYNC" ] || [ -n "$X_VERTREFRESH" ]; then
+    CONFIGURE_X="True"
+fi
+
 set_sync_ranges() {
     if [ -n "$X_HORZSYNC" ]; then
         echo "        Horizsync ${X_HORZSYNC}" >> ${XCONF}

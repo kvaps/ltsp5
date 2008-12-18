@@ -5,6 +5,10 @@
 
 screen_hacks="$screen_hacks x_virtual"
 
+if [ -n "${X_VIRTUAL_AUTO}" ] || [ -n "${X_VIRTUAL}" ];then
+    CONFIGURE_X="True"
+fi
+
 x_virtual() {
     if boolean_is_true "${X_VIRTUAL_AUTO}"; then
         for i in 0 1 2 3 4 5 6 7 8; do

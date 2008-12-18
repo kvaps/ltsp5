@@ -3,6 +3,10 @@
 #
 module_hacks="$module_hacks set_xmodules"
 
+if [ -n "$(env|grep X_MODULE)" ]; then
+    CONFIGURE_X="True"
+fi
+
 set_xmodules() {
     unset X_MODULE
     if [ -n "$(env|grep X_MODULE)" ]; then

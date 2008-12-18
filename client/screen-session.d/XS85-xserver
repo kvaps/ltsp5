@@ -3,6 +3,10 @@
 
 device_hacks="$device_hacks set_xserver"
 
+if [ -n "${XSERVER}" ]; then
+    CONFIGURE_X="True"
+fi
+
 set_xserver() {
     if [ -n "${XSERVER}" ]; then
         echo "        Driver \"${XSERVER}\"" >> ${XCONF}
