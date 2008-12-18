@@ -2,10 +2,6 @@
 # It cannot be autodetected by upstream X.org currently.
 
 if [ -z "$XSERVER" ] && [ -n "$(PATH=/sbin:/usr/sbin:/bin:/usr/bin lspci -n |grep 100b:0030)" ]; then
-    device_hacks="$device_hacks set_xserver_geode_gx2"
     CONFIGURE_X="True"
-
-    set_xserver_geode_gx2() {
-        XSERVER=geode
-    }
+    XSERVER=geode
 fi
