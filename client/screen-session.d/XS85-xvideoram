@@ -1,14 +1,11 @@
 # This script adds the ability to force a particular driver's video memory 
 # using the X_VIDEO_RAM lts.conf var
 
-device_hacks="$device_hacks set_videoram"
-
 if [ -n "${X_VIDEO_RAM}" ]; then
+    device_hacks="$device_hacks set_videoram"
     CONFIGURE_X="True"
-fi
 
-set_videoram() {
-    if [ -n "${X_VIDEO_RAM}" ]; then
+    set_videoram() {
         echo "        VideoRam \"${X_VIDEO_RAM}\"" >> ${XCONF}
-    fi
-}
+    }
+fi

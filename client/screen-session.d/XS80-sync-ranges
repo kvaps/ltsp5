@@ -5,17 +5,17 @@
 #       DDC probing, in combination with drivers that have bad default
 #       ranges when none are probed
 
-monitor_hacks="$monitor_hacks set_sync_ranges"
-
 if [ -n "$X_HORZSYNC" ] || [ -n "$X_VERTREFRESH" ]; then
-    CONFIGURE_X="True"
-fi
+    monitor_hacks="$monitor_hacks set_sync_ranges"
 
-set_sync_ranges() {
-    if [ -n "$X_HORZSYNC" ]; then
-        echo "        Horizsync ${X_HORZSYNC}" >> ${XCONF}
-    fi
-    if [ -n "$X_VERTREFRESH" ]; then
-        echo "        Vertrefresh ${X_VERTREFRESH}" >> ${XCONF}
-    fi
-}
+    CONFIGURE_X="True"
+
+    set_sync_ranges() {
+        if [ -n "$X_HORZSYNC" ]; then
+            echo "        Horizsync ${X_HORZSYNC}" >> ${XCONF}
+        fi
+        if [ -n "$X_VERTREFRESH" ]; then
+            echo "        Vertrefresh ${X_VERTREFRESH}" >> ${XCONF}
+        fi
+    }
+fi

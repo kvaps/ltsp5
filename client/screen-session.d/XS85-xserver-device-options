@@ -1,19 +1,17 @@
 # This script sets device options for the specified driver
 # using the X_OPTION_01 .. X_OPTION_10 lts.conf vars
 #
-device_hacks="$device_hacks set_dev_options"
+unset X_DEVICE_OPTION
 
 if [ -n "$(env|grep X_DEVICE_OPTION)" ]; then
+    device_hacks="$device_hacks set_dev_options"
     CONFIGURE_X="True"
-fi
 
-set_dev_options() {
-    unset X_DEVICE_OPTION
-    if [ -n "$(env|grep X_DEVICE_OPTION)" ]; then
+    set_dev_options() {
         for i in 01 02 03 04 05 06 07 08 09 10; do
             eval X_DEVICE_OPTION="\$X_DEVICE_OPTION_$i"
             [ -n "${X_DEVICE_OPTION}" ] && \
                 echo "        Option ${X_DEVICE_OPTION}" >> ${XCONF} 
         done
-    fi
-}
+    }
+fi
