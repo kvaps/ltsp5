@@ -1,5 +1,7 @@
 # Forces fbdev on ppc with ATI Rage 128
-# This driver was broken on ppc since at least 2004, perhaps earlier.
+# https://bugzilla.redhat.com/show_bug.cgi?id=445419
+# TODO: airlied suggests trying option "UseFBDev" "true", where the r128 driver
+# uses fbdev possibly with a little more perfomance than fbdev directly.
 
 if [ -z "$XSERVER" ] && \
    [ "$(uname -m)" = "ppc" ] && \
