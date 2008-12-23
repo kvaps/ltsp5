@@ -60,9 +60,9 @@ while :; do
     
         logit "Executing command as username ${LDM_USERNAME}: ${LTSP_COMMAND} "
         if [ "$LTSP_COMMAND_WAIT" = "true" ]; then
-            su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
+            su - ${LDM_USERNAME} -c "LANG=$LANG DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
         else
-            su - ${LDM_USERNAME} -c "DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
+            su - ${LDM_USERNAME} -c "LANG=$LANG DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
         fi
     fi
     reset_xprop LTSP_COMMAND
