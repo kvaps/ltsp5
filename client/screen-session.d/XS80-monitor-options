@@ -1,8 +1,8 @@
 # This script sets monitor options 
 # using the X_MONITOR_OPTION_01 .. X_MONITOR_OPTION_10 lts.conf vars
 #
-unset X_MONITOR_OPTION
-if [ -n "$(env|grep X_MONITOR_OPTION)" ]; then
+
+if [ -n "$(env|awk -F = '/^X_MONITOR_OPTION_(0[1-9]|10)=/{print $2}')" ]; then
     monitor_hacks="$monitor_hacks set_mon_options"
 
     # Auto-set CONFIGURE_X

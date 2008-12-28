@@ -2,8 +2,7 @@
 # using the X_MODULE_01 .. X_MODULE_10 lts.conf vars
 #
 
-unset X_MODULE
-if [ -n "$(env|grep X_MODULE)" ]; then
+if [ -n "$(env|awk -F = '/^X_MODULE_(0[1-9]|10)=/{print $2}')" ]; then
     module_hacks="$module_hacks set_xmodules"
     CONFIGURE_X="True"
 
