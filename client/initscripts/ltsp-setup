@@ -157,7 +157,6 @@ case "$1" in
         configure_syslog || true
         configure_fstab || true
         run_rcfiles || true
-        configure_x || true
         configure_serial_mouse || true
         configure_localdev || true
         configure_printer || true
