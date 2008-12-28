@@ -12,10 +12,10 @@ if [ -n "$X_HORZSYNC" ] || [ -n "$X_VERTREFRESH" ]; then
 
     set_sync_ranges() {
         if [ -n "$X_HORZSYNC" ]; then
-            echo "        Horizsync ${X_HORZSYNC}" >> ${XCONF}
+            echo "        Horizsync ${X_HORZSYNC}"
         fi
         if [ -n "$X_VERTREFRESH" ]; then
-            echo "        Vertrefresh ${X_VERTREFRESH}" >> ${XCONF}
+            echo "        Vertrefresh ${X_VERTREFRESH}"
         fi
     }
 fi

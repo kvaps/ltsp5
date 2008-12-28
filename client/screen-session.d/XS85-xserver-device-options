@@ -23,7 +23,7 @@ if [ -n "$(env|grep X_DEVICE_OPTION)" ]; then
         for i in 01 02 03 04 05 06 07 08 09 10; do
             eval X_DEVICE_OPTION="\$X_DEVICE_OPTION_$i"
             [ -n "${X_DEVICE_OPTION}" ] && \
-                echo "        Option ${X_DEVICE_OPTION}" >> ${XCONF} 
+                echo "        Option ${X_DEVICE_OPTION}"
         done
     }
 fi

@@ -24,6 +24,6 @@ if [ -n "${X_VIRTUAL_AUTO}" ] || [ -n "${X_VIRTUAL}" ];then
             [ -n "${R_VERT}" ] && [ -n "${R_HORIZ}" ] && X_VIRTUAL="${R_VERT} ${R_HORIZ}" 
         fi
     
-        [ -n "${X_VIRTUAL}" ] && echo "       Virtual ${X_VIRTUAL}" >> ${XCONF}
+        [ -n "${X_VIRTUAL}" ] && echo "       Virtual ${X_VIRTUAL}"
     }
 fi

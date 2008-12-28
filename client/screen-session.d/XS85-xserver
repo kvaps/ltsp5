@@ -6,6 +6,6 @@ if [ -n "${XSERVER}" ]; then
     CONFIGURE_X="True"
 
     set_xserver() {
-        echo "        Driver \"${XSERVER}\"" >> ${XCONF}
+        echo "        Driver \"${XSERVER}\""
     }
 fi

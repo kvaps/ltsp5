@@ -20,5 +20,5 @@
 # screen_hacks="$screen_hacks myFunction"
 #
 # myFunction() {
-#    echo "blah" >> ${XCONF}
+#    echo "blah" 
 # }

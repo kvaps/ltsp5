@@ -11,7 +11,7 @@ write_screen() {
 
     for i in ${screen_hacks}; do
         ${i} || true
-    done
+    done >> ${XCONF}
 
     echo "EndSection" >> ${XCONF}
 }
@@ -25,7 +25,7 @@ write_monitor() {
 
     for i in ${monitor_hacks}; do
         ${i} || true
-    done
+    done >> ${XCONF}
 
     echo "EndSection" >> ${XCONF}
 }
@@ -39,7 +39,7 @@ write_device() {
 
     for i in ${device_hacks}; do
         ${i} || true
-    done
+    done >> ${XCONF}
 
     echo "EndSection" >> ${XCONF}
 }
@@ -50,7 +50,7 @@ write_module() {
 
     for i in ${module_hacks}; do
         ${i} || true
-    done
+    done >> ${XCONF}
 
     echo "EndSection" >> ${XCONF}
 }
