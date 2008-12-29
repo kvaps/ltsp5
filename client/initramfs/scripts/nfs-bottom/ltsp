@@ -4,5 +4,20 @@
 
 read HOSTNAME < /proc/sys/kernel/hostname
 if [ "${HOSTNAME}" = "(none)" ]; then
-    echo "ltsp" > /proc/sys/kernel/hostname
+    HOSTNAME_BASE="ltsp"
+    # get networking configuration
+    . /tmp/net-*.conf
+    if [ -f ${rootmnt}/etc/lts.conf ] && [ -x ${rootmnt}/usr/bin/getltscfg ]; then
+        # get defaults from lts.conf
+        eval $(chroot ${rootmnt} /usr/bin/getltscfg -a)
+    fi
+    case $HOSTNAME_EXTRA in
+        mac)
+            HOSTNAME_EXTRA=$(ip link show $DEVICE | awk '/ether/{print $2}' | tr ':' '-')
+            ;;
+        ip|"")
+            HOSTNAME_EXTRA=$(echo "$IPV4ADDR.$IPV4NETMASK" | awk -F "." '{ print (($1%(256-$5)*256+$2%(256-$6))*256+$3%(256-$7))*256+$4%(256-$8) }')
+            ;;
+    esac
+    echo "$HOSTNAME_BASE$HOSTNAME_EXTRA" > /proc/sys/kernel/hostname
 fi
