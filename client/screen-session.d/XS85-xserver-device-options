@@ -3,7 +3,7 @@
 # or the older X_DEVICE_OPTION_01 .. X_DEVICE_OPTION_10 lts.conf vars
 #
 
-if [ -n "$(env|awk -F = '/^X_(|DEVICE_)OPTION_(0[1-9]|10)=/{print $2}')" ]; then
+if [ -n "$(env|awk -F = '/^X_(DEVICE_)OPTION_(0[1-9]|10)=/{print $2}')" ]; then
     device_hacks="$device_hacks set_dev_options"
     CONFIGURE_X="True"
 
