@@ -9,8 +9,9 @@ if [ -n "$(env|awk -F = '/^X_MODULE_(0[1-9]|10)=/{print $2}')" ]; then
     set_xmodules() {
         for i in 01 02 03 04 05 06 07 08 09 10; do
             eval X_MODULE="\$X_MODULE_$i"
-            [ -n "${X_MODULE}" ] && \
+            if [ -n "${X_MODULE}" ]; then
                  echo "        Load ${X_MODULE}"
+            fi
         done
     }
 fi

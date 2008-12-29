@@ -11,8 +11,9 @@ if [ -n "$(env|awk -F = '/^X_MONITOR_OPTION_(0[1-9]|10)=/{print $2}')" ]; then
     set_mon_options() {
         for i in 01 02 03 04 05 06 07 08 09 10; do
             eval X_MONITOR_OPTION="\$X_MONITOR_OPTION_$i"
-            [ -n "${X_MONITOR_OPTION}" ] && \
+            if [ -n "${X_MONITOR_OPTION}" ]; then
                 echo "        Option ${X_MONITOR_OPTION}"
+            fi
         done
     }
 fi

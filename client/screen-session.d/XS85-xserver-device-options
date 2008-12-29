@@ -10,11 +10,13 @@ if [ -n "$(env|awk -F = '/^X_(|DEVICE_)OPTION_(0[1-9]|10)=/{print $2}')" ]; then
     set_dev_options() {
         for i in 01 02 03 04 05 06 07 08 09 10; do
             eval X_DEVICE_OPTION="\$X_OPTION_$i"
-            [ -z "${X_DEVICE_OPTION}" ] && \
+            if [ -z "${X_DEVICE_OPTION}" ]; then
                 # backwards compatibility for ltsp 4.x
                 eval X_DEVICE_OPTION="\$X_DEVICE_OPTION_$i"
-            [ -n "${X_DEVICE_OPTION}" ] && \
+            fi
+            if [ -n "${X_DEVICE_OPTION}" ]; then
                 echo "        Option ${X_DEVICE_OPTION}"
+            fi
         done
     }
 fi
