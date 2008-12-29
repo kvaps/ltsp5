@@ -5,9 +5,15 @@ XCONF=${XCONF:-/etc/X11/xorg.conf}
 write_screen() {
     num=${1:-0}
     #eval screen_hacks=\$screen_hacks_$num
-    [ -z "$screen_hacks" ] && return
+    [ -z "$screen_hacks" ] && [ -z "$monitor_hacks" ] && return
     echo "Section \"Screen\"" >> ${XCONF}
     echo "    Identifier \"Screen${num}\"" >> ${XCONF}
+    if [ -n "$monitor_hacks" ]; then
+        # force the monitor definition if revelent monitor settings are
+        # desired, otherwise X.org may just use built-in defaults for monitor
+        # settings
+        echo "Monitor \"Monitor${num}\"" >> ${XCONF}
+    fi
 
     for i in ${screen_hacks}; do
         ${i} || true
