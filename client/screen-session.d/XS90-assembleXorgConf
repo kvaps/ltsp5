@@ -12,7 +12,7 @@ write_screen() {
         # force the monitor definition if revelent monitor settings are
         # desired, otherwise X.org may just use built-in defaults for monitor
         # settings
-        echo "Monitor \"Monitor${num}\"" >> ${XCONF}
+        echo "    Monitor \"Monitor${num}\"" >> ${XCONF}
     fi
 
     for i in ${screen_hacks}; do
