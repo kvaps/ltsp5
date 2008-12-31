@@ -11,9 +11,7 @@ write_screen() {
         echo "    Monitor \"Monitor${num}\""
     fi
 
-    if [ -n "$display_hacks" ]; then
-        write_display || true
-    fi
+    write_display || true
 
     for i in ${screen_hacks}; do
         ${i} || true
