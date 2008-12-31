@@ -1,0 +1,68 @@
+write_screen() {
+    num=${1:-0}
+    #eval screen_hacks=\$screen_hacks_$num
+    [ -z "$screen_hacks" ] && [ -z "$monitor_hacks" ] && return
+    echo "Section \"Screen\""
+    echo "    Identifier \"Screen${num}\""
+    if [ -n "$monitor_hacks" ]; then
+        # force the monitor definition if revelent monitor settings are
+        # desired, otherwise X.org may just use built-in defaults for monitor
+        # settings
+        echo "    Monitor \"Monitor${num}\""
+    fi
+
+    for i in ${screen_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection"
+}
+
+write_monitor() {
+    num=${1:-0}
+    #eval monitor_hacks=\$monitor_hacks_$num
+    [ -z "$monitor_hacks" ] && return
+    echo "Section \"Monitor\""
+    echo "    Identifier \"Monitor${num}\""
+
+    for i in ${monitor_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection"
+}
+
+write_device() {
+    num=${1:-0}
+    #eval device_hacks=\$device_hacks_$num
+    [ -z "$device_hacks" ] && return
+    echo "Section \"Device\""
+    echo "    Identifier \"Device${num}\""
+
+    for i in ${device_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection"
+}
+
+write_module() {
+    [ -z "$module_hacks" ] && return
+    echo "Section \"Module\""
+
+    for i in ${module_hacks}; do
+        ${i} || true
+    done
+
+    echo "EndSection"
+}
+
+write_xorg_conf(){
+    # For now, we will only do one screen, monitor, and device
+    # under the assumption that multiple-head issues should
+    # be handled exclusively by xrandr
+    write_screen 0
+    write_monitor 0
+    write_device 0
+    write_module
+}
