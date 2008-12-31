@@ -1,7 +1,7 @@
 write_screen() {
     num=${1:-0}
     #eval screen_hacks=\$screen_hacks_$num
-    [ -z "$screen_hacks" ] && [ -z "$monitor_hacks" ] && return
+    [ -z "$screen_hacks" ] && [ -z "$monitor_hacks" ] && [ -z "$display_hacks" ] && return
     echo "Section \"Screen\""
     echo "    Identifier \"Screen${num}\""
     if [ -n "$monitor_hacks" ]; then
@@ -9,6 +9,10 @@ write_screen() {
         # desired, otherwise X.org may just use built-in defaults for monitor
         # settings
         echo "    Monitor \"Monitor${num}\""
+    fi
+
+    if [ -n "$display_hacks" ]; then
+        write_display || true
     fi
 
     for i in ${screen_hacks}; do
@@ -55,6 +59,15 @@ write_module() {
     done
 
     echo "EndSection"
+}
+
+write_display() {
+    [ -z "$display_hacks" ] && return
+    echo '    SubSection "Display"'
+    for x in $display_hacks ; do
+        ${x} || true
+    done
+    echo '    EndSubSection'
 }
 
 write_xorg_conf(){
