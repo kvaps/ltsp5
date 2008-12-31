@@ -8,7 +8,7 @@ if boolean_is_true "${CONFIGURE_X}"; then
     if [ -n "${CONFIGURE_X_COMMAND}" ] && [ -x "${CONFIGURE_X_COMMAND}" ]; then
         ${CONFIGURE_X_COMMAND}
     else
-        if [ -n "$screen_hacks" ] || [ -n "$monitor_hacks" ] || [ -n "$device_hacks" ] || [ -n "$module_hacks" ]; then
+        if [ -n "$screen_hacks" ] || [ -n "$monitor_hacks" ] || [ -n "$device_hacks" ] || [ -n "$module_hacks" ] || [ -n "$display_hacks" ]; then
             write_xorg_conf > ${XCONF} || true
         fi
     fi
