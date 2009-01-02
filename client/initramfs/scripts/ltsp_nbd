@@ -7,46 +7,7 @@ mountroot()
 	run_scripts /scripts/nfs-top
 	[ "$quiet" != "y" ] && log_end_msg
 
-    if [ -n "$dhcpport" ]; then
-       DHCPPORT="$dhcpport"
-    fi
-
-	# For DHCP
-	modprobe -q af_packet
-
-	case ${IPOPTS} in
-		none|off)
-			# Do nothing
-			;;
-		""|on|any)
-			# Bring up device
-			ipconfig ${DEVICE}
-			;;
-		dhcp|bootp|rarp|both)
-            if [ ${IPOPTS} == "dhcp"] && [ -n "$DHCPPORT" ]; then
-                IPOPTS="${IPOPTS} -p ${DHCPPORT}"
-            fi
-			ipconfig -c ${IPOPTS} -d ${DEVICE}
-			;;
-		*)
-			ipconfig -d $IPOPTS
-
-			# grab device entry from ip option
-			NEW_DEVICE=${IPOPTS#*:*:*:*:*:*}
-			if [ "${NEW_DEVICE}" != "${IPOPTS}" ]; then
-				NEW_DEVICE=${NEW_DEVICE%:*}
-			else
-				# wrong parse, possibly only a partial string
-				NEW_DEVICE=
-			fi
-			if [ -n "${NEW_DEVICE}" ]; then
-				DEVICE="${NEW_DEVICE}"
-			fi
-			;;
-	esac
-
-	# source relevant ipconfig output
-	. /tmp/net-${DEVICE}.conf
+    configure_networking
 
     if [ -n "${nbdroot}" ]; then
                NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
