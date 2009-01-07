@@ -1,0 +1,7 @@
+# Let's export some audio environment variables for non-LDM sessions
+
+if boolean_is_true "${SOUND}"; then
+    export PULSE_SERVER=tcp:127.0.0.1:4713
+    export ESPEAKER=127.0.0.1:16001
+    PATH=/sbin:/usr/sbin:/bin:/usr/bin asoundconf set-pulseaudio 2>/dev/null || true
+fi
