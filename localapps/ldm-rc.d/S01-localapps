@@ -82,8 +82,8 @@ if boolean_is_true "$LOCAL_APPS"; then
             myGroups="${myGroups},$i"
         fi 
     done
-    myGroups=$(echo $myGroups|sed -e 's/^,//')
     unset IFS
+    myGroups=$(echo $myGroups|sed -e 's/^,//')
     if [ -n "$OLD_IFS" ]; then
         IFS=$OLD_IFS
     fi
