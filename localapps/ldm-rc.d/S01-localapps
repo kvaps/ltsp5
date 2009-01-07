@@ -46,6 +46,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Now, some groups may have different gids on the server than the client chroot
     # So, let's prune out all the dups
     TMPGROUP="${LOCALAPPS_CACHE}/tmpgroup"
+    [ -f "${TMPGROUP}" ] && rm ${TMPGROUP}
     gnames=""
     while read line; do
         gname=$(echo $line|cut -d: -f1)
@@ -60,7 +61,7 @@ if boolean_is_true "$LOCAL_APPS"; then
             gnames="$gnames $gname"
         fi
     done </etc/group
-    mv ${TMPGROUP} /etc/group
+    cp ${TMPGROUP} /etc/group
     chmod 644 /etc/group
 
     # Get the system groups that the user belongs to, so we can add him back in
