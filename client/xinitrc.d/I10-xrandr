@@ -14,7 +14,7 @@ for i in ${X_MODE_0}; do
     [ $c = 1 ] && XRANDR_MODE_0=${i}
 done
 [ $c -gt 1 ] && XRANDR_NEWMODE_0=${X_MODE_0}
-unset $c
+unset c
 
 # Definition of lts.conf vars:
 #     XRANDR_OUTPUT_0 = <name of output 0>
