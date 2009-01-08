@@ -67,28 +67,14 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Get the system groups that the user belongs to, so we can add him back in
     myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/getent group|egrep "[,:]${LDM_USERNAME}(,|$)"|cut -d: -f1| tr '\n' ',' | sed -e 's/,$//g')
 
-    ### Begin code to make groups call work
-    # (groups is only needed because getent evidently does not return groups
+    # (/usr/bin/id is only needed because getent evidently does not return groups
     # added by pam_group (bug in pam_group?)
 
-    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/groups | tr ' ' ',')
+    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/id | awk -F groups= '/groups=/{print $2}' | sed -e 's/[0-9]*(//g' -e 's/)//g')
 
-    # check groups for bad groups (bad groups will make the whole call fail
-    # Only because "groups" call above returns groups like "Domain Users" 
-    # as: Domain,Users
-    OLD_IFS=$IFS
-    IFS=,
-    for i in ${myGroups1}; do
-        if getent group "$i"; then
-            myGroups="${myGroups},$i"
-        fi 
-    done
-    unset IFS
-    myGroups=$(echo $myGroups|sed -e 's/^,//')
-    if [ -n "$OLD_IFS" ]; then
-        IFS=$OLD_IFS
-    fi
-    ### End of extra code to make groups call work
+    # concatenate groups from different sources, stripping off prefixed and
+    # trailing commas
+    myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$,,g'
 
     if [ -n "$myGroups" ]; then
         usermod -G "$myGroups" "${LDM_USERNAME}" 2>/dev/null
