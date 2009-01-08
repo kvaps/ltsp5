@@ -29,7 +29,7 @@ chroot_dir $CHROOT
 pre_sanity_check_config () {
 	# we can't use the wrapper stage_uri due the way the sanity check is done in quickstart
 	if [ -z "${STAGE_URI}" ]; then
-		stage_url="http://www.funtoo.org/linux/${arch}/stage3-${arch}-current.tar.bz2"
+		stage_uri="http://www.funtoo.org/linux/${arch}/stage3-${arch}-current.tar.bz2"
 	else 
 		stage_uri="${STAGE_URI}"
 	fi
