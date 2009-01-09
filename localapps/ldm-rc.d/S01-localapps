@@ -74,7 +74,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # concatenate groups from different sources, stripping off prefixed and
     # trailing commas
-    myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$,,g')
+    myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$//g')
 
     if [ -n "$myGroups" ]; then
         usermod -G "$myGroups" "${LDM_USERNAME}" 2>/dev/null
