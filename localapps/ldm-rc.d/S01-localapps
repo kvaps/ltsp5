@@ -48,17 +48,25 @@ if boolean_is_true "$LOCAL_APPS"; then
     TMPGROUP="${LOCALAPPS_CACHE}/tmpgroup"
     [ -f "${TMPGROUP}" ] && rm ${TMPGROUP}
     gnames=""
+    gids=""
     while read line; do
         gname=$(echo $line|cut -d: -f1)
+        gid=$(echo $line|cut -d: -f3)
         match=
         for e in $gnames; do
             if [ "$gname" = "$e" ]; then
                 match=1
             fi
         done
+        for e in $gids; do
+            if [ "$gid" = "$e" ]; then
+                match=1
+            fi
+        done
         if [ -z "$match" ]; then
             echo "$line" >>${TMPGROUP}
             gnames="$gnames $gname"
+            gids="$gids $gid"
         fi
     done </etc/group
     cp ${TMPGROUP} /etc/group
