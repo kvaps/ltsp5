@@ -39,9 +39,24 @@ if ! env|grep XRANDR_OUTPUT >/dev/null; then
         eval XRANDR_OUTPUT_${o}=${i}
         if boolean_is_true "${XRANDR_AUTO_MULTIHEAD:-Y}" && [ ${o} -gt 0 ]; then
             eval XRANDR_OUTPUT_${o}=\"\$XRANDR_OUTPUT_${o} --left-of ${last_i}\"
-            # Make all displays the same mode
-            eval XRANDR_MODE_${o}=\$XRANDR_MODE_$(($o-1))
-            eval XRANDR_NEWMODE_${o}=\$XRANDR_NEWMODE_$(($o-1))
+            # If no mode is forced for this screen, and 
+            # no mode is forced for any screen, then try to use the preferred 
+            # mode for the attached monitor.
+            # But, if no mode is forced for this screen and a mode is forced
+            # for the first screen, use the first screen's mode for this
+            # screen, as well, because the user is most likely wanting
+            # a multiscreen display with the same forced resolution on all
+            # screens.
+            eval THIS_MODE=\$XRANDR_MODE_${o}
+            if [ -z "${THIS_MODE}" ]; then
+                if [ -z "${XRANDR_MODE_0}" ]; then
+                    eval XRANDR_OUTPUT_${o}=\"\$XRANDR_OUTPUT_${o} --auto\"
+                else
+                    eval XRANDR_MODE_${o}=\$XRANDR_MODE_$(($o-1))
+                    eval XRANDR_NEWMODE_${o}=\$XRANDR_NEWMODE_$(($o-1))
+                fi
+            fi
+            unset THIS_MODE
         fi
         o=$(($o+1))
         last_i=${i}
