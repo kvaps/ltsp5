@@ -4,4 +4,4 @@ if [ "$1" = "--wait" ]; then
     xprop -root -f LTSP_COMMAND_WAIT 8s -set LTSP_COMMAND_WAIT "true"
     shift
 fi
-xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "$1"
+xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "$*"
