@@ -18,7 +18,7 @@ $0 [OPTION]
   -t, --timeout         Connection timeout in seconds. (Default: 10 seconds)
   -l, --log             Log state : boot, login, logout (Default: boot)
   -i, --with-inventory  Send inventory of the thin-client.
-  -c, --use-cache       Use a cache.
+  -d, --drop-cache      Force to reload configuration cache.
   -e, --enable-ssl      Use https for query (default: disabled)
   -a                    Export all configuration keys
   -h, --help            This help.
@@ -38,7 +38,7 @@ fi
 # Handle command line args
 #
 
-ARGS=$(getopt -o s:p:t:l:ichea --long server:,port:,timeout:,log:,with-inventory,use-cache,enable-ssl,help -n $0 -- "$@")
+ARGS=$(getopt -o s:p:t:l:idhea --long server:,port:,timeout:,log:,with-inventory,drop-cache,enable-ssl,help -n $0 -- "$@")
 
 if [ $? != 0 ]; then
     echo "Error : getopt failed"
@@ -55,7 +55,7 @@ while true ; do
         -t|--timeout) TIMEOUT=$2 ; shift 2 ;;
         -l|--log) LOG=$2 ; shift 2 ;;
         -i|--with-inventory) INVENTORY="Y"; shift;;
-        -c|--use-cache) DROP_CACHE="N"; shift;;
+        -d|--drop-cache) DROP_CACHE="Y"; shift;;
         -e|--enable-ssl) ENABLE_SSL="Y"; shift;;
         -a) EXPORT_CONF="Y"; shift;;
         -h|--help) usage ; exit 0 ;;
@@ -68,7 +68,7 @@ done
 PORT=${PORT:-"80"}
 TIMEOUT=${TIMEOUT:-"10"}
 INVENTORY=${INVENTORY:-"N"}
-DROP_CACHE=${DROP_CACHE:-"Y"}
+DROP_CACHE=${DROP_CACHE:-"N"}
 ENABLE_SSL=${ENABLE_SSL:-"N"}
 EXPORT_CONF=${EXPORT_CONF:-"N"}
 LOG=${LOG:-"boot"}
