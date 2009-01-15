@@ -1,36 +1,20 @@
 case "$MODE" in
     commandline)
-        add_option "ltsp-cluster" "`eval_gettext "Enable LTSP-Cluster (will use unsigned PPA)"`" "advanced" "false"
+        add_option "ltsp-cluster" "`eval_gettext "Enable LTSP-Cluster"`" "advanced" "false"
         add_option "ltsp-cluster-control" "`eval_gettext "The IP of the LTSP Cluster Control Center"`" "advanced" "true"
-        add_option "ltsp-cluster-lbserver" "`eval_gettext "The IP of the LTSP Cluster load balancer"`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_ltsp_cluster_value" ]; then
             CLUSTER="True"
-            if [ ! -n "$option_accept_unsigned_packages_value" ]; then
-                APT_GET_OPTS="$APT_GET_OPTS --force-yes"
-            fi
         fi
         if [ -n "$option_ltsp_cluster_control_value" ]; then
             CLUSTER_CONTROL="$option_ltsp_cluster_control_value"
         fi
-        if [ -n "$option_ltsp_cluster_lbserver_value" ]; then
-            CLUSTER_LBSERVER="$option_ltsp_cluster_lbserver_value"
-        fi
-        ;;
-    after-install)
-        if [ -n "$CLUSTER" ]; then
-            echo "deb http://ppa.launchpad.net/ltsp-cluster-team/ubuntu intrepid main" >> $ROOT/etc/apt/sources.list
-        fi
         ;;
     finalization)
         if [ -n "$CLUSTER" ]; then
-            chroot $ROOT apt-get $APT_GET_OPTS install ltsp-cluster-client
             if [ -n "$CLUSTER_CONTROL" ]; then
-                echo "http://$CLUSTER_CONTROL/ltsp-cluster-control/Terminal" > $ROOT/etc/ltsp/directory.conf
-            fi
-            if [ -n "$CLUSTER_LBSERVER" ]; then
-                sed -i "s/#SERVER=localhost/SERVER=$CLUSTER_LBSERVER/" $ROOT/etc/ltsp/loadbalancer-client.conf
+                echo SERVER=$CLUSTER_CONTROL > /etc/ltsp/getltscfg-cluster.conf
             fi
         fi
         ;;
