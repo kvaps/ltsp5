@@ -91,21 +91,28 @@ if [ "$LOG" = "login" ] && [ -z "$LDM_SERVER" ]; then
 fi
 
 # Manage cache files
-cache_dir=/var/cache/getltscfg-cluster
+cache_dir="/var/cache/getltscfg-cluster"
+cache_lts="$cache_dir/lts.conf"
+cache_info="$cache_dir/info.cache"
+cache_inventory="$cache_dir/inventory.cache"
+
+if [ -f "cache_info" ];
+then
+    . $cache_info
+fi
+if [ -z "$ROOT_SRV" ] || [ -z "$ETH0_IP" ] || [ -z "$ETH0_MAC" ]; then
+    DROP_CACHE=Y
+fi
 if [ "$DROP_CACHE" = "Y" ]; then
-    if [ -d $cache_dir ]; then
-        rm -rf $cache_dir
+    if [ -d "$cache_dir" ]; then
+        rm -Rf $cache_dir
     fi
 fi
 
-mkdir -p $cache_dir
-[ "$?" = "1" ] && echo "Unable to create the cache directory." && exit 1
-cache_lts=$cache_dir/lts.conf
-cache_info=$cache_dir/info.cache
-cache_inventory=$cache_dir/inventory.cache
-
+mkdir -p "$cache_dir"
 if [ ! -f "$cache_info" ]; then
-    echo ETH0_MAC=$(ifconfig | grep eth0 | cut -f11 -d" ") >> $cache_info
+    ! touch $cache_info && exit 1
+    echo ETH0_MAC=$(ifconfig | grep eth0 | cut -f11 -d" ") > $cache_info
     echo ETH0_IP=$(ifconfig eth0 | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
     nbd_device=$(cat /proc/mounts|grep /rofs|grep nbd|cut -d" " -f1) 2>/dev/null
     if [ -n "$nbd_device" ]; then
@@ -120,6 +127,10 @@ fi
 
 . $cache_info
 
+if [ -z "$ROOT_SRV" ] || [ -z "$ETH0_IP" ] || [ -z "$ETH0_MAC" ]; then
+    echo Failed to get needed information about the client
+    exit 1
+fi
 if [ ! -f "$cache_inventory" ] && [ "$INVENTORY" = "Y" ]; then
     inventory | sed -e "s/%/%25/g" | sed -e "s/\//%2F/g" | sed -e "s/&/%26/g" | sed -e "s/=/%3D/g" >> $cache_inventory 
 fi
@@ -128,7 +139,7 @@ fi
 if [ "$ENABLE_SSL" = "Y" ]; then
     PROTO="https"
     if [ "$PORT" = "80" ]; then
-        PORT=443
+        PORT="443"
     fi
     OPTIONS="--no-check-certificate"
 else
@@ -146,13 +157,15 @@ OPTIONS="$OPTIONS -q -O $cache_lts -T $TIMEOUT -t 1"
 QUERY=""
 # Make sure that configuration if fetch only once in the boot process
 if [ "$LOG" = "boot" ]; then
-    if [ ! -f $cache_lts ] || [ "$DROP_CACHE" = "Y" ]
+    if [ ! -f "$cache_lts" ] || [ "$DROP_CACHE" = "Y" ]
     then
         QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/bootservip=$ROOT_SRV/code=1"
         if [ "$INVENTORY" = "Y" ]; then
             QUERY="$QUERY --post-file=$cache_inventory"
         fi
     fi
+elif [ "$LOG" = "prompt" ]; then 
+    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=2"
 elif [ "$LOG" = "login" ]; then 
     QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=3"
 elif [ "$LOG" = "logout" ]; then
