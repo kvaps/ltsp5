@@ -132,6 +132,7 @@ if [ -z "$ROOT_SRV" ] || [ -z "$ETH0_IP" ] || [ -z "$ETH0_MAC" ]; then
     exit 1
 fi
 if [ ! -f "$cache_inventory" ] && [ "$INVENTORY" = "Y" ]; then
+    echo -n "hwlist=" > $cache_inventory
     inventory | sed -e "s/%/%25/g" | sed -e "s/\//%2F/g" | sed -e "s/&/%26/g" | sed -e "s/=/%3D/g" >> $cache_inventory 
 fi
 
