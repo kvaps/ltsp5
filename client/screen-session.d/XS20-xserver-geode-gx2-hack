@@ -3,4 +3,5 @@
 
 if [ -z "$XSERVER" ] && [ -n "$(PATH=/sbin:/usr/sbin:/bin:/usr/bin lspci -n |grep 100b:0030)" ]; then
     XSERVER=geode
+    export X_DEVICE_OPTION_01='"AccelMethod" "XAA"'
 fi
