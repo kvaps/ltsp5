@@ -22,4 +22,4 @@ temp_copy_dirs=""
 
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/hosts /etc/syslog-ng/syslog-ng.conf /etc/fstab 
-/etc/resolv.conf /etc/passwd /etc/group /etc/localtime"
+/etc/resolv.conf /etc/passwd /etc/group /etc/localtime /etc/lts.conf"
