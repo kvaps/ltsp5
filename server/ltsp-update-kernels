@@ -76,8 +76,8 @@ for TFTPDIR in $TFTPDIRS ; do
 
             # OFW on Mac is lame, they cannot tftp from directories
             if [ -e $TFTPBOOT/$CHROOT_NAME/yaboot ]; then
-                ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPBOOT/yaboot
-                ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPBOOT/yaboot
+                ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPDIR/yaboot
+                ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPDIR/yaboot.conf
             fi
         else
             # not a valid chroot
