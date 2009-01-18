@@ -40,8 +40,10 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Get passwd info *just* for that user
     ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent passwd ${LDM_USERNAME}" >>/etc/passwd
 
-    # Get all group info and copy to TMPGROUP
-    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent group" >>/etc/group
+    # Get all group info and copy to COMBINED_GROUP
+    COMBINED_GROUP=${LOCALAPPS_CACHE}/group.combined
+    cp /etc/group ${COMBINED_GROUP}
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent group" >> ${COMBINED_GROUP}
 
     # Now, some groups may have different gids on the server than the client chroot
     # So, let's prune out all the dups
@@ -68,7 +70,7 @@ if boolean_is_true "$LOCAL_APPS"; then
             gnames="$gnames $gname"
             gids="$gids $gid"
         fi
-    done </etc/group
+    done < ${COMBINED_GROUP}
     cp ${TMPGROUP} /etc/group
     chmod 644 /etc/group
 
