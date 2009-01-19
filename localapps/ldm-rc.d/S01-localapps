@@ -108,7 +108,13 @@ if boolean_is_true "$LOCAL_APPS"; then
     echo $! > $LOCALAPPSD_PIDFILE
 
     # if cups is installed in the chroot, use LDM_SERVER for printing
-    [ -d "/etc/cups" ] && echo "ServerName ${LDM_SERVER}" > /etc/cups/client.conf
+    if [ -d "/etc/cups" ]; then
+        if [ -n "${CUPS_SERVER}" ]; then
+            echo "ServerName ${CUPS_SERVER}" > /etc/cups/client.conf
+        else
+            echo "ServerName ${LDM_SERVER}" > /etc/cups/client.conf
+        fi
+    fi
 
     ltsp-localappsd
 
@@ -124,7 +130,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     for i in passwd group; do
         cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
     done
-    
+
     # Unmount sshfs and remove the mount dir
     fusermount -uqz ${LDM_HOME}
     rmdir ${LDM_HOME}
