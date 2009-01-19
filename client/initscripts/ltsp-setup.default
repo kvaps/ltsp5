@@ -17,7 +17,7 @@ rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs="/root /home /var/cache/ltsp-localapps /etc/rsyslog.d"
+copy_dirs="/root /home /var/cache/ltsp-localapps /etc/rsyslog.d /etc/cups /media"
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
