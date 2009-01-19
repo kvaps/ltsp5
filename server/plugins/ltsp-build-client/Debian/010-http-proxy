@@ -1,7 +1,7 @@
 case "$MODE" in
     commandline)
         add_option "http-proxy" "`eval_gettext "use specified http proxy"`" "advanced" "true"
-        add_option "no-guess-proxy" "`eval_gettext "do not autodetect apt proxy configuration"`" "advanced" "true"
+        add_option "no-guess-proxy" "`eval_gettext "do not autodetect apt proxy configuration"`" "advanced" "false"
         ;;
     configure)
         if [ -n "$option_http_proxy_value" ]; then
