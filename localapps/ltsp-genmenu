@@ -1,69 +1,88 @@
 #!/bin/sh
 LANG=C
-if [ ! -f /etc/ltsp/localapps-menu/directory ]
-then
-    echo "You need /etc/ltsp/localapps-menu/directory to generate the localapp menu"
-    exit 1
-fi
+VARRUN=~/.ltsp-genmenu
 generate() {
-    mkdir -p ~/.config/menus/applications-merged/
-    mkdir -p ~/.local/share/applications/
-    mkdir -p ~/.local/share/desktop-directories/
-    mkdir -p ~/.local/share/icons/
-    cp /etc/ltsp/localapps-menu/directory ~/.local/share/desktop-directories/ltsp-localapps.directory
-    (
-    cat << 'EOF'
-<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN" "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
-<Menu>
-    <Name>Applications</Name>
-    <DefaultLayout inline="false"/>
-    <Menu>
-        <Name>ltsp-localapps</Name>
-        <Directory>ltsp-localapps.directory</Directory>
-        <Include>
-EOF
-    ) > ~/.config/menus/applications-merged/localapp.menu
-    for entry in /etc/ltsp/localapps-menu/*.desktop
-    do
-        file=`echo $entry | sed "s/\/etc\/ltsp\/localapps-menu\/[0-9][0-9]/localapp/"`
-        echo "            <Filename>$file</Filename>" >> ~/.config/menus/applications-merged/localapp.menu
-        cp $entry ~/.local/share/applications/$file
-        icon=`grep "X-Localapp-Icon=" $entry | sed "s/.*=//"`
-        if [ -n "$icon" ]
-        then
-           cp $icon ~/.local/share/icons/ 
-        fi
-    done
-    (
-    cat << 'EOF'
-        </Include>
-        <Layout>
-EOF
-    ) >> ~/.config/menus/applications-merged/localapp.menu
-    for entry in `find /etc/ltsp/localapps-menu/*.desktop /etc/ltsp/localapps-menu/*.separator -type f | sort`
-    do
-        file=`echo $entry | sed "s/\/etc\/ltsp\/localapps-menu\/[0-9][0-9]/localapp/"`
-        if [ -n "`echo $file | grep ".separator$"`" ]
-        then
-            echo "            <Separator />" >> ~/.config/menus/applications-merged/localapp.menu
+    :>${VARRUN} || exit 0
+
+    # Make sure the user's applications directory exists
+    [ ! -d ~/.local/share/applications ] && mkdir -p ~/.local/share/applications/
+    # Make sure the user's icons directory exists
+    [ ! -d ~/.local/share/icons ] && mkdir -p ~/.local/share/icons/
+
+    # Build desktop file list
+    if [ -n "${LOCAL_APPS_MENU_ITEMS}" ]; then
+        DESKTOP_FILES=""
+        IFS=,
+        for i in ${LOCAL_APPS_MENU_ITEMS}; do 
+            if [ -e "/usr/share/applications/${i}.desktop" ]; then 
+                DESKTOP_FILES="${DESKTOP_FILES} /usr/share/applications/${i}.desktop" 
+            fi
+        done
+        unset IFS
+    else
+        DESKTOP_FILES=/usr/share/applications/*.desktop
+    fi
+
+    # Cycle through all .desktop files in client's system applications dir
+    for a in ${DESKTOP_FILES}; do
+        # If a desktop file with the same name exists in the user's account, 
+        # back it up (sensibly and carefully)
+        if [ -e ~/.local/share/applications/${a##*/} ]; then
+            # Only backup first time to .orig
+            # If .orig exists it means that it was never restored, so don't
+            # overwrite it, preserve it
+            if [ ! -e ~/.local/share/applications/${a##*/}.orig ]; then
+                mv ~/.local/share/applications/${a##*/} ~/.local/share/applications/${a##*/}.orig
+            fi
+        fi 
+        
+        # Copy client's .desktop file to local
+        cp ${a} ~/.local/share/applications/${a##*/}
+
+        # Change Exec and TryExec to our localapps command
+        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ~/.local/share/applications/${a##*/} 
+
+        # Find the appropriate icon and copy it into the local icons dir
+        ICON=$(grep ^Icon ${a}|sed -e 's/^Icon=\(.*\)/\1/')
+
+        # If an icon file with the same name exists in the user's account, 
+        # back it up (sensibly and carefully)
+        if [ -e ~/.local/share/icons/${ICON} ]; then
+            # Only backup first time to .orig
+            # If .orig exists it means that it was never restored, so don't
+            # overwrite it, preserve it
+            if [ ! -e ~/.local/share/icons/${ICON}.orig ]; then
+                mv ~/.local/share/icons/${ICON} ~/.local/share/icons/${ICON}.orig
+            fi
+        fi 
+        
+        # If icon is relative path, try to copy from /usr/share/pixmaps
+        # If icon is absolute path, try to copy from absolute path
+        # Else don't copy an icon
+        if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
+            ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -name ${ICON}'*[png|xpm|svg]'|head -1)
+            cp ${ICON} ~/.local/share/icons/${ICON##*/}
         else
-            echo "            <Filename>$file</Filename>" >> ~/.config/menus/applications-merged/localapp.menu
-            cp $entry ~/.local/share/applications/$file
-        fi
+            [ -e ${ICON} ] && cp ${ICON} ~/.local/share/icons/${ICON##*/} 
+        fi 
+
+        # record files copied in ${VARRUN}
+        echo ".local/share/applications/${a##*/}" >>${VARRUN}
+        echo ".local/share/icons/${ICON##*/}" >>${VARRUN}
     done
-    (
-    cat << 'EOF'
-        </Layout>
-    </Menu>
-</Menu>
-EOF
-    ) >> ~/.config/menus/applications-merged/localapp.menu
 }
 
 remove() {
-    rm -f ~/.local/share/desktop-directories/ltsp-localapps.directory
-    rm -f ~/.local/share/applications/localapp-*
-    rm -f ~/.config/menus/applications-merged/localapp.menu
+    if [ -r ${VARRUN} ]; then
+        while read filename; do
+            if [ -e ~/${filename}.orig ]; then
+                mv ~/${filename}.orig ~/${filename}
+            else
+                [ -e ~/${filename} ] && rm ~/${filename}
+            fi 
+        done <${VARRUN}
+        rm ${VARRUN}
+    fi
 }
 
 case "$1" in
