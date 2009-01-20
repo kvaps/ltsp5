@@ -1,7 +1,0 @@
-This directory contains all the .desktop and .separator files required
-to generate the localapp menu.
-The content of this directory should go to /etc/ltsp/localapps-menu/
-
-The directory file contains the menu title.
-In the .desktop files you can use the "X-Localapp-Icon" property to specify an
-icon file that must be copied to the server (if the icon isn't on the server).
