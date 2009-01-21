@@ -37,6 +37,7 @@ fi
 
 # Files to silence warning messages
 touch /etc/alsa/asound.state
+touch /etc/asound.state
 
 # Silence /etc/mtab rwtab error message during bootup
 sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
@@ -46,6 +47,12 @@ sed -i 's/^rm -f \/etc\/mtab/#rm -f \/etc\/mtab/' /etc/rc.sysinit
 
 # Silence local filesystems mount errors during bootup
 sed -i '/^sysfs/d' /etc/fstab
+
+# pre-F10: /var/lib/random-seed rwtab
+/bin/grep -q "random-seed" /etc/rwtab 2> /dev/null
+if [ $? -ne 0 ]; then
+    echo "files  /var/lib/random-seed" >> /etc/rwtab.d/k12linux-local.rwtab
+fi
 
 # TEMPORARY: /var/lib/pulse/ must exist (we can remove this soon)
 mkdir -p /var/lib/pulse/

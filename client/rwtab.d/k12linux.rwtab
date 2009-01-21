@@ -12,6 +12,7 @@ files   /.viminfo
 files   /etc/passwd
 files   /etc/group
 files   /etc/alsa/asound.state
+files   /etc/asound.state
 files   /etc/localtime
 files   /etc/cups/client.conf
 
