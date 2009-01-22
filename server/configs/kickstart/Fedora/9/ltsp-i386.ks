@@ -7,8 +7,9 @@ repo --name=released-9-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirror
 repo --name=updates-9-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9.newkey&arch=i386
 repo --name=temporary-9-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/9/i386/
 
-%include ../common.ks
-%include ../common-i386.ks
+%include ../common/common.ks
+%include ../common/arch/i386.ks
+%include ../common/release/9.ks
 
 # No i586 clients?  Try this instead.
-#%include ../common-i686.ks
+#%include ../common/arch/i686.ks

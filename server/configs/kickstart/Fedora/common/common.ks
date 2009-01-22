@@ -45,7 +45,6 @@ cups-libs
 cyrus-sasl-lib
 db4
 dbus
-dejavu-fonts
 device-mapper
 diffutils
 dmraid

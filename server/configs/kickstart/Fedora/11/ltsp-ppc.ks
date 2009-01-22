@@ -6,5 +6,6 @@ install
 repo --name=rawhide-11-ppc --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=ppc
 repo --name=temporary-11-ppc --baseurl=http://togami.com/~k12linux-temporary/fedora/11/ppc/
 
-%include ../common.ks
-%include ../common-ppc.ks
+%include ../common/common.ks
+%include ../common/arch/ppc.ks
+%include ../common/release/11.ks

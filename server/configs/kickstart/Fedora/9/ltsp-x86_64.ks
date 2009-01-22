@@ -7,5 +7,6 @@ repo --name=released-9-x86_64 --mirrorlist=http://mirrors.fedoraproject.org/mirr
 repo --name=updates-9-x86_64 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f9.newkey&arch=x86_64
 repo --name=temporary-9-x86_64 --baseurl=http://togami.com/~k12linux-temporary/fedora/9/x86_64/
 
-%include ../common.ks
-%include ../common-x86_64.ks
+%include ../common/common.ks
+%include ../common/arch/x86_64.ks
+%include ../common/release/9.ks
