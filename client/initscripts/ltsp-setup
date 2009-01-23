@@ -149,6 +149,10 @@ case "$1" in
             touch / 2> /dev/null || root_write_method="bind_mounts"
         fi
         [ "$root_write_method" = "bind_mounts" ] && bind_mounts
+        if [ -f "/etc/ltsp/getltscfg-cluster.conf" ]; then
+            # Tell the control center that we are booting and get lts.conf
+            eval $(getltscfg-cluster -a -l refresh) || true
+        fi
         load_modules || true
         set_time || true
         configure_console || true
