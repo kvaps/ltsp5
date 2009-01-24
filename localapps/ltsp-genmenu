@@ -34,8 +34,8 @@ generate() {
             if [ ! -e ~/.local/share/applications/${a##*/}.orig ]; then
                 mv ~/.local/share/applications/${a##*/} ~/.local/share/applications/${a##*/}.orig
             fi
-        fi 
-        
+        fi
+
         # Copy client's .desktop file to local
         cp ${a} ~/.local/share/applications/${a##*/}
 
@@ -54,17 +54,19 @@ generate() {
             if [ ! -e ~/.local/share/icons/${ICON}.orig ]; then
                 mv ~/.local/share/icons/${ICON} ~/.local/share/icons/${ICON}.orig
             fi
-        fi 
-        
+        fi
+
         # If icon is relative path, try to copy from /usr/share/pixmaps
         # If icon is absolute path, try to copy from absolute path
         # Else don't copy an icon
         if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
-            ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -name ${ICON}'*[png|xpm|svg]'|head -1)
+            ICONFILE=$(find -L /usr/share/icons /usr/share/pixmaps -type f -name ${ICON}'*[png|xpm|svg]'|head -1)
+            [ -n "$ICONFILE" ] && ICONFILE=$(find -L /usr/share/icons /usr/share/pixmaps -type f -name ${ICON}'*'|head -1)
+            ICON=$ICONFILE
             cp ${ICON} ~/.local/share/icons/${ICON##*/}
         else
             [ -e ${ICON} ] && cp ${ICON} ~/.local/share/icons/${ICON##*/} 
-        fi 
+        fi
 
         # record files copied in ${VARRUN}
         echo ".local/share/applications/${a##*/}" >>${VARRUN}
