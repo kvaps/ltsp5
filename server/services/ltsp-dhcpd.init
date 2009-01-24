@@ -75,7 +75,7 @@ start() {
     RETVAL=$?
     [ $RETVAL -eq 0 ] && return $RETVAL
 
-    echo -n $"Starting ltsp-$prog: "
+    echo -n "Starting ltsp-$prog:"
     daemon $dhcpd $DHCPDARGS 2>/dev/null
     RETVAL=$?
     echo
@@ -97,7 +97,7 @@ stop() {
         return $RETVAL
     fi
 
-    echo -n $"Shutting down ltsp-$prog: "
+    echo -n "Shutting down ltsp-$prog:"
     killproc $prog
     RETVAL=$?
 
@@ -148,7 +148,7 @@ case "$1" in
         RETVAL=$?
         ;;
     *)
-        echo $"Usage: $0 {start|stop|restart|condrestart|configtest|status}"
+        echo "Usage: $0 {start|stop|restart|condrestart|configtest|status}"
         RETVAL=3
         ;;
 esac
