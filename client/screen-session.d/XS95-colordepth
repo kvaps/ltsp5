@@ -1,6 +1,16 @@
 ### color depth
 
-if [ "$X_CONF" = "$XCONF" ] && [ -n "$X_COLOR_DEPTH" ]; then
-    X_ARGS="$X_ARGS -depth $X_COLOR_DEPTH"
+if [ -n "$X_COLOR_DEPTH" ]; then
+    # Set color depth if X_CONF has been set to our internally generated
+    # XCONF file OR if no user-defined X_CONF file was specified.
+    # 
+    # However, if the user defines their own X_CONF file, then we
+    # should ignore a request by the user for a specific color depth.
+    # The color depth should instead be set in that pre-defined xorg.conf
+    # file.  Otherwise, it might lead to confusion.
+    #
+    if [ "$X_CONF" = "$XCONF" ] || [ -z "$X_CONF" ]; then
+        X_ARGS="$X_ARGS -depth $X_COLOR_DEPTH"
+    fi
 fi  
 
