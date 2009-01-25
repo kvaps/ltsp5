@@ -120,8 +120,6 @@ pre_install_portage_tree() {
 	sys-apps/baselayout
 	sys-fs/ltspfs
 	x11-misc/ldm
-	# needed for ldm
-	~x11-themes/gtk-engines-ubuntulooks-0.9.12
 
 	EOF
 
