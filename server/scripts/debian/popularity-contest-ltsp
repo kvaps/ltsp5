@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# install this in the server's cron.weekly to have the terminal chroot
+# install this in the server's cron.daily to have the terminal chroot
 # filesystems submit popularity-contest data
 
 # it requires installing popularity-contest in each chroot, preferrably
@@ -17,8 +17,16 @@ for base in $BASE ; do
             # only do the following if popularity-contest is installed, 
             # /bin/true exists and returns true (in case of architecture mis-match),
             # and chroot is available
-            if [ -x $dir/etc/cron.weekly/popularity-contest ] && [ -x $dir/bin/true ] && [ $dir/bin/true ] && [ -n "$(which chroot)" ] ; then
-                chroot $dir /etc/cron.weekly/popularity-contest
+            if [ -x $dir/bin/true ] && [ $dir/bin/true ] && [ -n "$(which chroot)" ] ; then
+                # check for presence of cron.daily or cron.weekly script, and
+                # run the first one found (popcon 1.45+ runs from cron.daily)
+                for frequency in daily weekly ; do
+                    script="/etc/cron.$frequency/popularity-contest"
+                    if [ -x "$dir/$script" ]; then
+                        chroot $dir $script
+                        break
+                    fi
+                done
             fi
         done
     fi
