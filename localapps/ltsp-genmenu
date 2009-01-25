@@ -60,9 +60,7 @@ generate() {
         # If icon is absolute path, try to copy from absolute path
         # Else don't copy an icon
         if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
-            ICONFILE=$(find -L /usr/share/icons /usr/share/pixmaps -type f -name ${ICON}'*[png|xpm|svg]'|head -1)
-            [ -n "$ICONFILE" ] && ICONFILE=$(find -L /usr/share/icons /usr/share/pixmaps -type f -name ${ICON}'*'|head -1)
-            ICON=$ICONFILE
+            ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
             cp ${ICON} ~/.local/share/icons/${ICON##*/}
         else
             [ -e ${ICON} ] && cp ${ICON} ~/.local/share/icons/${ICON##*/} 
