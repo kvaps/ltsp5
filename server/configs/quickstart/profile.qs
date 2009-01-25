@@ -162,13 +162,6 @@ post_install_extra_packages() {
 	mkdir ${chroot_dir}/var/lib/nfs
  
 	spawn_chroot "rm /etc/init.d/net.eth0"
-
-	cat >> ${chroot_dir}/etc/lts.conf <<- EOF
-	# see /usr/share/doc/ltsp-client-$version/lts-parameters.txt.bz2 for a listing 
-	# of all possible options (Don't forget to include a [default] section)
-	# This file will be overwitten by an lts.conf from the tftp server 
-	# from /var/lib/tftpboot/ltsp/${ARCH}/lts.conf if it is available
-	EOF
 }
 
 rcadd ltsp-client-setup boot
