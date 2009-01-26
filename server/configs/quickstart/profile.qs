@@ -120,7 +120,6 @@ pre_install_portage_tree() {
 	sys-apps/baselayout
 	sys-fs/ltspfs
 	x11-misc/ldm
-
 	EOF
 
 	# temporary overrides (hopefully)
@@ -152,7 +151,7 @@ pre_install_extra_packages() {
 	spawn_chroot "emerge --update --deep world"
 }
 
-extra_packages joystick ltspfs ldm ltsp-client xdm ${PACKAGES}
+extra_packages ldm ltsp-client ${PACKAGES}
 
 post_install_extra_packages() {
 	# point /etc/mtab to /proc/mounts
