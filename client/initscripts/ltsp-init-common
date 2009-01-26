@@ -183,6 +183,11 @@ set_time() {
     [ -n "$TIMEZONE" ] && [ -e "/usr/share/zoneinfo/$TIMEZONE" ] && \
         cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
 
+    # Set timeserver to $SERVER if set to autodetect
+    if [ "$TIMESERVER" = "auto" ]; then
+        TIMESERVER=${SERVER}
+    fi
+
     # Set up timeserver
     [ -n "$TIMESERVER" ] && ntpdate $TIMESERVER &
 }
