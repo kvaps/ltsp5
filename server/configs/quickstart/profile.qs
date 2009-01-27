@@ -116,16 +116,19 @@ pre_install_portage_tree() {
 
 	cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<- EOF
 	net-misc/ltsp-client
-	sys-apps/openrc
-	sys-apps/baselayout
 	sys-fs/ltspfs
 	x11-misc/ldm
 	EOF
 
 	# temporary overrides (hopefully)
 	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<- EOF
-	# stable fails on 2.6.24 kernel
+	sys-apps/openrc
+	sys-apps/baselayout
+	sys-fs/udev
+	sys-apps/sysvinit
+	# stable fails on newer kernels
 	~sys-fs/fuse-2.7.3
+	# needed for local apps
 	~sys-fs/sshfs-fuse-2.1
 	EOF
 }
