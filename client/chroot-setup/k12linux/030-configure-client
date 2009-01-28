@@ -64,3 +64,8 @@ cp -f /etc/sysconfig/mkinitrd.ltsp-template /etc/sysconfig/mkinitrd
 if [ -e /var/lib/plymouth/boot-duration ]; then
     cp /usr/share/ltsp/template/plymouth-default-boot-duration /var/lib/plymouth/boot-duration
 fi
+
+# Allow clean shutdown to complete when rootfs is mounted on a nbd or iscsi block device
+sed -i 's/^action $"Sending all processes/#action $"Sending all processes/' /etc/init.d/halt
+sed -i 's/^sleep 2/#sleep 2/' /etc/init.d/halt
+sed -i 's/^rm -f/#rm -f/' /etc/init.d/halt
