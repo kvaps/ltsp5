@@ -23,6 +23,10 @@ for base in $BASE ; do
                 for frequency in daily weekly ; do
                     script="/etc/cron.$frequency/popularity-contest"
                     if [ -x "$dir/$script" ]; then
+                        if [ "$frequency" = "weekly" ] && [ "$(date +%w)" != "0" ]; then
+                            # only run cron.weekly script once a week
+                            break
+                        fi
                         chroot $dir $script
                         break
                     fi
