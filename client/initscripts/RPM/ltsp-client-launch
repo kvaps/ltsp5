@@ -62,6 +62,11 @@ cd - > /dev/null
 # Source function libraries.
 . /usr/share/ltsp/ltsp-init-common
 
+teardown() {
+    killall -g screen_session pulseaudio ldm ltspfsd
+}
+trap "teardown" TERM
+
 # Start Screen Sessions defined in /etc/lts.conf
 for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
 eval num=\$SCREEN_$screen
