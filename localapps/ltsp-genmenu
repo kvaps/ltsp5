@@ -7,7 +7,7 @@ generate() {
     fi
 
     # Make the working directory and subdirs
-    TMP_XDG_DIR_LOCAL="$(mktemp /tmp/ltsp-localapps-${USER}-XXXXXX)"
+    TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${USER}-XXXXXX)"
 
     for d in applications icons; do
         mkdir -p "${TMP_XDG_DIR_LOCAL}/${d}"

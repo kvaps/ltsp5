@@ -105,7 +105,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Create tmpdir for localapps menu
     if boolean_is_true "$LOCAL_APPS_MENU"; then
-        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp /tmp/ltsp-localapps-${USER}-XXXXXX)"
+        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${USER}-XXXXXX)"
         export TMP_XDG_MENU
         CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}:\${XDG_DATA_DIRS}"
     fi
