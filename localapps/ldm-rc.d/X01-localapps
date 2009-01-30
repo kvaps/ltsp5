@@ -116,7 +116,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
         # chown the tmpdir to be owned by the user
         # FIXME: assumes user/group are identical
-        chown -R ${TMP_XDG_DIR_LOCAL} ${LDM_USERNAME}:${LDM_USERNAME}
+        chown -R ${LDM_USERNAME}:${LDM_USERNAME} ${TMP_XDG_DIR_LOCAL} 
 
         su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} /usr/bin/ltsp-genmenu install"
 
