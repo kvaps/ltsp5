@@ -107,7 +107,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     if boolean_is_true "$LOCAL_APPS_MENU"; then
         TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${USER}-XXXXXX)"
         export TMP_XDG_MENU
-        CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}:\${XDG_DATA_DIRS}"
+        CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}/:/usr/local/share/:/usr/share/"
     fi
 
     #Launch the ltsp-localappsd to handle the apps
