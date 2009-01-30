@@ -1,0 +1,5 @@
+# Remove the localapp menu
+
+if boolean_is_true "$LOCAL_APPS" && boolean_is_true "$LOCAL_APPS_MENU"; then
+    [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "TMP_XDG_MENU=${TMP_XDG_MENU} LDM_SOCKET=${LDM_SOCKET} LDM_SERVER=${LDM_SERVER} /usr/bin/ltsp-genmenu remove"
+fi

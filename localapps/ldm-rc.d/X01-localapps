@@ -103,6 +103,13 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Mount the home directory
     sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
+    # Create tmpdir for localapps menu
+    if boolean_is_true "$LOCAL_APPS_MENU"; then
+        TMP_XDG_MENU="$(mktemp /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
+        export TMP_XDG_MENU
+        CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}:\${XDG_DATA_DIRS}"
+    fi
+
     #Launch the ltsp-localappsd to handle the apps
     (
     echo $! > $LOCALAPPSD_PIDFILE
@@ -120,7 +127,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Clean up localapps menu
     if boolean_is_true "$LOCAL_APPS_MENU"; then
-        [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "/usr/bin/ltsp-genmenu remove"
+        [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "LDM_SOCKET=${LDM_SOCKET} LDM_SERVER=${LDM_SERVER} TMP_XDG_DIR=${TMP_XDG_DIR} /usr/bin/ltsp-genmenu remove"
     fi
 
     # Clean up cups config

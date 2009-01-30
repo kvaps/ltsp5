@@ -1,13 +1,15 @@
 #!/bin/sh
 LANG=C
-VARRUN=~/.ltsp-genmenu
-generate() {
-    :>${VARRUN} || exit 0
 
-    # Make sure the user's applications directory exists
-    [ ! -d ~/.local/share/applications ] && mkdir -p ~/.local/share/applications/
-    # Make sure the user's icons directory exists
-    [ ! -d ~/.local/share/icons ] && mkdir -p ~/.local/share/icons/
+generate() {
+    if [ -z ${TMP_XDG_DIR} ]; then
+        exit
+    fi
+
+    # Make the working directory and subdirs
+    for d in applications icons; do
+        mkdir -p "${TMP_XDG_DIR}/${d}"
+    done
 
     # Build desktop file list
     if [ -n "${LOCAL_APPS_MENU_ITEMS}" ]; then
@@ -25,63 +27,34 @@ generate() {
 
     # Cycle through all .desktop files in client's system applications dir
     for a in ${DESKTOP_FILES}; do
-        # If a desktop file with the same name exists in the user's account, 
-        # back it up (sensibly and carefully)
-        if [ -e ~/.local/share/applications/${a##*/} ]; then
-            # Only backup first time to .orig
-            # If .orig exists it means that it was never restored, so don't
-            # overwrite it, preserve it
-            if [ ! -e ~/.local/share/applications/${a##*/}.orig ]; then
-                mv ~/.local/share/applications/${a##*/} ~/.local/share/applications/${a##*/}.orig
-            fi
-        fi
-
         # Copy client's .desktop file to local
-        cp ${a} ~/.local/share/applications/${a##*/}
+        cp ${a} ${TMP_XDG_DIR}/applications/${a##*/}
 
         # Change Exec and TryExec to our localapps command
-        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ~/.local/share/applications/${a##*/} 
+        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ${TMP_XDG_DIR}/applications/${a##*/} 
 
         # Find the appropriate icon and copy it into the local icons dir
         ICON=$(grep ^Icon ${a}|sed -e 's/^Icon=\(.*\)/\1/')
-
-        # If an icon file with the same name exists in the user's account, 
-        # back it up (sensibly and carefully)
-        if [ -e ~/.local/share/icons/${ICON} ]; then
-            # Only backup first time to .orig
-            # If .orig exists it means that it was never restored, so don't
-            # overwrite it, preserve it
-            if [ ! -e ~/.local/share/icons/${ICON}.orig ]; then
-                mv ~/.local/share/icons/${ICON} ~/.local/share/icons/${ICON}.orig
-            fi
-        fi
 
         # If icon is relative path, try to copy from /usr/share/pixmaps
         # If icon is absolute path, try to copy from absolute path
         # Else don't copy an icon
         if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
             ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
-            cp ${ICON} ~/.local/share/icons/${ICON##*/}
+            cp ${ICON} ${TMP_XDG_DIR}/icons/${ICON##*/}
         else
-            [ -e ${ICON} ] && cp ${ICON} ~/.local/share/icons/${ICON##*/} 
+            [ -e ${ICON} ] && cp ${ICON} ${TMP_XDG_DIR}/icons/${ICON##*/} 
         fi
-
-        # record files copied in ${VARRUN}
-        echo ".local/share/applications/${a##*/}" >>${VARRUN}
-        echo ".local/share/icons/${ICON##*/}" >>${VARRUN}
     done
+
+    # now, scp the directory to the /tmp dir on the server
+    scp -r -o "ControlPath $LDM_SOCKET" -o "User $USER" "${TMP_XDG_DIR}" ${LDM_SERVER}:/tmp
 }
 
 remove() {
-    if [ -r ${VARRUN} ]; then
-        while read filename; do
-            if [ -e ~/${filename}.orig ]; then
-                mv ~/${filename}.orig ~/${filename}
-            else
-                [ -e ~/${filename} ] && rm ~/${filename}
-            fi 
-        done <${VARRUN}
-        rm ${VARRUN}
+    if [ -n "${TMP_XDG_DIR}" ];then
+        rm -rf "${TMP_XDG_DIR}" 
+        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_DIR}" || true
     fi
 }
 
