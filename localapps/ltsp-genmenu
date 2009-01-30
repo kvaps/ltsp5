@@ -2,7 +2,7 @@
 LANG=C
 
 generate() {
-    if [ -z ${TMP_XDG_DIR} ]; then
+    if [ -z ${TMP_XDG_MENU} ]; then
         exit
     fi
 
@@ -50,15 +50,15 @@ generate() {
     done
 
     # now, scp the directory to the /tmp dir on the server
-    scp -r -o "ControlPath $LDM_SOCKET" -o "User $USER" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_DIR}
+    scp -r -o "ControlPath $LDM_SOCKET" -o "User $USER" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
 
     # Clean up local
     rm -rf ${TMP_XDG_DIR_LOCAL} || true
 }
 
 remove() {
-    if [ -n "${TMP_XDG_DIR}" ];then
-        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_DIR}" || true
+    if [ -n "${TMP_XDG_MENU}" ];then
+        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}" || true
     fi
 }
 
