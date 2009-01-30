@@ -2,12 +2,9 @@
 LANG=C
 
 generate() {
-    if [ -z ${TMP_XDG_MENU} ]; then
+    if [ -z ${TMP_XDG_MENU} ] || [ ! -d ${TMP_XDG_DIR_LOCAL} ]; then
         exit
     fi
-
-    # Make the working directory and subdirs
-    TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${USER}-XXXXXX)"
 
     for d in applications icons; do
         mkdir -p "${TMP_XDG_DIR_LOCAL}/${d}"
@@ -48,12 +45,6 @@ generate() {
             [ -e ${ICON} ] && cp ${ICON} ${TMP_XDG_DIR_LOCAL}/icons/${ICON##*/} 
         fi
     done
-
-    # now, scp the directory to the /tmp dir on the server
-    scp -r -o "ControlPath $LDM_SOCKET" -o "User $USER" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
-
-    # Clean up local
-    rm -rf ${TMP_XDG_DIR_LOCAL} || true
 }
 
 remove() {
@@ -64,7 +55,6 @@ remove() {
 
 case "$1" in
     install)
-        remove
         generate
     ;;
     remove)

@@ -1,5 +1,15 @@
 # Generate the localapp menu
 
-if boolean_is_true "$LOCAL_APPS" && boolean_is_true "$LOCAL_APPS_MENU"; then
-    [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} LDM_SOCKET=${LDM_SOCKET} LDM_SERVER=${LDM_SERVER} TMP_XDG_MENU=${TMP_XDG_MENU} /usr/bin/ltsp-genmenu install"
+if boolean_is_true "$LOCAL_APPS" && boolean_is_true "$LOCAL_APPS_MENU" && [ -x "/usr/bin/ltsp-genmenu" ]; then
+    # chown the tmpdir to be owned by the user
+    # FIXME: assumes user/group are identical
+    chown -R ${TMP_XDG_DIR_LOCAL} ${LDM_USERNAME}:${LDM_USERNAME}
+
+    su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} /usr/bin/ltsp-genmenu install"
+
+    # now, scp the directory to the /tmp dir on the server
+    scp -r -o "ControlPath $LDM_SOCKET" -o "User $LDM_USERNAME" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
+
+    # Clean up local
+    rm -rf ${TMP_XDG_DIR_LOCAL} || true
 fi

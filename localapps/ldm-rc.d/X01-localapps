@@ -105,8 +105,11 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Create tmpdir for localapps menu
     if boolean_is_true "$LOCAL_APPS_MENU"; then
-        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${USER}-XXXXXX)"
+        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
         export TMP_XDG_MENU
+        # Make the working directory and subdirs
+        TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
+        export TMP_XDG_DIR_LOCAL
         CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}/:/usr/local/share/:/usr/share/"
     fi
 
