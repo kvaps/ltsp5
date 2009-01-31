@@ -105,19 +105,20 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Create tmpdir for localapps menu
     if boolean_is_true "$LOCAL_APPS_MENU" && [ -x "/usr/bin/ltsp-genmenu" ]; then
+        # get a temporary directory on the server
         TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
         export TMP_XDG_MENU
-        # Make the working directory and subdirs
-        TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
-        export TMP_XDG_DIR_LOCAL
         CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}/:/usr/local/share/:/usr/share/"
 
-        # Generate the localapp menu
+        # Make the local temporary directory
+        TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
+        export TMP_XDG_DIR_LOCAL
 
         # chown the tmpdir to be owned by the user
         # FIXME: assumes user/group are identical
         chown -R ${LDM_USERNAME}:${LDM_USERNAME} ${TMP_XDG_DIR_LOCAL} 
 
+        # Generate the localapp menu
         su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} TMP_XDG_DIR_LOCAL=${TMP_XDG_DIR_LOCAL} /usr/bin/ltsp-genmenu install"
 
         # now, scp the directory to the /tmp dir on the server
