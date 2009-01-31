@@ -2,7 +2,7 @@
 LANG=C
 
 generate() {
-    if [ -z ${TMP_XDG_MENU} ] || [ ! -d ${TMP_XDG_DIR_LOCAL} ]; then
+    if [ ! -d ${TMP_XDG_DIR_LOCAL} ]; then
         exit
     fi
 
