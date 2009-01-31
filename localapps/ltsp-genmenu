@@ -47,21 +47,12 @@ generate() {
     done
 }
 
-remove() {
-    if [ -n "${TMP_XDG_MENU}" ];then
-        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}" || true
-    fi
-}
-
 case "$1" in
     install)
         generate
     ;;
-    remove)
-        remove
-    ;;
     *)
-        echo "Usage: $0 install|remove"
+        echo "Usage: $0 install"
         exit
     ;;
 esac
