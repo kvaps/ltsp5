@@ -25,24 +25,28 @@ generate() {
     fi
 
     # Cycle through all .desktop files in client's system applications dir
-    for a in ${DESKTOP_FILES}; do
+    for desktop in ${DESKTOP_FILES}; do
+        local_desktop=${TMP_XDG_DIR_LOCAL}/applications/${desktop##*/}
+
         # Copy client's .desktop file to local
-        cp ${a} ${TMP_XDG_DIR_LOCAL}/applications/${a##*/}
+        cp ${desktop} ${local_desktop}
 
         # Change Exec and TryExec to our localapps command
-        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ${TMP_XDG_DIR_LOCAL}/applications/${a##*/} 
+        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ${local_desktop}
 
         # Find the appropriate icon and copy it into the local icons dir
-        ICON=$(grep ^Icon ${a}|sed -e 's/^Icon=\(.*\)/\1/')
+        ICON=$(grep ^Icon ${local_desktop}|sed -e 's/^Icon=\(.*\)/\1/')
 
         # If icon is relative path, try to copy from /usr/share/pixmaps
         # If icon is absolute path, try to copy from absolute path
         # Else don't copy an icon
-        if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
+        base_ICON="${ICON##*/}" 
+        local_ICON=${TMP_XDG_DIR_LOCAL}/icons/${base_ICON}
+        if [ -n "${ICON}" ] && [ "${ICON}" = "${base_ICON}" ]; then
             ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
-            cp ${ICON} ${TMP_XDG_DIR_LOCAL}/icons/${ICON##*/}
-        else
-            [ -e ${ICON} ] && cp ${ICON} ${TMP_XDG_DIR_LOCAL}/icons/${ICON##*/} 
+            cp ${ICON} ${local_ICON}
+        elif [ -e ${ICON} ]; then
+            cp ${ICON} ${local_ICON}
         fi
     done
 }
