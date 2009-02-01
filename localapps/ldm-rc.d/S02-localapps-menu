@@ -1,5 +1,0 @@
-# Generate the localapp menu
-
-if boolean_is_true "$LOCAL_APPS" && boolean_is_true "$LOCAL_APPS_MENU"; then
-    [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} /usr/bin/ltsp-genmenu install"
-fi

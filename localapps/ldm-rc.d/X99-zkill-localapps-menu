@@ -1,0 +1,5 @@
+# Remove the localapp menu
+
+if boolean_is_true "$LOCAL_APPS" && boolean_is_true "$LOCAL_APPS_MENU" && [ -n "${TMP_XDG_MENU}" ]; then
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}" || true
+fi

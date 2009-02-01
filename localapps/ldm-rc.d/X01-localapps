@@ -103,6 +103,31 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Mount the home directory
     sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
+    # Create tmpdir for localapps menu
+    if boolean_is_true "$LOCAL_APPS_MENU" && [ -x "/usr/bin/ltsp-genmenu" ]; then
+        # get a temporary directory on the server
+        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
+        export TMP_XDG_MENU
+        CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}/:/usr/local/share/:/usr/share/"
+
+        # Make the local temporary directory
+        TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
+        export TMP_XDG_DIR_LOCAL
+
+        # chown the tmpdir to be owned by the user
+        # FIXME: assumes user/group are identical
+        chown -R ${LDM_USERNAME}:${LDM_USERNAME} ${TMP_XDG_DIR_LOCAL} 
+
+        # Generate the localapp menu
+        su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} TMP_XDG_DIR_LOCAL=${TMP_XDG_DIR_LOCAL} /usr/bin/ltsp-genmenu install"
+
+        # now, scp the directory to the /tmp dir on the server
+        scp -r -o "ControlPath $LDM_SOCKET" -o "User $LDM_USERNAME" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
+
+        # Clean up local
+        rm -rf ${TMP_XDG_DIR_LOCAL} || true
+    fi
+
     #Launch the ltsp-localappsd to handle the apps
     (
     echo $! > $LOCALAPPSD_PIDFILE
@@ -119,8 +144,8 @@ if boolean_is_true "$LOCAL_APPS"; then
     ltsp-localappsd
 
     # Clean up localapps menu
-    if boolean_is_true "$LOCAL_APPS_MENU"; then
-        [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "/usr/bin/ltsp-genmenu remove"
+    if boolean_is_true "$LOCAL_APPS_MENU" && [ -n "${TMP_XDG_MENU}" ]; then
+        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}" 
     fi
 
     # Clean up cups config

@@ -1,5 +1,0 @@
-# Remove the localapp menu
-
-if boolean_is_true "$LOCAL_APPS" && boolean_is_true "$LOCAL_APPS_MENU"; then
-    [ -x "/usr/bin/ltsp-genmenu" ] && su - ${LDM_USERNAME} -c "/usr/bin/ltsp-genmenu remove"
-fi
