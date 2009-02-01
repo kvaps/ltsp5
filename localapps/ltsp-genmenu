@@ -32,7 +32,7 @@ generate() {
         cp ${desktop} ${local_desktop}
 
         # Change Exec and TryExec to our localapps command
-        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ${local_desktop}
+        sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop/' -e 's/^Exec=\(.*\)/Exec=xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "\1"/' ${local_desktop}
 
         # Find the appropriate icon and copy it into the local icons dir
         ICON=$(grep ^Icon ${local_desktop}|sed -e 's/^Icon=\(.*\)/\1/')
