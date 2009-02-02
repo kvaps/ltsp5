@@ -45,6 +45,23 @@ if boolean_is_true "$LOCAL_APPS"; then
     cp /etc/group ${COMBINED_GROUP}
     ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent group" >> ${COMBINED_GROUP}
 
+    # Get the system groups that the user belongs to, so we can add him back in
+    myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/getent group|egrep "[,:]${LDM_USERNAME}(,|$)"|cut -d: -f1| tr '\n' ',' | sed -e 's/,$//g')
+
+    # (/usr/bin/id is only needed because getent evidently does not return groups
+    # added by pam_group (bug in pam_group?)
+
+    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C /usr/bin/id | awk -F groups= '/groups=/{print $2}' | sed -e 's/[0-9]*(//g' -e 's/)//g')
+
+    # concatenate groups from different sources, stripping off prefixed and
+    # trailing commas
+    myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$//g')
+
+    # Get the user's groups specifically (in case they weren't returned by "getent group")
+    for group in $(echo $myGroups | tr ',' ' '); do
+        ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C getent group $group >> ${COMBINED_GROUP}
+    done
+
     # Now, some groups may have different gids on the server than the client chroot
     # So, let's prune out all the dups
     TMPGROUP="${LOCALAPPS_CACHE}/tmpgroup"
@@ -74,17 +91,6 @@ if boolean_is_true "$LOCAL_APPS"; then
     cp ${TMPGROUP} /etc/group
     chmod 644 /etc/group
 
-    # Get the system groups that the user belongs to, so we can add him back in
-    myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/getent group|egrep "[,:]${LDM_USERNAME}(,|$)"|cut -d: -f1| tr '\n' ',' | sed -e 's/,$//g')
-
-    # (/usr/bin/id is only needed because getent evidently does not return groups
-    # added by pam_group (bug in pam_group?)
-
-    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C /usr/bin/id | awk -F groups= '/groups=/{print $2}' | sed -e 's/[0-9]*(//g' -e 's/)//g')
-
-    # concatenate groups from different sources, stripping off prefixed and
-    # trailing commas
-    myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$//g')
 
     if [ -n "$myGroups" ]; then
         usermod -G "$myGroups" "${LDM_USERNAME}" 2>/dev/null
