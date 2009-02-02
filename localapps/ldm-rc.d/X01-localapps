@@ -58,9 +58,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$//g')
 
     # Get the user's groups specifically (in case they weren't returned by "getent group")
-    for group in $(echo $myGroups | tr ',' ' '); do
-        ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C getent group $group >> ${COMBINED_GROUP}
-    done
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C getent group $(echo $myGroups | tr ',' ' ') >> ${COMBINED_GROUP}
 
     # Now, some groups may have different gids on the server than the client chroot
     # So, let's prune out all the dups
