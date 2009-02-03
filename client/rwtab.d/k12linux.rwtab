@@ -5,6 +5,7 @@ dirs    /var/cache/ldm/
 dirs    /home
 dirs	/var/cache/hald/
 dirs	/var/lib/pulse/
+dirs    /var/cache/ltsp-localapps/
 
 files	/etc/lts.conf
 files   /etc/X11/xorg.conf
