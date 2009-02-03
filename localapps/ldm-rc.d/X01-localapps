@@ -14,16 +14,8 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Set up local uids/gids
 
     LOCALAPPS_CACHE=/var/cache/ltsp-localapps
+    export LOCALAPPS_CACHE
     mkdir -p ${LOCALAPPS_CACHE} 2>/dev/null
-
-    # Cleanup 
-    LOCALAPPSD_PIDFILE=/var/run/ltsp/ltsp-localappsd
-    [ -r "$LOCALAPPSD_PIDFILE" ] && LOCALAPPSD_PID=$(cat $LOCALAPPSD_PIDFILE)
-    # Kill PID
-    if [ -n "$LOCALAPPSD_PID" ]; then
-        pkill -P $LOCALAPPSD_PID
-        rm $LOCALAPPSD_PIDFILE
-    fi
 
     # Copy /etc/passwd and /etc/group to cache if it does not exist (should only happen on first login)
     for i in passwd group; do
@@ -117,6 +109,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # First, make the mountpoint
     LDM_HOME=$(getent passwd ${LDM_USERNAME}|cut -d: -f6)
+    export LDM_HOME
     mkdir -p ${LDM_HOME}
     chown ${LDM_USERNAME}.${LDM_USERNAME} ${LDM_HOME}
 
@@ -151,10 +144,6 @@ if boolean_is_true "$LOCAL_APPS"; then
         rm -rf ${TMP_XDG_DIR_LOCAL} || true
     fi
 
-    #Launch the ltsp-localappsd to handle the apps
-    (
-    echo $! > $LOCALAPPSD_PIDFILE
-
     # if cups is installed in the chroot, use LDM_SERVER for printing
     if [ -d "/etc/cups" ]; then
         if [ -n "${CUPS_SERVER}" ]; then
@@ -164,25 +153,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         fi
     fi
 
-    ltsp-localappsd
-
-    # Clean up localapps menu
-    if boolean_is_true "$LOCAL_APPS_MENU" && [ -n "${TMP_XDG_MENU}" ]; then
-        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}" 
-    fi
-
-    # Clean up cups config
-    [ -r "/etc/cups/client.conf" ] && rm -f /etc/cups/client.conf
-
-    # Copy back passwd and group
-    for i in passwd group; do
-        cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
-    done
-
-    # Unmount sshfs and remove the mount dir
-    fusermount -uqz ${LDM_HOME}
-    rmdir ${LDM_HOME}
-    rm $LOCALAPPSD_PIDFILE
-    )&
+    #Launch the ltsp-localappsd to handle the apps
+    ltsp-localappsd &
 
 fi

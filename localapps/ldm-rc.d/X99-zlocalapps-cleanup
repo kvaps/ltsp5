@@ -1,0 +1,19 @@
+if boolean_is_true "$LOCAL_APPS"; then
+    # Clean up localapps menu
+    if boolean_is_true "$LOCAL_APPS_MENU" && [ -n "${TMP_XDG_MENU}" ]; then
+        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}"
+    fi
+
+    # Clean up cups config
+    [ -r "/etc/cups/client.conf" ] && rm -f /etc/cups/client.conf
+
+    # Copy back passwd and group
+    for i in passwd group; do
+        [ -e "${LOCALAPPS_CACHE}/${i}" ] && cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
+    done
+
+    # Unmount sshfs and remove the mount dir
+    fusermount -uqz ${LDM_HOME}
+    rmdir ${LDM_HOME}
+    rm $LOCALAPPSD_PIDFILE
+fi
