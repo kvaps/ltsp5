@@ -51,7 +51,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     # (/usr/bin/id is only needed because getent evidently does not return groups
     # added by pam_group (bug in pam_group?)
 
-    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C /usr/bin/id | awk -F groups= '/groups=/{print $2}' | sed -e 's/[0-9]*(//g' -e 's/)//g')
+    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C /usr/bin/id | awk '{print $3}'|cut -d= -f2|sed -e 's/[0-9]*(//g' -e 's/)//g')
 
     # concatenate groups from different sources, stripping off prefixed and
     # trailing commas
@@ -91,7 +91,26 @@ if boolean_is_true "$LOCAL_APPS"; then
 
 
     if [ -n "$myGroups" ]; then
-        usermod -G "$myGroups" "${LDM_USERNAME}" 2>/dev/null
+        if [ -w /etc ]; then
+            usermod -G "$myGroups" "${LDM_USERNAME}" 2>/dev/null
+        else
+            # Read-only /etc cannot use usermod
+            myGroups=$(echo ${myGroups} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+            OLDIFS="$IFS"
+            IFS=,
+            cp /etc/group $TMPGROUP
+            for group in $myGroups ; do
+                # add user to each group manually
+                line="$(egrep ^${group}: $TMPGROUP | egrep -v [:,]${LDM_USERNAME}'(,|$)' )"
+                if [ -n "$line" ]; then
+                    # add the user to the group
+                    sed -i -e "s/^$line/$line,${LDM_USERNAME}/g" -e 's/:,/:/g' $TMPGROUP
+                fi
+            done
+            cp $TMPGROUP /etc/group
+            unset IFS
+            test -n "$OLDIFS" && IFS="$OLDIFS"
+        fi
     fi
 
     # Now, let's mount the home directory
