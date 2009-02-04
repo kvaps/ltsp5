@@ -23,7 +23,8 @@ LDM_DIRECTX         boolean   		     unset           disable ssh tunneling for v
 ---------------------------------------------------------------------------------------------
 LDM_REMOTECMD       A custom command (path   Xsession        use to override default session on the server)
 ---------------------------------------------------------------------------------------------
-LDM_AUTOLOGIN       boolean		     unset	     automatically logs in with username = hostname and password = hostname	
+LDM_AUTOLOGIN       boolean		     unset	     automatically logs in with username = hostname 
+                                                             and password = hostname	
 ---------------------------------------------------------------------------------------------
 LDM_DEBUG           boolean		     unset	     Write to debug log /var/log/ldm.log on client
 ---------------------------------------------------------------------------------------------
@@ -31,12 +32,24 @@ LDM_USERNAME        A valid username	     unset	     use this username for autol
 ---------------------------------------------------------------------------------------------
 LDM_PASSWORD        A valid password	     unset	     use this password for autologin
 ---------------------------------------------------------------------------------------------
-LDM_GUESTLOGIN      boolean		     unset	     Add "Guest login" button to greeter (autologin when pressed by user)
+LDM_GUESTLOGIN      boolean		     unset	     Add "Guest login" button to greeter 
+                                                             (autologin when pressed by user)
 ---------------------------------------------------------------------------------------------
 LOCAL_APPS          boolean	             True
 ---------------------------------------------------------------------------------------------
-LOCAL_APPS_WHITELIST list of commands	     unset           Use to allow only specified space-separated commands to be run as local apps, allow all is default if unset
-                                                             Full-paths are required for each command.  No spaces in names are allowed.
+LOCAL_APPS_MENU     boolean	             False           Make local applications appear/override items
+                                                             in desktop menu
+---------------------------------------------------------------------------------------------
+LOCAL_APPS_MENU_ITEMS  comma-delimited list  unset           Only make the specified applications
+                       of application names                  appear/override items in desktop menu
+                       as they appear in the
+                       .desktop filename	 
+---------------------------------------------------------------------------------------------
+LOCAL_APPS_WHITELIST list of commands	     unset           Use to allow only specified space-separated 
+                                                             commands to be run as local apps, allow all 
+                                                             is default if unset
+                                                             Full-paths are required for each command.  
+                                                             No spaces in names are allowed.
 ---------------------------------------------------------------------------------------------
 LOCALDEV            boolean	             True    	     Honors LOCAL_STORAGE (deprecated)
 ---------------------------------------------------------------------------------------------
@@ -79,6 +92,10 @@ SYSLOG_HOST         Server IP                ltsp server      add SYSLOGD="-r" t
 ---------------------------------------------------------------------------------------------
 TELNET_HOST         Telnet server IP         ltsp server      for use with SCREEN_nn=telnet
 ---------------------------------------------------------------------------------------------
+TIMEZONE            Timezone                 unset            Timezone for client to use
+---------------------------------------------------------------------------------------------
+TIMESERVER          IP/Hostname              unset            NTP time server to set client time
+---------------------------------------------------------------------------------------------
 USE_LOCAL_SWAP      boolean	             unset
 ---------------------------------------------------------------------------------------------
 USE_TOUCH	    Enable touchscreen	     unset	      Enable touchscreen
@@ -94,6 +111,15 @@ USE_TOUCH	    Enable touchscreen	     unset	      Enable touchscreen
 USE_XFS             boolean	             unset
  (XFS_SERVER)       Font server IP           unset
 ---------------------------------------------------------------------------------------------
+VOLUME              percentage		     90               Main volume preset percentage
+HEADPHONE_VOLUME                                              Headphone volume preset
+PCM_VOLUME                                                    PCM volume preset
+CD_VOLUME                                                     CD volume preset
+FRONT_VOLUME                                                  Front speaker volume preset
+MIC_VOLUME                                                    Microphone volume preset
+---------------------------------------------------------------------------------------------
+X_BLANKING          seconds                  unset            DPMS blanking of screen (0=never)
+---------------------------------------------------------------------------------------------
 X_COLOR_DEPTH       2, 4, 8, 16, 24, 32      24               set to 16bit to save client mem
                                              (16 in Debian)
 ---------------------------------------------------------------------------------------------
@@ -101,13 +127,13 @@ X_CONF              full path to a file      autodetected     relative to /opt/l
 or
 XF86CONFIG_FILE
 ---------------------------------------------------------------------------------------------
-X_HORZSYNC          min-max MHz              autdetected      use for forcing X_MODE 
+X_HORZSYNC          min-max MHz              autdetected      use for forcing horizontal sync 
 and
-X_VERTREFRESH       min-max Hz               autdetected      use for forcing X_MODE
+X_VERTREFRESH       min-max Hz               autdetected      use for forcing vertical refresh
 ---------------------------------------------------------------------------------------------
 X_MODE_0            A valid mode name        autodetected     use for forcing X_MODE
-  (X_MODE_1)
-  (X_MODE_2)
+  (X_MODE_1)                                                  (XRANDR_MODE_0 preferred -
+  (X_MODE_2)                                                  see below for details)
 ---------------------------------------------------------------------------------------------
 X_MONITOR_OPTION_01 A valid Monitor option   unset	      set Monitor option for driver
 ...
@@ -139,6 +165,9 @@ X_MOUSE_DEVICE      /dev/ttySn               autodetected     serial mice only,
 ---------------------------------------------------------------------------------------------
 X_MOUSE_EMULATE3BTN boolean	             unset
 ---------------------------------------------------------------------------------------------
+X_NUMLOCK           boolean	             unset           Set numlock key status (requires 
+                                                             numlockx installed)
+---------------------------------------------------------------------------------------------
 X_OPTION_01	    A valid Device option    unset	     set Device option for driver
 ...
 X_OPTION_10
@@ -158,6 +187,42 @@ XKBOPTIONS          A set of xkb options     unset           see xorg documentat
 XKBVARIANT          A valid xkb variant      unset           see xorg documentation for value
 ---------------------------------------------------------------------------------------------
 XRAMPERC	    An integer   	     80		     Percentage of RAM for X server
+---------------------------------------------------------------------------------------------
+XRANDR_OUTPUT_01    Valid xrandr output name unset           Define xrandr output - can also 
+...                                                          use for multihead positioning
+XRANDR_OUTPUT_09
+---------------------------------------------------------------------------------------------
+XRANDR_MODE_01      Valid video              unset           Set mode for corresponding 
+...                 mode/resolution                          output
+XRANDR_MODE_09
+---------------------------------------------------------------------------------------------
+XRANDR_NEWMODE_01   Valid modeline           unset           Add new modeline for corresponding
+...                                                          output
+XRANDR_NEWMODE_09
+---------------------------------------------------------------------------------------------
+XRANDR_RATE_01      Refresh rate             unset           Set refresh rate for corresponding
+...                                                          output
+XRANDR_RATE_09
+---------------------------------------------------------------------------------------------
+XRANDR_DPI_01       DPI value                unset           Set dpi for corresponding output
+...
+XRANDR_DPI_09
+---------------------------------------------------------------------------------------------
+XRANDR_ROTATE_01    Rotation                 unset           Set rotation for corresponding output
+...
+XRANDR_ROTATE_09
+---------------------------------------------------------------------------------------------
+XRANDR_REFLECT_01   Reflection               unset           Set reflection for corresponding output
+...
+XRANDR_REFLECT_09
+---------------------------------------------------------------------------------------------
+XRANDR_SIZE_01      Resolution               unset           Set resolution for corresponding output
+...                                                          (For xrandr <1.2)
+XRANDR_SIZE_09
+---------------------------------------------------------------------------------------------
+XRANDR_ORIENTATION_01   Orientation          unset           Set orientation for corresponding output
+...                                                          (For xrandr <1.2)
+XRANDR_ORIENTATION_09
 ---------------------------------------------------------------------------------------------
 XSERVER             A valid Xorg driver      autodetected    see xorg documentation for value
 ---------------------------------------------------------------------------------------------
