@@ -1,8 +1,15 @@
 # /etc/sysconfig/mkinitrd configuration directs mkinitrd to generate a netboot capable image
 # initrd obtains from netboot the IP address and rootfs type 
-if [ -e /lib/modules/`ls /boot/vmlinuz-* |sed 's/vmlinuz-//' | sort -nr | head -n1 | xargs basename`/modules.modesetting ]; then
-    # F10 has modesetting drivers, include them if modules.modesetting exists
-    availmodules="=networking =modesetting"
+unset MODESETTING
+for name in modesetting drm; do
+    if [ -e /lib/modules/`ls /boot/vmlinuz-* |sed 's/vmlinuz-//' | sort -nr | head -n1 | xargs basename`/modules.$name ]; then
+        MODESETTING=$name
+        break 
+    fi
+done
+if [ -n "$MODESETTING" ];
+    # F10+ has modesetting drivers, include them if they exist
+    availmodules="=networking =$MODESETTING"
 else
     availmodules="=networking"
 fi
