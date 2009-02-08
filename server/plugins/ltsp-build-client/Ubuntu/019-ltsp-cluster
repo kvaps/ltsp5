@@ -14,8 +14,8 @@ case "$MODE" in
     finalization)
         if [ -n "$CLUSTER" ]; then
             if [ -n "$CLUSTER_CONTROL" ]; then
-                mkdir -p /etc/ltsp/
-                echo SERVER=$CLUSTER_CONTROL > /etc/ltsp/getltscfg-cluster.conf
+                mkdir -p $ROOT/etc/ltsp/
+                echo SERVER=$CLUSTER_CONTROL > $ROOT/etc/ltsp/getltscfg-cluster.conf
             fi
         fi
         ;;
