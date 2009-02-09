@@ -4,7 +4,7 @@ CPUFREQ=$(grep "^cpu MHz" /proc/cpuinfo | head -n1 | awk '{print $4}')
 CPUNAME=$(grep "^model name" /proc/cpuinfo | head -n1 | sed "s/.*: //g")
 CPUCOUNT=$(grep ^processor /proc/cpuinfo | wc -l)
 CPUVENDOR=$(grep "^vendor_id" /proc/cpuinfo | head -n1 | sed "s/.*: //")
-PCIID=$(lspci -n | awk '{print $3}' | tr ' ' '\n' | sort | uniq -c)
+PCIID=$(lspci -n | awk '{print $3}' | tr ' ' '\n' | sort | uniq)
 echo MEMTOTAL=$MEMTOTAL
 echo CPUFREQ=$CPUFREQ
 echo CPUNAME=$CPUNAME
@@ -12,5 +12,5 @@ echo CPUCOUNT=$CPUCOUNT
 echo CPUVENDOR=$CPUVENDOR
 for id in $PCIID
 do
-	echo PCIID=$id
+    echo PCIID=$id
 done
