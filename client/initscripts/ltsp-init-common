@@ -65,10 +65,10 @@ configure_sound_volume() {
        /usr/bin/amixer -c0 sset PCM,0 ${PCM_VOLUME}% unmute 2>/dev/null
     fi
     if [ "$CD_VOLUME" != "0" ]; then
-       /usr/bin/amixer -c0 sset CD,0 ${CD_VOLUME}% unmute cap 2>/dev/null
+       /usr/bin/amixer -c0 sset CD,0 ${CD_VOLUME}% unmute 2>/dev/null
     fi
     if [ "$FRONT_VOLUME" != "0" ]; then
-       /usr/bin/amixer -c0 sset Front,0 ${FRONT_VOLUME}% unmute cap 2>/dev/null
+       /usr/bin/amixer -c0 sset Front,0 ${FRONT_VOLUME}% unmute 2>/dev/null
     fi
 
     # Microphone can be controlled by Pulseaudio, so let it be set by lts.conf
