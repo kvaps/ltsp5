@@ -111,7 +111,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     LDM_HOME=$(getent passwd ${LDM_USERNAME}|cut -d: -f6)
     export LDM_HOME
     mkdir -p ${LDM_HOME}
-    chown ${LDM_USERNAME}.${LDM_USERNAME} ${LDM_HOME}
+    chown $(getent passwd "${LDM_USERNAME}" | cut -d ":" -f 3-4) ${LDM_HOME}
 
     ## Maybe do this:
     ## export HOME=${LOCALAPPS_CACHE}
@@ -131,8 +131,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         export TMP_XDG_DIR_LOCAL
 
         # chown the tmpdir to be owned by the user
-        # FIXME: assumes user/group are identical
-        chown -R ${LDM_USERNAME}:${LDM_USERNAME} ${TMP_XDG_DIR_LOCAL} 
+        chown -R $(getent passwd "${LDM_USERNAME}" | cut -d ":" -f 3-4) ${TMP_XDG_DIR_LOCAL} 
 
         # Generate the localapp menu
         su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} TMP_XDG_DIR_LOCAL=${TMP_XDG_DIR_LOCAL} /usr/bin/ltsp-genmenu install"
