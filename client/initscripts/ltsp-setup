@@ -143,8 +143,9 @@ run_rcfiles() {
 case "$1" in
     start)
         log_begin_msg "Setting up LTSP client..."
-	    type usplash_write >/dev/null 2>/dev/null && \
+        if type usplash_write >/dev/null 2>/dev/null ; then
             usplash_write "TIMEOUT 120" || true
+        fi
         if [ -z "$root_write_method" ] && [ ! -w "/" ]; then
             root_write_method="bind_mounts"
         fi
