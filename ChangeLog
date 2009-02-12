@@ -1,7 +1,0 @@
-2006-07-03  Otavio Salvador  <otavio@debian.org>
-
-	* 001-set-exclude, 001-set-dist: moved to server/plugins/common
-	since it's very agnostic and every vendor that use this system
-	will need to have a way to avoid a package inclusion. Those
-	symbolic links was also removed from Ubuntu plugins repository.
-
