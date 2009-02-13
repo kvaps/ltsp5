@@ -25,5 +25,3 @@ if [ -x /usr/share/ltsp/xinitrc ]; then
 fi
 
 xinit $xinitrc /usr/bin/rdesktop ${RDESKTOP_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br >/dev/null
-
-rm -f ${XINITRC}
