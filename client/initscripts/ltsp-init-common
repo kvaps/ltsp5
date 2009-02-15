@@ -195,5 +195,8 @@ set_time() {
     fi
 
     # Set up timeserver
-    [ -n "$TIMESERVER" ] && ntpdate $TIMESERVER &
+    if [ -n "$TIMESERVER" ]; then
+        (ntpdate $TIMESERVER; hwclock --systohc) &
+    fi
+
 }
