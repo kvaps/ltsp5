@@ -51,7 +51,7 @@ configure_sound_volume() {
     ## Set higher volume than default if not specified by lts.conf
     [ -z "$VOLUME" ]           && VOLUME=90
     [ -z "$HEADPHONE_VOLUME" ] && HEADPHONE_VOLUME=${VOLUME}
-    [ -z "$PCM_VOLUME" ]       && PCM_VOLUME=${VOLUME}
+    [ -z "$PCM_VOLUME" ]       && PCM_VOLUME=90
     [ -z "$CD_VOLUME" ]        && CD_VOLUME=${VOLUME}
     [ -z "$FRONT_VOLUME" ]     && FRONT_VOLUME=${VOLUME}
 
