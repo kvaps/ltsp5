@@ -4,7 +4,7 @@
 # will be calculated from XRANDR_MODEs set 
 
 if [ -n "${X_VIRTUAL}" ] || boolean_is_true "${X_VIRTUAL_AUTO}" ;then
-    screen_hacks="$screen_hacks x_virtual"
+    display_hacks="$display_hacks x_virtual"
 
     CONFIGURE_X="True"
 
