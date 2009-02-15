@@ -50,10 +50,10 @@ configure_sound_volume() {
     # Set up sound volume
     ## Set higher volume than default if not specified by lts.conf
     [ -z "$VOLUME" ]           && VOLUME=90
-    [ -z "$HEADPHONE_VOLUME" ] && HEADPHONE_VOLUME=90
-    [ -z "$PCM_VOLUME" ]       && PCM_VOLUME=90
-    [ -z "$CD_VOLUME" ]        && CD_VOLUME=90
-    [ -z "$FRONT_VOLUME" ]     && FRONT_VOLUME=90
+    [ -z "$HEADPHONE_VOLUME" ] && HEADPHONE_VOLUME=${VOLUME}
+    [ -z "$PCM_VOLUME" ]       && PCM_VOLUME=${VOLUME}
+    [ -z "$CD_VOLUME" ]        && CD_VOLUME=${VOLUME}
+    [ -z "$FRONT_VOLUME" ]     && FRONT_VOLUME=${VOLUME}
 
     if [ "$VOLUME" != "0" ]; then
        /usr/bin/amixer -c0 sset Master,0 ${VOLUME}% unmute 2>&1 > /dev/null
