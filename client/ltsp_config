@@ -35,7 +35,7 @@
 #
 
 # Read in lts.conf entries.
-if [ -f /etc/lts.conf ] && [ -n "$(grep -v ^# /etc/lts.conf)" ]; then
+if [ -f /etc/lts.conf ]; then
     eval $(getltscfg -a) || true
 fi
 
