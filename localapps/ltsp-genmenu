@@ -37,15 +37,15 @@ generate() {
         # Find the appropriate icon and copy it into the local icons dir
         ICON=$(grep ^Icon ${local_desktop}|sed -e 's/^Icon=\(.*\)/\1/')
 
-        # If icon is relative path, try to copy from /usr/share/pixmaps
-        # If icon is absolute path, try to copy from absolute path
-        # Else don't copy an icon
-        base_ICON="${ICON##*/}" 
-        local_ICON=${TMP_XDG_DIR_LOCAL}/icons/${base_ICON}
-        if [ -n "${ICON}" ] && [ "${ICON}" = "${base_ICON}" ]; then
+        # If icon is relative path, find the real icon file
+        if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
             ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
-            cp ${ICON} ${local_ICON}
-        elif [ -e ${ICON} ]; then
+        fi
+
+        # If the icon file exists, copy it
+        if [ -e ${ICON} ]; then
+            base_ICON="${ICON##*/}" 
+            local_ICON=${TMP_XDG_DIR_LOCAL}/icons/${base_ICON}
             cp ${ICON} ${local_ICON}
         fi
     done
