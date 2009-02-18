@@ -72,6 +72,7 @@ DROP_CACHE=${DROP_CACHE:-"N"}
 ENABLE_SSL=${ENABLE_SSL:-"N"}
 EXPORT_CONF=${EXPORT_CONF:-"N"}
 LOG=${LOG:-"boot"}
+INTERFACE=$(ip route | grep default | cut -d " " -f5)
 
 if [ -z "$SERVER" ]; then
     echo "Error : --server option is mandatory"
@@ -100,7 +101,7 @@ if [ -f "cache_info" ];
 then
     . $cache_info
 fi
-if [ -z "$ROOT_SRV" ] || [ -z "$ETH0_IP" ] || [ -z "$ETH0_MAC" ]; then
+if [ -z "$ROOT_SRV" ] || [ -z "$INTERFACE_IP" ] || [ -z "$INTERFACE_MAC" ]; then
     DROP_CACHE=Y
 fi
 if [ "$DROP_CACHE" = "Y" ]; then
@@ -112,8 +113,8 @@ fi
 mkdir -p "$cache_dir"
 if [ ! -f "$cache_info" ]; then
     ! touch $cache_info && exit 1
-    echo ETH0_MAC=$(ifconfig | grep eth0 | cut -f11 -d" ") > $cache_info
-    echo ETH0_IP=$(ifconfig eth0 | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
+    echo INTERFACE_MAC=$(ifconfig | grep ${INTERFACE} | cut -f11 -d" ") > $cache_info
+    echo INTERFACE_IP=$(ifconfig ${INTERFACE} | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
     nbd_device=$(cat /proc/mounts|grep /rofs|grep nbd|cut -d" " -f1) 2>/dev/null
     if [ -n "$nbd_device" ]; then
         nbd_pid=$(pgrep -f $nbd_device)
@@ -127,7 +128,7 @@ fi
 
 . $cache_info
 
-if [ -z "$ROOT_SRV" ] || [ -z "$ETH0_IP" ] || [ -z "$ETH0_MAC" ]; then
+if [ -z "$ROOT_SRV" ] || [ -z "$INTERFACE_IP" ] || [ -z "$INTERFACE_MAC" ]; then
     echo Failed to get needed information about the client
     exit 1
 fi
@@ -160,19 +161,19 @@ QUERY=""
 if [ "$LOG" = "boot" ]; then
     if [ ! -f "$cache_lts" ] || [ "$DROP_CACHE" = "Y" ]
     then
-        QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/bootservip=$ROOT_SRV/code=1"
+        QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/bootservip=$ROOT_SRV/code=1"
         if [ "$INVENTORY" = "Y" ]; then
             QUERY="$QUERY --post-file=$cache_inventory"
         fi
     fi
 elif [ "$LOG" = "prompt" ]; then 
-    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=2"
+    QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/appservip=$LDM_SERVER/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=2"
 elif [ "$LOG" = "login" ]; then 
-    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=3"
+    QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=3"
 elif [ "$LOG" = "logout" ]; then
-    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=4"
+    QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=4"
 elif [ "$LOG" = "refresh" ]; then
-    QUERY="?mac=$ETH0_MAC/ip=$ETH0_IP/bootservip=$ROOT_SRV/code=0"
+    QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/bootservip=$ROOT_SRV/code=0"
 else
     echo "Error : Unknown log operation" 
     usage
