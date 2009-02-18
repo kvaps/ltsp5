@@ -51,7 +51,7 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Get the user's groups specifically (in case they weren't returned by "getent group")
     myGroups_quoted=$(echo $myGroups | sed -e "s/^/\\\'/" -e "s/$/\\\'/" -e "s/,/\\\' \\\'/g")
-    ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C getent group ${myGroups_quoted} >> ${COMBINED_GROUP}
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C eval getent group ${myGroups_quoted} >> ${COMBINED_GROUP}
     unset myGroups_quoted
 
     # Now, some groups may have different gids on the server than the client chroot
