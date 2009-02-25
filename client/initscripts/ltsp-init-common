@@ -28,7 +28,7 @@ start_sound() {
                 -L "module-native-protocol-tcp auth-anonymous=1" \
                 -L module-volume-restore \
                 -L module-rescue-streams \
-                -L module-native-protocol-unix \
+                -L "module-native-protocol-unix auth-anonymous=1" \
                 -n &
                 ;;
             esd) 

@@ -29,10 +29,6 @@ reset_xprop LTSP_COMMAND_WAIT
 # Make sure the local user has access to X
 chown ${LDM_USERNAME} $XAUTHORITY
 
-if boolean_is_true "$SOUND" ; then
-    PULSE_SERVER="PULSE_SERVER=127.0.0.1"
-fi
-
 # Poll for LTSP_COMMAND changes and execute
 while :; do
     LTSP_COMMAND="$(xatomwait LTSP_COMMAND)"
@@ -60,9 +56,9 @@ while :; do
     
         logit "Executing command as username ${LDM_USERNAME}: ${LTSP_COMMAND} "
         if [ "$LTSP_COMMAND_WAIT" = "true" ]; then
-            su - ${LDM_USERNAME} -c "LANG=$LANG DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
+            su - ${LDM_USERNAME} -c "LANG=$LANG DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}"
         else
-            su - ${LDM_USERNAME} -c "LANG=$LANG DISPLAY=$DISPLAY $PULSE_SERVER XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
+            su - ${LDM_USERNAME} -c "LANG=$LANG DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY ${LTSP_COMMAND}" &
         fi
     fi
     reset_xprop LTSP_COMMAND
