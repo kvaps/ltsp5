@@ -151,6 +151,7 @@ pcre
 perl
 popt
 rpcbind
+plymouth-plugin-solar
 procps
 psmisc
 pulseaudio-utils
