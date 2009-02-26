@@ -25,6 +25,10 @@
 
 XINITRCDIR=/usr/share/ltsp/xinitrc.d
 
+COMMAND=$*
+
+export COMMAND
+
 # use run-parts to source every file in the xinitrc directory; we source
 # instead of executing so that the variables and functions defined above
 # are available to the scripts, and so that they can pass variables to each
@@ -38,4 +42,4 @@ if [ -n "$XINITRCFILES" ]; then
   set -e
 fi
 
-exec $@
+exec $COMMAND
