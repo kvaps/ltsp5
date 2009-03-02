@@ -110,7 +110,6 @@ libXaw
 libXdmcp
 libXext
 libXfont
-libXfontcache
 libXft
 libXi
 libXinerama
@@ -122,7 +121,6 @@ libXpm
 libXrandr
 libXrender
 libXt
-libXTrap
 libXtst
 libXv
 libXxf86dga
