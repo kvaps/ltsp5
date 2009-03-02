@@ -21,7 +21,7 @@ DNS_SERVER          A valid IP               unset
 LDM_DIRECTX         boolean   		     unset           disable ssh tunneling for video 
                                              (True in Fedora)
 ---------------------------------------------------------------------------------------------
-LDM_REMOTECMD       A custom command (path   Xsession        use to override default session on the server)
+LDM_XSESSION       A custom command (path   Xsession        use to override default session on the server)
 ---------------------------------------------------------------------------------------------
 LDM_AUTOLOGIN       boolean		     unset	     automatically logs in with username = hostname 
                                                              and password = hostname	
@@ -31,6 +31,10 @@ LDM_DEBUG           boolean		     unset	     Write to debug log /var/log/ldm.log
 LDM_USERNAME        A valid username	     unset	     use this username for autologin
 ---------------------------------------------------------------------------------------------
 LDM_PASSWORD        A valid password	     unset	     use this password for autologin
+---------------------------------------------------------------------------------------------
+LDM_LANGUAGE        A valid language	     unset	     use this language for ldm 
+---------------------------------------------------------------------------------------------
+LDM_SESSION         A valid session	     unset	     use this session for ldm 
 ---------------------------------------------------------------------------------------------
 LDM_GUESTLOGIN      boolean		     unset	     Add "Guest login" button to greeter 
                                                              (autologin when pressed by user)
