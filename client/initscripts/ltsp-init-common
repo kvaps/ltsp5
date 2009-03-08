@@ -59,7 +59,7 @@ configure_sound_volume() {
         else
             if [ -n "$channel" ] && [ -n "$(echo $line|grep volume)" ]; then
                 channel_name=$(echo ${channel}|sed -e s/^\'// -e s/\'.*$// -e 's/ -//g' -e 's/ /_/g' -e 's/-/_/g' |tr [a-z] [A-Z])
-                eval channel_vol="\${${channel_name}_VOLUME}"
+                eval channel_vol="\$${channel_name}_VOLUME"
                 if [ "${channel_name}" = "MIC" ]; then 
                     cap="cap"
                 else
