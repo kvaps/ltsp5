@@ -28,7 +28,7 @@ msgstr ""
 
 #: ltsp-login.sh:21
 #, sh-format
-msgid "Cencel"
+msgid "Cancel"
 msgstr ""
 
 #: ltsp-login.sh:22 ltsp-login.sh:29
