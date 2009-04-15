@@ -7,7 +7,7 @@ for name in modesetting drm; do
         break 
     fi
 done
-if [ -n "$MODESETTING" ];
+if [ -n "$MODESETTING" ]; then
     # F10+ has modesetting drivers, include them if they exist
     availmodules="=networking =$MODESETTING"
 else
