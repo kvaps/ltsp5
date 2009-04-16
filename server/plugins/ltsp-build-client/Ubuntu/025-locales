@@ -18,7 +18,7 @@ case $MODE in
             chroot $ROOT locale-gen $LOCALE
         fi
 
-        if [ -f /etc/environment ]; then
+        if [ "$LOCALE" = "C" ] && [ -f /etc/environment ]; then
             cp /etc/environment $ROOT/etc/
         else
             echo "LANG=$LOCALE" >> $ROOT/etc/environment
