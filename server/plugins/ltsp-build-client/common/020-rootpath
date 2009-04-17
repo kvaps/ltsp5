@@ -7,7 +7,7 @@ case "$MODE" in
         if [ -d $ROOT ] ; then
             if [ "true" = "$option_purge_chroot_value" ]; then
                 # wipe it out, so we can try again
-                rm --force --recursive "$ROOT"
+                rm --force --recursive --one-file-system "$ROOT"
             else
                 echo "NOTE: Root directory $ROOT already exists, this will lead to problems, please remove it before trying again. Exiting."
                 exit 0
