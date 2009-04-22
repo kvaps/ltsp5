@@ -10,10 +10,6 @@ warn() {
 
 start_sound() {
     if boolean_is_true "$SOUND" ; then
-        # Detect and report a common problem with thin clients
-        if [ ! -c /dev/dsp ] ; then
-            warn "Sound requested but /dev/dsp is missing.  Continuing."
-        fi
         case "$SOUND_DAEMON" in
             pulse|'') # The default when no value is set
                 /usr/bin/pulseaudio --system \
