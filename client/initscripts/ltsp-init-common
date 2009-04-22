@@ -12,6 +12,10 @@ start_sound() {
     if boolean_is_true "$SOUND" ; then
         case "$SOUND_DAEMON" in
             pulse|'') # The default when no value is set
+                # Explicitly allow pulse user access to sound devices, ignore errors
+                if [ -x /usr/bin/setfacl ]; then
+                    /usr/bin/setfacl -m u:pulse:rw /dev/snd/* > /dev/null 2>&1
+                fi
                 /usr/bin/pulseaudio --system \
                 --exit-idle-time=-1 \
                 --disable-shm \
