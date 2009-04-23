@@ -21,6 +21,11 @@ case "$LTSPDIST" in
         export RELEASEDEF=11
         export TFTPDIR=/var/lib/tftpboot
     ;;
+    fc12)
+        export VENDORDEF="Fedora"
+        export RELEASEDEF=12
+        export TFTPDIR=/var/lib/tftpboot
+    ;;
     el5)
         export VENDORDEF="Fedora"
         export RELEASEDEF=9
