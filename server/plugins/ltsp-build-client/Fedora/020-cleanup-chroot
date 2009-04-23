@@ -7,7 +7,7 @@ case "$MODE" in
         # 64bit db4 locks makes it impossible for 32bit rpm to operate within the chroot
         rm -rf $ROOT/var/lib/rpm/__db*
         # Import RPM GPG Key
-        setarch $ARCH $CHROOTEXEC $ROOT rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora ||:
+        setarch $ARCH $CHROOTEXEC $ROOT rpm --import /etc/pki/rpm-gpg/* > /dev/null 2>&1 ||:
         # Remove db4 locks again because we don't need them in the image
         rm -rf $ROOT/var/lib/rpm/__db*
         ;;
