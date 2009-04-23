@@ -8,7 +8,7 @@ repo --name=updates-11-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirror
 repo --name=temporary-11-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/11/i386/
 
 %include ../common/common.ks
-%include ../common/arch/i386.ks
+%include ../common/arch/i586.ks
 %include ../common/release/11.ks
 
 # No i586 clients?  Try this instead.
