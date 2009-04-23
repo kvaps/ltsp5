@@ -8,14 +8,14 @@ KERNELOPTS="ro quiet selinux=0 rhgb"
 # Not using wraplinux for ELF because it cannot boot on coreboot.
 if [ -x /usr/sbin/mkelfImage ]; then
   rm -f /boot/elf-$1.img
-  mkelfImage --kernel=/boot/vmlinuz-$1 --initrd=/boot/initrd-$1.img --output=/boot/elf-$1.img --append="$KERNELOPTS"
+  /usr/sbin/mkelfImage --kernel=/boot/vmlinuz-$1 --initrd=/boot/initrd-$1.img --output=/boot/elf-$1.img --append="$KERNELOPTS"
   ln -sf elf-$1.img /boot/elf.ltsp
 fi
 
 # Wraplinux NBI
 if [ -x /usr/bin/wraplinux ]; then
   rm -f /boot/wraplinux-nbi-$1.img
-  wraplinux --nbi /boot/vmlinuz-$1 --initrd /boot/initrd-$1.img -o /boot/wraplinux-nbi-$1.img
+  /usr/bin/wraplinux --nbi /boot/vmlinuz-$1 --initrd /boot/initrd-$1.img -o /boot/wraplinux-nbi-$1.img
   ln -sf wraplinux-nbi-$1.img /boot/wraplinux-nbi.ltsp
 fi
 
