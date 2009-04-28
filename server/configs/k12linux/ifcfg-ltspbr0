@@ -1,9 +1,16 @@
 # Sample Configuration for Initscript Driven Bridge
 # Put this into /etc/sysconfig/network-scripts/ifcfg-ltspbr0
-# Note that this network range does not match the defaults in dhcpd.conf
+#
+# Warning: Deleting ifcfg-ltspbr0 alone to disable ltspbr0 will cause you
+# problems, because it will come back the next time you upgrade the 
+# ltsp-server package. 
+#
+# Comment out these two lines to disable ltspbr0.
+ONBOOT=yes
+IPADDR=172.31.100.254
+
 DEVICE=ltspbr0
 TYPE=Bridge
-ONBOOT=yes
 BOOTPROTO=static
 STP=off
 DELAY=0.1
@@ -11,5 +18,4 @@ USERCTL=no
 IPV6INIT=no
 PEERDNS=yes
 NETMASK=255.255.255.0
-IPADDR=172.31.100.254
 ARP=yes
