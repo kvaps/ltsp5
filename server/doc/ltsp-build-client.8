@@ -1,74 +1,91 @@
-.TH "ltsp-build-client" "8" "20060904" "" ""
+.TH "ltsp-build-client" "8" "20060511" "" ""
 .SH "NAME"
 ltsp\-build\-client \- Builds an LTSP client system for use with the LTSP server 
+
 .SH "SYNOPSIS"
 .PP 
 \fBltsp\-build\-client\fR  <options>
+
 .SH "DESCRIPTION"
 .PP 
-\fBltsp\-build\-client\fR builds an ltsp client chroot using standard packages for use with the ltsp server.  This chroot installation  
-can be modified in a number of ways as outlined in the OPTIONS section.  If present, defaults will be read from the configuration file /etc/ltsp/ltsp\-build\-client.conf, and will be overridden by using the command line options. 
-Visit http://www.ltsp.org for more information  
+\fBltsp\-build\-client\fR builds an ltsp client chroot using standard packages
+for use with the ltsp server.  This chroot installation  can be modified in a
+number of ways as outlined in the OPTIONS section.  If present, defaults will
+be read from the configuration file /etc/ltsp/ltsp\-build\-client.conf, and
+will be overridden by using the command line options. \fBltsp\-build\-client\fR
+is usually run as the root user.  Visit http://www.ltsp.org for more
+information.
+
 .SH "OPTIONS"
 .PP 
-not all options are available on all installations. for a complete list of available options, use the \fB\-\-help\fR option.
+Not all options are available on all installations. For a complete list of
+available options, use the \fB\-\-help\fR and \fB\-\-extra\-help\fR options.
+
+.IP "\fB\-\-arch\fP \fIarch\fR" 10 
+Builds a chroot with the specified architecture. Must be a supported
+architecture of the distribution, and compatible with the host architecture.
+Defaults vary by distribution.
+
 .IP "\fB\-\-base\fP \fIdir\fR" 10 
-Sets the default path for the ltsp chroots to be installed into, defaults to /opt/ltsp/
+Sets the default path for the ltsp chroots to be installed into. Defaults to
+/opt/ltsp/.
+
+.IP "\fB\-\-chroot\fP \fIfile\fR" 10 
+Sets the default name for the ltsp chroot. Defaults to the architecture
+selected with \-\-arch or the running architecture.
+
+.IP "\fB\-\-conf\fP \fIfile\fR" 10 
+Load configuration defaults from specified file. See \fBCONFIG FILE\fR below
+for more information.
 
 .IP "\fB\-\-dist\fP \fIdistribution\fR" 10 
 Distribution : Sets the distribution to be installed in the client chroot.
+Defaults to the running distribution.
  
-.IP "\fB\-\-mirror\fP \fImirror_url\fR" 10 
-Select the mirror to download packages from. file:/// and http:// URLs are supported.
- 
-.IP "\fB\-\-extra\-mirror\fP \fImirror_url dist components\fR" 10 
-Select an extra mirror to download packages from.
-This option can also have dist and component 
-variables associated as demonstrated above. If no dist and components  
-are specified the defaults are used.  file:/// and http:// URLs are supported.
- 
-.IP "\fB\-\-security\-mirror\fP \fImirror_url dist components\fR" 10 
-Select a mirror to download package security updates from.
-This option can also have dist and component 
-variables associated as demonstrated above. If no dist and components  
-are specified the defaults are used.  file:/// and http:// URLs are supported.
- 
-.IP "\fB\-\-exclude\fP \fIpackage1 package2\fR" 10 
-Exclude the list of packages from the initial client chroot. note that this does not prevent these packages from being installed in the chroot later, only the initial building of the chroot.
-
-.IP "\fB\-\-early\-packages\fP \fIpackage1 package2\fR" 10 
-List of packages to be installed immediately after the initial chroot is built. this normally will include the ltsp\-client package.
-
-.IP "\fB\-\-late\-packages\fP \fIpackage1 package2\fR" 10 
-Packages to be installed into the client chroot in the last phases of installation, after other parts of the ltsp configuration tweaks have been applied.
-
-.IP "\fB\-\-serial\-console\fP" 10 
-Enables the serial console in the new ltsp client chroot.
- 
-.IP "\fB\-\-arch\fP \fIi386 | powerpc\fR" 10 
-Builds an i386 chroot on an amd64 or a powerpc chroot on a ppc64.   
-An error will be presented if the arch chosen is unsupported.  
-.IP "\fB\-\-debconf\-seeds\fP" 10 
-Loads the debconf pre\-seeding files into the ltsp client chroot
-
-.IP "\fB\-\-apt\-keys\fP \fIkey1 key2\fR" 10 
-Specifies keys to add to the apt keyring
+.IP "\fB\-\-extra\-help\fP" 10 
+Displays all available commandline options.
 
 .IP "\fB\-\-help\fP" 10 
-Displays the ltsp\-build\-client help message
+Displays the ltsp\-build\-client help message.
+
+.IP "\fB\-\-mirror\fP \fImirror_url\fR" 10 
+Select the mirror to download packages from. file:/// and http:// URLs are
+supported.
+
+.SH "CONFIG FILE"
+.PP
+\fBltsp\-build\-client\fR will read a configuration file to override built-in
+defaults. the default location for this configuration file is
+/etc/ltsp/ltsp\-build\-client.conf, and can be specified with the \-\-conf
+commandline option.
+
+.PP
+values are NAME="VALUE" pairs, with # representing commented lines. most
+commandline options have an equivalent. an example Debian based system with an
+alternate base location, architecture, and distribution:
+
+.PP
+ # set alternate default location for ltsp chroot (--base)
+ BASE="/srv/ltsp"
+ # build an amd64 chroot by default (--arch)
+ ARCH="amd64"
+ # build a Debian sid environment (--dist)
+ DIST="sid"
+
 .SH "SEE ALSO"
 .PP 
 \fBltsp\-update\-sshkeys\fP\fB(8)\fP, 
 \fBltsp\-update\-kernels\fP\fB(8)\fP. 
+
 .SH "AVAILABILITY"
 .PP 
-\fBltsp\-build\-client\fR is part of \fBltsp\fP package 
-and the latest versions are available in source form from 
-\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR. 
+\fBltsp\-build\-client\fR is part of \fBltsp\fP package and the latest versions
+are available in source form from \fIhttps://launchpad.net/products/ltsp\fR. 
+
 .SH "MAN PAGE AUTHOR"
 .PP 
 Peter Savage \- silentk \- cbx33 
 debug@silentkeystroke.co.uk
 .PP 
-updated 20060904 by Vagrant Cascadian <vagrant@freegeek.org> 
+updated 2006, 2009 by Vagrant Cascadian <vagrant@freegeek.org> 
 .\" created by instant / docbook\-to\-man, Fri 21 Apr 2006, 06:18
