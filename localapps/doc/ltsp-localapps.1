@@ -1,0 +1,30 @@
+.TH "ltsp-localapps" "1" 20090511
+.SH "NAME" 
+ltsp-localapps \(em start local application on the LTSP thin client
+
+.SH "SYNOPSIS" 
+.PP 
+\fBltsp-localapps\fR [--wait] command 
+
+.SH "DESCRIPTION" 
+.PP 
+\fBltsp-localapps\fR is a simple wrapper script which is used to start an
+application on an LTSP thin client. It uses xprop(1) to set the LTSP_COMMAND X
+property. On the thin-client, the ltsp-localappsd(8) daemon runs to listen for
+changes on the LTSP_COMMAND X property, and starts the command specified on the
+local X server.
+
+.SH "SEE ALSO" 
+.PP 
+\fBltsp-localappsd\fP\fB(8)\fP, 
+\fBxprop\fP\fB(1)\fP. 
+
+.SH "AVAILABILITY" 
+.PP 
+\fBltsp-localapps\fR is part of the \fBltsp\fP package and the latest versions
+are available in source form from \fIhttps://launchpad.net/products/ltsp\fR. 
+
+.SH "MAN PAGE AUTHOR" 
+.PP 
+Copyright 2009 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.

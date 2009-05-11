@@ -1,0 +1,29 @@
+.TH "ltsp-localappsd" "1" 20090511
+.SH "NAME" 
+ltsp-localappsd \(em start local applications on the LTSP thin client
+
+.SH "SYNOPSIS" 
+.PP 
+\fBltsp-localappsd\fR
+
+.SH "DESCRIPTION" 
+.PP 
+\fBltsp-localappsd\fR listens for X property changes. When it detects a change
+in the LTSP_COMMAND X property, it starts the command specified as the user
+logged into the X server. It uses xprop(1) and xatomwait(1) to set and read X
+properties.
+
+.SH "SEE ALSO" 
+.PP 
+\fBxatomwait\fP\fB(1)\fP, 
+\fBxprop\fP\fB(1)\fP. 
+
+.SH "AVAILABILITY" 
+.PP 
+\fBltsp-localappsd\fR is part of the \fBltsp\fP package and the latest versions are
+available in source form from \fIhttps://launchpad.net/products/ltsp\fR. 
+
+.SH "MAN PAGE AUTHOR" 
+.PP 
+Copyright 2009 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.
