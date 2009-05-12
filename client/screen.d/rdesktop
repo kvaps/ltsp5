@@ -18,7 +18,7 @@ PATH=/bin:$PATH; export PATH
  
 RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
 
-RDESKTOP_OPTIONS="${RDP_OPTIONS} -f $* ${RDP_SERVER}"
+RDESKTOP_OPTIONS="${RDP_OPTIONS} -f -u '' $* ${RDP_SERVER}"
 
 if [ -x /usr/share/ltsp/xinitrc ]; then
     xinitrc=/usr/share/ltsp/xinitrc
