@@ -42,4 +42,4 @@ if [ -n "$XINITRCFILES" ]; then
   set -e
 fi
 
-eval $COMMAND
+eval exec $COMMAND
