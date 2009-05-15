@@ -30,7 +30,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     [ -z "$LDM_USERNAME" ] && LDM_USERNAME=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} 'echo ${USER}')
 
     # Get passwd info *just* for that user
-    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent passwd ${LDM_USERNAME}" >>/etc/passwd
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent passwd ${LDM_USERNAME}" | sed -e "s/${LDM_USERNAME}/${LDM_USERNAME}/i" >>/etc/passwd
 
     # Get all group info and copy to COMBINED_GROUP
     COMBINED_GROUP=${LOCALAPPS_CACHE}/group.combined
