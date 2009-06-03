@@ -145,7 +145,7 @@ for TFTPDIR in $TFTPDIRS ; do
         for kernelpath in $(find $TFTPDIR/$TFTPBOOTDIR/$arch -name 'vmlinuz-*'); do
             kernel=`basename $kernelpath`
             version=${kernel##vmlinuz-}
-            if [ ! -d /opt/ltsp/$arch/lib/modules/$version ]; then
+            if [ ! -d $BASE/$arch/lib/modules/$version ]; then
                 echo "Removing $kernelpath"
                 removefiles
             fi
