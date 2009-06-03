@@ -114,6 +114,9 @@ if boolean_is_true "$LOCAL_APPS"; then
     export LDM_HOME
     mkdir -p ${LDM_HOME}
     chown $(getent passwd "${LDM_USERNAME}" | cut -d ":" -f 3-4) ${LDM_HOME}
+    if [ -n "${XAUTHORITY_DIR}" ]; then
+        chown $(getent passwd "${LDM_USERNAME}" | cut -d ":" -f 3-4) ${XAUTHORITY_DIR}
+    fi
 
     ## Maybe do this:
     ## export HOME=${LOCALAPPS_CACHE}
