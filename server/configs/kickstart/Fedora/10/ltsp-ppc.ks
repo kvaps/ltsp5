@@ -5,7 +5,7 @@ install
 
 repo --name=released-10-ppc --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-10&arch=ppc
 repo --name=updates-10-ppc --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f10&arch=ppc
-repo --name=temporary-10-ppc --baseurl=http://togami.com/~k12linux-temporary/fedora/10/ppc/
+#repo --name=temporary-10-ppc --baseurl=http://togami.com/~k12linux-temporary/fedora/10/ppc/
 
 %include ../common/common.ks
 %include ../common/arch/ppc.ks

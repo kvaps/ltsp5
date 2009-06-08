@@ -4,7 +4,7 @@
 install
 
 repo --name=rawhide-12-x86_64 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=x86_64
-repo --name=temporary-12-x86_64 --baseurl=http://togami.com/~k12linux-temporary/fedora/12/x86_64/
+#repo --name=temporary-12-x86_64 --baseurl=http://togami.com/~k12linux-temporary/fedora/12/x86_64/
 
 %include ../common/common.ks
 %include ../common/arch/x86_64.ks

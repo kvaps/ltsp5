@@ -5,7 +5,7 @@ install
 
 repo --name=released-11-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-11&arch=i386
 repo --name=updates-11-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f11&arch=i386
-repo --name=temporary-11-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/11/i386/
+#repo --name=temporary-11-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/11/i386/
 
 %include ../common/common.ks
 %include ../common/arch/i586.ks

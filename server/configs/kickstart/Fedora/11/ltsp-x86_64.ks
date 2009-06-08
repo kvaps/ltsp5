@@ -5,7 +5,7 @@ install
 
 repo --name=released-11-x86_64 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-11&arch=x86_64
 repo --name=updates-11-x86_64 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f11&arch=x86_64
-repo --name=temporary-11-x86_64 --baseurl=http://togami.com/~k12linux-temporary/fedora/11/x86_64/
+#repo --name=temporary-11-x86_64 --baseurl=http://togami.com/~k12linux-temporary/fedora/11/x86_64/
 
 %include ../common/common.ks
 %include ../common/arch/x86_64.ks

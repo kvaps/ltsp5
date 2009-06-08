@@ -4,7 +4,7 @@
 install
 
 repo --name=rawhide-12-i386 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=i386
-repo --name=temporary-12-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/12/i386/
+#repo --name=temporary-12-i386 --baseurl=http://togami.com/~k12linux-temporary/fedora/12/i386/
 
 %include ../common/common.ks
 %include ../common/arch/i586.ks

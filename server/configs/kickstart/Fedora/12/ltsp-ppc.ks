@@ -4,7 +4,7 @@
 install
 
 repo --name=rawhide-12-ppc --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=ppc
-repo --name=temporary-12-ppc --baseurl=http://togami.com/~k12linux-temporary/fedora/12/ppc/
+#repo --name=temporary-12-ppc --baseurl=http://togami.com/~k12linux-temporary/fedora/12/ppc/
 
 %include ../common/common.ks
 %include ../common/arch/ppc.ks
