@@ -65,7 +65,7 @@ get_xfs_settings() {
         for SRV in $XFS_SERVER ; do
             xfs_line="tcp/${SRV}:7100"
             if [ -z "$(echo $X_ARGS | grep $xfs_line)" ]; then
-                if nc -w 5 $SRV 7100 >/dev/null ; then
+                if nc -z -w 5 $SRV 7100 >/dev/null ; then
                     X_ARGS="$X_ARGS -fp $xfs_line"
                 fi
             fi
