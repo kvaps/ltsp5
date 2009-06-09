@@ -1,4 +1,4 @@
-# NBD filesystem mounting			-*- shell-script -*-
+# NBD filesystem mounting           -*- shell-script -*-
 #
 #  Copyright (c) 2007 Canonical
 #  Author: Oliver Grawert <ogra@canonical.com>
@@ -27,9 +27,9 @@
 # NBD root mounting
 mountroot()
 {
-	[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-top"
-	run_scripts /scripts/nfs-top
-	[ "$quiet" != "y" ] && log_end_msg
+    [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-top"
+    run_scripts /scripts/nfs-top
+    [ "$quiet" != "y" ] && log_end_msg
 
     configure_networking
 
@@ -86,7 +86,7 @@ mountroot()
         cp ./lts.conf ${rootmnt}/etc/
     fi
 
-	[ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-bottom"
-	run_scripts /scripts/nfs-bottom
-	[ "$quiet" != "y" ] && log_end_msg
+    [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-bottom"
+    run_scripts /scripts/nfs-bottom
+    [ "$quiet" != "y" ] && log_end_msg
 }
