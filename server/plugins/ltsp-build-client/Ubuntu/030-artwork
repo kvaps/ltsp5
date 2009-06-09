@@ -1,14 +1,17 @@
 case "$MODE" in
     finalization)
-        for cdd in ed x k; do 
-            if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then 
+        for cdd in ed x k; do
+            if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then
                 if dpkg -l | grep -q "${cdd}ubuntu-artwork-usplash"; then
-                    chroot $ROOT apt-get $APT_GET_OPTS install ${cdd}ubuntu-artwork-usplash
+                    chroot $ROOT apt-get $APT_GET_OPTS install ${cdd}ubuntu-artwork-usplash ldm-${ccd}ubuntu-theme
                 fi
-                if [ -d $ROOT/usr/share/ldm/themes/${cdd}ubuntu ]; then 
-                    chroot $ROOT /usr/sbin/update-alternatives --set ldm-theme /usr/share/ldm/themes/${cdd}ubuntu 
+                if [ -d $ROOT/usr/share/ldm/themes/${cdd}ubuntu ]; then
+                    chroot $ROOT /usr/sbin/update-alternatives --set ldm-theme /usr/share/ldm/themes/${cdd}ubuntu
                 fi
-            fi 
+                return
+            fi
         done
-        ;;
+        chroot $ROOT apt-get $APT_GET_OPTS install usplash-theme-ubuntu ldm-ubuntu-theme
+        chroot $ROOT /usr/sbin/update-alternatives --set ldm-theme /usr/share/ldm/themes/ubuntu
+    ;;
 esac
