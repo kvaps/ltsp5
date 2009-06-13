@@ -115,7 +115,7 @@ if [ ! -f "$cache_info" ]; then
     ! touch $cache_info && exit 1
     echo INTERFACE_MAC=$(ifconfig | grep ${INTERFACE} | cut -f11 -d" ") > $cache_info
     echo INTERFACE_IP=$(ifconfig ${INTERFACE} | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
-    nbd_device=$(cat /proc/mounts|grep /rofs|grep nbd|head -1|cut -d" " -f1) 2>/dev/null
+    nbd_device=$(egrep 'nbd.*/rofs' /proc/mounts|head -1|cut -d" " -f1) 2>/dev/null
     if [ -n "$nbd_device" ]; then
         nbd_pid=$(pgrep -f $nbd_device)
         nbd_command=$(ps -o cmd $nbd_pid|grep -v CMD)
