@@ -190,7 +190,7 @@ set_time() {
 
     # Set up timeserver
     if [ -n "$TIMESERVER" ]; then
-        (ntpdate $TIMESERVER; hwclock --systohc) &
+        (ntpdate $TIMESERVER; hwclock --systohc --utc --noadjfile) &
     fi
 
 }
