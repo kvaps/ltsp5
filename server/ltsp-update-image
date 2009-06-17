@@ -35,6 +35,7 @@ $0 [OPTION]
   -b, --base     Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
   -p, --port     Port you wish this nbd image to communicate on.  Default
                  is 2000.
+  -n, --no-comp  Do not compress the image.
   -a, --arch     Architecture of this image.  Default is arch of the host.
   -h, --help     This message.
 EOF
@@ -44,7 +45,7 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:h --long base:,port:,arch:,help -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:nh --long base:,port:,arch:,no-comp,help -n $0 -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -57,6 +58,7 @@ while true ; do
         -b|--base) BASE=$2 ; shift 2 ;;
         -p|--port) PORT=$2 ; shift 2 ;;
         -a|--arch) ARCH=$2 ; shift 2 ;;
+        -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
         -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
@@ -113,7 +115,7 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
 
     IMAGE="${IMGDIR}/${ARCH}.img"
     rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-    mksquashfs "${CHROOT}" "${IMAGE}.tmp" -e cdrom
+    mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom
     if [ "$?" != "0" ]; then
         echo "Error: mksquashfs failed to build the ltsp image, exiting"
         exit 1
