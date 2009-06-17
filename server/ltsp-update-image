@@ -46,7 +46,7 @@ EOF
 
 ARGS=$(getopt -o b:p:a:h --long base:,port:,arch:,help -n $0 -- "$@")
 
-if [ $? != 0 ]; then
+if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
 fi
 
@@ -112,11 +112,16 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
     fi
 
     IMAGE="${IMGDIR}/${ARCH}.img"
-    rm -f "${IMAGE}" >/dev/null 2>&1
     rm -f "${IMAGE}.tmp" >/dev/null 2>&1
     mksquashfs "${CHROOT}" "${IMAGE}.tmp" -e cdrom
-    mv "${IMAGE}.tmp" "${IMAGE}"
-    chmod 0744 "${IMAGE}"
+    if [ "$?" != "0" ]; then
+        echo "Error: mksquashfs failed to build the ltsp image, exiting"
+        exit 1
+    fi
+    if [ -f "${IMAGE}.tmp" ]; then
+        mv "${IMAGE}.tmp" "${IMAGE}"
+        chmod 0644 "${IMAGE}"
+    fi
 
     # Make sure hosts.allow has the keepalive option for nbdrootd
     if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
