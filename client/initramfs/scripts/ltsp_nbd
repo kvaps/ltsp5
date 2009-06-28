@@ -36,15 +36,15 @@ mountroot()
     if [ -n "${nbdroot}" ]; then
                NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
                NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
-       else
+    else
                NBD_ROOT_SERVER="${ROOTSERVER}"
                NBD_ROOT_PORT=${nbdport:-"2000"}
-       fi
-       if [ -n "${nbdswap}" ]; then
+    fi
+    if [ -n "${nbdswap}" ]; then
                NBD_SWAP_SERVER=$( echo "${nbdswap}" | sed 's/:.*//')
                NBD_SWAP_PORT=$( echo "${nbdswap}" | sed 's/.*://')
-       else
-               NBD_SWAP_SERVER="${ROOTSERVER}"
+    else
+               NBD_SWAP_SERVER="${NBD_ROOT_SERVER}"
                NBD_SWAP_PORT=${nbdswapport:-"9572"}
     fi
 
@@ -81,7 +81,7 @@ mountroot()
 
     # get the lts.conf via tftp
     tftpath=$(echo ${filename%/*}|tr -d '"')
-    (echo "get ${tftpath:-/ltsp/i386}/lts.conf"|tftp ${ROOTSERVER} >/dev/null 2>&1)
+    (echo "get ${tftpath:-/ltsp/i386}/lts.conf"|tftp ${NBD_ROOT_SERVER} >/dev/null 2>&1)
     if [ -s ./lts.conf ];then
         cp ./lts.conf ${rootmnt}/etc/
     fi
