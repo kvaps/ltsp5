@@ -124,7 +124,7 @@ EOF
     memtest_bin='memtest86+.bin memtest86.bin'
     for memtest in $memtest_bin ; do
         if [ -f $BOOT/$memtest ]; then
-            memtest_name==$(basename $memtest .bin)
+            memtest_name=$(basename $memtest .bin)
             cat >> $PXECFG/default <<EOF
 
 label $memtest_name
