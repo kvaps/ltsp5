@@ -85,9 +85,6 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
-    if [ -z "$PXELINUX_CMDLINE" ]; then
-        PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
-    fi
     cat > $PXECFG/default <<EOF
 default ${PXELINUX_DEFAULT:-"ltsp"}
 
