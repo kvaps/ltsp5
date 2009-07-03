@@ -79,9 +79,10 @@ else
     msg "Skipping yaboot configuration. install yaboot package if you need it."
 fi
 
-if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
+syslinux_dir=/usr/lib/syslinux
+if [ -f $syslinux_dir/pxelinux.0 ]; then
     PXECFG=$BOOT/pxelinux.cfg
-    cp /usr/lib/syslinux/pxelinux.0 $BOOT
+    cp $syslinux_dir/pxelinux.0 $BOOT
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
