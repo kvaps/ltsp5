@@ -116,9 +116,11 @@ append ro initrd=initrd.img $BOOTPROMPT_OPTS
 
 EOF
 
-    for memtest in 'memtest86+.bin' 'memtest86.bin' ; do
+    memtest_bin='memtest86+.bin memtest86.bin'
+    for memtest in $memtest_bin ; do
         if [ -f $BOOT/$memtest ]; then
             cat >> $PXECFG/default <<EOF
+
 label memory test: $memtest
 kernel $memtest
 
