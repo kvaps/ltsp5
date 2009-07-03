@@ -83,6 +83,13 @@ syslinux_dir=/usr/lib/syslinux
 if [ -f $syslinux_dir/pxelinux.0 ]; then
     PXECFG=$BOOT/pxelinux.cfg
     cp $syslinux_dir/pxelinux.0 $BOOT
+
+    # copy the PXELINUX_DEFAULT helper program if installed, such as menu or
+    # vesamenu
+    if [ -f "$syslinux_dir/$PXELINUX_DEFAULT.c32" ]; then
+        cp "$syslinux_dir/$PXELINUX_DEFAULT.c32" $BOOT
+    fi
+
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
