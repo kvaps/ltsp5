@@ -89,7 +89,11 @@ if [ -f /usr/lib/syslinux/pxelinux.0 ]; then
         PXELINUX_CMDLINE="DEFAULT vmlinuz ro initrd=initrd.img $BOOTPROMPT_OPTS"
     fi
     cat > $PXECFG/default <<EOF
-$PXELINUX_CMDLINE
+default ${PXELINUX_DEFAULT:-"ltsp"}
+
+label ltsp
+kernel vmlinuz
+append ro initrd=initrd.img $BOOTPROMPT_OPTS
 EOF
 
 else
