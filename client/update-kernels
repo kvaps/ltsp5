@@ -104,7 +104,18 @@ default ${PXELINUX_DEFAULT:-"ltsp"}
 label ltsp
 kernel vmlinuz
 append ro initrd=initrd.img $BOOTPROMPT_OPTS
+
 EOF
+
+    for memtest in 'memtest86+.bin' 'memtest86.bin' ; do
+        if [ -f $BOOT/$memtest ]; then
+            cat >> $PXECFG/default <<EOF
+label memory test: $memtest
+kernel $memtest
+
+EOF
+        fi
+    done
 
 else
     msg "Skipping PXE configuration.  Install the syslinux package if you need it."
