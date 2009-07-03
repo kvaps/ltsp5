@@ -103,6 +103,10 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
         TIMEOUT="timeout $TIMEOUT"
     fi
 
+    if [ -n "$IPAPPEND" ]; then
+        IPAPPEND="ipappend $IPAPPEND"
+    fi
+
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
@@ -113,6 +117,7 @@ $TIMEOUT
 label ltsp
 kernel vmlinuz
 append ro initrd=initrd.img $BOOTPROMPT_OPTS
+$IPAPPEND
 
 EOF
 
