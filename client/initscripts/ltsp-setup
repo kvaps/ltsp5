@@ -107,7 +107,7 @@ configure_fstab() {
 configure_cron() {
     CRON_FILE=/etc/cron.d/ltsp
     if [ -n "$SHUTDOWN_TIME" ] ; then
-        echo $SHUTDOWN_TIME | awk -F : '{print $2" "$1" * * * root test ! -S /var/run/ldm_socket_* && halt" }' >> $CRON_FILE
+        echo $SHUTDOWN_TIME | awk -F : '{print $2" "$1" * * * root test ! -S $(ls -1 /var/run/ldm_socket_* | head -1) && halt" }' >> $CRON_FILE
     fi
     for ltsconf in /etc/lts.conf /var/cache/getltscfg-cluster/lts.conf; do
         if [ -f $ltsconf ]; then
