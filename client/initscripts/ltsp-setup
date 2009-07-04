@@ -33,6 +33,19 @@ load_modules() {
     done
 }
 
+configure_nbd() {
+    # Restart nbd so -persist will work
+    nbdcmd=`pgrep -l -f "/dev/nbd0 -persist" | cut -d " " -f "2-"`
+    if [ -n "$nbdcmd" ]; then
+        nbd-client -d /dev/nbd0
+        nbd-client -c /dev/nbd0
+        while [ "$?" != "1" ]; do
+            nbd-client -c /dev/nbd0
+        done
+        $nbdcmd
+    fi
+}
+
 configure_localdev() {
     boolean_is_true "$LOCALDEV" && mkdir -p /var/run/drives
 }
@@ -166,9 +179,10 @@ case "$1" in
             eval $(getltscfg-cluster -a -l refresh) || true
         fi
         load_modules || true
+        configure_resolver || true
+        #configure_nbd || true FIXME: Disable it for now as it doesn't work with unionfs-fuse
         set_time || true
         configure_console || true
-        configure_resolver || true
         configure_swap || true
         configure_syslog || true
         configure_fstab || true
