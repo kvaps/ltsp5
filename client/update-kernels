@@ -121,6 +121,10 @@ $IPAPPEND
 
 EOF
 
+    if [ -f "$PXELINUX_APPEND_FILE" ]; then
+        cat "$PXELINUX_APPEND_FILE" >> $PXECFG/default
+    fi
+
     memtest_bin='memtest86+.bin memtest86.bin'
     for memtest in $memtest_bin ; do
         if [ -f $BOOT/$memtest ]; then
