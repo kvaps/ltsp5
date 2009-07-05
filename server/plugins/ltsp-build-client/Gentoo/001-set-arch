@@ -11,6 +11,8 @@ case "$MODE" in
     configure)
         if [ -n "$option_arch_value" ]; then
             ARCH_OPT="$option_arch_value"
+        elif [ -n "${ARCH}" ]; then
+            ARCH_OPT=${ARCH}
         else
             # ARCH is not explicitly set by config or command line, get it from the environment
             ARCH_OPT=$(uname -m | sed -e 's:i[3-6]86:x86:' -e 's:x86_64:amd64:')

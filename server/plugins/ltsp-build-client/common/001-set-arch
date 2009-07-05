@@ -5,6 +5,8 @@ case "$MODE" in
     configure)
         if [ -n "$option_arch_value" ]; then
             ARCH_OPT="$option_arch_value"
+        elif [ -n "${ARCH}" ]; then
+            ARCH_OPT=${ARCH}
         else
             ARCH_OPT=$(uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/)
         fi
