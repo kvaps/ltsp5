@@ -15,9 +15,11 @@ case "$MODE" in
         ;;
     before-install)
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
+            MODULE_VERSION=${KERNEL_VERSION}
+            test -n "$KERNEL_ARCH" && MODULE_VERSION="${MODULE_VERSION}-${KERNEL_ARCH}"
             for fs in aufs squashfs ; do
                 # add appropriate module packages to list of packages to be installed
-                LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${KERNEL_VERSION}"
+                LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${MODULE_VERSION}"
             done
 
             BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet ip=dhcp boot=ltsp_nbd"}
