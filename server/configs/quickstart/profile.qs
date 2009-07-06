@@ -98,7 +98,7 @@ pre_install_portage_tree() {
 	# TODO: allow overriding of all these variables
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
-	USE="alsa xml X -cups"
+	USE="alsa svg xml X -cups"
 	FEATURES="ccache"
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
