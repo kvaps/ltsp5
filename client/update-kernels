@@ -95,7 +95,7 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
         cp "$syslinux_dir/$PXELINUX_DEFAULT.c32" $BOOT
         case $PXELINUX_DEFAULT in
             # set a timeout, otherwise the menu will wait indefinitely
-            menu|vesamenu) TIMEOUT=${TIMEOUT:-"300"} ;;
+            menu|vesamenu) TIMEOUT=${TIMEOUT:-"50"} ;;
         esac
     fi
 
