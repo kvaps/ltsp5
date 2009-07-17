@@ -1,5 +1,5 @@
 case "$MODE" in
     after-install)
-        touch $ROOT/etc/nbd-client
+        echo KILLALL=false >> $ROOT/etc/nbd-client
         ;;
 esac
