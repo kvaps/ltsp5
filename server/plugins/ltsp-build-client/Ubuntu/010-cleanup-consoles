@@ -1,6 +1,10 @@
 case "$MODE" in
     after-install)
 	    # we only want the first console by default (save memory)
-        rm $ROOT/etc/event.d/tty[2-6]
+        if [ -d $ROOT/etc/event.d  ];then
+            rm $ROOT/etc/event.d/tty[2-6]
+        else
+            rm $ROOT/etc/init/tty[2-6].conf
+        fi
         ;;
 esac
