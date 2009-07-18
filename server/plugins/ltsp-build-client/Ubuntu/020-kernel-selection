@@ -7,6 +7,9 @@ case "$MODE" in
 	    sparc) 
 		KERNEL_ARCH="$(uname -m)"
 		;;
+		armel)
+		KERNEL_ARCH="imx51"
+		;;
 	    *)
 		KERNEL_ARCH="$ARCH"
 		;;

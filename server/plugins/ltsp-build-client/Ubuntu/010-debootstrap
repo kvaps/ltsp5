@@ -7,6 +7,15 @@ case "$MODE" in
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=$INCLUDE"
         fi
         # Install base packages
-        debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+        case $ARCH in
+            armel)
+                debootstrap --foreign $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+                cp /usr/bin/qemu-arm-eabi "$ROOT"/usr/bin || echo "qemu-arm-eabi not found !"
+                chroot "$ROOT" debootstrap/debootstrap --second-stage
+            ;;
+            *)
+            debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+            ;;
+        esac
         ;;
 esac
