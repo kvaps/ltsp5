@@ -30,9 +30,9 @@ rm -f /etc/mtab
 ln -sf ../proc/mounts /etc/mtab
 
 # Blacklist pcspkr
-/bin/grep -q "blacklist pcspkr" /etc/modprobe.conf 2> /dev/null
+/bin/grep -q "blacklist pcspkr" /etc/modprobe.d/blacklist-pcspkr.conf 2> /dev/null
 if [ $? -ne 0 ]; then
-    echo "blacklist pcspkr" >> /etc/modprobe.conf
+    echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist-pcspkr.conf
 fi
 
 # Files to silence warning messages
