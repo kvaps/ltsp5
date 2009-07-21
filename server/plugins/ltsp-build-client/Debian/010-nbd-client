@@ -1,5 +1,6 @@
 case "$MODE" in
     after-install)
         echo KILLALL=false >> $ROOT/etc/nbd-client
+        echo OMITKILL=/dev/nbd0 >> $ROOT/etc/nbd-client
         ;;
 esac
