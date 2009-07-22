@@ -28,3 +28,13 @@ if [ -x /usr/bin/setxkbmap ]; then
         /usr/bin/setxkbmap $kbopts
     fi
 fi
+
+if [ -f /etc/default/console-setup ]; then
+    if [ -n "$XKBVARIANT" ]; then
+        sed -i "s/\(^XKBVARIANT=\"\).*\(\"\)/\1$XKBVARIANT\2/g" /etc/default/console-setup
+    fi
+
+    if [ -n "$XKBLAYOUT" ]; then
+        sed -i "s/\(^XKBLAYOUT=\"\).*\(\"\)/\1$XKBLAYOUT\2/g" /etc/default/console-setup
+    fi
+fi
