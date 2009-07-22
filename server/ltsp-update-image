@@ -85,7 +85,7 @@ CHROOT="${BASE}/${ARCH}"
 #
 
 TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
-TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot"}
+TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
 
 # source config file
 if [ -f /etc/default/ltsp-update-image ]; then
