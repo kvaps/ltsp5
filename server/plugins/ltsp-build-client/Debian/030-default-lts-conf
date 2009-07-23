@@ -4,8 +4,10 @@ case "$MODE" in
         cat <<EOF > $ROOT/etc/lts.conf
 # This is the default lts.conf file for ltsp 5.
 # For more information about valid options please see: 
-# /usr/share/doc/ltsp-client/examples/lts-parameters.txt.gz
-# in the client environment
+# /usr/share/doc/ltsp-client-core/lts-parameters.txt.gz
+# in the client environment or
+# /usr/share/doc/ltsp-server/lts-parameters.txt.gz
+# on the server
 
 [default] 
     LTSP_CONFIG=True
