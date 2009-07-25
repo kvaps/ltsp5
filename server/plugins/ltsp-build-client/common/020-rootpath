@@ -3,7 +3,7 @@ case "$MODE" in
         add_option "purge-chroot" "`eval_gettext "purge exiting LTSP chroot if present"`" "advanced" "false"
         ;;
     before-install)
-        ROOT=$BASE/$CHROOT
+        export ROOT=$BASE/$CHROOT
         if [ -d $ROOT ] ; then
             if [ "true" = "$option_purge_chroot_value" ]; then
                 # wipe it out, so we can try again
