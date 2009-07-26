@@ -28,6 +28,10 @@ case "$MODE" in
                    # generic kernel unknown, select the running kernel
                    KERNEL_VERSION="$(uname -r)"
                    KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_VERSION"
+                   if [ "$HOST_ARCH" != "$ARCH" ]; then
+                        echo "ERROR: unable to determine cross-architecture kernel"
+                        echo "please select kernel with with --kernel-packages"
+                   fi
                    ;;
            esac
            if [ -z "$KERNEL_PACKAGES" ]; then
