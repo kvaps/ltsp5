@@ -35,7 +35,7 @@ case "$MODE" in
 
             # finish up last steps of debootstrap now that the emulator is
             # available inside the chroot
-            LC_ALL=C ltsp-chroot debootstrap/debootstrap --second-stage
+            LC_ALL=C chroot $ROOT debootstrap/debootstrap --second-stage
         fi
         ;;
 esac
