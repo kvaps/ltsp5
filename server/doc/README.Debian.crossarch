@@ -1,0 +1,43 @@
+2009-07-29
+
+it is possible to install alien architectures on Debian systems, by using qemu
+userspace emulation. so far, this has been tested with qemu 0.11.0-rc0,
+building an armel LTSP chroot on an i386 server. other architectures did not
+work at the time of this writing.  it requires using a statically built qemu
+userspace binary for the appropriate architecture, which requires building qemu
+using the --static flag to the configure script. it also requires setting up
+binfmt_misc to set the emulator to use for binaries of that architecture. 
+
+
+to register arm binaries for binfmt-misc:
+
+  apt-get install binfmt-support
+
+  cat << EOF > /usr/share/binfmts/arm
+package qemu
+interpreter /usr/bin/qemu-arm
+flags: OC
+offset 0
+magic \x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00
+mask \xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff
+EOF
+
+  update-binfmts --import arm
+
+
+getting a static qemu binary:
+
+hopefully this will be available in debian itself soon, until then...  i built
+qemu by grabbing a qemu source tarball from http://www.qemu.org/download.html,
+i had to dig around to find the 0.11.0-rc0 pre-release. then grab the debian
+dir from sid's qemu package. edit debian/rules to pass the --static option to
+configure. it needs to have either a qemu-armel-static or qemu-armel binary
+available in /usr/bin.
+
+
+once it's all set up, it's as simple as specifying the architecture, and
+possibly the kernel package:
+
+  ltsp-build-client --arch armel --kernel-packages linux-image-2.6-kirkwood
+
+some architecture-specific configuration of the kernel may be required.
