@@ -1,0 +1,21 @@
+# a number of hacks needed to resolve:  http://bugs.debian.org/537526
+case "$MODE" in
+    after-install)
+        # some versions of pulseaudio need /var/lib/pulse to be present, but
+        # create it dynamically. create the directory so we can bind-mount it.
+        mkdir $ROOT/var/lib/pulse
+
+        # workaround to get pulseaudio to start on thin-clients with only 64MB
+        # of ram.
+        if [ -f "$ROOT/etc/pulse/daemon.conf" ]; then
+            echo 'disable-shm = yes' >> "$ROOT/etc/pulse/daemon.conf"
+            echo 'shm-size-bytes = 65535' >> "$ROOT/etc/pulse/daemon.conf"
+        fi
+
+        # move aside the system.pa, which tries to load hal-based modules, and
+        # dies badly.  it works fine without it.
+        if [ -f "$ROOT/etc/pulse/system.pa" ]; then
+            mv "$ROOT/etc/pulse/system.pa" "$ROOT/etc/pulse/system.pa.ltsp" || true
+        fi
+        ;;
+esac

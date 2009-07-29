@@ -1,7 +1,0 @@
-case "$MODE" in
-    after-install)
-        # some versions of pulseaudio need /var/lib/pulse to be present, but
-        # create it dynamically. create the directory so we can bind-mount it.
-        mkdir $ROOT/var/lib/pulse
-        ;;
-esac
