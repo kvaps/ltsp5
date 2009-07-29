@@ -5,24 +5,30 @@ case "$MODE" in
             # qemu and the appropriate binaries for the specified architecture
             case $ARCH in
                 armel) # tested with qemu 0.11.0-rc0
-                    CROSS_ARCH_EMULATOR=/usr/bin/qemu-arm
+                    CROSS_ARCH_EMULATOR=qemu-arm
                     ;;
                 powerpc) # untested
-                    CROSS_ARCH_EMULATOR=/usr/bin/qemu-ppc
+                    CROSS_ARCH_EMULATOR=qemu-ppc
                     ;;
                 i386)
                     # building i386 on amd64 doesn't require qemu
                     if [ "$HOST_ARCH" != "amd64" ]; then
                         # untested
-                        CROSS_ARCH_EMULATOR=/usr/bin/qemu-i386
+                        CROSS_ARCH_EMULATOR=qemu-i386
                     fi
                     ;;
                 amd64) # untested
-                    CROSS_ARCH_EMULATOR=/usr/bin/qemu-x86_64
+                    CROSS_ARCH_EMULATOR=qemu-x86_64
                     ;;
                 *) echo "WARNING: unknown cross-architecture combination: $ARCH on $HOST_ARCH"
                     ;;
             esac
+            if [ -x "/usr/bin/${CROSS_ARCH_EMULATOR}-static" ]; then
+                # prefer static variants
+                CROSS_ARCH_EMULATOR="/usr/bin/${CROSS_ARCH_EMULATOR}-static"
+            else
+                CROSS_ARCH_EMULATOR="/usr/bin/${CROSS_ARCH_EMULATOR}"
+            fi
         fi
         if [ -n "$CROSS_ARCH_EMULATOR" ] && [ ! -x "$CROSS_ARCH_EMULATOR" ]; then
             echo "WARNING: cross architecture support requested, but binary not installed: $CROSS_ARCH_EMULATOR" 
