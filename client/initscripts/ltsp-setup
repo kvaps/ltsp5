@@ -4,10 +4,10 @@
 #
 ### BEGIN INIT INFO
 # Provides:          ltsp-client-setup
-# Required-Start:    mountvirtfs $local_fs
-# Required-Stop:     mountvirtfs $local_fs
-# Default-Start:     S 1 2 3 4 5
-# Default-Stop:      0 6
+# Required-Start:    mountdevsubfs $local_fs
+# Required-Stop:     
+# Default-Start:     S
+# Default-Stop:      
 # Short-Description: Script for LTSP client initialization
 # Description:
 ### END INIT INFO

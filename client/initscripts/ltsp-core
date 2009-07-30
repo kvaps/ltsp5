@@ -4,10 +4,10 @@
 #
 ### BEGIN INIT INFO
 # Provides:          ltsp-client
-# Required-Start:    ltsp-client-setup $network $syslog
-# Required-Stop:     ltsp-client-setup $network $syslog
+# Required-Start:    ltsp-client-setup $remote_fs $network $syslog
+# Required-Stop:     
 # Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
+# Default-Stop:      
 # Short-Description: Script for LTSP client initialization
 # Description:
 ### END INIT INFO
