@@ -4,7 +4,8 @@
 #
 ### BEGIN INIT INFO
 # Provides:          ltsp-client-setup
-# Required-Start:    mountdevsubfs $local_fs
+# Required-Start:    mountdevsubfs 
+# X-Start-Before:    mountall
 # Required-Stop:     
 # Default-Start:     S
 # Default-Stop:      
