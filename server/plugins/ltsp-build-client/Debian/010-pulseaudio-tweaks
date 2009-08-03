@@ -7,7 +7,7 @@ case "$MODE" in
 
         # workaround to get pulseaudio to start on thin-clients with only 64MB
         # of ram.
-        if [ -f "$ROOT/etc/pulse/daemon.conf" ]; then
+        if [ -f "$ROOT/etc/pulse/daemon.conf" ] && [ "$DIST" != "lenny" ]; then
             echo 'shm-size-bytes = 65535' >> "$ROOT/etc/pulse/daemon.conf"
         fi
 
