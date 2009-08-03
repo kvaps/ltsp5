@@ -43,6 +43,7 @@ ln -sf vmlinuz-$1    /boot/vmlinuz.ltsp
 if [ -f /boot/vmlinuz-generic-$1.img ]; then
   # dracut initrd
   ln -sf initrd-generic-$1.img /boot/initrd.ltsp
+  rm /boot/initrd-$1.img
 else
   ln -sf initrd-$1.img /boot/initrd.ltsp
 fi
