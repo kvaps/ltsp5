@@ -23,7 +23,7 @@ case "$MODE" in
                 *) echo "WARNING: unknown cross-architecture combination: $ARCH on $HOST_ARCH"
                     ;;
             esac
-            if [ -z "$CROSS_ARCH_EMULATOR" ]; the
+            if [ -z "$CROSS_ARCH_EMULATOR" ]; then
                 : # no cross-architecture emulator detected
             elif [ -x "/usr/bin/${CROSS_ARCH_EMULATOR}-static" ]; then
                 # prefer static variants
