@@ -40,11 +40,11 @@ fi
 
 # Symlink vmlinuz.ltsp and initrd.ltsp and set permissions for tftp server
 ln -sf vmlinuz-$1    /boot/vmlinuz.ltsp
-if [ -f /boot/vmlinuz-generic-$1.img ]; then
+if [ -f /boot/initrd-generic-$1.img ]; then
   # dracut initrd
   ln -sf initrd-generic-$1.img /boot/initrd.ltsp
   rm /boot/initrd-$1.img
 else
   ln -sf initrd-$1.img /boot/initrd.ltsp
 fi
-chmod 644 /boot/initrd-$1.img
+chmod 644 /boot/initrd-*$1.img
