@@ -131,6 +131,7 @@ for TFTPDIR in $TFTPDIRS ; do
         rm -f $archpath/System.map-$version
         # Fedora
         rm -f $archpath/initrd-$version.img
+        rm -f $archpath/initrd-generic-$version.img
         rm -f $archpath/elf-$version.img
         rm -f $archpath/wraplinux-nbi-$version.img
         rm -f $archpath/aout-$version.img
