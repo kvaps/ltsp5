@@ -28,7 +28,7 @@ case "$MODE" in
             elif [ -x "/usr/bin/${CROSS_ARCH_EMULATOR}-static" ]; then
                 # prefer static variants
                 CROSS_ARCH_EMULATOR="/usr/bin/${CROSS_ARCH_EMULATOR}-static"
-            elif [ -x /usr/bin/${CROSS_ARCH_EMULATOR}" ]; then
+            elif [ -x "/usr/bin/${CROSS_ARCH_EMULATOR}" ]; then
                 CROSS_ARCH_EMULATOR="/usr/bin/${CROSS_ARCH_EMULATOR}"
             else
                 echo "WARNING: unable to find: $CROSS_ARCH_EMULATOR in /usr/bin"
