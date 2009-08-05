@@ -1,20 +1,27 @@
-dirs    /etc/udev/rules.d/
-dirs    /var/lib/dbus/
+# Already in F12 /etc/rwtab
+empty	/var/log/ConsoleKit/
+empty   /var/lib/dbus/
+empty	/var/cache/hald/
+empty	/var/lib/pulse/
+files   /.viminfo
+files	/etc/alsa/asound.state
+# Already in F11 /etc/rwtab
 dirs    /var/lib/xkb/
+
+# BUG: Directories that need to be writable but contain files we don't want to disappear
+# (Although somehow this wasn't harmful to LTSP in the past?)
+dirs    /etc/udev/rules.d/
+
+# LTSP specific
 dirs    /var/cache/ldm/
 dirs    /home
-dirs	/var/cache/hald/
-dirs	/var/lib/pulse/
-dirs    /var/cache/ltsp-localapps/
-
-files	/etc/lts.conf
+empty	/var/cache/ltsp-localapps/
+empty	/root
+files   /etc/lts.conf
 files   /etc/X11/xorg.conf
-files   /.viminfo
 files   /etc/passwd
 files   /etc/group
-files   /etc/alsa/asound.state
-files   /etc/asound.state
 files   /etc/localtime
 files   /etc/cups/client.conf
-
-empty   /root
+# Old versions of Fedora only
+files	/etc/asound.state
