@@ -13,7 +13,7 @@ tmpfs_size=10m
 
 # tmpfs/bind directories that get mounted with only directory structure
 # preserved
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hal"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hald"
 
 # tmpfs/bind directories that get mounted with directory structure and data
 # copied
