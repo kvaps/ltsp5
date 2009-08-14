@@ -17,7 +17,12 @@ case "$MODE" in
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
             MODULE_VERSION=${KERNEL_VERSION}
             test -n "$KERNEL_ARCH" && MODULE_VERSION="${MODULE_VERSION}-${KERNEL_ARCH}"
-            for fs in aufs squashfs ; do
+            if [ "$DIST" = "lenny" ]; then
+                module_packages="aufs squashfs"
+            else
+                module_packages="aufs"
+            fi
+            for fs in $module_packages ; do
                 # add appropriate module packages to list of packages to be installed
                 LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${MODULE_VERSION}"
             done
