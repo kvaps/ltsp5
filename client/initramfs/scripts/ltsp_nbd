@@ -67,7 +67,7 @@ mountroot()
     mount -t tmpfs tmpfs /cow
 
     # mount the readonly root
-    if nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 -persist ; then
+    if nbd-client ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} /dev/nbd0 ; then
         eval $(fstype /dev/nbd0)
         if [ -z "$FSTYPE" ]; then
             echo "Warning: unable to detect filesystem, assuming squashfs."
