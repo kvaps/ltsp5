@@ -170,7 +170,8 @@ case "$1" in
             # Tell the control center that we are booting and get lts.conf
             eval $(getltscfg-cluster -a -l refresh) || true
         fi
-        monitor_nbd&
+        which start-stop-daemon >/dev/null 2>/dev/null && \
+            start-stop-daemon --start --background --quiet --exec /usr/sbin/monitor_nbd || true
         load_modules || true
         configure_resolver || true
         set_time || true
