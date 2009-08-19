@@ -125,10 +125,7 @@ pre_install_portage_tree() {
 	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<- EOF
 	sys-apps/openrc
 	sys-apps/baselayout
-	sys-fs/udev
 	sys-apps/sysvinit
-	# stable fails on newer kernels
-	~sys-fs/fuse-2.7.3
 	# needed for local apps
 	~sys-fs/sshfs-fuse-2.1
 	EOF
