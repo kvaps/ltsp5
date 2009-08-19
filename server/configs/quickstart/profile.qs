@@ -64,7 +64,7 @@ tree_type none
 # TODO: do these
 #kernel_config_uri
 #kernel_sources (defaults to gentoo sources)
-genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
+genkernel_opts --makeopts="${MAKEOPTS}"
 
 post_unpack_stage_tarball() {
 	if [ -n "$LOCALE" ]; then
@@ -77,15 +77,18 @@ post_unpack_stage_tarball() {
 	fi
 }
 pre_install_portage_tree() {
+	# bind mounting portage
 	spawn "mkdir ${chroot_dir}/usr/portage"
 	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
 	echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
 
+	# bind mounting binary package dir
 	spawn "mkdir -p /usr/portage/packages/$ARCH"
 	spawn_chroot "mkdir -p /usr/portage/packages"
 	spawn "mount /usr/portage/packages/$ARCH ${chroot_dir}/usr/portage/packages -o bind"
 	echo "${chroot_dir}/usr/portage/packages" >> /tmp/install.umount
 
+	# bind mounting portage local, for overlay packages
 	# TODO: remove this mounting when the ltsp ebuilds are in the tree
 	spawn "mkdir ${chroot_dir}/usr/local/portage"
 	spawn "mount /usr/local/portage ${chroot_dir}/usr/local/portage -o bind"
@@ -98,8 +101,7 @@ pre_install_portage_tree() {
 	# TODO: allow overriding of all these variables
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
-	USE="alsa svg xml X -cups"
-	FEATURES="ccache"
+	USE="alsa pulseaudio svg xml X -cups"
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
 	# TODO: don't add this by default
@@ -109,9 +111,8 @@ pre_install_portage_tree() {
 	cat > ${chroot_dir}/etc/fstab <<- EOF
 	# DO NOT DELETE
 	EOF
-   
-	# TODO: copy the preset version of /etc/portage from elsewhere
-	#	   instead of making it here
+
+	# TODO: copy this from elsewhere instead of making it here.
 	spawn "mkdir -p ${chroot_dir}/etc/portage/package.keywords"
 
 	cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<- EOF
@@ -135,19 +136,29 @@ pre_install_portage_tree() {
 
 pre_build_kernel() {
 	# FIXME: upgrade to porage 2.2 to resolve blockers since 2008.0
-	spawn_chroot "emerge -1 portage"
+	spawn_chroot "emerge portage"
 
 	export CONFIG_PROTECT_MASK=""
-	export CCACHE_DIR="/var/tmp/ccache"
-	export CCACHE_SIZE="4G"
 
-	spawn_chroot "mkdir -p $TMP"
+	if [[ $CCACHE == "true" ]]; then
 
-	spawn_chroot "emerge ccache"
-	spawn_chroot "mkdir -p /var/tmp/ccache"
-	spawn "mkdir -p /var/tmp/ccache/${ARCH}"
-	spawn "mount /var/tmp/ccache/${ARCH} ${chroot_dir}/var/tmp/ccache -o bind"
-	echo "${chroot_dir}/var/tmp/ccache" >> /tmp/install.umount
+		#spawn_chroot "mkdir -p $TMP"
+
+		spawn_chroot "emerge ccache"
+		spawn_chroot "mkdir -p /var/tmp/ccache"
+		spawn "mkdir -p /var/tmp/ccache/${ARCH}"
+		spawn "mount /var/tmp/ccache/${ARCH} ${chroot_dir}/var/tmp/ccache -o bind"
+		echo "${chroot_dir}/var/tmp/ccache" >> /tmp/install.umount
+
+		cat >> ${chroot_dir}/etc/make.conf <<- EOF
+		FEATURES="ccache"
+		EOF
+
+		export CCACHE_DIR="/var/tmp/ccache"
+		export CCACHE_SIZE="4G"
+
+		genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
+	fi
 }
 
 pre_install_extra_packages() {
