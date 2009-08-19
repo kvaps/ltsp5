@@ -34,9 +34,18 @@ case "$MODE" in
     install)
         printf "`eval_gettext "Installing into: %s"`\n" $ROOT
         
+        # TODO: figure out why we need to set ROOT=""
+        # ROOT is somehow used in emerge, causing emerged installs
+        # to go into /chroot/chroot, resetting until quickstart is done.
+        TEMPROOT=${ROOT}        
+        ROOT=""
+
         PACKAGES="${PACKAGES}" STAGE_URI="${STAGE_URI}" MIRRORS="${MIRRORS}" \
         MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" \
         ARCH="${ARCH}" NAME="${CHROOT}" \
         quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
+        # And reset to the original value
+        ROOT=${TEMPROOT}
+
     ;;
 esac
