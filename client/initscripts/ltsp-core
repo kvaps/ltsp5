@@ -4,7 +4,7 @@
 #
 ### BEGIN INIT INFO
 # Provides:          ltsp-client
-# Required-Start:    ltsp-client-setup hal $remote_fs $network $syslog
+# Required-Start:    ltsp-client-setup $remote_fs $network $syslog
 # Required-Stop:     
 # Default-Start:     2 3 4 5
 # Default-Stop:      
