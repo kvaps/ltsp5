@@ -159,7 +159,7 @@ set_sync_ranges(){
     # beware, Xorg -configure sometimes writes these values in the bootstrapped file,
     # so we need replacement code as well
     if [ -n "$X_HORZSYNC" ] && [ -n "$X_VERTREFRESH" ]; then
-        if [ -z "$(grep HorizSync $INPUT_FILE)"] && [ -z "$(grep VertRefresh $INPUT_FILE)"];then
+        if [ -z "$(grep '^[[:space:]]*HorizSync' $INPUT_FILE)" ] && [ -z "$(grep '^[[:space:]]*VertRefresh' $INPUT_FILE)" ]; then
             sed -i -e '/Section "Monitor"/,3aVertRefresh\t'$X_VERTREFRESH'\nHorizSync\t'$X_HORZSYNC'' $INPUT_FILE
         else
             sed -i -e 's/^\s*VertRefresh.*$/\tVertRefresh\t'$X_VERTREFRESH'/' $INPUT_FILE
