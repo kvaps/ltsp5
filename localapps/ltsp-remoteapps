@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# FIXME: It seems we need to be root to access a socket, so using sudo for now
+# FIXME: You need that in /etc/sudoers: ALL ALL=(ALL) NOPASSWD:NOEXEC:/usr/bin/ltsp-remoteapp
+
+# FIXME: In order to work LDM_SERVER, LDM_SOCKET and LDM_DISPLAY must be in the environment
+# FIXME: We should find a better way to store the file when it isn't on the server
+if [ "$USER" != "root" ]; then
+    sudo -E ltsp-remoteapp "$*"
+else
+    file=$*
+    if [ "$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} ls -1 \"$file\" 2> /dev/zero)" != "$file" ]; then
+        mkdir -p $HOME/.tmp
+        cp "$file" $HOME/.tmp/$(basename "$file")
+        file=$HOME/.tmp/$(basename "$file")
+        remove=1
+    fi
+    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "DISPLAY=${LDM_DISPLAY} xdg-open \"$file\""
+    [ -n "$remove" ] && rm $file
+fi
