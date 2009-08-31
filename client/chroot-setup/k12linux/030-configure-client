@@ -43,7 +43,13 @@ touch /etc/asound.state
 sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
 
 # Silence /etc/mtab* removal errors
-sed -i 's/^rm -f \/etc\/mtab/#rm -f \/etc\/mtab/' /etc/rc.sysinit
+sed -i 's/^rm -f \/etc\/mtab/#rm -f \/etc\/mtab/' /etc/rc.d/rc.sysinit
+
+# Fix rc.sysinit symlink broken by earlier ltsp-client (pre F12)
+if [ -f /etc/rc.sysinit ]; then
+    rm -f /etc/rc.sysinit
+    ln -sf rc.d/rc.sysinit /etc/rc.sysinit
+fi
 
 # Silence local filesystems mount errors during bootup
 sed -i '/^sysfs/d' /etc/fstab
