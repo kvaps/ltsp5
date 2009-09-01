@@ -20,7 +20,7 @@ start_sound() {
                 # Detect method, 0.9.16+ uses module-udev-detect instead of module-detect
                 unset PULSE_DETECT
                 case $(pulseaudio --version |awk {'print $2'}) in
-                    0.9.1[6-9]|0.9.[2-9][0-9]*) PULSE_DETECT=module-udev-detect ;;
+                    0.9.1[6-9]*|0.9.[2-9][0-9]*) PULSE_DETECT=module-udev-detect ;;
                     0.[0-9].*) PULSE_DETECT=module-detect ;;
                     *) PULSE_DETECT=module-udev-detect ;;
                 esac
