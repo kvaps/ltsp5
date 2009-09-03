@@ -176,6 +176,12 @@ configure_printer() {
     done
 }
 
+configure_scanner() {
+    if boolean_is_true "$SCANNER" ; then
+        saned -a
+    fi
+}
+
 configure_serial_mouse() {
       if [ -n "$X_MOUSE_DEVICE" ] && \
           [ -n "$X_MOUSE_PROTOCOL" ] && \
