@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1.84\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-06 10:59-0700\n"
+"POT-Creation-Date: 2009-09-06 12:58-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,7 +127,7 @@ msgstr ""
 
 #: ../server/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
-msgid "purge exiting LTSP chroot if present"
+msgid "purge existing LTSP chroot if present"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
