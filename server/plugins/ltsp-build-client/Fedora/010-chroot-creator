@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #
 # install a LTSP chroot to /opt/ltsp/$ARCH
 # requires livecd-tools-015 or higher

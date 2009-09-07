@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # install a LTSP chroot to /srv/kiwi-ltsp-nfs for nfs and creates squashfs image for nbdroot in /srv/kiwi-ltsp
 # requires kiwi-desc-ltsp package installed
