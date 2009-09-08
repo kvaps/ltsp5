@@ -45,6 +45,9 @@ export X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
 export LOCALDEV=${LOCALDEV:-"$LOCAL_STORAGE"}
 export X_CONF=${X_CONF:-"$XF86CONFIG_FILE"}
 
+# work around common typo with horizontal sync variables
+export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
+
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     # check for NBD devices
