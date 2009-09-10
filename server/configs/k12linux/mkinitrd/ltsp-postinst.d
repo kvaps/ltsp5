@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ -f /boot/initrd-generic-$1.img ]; then
-    INITRD=initrd-generic-$1.img
+if [ -f /boot/initramfs-$1.img ]; then
+    INITRD=initramfs-$1.img
     rm -f /boot/initrd-$1.img
 else
     INITRD=initrd-$1.img

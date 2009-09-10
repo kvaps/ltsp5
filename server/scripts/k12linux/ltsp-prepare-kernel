@@ -31,8 +31,8 @@ chmod 644 $ROOT/boot/initrd*
 # Symlink kernel and initrd
 cd $ROOT/boot
 ln -sf vmlinuz-$kernelversion     vmlinuz.ltsp
-if [ -e initrd-generic-$kernelversion.img ]; then
-    ln -sf  initrd-generic-$kernelversion.img initrd.ltsp
+if [ -e initramfs-$kernelversion.img ]; then
+    ln -sf  initramfs-$kernelversion.img initrd.ltsp
 else
     ln -sf  initrd-$kernelversion.img initrd.ltsp
 fi
