@@ -2,6 +2,7 @@
 dejavu-sans-fonts
 dejavu-sans-mono-fonts
 dejavu-serif-fonts
+plymouth-theme-charge
 %end
 
 %post
