@@ -47,4 +47,4 @@ fi
 # Symlink vmlinuz.ltsp and initrd.ltsp and set permissions for tftp server
 ln -sf vmlinuz-$1    /boot/vmlinuz.ltsp
 ln -sf $INITRD /boot/initrd.ltsp
-chmod 644 /boot/initrd-*$1.img
+chmod 644 /boot/$INITRD
