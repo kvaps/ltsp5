@@ -1,24 +1,41 @@
-# example configuration for using dnsmasq as a dhcp server.  
+# Example configuration for using dnsmasq as a dhcp and tftp server.  
+# Install the dnsmasq package and copy this file to /etc/dnsmasq.d/ltsp.conf
+# You may need to disable the tftp options if another tftp server is installed.
 
-# install the dnsmasq package
-# copy this file to /etc/ltsp/dhcpd-dnsmasq
-# add the following line to /etc/dnsmasq.conf:
-# conf-file=/etc/ltsp/dhcpd-dnsmasq
+# Don't function as a DNS server
+port=0
+
+# Uncomment the following to log DHCP transactions
+#log-dhcp
 
 # ip ranges to hand out
 dhcp-range=192.168.0.20,192.168.0.250,1h
 
-# rootpath option
+# If another DHCP server is present on the network, you may use a proxy range
+# instead. This makes dnsmasq provide boot information but not IP leases.
+# (needs dnsmasq 2.48+)
+#dhcp-range=192.168.0.0,proxy
+
+# Rootpath option, for NFS
 dhcp-option=17,/opt/ltsp/i386
 
 # define common netboot types 
 dhcp-vendorclass=etherboot,Etherboot
 dhcp-vendorclass=pxe,PXEClient
+dhcp-vendorclass=ltsp,"Linux ipconfig"
 
-# Set the boot filename for BOOTP. 
+# Set the boot filename depending on the client vendor identifier
 dhcp-boot=net:pxe,/ltsp/i386/pxelinux.0
 dhcp-boot=net:etherboot,/ltsp/i386/nbi.img
+dhcp-boot=net:ltsp,/ltsp/i386/lts.conf
 
-# enable the TFTP server (needs dnsmasq 2.36+)
+# Kill multicast
+dhcp-option=vendor:pxe,6,2b
+
+# Disable re-use of the DHCP servername and filename fields as extra
+# option space. That's to avoid confusing some old or broken DHCP clients.
+dhcp-no-override
+
+# enable the TFTP server (needs dnsmasq 2.36+). 
 enable-tftp
 tftp-root=/var/lib/tftpboot/
