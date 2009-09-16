@@ -132,9 +132,7 @@ MAKEDEV
 mcstrans
 mesa-libGL
 mingetty
-mkinitrd
 module-init-tools
-nash
 nbd
 nc
 ncurses
