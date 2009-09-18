@@ -7,8 +7,7 @@ if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
     (echo -n "$LDM_SERVER " ; echo "getkey" | nc $LDM_SERVER 8001) > /root/.ssh/known_hosts
 
     if ( boolean_is_true "$LDM_AUTOLOGIN" || boolean_is_true "$LDM_GUESTLOGIN" ) && [ -z "$LDM_USERNAME" ]; then
-        ssh-keygen -b 768 -C root@ltsp -t rsa -N "" -f /root/.ssh/id_rsa > /dev/null
-        login=$(echo "`cat /root/.ssh/id_rsa.pub`" | nc $LDM_SERVER 8001 | awk '{print $2}')
+        login=$(echo "username" | nc $LDM_SERVER 8001 | awk '{print $2}')
         export LDM_USERNAME=$login
     fi
 fi
