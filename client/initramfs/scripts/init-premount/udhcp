@@ -164,7 +164,7 @@ interfaces=${interface:-$interfaces}
 while [ -z "$configured" ]; do
     for i in $interfaces; do    # Make a DHCP request for each interface
         echo "DHCP request for $i..."
-        if udhcpc -n -s /tmp/dhcp-script.sh -i $i $clientid_param $hostname_param $ip_param > /dev/null; then
+        if udhcpc -n -c '' -s /tmp/dhcp-script.sh -i $i $clientid_param $hostname_param $ip_param > /dev/null; then
             configured="true"
             break
         fi
