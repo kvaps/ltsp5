@@ -25,4 +25,4 @@
 
 # nbd-server wrapper that serves an ltsp squashfs image
 # start the blockdevice server
-PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null > /dev/null 2>&1
+PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null -a 300 > /dev/null 2>&1
