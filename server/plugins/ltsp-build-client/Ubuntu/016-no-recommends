@@ -1,0 +1,14 @@
+case "$MODE" in
+    finalization)
+        if [ -n "$(echo ${APT_GET_OPTS} | grep '\-\-no\-install\-recommends')" ]; then
+            mkdir -p $ROOT/etc/apt/apt.conf.d/
+            (
+            cat << EOF
+APT {
+    Install-Recommends "false";
+};
+EOF
+            ) > $ROOT/etc/apt/apt.conf.d/02ltsp-noinstallrecommends
+        fi
+    ;;
+esac
