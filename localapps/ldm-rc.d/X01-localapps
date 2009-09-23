@@ -157,7 +157,4 @@ if boolean_is_true "$LOCAL_APPS"; then
         fi
     fi
 
-    #Launch the ltsp-localappsd to handle the apps
-    ltsp-localappsd &
-
 fi

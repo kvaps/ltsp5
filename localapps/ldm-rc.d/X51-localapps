@@ -1,0 +1,21 @@
+#
+# The following is a script to set up local apps support on LTSP through LDM
+#
+# The presumption is that the environment is set up such that NSS will look
+# at extrafiles, ie. additional local files for passwd and group beyond
+# those found in /etc.
+#
+# This will enable us to easily bypass the need for setting up local user
+# authentication, and instead leverage the authentication already set up on
+# the server.
+
+# Start ltsp-localappsd now so we can run the localapp with the right locale
+
+if boolean_is_true "$LOCAL_APPS"; then
+    if [ -n "$LDM_LANGUAGE" ]; then
+        MY_LANG="LC_ALL=$LDM_LANGUAGE LANGUAGE=$LDM_LANGUAGE LANG=$LDM_LANGUAGE"
+    fi
+
+    #Launch the ltsp-localappsd to handle the apps
+    ltsp-localappsd &
+fi
