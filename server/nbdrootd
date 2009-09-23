@@ -25,4 +25,8 @@
 
 # nbd-server wrapper that serves an ltsp squashfs image
 # start the blockdevice server
-PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null -a 7200 > /dev/null 2>&1
+
+# First parameter is the image file, second is the delay after which 
+# the connection is killed (default to 2 hours)
+
+PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null -a ${2:-"7200"} > /dev/null 2>&1
