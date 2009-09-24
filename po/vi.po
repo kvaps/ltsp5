@@ -1,26 +1,83 @@
 # Vietnamese translation for LTSP.
-# Copyright © 2008 Free Software Foundation, Inc.
-# Clytie Siddall <clytie@riverland.net.au>, 2008.
+# Copyright © 2009 Free Software Foundation, Inc.
+# Clytie Siddall <clytie@riverland.net.au>, 2008-2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.0.40~bzr20080121-2\n"
+"Project-Id-Version: ltsp 5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 22:44-0500\n"
-"PO-Revision-Date: 2008-02-02 15:01+1030\n"
+"POT-Creation-Date: 2009-09-06 12:58-0700\n"
+"PO-Revision-Date: 2009-09-24 19:36+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: LocFactoryEditor 1.7b1\n"
+"X-Generator: LocFactoryEditor 1.8\n"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#: ../server/configs/ALTLinux/ltsp-login.sh:30
+#: ../server/configs/ALTLinux/ltsp-login.sh:33
+#: ../server/configs/ALTLinux/ltsp-login.sh:40
+#: ../server/configs/ALTLinux/ltsp-login.sh:50
 #, sh-format
-msgid "Set the distribution to be used for install"
-msgstr "Đặt bản phân phối cần dùng để cài đặt"
+msgid "Login Error"
+msgstr "Lỗi đăng nhập"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:31
+#: ../server/configs/ALTLinux/ltsp-login.sh:34
+#: ../server/configs/ALTLinux/ltsp-login.sh:44
+#: ../server/configs/ALTLinux/ltsp-login.sh:52
+#: ../server/configs/ALTLinux/ltsp-login.sh:62
+#: ../server/configs/ALTLinux/ltsp-login.sh:81
+#: ../server/configs/ALTLinux/ltsp-login.sh:84
+#: ../server/configs/ALTLinux/ltsp-login.sh:95
+#: ../server/configs/ALTLinux/ltsp-login.sh:105
+#: ../server/configs/ALTLinux/ltsp-login.sh:115
+#, sh-format
+msgid "User"
+msgstr "Người dùng"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:31
+#: ../server/configs/ALTLinux/ltsp-login.sh:34
+#: ../server/configs/ALTLinux/ltsp-login.sh:44
+#: ../server/configs/ALTLinux/ltsp-login.sh:52
+#: ../server/configs/ALTLinux/ltsp-login.sh:62
+#: ../server/configs/ALTLinux/ltsp-login.sh:81
+#: ../server/configs/ALTLinux/ltsp-login.sh:84
+#: ../server/configs/ALTLinux/ltsp-login.sh:95
+#: ../server/configs/ALTLinux/ltsp-login.sh:105
+#: ../server/configs/ALTLinux/ltsp-login.sh:115
+#, sh-format
+msgid "already logged in!"
+msgstr "đã đăng nhập !"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:34
+#: ../server/configs/ALTLinux/ltsp-login.sh:43
+#: ../server/configs/ALTLinux/ltsp-login.sh:84
+#: ../server/configs/ALTLinux/ltsp-login.sh:93
+#: ../server/configs/ALTLinux/ltsp-login.sh:117
+#, sh-format
+msgid "Continue"
+msgstr "Tiếp tục"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:80
+#: ../server/configs/ALTLinux/ltsp-login.sh:83
+#: ../server/configs/ALTLinux/ltsp-login.sh:90
+#: ../server/configs/ALTLinux/ltsp-login.sh:103
+#, sh-format
+msgid "Login Warning"
+msgstr "Cảnh báo Đăng nhập"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:94
+#, sh-format
+msgid "Cancel"
+msgstr "Thôi"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "Đặt thư mục cài đặt cơ bản mặc định"
 
 #: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
@@ -28,55 +85,56 @@ msgstr "Đặt bản phân phối cần dùng để cài đặt"
 msgid "Load a user specific configuration file"
 msgstr "Nạp một tập tin cấu hình đặc trưng cho người dùng"
 
-#: ../server/plugins/ltsp-build-client/common/010-set-base:3
-#, sh-format
-msgid "Set the default base install directory"
-msgstr "Đặt thư mục cài đặt cơ bản mặc định"
-
-#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
-#, sh-format
-msgid "Set the name of the chroot."
-msgstr "Đặt tên của chroot."
-
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:9
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:9
-#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #, sh-format
 msgid "set the target architecture"
 msgstr "đặt kiến trúc đích"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:42
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:22
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:33
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:44
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr "LỖI: « --arch %s » được gọi đối với kiến trúc không được hỗ trợ : %s"
+msgstr "LỖI: « --arch %s » được gọi trên kiến trúc không được hỗ trợ : %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:49
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:30
-#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:32
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
+#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 "LỖI: kiến trúc không được hỗ trợ. Hãy kiểm tra lại đối số « --arch »: %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:50
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:31
-#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:33
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
+#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
-msgstr "       các giá trị được hỗ trợ là: %s"
+msgstr "       các giá trị được hỗ trợ : %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #, sh-format
-msgid "exclude packages from the initial chroot"
-msgstr "loại trừ các gói khỏi chroot đầu tiên"
+msgid "Set the distribution to be used for install"
+msgstr "Đặt bản phân phối cần dùng để cài đặt"
+
+#: ../server/plugins/ltsp-build-client/common/020-rootpath:3
+#, sh-format
+msgid "purge existing LTSP chroot if present"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#, sh-format
+msgid "Set the name of the chroot."
+msgstr "Đặt tên của chroot."
 
 #: ../server/plugins/ltsp-build-client/common/095-rootpass:3
 #: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
@@ -84,100 +142,204 @@ msgstr "loại trừ các gói khỏi chroot đầu tiên"
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "nhắc đặt mật khẩu người chủ (giá trị mặc định là « bị tắt »)"
 
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "loại trừ các gói khỏi chroot đầu tiên"
+
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "Enable debug support"
 msgstr "Bật hỗ trợ chức năng gỡ lỗi"
 
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
+#, sh-format
+msgid "Path to Quickstart profile"
+msgstr "Đường dẫn đến hồ sơ Khởi Chạy Nhanh"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
+#, sh-format
+msgid "Debug Quickstart"
+msgstr "Gỡ lỗi Khởi Chạy Nhanh"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
+#, sh-format
+msgid "Show external command output"
+msgstr "Hiện kết xuất lệnh ngoài"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
+#, sh-format
+msgid "Get profile from a Quickstart server"
+msgstr "Lấy hồ sơ từ máy phục vụ Khởi Chạy Nhanh"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:12
+#, sh-format
+msgid "Manual Quickstart: %s"
+msgstr "Khởi Chạy Nhanh bằng tay: %s"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:15
+#, sh-format
+msgid "Default Quickstart profile: %s"
+msgstr "Hồ sơ Khởi Chạy Nhanh mặc định: %s"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:19
+#, sh-format
+msgid "ERROR: %s does not exist"
+msgstr "LỖI: %s không tồn tại"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:35
+#, sh-format
+msgid "Installing into: %s"
+msgstr "Đang cài đặt vào : %s"
+
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
 msgid "Stage 3 URI"
-msgstr ""
+msgstr "URI giai đoạn 3"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
 msgid "Set the number of parallel build processes"
-msgstr ""
+msgstr "Đặt số các tiến trình xây dựng chạy song song"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set extra mirror locations (space-separated)"
-msgstr "Đặt địa chỉ của máy nhân bản"
+msgstr "Đặt địa chỉ máy nhân bản bổ sung (định giới bằng dấu cách)"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
-#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #, sh-format
 msgid "Set the default locale"
 msgstr "Đặt miền địa phương mặc định"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:7
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of extra packages to install as part of the initial installation."
 msgstr ""
+"danh sách các gói bổ sung cần cài đặt như là phần của tiến trình cài đặt đầu "
+"tiên."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"GHI CHÚ : đang thêm bản phát hành mặc định và các thành phần vào máy nhân "
+"bản bảo mật:"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
+#, sh-format
+msgid "Enable LTSP-Cluster"
+msgstr "Bật LTSP-Cluster"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
+#, sh-format
+msgid "force to skip the squashfs build (for debian-installer)."
+msgstr "ép buộc bỏ qua tiến trình xây dựng squashfs (cho debian-installer)."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#, sh-format
+msgid "a simple webkiosk mode."
+msgstr "một chế độ truy cập hạn Web"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
+#, sh-format
+msgid "use the servers sources.list instead of generating one"
+msgstr ""
+"dùng danh sách các nguồn (sources.list) của máy phục vụ, thay vì tạo ra một "
+"danh sách riêng"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
+#, sh-format
+msgid "Set the i18n langs"
+msgstr "Đặt các ngôn ngữ quốc tế hoá"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "bảo tồn vùng nhớ tạm các tập tin gói đã tải về"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
+#, sh-format
+msgid "set the kernel modules packages to install."
+msgstr "đặt các gói mô-đun hạt nhân cần cài đặt."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Đặt địa chỉ của máy nhân bản"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "thêm một máy nhân bản, mà có mức ưu tiên cao hơn máy nhân bản mặc định"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr ""
+"thêm một máy nhân bản, mà có mức ưu tiên thấp hơn máy nhân bản mặc định"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr "thêm một máy nhân bản bảo mật"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed."
+msgstr ""
+"đặt danh sách các gói cần cài đặt sau khi chạy xong tiến trình cài đặt cơ "
+"bản (base-install)"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
+#, sh-format
+msgid "Enable progress reporting"
+msgstr "Bật thông báo về tiến hành"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
+#, sh-format
+msgid "Print stage times (seconds)"
+msgstr "In ra thời gian chạy giai đoạn"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
+#, sh-format
+msgid "Draw progress bar"
+msgstr "Vẽ thanh tiến hành"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
+#, sh-format
+msgid "set the kernel package to install."
+msgstr "đặt gói hạt nhân cần cài đặt."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation."
+msgstr ""
 "danh sách các gói cần cài đặt như là phần của tiến trình cài đặt cuối cùng."
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
 #, sh-format
-msgid "Path to Quickstart profile"
-msgstr ""
+msgid "enable serial console"
+msgstr "bật bàn giao tiếp nối tiếp"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
-msgid "Debug Quickstart"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, sh-format
-msgid "Show external command output"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, sh-format
-msgid "Get profile from a Quickstart server"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:12
-#, sh-format
-msgid "Manual Quickstart: %s"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:15
-#, sh-format
-msgid "Default Quickstart profile: %s"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:19
-#, sh-format
-msgid "ERROR: %s does not exist"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:35
-#, sh-format
-msgid "Installing into: %s"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
-#, sh-format
-msgid "mounts CDROM before installation"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
-#, sh-format
-msgid "distribution to set up apt pinning"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
-#, fuzzy, sh-format
-msgid "list of packages to install from the pinned distribution"
-msgstr ""
-"danh sách các gói cần cài đặt như là phần của tiến trình cài đặt cuối cùng."
-
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, sh-format
-msgid "set the list of kernel packages to install."
-msgstr "đặt danh sách các gói hạt nhân cần cài đặt."
+msgid "Enabling serial console..."
+msgstr "Đang bật bàn giao tiếp nối tiếp..."
 
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -185,128 +347,25 @@ msgid "include the listed keys in the apt keyring"
 msgstr "kèm thêm các khoá đã liệt kê trong vòng khoá apt"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "mount package cache dir from server"
-msgstr "sao chép các gói apt từ máy phục vụ"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
-#, sh-format
-msgid "Set the mirror location"
-msgstr "Đặt địa chỉ của máy nhân bản"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
-#, sh-format
-msgid "add a mirror, which takes priority over the default mirror"
-msgstr "thêm một máy nhân bản, mà có mức ưu tiên cao hơn máy nhân bản mặc định"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
-#, sh-format
-msgid "add a mirror, with lower priority than the default mirror"
-msgstr ""
-"thêm một máy nhân bản, mà có mức ưu tiên thấp hơn máy nhân bản mặc định"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
-#, sh-format
-msgid "add a security mirror"
-msgstr "thêm một máy nhân bản bảo mật"
-
-#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/090-clean-package-cache:3
-#, sh-format
-msgid "keep cache of downloaded package files"
-msgstr "bảo tồn vùng nhớ tạm các tập tin gói đã tải về"
-
-#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
-#, sh-format
-msgid "create ext2 image for use with NBD"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:4
-#, sh-format
-msgid "create image for use with NBD of the specified filesystem"
-msgstr ""
+msgstr "gắn thư mục nhớ tạm gói từ máy phục vụ"
 
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD."
+msgstr "tạo ảnh squashfs để dùng với NBD."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
 msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
-#, sh-format
-msgid "enable serial console"
-msgstr "bật bàn giao tiếp nối tiếp"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
-#, sh-format
-msgid "Enabling serial console..."
-msgstr "Đang bật bàn giao tiếp nối tiếp..."
-
-#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#, sh-format
-msgid "a simple webkiosk mode."
-msgstr "một chế độ truy cập hạn Web"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
-#, sh-format
-msgid "enable popularity-contest in the chroot"
-msgstr ""
-"bật chức năng thông báo các gói đã cài đặt (popularity-contest) trong chroot"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
-#, sh-format
-msgid "Enabling popularity contest..."
-msgstr ""
-"Đang bật chức năng thông báo các gói đã cài đặt (popularity-contest)..."
-
-#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
-#, sh-format
-msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr "GHI CHÚ : đang tắt nguồn APT bảo mật cho sid (nó không tồn tại)."
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
-#, sh-format
-msgid "Set the components to be used in mirror"
-msgstr "Đặt các thành phần cần dùng khi nhân bản"
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, sh-format
-msgid "allow unsigned packages during install."
-msgstr "cho phép các gói không có chữ ký trong khi cài đặt."
-
-#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-early-packages:3
-#, sh-format
-msgid "set the list of packages to install after base-install is completed."
-msgstr ""
-"đặt danh sách các gói cần cài đặt sau khi chạy xong tiến trình cài đặt cơ "
-"bản (base-install)"
+"nạp vào chroot chức năng chèn sẵn dữ liệu cấu hình debconf sau khi cài đặt"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
 msgstr "sao chép các gói apt từ máy phục vụ"
-
-#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-late-packages:3
-#, sh-format
-msgid "list of packages to install as part of the final installation."
-msgstr ""
-"danh sách các gói cần cài đặt như là phần của tiến trình cài đặt cuối cùng."
-
-#: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, fuzzy, sh-format
-msgid "skip upgrade of installed packages."
-msgstr "bảo tồn vùng nhớ tạm các tập tin gói đã tải về"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
@@ -323,197 +382,134 @@ msgstr "Đang sao chép các gói"
 msgid "done."
 msgstr "hoàn tất."
 
-#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
 #, sh-format
-msgid "load debconf seeding in the chroot after install"
-msgstr ""
-"nạp vào chroot chức năng chèn sẵn dữ liệu cấu hình debconf sau khi cài đặt"
+msgid "skip upgrade of installed packages."
+msgstr "bỏ qua bước nâng cấp các gói đã cài đặt."
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install."
+msgstr "đặt danh sách các gói hạt nhân cần cài đặt."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr "GHI CHÚ : đang tắt nguồn APT bảo mật cho sid (nó không tồn tại)."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install."
+msgstr "cho phép các gói không ký trong khi cài đặt."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "Set the components to be used in mirror"
+msgstr "Đặt các thành phần cần dùng khi nhân bản"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
+#, sh-format
+msgid "create ext2 image for use with NBD"
+msgstr "tạo ảnh ext2 để dùng với NBD."
+
+#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:4
+#, sh-format
+msgid "create image for use with NBD of the specified filesystem"
+msgstr "tạo ảnh hệ thống tập tin đưa ra để dùng với NBD"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
 msgid "use specified http proxy"
-msgstr ""
+msgstr "dùng ủy nhiệm HTTP đưa ra"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:4
 #, sh-format
 msgid "do not autodetect apt proxy configuration"
-msgstr ""
+msgstr "không tự động phát hiện cấu hình ủy nhiệm apt"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
-msgid "NOTE: adding default dist and components to security mirror:"
+msgid "distribution to set up apt pinning"
+msgstr "bản phân phối để thiết lập ghim apt"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
+#, sh-format
+msgid "list of packages to install from the pinned distribution"
+msgstr "danh sách các gói cần cài đặt từ bản phân phối đã ghim"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
 msgstr ""
-"GHI CHÚ : đang thêm vào máy nhân bản bảo mật bản phát hành mặc định và các "
-"thành phần:"
+"bật chức năng thông báo các gói đã cài đặt (popularity-contest) trong chroot"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr ""
+"Đang bật chức năng thông báo các gói đã cài đặt (popularity-contest)..."
+
+#: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
+#, sh-format
+msgid "mounts CDROM before installation"
+msgstr "gắn đĩa CD-ROM trước khi cài đặt"
 
 #: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Path to kickstart file"
-msgstr ""
+msgstr "Đường dẫn đến tập tin kickstart"
 
 #: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Path to chroot-creator cache"
-msgstr ""
+msgstr "Đường dẫn đến vùng nhớ tạm chroot-creator"
 
 #: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:13
 #, sh-format
 msgid "Release version number"
-msgstr ""
+msgstr "Số thứ tự phiên bản phát hành"
 
 #: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:14
 #, sh-format
 msgid "Distro name"
-msgstr ""
+msgstr "Tên bản phân phối"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
-#, fuzzy, sh-format
-msgid "set the kernel package to install."
-msgstr "đặt danh sách các gói hạt nhân cần cài đặt."
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
-#, fuzzy, sh-format
-msgid "set the kernel modules packages to install."
-msgstr "đặt danh sách các gói hạt nhân cần cài đặt."
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
-#, sh-format
-msgid "Enable progress reporting"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
-#, sh-format
-msgid "Print stage times (seconds)"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
-#, sh-format
-msgid "Draw progress bar"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
-#, fuzzy, sh-format
-msgid "Set the i18n langs"
-msgstr "Đặt địa chỉ của máy nhân bản"
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
-#, sh-format
-msgid "force to skip the squashfs build (for debian-installer)."
-msgstr ""
-"ép buộc bỏ qua tiến trình xây dựng squashfs (đối với debian-installer)."
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
-#, sh-format
-msgid "Enable LTSP-Cluster"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:4
-#, sh-format
-msgid "The IP of the LTSP Cluster Control Center"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
-#, sh-format
-msgid "use the servers sources.list instead of generating one"
-msgstr ""
-"dùng danh sách các nguồn (sources.list) của máy phục vụ, thay vì tạo ra một "
-"danh sách riêng"
-
-#: ../server/configs/ALTLinux/ltsp-login.sh:30
-#: ../server/configs/ALTLinux/ltsp-login.sh:33
-#: ../server/configs/ALTLinux/ltsp-login.sh:40
-#: ../server/configs/ALTLinux/ltsp-login.sh:50
-#, sh-format
-msgid "Login Error"
-msgstr ""
-
-#: ../server/configs/ALTLinux/ltsp-login.sh:31
-#: ../server/configs/ALTLinux/ltsp-login.sh:34
-#: ../server/configs/ALTLinux/ltsp-login.sh:44
-#: ../server/configs/ALTLinux/ltsp-login.sh:52
-#: ../server/configs/ALTLinux/ltsp-login.sh:62
-#: ../server/configs/ALTLinux/ltsp-login.sh:81
-#: ../server/configs/ALTLinux/ltsp-login.sh:84
-#: ../server/configs/ALTLinux/ltsp-login.sh:95
-#: ../server/configs/ALTLinux/ltsp-login.sh:105
-#: ../server/configs/ALTLinux/ltsp-login.sh:115
-#, sh-format
-msgid "User"
-msgstr ""
-
-#: ../server/configs/ALTLinux/ltsp-login.sh:31
-#: ../server/configs/ALTLinux/ltsp-login.sh:34
-#: ../server/configs/ALTLinux/ltsp-login.sh:44
-#: ../server/configs/ALTLinux/ltsp-login.sh:52
-#: ../server/configs/ALTLinux/ltsp-login.sh:62
-#: ../server/configs/ALTLinux/ltsp-login.sh:81
-#: ../server/configs/ALTLinux/ltsp-login.sh:84
-#: ../server/configs/ALTLinux/ltsp-login.sh:95
-#: ../server/configs/ALTLinux/ltsp-login.sh:105
-#: ../server/configs/ALTLinux/ltsp-login.sh:115
-#, sh-format
-msgid "already logged in!"
-msgstr ""
-
-#: ../server/configs/ALTLinux/ltsp-login.sh:34
-#: ../server/configs/ALTLinux/ltsp-login.sh:43
-#: ../server/configs/ALTLinux/ltsp-login.sh:84
-#: ../server/configs/ALTLinux/ltsp-login.sh:93
-#: ../server/configs/ALTLinux/ltsp-login.sh:117
-#, sh-format
-msgid "Continue"
-msgstr ""
-
-#: ../server/configs/ALTLinux/ltsp-login.sh:80
-#: ../server/configs/ALTLinux/ltsp-login.sh:83
-#: ../server/configs/ALTLinux/ltsp-login.sh:90
-#: ../server/configs/ALTLinux/ltsp-login.sh:103
-#, sh-format
-msgid "Login Warning"
-msgstr ""
-
-#: ../server/configs/ALTLinux/ltsp-login.sh:94
-#, sh-format
-msgid "Cancel"
-msgstr ""
-
-#: ../server/ltsp-build-client:54
+#: ../server/ltsp-build-client:85
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "LỖI API: bạn cần phải cung cấp trả lời đúng (true) hay sai (false)."
 
-#: ../server/ltsp-build-client:97
+#: ../server/ltsp-build-client:128
 #, sh-format
 msgid "Display this help message"
 msgstr "Hiển thị trợ giúp này"
 
-#: ../server/ltsp-build-client:98
+#: ../server/ltsp-build-client:129
 #, sh-format
 msgid "Display help for all available commandline options"
-msgstr "Hiển thị trợ giúp đối với tất cả các tùy chọn dòng lệnh"
+msgstr "Hiển thị trợ giúp về tất cả các tùy chọn dòng lệnh sẵn sàng"
 
-#: ../server/ltsp-build-client:102
+#: ../server/ltsp-build-client:133
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Sử dụng trình khách xây dựng LTSP:"
 
-#: ../server/ltsp-build-client:106
+#: ../server/ltsp-build-client:137
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Tùy chọn bình thường:"
 
-#: ../server/ltsp-build-client:110
+#: ../server/ltsp-build-client:141
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Tùy chọn cấp cao :"
 
-#: ../server/ltsp-build-client:122
+#: ../server/ltsp-build-client:153
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr "chú ý: tiến trình cài đặt trình khách LTSP đã được chạy thành công"
+msgstr "chú ý: tiến trình cài đặt trình khách LTSP đã chạy thành công"
 
-#: ../server/ltsp-build-client:124
+#: ../server/ltsp-build-client:155
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "lỗi: tiến trình cài đặt trình khách LTSP đã kết thúc bất thường"
