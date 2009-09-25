@@ -13,9 +13,8 @@
 
 if boolean_is_true "$LOCAL_APPS"; then
     if [ -n "$LDM_LANGUAGE" ]; then
-        MY_LANG="LC_ALL=$LDM_LANGUAGE LANGUAGE=$LDM_LANGUAGE LANG=$LDM_LANGUAGE"
+        LC_ALL=$LDM_LANGUAGE LANGUAGE=$LDM_LANGUAGE LANG=$LDM_LANGUAGE ltsp-localappsd &
+    else
+        ltsp-localappsd &
     fi
-
-    #Launch the ltsp-localappsd to handle the apps
-    ltsp-localappsd &
 fi
