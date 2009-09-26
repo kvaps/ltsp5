@@ -29,4 +29,10 @@
 # First parameter is the image file, second is the delay after which 
 # the connection is killed (default to 2 hours)
 
-PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null -a ${2:-"7200"} > /dev/null 2>&1
+if [ -n "$2" ]; then
+    # Set a timeout. Note that nbd 0.9.13+ will fail if the -a option is
+    # passed to it, as it was removed.
+    nbd_timeout="-a $2"
+fi
+
+PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null $nbd_timeout > /dev/null 2>&1
