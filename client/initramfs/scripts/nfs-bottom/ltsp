@@ -21,4 +21,4 @@ if [ "${HOSTNAME}" = "(none)" ]; then
     esac
     echo "$HOSTNAME_BASE$HOSTNAME_EXTRA" > /proc/sys/kernel/hostname
 fi
-cat /proc/sys/kernel/hostname > /root/etc/hostname
+cat /proc/sys/kernel/hostname > ${rootmnt}/etc/hostname
