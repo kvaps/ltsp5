@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ltsp 5.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-06 12:58-0700\n"
-"PO-Revision-Date: 2009-09-24 19:36+0930\n"
+"PO-Revision-Date: 2009-09-26 19:07+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -129,7 +129,7 @@ msgstr "Đặt bản phân phối cần dùng để cài đặt"
 #: ../server/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
-msgstr ""
+msgstr "tẩy gốc LTSP đã có (nếu có)"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
