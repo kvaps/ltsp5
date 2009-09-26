@@ -30,7 +30,7 @@
 # the connection is killed (default to 2 hours)
 
 if [ -n "$2" ]; then
-    # Set a timeout. Note that nbd 0.9.13+ will fail if the -a option is
+    # Set a timeout. Note that nbd 2.9.13+ will fail if the -a option is
     # passed to it, as it was removed.
     nbd_timeout="-a $2"
 fi
