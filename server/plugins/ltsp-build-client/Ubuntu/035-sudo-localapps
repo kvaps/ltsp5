@@ -1,8 +1,0 @@
-case "$MODE" in
-    finalization)
-        if [ -z "$(grep shutdown $ROOT/etc/sudoers)" ]
-        then
-            echo "ALL    ALL=(ALL) NOPASSWD:/sbin/shutdown, /usr/bin/eject" >> $ROOT/etc/sudoers
-        fi
-        ;;
-esac
