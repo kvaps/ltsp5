@@ -124,6 +124,17 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Mount the home directory
     sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
+    # Mount other directories
+    if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
+        OLDIFS="$IFS"
+        IFS=","
+        for extradir in $(echo ${LOCAL_APPS_EXTRAMOUNTS}); do
+            mkdir -p "${extradir}"
+            sshfs -o allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
+        done
+        IFS="$OLDIFS"
+    fi
+
     # Create tmpdir for localapps menu
     if boolean_is_true "$LOCAL_APPS_MENU" && [ -x "/usr/bin/ltsp-genmenu" ]; then
         # get a temporary directory on the server

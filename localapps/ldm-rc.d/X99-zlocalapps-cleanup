@@ -17,5 +17,17 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Unmount sshfs and remove the mount dir
     fusermount -uqz ${LDM_HOME}
     rmdir ${LDM_HOME}
+
+    # Unmount other mounts
+    if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
+        OLDIFS="$IFS"
+        IFS=','
+        for extradir in $(echo ${LOCAL_APPS_EXTRAMOUNTS}); do
+            fusermount -uqz "${extradir}"
+            rmdir "${extradir}"
+        done
+        IFS="$OLDIFS"
+    fi
+
     rm $LOCALAPPSD_PIDFILE
 fi
