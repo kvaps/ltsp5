@@ -22,7 +22,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
         OLDIFS="$IFS"
         IFS=','
-        for extradir in $(echo ${LOCAL_APPS_EXTRAMOUNTS}); do
+        for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             fusermount -uqz "${extradir}"
             rmdir "${extradir}"
         done

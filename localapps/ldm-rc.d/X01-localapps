@@ -128,7 +128,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
         OLDIFS="$IFS"
         IFS=","
-        for extradir in $(echo ${LOCAL_APPS_EXTRAMOUNTS}); do
+        for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             mkdir -p "${extradir}"
             sshfs -o allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
         done
