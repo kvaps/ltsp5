@@ -1,7 +1,9 @@
 #!/bin/sh
 
 # Disable services we don't want
-for service in ConsoleKit avahi-daemon crond cups exim gpm iptables ip6tables kudzu mcstrans mdmonitor netfs network nfs pcscd rpcbind; do
+for service in ConsoleKit avahi-daemon crond cups exim gpm iptables ip6tables \
+    iscsi iscsid kudzu lvm2-monitor mcstrans mdmonitor netfs network nfs \
+    pcscd rpcbind rpcgssd rpcidmapd rpcsvcgssd; do
     if [ ! -e /etc/init.d/$service ]; then
         continue
     fi
