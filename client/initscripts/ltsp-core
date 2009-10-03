@@ -3,7 +3,7 @@
 # Author:	Matt Zimmerman <mdz@ubuntu.com>
 #
 ### BEGIN INIT INFO
-# Provides:          ltsp-client
+# Provides:          ltsp-client ltsp-client-core
 # Required-Start:    ltsp-client-setup $remote_fs $network $syslog
 # Required-Stop:     
 # Default-Start:     2 3 4 5
