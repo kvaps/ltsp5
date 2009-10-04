@@ -12,8 +12,18 @@ case "$MODE" in
             # select a kernel
             KERNEL_BASE="linux-image"
             case $ARCH in
-                i386)
+                kfreebsd-*)
+                    KERNEL_BASE="kfreebsd-image"
+                    # need to figure out a generic unversioned one:
+                    KERNEL_VERSION="7"
+                    ;;
+            esac
+            case $ARCH in
+                i386|kfreebsd-i386)
                     KERNEL_ARCH="486"
+                    ;;
+                kfreebsd-amd64)
+                    KERNEL_ARCH="amd64"
                     ;;
                 sparc) 
                     KERNEL_ARCH="$(uname -m)"
