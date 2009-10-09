@@ -39,6 +39,9 @@
 if [ -f /etc/lts.conf ]; then
     eval $(getltscfg -a) || true
 fi
+if [ -f /var/cache/getltscfg-cluster/lts.conf ]; then
+    eval $(getltscfg -a -c /var/cache/getltscfg-cluster/lts.conf) || true
+fi
 
 # set compatbility for ltsp 4.x variables
 export X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
