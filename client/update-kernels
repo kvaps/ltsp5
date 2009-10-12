@@ -38,7 +38,7 @@ SUB_ARCH=${SUB_ARCH:-"$(uname -m)"}
 VENDOR=${VENDOR:-"$(lsb_release -i -s)"}
 
 case $0 in
-  /etc/kernel/post*.d*) QUIET=true
+  /etc/kernel/post*.d*) QUIET=true ;;
 esac
 
 msg() {
