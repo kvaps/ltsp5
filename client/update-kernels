@@ -49,7 +49,7 @@ msg() {
 
 if [ -z "$CHROOT_NAME" ]; then
     # FIXME: replace with a common function
-    CHROOT_NAME="$(dpkg --print-installation-architecture)"
+    CHROOT_NAME="$(dpkg --print-architecture)"
 fi
 
 if [ -z "$BOOTPROMPT_OPTS" ]; then
