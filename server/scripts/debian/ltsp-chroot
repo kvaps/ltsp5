@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# copyright 2009 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+# the terms of the GNU General Public License version 2 or any later version.
+
+export LTSP_HANDLE_DAEMONS=false
+if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
+    /etc/ltsp/ltsp-chroot.conf
+fi
+if [ -z "$ROOT" ]; then
+    ROOT="/opt/ltsp/$(dpkg --print-architecture)"
+fi
+if [ ! -d "$ROOT" ]; then
+    echo "ERROR: ltsp chroot not found: $ROOT" > /dev/stderr
+    exit 1
+fi
+exec chroot $ROOT $@
