@@ -4,5 +4,5 @@
 #
 
 if [ "$LTSP_HANDLE_DAEMONS" != "false" ]; then
-    /sbin/start-stop-daemon.real $*
+    /sbin/start-stop-daemon.real "$@"
 fi
