@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1.84\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-06 12:58-0700\n"
-"PO-Revision-Date: 2009-09-08 00:14+0100\n"
+"POT-Creation-Date: 2009-10-18 18:04-0700\n"
+"PO-Revision-Date: 2009-10-19 07:25+0100\n"
 "Last-Translator: Américo Monteiro <a_monteiro@netcabo.pt>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
 "MIME-Version: 1.0\n"
@@ -221,14 +221,6 @@ msgstr "Definir o locale predefinido"
 msgid "list of extra packages to install as part of the initial installation."
 msgstr "lista de pacotes extra para instalar como parte da instalação inicial."
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
-#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
-#, sh-format
-msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
-"NOTA: adicionando distribuição predefinida e componentes ao mirror de "
-"segurança:"
-
 #: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
 msgid "Enable LTSP-Cluster"
@@ -250,6 +242,35 @@ msgstr "um simples modo webkiosk."
 msgid "use the servers sources.list instead of generating one"
 msgstr "usar o sources.list do servidor em vez de gerar um"
 
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Definir a localização do mirror"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "adicionar um mirror, que ganha prioridade sobre o mirror predefinido"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "adicionar um mirror, com prioridade menor que o mirror predefinido"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:6, sh-format
+msgid "Set the security mirror location"
+msgstr "Definir a localização do mirror de segurança"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:7, sh-format
+msgid "Set the update mirror location"
+msgstr "Definir a localização do mirror de actualização"
+
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
 msgid "Set the i18n langs"
@@ -265,24 +286,6 @@ msgstr "manter a cache dos ficheiros de pacotes descarregados"
 #, sh-format
 msgid "set the kernel modules packages to install."
 msgstr "definir os pacotes de módulos de kernel para instalar."
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, sh-format
-msgid "Set the mirror location"
-msgstr "Definir a localização do mirror"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#, sh-format
-msgid "add a mirror, which takes priority over the default mirror"
-msgstr "adicionar um mirror, que ganha prioridade sobre o mirror predefinido"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#, sh-format
-msgid "add a mirror, with lower priority than the default mirror"
-msgstr "adicionar um mirror, com prioridade menor que o mirror predefinido"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
@@ -344,6 +347,13 @@ msgstr "incluir as chaves listadas no apt keyring"
 #, sh-format
 msgid "mount package cache dir from server"
 msgstr "montar directório de cache de pacotes do servidor"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"NOTA: adicionando distribuição predefinida e componentes ao mirror de "
+"segurança:"
 
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
@@ -445,62 +455,63 @@ msgstr "Activando o concurso de popularidade..."
 msgid "mounts CDROM before installation"
 msgstr "monta o CDROM antes da instalação"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
 msgstr "Caminho para o ficheiro kickstart"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr "Caminho para a cache do chroot-creator"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:13
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
 msgstr "Número da versão de lançamento"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:14
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
 msgstr "Nome da distribuição"
 
-#: ../server/ltsp-build-client:85
+#: ../server/ltsp-build-client:83
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "ERRO da API: você precisa fornecer verdadeiro ou falso."
 
-#: ../server/ltsp-build-client:128
+#: ../server/ltsp-build-client:126
 #, sh-format
 msgid "Display this help message"
 msgstr "Mostra esta mensagem de ajuda"
 
-#: ../server/ltsp-build-client:129
+#: ../server/ltsp-build-client:127
 #, sh-format
 msgid "Display help for all available commandline options"
 msgstr "Mostra ajuda para as opções disponíveis da linha de comandos"
 
-#: ../server/ltsp-build-client:133
+#: ../server/ltsp-build-client:131
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Utilização do LTSP Build Client:"
 
-#: ../server/ltsp-build-client:137
+#: ../server/ltsp-build-client:135
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Opções regulares:"
 
-#: ../server/ltsp-build-client:141
+#: ../server/ltsp-build-client:139
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Opções avançadas:"
 
-#: ../server/ltsp-build-client:153
+#: ../server/ltsp-build-client:151
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "informação: instalação do cliente do LTSP terminada com sucesso"
 
-#: ../server/ltsp-build-client:155
+#: ../server/ltsp-build-client:153
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erro: instalação do cliente do LTSP terminou anormalmente"
+
