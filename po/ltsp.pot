@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.1.88\n"
+"Project-Id-Version: ltsp 5.1.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-26 16:40-0700\n"
+"POT-Creation-Date: 2009-10-18 18:04-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -472,42 +472,42 @@ msgstr ""
 msgid "Distro name"
 msgstr ""
 
-#: ../server/ltsp-build-client:85
+#: ../server/ltsp-build-client:83
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr ""
 
-#: ../server/ltsp-build-client:128
+#: ../server/ltsp-build-client:126
 #, sh-format
 msgid "Display this help message"
 msgstr ""
 
-#: ../server/ltsp-build-client:129
+#: ../server/ltsp-build-client:127
 #, sh-format
 msgid "Display help for all available commandline options"
 msgstr ""
 
-#: ../server/ltsp-build-client:133
+#: ../server/ltsp-build-client:131
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr ""
 
-#: ../server/ltsp-build-client:137
+#: ../server/ltsp-build-client:135
 #, sh-format
 msgid "  Regular options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:141
+#: ../server/ltsp-build-client:139
 #, sh-format
 msgid "  Advanced options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:153
+#: ../server/ltsp-build-client:151
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr ""
 
-#: ../server/ltsp-build-client:155
+#: ../server/ltsp-build-client:153
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
