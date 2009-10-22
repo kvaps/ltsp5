@@ -172,7 +172,7 @@ elif [ "$LOG" = "login" ]; then
     QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=3"
 elif [ "$LOG" = "logout" ]; then
     QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/appservip=$LDM_SERVER/username=$LDM_USERNAME/display=$(echo $DISPLAY | cut -d ":" -f 2)/code=4"
-elif [ "$LOG" = "refresh" ]; then
+elif [ "$LOG" = "refresh" ] || [ "$LOG" = "ldm" ]; then
     QUERY="?mac=$INTERFACE_MAC/ip=$INTERFACE_IP/bootservip=$ROOT_SRV/code=0"
 else
     echo "Error : Unknown log operation" 
@@ -193,4 +193,8 @@ fi
 
 if [ "$EXPORT_CONF" = "Y" ]; then 
     getltscfg -a -c $cache_lts
+fi
+if [ "$LOG" = "ldm" ]; then
+    eval $(getltscfg -a -c $cache_lts)
+    echo -n $LDM_SERVER
 fi

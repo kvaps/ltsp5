@@ -1,11 +1,6 @@
 # sourced
 
 if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
-    # Initialize ssh
-    mkdir -p /root/.ssh
-    rm -f /root/.ssh/*
-    (echo -n "$LDM_SERVER " ; echo "getkey" | nc $LDM_SERVER 8001) > /root/.ssh/known_hosts
-
     if ( boolean_is_true "$LDM_AUTOLOGIN" || boolean_is_true "$LDM_GUESTLOGIN" ) && [ -z "$LDM_USERNAME" ]; then
         login=$(echo "username" | nc $LDM_SERVER 8001 | awk '{print $2}')
         export LDM_USERNAME=$login
