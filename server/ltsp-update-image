@@ -37,6 +37,8 @@ $0 [OPTION]
                       is 2000.
   -n, --no-comp       Do not compress the image.
   -e, --exclude-dirs  Exclude those dirs from the image.
+  -d, --tftpbootdir   Subdir within tftpdir where ltsp kernels are.  Defaults
+                      to "ltsp".
   -a, --arch          Architecture of this image.  Default is arch of the host.
   -h, --help          This message.
 EOF
@@ -59,6 +61,7 @@ while true ; do
         -b|--base) BASE=$2 ; shift 2 ;;
         -p|--port) PORT=$2 ; shift 2 ;;
         -a|--arch) ARCH=$2 ; shift 2 ;;
+        -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
         -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
         -h|--help) usage ; exit 0 ;;
