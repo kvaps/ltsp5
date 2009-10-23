@@ -32,12 +32,13 @@
 usage() {
 cat <<EOF
 $0 [OPTION]
-  -b, --base     Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
-  -p, --port     Port you wish this nbd image to communicate on.  Default
-                 is 2000.
-  -n, --no-comp  Do not compress the image.
-  -a, --arch     Architecture of this image.  Default is arch of the host.
-  -h, --help     This message.
+  -b, --base          Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
+  -p, --port          Port you wish this nbd image to communicate on.  Default
+                      is 2000.
+  -n, --no-comp       Do not compress the image.
+  -e, --exclude-dirs  Exclude those dirs from the image.
+  -a, --arch          Architecture of this image.  Default is arch of the host.
+  -h, --help          This message.
 EOF
 }
 
@@ -59,6 +60,7 @@ while true ; do
         -p|--port) PORT=$2 ; shift 2 ;;
         -a|--arch) ARCH=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
+        -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
         -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
@@ -115,7 +117,7 @@ if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
 
     IMAGE="${IMGDIR}/${ARCH}.img"
     rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-    mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom
+    mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
     if [ "$?" != "0" ]; then
         echo "Error: mksquashfs failed to build the ltsp image, exiting"
         exit 1
