@@ -1,0 +1,103 @@
+#!/bin/sh
+
+#  Copyright (c) 2006-2009 Vagrant Cascadian <vagrant@freegeek.org>
+
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, you can find it on the World Wide
+#  Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
+#  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+
+if [ -e /etc/sysconfig/ltspdist ]; then
+    . /etc/sysconfig/ltspdist
+    VENDOR=$VENDORDEF
+else
+    VENDOR=$(lsb_release --id --short | tr " " "_")
+fi
+export BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
+
+find_chroots() {
+    find $BASE -mindepth 1 -maxdepth 1 -type d
+}
+
+find_lts_conf() {
+    chroot=$1
+    chroot_name=$(basename $chroot)
+    lts_conf_dirs="$chroot/etc/ /var/lib/tftpboot/ltsp/$chroot_name /srv/tftp/ltsp/$chroot_name /tftpboot/ltsp/$chroot_name"
+    for lts_conf_dir in $lts_conf_dirs ; do
+        lts_conf=$lts_conf_dir/lts.conf
+        if [ -f "$lts_conf" ]; then
+            echo "$lts_conf"
+        fi
+    done
+}
+
+Debian_server_info() {
+    echo server information:
+    lsb_release --all
+    echo
+}
+
+Debian_server_packages() {
+    echo server packages:
+    COLUMNS=200 dpkg -l 'ltsp*' 'ldm*' | awk '/ltsp|ldm/{print $1,$2,$3}'
+    echo
+}
+
+Debian_chroot_packages() {
+    chroot=$1
+    if [ -f $chroot/var/lib/dpkg/status ]; then
+        echo "packages in chroot: $chroot"
+        COLUMNS=200 dpkg --root=$chroot -l 'ltsp*' 'ldm*' | awk '/ltsp-client|ldm|ltspfs/{print $1,$2,$3}'
+        echo
+    fi
+}
+
+for opt in $@ ; do
+    case $opt in
+        --no-server-info) server_info="false" ;;
+        --verbose|-v) verbose="true" ;;
+    esac
+done
+
+case $VENDOR in
+    Debian)
+        if [ "$server_info" != "false" ]; then
+            Debian_server_info
+            Debian_server_packages
+        fi
+        for chroot in $(find_chroots) ; do
+            chroot_name=$(basename $chroot)
+            Debian_chroot_packages $chroot
+            lts_conf_files=$(find_lts_conf $chroot)
+            if [ -n "$lts_conf_files" ]; then
+                if [ "$verbose" = "true" ]; then
+                    for file in $lts_conf_files ; do
+                        echo found: $file
+                        cat $file
+                        echo
+                    done
+                else
+                    echo found lts.conf files: $lts_conf_files
+                    echo
+                fi
+            fi
+        done
+        if [ -d "$BASE/images" ]; then
+            for image in $(find $BASE/images/ -type f -name '*.img' ); do
+                echo found image: $image
+                echo
+            done
+        fi        
+        ;;
+esac
