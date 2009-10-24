@@ -121,8 +121,13 @@ if boolean_is_true "$LOCAL_APPS"; then
     ## Maybe do this:
     ## export HOME=${LOCALAPPS_CACHE}
 
+    if boolean_is_true "$SSH_FOLLOW_SYMLINKS" || [ -z "$SSH_FOLLOW_SYMLINKS" ]; then
+        SSH_FOLLOW_SYMLINKS="follow_symlinks,"
+    else
+        unset SSH_FOLLOW_SYMLINKS
+    fi
     # Mount the home directory
-    sshfs -o allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+    sshfs -o ${SSH_FOLLOW_SYMLINKS}allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
 
     # Mount other directories
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
@@ -130,7 +135,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         IFS=","
         for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             mkdir -p "${extradir}"
-            sshfs -o allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
+            sshfs -o ${SSH_FOLLOW_SYMLINKS}allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
         done
         IFS="$OLDIFS"
     fi
