@@ -71,7 +71,7 @@ main() {
         # Reset the environement
         unset $(env | egrep '^(\w+)=(.*)$' | egrep -vw 'PWD|USER|PATH|HOME|SCREEN_NUM|SCREEN_DIRS|TTY_NUM' | /usr/bin/cut -d= -f1)
         . /usr/share/ltsp/ltsp_config
-        eval $(getltscfg-cluster -a -l refresh)
+        eval $(getltscfg-cluster -a -l prompt)
     fi
     eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
     SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
