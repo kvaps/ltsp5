@@ -1,0 +1,519 @@
+# ltsp gettext messages for Czech language.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ltsp package.
+# Miroslav Kure <kurem@debian.cz>, 2006, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ltsp 5.1.91\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-18 18:04-0700\n"
+"PO-Revision-Date: 2009-11-01 20:51+0100\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:30
+#: ../server/configs/ALTLinux/ltsp-login.sh:33
+#: ../server/configs/ALTLinux/ltsp-login.sh:40
+#: ../server/configs/ALTLinux/ltsp-login.sh:50
+#, sh-format
+msgid "Login Error"
+msgstr "Chyba přihlášení"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:31
+#: ../server/configs/ALTLinux/ltsp-login.sh:34
+#: ../server/configs/ALTLinux/ltsp-login.sh:44
+#: ../server/configs/ALTLinux/ltsp-login.sh:52
+#: ../server/configs/ALTLinux/ltsp-login.sh:62
+#: ../server/configs/ALTLinux/ltsp-login.sh:81
+#: ../server/configs/ALTLinux/ltsp-login.sh:84
+#: ../server/configs/ALTLinux/ltsp-login.sh:95
+#: ../server/configs/ALTLinux/ltsp-login.sh:105
+#: ../server/configs/ALTLinux/ltsp-login.sh:115
+#, sh-format
+msgid "User"
+msgstr "Uživatel"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:31
+#: ../server/configs/ALTLinux/ltsp-login.sh:34
+#: ../server/configs/ALTLinux/ltsp-login.sh:44
+#: ../server/configs/ALTLinux/ltsp-login.sh:52
+#: ../server/configs/ALTLinux/ltsp-login.sh:62
+#: ../server/configs/ALTLinux/ltsp-login.sh:81
+#: ../server/configs/ALTLinux/ltsp-login.sh:84
+#: ../server/configs/ALTLinux/ltsp-login.sh:95
+#: ../server/configs/ALTLinux/ltsp-login.sh:105
+#: ../server/configs/ALTLinux/ltsp-login.sh:115
+#, sh-format
+msgid "already logged in!"
+msgstr "je již přihlášen!"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:34
+#: ../server/configs/ALTLinux/ltsp-login.sh:43
+#: ../server/configs/ALTLinux/ltsp-login.sh:84
+#: ../server/configs/ALTLinux/ltsp-login.sh:93
+#: ../server/configs/ALTLinux/ltsp-login.sh:117
+#, sh-format
+msgid "Continue"
+msgstr "Pokračovat"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:80
+#: ../server/configs/ALTLinux/ltsp-login.sh:83
+#: ../server/configs/ALTLinux/ltsp-login.sh:90
+#: ../server/configs/ALTLinux/ltsp-login.sh:103
+#, sh-format
+msgid "Login Warning"
+msgstr "Varování přihlášení"
+
+#: ../server/configs/ALTLinux/ltsp-login.sh:94
+#, sh-format
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#, sh-format
+msgid "Set the default base install directory"
+msgstr "Nastavit výchozí instalační adresář"
+
+#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr "Nahrát specifický konfigurační soubor uživatele"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:9
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#, sh-format
+msgid "set the target architecture"
+msgstr "Nastavit cílovou architekturu"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:22
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:33
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:44
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr "CHYBA: --arch %s spuštěno na nepodporované architektuře: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:32
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
+#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#, sh-format
+msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
+msgstr "CHYBA: nepodporovaná architektura. Zkontrolujte argument --arch: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:33
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
+#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#, sh-format
+msgid "       supported values are: %s"
+msgstr "       podporované hodnoty jsou: %s"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "Nastavit distribuci, která se použije pro instalaci"
+
+#: ../server/plugins/ltsp-build-client/common/020-rootpath:3
+#, sh-format
+msgid "purge existing LTSP chroot if present"
+msgstr "pokud existuje, smazat předchozí LTSP chroot"
+
+#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#, sh-format
+msgid "Set the name of the chroot."
+msgstr "Nastavit jméno chrootu."
+
+#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr "dotázat se na rootovo heslo, výchozí je zakázáno"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "vyřadit balíky z prvotního chrootu"
+
+#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#, sh-format
+msgid "Enable debug support"
+msgstr "Povolit podporu ladění"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
+#, sh-format
+msgid "Path to Quickstart profile"
+msgstr "Cesta ke Quickstart profilu"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
+#, sh-format
+msgid "Debug Quickstart"
+msgstr "Ladit Quickstart"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
+#, sh-format
+msgid "Show external command output"
+msgstr "Zobrazit výstup externích programů"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
+#, sh-format
+msgid "Get profile from a Quickstart server"
+msgstr "Získat profil z Quickstart serveru"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:12
+#, sh-format
+msgid "Manual Quickstart: %s"
+msgstr "Ruční Quickstart: %s"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:15
+#, sh-format
+msgid "Default Quickstart profile: %s"
+msgstr "Výchozí profil Quickstartu: %s"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:19
+#, sh-format
+msgid "ERROR: %s does not exist"
+msgstr "CHYBA: %s neexistuje"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:35
+#, sh-format
+msgid "Installing into: %s"
+msgstr "Instaluje se do: %s"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
+#, sh-format
+msgid "Stage 3 URI"
+msgstr "URI 3. fáze"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
+#, sh-format
+msgid "Set the number of parallel build processes"
+msgstr "Nastavit počet paralelních buildovacích procesů"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
+#, sh-format
+msgid "Set extra mirror locations (space-separated)"
+msgstr "Nastavit umístění dalších zrcadel (oddělené mezerami)"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
+#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#, sh-format
+msgid "Set the default locale"
+msgstr "nastavit výchozí locale"
+
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:7
+#, sh-format
+msgid "list of extra packages to install as part of the initial installation."
+msgstr ""
+"seznam dalších balíků, které se nainstalují jako součást úvodní instalace."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
+#, sh-format
+msgid "Enable LTSP-Cluster"
+msgstr "Povolit LTSP-Cluster"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
+#, sh-format
+msgid "force to skip the squashfs build (for debian-installer)."
+msgstr "přeskočit vytvoření squashfs (pro debian-installer)."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#, sh-format
+msgid "a simple webkiosk mode."
+msgstr "režim jednoduchého webového kiosku."
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
+#, sh-format
+msgid "use the servers sources.list instead of generating one"
+msgstr "místo vytváření sources.list použít ten ze serveru"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Nastavit umístění zrcadel"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "přidat zrcadlo, které má prioritu před výchozím zrcadlem"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "přidat zrcadlo, které má nižší prioritu než výchozí zrcadlo"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:6
+#, sh-format
+msgid "Set the security mirror location"
+msgstr "Nastavit umístění zrcadla s bezpečnostními aktualizacemi"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:7
+#, sh-format
+msgid "Set the update mirror location"
+msgstr "Nastavit umístění zrcadla s aktualizacemi"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
+#, sh-format
+msgid "Set the i18n langs"
+msgstr "Nastavit i18n jazyky"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "ponechat soubory stažených balíků v cache"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
+#, sh-format
+msgid "set the kernel modules packages to install."
+msgstr "nastavit balíky s jadernými moduly, které se mají instalovat."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr "přidat zrcadlo s bezpečnostními aktualizacemi"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed."
+msgstr ""
+"nastavit seznam balíků, které se mají instalovat po skončení základní instalace."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
+#, sh-format
+msgid "Enable progress reporting"
+msgstr "Povolit hlášení o postupu"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
+#, sh-format
+msgid "Print stage times (seconds)"
+msgstr "Vypisovat časy jednotlivých fází (v sekundách)"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
+#, sh-format
+msgid "Draw progress bar"
+msgstr "Zobrazovat ukazatel postupu"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
+#, sh-format
+msgid "set the kernel package to install."
+msgstr "vybrat balík s jádrem, který se má instalovat."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation."
+msgstr "seznam balíků k instalaci jako součást finální instalace."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "povolit sériovou konzoli"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "Povoluje se sériová konzole..."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "přidat vypsané klíče na klíčenku aptu"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
+#, sh-format
+msgid "mount package cache dir from server"
+msgstr "připojit adresář s cachí balíků ze serveru"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"INFO: k zrcadlu s bezpečnostními aktualizacemi se nastavují výchozí "
+"komponenty a distribuce:"
+
+#: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
+#, sh-format
+msgid "create squashfs image for use with NBD."
+msgstr "vytvořit squashfs obraz pro použití s NBD."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "po instalaci nahrát do chrootu debconf přednastavení"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr "zkopírovat soubory Packages ze serveru"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
+msgid "cache downloaded packages"
+msgstr "ukládat stažené balíky do cache"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr "Kopírují se balíky"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
+#, sh-format
+msgid "done."
+msgstr "hotovo."
+
+#: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
+#, sh-format
+msgid "skip upgrade of installed packages."
+msgstr "přeskočit instalaci instalovaných balíků."
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install."
+msgstr "vybrat seznam balíků s jádrem, které se mají instalovat."
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr ""
+"INFO: zakazují se zdroje s bezpečnostními aktualizacemi pro sid, protože "
+"neexistují."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install."
+msgstr "povolit během instalace nepodepsané balíky."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "Set the components to be used in mirror"
+msgstr "Nastavit komponenty, které se mají ze zrcadla použít"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
+#, sh-format
+msgid "create ext2 image for use with NBD"
+msgstr "vytvořit ext2 obraz pro použití s NBD"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:4
+#, sh-format
+msgid "create image for use with NBD of the specified filesystem"
+msgstr "vytvořit obraz pro použití NBD se zadaným souborovým systémem"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:3
+#, sh-format
+msgid "use specified http proxy"
+msgstr "použít zadanou http proxy"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:4
+#, sh-format
+msgid "do not autodetect apt proxy configuration"
+msgstr "nerozpoznávat nastavení apt proxy automaticky"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
+#, sh-format
+msgid "distribution to set up apt pinning"
+msgstr "nastavit distribuci, která se použije pro vypichování balíků v apt"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
+#, sh-format
+msgid "list of packages to install from the pinned distribution"
+msgstr ""
+"seznam vypíchnutých balíků, které se mají nainstalovat ze zadané distribuce"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "povolit v chrootu popularity-contest"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "Povoluje se popularity-contest..."
+
+#: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
+#, sh-format
+msgid "mounts CDROM before installation"
+msgstr "před instalací připojí CD-ROM"
+
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
+#, sh-format
+msgid "Path to kickstart file"
+msgstr "Cesta k souboru kickstart"
+
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
+#, sh-format
+msgid "Path to chroot-creator cache"
+msgstr "Cesta k cache chroot-creatoru"
+
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#, sh-format
+msgid "Release version number"
+msgstr "Verze vydání"
+
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
+#, sh-format
+msgid "Distro name"
+msgstr "Jméno distribuce"
+
+#: ../server/ltsp-build-client:83
+#, sh-format
+msgid "API ERROR: you need to provide true or false."
+msgstr "CHYBA API: musíte zadat true nebo false."
+
+#: ../server/ltsp-build-client:126
+#, sh-format
+msgid "Display this help message"
+msgstr "Zobrazí tuto nápovědu"
+
+#: ../server/ltsp-build-client:127
+#, sh-format
+msgid "Display help for all available commandline options"
+msgstr "Zobrazí nápovědu pro všechny dostupné volby"
+
+#: ../server/ltsp-build-client:131
+#, sh-format
+msgid "LTSP Build Client usage:"
+msgstr "Použití LTSP build klienta:"
+
+#: ../server/ltsp-build-client:135
+#, sh-format
+msgid "  Regular options:"
+msgstr "  Běžné volby:"
+
+#: ../server/ltsp-build-client:139
+#, sh-format
+msgid "  Advanced options:"
+msgstr "  Pokročilé volby:"
+
+#: ../server/ltsp-build-client:151
+#, sh-format
+msgid "info: LTSP client installation completed successfully"
+msgstr "info: instalace LTSP klienta skončila úspěšně"
+
+#: ../server/ltsp-build-client:153
+#, sh-format
+msgid "error: LTSP client installation ended abnormally"
+msgstr "chyba: instalace LTSP klienta neočekávaně skončila"
