@@ -251,25 +251,25 @@ EOF
 read router0 rest_routers <<EOF
 $router
 EOF
-echo "DEVICE=$interface
-IPV4ADDR=$ip
-IPV4BROADCAST=$broadcast
-IPV4NETMASK=$subnet
-IPV4GATEWAY=$router0
-IPV4DNS0=$dns0
-IPV4DNS1=$dns1
-HOSTNAME=$hostname
-DNSDOMAIN=$domain
-NISDOMAIN=$domain
-ROOTSERVER=$tftp
-ROOTPATH=$rootpath
-filename=\"$bootfile\"
-DNS_SERVER=$dns0    # TODO: Some additional useful vars, delete if not wanted
-SEARCH_DOMAIN=$domain    # E.g. dns can be automatically (!) used from ltsp-setup later
-NTPSVR=$ntpsrv        # And with a little handling, we could use the other servers here
-TIMESVR=$timesvr    # as an alternative to declaring them in lts.conf
-TIMEZONE=$timezone
-LOGSVR=$logsvr" > /tmp/net-$interface.conf
+echo "DEVICE='$interface'
+IPV4ADDR='$ip'
+IPV4BROADCAST='$broadcast'
+IPV4NETMASK='$subnet'
+IPV4GATEWAY='$router0'
+IPV4DNS0='$dns0'
+IPV4DNS1='$dns1'
+HOSTNAME='$hostname'
+DNSDOMAIN='$domain'
+NISDOMAIN='$domain'
+ROOTSERVER='$tftp'
+ROOTPATH='$rootpath'
+filename='$bootfile'
+DNS_SERVER='$dns0'
+SEARCH_DOMAIN='$domain'
+NTPSVR='$ntpsrv'
+TIMESVR='$timesvr'
+TIMEZONE='$timezone'
+LOGSVR='$logsvr'" > /tmp/net-$interface.conf
 
 # Write the file that'll be sourced by the callee function run_scripts
 mkdir -p /conf
