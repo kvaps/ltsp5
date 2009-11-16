@@ -4,4 +4,13 @@ if [ "$1" = "--wait" ]; then
     xprop -root -f LTSP_COMMAND_WAIT 8s -set LTSP_COMMAND_WAIT "true"
     shift
 fi
-xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "$*"
+
+CMD=$1
+shift
+
+unset ARGS
+for i in "$@"; do
+    ARGS="$ARGS \"$i\""
+done
+
+xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "$CMD $ARGS"

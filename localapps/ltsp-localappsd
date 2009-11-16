@@ -38,7 +38,7 @@ while :; do
     LTSP_COMMAND="$(xatomwait LTSP_COMMAND)"
     [ "$?" != 0 ] && exit 
 
-    LTSP_COMMAND=$(echo "${LTSP_COMMAND}"|sed -e 's/^LTSP_COMMAND = //' -e 's/^"//' -e 's/"$//')
+    LTSP_COMMAND=$(echo "${LTSP_COMMAND}"|sed -e 's/^LTSP_COMMAND = //') 
     LTSP_COMMAND_WAIT=$(xprop -root -notype LTSP_COMMAND_WAIT |sed -e 's/^LTSP_COMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
     if [ -n "${LTSP_COMMAND}" ]; then
         # If LOCAL_APPS_APPS_WHITELIST is defined, reject anything not listed.  Otherwise allow by default.
