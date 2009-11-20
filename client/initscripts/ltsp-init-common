@@ -208,3 +208,133 @@ set_time() {
     fi
 
 }
+
+load_modules() {
+    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/);do
+        modprobe $(echo $module|tr "*" " ")
+    done
+}
+
+configure_localdev() {
+    boolean_is_true "$LOCALDEV" && mkdir -p /var/run/drives
+}
+
+configure_console() {
+    if [ -n "$CONSOLE_KEYMAP" ]; then
+        ckbcomp -model pc105 "$CONSOLE_KEYMAP" | loadkeys
+    fi
+}
+
+configure_resolver() {
+    hostname=$(hostname)
+    if [ "(none)" = "$hostname" ] ; then
+        /etc/init.d/hostname.sh start
+        hostname="$(hostname)"
+    else
+        echo $hostname > /etc/hostname
+    fi
+    cat <<EOF > /etc/hosts
+127.0.0.1 localhost
+127.0.0.2 $hostname
+$SERVER server
+EOF
+    if [ -f /etc/hosts.ltsp ]; then
+        cat /etc/hosts.ltsp >> /etc/hosts
+    fi
+
+    if [ -n "$DNS_SERVER" ] && [ -n "$SEARCH_DOMAIN" ]; then
+        cat <<EOF > /etc/resolv.conf
+search $SEARCH_DOMAIN
+nameserver $DNS_SERVER
+EOF
+    fi
+}
+
+configure_syslog() {
+    if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
+        syslog_conf=/etc/syslog.conf
+        if [ -d /etc/rsyslog.d ]; then
+            syslog_conf=/etc/rsyslog.d/ltsp.conf   
+            touch $syslog_conf
+        fi
+        if [ -f "$syslog_conf" ]; then
+            cat <<EOF > "$syslog_conf"
+*.* @${SYSLOG_HOST:-$SERVER}
+EOF
+        fi
+    fi
+}
+
+configure_fstab() {
+    if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
+        echo "/dev/root     /       rootfs defaults        0       0" > /etc/fstab
+        echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
+        mount /tmp
+    fi
+}
+
+configure_cron() {
+    CRON_FILE=/etc/cron.d/ltsp
+    if [ ! -w "/etc/cron.d" ]; then
+        echo "Warning: /etc/cron.d is not writeable."
+        return 1
+    fi
+    if [ -n "$SHUTDOWN_TIME" ] ; then
+        echo $SHUTDOWN_TIME | awk -F : '{print $2" "$1" * * * root test ! -S $(ls -1 /var/run/ldm_socket_* | head -1) && halt" }' >> $CRON_FILE
+    fi
+    for ltsconf in /etc/lts.conf /var/cache/getltscfg-cluster/lts.conf; do
+        if [ -f $ltsconf ]; then
+            cat $ltsconf | grep -E "^CRONTAB_[0-9]{2}=" | sed -e "s/.*[0-9]\{2\}=\"//g" -e "s/\"$//g" >> $CRON_FILE
+        fi
+    done
+}
+
+run_rcfiles() {
+    for rcfile in $(env | sort | awk -F= '$1 ~ /^RCFILE_/ { print $2 }'); do
+        [ -x "$rcfile" ] && "$rcfile" $@
+    done
+}
+
+bind_mounts () {
+    # set defaults
+    test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
+    mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
+    # preserve directory structure
+    for d in $rw_dirs ; do
+        if [ -d "$d" ]; then
+            cd $tmpfs_dir
+            tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist"
+        fi
+    done
+    # copy contents into tmpfs
+    for d in $copy_dirs $temp_copy_dirs; do
+        if [ -d "$d" ]; then
+            cd $tmpfs_dir
+            tar -cpf - $d 2> /dev/null | tar xpf -
+            mount --bind $tmpfs_dir/$d $d
+        else
+            echo "WARNING: $d does not exist"
+        fi
+    done
+    # mount one file on top of another
+    for f in $bindfiles ; do
+        if [ -e "$f" ]; then
+            mkdir -p "$(dirname $tmpfs_dir/$f)"
+            cp $f $tmpfs_dir/$f
+            mount --bind $tmpfs_dir/$f $f
+        else
+            echo "WARNING: $f does not exist"
+        fi
+    done
+}
+
+bind_unmounts() {
+    for dir in $temp_copy_dirs; do
+        umount $dir
+        rm -rf $tmpfs_dir/${dir#/}
+    done
+}
+
