@@ -1,0 +1,31 @@
+#!/bin/sh
+
+if [ -z "$DISPLAY" ];then 
+    exit 1
+fi
+
+# Initialize LTSP_RCOMMAND as blank
+reset_xprop(){
+    xprop -root -f $1 8s -set $1 ""
+}
+
+reset_xprop LTSP_RCOMMAND
+reset_xprop LTSP_RCOMMAND_WAIT
+
+# Poll for LTSP_RCOMMAND changes and execute
+while :; do
+    LTSP_RCOMMAND="$(xatomwait LTSP_RCOMMAND)"
+    [ "$?" != 0 ] && exit 
+
+    LTSP_RCOMMAND=$(echo "${LTSP_RCOMMAND}"|sed -e 's/^LTSP_RCOMMAND = //') 
+    LTSP_RCOMMAND_WAIT=$(xprop -root -notype LTSP_RCOMMAND_WAIT |sed -e 's/^LTSP_RCOMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
+    if [ -n "${LTSP_RCOMMAND}" ]; then
+        if [ "$LTSP_RCOMMAND_WAIT" = "true" ]; then
+            ${LTSP_RCOMMAND}
+        else
+            ${LTSP_RCOMMAND} &
+        fi
+    fi
+    reset_xprop LTSP_RCOMMAND
+    reset_xprop LTSP_RCOMMAND_WAIT
+done

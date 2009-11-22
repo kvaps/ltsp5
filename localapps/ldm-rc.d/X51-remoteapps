@@ -1,0 +1,24 @@
+#
+# The following is a script to set up remote apps support on LTSP through LDM
+#
+
+if boolean_is_true "$REMOTE_APPS"; then
+    if [ -z "$TMP_XDG_MENU" ]; then
+        # Let's use the tmp dir on the server that localapps uses to copy
+        # out remoteappsd binary to, rather than make yet another tmpdir
+        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
+    fi
+
+    if [ -x /usr/share/ltsp/ltsp-remoteappsd ] && [ -x /usr/bin/xatomwait ]; then
+        # Now, let's copy ltsp-remoteappsd to the server
+        scp -o "ControlPath $LDM_SOCKET" -o "User $LDM_USERNAME" /usr/share/ltsp/ltsp-remoteappsd ${LDM_SERVER}:${TMP_XDG_MENU}    
+        scp -o "ControlPath $LDM_SOCKET" -o "User $LDM_USERNAME" /usr/bin/xatomwait ${LDM_SERVER}:${TMP_XDG_MENU}    
+
+        # And, let's go ahead and execute it
+        if boolean_is_true "$LDM_DIRECTX"; then
+             MY_DISP="DISPLAY=${LDMINFO_IPADDR}${DISPLAY}"
+        fi
+
+        ssh -Y -t -S ${LDM_SOCKET} ${LDM_SERVER} "$MY_DISP PATH=$PATH:${TMP_XDG_MENU} ${TMP_XDG_MENU}/ltsp-remoteappsd" &
+    fi
+fi
