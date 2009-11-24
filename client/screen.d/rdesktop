@@ -7,18 +7,22 @@
 # This software is licensed under the Gnu General Public License.
 # The full text of which can be found at http://www.LTSP.org/license.txt
 #
-# Call this through /opt/ltsp/i386/etc/lts.conf like this:
+# Call this through lts.conf like this:
 #           RDP_OPTIONS  = "-a 16"
 #           RDP_SERVER   = w2k3.terminal.server.ip
 #           SCREEN_02    = rdesktop
 #
+# or like this:
+#           SCREEN_02    = "rdesktop -a 16 w2k3.terminal.server.ip"
 
 PATH=/bin:$PATH; export PATH
 . /usr/share/ltsp/screen-x-common
  
-RDP_OPTIONS=${RDP_OPTIONS:-"-f"}
+RDESKTOP_OPTIONS="-f -u '' ${RDP_OPTIONS} $* ${RDP_SERVER}"
 
-RDESKTOP_OPTIONS="${RDP_OPTIONS} -f -u '' $* ${RDP_SERVER}"
+if boolean_is_true "${RDP_DAEMON:-"True"}"; then
+    export XINITRC_DAEMON="True"
+fi
 
 if [ -x /usr/share/ltsp/xinitrc ]; then
     xinitrc=/usr/share/ltsp/xinitrc

@@ -42,4 +42,34 @@ if [ -n "$XINITRCFILES" ]; then
   set -e
 fi
 
-eval exec $COMMAND
+if boolean_is_true "$XINITRC_DAEMON"; then
+    set +e
+    # Make the arrow aa bit more presentable.  :)
+    xsetroot -cursor_name top_left_arrow
+    unset BREAK_LOOP
+    while [ -z "$BREAK_LOOP" ]; do
+        eval $COMMAND
+        ret=$?
+        if [ "$ret" != "0" ]; then
+            if [ -z "$XINITRC_COMMAND_ON_ERROR" ]; then
+                XINITRC_COMMAND_ON_ERROR="ldm-dialog --message \"An error has occured.\"" 
+            fi
+            if boolean_is_true "$XINITRC_PROMPT_ON_ERROR"; then
+                for i in $XINITRC_ERROR_CODES; do
+                    if [ "$i" = "$ret" ]; then
+                        eval ${XINITRC_COMMAND_ON_ERROR} 2>/dev/null || true
+                    fi
+                done
+            fi
+        else
+            if boolean_is_true "$XINITRC_PROMPT_ON_EXIT"; then
+                ldm-dialog --question "Would you like to start this session?"
+                [ "$?" != 0 ] && BREAK_LOOP=1
+                [ -n "$XINITRC_COMMAND_ON_EXIT" ] && eval ${XINITRC_COMMAND_ON_EXIT}
+            fi
+        fi
+    done
+    set -e
+else
+    eval exec $COMMAND
+fi
