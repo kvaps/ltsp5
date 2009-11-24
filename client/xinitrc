@@ -63,7 +63,7 @@ if boolean_is_true "$XINITRC_DAEMON"; then
             fi
         else
             if boolean_is_true "$XINITRC_PROMPT_ON_EXIT"; then
-                ldm-dialog --question "Would you like to start this session?"
+                ldm-dialog --question "Would you like to start this session?" 2>/dev/null || true
                 [ "$?" != 0 ] && BREAK_LOOP=1
                 [ -n "$XINITRC_COMMAND_ON_EXIT" ] && eval ${XINITRC_COMMAND_ON_EXIT}
             fi
