@@ -6,6 +6,7 @@ if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
         export LDM_USERNAME=$login
     fi
     if ! boolean_is_true "$CLUSTER_CONFIGURED" && [ -n "$(which ltsp-cluster-info)" ]; then
+        export HOME=/root/
         ltsp-cluster-info
     fi
 fi
