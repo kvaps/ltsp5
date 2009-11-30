@@ -5,6 +5,10 @@ case "$MODE" in
 # This is the default lts.conf file for ltsp 5.  For more information about
 # valid options please see lts.conf(5) man page, available in the ltsp-docs
 # package.
+#
+# Note that things like sound and local device support are auto-enabled if the
+# corresponding packages are installed, there is no need to manually set these
+# options anymore.
 
 [default] 
     LTSP_CONFIG=True
