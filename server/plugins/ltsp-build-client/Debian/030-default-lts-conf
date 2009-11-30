@@ -2,12 +2,9 @@ case "$MODE" in
     finalization)
 	    # create default lts.conf
         cat <<EOF > $ROOT/etc/lts.conf
-# This is the default lts.conf file for ltsp 5.
-# For more information about valid options please see: 
-# /usr/share/doc/ltsp-client-core/lts-parameters.txt.gz
-# in the client environment or
-# /usr/share/doc/ltsp-server/lts-parameters.txt.gz
-# on the server
+# This is the default lts.conf file for ltsp 5.  For more information about
+# valid options please see lts.conf(5) man page, available in the ltsp-docs
+# package.
 
 [default] 
     LTSP_CONFIG=True
