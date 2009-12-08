@@ -1,0 +1,10 @@
+# See if a reboot/halt was requested in the last session
+
+case "$(cat /var/run/ldm-logout-action)" in
+        REBOOT)
+            exec reboot -fp
+            ;;
+        HALT)
+            exec poweroff -fp
+            ;;
+esac
