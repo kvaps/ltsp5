@@ -60,18 +60,28 @@ if boolean_is_true "$LOCAL_APPS"; then
     [ -f "${TMPGROUP}" ] && rm ${TMPGROUP}
     gnames=""
     gids=""
+    # those 2 variables are there because if group is rejected because of the gid we need to create this group.
+    dgnames=""
+    ngids=""
+
     while read line; do
         gname=$(echo $line|cut -d: -f1)
         gid=$(echo $line|cut -d: -f3)
         match=
         for e in $gnames; do
             if [ "$gname" = "$e" ]; then
+                if [ -n "$(echo $line | grep "${LDM_USERNAME}")" ]; then
+                    dgnames="$dgnames $gname,"
+                fi
                 match=1
             fi
         done
         for e in $gids; do
             if [ "$gid" = "$e" ]; then
                 match=1
+                if [ -n "$(echo $line | grep "${LDM_USERNAME}")" ]; then
+                    ngids="$ngids $gname,"
+                fi
             fi
         done
         if [ -z "$match" ]; then
@@ -80,14 +90,46 @@ if boolean_is_true "$LOCAL_APPS"; then
             gids="$gids $gid"
         fi
     done < ${COMBINED_GROUP}
+    # cleanup
+    dgnames=$(echo ${dgnames} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+    ngids=$(echo ${ngids} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+    tocreate=""
+    OLDIFS="$IFS"
+    IFS=,
+    for e in $ngids; do
+        match=
+        for f in $dgnames; do
+            if [ "$e" = "$f" ]; then
+        match=1
+        fi
+        done
+        if [ -z "$match" ]; then
+        tocreate="$tocreate $e,"
+    fi
+    done
+    tocreate=$(echo ${tocreate} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//' | sed 's/^[[:blank:]]*//g')
+    unset IFS
+    test -n "$OLDIFS" && IFS="$OLDIFS"
+
     cp ${TMPGROUP} /etc/group
     chmod 644 /etc/group
 
 
     if [ -n "$myGroups" ]; then
         if [ -w /etc ]; then
-            usermod -G "$myGroups" "${LDM_USERNAME}" 2>/dev/null
+            OLDIFS="$IFS"
+            IFS=,
+            for ngroup in $tocreate; do
+                ngroup=$(echo ${ngroup} | sed -e 's/ /\\\ /g') # FIXME: Problem with AD. Space not permited here.
+                groupadd -r ${ngroup}
+            done
+            unset IFS
+            test -n "$OLDIFS" && IFS="$OLDIFS"
+        for group in $(echo ${myGroups} | tr ',' '\n' | sort -u); do
+        /usr/sbin/usermod -a -G $group "${LDM_USERNAME}" 2>/dev/null
+            done
         else
+            # FIXME: maybe add system groups: $tocreate into /etc/group
             # Read-only /etc cannot use usermod
             myGroups=$(echo ${myGroups} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
             OLDIFS="$IFS"
