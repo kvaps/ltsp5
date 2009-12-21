@@ -1,5 +1,7 @@
 # See if a reboot/halt was requested in the last session
 
+[ ! -f /var/run/ldm-logout-action ] && return
+
 case "$(cat /var/run/ldm-logout-action)" in
         REBOOT)
             exec reboot -fp
