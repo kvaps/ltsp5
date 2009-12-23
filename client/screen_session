@@ -39,6 +39,13 @@ if [ "True" != "$LTSP_CONFIG" ]; then
     . /usr/share/ltsp/ltsp_config
 fi
 
+CURTTY="/dev/tty$(fgconsole)"
+case $CURTTY in
+    /dev/tty?) CURRENT_NUM="0${CURTTY##/dev/tty}" ;;
+    /dev/tty??) CURRENT_NUM="${CURTTY##/dev/tty}" ;;
+esac
+CURTTY_NUM=${CURRENT_NUM#0}
+
 # Figure out SCREEN_NUM
 if [ -n "$1" ]; then
     SCREEN_NUM="$1"
@@ -48,11 +55,9 @@ if [ -n "$1" ]; then
 else
     # If screen_session is called from inittab/upstart, already with a
     # controlling terminal, then just figure out what screen number we are.
-    TTY=`tty`
-    case $TTY in
-        /dev/tty?) SCREEN_NUM="0${TTY##/dev/tty}" ;;
-        /dev/tty??) SCREEN_NUM="${TTY##/dev/tty}" ;;
-    esac
+    SCREEN_NUM=${CURRENT_NUM}
+    TTY_NUM=${CURTTY_NUM}
+    TTY=${CURTTY}
 fi
 
 export SCREEN_NUM
@@ -69,7 +74,7 @@ fi
 main() {
     if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
         # Reset the environement
-        unset $(env | egrep '^(\w+)=(.*)$' | egrep -vw 'PWD|USER|PATH|HOME|SCREEN_NUM|SCREEN_DIRS|TTY_NUM' | /usr/bin/cut -d= -f1)
+        unset $(env | egrep '^(\w+)=(.*)$' | egrep -vw 'PWD|USER|PATH|HOME|SCREEN_NUM|SCREEN_DIRS|TTY_NUM|CURTTY_NUM' | /usr/bin/cut -d= -f1)
         . /usr/share/ltsp/ltsp_config
         eval $(getltscfg-cluster -a -l prompt)
     fi
@@ -96,7 +101,21 @@ main() {
             else
                 return 2
             fi
-            ${openvt} -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+
+            # Check if we need to switch VT
+            if [ "${CURTTY_NUM}" != "${TTY_NUM}" ]; then
+                ${openvt} -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
+                PID=$!
+
+                # Check if our current VT has a screen configured, if so, make sure we stay there
+                eval CURRENT_CMD=\$\{SCREEN_$CURRENT_NUM\}
+                if [ -n "${CURRENT_CMD}" ]; then
+                    chvt ${CURTTY_NUM}
+                fi
+                wait $PID
+            else
+                ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
+            fi
             return 0
         fi
     done
