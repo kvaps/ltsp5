@@ -28,4 +28,4 @@ if [ -x /usr/share/ltsp/xinitrc ]; then
     xinitrc=/usr/share/ltsp/xinitrc
 fi
 
-xinit $xinitrc /usr/bin/rdesktop ${RDESKTOP_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br >/dev/null
+xinit $xinitrc /usr/bin/rdesktop ${RDESKTOP_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br >/dev/null 2>&1
