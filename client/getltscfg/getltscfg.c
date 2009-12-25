@@ -28,6 +28,8 @@
 #include  <net/if.h>
 #include  <netinet/in.h>
 #include  <arpa/inet.h>
+#define _GNU_SOURCE /* need the fnmatch FNM_CASEFOLD flag */
+#include  <fnmatch.h>
 #include  "getltscfg.h"
 
 extern FILE *yyin;
@@ -191,13 +193,17 @@ void process_tuple(char *kwd, char *val)
 //
 // find_chain_entry(), returns TRUE if it found the entry, and FALSE otherwise
 //
-int find_chain_entry(char *name)
+int find_chain_entry(char *name, int glob)
 {
     int	fFound = FALSE;
     SECTTYPE *worksect;
     cursect = headsect;
+    int matches = FALSE;
     while( cursect && !fFound ){
-        if(strcasecmp(cursect->name,name) == 0){
+        matches = strcasecmp(cursect->name,name) == 0;
+        if (glob)
+            matches = !matches && fnmatch(cursect->name, name, FNM_CASEFOLD) == 0;
+        if(matches){
             CHAINTYPE *chainptr = (CHAINTYPE *)malloc(sizeof(CHAINTYPE));
             worksect = cursect;
             fFound = TRUE;
@@ -429,8 +435,8 @@ int main( int argc, const char **argv )
     // that we are interested in.  Then, walk through the linked list
     // looking for any entries that indicate we want to "inherit" entries
     // from another section.  We'll build a new linked list of those
-    // sections that we want to inherit from. Then, we'll tack the 'Default'
-    // section on the end of that.  Once we have the inheritance list, we
+    // sections that we want to inherit from. Then, we'll tack any wildcard matches
+    // and the 'Default' section on the end of that.  Once we have the inheritance list, we
     // need to walk that list backwards, building the list of
     // tuples (keyword/value pairs).
     // Finally, when we are all done, we should have all of the values that
@@ -447,7 +453,7 @@ int main( int argc, const char **argv )
     i = 0;
     fFound = FALSE;
     while( aWorkstationId[i] && !fFound ){
-        if(find_chain_entry(aWorkstationId[i])){
+        if(find_chain_entry(aWorkstationId[i], FALSE)){
 	    fFound = TRUE;
         }
         i++;
@@ -458,17 +464,33 @@ int main( int argc, const char **argv )
         curtuple = chain->sect->tuple_list;
         while(curtuple){
             if(strcasecmp(curtuple->keyword,"LIKE") == 0)
-                status = find_chain_entry(curtuple->value);
+                status = find_chain_entry(curtuple->value, FALSE);
 
             curtuple = curtuple->next;
         }
         chain = chain->next;
     }
 
+    for (i=0; aWorkstationId[i]; ++i){
+        if((status = find_chain_entry(aWorkstationId[i], TRUE))){
+            chain = headchain;
+            while(chain){
+                curtuple = chain->sect->tuple_list;
+                while(curtuple){
+                    if(strcasecmp(curtuple->keyword,"LIKE") == 0)
+                        status = find_chain_entry(curtuple->value, FALSE);
+
+                    curtuple = curtuple->next;
+                }
+                chain = chain->next;
+            }
+        }
+    }
+
     //
     // the last entry in the chain is the '[Default]' entry
     //
-    status = find_chain_entry("default");
+    status = find_chain_entry("default", FALSE);
 
 
     curchain = tailchain;
