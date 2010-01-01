@@ -25,8 +25,8 @@ case "$MODE" in
                 kfreebsd-amd64)
                     KERNEL_ARCH="amd64"
                     ;;
-                sparc) 
-                    KERNEL_ARCH="$(uname -m)"
+                sparc) # only 64 bit kernel is supported in Debian Lenny+
+                    KERNEL_ARCH="sparc64"
                     ;;
                 alpha)
                     KERNEL_ARCH="alpha-generic"
