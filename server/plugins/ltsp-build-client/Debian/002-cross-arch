@@ -20,6 +20,9 @@ case "$MODE" in
                 amd64) # untested
                     CROSS_ARCH_EMULATOR=qemu-x86_64
                     ;;
+                mips|mipsel) # semi-functional with qemu 0.12.1
+                    CROSS_ARCH_EMULATOR=qemu-"$ARCH"
+                    ;;
                 *) echo "WARNING: unknown cross-architecture combination: $ARCH on $HOST_ARCH"
                     ;;
             esac
