@@ -7,7 +7,7 @@ case "$MODE" in
                 armel) # tested with qemu 0.11.0-rc0
                     CROSS_ARCH_EMULATOR=qemu-arm
                     ;;
-                powerpc) # untested
+                powerpc) # semi-functional with qemu 0.12.1
                     CROSS_ARCH_EMULATOR=qemu-ppc
                     ;;
                 i386)
