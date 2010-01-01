@@ -41,6 +41,7 @@ case "$MODE" in
                     if [ "$HOST_ARCH" != "$ARCH" ]; then
                         echo "ERROR: unable to determine cross-architecture kernel"
                         echo "please select kernel with with --kernel-packages"
+                        exit 1
                     fi
                     ;;
             esac
