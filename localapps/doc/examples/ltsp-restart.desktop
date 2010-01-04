@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Exec=sh -c 'xprop -root -f LTSP_COMMAND 8s -set LTSP_COMMAND "echo reboot > /tmp/ldm-logout-action" && gnome-session-save --logout'
+Exec=sh -c 'xprop -root -f LTSP_LOGOUT_ACTION 8s -set LTSP_LOGOUT_ACTION REBOOT && gnome-session-save --logout'
 Name=Restart
 Name[fr]=Redémarrer
 Icon=gnome-session-reboot
