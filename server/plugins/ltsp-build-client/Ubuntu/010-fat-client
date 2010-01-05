@@ -1,0 +1,44 @@
+case "$MODE" in
+    commandline)
+        # Add a command line switch to ltsp-build-client that installs desktop
+        # meta-packages so that diskless workstations can everything locally
+        add_option "fat-client" "`eval_gettext "run most or all applications locally"`" "advanced" "false"
+        add_option "fat-client-desktop" "`eval_gettext "run most or all applications locally"`" "advanced" "true"
+    ;;
+    after-install)
+        # If fat client isn't enabled, just continue
+        [ -z "$option_fat_client_value" ] && return
+
+        # Check what the sysadmin chose to install, if (s)he is lazy and didn't
+        # specify one, then we install the desktop meta-package that's already
+        # installed on the server.
+
+        if [ -n "$option_fat_client_desktop_value" ]; then
+            export fat_client_desktop="$option_fat_client_desktop_value"
+        else
+            export fat_client_desktop=ubuntu-desktop
+            for cdd in ed x k; do
+                if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then
+                        export fat_client_desktop=${ccd}ubuntu-desktop
+                     return
+                fi
+            done
+        fi
+
+        # Check if the proc filesystem is mounted, if not do so
+        if [ ! -f $ROOT/proc/mounts ]; then
+            mount -t proc proc $ROOT/proc
+        fi
+
+        # Install desktop packages, then remove excess and incompatible packages
+        chroot $ROOT apt-get --force-yes -yy install $fat_client_desktop
+        chroot $ROOT apt-get --force-yes -yy --purge remove gdm network-manager.* modemmanager ubufox apport-gtk apport apport-symptoms jockey-common jockey-gtk
+        chroot $ROOT apt-get --force-yes -yy --purge autoremove
+
+        # Disable the fast user switching applet, it doesn't work without GDM
+        chroot $ROOT gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --set --type list --list-type string /apps/panel/global/disabled_applets "[OAFIID:GNOME_FastUserSwitchApplet,OAFIID:GNOME_IndicatorApplet]"
+
+        # Clean up package cache
+        chroot $ROOT apt-get clean
+    ;;
+esac
