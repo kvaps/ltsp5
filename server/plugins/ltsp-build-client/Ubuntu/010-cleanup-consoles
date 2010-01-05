@@ -1,6 +1,6 @@
 case "$MODE" in
     after-install)
-	    # we only want the first console by default (save memory)
+        # we only want the first console by default (save memory)
         if [ -d $ROOT/etc/event.d  ];then
             rm $ROOT/etc/event.d/tty[2-6]
         else

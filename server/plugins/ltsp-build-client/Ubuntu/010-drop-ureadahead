@@ -1,0 +1,6 @@
+case "$MODE" in
+    after-install)
+        # We don't want ureadahead to run/profile on a thin client
+        rm -f $ROOT/etc/init/ureadahead*.conf
+        ;;
+esac
