@@ -126,8 +126,6 @@ pre_install_portage_tree() {
 	sys-apps/openrc
 	sys-apps/baselayout
 	sys-apps/sysvinit
-	# needed for local apps
-	~sys-fs/sshfs-fuse-2.1
 	EOF
 }
 
