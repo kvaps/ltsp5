@@ -127,6 +127,11 @@ pre_install_portage_tree() {
 	sys-apps/baselayout
 	sys-apps/sysvinit
 	EOF
+
+	# pulseaudio pulls udev[extras]
+	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
+	sys-fs/udev extras
+	EOF
 }
 
 pre_build_kernel() {
@@ -157,7 +162,7 @@ pre_build_kernel() {
 }
 
 pre_install_extra_packages() {
-	spawn_chroot "emerge --update --deep world"
+	spawn_chroot "emerge --update --deep --newuse world"
 }
 
 extra_packages ldm ltsp-client ${PACKAGES}
