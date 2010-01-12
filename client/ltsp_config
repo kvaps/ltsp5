@@ -54,13 +54,14 @@ export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     # check for NBD devices
-    NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/rofs /{print $1}' /proc/mounts)
-    if [ -n "$NBD_DEVICES" ]; then
-        for DEVICE in $NBD_DEVICES ; do
-                server=$(pgrep -f -l $DEVICE | awk '{print $3}')
-                test -n "$server" && break
-        done
-    else
+    for DEVICE in /dev/nbd*; do
+        pid=$(nbd-client -c $DEVICE)
+        server=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 2)
+        if [ -n "$server" ]; then
+            break
+        fi
+    done
+    if [ -z "$server" ]; then
         # check for NFS root
         server=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
     fi
