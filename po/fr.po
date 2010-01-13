@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 0.99debian3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-23 11:21-0700\n"
+"POT-Creation-Date: 2010-01-13 10:32-0800\n"
 "PO-Revision-Date: 2009-04-24 11:55+0100\n"
 "Last-Translator: Jean-Baka Domelevo Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -75,37 +75,305 @@ msgstr "Alerte de connexion"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #, sh-format
-msgid "Set the default base install directory"
-msgstr "Indiquer le répertoire d'installation de base par défaut"
+msgid "set the list of packages to install after base-install is completed."
+msgstr ""
+"indiquer la liste des paquets à installer une fois l'installation de base "
+"(« base-install ») terminée."
 
-#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
+#: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #, sh-format
-msgid "Load a user specific configuration file"
-msgstr "Charger un fichier de configuration propre à l'utilisateur"
+msgid "list of packages to install as part of the final installation."
+msgstr "liste des paquets à installer lors de l'installation finale."
 
+#: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
+#, sh-format
+msgid "Set the default locale"
+msgstr "Indiquer la langue (« locale ») par défaut"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
+#, sh-format
+msgid "Enable progress reporting"
+msgstr "Activer l'affichage de la progression"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
+#, sh-format
+msgid "Print stage times (seconds)"
+msgstr "Afficher le temps des différentes étapes (en secondes)"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
+#, sh-format
+msgid "Draw progress bar"
+msgstr "Afficher une barre de progression"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
+#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr ""
+"demander la saisie du mot de passe du superutilisateur, désactivé par défaut"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "activer la console série"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
+#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "Activation de la console série..."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:3
+#, sh-format
+msgid "Set the mirror location"
+msgstr "Indiquer l'emplacement du miroir"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "ajouter un miroir, prioritaire sur le miroir par défaut"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "ajouter un miroir, sur lequel le miroir par défaut sera prioritaire"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#, sh-format
+msgid "add a security mirror"
+msgstr "ajouter un miroir sécurité"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
+#, sh-format
+msgid "set the kernel package to install."
+msgstr "indiquer le paquet de noyau à installer."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
+#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "garder en cache les paquets téléchargés"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#, sh-format
+msgid "Set the distribution to be used for install"
+msgstr "Indiquer la distribution à utiliser pour l'installation"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
+#, sh-format
+msgid "Set the i18n langs"
+msgstr "Indiquer les langues pour l'internationalisation"
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
+#, sh-format
+msgid "set the kernel modules packages to install."
+msgstr "indiquer la liste des modules de noyau à installer."
+
+#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:9
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
-#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
-msgstr "Indiquer l'architecture cible"
+msgstr "indiquer l'architecture cible"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:20
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:31
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:42
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed"
+msgstr ""
+"indiquer la liste des paquets à installer une fois l'installation de base "
+"(« base-install ») terminée"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "inclure les clés listées dans le trousseau d'APT"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
+msgid "cache downloaded packages"
+msgstr "garder en cache les paquets téléchargés"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr "Copie des paquets"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
+#, sh-format
+msgid "done."
+msgstr "terminé"
+
+#: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
+#, sh-format
+msgid "create squashfs image for use with NBD"
+msgstr "créer une image squashfs pour utilisation avec NBD"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "charger la préconfiguration debconf dans le chroot après installation"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
+#, sh-format
+msgid "mount package cache dir from server"
+msgstr "monter le répertoire de cache des paquets depuis le serveur"
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install"
+msgstr "autoriser l'installation de paquets non signés"
+
+#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr "télécharger les fichiers « Packages » d'APT depuis le serveur"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
+#, sh-format
+msgid "distribution to set up apt pinning"
+msgstr "distribution à utiliser pour le apt pinning"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
+#, sh-format
+msgid "list of packages to install from the pinned distribution"
+msgstr ""
+"liste des paquets à installer depuis la distribution marquée (« pinned »)"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#, sh-format
+msgid "a simple webkiosk mode"
+msgstr "un mode de kiosque web simplifié"
+
+#: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
+#, sh-format
+msgid "mounts CDROM before installation"
+msgstr "monter le CDROM avant l'installation"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:3
+#, sh-format
+msgid "use specified http proxy"
+msgstr "utiliser le proxy http specifié"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:4
+#, sh-format
+msgid "do not autodetect apt proxy configuration"
+msgstr "ne pas détecter automatiquement la configuration du proxy apt"
+
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#, sh-format
+msgid "set the default locale"
+msgstr "indiquer la langue (« locale ») par défaut"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "activer les statistiques d'utilisation de paquets dans le chroot"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "Activation des statistiques d'utilisation de paquets..."
+
+#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "set the components to be used in mirror"
+msgstr "sélectionner les composants à utiliser sur le miroir"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
+#, sh-format
+msgid "create ext2 image for use with NBD"
+msgstr "créer une image ext2 pour utilisation avec NBD"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:4
+#, sh-format
+msgid "create image for use with NBD of the specified filesystem"
+msgstr ""
+"créer une image pour utilisation avec NBD utilisant le système de fichiers "
+"specifié"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
+#, sh-format
+msgid "skip upgrade of installed packages"
+msgstr "sauter la mise à jour des paquets déjà installés"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "set the mirror location"
+msgstr "indiquer l'emplacement du miroir"
+
+#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install"
+msgstr "indiquer la liste des paquets de noyau à installer"
+
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation"
+msgstr "liste des paquets à installer lors de l'installation finale"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr ""
+"Note : ajout des distributions et des composants par défaut au miroir "
+"sécurité :"
+
+#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid "NOTE: disabling security APT source for sid.  It does not exist."
+msgstr ""
+"Note : désactivation de la source sécurité d'APT pour sid. Il n'y en a pas."
+
+#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#, sh-format
+msgid "exclude packages from the initial chroot"
+msgstr "exclure des paquets du chroot initial"
+
+#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#, sh-format
+msgid "load a user specific configuration file"
+msgstr "charger un fichier de configuration propre à l'utilisateur"
+
+#: ../server/plugins/ltsp-build-client/common/020-rootpath:3
+#, sh-format
+msgid "purge existing LTSP chroot if present"
+msgstr "supprimer le chroot si déjà présent"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
+#, sh-format
+msgid "set the distribution to be used for install"
+msgstr "indiquer la distribution à utiliser pour l'installation"
+
+#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#, sh-format
+msgid "enable debug support"
+msgstr "activer le débogage"
+
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:22
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:33
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:44
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr "Erreur : --arch %s appelé avec une architecture non supportée : %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:49
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:30
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:32
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
@@ -113,41 +381,57 @@ msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 "Erreur : architecture non supportée. Vérifiez votre paramètre --arch : %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:50
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:31
+#: ../server/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:33
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       valeurs possibles : %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#: ../server/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
-msgid "Set the distribution to be used for install"
-msgstr "Indiquer la distribution à utiliser pour l'installation"
+msgid "set the default base install directory"
+msgstr "indiquer le répertoire d'installation de base par défaut"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
-msgid "Set the name of the chroot."
-msgstr "Indiquer le nom du chroot."
+msgid "set the name of the chroot"
+msgstr "indiquer le nom du chroot"
 
-#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
-msgid "prompt to set the root password, defaults to disabled"
+msgid "use the servers sources.list instead of generating one"
 msgstr ""
-"demander la saisie du mot de passe du superutilisateur, désactivé par défaut"
+"utiliser les serveurs mentionnés dans sources.list et ne pas générer de "
+"nouvelle liste"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:5
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:6
 #, sh-format
-msgid "exclude packages from the initial chroot"
-msgstr "exclure des paquets du chroot initial"
+msgid "run most or all applications locally"
+msgstr "démarre toutes (ou presque) les applications localement"
 
-#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
-msgid "Enable debug support"
-msgstr "Activer le débogage"
+msgid "enable LTSP-Cluster"
+msgstr "activer LTSP-Cluster"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
+#, sh-format
+msgid "force to skip the squashfs build (for debian-installer)"
+msgstr ""
+"obliger à ne pas construire de système squashfs (dans l'installateur Debian)"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:6
+#, sh-format
+msgid "set the security mirror location"
+msgstr "indiquer l'emplacement du miroir de sécurité"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:7
+#, sh-format
+msgid "set the update mirror location"
+msgstr "indiquer l'emplacement du miroir de mise à jour"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -204,14 +488,6 @@ msgstr "Définir le nombre de processus de compilation simultanés"
 msgid "Set extra mirror locations (space-separated)"
 msgstr "Indiquer d'autres adresses de miroir (séparées par un espace)"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
-#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
-#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
-#, sh-format
-msgid "Set the default locale"
-msgstr "Indiquer la langue (« locale ») par défaut"
-
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:7
 #, sh-format
 msgid "list of extra packages to install as part of the initial installation."
@@ -219,307 +495,67 @@ msgstr ""
 "liste des paquets supplémentaires à installer lors de l'installation "
 "initiale."
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-security-mirror:8
-#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
-msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
-"Note : ajout des distributions et des composants par défaut au miroir "
-"sécurité :"
+msgid "Load a user specific configuration file"
+msgstr "Charger un fichier de configuration propre à l'utilisateur"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/090-clean-package-cache:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
-#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
-#, sh-format
-msgid "keep cache of downloaded package files"
-msgstr "garder en cache les paquets téléchargés"
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-early-packages:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
-#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, sh-format
-msgid "set the list of packages to install after base-install is completed."
-msgstr ""
-"indiquer la liste des paquets à installer une fois l'installation de base "
-"(« base-install ») terminée."
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
-#, sh-format
-msgid "Enable LTSP-Cluster"
-msgstr "Activer LTSP-Cluster"
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-late-packages:3
-#: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
-#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, sh-format
-msgid "list of packages to install as part of the final installation."
-msgstr "liste des paquets à installer lors de l'installation finale."
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
-#, sh-format
-msgid "force to skip the squashfs build (for debian-installer)."
-msgstr ""
-"obliger à ne pas construire de système squashfs (dans l'installateur Debian)."
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
-#, sh-format
-msgid "a simple webkiosk mode."
-msgstr "un mode de kiosque web simplifié"
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
-#, sh-format
-msgid "use the servers sources.list instead of generating one"
-msgstr ""
-"utiliser les serveurs mentionnés dans sources.list et ne pas générer de "
-"nouvelle liste"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
-#, sh-format
-msgid "Set the i18n langs"
-msgstr "Indiquer les langues pour l'internationalisation"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
-#, sh-format
-msgid "set the kernel modules packages to install."
-msgstr "Indiquer la liste des modules de noyau à installer."
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, sh-format
-msgid "Set the mirror location"
-msgstr "Indiquer l'emplacement du miroir"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#, sh-format
-msgid "add a mirror, which takes priority over the default mirror"
-msgstr "ajouter un miroir, prioritaire sur le miroir par défaut"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#, sh-format
-msgid "add a mirror, with lower priority than the default mirror"
-msgstr "ajouter un miroir, sur lequel le miroir par défaut sera prioritaire"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
-#, sh-format
-msgid "add a security mirror"
-msgstr "ajouter un miroir sécurité"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
-#, sh-format
-msgid "Enable progress reporting"
-msgstr "Activer l'affichage de la progression"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
-#, sh-format
-msgid "Print stage times (seconds)"
-msgstr "Afficher le temps des différentes étapes (en secondes)"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
-#, sh-format
-msgid "Draw progress bar"
-msgstr "Afficher une barre de progression"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
-#, sh-format
-msgid "set the kernel package to install."
-msgstr "indiquer le paquet de noyau à installer."
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
-#, sh-format
-msgid "enable serial console"
-msgstr "activer la console série"
-
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
-#, sh-format
-msgid "Enabling serial console..."
-msgstr "Activation de la console série..."
-
-#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
-#, sh-format
-msgid "include the listed keys in the apt keyring"
-msgstr "inclure les clés listées dans le trousseau d'APT"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
-#, sh-format
-msgid "mount package cache dir from server"
-msgstr "monter le répertoire de cache des paquets depuis le serveur"
-
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection.~1~:3
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection.~2~:3
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, sh-format
-msgid "set the list of kernel packages to install."
-msgstr "indiquer la liste des paquets de noyau à installer."
-
-#: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
-#: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image.~1~:3
-#, sh-format
-msgid "create squashfs image for use with NBD."
-msgstr "créer une image squashfs pour utilisation avec NBD"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
-#, sh-format
-msgid "load debconf seeding in the chroot after install"
-msgstr "charger la préconfiguration debconf dans le chroot après installation"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
-#, sh-format
-msgid "copy apt Packages files from server"
-msgstr "télécharger les fichiers « Packages » d'APT depuis le serveur"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
-#, sh-format
-msgid "cache downloaded packages"
-msgstr "garder en cache les paquets téléchargés"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
-#, sh-format
-msgid "Copying packages"
-msgstr "Copie des paquets"
-
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
-#, sh-format
-msgid "done."
-msgstr "Terminé"
-
-#: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, sh-format
-msgid "skip upgrade of installed packages."
-msgstr "sauter la mise à jour des paquets déjà installés"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
-#, sh-format
-msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr ""
-"Note : désactivation de la source sécurité d'APT pour sid. Il n'y en a pas."
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, sh-format
-msgid "allow unsigned packages during install."
-msgstr "autoriser l'installation de paquets non signés."
-
-#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
-#, sh-format
-msgid "Set the components to be used in mirror"
-msgstr "Sélectionner les composants à utiliser sur le miroir"
-
-#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
-#, sh-format
-msgid "create ext2 image for use with NBD"
-msgstr "créer une image ext2 pour utilisation avec NBD"
-
-#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:4
-#, sh-format
-msgid "create image for use with NBD of the specified filesystem"
-msgstr ""
-"créer une image pour utilisation avec NBD utilisant le système de fichiers "
-"specifié"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:3
-#, sh-format
-msgid "use specified http proxy"
-msgstr "utiliser le proxy http specifié"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:4
-#, sh-format
-msgid "do not autodetect apt proxy configuration"
-msgstr "ne pas détecter automatiquement la configuration du proxy apt"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
-#, sh-format
-msgid "distribution to set up apt pinning"
-msgstr "distribution à utiliser pour le apt pinning"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
-#, sh-format
-msgid "list of packages to install from the pinned distribution"
-msgstr ""
-"liste des paquets à installer depuis la distribution marquée (« pinned »)"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
-#, sh-format
-msgid "enable popularity-contest in the chroot"
-msgstr "activer les statistiques d'utilisation de paquets dans le chroot"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
-#, sh-format
-msgid "Enabling popularity contest..."
-msgstr "Activation des statistiques d'utilisation de paquets..."
-
-#: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
-#, sh-format
-msgid "mounts CDROM before installation"
-msgstr "monter le CDROM avant l'installation"
-
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
 msgstr "Chemin vers le fichier kickstart"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr "Chemin vers le cache du créateur de chroot"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:13
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
 msgstr "Numéro de version"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:14
+#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
 msgstr "Nom de la distribution"
 
-#: ../server/ltsp-build-client:85
+#: ../server/ltsp-build-client:83
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "erreur d'API : vous devez indiquer « true » ou « false »."
 
-#: ../server/ltsp-build-client:128
+#: ../server/ltsp-build-client:126
 #, sh-format
-msgid "Display this help message"
-msgstr "Afficher ce message d'aide"
+msgid "display this help message"
+msgstr "afficher ce message d'aide"
 
-#: ../server/ltsp-build-client:129
+#: ../server/ltsp-build-client:127
 #, sh-format
-msgid "Display help for all available commandline options"
-msgstr "Afficher l'aide pour toutes les options en ligne de commande"
+msgid "display help for all available commandline options"
+msgstr "afficher l'aide pour toutes les options en ligne de commande"
 
-#: ../server/ltsp-build-client:133
+#: ../server/ltsp-build-client:131
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Utilisation du client de construction LTSP :"
 
-#: ../server/ltsp-build-client:137
+#: ../server/ltsp-build-client:135
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Options ordinaires :"
 
-#: ../server/ltsp-build-client:141
+#: ../server/ltsp-build-client:139
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Options avancées :"
 
-#: ../server/ltsp-build-client:153
+#: ../server/ltsp-build-client:151
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "info : l'installation du client LTSP est terminée."
 
-#: ../server/ltsp-build-client:155
+#: ../server/ltsp-build-client:153
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erreur : l'installation du client LTSP a échoué."
-
-#, fuzzy
-#~ msgid "add a backports mirror"
-#~ msgstr "ajouter un miroir sécurité"
-
-#~ msgid "The IP of the LTSP Cluster Control Center"
-#~ msgstr "Adresse IP du control-center de LTSP-Cluster"
