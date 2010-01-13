@@ -1,0 +1,21 @@
+------------------------------------------------------------
+revno: 3
+committer: Julien Desfossez <jd@rlnx.com>
+branch nick: nbd
+timestamp: Tue 2010-01-05 17:42:58 -0500
+message:
+  first reconnect
+------------------------------------------------------------
+revno: 2
+committer: Julien Desfossez <jd@rlnx.com>
+branch nick: nbd
+timestamp: Tue 2010-01-05 16:00:42 -0500
+message:
+  working proxy. Only bridge
+------------------------------------------------------------
+revno: 1
+committer: Julien Desfossez <jd@rlnx.com>
+branch nick: nbd
+timestamp: Tue 2010-01-05 12:03:18 -0500
+message:
+  initial import nbd PoC and C version

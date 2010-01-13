@@ -1,0 +1,45 @@
+http://grep.be/blog/en/computer/nbd/
+
+"Negotiation" phase:
+
+        * Connection is opened by the client
+        * The server sends out the literal string NBDMAGIC to the client (which is the "INIT_PASSWD" in the code and in error messages), 
+		  followed by the the 'cliserv_magic', 0x00420281861253LL. The NBDMAGIC is there to identify a server; the cliserv_magic may 
+		  be updated when the protocol changes incompatibly.
+        * The server sends the size of the device as a 64 bit unsigned integer.
+        * The server sends 128 bytes of zeroes (discarded by the client currently; these are reserved for further use)
+
+    (whether or not the above are all in one packet is something I don't know and don't really care about; they're all done using different write calls, so can technically be in different packets)
+    After that, the client is expected to be happy with the connection (if it isn't, it'll just drop the connection without explanation).
+
+
+Main data pushing phase:
+        * Clients sends a struct nbd_request to the server (which is defined in <linux/nbd.h>. The fields in that struct are:
+
+          magic (32bit unsigned int)
+            must be NBD_REQUEST_MAGIC aka 0x25609513 (again defined in <linux/nbd.h>); if it isn't, the server disconnects 
+			(this should really be handled better, but at the moment it isn't; and changing the protocol to do this might be 
+			less than trivial). It is possible that previous versions of the protocol used 0x12560953 instead (the header file 
+			mentions that as something not to be used, but I don't know where it comes from).
+          type (32 bit unsigned int)
+              is NBD_CMD_READ aka 0 (to read data), NBD_CMD_WRITE (to write data) aka 1, or NBD_CMD_DISC aka 2 (to request a clean disconnect).
+          handle (char array of eight bytes)
+              used to uniquely identify a request; this is later sent back in the reply, and can be used to associate a reply with a request.
+          from (64 bit unsigned int)
+              the offset in the export where the read or the write should start.
+          len (32 bit unsigned int)
+              the length of the requested read or write.
+
+        * If struct nbd_request.type==NBD_CMD_WRITE, the client will then send struct nbd_request.len bytes to the server, 
+		  containing the data it wants to see written.
+        * Server sends a struct nbd_reply to the client:
+
+          magic (32 bit unsigned int)
+              functions similar to struct nbd_request.magic, only its value is supposed to be 0x67446698. Analoguous to 
+			  struct nbd_request.magic, there's a value, possibly from a previous version of the protocol, which says 0x96744668 instead.
+          error (32 bit unsigned integer)
+              is zero, unless an error occurred
+          handle (char array of eight bytes)
+              the exact same value that was received in struct nbd_request.handle If struct nbd_request.type==NBD_CMD_READ, 
+			  the server will then send struct nbd_request.len bytes to the client, containing the data it read.
+
