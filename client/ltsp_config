@@ -53,7 +53,7 @@ export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
-    while read DEVICE MOUNTPOUNT FSTYPE OPTIONS PASS1 PASS2; do
+    while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
         case $DEVICE in
             /dev/nbd[0-9]*)
                 if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
