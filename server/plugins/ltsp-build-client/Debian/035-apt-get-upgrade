@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "skip-upgrade" "`eval_gettext "skip upgrade of installed packages."`" "advanced" "false"
+        add_option "skip-upgrade" "`eval_gettext "skip upgrade of installed packages"`" "advanced" "false"
         ;;
     configure)
         if [ -n "$option_skip_upgrade_value" ]; then

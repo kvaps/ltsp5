@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "squashfs-image" "`eval_gettext "create squashfs image for use with NBD."`" "advanced" "false"
+        add_option "squashfs-image" "`eval_gettext "create squashfs image for use with NBD"`" "advanced" "false"
         ;;
     configure)
         if [ -n "$option_squashfs_image_value" ]; then

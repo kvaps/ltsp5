@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "ltsp-cluster" "`eval_gettext "Enable LTSP-Cluster"`" "advanced" "false"
+        add_option "ltsp-cluster" "`eval_gettext "enable LTSP-Cluster"`" "advanced" "false"
         ;;
     configure)
         if [ -n "$option_ltsp_cluster_value" ]; then

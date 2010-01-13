@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "skipimage" "`eval_gettext "force to skip the squashfs build (for debian-installer)."`" "advanced" "false"
+        add_option "skipimage" "`eval_gettext "force to skip the squashfs build (for debian-installer)"`" "advanced" "false"
         ;;
     configure)
         if [ -z "$option_skipimage_value" ]; then

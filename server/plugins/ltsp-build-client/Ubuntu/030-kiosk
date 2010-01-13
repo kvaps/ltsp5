@@ -4,7 +4,7 @@ case "$MODE" in
         # we dont expect any value, callig --kiosk is enough, we could enhance
         # the plugin to use --kiosk kde for example to install kdm and konqueror
         # instead if we'd set it to true
-        add_option "kiosk" "`eval_gettext "a simple webkiosk mode."`" "advanced" "false"
+        add_option "kiosk" "`eval_gettext "a simple webkiosk mode"`" "advanced" "false"
         ;;
     configure)
         if [ -n "$option_kiosk_value" ]; then

@@ -123,8 +123,8 @@ chroot_mount() {
 ####################################
 
 # Add commandline option to handle --help
-add_option "help" "`eval_gettext "Display this help message"`" "regular" "false"
-add_option "extra-help" "`eval_gettext "Display help for all available commandline options"`" "regular" "false"
+add_option "help" "`eval_gettext "display this help message"`" "regular" "false"
+add_option "extra-help" "`eval_gettext "display help for all available commandline options"`" "regular" "false"
 
 # Print usage information.
 usage() {
