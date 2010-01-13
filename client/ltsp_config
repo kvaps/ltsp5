@@ -53,19 +53,19 @@ export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 
 # Ensure a default for SERVER
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
-    # check for NBD devices
     while read DEVICE MOUNTPOUNT FSTYPE OPTIONS PASS1 PASS2; do
-        case $DEVICE in
-            /dev/nbd[0-9]*)
-                if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
+        if [ "$FSTYPE" = "nfs" ] && [ "$MOUNTPOINT" = "/" ]; then
+            # NFS root
+            server=${DEVICE%%:*}
+        elif [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
+            case $DEVICE in
+                /dev/nbd[0-9]*)
+                    # check for NBD devices
                     pid=$(nbd-client -c $DEVICE)
                     server=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 2)
-                fi
-                ;;
-            *:/opt/ltsp/*)
-                server=${DEVICE%%:*}
-                ;;
-        esac
+                    ;;
+            esac
+        fi
         [ -n "$server" ] && break
     done < /proc/mounts
 
