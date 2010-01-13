@@ -55,19 +55,19 @@ export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 if [ -z "$SERVER" -o "$SERVER" = "auto" ]; then
     # check for NBD devices
     while read DEVICE MOUNTPOUNT FSTYPE OPTIONS PASS1 PASS2; do
-        BASEDEV=${DEVICE%%[0-9]*}
-        if [ "$BASEDEV" = "/dev/nbd" ]; then
-            if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
-                pid=$(nbd-client -c $DEVICE)
-                server=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 2)
-                [ -n "$server"] && break
-            fi
-        fi
+        case $DEVICE in
+            /dev/nbd[0-9]*)
+                if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
+                    pid=$(nbd-client -c $DEVICE)
+                    server=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 2)
+                fi
+                ;;
+            *:/opt/ltsp/*)
+                server=${DEVICE%%:*}
+                ;;
+        esac
+        [ -n "$server" ] && break
     done < /proc/mounts
-    if [ -z "$server" ]; then
-        # check for NFS root
-        server=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
-    fi
 
     SERVER="${server:-192.168.0.254}"
     export SERVER
