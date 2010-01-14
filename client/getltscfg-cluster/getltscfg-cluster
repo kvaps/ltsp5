@@ -115,14 +115,31 @@ if [ ! -f "$cache_info" ]; then
     ! touch $cache_info && exit 1
     echo INTERFACE_MAC=$(ifconfig | grep ${INTERFACE} | cut -f11 -d" ") > $cache_info
     echo INTERFACE_IP=$(ifconfig ${INTERFACE} | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
-    nbd_device=$(egrep 'nbd.*/rofs' /proc/mounts|head -1|cut -d" " -f1) 2>/dev/null
-    if [ -n "$nbd_device" ]; then
-        nbd_pid=$(pgrep -f $nbd_device)
-        nbd_command=$(ps -o cmd $nbd_pid|grep -v CMD)
-        server=$(echo $nbd_command|sed 's/[a-z\-]*. //'|sed 's/ .*//')
-    else
-        server=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
-    fi
+
+    while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
+        case $DEVICE in
+            /dev/nbd[0-9]*)
+                if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
+                    # check for NBD devices
+                    pid=$(nbd-client -c $DEVICE)
+                    server=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 2)
+
+                    # Check for nbd-proxy
+                    if [ "$server" = "127.0.0.1" ]; then
+                        port=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 3)
+                        server=$(ps --no-headers -o cmd x | grep "^nbd-proxy [[:graph:]]* [[:graph:]]* ${port}" | cut -d ' ' -f2)
+                    fi
+                fi
+                ;;
+            *)
+                if [ "$FSTYPE" = "nfs" ] && [ "$MOUNTPOINT" = "/" ]; then
+                    # NFS root
+                    server=${DEVICE%%:*}
+                fi
+                ;;
+        esac
+        [ -n "$server" ] && break
+    done < /proc/mounts
     echo ROOT_SRV=$server >> $cache_info
 fi
 

@@ -68,6 +68,7 @@ mountroot()
 
     # Make sure the loopback interface has an address
     ip addr add dev lo 127.0.0.1
+    ip link set lo up
 
     # Start nbd-proxy and wait for it to connect
     nbd-proxy ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} ${NBD_ROOT_PORT}
