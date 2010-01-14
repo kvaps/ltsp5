@@ -36,8 +36,7 @@ fi
 # Compute tty and display
 #
 
-TTY=$(tty)
-TTY=${TTY#/dev/tty}
+TTY=$(fgconsole)
 DISPLAY=":$TTY"
 # set DISP for backwards compatibility with older screen scripts
 DISP="$DISPLAY"
