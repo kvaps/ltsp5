@@ -10,18 +10,32 @@
 #include <sys/types.h>
 #include <limits.h>
 #include <unistd.h>
+#include <stdarg.h>
 
 #include "nbd-proxy.h"
 
+int debug = 0;
 void print_nrs(struct thread_data *infos) {
     int count = 0;
     if(*(infos->reqs) == NULL) {
-        printf("[COUNT] %d\n", count);
+        print_debug("[COUNT] %d\n", count);
         return;
     }
     struct proxy_nbd_request *current_pnr = *(infos->reqs);
     while((current_pnr = current_pnr->next) != NULL) {count++;}
-    printf("[COUNT] %d\n", count);
+    print_debug("[COUNT] %d\n", count);
+}
+
+// Wrapper around print_debug for debug output
+void print_debug ( const char* format, ... ) {
+    if (debug == 0) {
+        return;
+    }
+
+    va_list args;
+    va_start( args, format );
+    vfprintf( stderr, format, args );
+    va_end( args );
 }
 
 /* client_to_server
@@ -34,11 +48,11 @@ void *client_to_server(void *data) {
     char recv_buf[sizeof(struct nbd_request)];
     size_t bytes_read;
 
-    printf("[th_client] Init mainloop\n");
+    print_debug("[th_client] Init mainloop\n");
     while(1) {
         bytes_read = recv(infos->client_socket, recv_buf, sizeof(recv_buf), 0);
         if(bytes_read == 0) {
-            printf("[th_client] Client disconnected on recv(). Reconnecting\n");
+            print_debug("[th_client] Client disconnected on recv(). Reconnecting\n");
             reconnect_client(infos);
             continue;
         }
@@ -47,7 +61,7 @@ void *client_to_server(void *data) {
         memcpy(new_req, recv_buf, sizeof(recv_buf));
         // Checking if data is a valid nbd_request
         if((new_req->magic == ntohl(NBD_REQUEST_MAGIC)) && (new_req->type != ntohl(NBD_CMD_WRITE))) {
-            //printf("[th_client] Got nbd_request\n");
+            //print_debug("[th_client] Got nbd_request\n");
             pthread_mutex_lock(&pnr_lock);
             add_nbd_request(new_req, infos->reqs);
             pthread_mutex_unlock(&pnr_lock);
@@ -75,7 +89,7 @@ void *server_to_client(void *data) {
     struct nbd_request *flag_disc;
 
     // Main loop
-    printf("[th_server] Init mainloop\n");
+    print_debug("[th_server] Init mainloop\n");
     while(1) {
         bytes_read = recv(infos->server_socket, recv_buf, size_recv_buf, 0);
         // Keep track of bytes read for specific use
@@ -83,7 +97,7 @@ void *server_to_client(void *data) {
         discard_reply_flag = 0;
         flag_disc = NULL;
         if(bytes_read == 0) {
-            printf("[th_server] Server disconnected on recv(). Reconnecting\n");
+            print_debug("[th_server] Server disconnected on recv(). Reconnecting\n");
             pthread_mutex_lock(&pnr_lock);
             reconnect_server(infos);
             // Sending last nbd_request modified
@@ -91,11 +105,11 @@ void *server_to_client(void *data) {
                 send_to_server(infos, (char *) current_nr, sizeof(struct nbd_request));
                 flag_disc = current_nr;
                 discard_reply_flag = sizeof(struct nbd_reply);
-                printf("[th_server] Last known nbd_request sent\n");
-                printf("   |-- len : %u\n", ntohl(current_nr->len));
-                printf("   |-- from : %lu\n", ntohll(current_nr->from));
+                print_debug("[th_server] Last known nbd_request sent\n");
+                print_debug("   |-- len : %u\n", ntohl(current_nr->len));
+                print_debug("   |-- from : %lu\n", ntohll(current_nr->from));
                 char *handle = current_nr->handle;
-                printf("   |-- handle : %X, %X, %X, %X, %X, %X, %X, %X\n", 
+                print_debug("   |-- handle : %X, %X, %X, %X, %X, %X, %X, %X\n", 
                     handle[0], handle[1], handle[2], handle[3],
                     handle[4], handle[5], handle[6], handle[7]);
             }
@@ -107,18 +121,18 @@ void *server_to_client(void *data) {
         // Getting nbd_reply
         memcpy(&nr, recv_buf, sizeof(struct nbd_reply));
         if(nr.magic == ntohl(NBD_REPLY_MAGIC)) {
-            //printf("[th_server] Got nbd_reply\n");
+            //print_debug("[th_server] Got nbd_reply\n");
             // The packet received contain a valid nbd_reply
             pthread_mutex_lock(&pnr_lock);
             if((current_nr = get_nbd_request_by_handle(nr.handle, infos->reqs)) == NULL) {
-                printf("[th_server] nbd_reply handle unknown\n");
+                print_debug("[th_server] nbd_reply handle unknown\n");
             }
             pthread_mutex_unlock(&pnr_lock);
 
             // Ignoring nbd_reply size for len in nbd_request
             r_bytes -= 16;
         } else if(current_nr == NULL) {
-            printf("[th_server] Fatal error: No nbd_reply received and no nbd_request to serve\n");
+            print_debug("[th_server] Fatal error: No nbd_reply received and no nbd_request to serve\n");
         }
 
         // Sending data to client (P -> C)
@@ -159,41 +173,41 @@ void *server_to_client(void *data) {
 struct nbd_init_data *nbd_connect(int sock) {
     struct nbd_init_data *nid = (struct nbd_init_data *) malloc(sizeof(struct nbd_init_data));
 
-    printf("Negotiation: ");
+    print_debug("Negotiation: ");
     /* Read INIT_PASSWD */
     if (read(sock, &(nid->init_passwd) , sizeof(nid->init_passwd)) < 0)
-        printf("Failed/1: %m\n");
+        print_debug("Failed/1: %m\n");
     if (strlen(nid->init_passwd)==0)
-        printf("Server closed connection\n");
+        print_debug("Server closed connection\n");
     if (strcmp(nid->init_passwd, INIT_PASSWD))
-        printf("INIT_PASSWD bad\n");
-    printf(".");
+        print_debug("INIT_PASSWD bad\n");
+    print_debug(".");
 
     /* Read cliserv_magic */
     if (read(sock, &(nid->magic), sizeof(nid->magic)) < 0)
-        printf("Failed/2: %m\n");
+        print_debug("Failed/2: %m\n");
     nid->magic = ntohll(nid->magic);
     if (nid->magic != cliserv_magic)
-        printf("Not enough cliserv_magic\n");
+        print_debug("Not enough cliserv_magic\n");
     nid->magic = ntohll(nid->magic);
-    printf(".");
+    print_debug(".");
 
     /* Read size */
     if (read(sock, &(nid->size), sizeof(nid->size)) < 0)
-        printf("Failed/3: %m\n");
+        print_debug("Failed/3: %m\n");
     //nid->size = ntohll(nid->size);
-    printf(".");
+    print_debug(".");
 
     /* Read flags */
     if (read(sock, &(nid->flags), sizeof(nid->flags)) < 0)
-        printf("Failed/4: %m\n");
+        print_debug("Failed/4: %m\n");
     //nid->flags = ntohl(nid->flags);
-    printf(".");
+    print_debug(".");
 
     /* Read zeros */
     if (read(sock, &(nid->zeros), sizeof(nid->zeros)) < 0)
-        printf("Failed/5: %m\n");
-    printf("\n");
+        print_debug("Failed/5: %m\n");
+    print_debug("\n");
 
     return nid;
 }
@@ -212,7 +226,7 @@ int create_connect_sock(int port, char *addr) {
 
     sock = socket(PF_INET, SOCK_STREAM, 0);
     if(sock == -1) {
-        printf("Unable to create Socket\n");
+        print_debug("Unable to create Socket\n");
         exit(1);
     }
 
@@ -221,13 +235,13 @@ int create_connect_sock(int port, char *addr) {
     struct_addr.sin_addr.s_addr = inet_addr(addr);
     memset(struct_addr.sin_zero, 0, sizeof(struct_addr.sin_zero));
 
-    printf("[create_connect_sock] Connect socket to %s\n", addr);
+    print_debug("[create_connect_sock] Connect socket to %s\n", addr);
     err = connect(sock, (struct sockaddr *) &struct_addr, sizeof(struct_addr));
     if(err == -1) {
-        printf("Server unable to connect\n");
+        print_debug("Server unable to connect\n");
     }
 
-    printf("[create_connect_sock] Connected and ready.\n");
+    print_debug("[create_connect_sock] Connected and ready.\n");
     return sock;
 }
 
@@ -247,7 +261,7 @@ int create_listen_sock(int port, int addr) {
     // New socket
     sock = socket(PF_INET, SOCK_STREAM, 0);
     if(sock == -1) {
-        printf("Unable to create Socket\n");
+        print_debug("Unable to create Socket\n");
         exit(1);
     }
 
@@ -255,28 +269,28 @@ int create_listen_sock(int port, int addr) {
     struct_addr.sin_port = htons(port);
     struct_addr.sin_addr.s_addr = ntohl(addr);
     memset(struct_addr.sin_zero, 0, sizeof(struct_addr.sin_zero));
-    
-    printf("[create_listen_sock] Binding socket to localhost\n");
+
+    print_debug("[create_listen_sock] Binding socket to localhost\n");
     if(!bind(sock, (struct sockaddr *) &struct_addr, sizeof(struct_addr)) == -1) {
-        printf("Unable to bind socket\n");
+        print_debug("Unable to bind socket\n");
         exit(1);
     }
 
-    printf("[create_listen_sock] Listining to localhost\n");
+    print_debug("[create_listen_sock] Listining to localhost\n");
     if(listen(sock,1) == -1) {
-        printf("Unable to listen\n");
+        print_debug("Unable to listen\n");
         exit(1);
     }
 
-    printf("[create_listen_sock] Accepting socket\n");
+    print_debug("[create_listen_sock] Accepting socket\n");
     s_size = sizeof(struct_addr);
     if((newfd = accept(sock, (struct sockaddr *) &struct_addr, &s_size)) == -1) {
-        printf("Accept() failed\n");
+        print_debug("Accept() failed\n");
         exit(1);
     } 
 
     setsockopt(newfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-    printf("[create_listen_sock] Socket bound and ready. Returning\n");
+    print_debug("[create_listen_sock] Socket bound and ready. Returning\n");
 
     return newfd;
 }
@@ -288,12 +302,12 @@ int create_listen_sock(int port, int addr) {
 void resend_all_nbd_requests(struct thread_data *infos) {
     struct proxy_nbd_request *current_pnr = *(infos->reqs);
     if(current_pnr == NULL) {
-        printf("[resend] No nbd_request in queue\n");
+        print_debug("[resend] No nbd_request in queue\n");
         return;
     }
     do {
         send_to_server(infos, (char*) current_pnr->nr, sizeof(struct nbd_request));
-        printf("[resend] nbd_request\n");
+        print_debug("[resend] nbd_request\n");
     } while((current_pnr = current_pnr->next) != NULL);
 }
 
@@ -333,7 +347,7 @@ void reconnect_client(struct thread_data *infos) {
 void server_connect(struct thread_data *infos) {
     // Saving nid information to thread_data
     infos->nid = nbd_connect(infos->server_socket);
-    printf("Server Connected\n");
+    print_debug("Server Connected\n");
 }
 
 /* client_connect
@@ -345,7 +359,7 @@ void client_connect(struct thread_data *td) {
     send(td->client_socket, &(nid->init_passwd), sizeof(nid->init_passwd), 0);
     send(td->client_socket, &(nid->magic), sizeof(nid->magic), 0);
     send(td->client_socket, &(nid->size), sizeof(nid->size) + sizeof(nid->flags) + sizeof(nid->zeros) - 4, 0);
-    printf("Client Connected\n");
+    print_debug("Client Connected\n");
 }
 
 /* send_to_client
@@ -355,14 +369,14 @@ void client_connect(struct thread_data *td) {
  *        size -- size of data to send
  *    Return -1 if error detected
  *    Else 0
- */         
+ */
 int send_to_client(struct thread_data *infos, char *buf, size_t size) {
     int flag = 0;
     int count = RESEND_MAX;
     // Sending to server
     while((send(infos->client_socket, buf, size, 0) == -1)) {
         flag = -1;
-        printf("Client disconnected on send(). Reconnecting\n");
+        print_debug("Client disconnected on send(). Reconnecting\n");
         if(--count == 0) {
             sleep(30);
             count = RESEND_MAX;
@@ -387,7 +401,7 @@ int send_to_server(struct thread_data *infos, char *buf, size_t size) {
     // Sending to server
     while((send(infos->server_socket, buf, size, 0) == -1)) {
         flag = -1;
-        printf("Server disconnected on send(). Reconnecting\n");
+        print_debug("Server disconnected on send(). Reconnecting\n");
         if(--count == 0) {
             sleep(30);
             count = RESEND_MAX;
@@ -402,7 +416,6 @@ int send_to_server(struct thread_data *infos, char *buf, size_t size) {
  *    entry point
  */
 int main(int argc, char *argv[]) {
-
     int server_port, listen_port, client_socket, server_socket;
     int client_th, server_th, rc;
     char *server_address;
@@ -410,24 +423,65 @@ int main(int argc, char *argv[]) {
     pthread_t threads[NUM_THREADS];
     struct nbd_init_data *nid;
 
-    if(argc < 2) {
-        printf("Usage : nbd-proxy server_address server_port listening_port\n");
+    if(argc < 4) {
+        printf("Usage : nbd-proxy server_address server_port listening_port [debug]\n");
         exit(1);
     }
 
     server_address = argv[1];
     server_port = atoi(argv[2]);
     listen_port = atoi(argv[3]);
+    if(argc >= 5) {
+        debug=1;
+    }
 
     struct thread_data *th_d1 = 
         (struct thread_data *) malloc(sizeof(struct thread_data));
     struct proxy_nbd_request *pnr = NULL;
 
-    printf("[main] Creating sockets\n");
+    /* Our process ID and Session ID */
+    pid_t pid, sid;
+    int daemon = 1;
+
+    if (debug == 0) {
+        /* Fork off the parent process */
+        pid = fork();
+        if (pid < 0) {
+            exit(EXIT_FAILURE);
+        }
+        /* If we got a good PID, then
+           we can exit the parent process. */
+        if (pid > 0) {
+            exit(EXIT_SUCCESS);
+        }
+
+        /* Change the file mode mask */
+        umask(0);
+
+        /* Create a new SID for the child process */
+        sid = setsid();
+        if (sid < 0) {
+            /* Log the failure */
+            exit(EXIT_FAILURE);
+        }
+
+        /* Change the current working directory */
+        if ((chdir("/")) < 0) {
+            /* Log the failure */
+            exit(EXIT_FAILURE);
+        }
+
+        /* Close out the standard file descriptors */
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+    }
+
+    print_debug("[main] Creating sockets\n");
     // New server socket
     server_socket = create_connect_sock(server_port, server_address);
 
-    printf("[main] nbd_connect\n");
+    print_debug("[main] nbd_connect\n");
     // Negotiate with nbd server
     nid = nbd_connect(server_socket);
 
@@ -445,20 +499,20 @@ int main(int argc, char *argv[]) {
     // Connect client with server negotiation data
     client_connect(th_d1);
 
-    printf("[main] Spawning thread server\n");
+    print_debug("[main] Spawning thread server\n");
     server_th = pthread_create(&threads[1], NULL, server_to_client, (void *) th_d1);
-    printf("[main] Spawning thread client\n");
+    print_debug("[main] Spawning thread client\n");
     client_th = pthread_create(&threads[0], NULL, client_to_server, (void *) th_d1);
 
     rc = pthread_join(threads[0], &status);
     if (rc) {
-        printf("ERROR, return code from pthread_join is %d\n", rc);
+        print_debug("ERROR, return code from pthread_join is %d\n", rc);
     }
     rc = pthread_join(threads[1], &status);
     if (rc) {
-        printf("ERROR, return code from pthread_join is %d\n", rc);
+        print_debug("ERROR, return code from pthread_join is %d\n", rc);
     }
 
-    printf("[main] main is dying\n");
+    print_debug("[main] main is dying\n");
     pthread_exit(NULL);
 }
