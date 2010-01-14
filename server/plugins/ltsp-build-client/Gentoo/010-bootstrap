@@ -46,6 +46,12 @@ case "$MODE" in
         quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
         # And reset to the original value
         ROOT=${TEMPROOT}
-
+    ;;
+    after-install)
+        # removing stage symlink
+        STAGE_FILE=$( basename ${STAGE_URI} )
+        if [ -L ${ROOT}/${STAGE_FILE} ]; then
+            rm ${ROOT}/${STAGE_FILE}
+        fi
     ;;
 esac
