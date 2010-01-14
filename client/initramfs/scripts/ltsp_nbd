@@ -66,9 +66,15 @@ mountroot()
     # create tmpfs for writeable files
     mount -t tmpfs tmpfs /cow
 
-    # mount the readonly root
-    nbd-proxy ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} {NBD_ROOT_PORT}
-    if nbd-client localhost ${NBD_ROOT_PORT} /dev/nbd0 ; then
+    # Make sure the loopback interface has an address
+    ip addr add dev lo 127.0.0.1
+
+    # Start nbd-proxy and wait for it to connect
+    nbd-proxy ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} ${NBD_ROOT_PORT}
+    sleep 2s
+
+    # Mount the root device
+    if nbd-client 127.0.0.1 ${NBD_ROOT_PORT} /dev/nbd0 ; then
         eval $(fstype /dev/nbd0)
         if [ -z "$FSTYPE" ]; then
             echo "Warning: unable to detect filesystem, assuming squashfs."
