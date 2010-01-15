@@ -1,16 +1,24 @@
 case "$MODE" in
     commandline)
         add_option "mount-package-cache" "`eval_gettext "mount package cache dir from server"`" "advanced" "false"
+        add_option "mount-package-dir" "`eval_gettext "mount a server directory as the chroot package cache dir"`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_mount_package_cache_value" ]; then
-            MOUNT_PACKAGE_CACHE=true
+            MOUNT_PACKAGE_DIR="/var/cache/apt/archives"
+            KEEP_PACKAGES=${KEEP_PACKAGES:-true}
+        fi
+        if [ -n "$option_mount_package_dir_value" ]; then
+            MOUNT_PACKAGE_DIR="$option_mount_package_dir_value"
+            KEEP_PACKAGES=${KEEP_PACKAGES:-true}
         fi
         ;;
     before-install)
-        if [ "true" = "$MOUNT_PACKAGE_CACHE" ]; then
-            mkdir -p $ROOT/var/cache/apt/archives/partial
-            chroot_mount /var/cache/apt/archives /var/cache/apt/archives --bind
+        if [ -n "$MOUNT_PACKAGE_DIR" ]; then
+            mkdir -p "$MOUNT_PACKAGE_DIR"
+            # if partial isn't created, apt complains later on chroot updates
+            mkdir -p "$ROOT/var/cache/apt/archives/partial"
+            chroot_mount "$MOUNT_PACKAGE_DIR" /var/cache/apt/archives --bind
         fi
         ;;
 esac

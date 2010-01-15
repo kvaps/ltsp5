@@ -8,7 +8,7 @@ case "$MODE" in
         fi
         ;;
     finalization)
-        if [ "true" != "$KEEP_PACKAGES" ] && [ "true" != "$MOUNT_PACKAGE_CACHE" ]; then
+        if [ "true" != "$KEEP_PACKAGES" ]; then
             chroot $ROOT apt-get clean
         fi
         ;;
