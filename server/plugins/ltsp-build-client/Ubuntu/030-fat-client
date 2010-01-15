@@ -1,0 +1,72 @@
+case "$MODE" in
+    commandline)
+        # Add a command line switch to ltsp-build-client that installs desktop
+        # meta-packages so that diskless workstations can everything locally
+        add_option "fat-client" "`eval_gettext "run most or all applications locally"`" "advanced" "false"
+        add_option "fat-client-desktop" "`eval_gettext "run most or all applications locally"`" "advanced" "true"
+    ;;
+
+    before-install)
+        # Check what the sysadmin chose to install. If (s)he is lazy and didn't
+        # specify one, then we install the desktop meta-packages that are
+        # already installed on the server.
+
+        if [ -n "$option_fat_client_desktop_value" ]; then
+            FAT_CLIENT_DESKTOPS="$(echo $option_fat_client_desktop_value | tr ',' ' ')"
+        elif [ -n "$option_fat_client_value" ]; then
+            FAT_CLIENT_DESKTOPS=""
+
+            # Code taken from 030-artwork
+            for cdd in ed x k; do
+                if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then
+                    if dpkg -l | grep -q "${cdd}ubuntu-desktop"; then
+                        FAT_CLIENT_DESKTOPS="$FAT_CLIENT_DESKTOPS ${cdd}ubuntu-desktop"
+                    fi
+                fi
+            done
+        else
+            # If fat client isn't enabled, just continue
+            return
+        fi
+
+        FAT_CLIENT_DESKTOPS=${FAT_CLIENT_DESKTOPS:-ubuntu-desktop}
+
+        # Mark some packages as incompatible with the fat client system
+        mkdir -p "$ROOT/etc/apt/preferences.d"
+        cat > "$ROOT/etc/apt/preferences.d/fat-client-blacklist" <<EOF
+Package: network-manager modemmanager ubufox apport jockey-common
+Pin: origin ""
+Pin-Priority: -1
+EOF
+
+        # Reenable recommented packages installation for fat clients
+        APT_GET_OPTS=$(echo "$APT_GET_OPTS" | sed 's/--no-install-recommends//')
+    ;;
+
+    after-install)
+        if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
+            return
+        fi
+
+        # Prevent other display managers from starting
+        mkdir -p "$ROOT/etc/X11"
+        echo '/usr/sbin/ldm' > "$ROOT/etc/X11/default-display-manager"
+
+        for package in ubuntu-standard $FAT_CLIENT_DESKTOPS; do
+            echo "Installing $package"
+            chroot $ROOT apt-get $APT_GET_OPTS install $package
+        done
+
+        # TODO: for some reason, the previous attempt to set the
+        # default-display-manager is erased, so do it again to be sure
+        echo '/usr/sbin/ldm' > "$ROOT/etc/X11/default-display-manager"
+
+        # TODO: better put that as a file in the gconf configuration directory
+        # Disable the fast user switching applet, it doesn't work without GDM
+        chroot $ROOT gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --set --type list --list-type string /apps/panel/global/disabled_applets '[OAFIID:GNOME_FastUserSwitchApplet,OAFIID:GNOME_IndicatorApplet]' || true
+
+        # TODO: something uses $ROOT/proc and it can't be cleanly unmounted.
+        # Currently using -l as a workaround, but should be fixed asap.
+        umount -l $ROOT/proc &&  chroot $ROOT mount -t proc proc /proc || true
+    ;;
+esac

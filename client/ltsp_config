@@ -92,7 +92,9 @@ fi
 if ! env | grep -q '^SCREEN_'; then
     if [ -f /etc/X11/default-display-manager ]; then
         default_display_manager="$(cat /etc/X11/default-display-manager)"
-        if [ -x "$default_display_manager" ]; then
+        if [ "$default_display_manager" = "/usr/sbin/ldm" ]; then
+            true
+        elif [ -x "$default_display_manager" ]; then
             display_manager_configured=true
         elif [ "$default_display_manager" = "/usr/bin/gdm" ] && \
              [ -x /usr/sbin/gdm ]; then
