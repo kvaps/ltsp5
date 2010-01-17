@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([nbd-proxy], [0.1], [stgraber@ltsp.org])
+AC_INIT([nbd-proxy], [0.1], [stgraber@ubuntu.com])
 AC_CONFIG_SRCDIR([src/nbd-proxy.c])
 AM_INIT_AUTOMAKE
 
