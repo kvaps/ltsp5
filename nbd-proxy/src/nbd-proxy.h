@@ -1,6 +1,6 @@
 #define NUM_THREADS 2
 #define INIT_PASSWD "NBDMAGIC"
-#define SRV_RECV_BUF 512
+#define SRV_RECV_BUF 1024
 #define htonll ntohll
 #define RESEND_MAX 3
 
@@ -38,7 +38,7 @@ void client_connect(struct thread_data *);
 void server_connect(struct thread_data *);
 void reconnect_server(struct thread_data *);
 void reconnect_client(struct thread_data *);
-void resend_all_nbd_requests(struct thread_data *);
+void resend_all_nbd_requests(struct thread_data *, struct nbd_request*);
 int send_to_server(struct thread_data *, char *, size_t);
 int send_to_client(struct thread_data *, char *, size_t);
 
@@ -62,7 +62,7 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
 
 	new_pnr->nr = nr;
 	new_pnr->next = NULL;
-	//printf("[add_nbd_request] nbd_request added to linked list\n");
+	printf("[add_nbd_request] nbd_request added to linked list\n");
 }
 
 /* get_nbd_request_by_handle
@@ -94,7 +94,7 @@ void rm_nbd_request(struct nbd_request *nr, struct proxy_nbd_request **first) {
 	if(current_pnr != NULL) {
 		do {
 			if(current_pnr->nr == nr) {
-				//printf("[rm_nbd_request] removing nbd_request\n");
+				printf("[rm_nbd_request] removing nbd_request\n");
 				if(current_pnr == *first) {
 					*first = current_pnr->next;
 				} else {
