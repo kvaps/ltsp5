@@ -75,7 +75,7 @@ void *client_to_server(void *data) {
         }
         pthread_mutex_unlock(&pnr_lock);
     }
-    printf("WTF client_to_server outside while\n");
+    print_debug("WTF client_to_server outside while\n");
 }
 
 /* server_to_client
@@ -119,7 +119,7 @@ void *server_to_client(void *data) {
                     handle[0], handle[1], handle[2], handle[3],
                     handle[4], handle[5], handle[6], handle[7]);
             } else {
-                printf("Resend after server recv error\n");
+                print_debug("Resend after server recv error\n");
                 flag_resend = 1;
                 resend_all_nbd_requests(infos, NULL);
             }
@@ -146,7 +146,7 @@ void *server_to_client(void *data) {
 
         // Sending data to client (P -> C)
         if(flag_disc == current_nr ||  flag_resend) {
-            printf("Bytes read : %d\n", (int)bytes_read);
+            print_debug("Bytes read : %d\n", (int)bytes_read);
         }
 
         send_to_client(infos, recv_buf + discard_reply_flag, bytes_read - discard_reply_flag);
@@ -162,7 +162,7 @@ void *server_to_client(void *data) {
                 pthread_mutex_lock(&pnr_lock);
                 rm_nbd_request(current_nr, infos->reqs);
                 if(current_nr == flag_disc) {
-                    printf("Current nr finished, resending\n");
+                    print_debug("Current nr finished, resending\n");
                     print_nrs(infos);
                     sleep(3);
                     resend_all_nbd_requests(infos, NULL);
@@ -179,7 +179,7 @@ void *server_to_client(void *data) {
             }
         }
     }
-    printf("WTF server_to_client outside while\n");
+    print_debug("WTF server_to_client outside while\n");
 }
 
 /* nbd_connect
