@@ -26,7 +26,7 @@ case "$MODE" in
             done
         else
             # If fat client isn't enabled, just continue
-            return
+            return 0
         fi
 
         FAT_CLIENT_DESKTOPS=${FAT_CLIENT_DESKTOPS:-ubuntu-desktop}
@@ -45,7 +45,7 @@ EOF
 
     after-install)
         if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
-            return
+            return 0
         fi
 
         # Prevent other display managers from starting
