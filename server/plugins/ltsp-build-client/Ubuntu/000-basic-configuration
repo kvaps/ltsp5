@@ -5,7 +5,7 @@ case "$MODE" in
         DIST=${DIST:-"$(lsb_release -s -c)"}
         MIRROR=http://archive.ubuntu.com/ubuntu
         COMPONENTS="main restricted universe multiverse"
-        EARLY_PACKAGES="ltsp-client ldm dbus"
+        EARLY_PACKAGES="$EARLY_PACKAGES ltsp-client ldm dbus"
         RCS_WHITELIST="mountkernfs.sh mountdevsubfs.sh hostname.sh loopback udev module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-setup console-screen.kbd.sh"
         RC2_WHITELIST="klogd sysklogd ltsp-client-core usplash rmnologin dbus"
         RC6_WHITELIST="reboot"
