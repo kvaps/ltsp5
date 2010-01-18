@@ -1,7 +1,7 @@
 # Common functions shared by LTSP init scripts
 
+# ltsp_config sources ltsp-common-functions
 . /usr/share/ltsp/ltsp_config
-. /usr/share/ltsp/ltsp-common-functions
 
 warn() {
     msg="$1"
