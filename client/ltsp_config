@@ -35,6 +35,9 @@
 #
 #
 
+# Source ltsp-common-functions if we have not already (needed in some functions)
+PATH="" boolean_is_true True 2>/dev/null || . /usr/share/ltsp/ltsp-common-functions || true
+
 # Read in lts.conf entries.
 if [ -f /etc/lts.conf ]; then
     eval $(getltscfg -a) || true
