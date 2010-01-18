@@ -114,7 +114,9 @@ if ! env | grep -q '^SCREEN_'; then
 fi
 
 # set defaults for sound support
-if [ -z "$SOUND_DAEMON" ]; then
+if boolean_is_true "$LTSP_FATCLIENT"; then
+    export SOUND=False
+elif [ -z "$SOUND_DAEMON" ]; then
     if [ -x /usr/bin/pulseaudio ]; then
         export SOUND_DAEMON=pulse
     elif [ -x /usr/bin/esd ]; then
