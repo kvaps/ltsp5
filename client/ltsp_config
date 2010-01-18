@@ -73,6 +73,11 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                         server=$(ps --no-headers -o cmd x | grep "^nbd-proxy [[:graph:]]* [[:graph:]]* ${port}" | cut -d ' ' -f2)
                     fi
                 fi
+                # Save the result so we don't go through this again
+                if [ ! -f /var/cache/ltsp/ltsp_config ]; then
+                    [ ! -d /var/cache/ltsp ] && mkdir /var/cache/ltsp
+                    echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config
+                fi
                 ;;
             *)
                 if [ "$FSTYPE" = "nfs" ] && [ "$MOUNTPOINT" = "/" ]; then
