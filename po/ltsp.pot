@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-13 10:32-0800\n"
+"POT-Creation-Date: 2010-01-18 21:02-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,19 +75,23 @@ msgid "Cancel"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
-msgid "set the list of packages to install after base-install is completed."
+msgid "set the list of packages to install after base-install is completed"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
-msgid "list of packages to install as part of the final installation."
+msgid "list of packages to install as part of the final installation"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "Set the default locale"
+msgid "set the default locale"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
@@ -124,9 +128,10 @@ msgid "Enabling serial console..."
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:3
 #, sh-format
-msgid "Set the mirror location"
+msgid "set the mirror location"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
@@ -161,8 +166,9 @@ msgid "keep cache of downloaded package files"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
 #, sh-format
-msgid "Set the distribution to be used for install"
+msgid "set the distribution to be used for install"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
@@ -183,11 +189,6 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, sh-format
-msgid "set the list of packages to install after base-install is completed"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
@@ -223,6 +224,11 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
 #, sh-format
 msgid "mount package cache dir from server"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
+#, sh-format
+msgid "mount a server directory as the chroot package cache dir"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
@@ -266,12 +272,6 @@ msgstr ""
 msgid "do not autodetect apt proxy configuration"
 msgstr ""
 
-#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#, sh-format
-msgid "set the default locale"
-msgstr ""
-
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
@@ -302,19 +302,9 @@ msgstr ""
 msgid "skip upgrade of installed packages"
 msgstr ""
 
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, sh-format
-msgid "set the mirror location"
-msgstr ""
-
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, sh-format
-msgid "list of packages to install as part of the final installation"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
@@ -340,11 +330,6 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#, sh-format
-msgid "set the distribution to be used for install"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
@@ -391,8 +376,8 @@ msgstr ""
 msgid "use the servers sources.list instead of generating one"
 msgstr ""
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:5
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:6
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
 msgstr ""
