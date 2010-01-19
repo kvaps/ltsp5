@@ -32,7 +32,7 @@ if [ "True" != "$LTSP_CONFIG" ]; then
 fi
 
 # Source ltsp-common-functions if we have not already (needed in some functions)
-PATH="" boolean_is_true True 2>/dev/null || . /usr/share/ltsp/ltsp-common-functions || true
+(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
 
 #
 # Compute tty and display

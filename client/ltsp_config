@@ -35,11 +35,16 @@
 #
 #
 
-# Source ltsp-common-functions if we have not already (needed in some functions)
-(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
-
 # Don't source this file if it has been sourced already
-if [ "$LTSP_CONFIG" = "True" ]; then return 0; fi
+if [ "$LTSP_CONFIG" = "True" ]; then 
+    return 0
+fi
+
+# Source ltsp-common-functions if we have not already (needed in some functions)
+# We set PATH to empty string here (in the subshell), because shell will look
+# for boolean_is_true in PATH if it doesn't find it as a built-in function
+# That search is a waste of time and so, we avoid it by not giving a PATH.
+(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
 
 # Read in lts.conf entries.
 if [ -f /etc/lts.conf ]; then
