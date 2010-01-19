@@ -72,7 +72,6 @@ mountroot()
 
     # Start nbd-proxy and wait for it to connect
     nbd-proxy ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} ${NBD_ROOT_PORT}
-    sleep 2s
 
     # Mount the root device
     if nbd-client 127.0.0.1 ${NBD_ROOT_PORT} /dev/nbd0 ; then
