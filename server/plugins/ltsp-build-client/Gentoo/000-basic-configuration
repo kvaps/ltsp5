@@ -3,7 +3,7 @@ case "$MODE" in
         add_option "stage-uri" "`eval_gettext "Stage 3 URI"`" "advanced" "true"
         add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "regular" "true"
         add_option "mirror" "`eval_gettext "Set extra mirror locations (space-separated)"`" "regular" "true"
-        add_option "locale" "`eval_gettext "Set the default locale"`" "advanced" "false"
+        add_option "locale" "`eval_gettext "set the default locale"`" "advanced" "false"
         add_option "packages" "`eval_gettext "list of extra packages to install as part of the initial installation."`" "advanced" "true"
         ;;
     configure)

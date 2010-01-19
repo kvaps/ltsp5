@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "dist" "`eval_gettext "Set the distribution to be used for install"`" "regular" "true"
+        add_option "dist" "`eval_gettext "set the distribution to be used for install"`" "regular" "true"
         ;;
     configure)
         [ -n "$option_dist_value" ] && DIST="$option_dist_value" || DIST="${DIST:-$ARCH noarch}"

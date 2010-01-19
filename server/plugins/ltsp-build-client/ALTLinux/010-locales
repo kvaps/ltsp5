@@ -1,6 +1,6 @@
 case $MODE in
     commandline)
-        add_option "locale" "`eval_gettext "Set the default locale"`" "advanced" "true"
+        add_option "locale" "`eval_gettext "set the default locale"`" "advanced" "true"
         ;;
     configure)
         [ -z "$option_locale_value" ] || LOCALE="$option_locale_value"

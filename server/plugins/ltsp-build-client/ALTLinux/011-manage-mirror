@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "mirror" "`eval_gettext "Set the mirror location"`" "regular" "true"
+        add_option "mirror" "`eval_gettext "set the mirror location"`" "regular" "true"
         add_option "early-mirror" "`eval_gettext "add a mirror, which takes priority over the default mirror"`" "advanced" "true"
         add_option "extra-mirror" "`eval_gettext "add a mirror, with lower priority than the default mirror"`" "advanced" "true"
         add_option "security-mirror" "`eval_gettext "add a security mirror"`" "advanced" "true"
