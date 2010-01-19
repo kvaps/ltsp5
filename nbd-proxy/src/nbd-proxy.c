@@ -9,10 +9,25 @@
 #include <string.h>
 #include <sys/types.h>
 #include <limits.h>
+#include <signal.h>
 #include <unistd.h>
 #include <stdarg.h>
 
 #include "nbd-proxy.h"
+
+/* sighandler
+ *     Handles the different signal during the execution
+ *         sig -- the type of signal emitted
+ *             SIGINT is handled, it terminates the program
+ */
+void sighandler(int sig) {
+    switch(sig) {
+        case SIGINT:
+            printf("Ctrl+c pressed, exiting\n");
+            exit(EXIT_FAILURE);
+            break;
+    }
+}
 
 /* client_to_server
  *    This thread acts as a proxy from client to server
@@ -35,12 +50,21 @@ void *client_to_server(void *data) {
 
         struct nbd_request *new_req = (struct nbd_request*) malloc(sizeof(struct nbd_request));
         memcpy(new_req, recv_buf, sizeof(recv_buf));
+        // Grab lock
         pthread_mutex_lock(&pnr_lock);
         // Checking if data is a valid nbd_request
-        if((new_req->magic == ntohl(NBD_REQUEST_MAGIC)) && (new_req->type != ntohl(NBD_CMD_WRITE))) {
-            PRINT_DEBUG("[t_client] Got nbd_request : handle(%s) of len(%u) and from(%lu)\n", 
-                    handle_to_string(new_req->handle), ntohl(new_req->len), ntohll(new_req->from));
-            add_nbd_request(new_req, infos->reqs);
+        if(new_req->magic == ntohl(NBD_REQUEST_MAGIC)) {
+            // NBD_CMD_READ from client    
+            if(new_req->type == ntohl(NBD_CMD_READ)) {
+                PRINT_DEBUG("[t_client] Got nbd_request : handle(%s) of len(%u) and from(%lu)\n", 
+                        handle_to_string(new_req->handle), ntohl(new_req->len), ntohll(new_req->from));
+                add_nbd_request(new_req, infos->reqs);
+            // NBD_CMD_DISC from client
+            } else if(new_req->type == ntohl(NBD_CMD_DISC)) {
+                PRINT_DEBUG("[t_client] NBD_DISCONNECT from client. Cleaning\n");
+                reconnect_client(infos);
+                continue;
+            }
         }
 
         // Sending received data to server
@@ -48,6 +72,7 @@ void *client_to_server(void *data) {
             PRINT_DEBUG("[t_client] Client detect server disconnect. Resendig all nbd_request\n");
             resend_all_nbd_requests(infos, new_req);
         }
+        // Release lock
         pthread_mutex_unlock(&pnr_lock);
     }
     PRINT_DEBUG("[t_client] WTF client_to_server outside while\n");
@@ -140,8 +165,8 @@ void *server_to_client(void *data) {
                 current_nr = NULL;
             }
             if(current_nr != NULL && ntohl(current_nr->len) < SRV_RECV_BUF) {
-                PRINT_DEBUG("[t_server] Adjusting recv buffer to : %u\n", ntohl(current_nr->len));
                 size_recv_buf = ntohl(current_nr->len);
+                PRINT_DEBUG("[t_server] Adjusting recv buffer to : %d\n", size_recv_buf);
             } else {
                 size_recv_buf = SRV_RECV_BUF;
             }
@@ -207,6 +232,7 @@ struct nbd_init_data *nbd_connect(int sock) {
 int create_connect_sock(int port, char *addr) {
     int sock;
     int err = -1;
+    int opt = 1;
     struct sockaddr_in struct_addr;
 
     sock = socket(PF_INET, SOCK_STREAM, 0);
@@ -214,6 +240,9 @@ int create_connect_sock(int port, char *addr) {
         PRINT_DEBUG("Unable to create connect socket\n");
         exit(1);
     }
+    
+    if((setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) == -1)
+        perror("setsockopt");
 
     struct_addr.sin_family = AF_INET;
     struct_addr.sin_port = htons(port);
@@ -244,34 +273,45 @@ int create_listen_sock(int port, int addr) {
     struct sockaddr_in struct_addr;
 
     // New socket
-    sock = socket(PF_INET, SOCK_STREAM, 0);
-    if(sock == -1) {
+    if((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        perror("socket");
         PRINT_DEBUG("Unable to create listen socket\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
-
+    
     struct_addr.sin_family = AF_INET;
     struct_addr.sin_port = htons(port);
     struct_addr.sin_addr.s_addr = ntohl(addr);
     memset(struct_addr.sin_zero, 0, sizeof(struct_addr.sin_zero));
 
+    if((setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) == -1)
+        perror("setsockopt");
+
     PRINT_DEBUG("[create_listen_sock] Binding socket to localhost\n");
-    if(!bind(sock, (struct sockaddr *) &struct_addr, sizeof(struct_addr)) == -1) {
+    if(bind(sock, (struct sockaddr *) &struct_addr, sizeof(struct_addr)) == -1) {
+        perror("bind");
         PRINT_DEBUG("Unable to bind socket\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     PRINT_DEBUG("[create_listen_sock] Listining to localhost\n");
     if(listen(sock,1) == -1) {
+        perror("listen");
         PRINT_DEBUG("Unable to listen\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
+#ifndef DEBUG
+    /* Send SIGHUP to detach the parent process */
+    kill(getppid(), SIGHUP);
+#endif
+
 
     PRINT_DEBUG("[create_listen_sock] Accepting socket\n");
     s_size = sizeof(struct_addr);
     if((newfd = accept(sock, (struct sockaddr *) &struct_addr, &s_size)) == -1) {
+        perror("accept");
         PRINT_DEBUG("Accept() failed\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     } 
 
     if((setsockopt(newfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt))) == -1)
@@ -322,6 +362,7 @@ void reconnect_server(struct thread_data *infos) {
  */
 void reconnect_client(struct thread_data *infos) {
     // Close old client socket
+    shutdown(infos->client_socket, SHUT_RDWR);
     close(infos->client_socket);
     // New client socket
     infos->client_socket = create_listen_sock(infos->listen_port, INADDR_LOOPBACK);
@@ -329,6 +370,7 @@ void reconnect_client(struct thread_data *infos) {
     client_connect(infos);
     // Update proxy_nbd_request first element to NULL (no more elems)
     pthread_mutex_lock(&pnr_lock);
+    PRINT_DEBUG("[reconnect_client] Cleaning nbd_request queue\n");
     *(infos->reqs) = NULL; 
     pthread_mutex_unlock(&pnr_lock);
     PRINT_DEBUG("[reconnect_client] Reconnected to client\n");
@@ -428,12 +470,12 @@ int main(int argc, char *argv[]) {
     struct thread_data *th_d1 = (struct thread_data *) malloc(sizeof(struct thread_data));
     struct proxy_nbd_request *pnr = NULL;
 
+    signal(SIGINT, sighandler);
 
 #ifndef DEBUG
     /* Our process ID and Session ID */
     pid_t pid, sid;
 
-    printf("Forking\n");
     /* Fork off the parent process */
     pid = fork();
     if (pid < 0) {
@@ -442,6 +484,8 @@ int main(int argc, char *argv[]) {
     /* If we got a good PID, then
        we can exit the parent process. */
     if (pid > 0) {
+        /* Wait until the child process is ready to process the requests and exit */
+        pause();
         exit(EXIT_SUCCESS);
     }
 
