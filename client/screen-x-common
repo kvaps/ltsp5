@@ -27,8 +27,7 @@
 # Load ltsp config defaults
 #
 
-if ! boolean_is_true "$LTSP_CONFIG" ; then
-    # ltsp_config sources ltsp-common-functions
+if [ "True" != "$LTSP_CONFIG" ]; then
     . /usr/share/ltsp/ltsp_config
 fi
 
