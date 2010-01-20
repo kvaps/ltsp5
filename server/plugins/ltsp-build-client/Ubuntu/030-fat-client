@@ -6,7 +6,7 @@ case "$MODE" in
         add_option "fat-client-desktop" "`eval_gettext "run most or all applications locally"`" "advanced" "true"
     ;;
 
-    before-install)
+    configure)
         # Check what the sysadmin chose to install. If (s)he is lazy and didn't
         # specify one, then we install the desktop meta-packages that are
         # already installed on the server.
@@ -30,6 +30,12 @@ case "$MODE" in
         fi
 
         FAT_CLIENT_DESKTOPS=${FAT_CLIENT_DESKTOPS:-ubuntu-desktop}
+        ;;
+
+    before-install)
+        if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
+            return 0
+        fi
 
         # Mark some packages as incompatible with the fat client system
         mkdir -p "$ROOT/etc/apt/preferences.d"
