@@ -19,7 +19,8 @@ start_sound() {
 
                 # Detect method, 0.9.16+ uses module-udev-detect instead of module-detect
                 unset PULSE_DETECT
-                case $(pulseaudio --version |awk {'print $2'}) in
+                # Replace "awk" with shell built-in "while read"
+                case $(pulseaudio --version |while read a b; do echo $b; done) in
                     0.9.1[6-9]*|0.9.[2-9][0-9]*) PULSE_DETECT=module-udev-detect ;;
                     0.[0-9].*) PULSE_DETECT=module-detect ;;
                     *) PULSE_DETECT=module-udev-detect ;;
@@ -185,9 +186,10 @@ configure_scanner() {
 configure_serial_mouse() {
       if [ -n "$X_MOUSE_DEVICE" ] && \
           [ -n "$X_MOUSE_PROTOCOL" ] && \
-          type inputattach >/dev/null 2>/dev/null && \
-          [ -n "$(echo $X_MOUSE_DEVICE | awk '/\/dev\/ttyS[0-9]/')" ]; then
-          inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" &
+          type inputattach >/dev/null 2>/dev/null ; then
+          case "${X_MOUSE_DEVICE}" in 
+              *ttyS*) inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" & ;;
+          esac
       fi
 }
 
