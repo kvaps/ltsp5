@@ -129,6 +129,10 @@ if ! env | grep -q '^SCREEN_'; then
     fi
 fi
 
+if [ -z "$LTSP_FATCLIENT" ] && [ -f /etc/ltsp_fat_chroot ]; then
+    export LTSP_FATCLIENT=True
+fi
+
 # set defaults for sound support
 if boolean_is_true "$LTSP_FATCLIENT"; then
     export SOUND=False
