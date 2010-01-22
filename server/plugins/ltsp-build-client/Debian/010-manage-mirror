@@ -19,14 +19,9 @@ case "$MODE" in
         add_mirror() {
             # add a mirror to the chroot's sources.list
             mirror="$1"
-            type="$2"
             if [ -n "$mirror" ]; then
                 if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
-                    if [ "$type" = "security" ]; then
-                        mirror="$mirror $DIST/updates $COMPONENTS"
-                    else
-                        mirror="$mirror $DIST $COMPONENTS"
-                    fi
+                    mirror="$mirror $DIST $COMPONENTS"
                 fi
                 echo "deb $mirror" >> $ROOT/etc/apt/sources.list
                 case $mirror in
