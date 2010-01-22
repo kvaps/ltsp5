@@ -62,4 +62,5 @@ case "$MODE" in
         add_mirror "$MIRROR" 
         add_multiple_mirrors "$EXTRA_MIRROR"
         add_mirror "$SECURITY_MIRROR" security
+        ;;
 esac
