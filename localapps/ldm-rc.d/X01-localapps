@@ -101,12 +101,12 @@ if boolean_is_true "$LOCAL_APPS"; then
         match=
         for f in $dgnames; do
             if [ "$e" = "$f" ]; then
-        match=1
-        fi
+                match=1
+            fi
         done
         if [ -z "$match" ]; then
-        tocreate="$tocreate $e,"
-    fi
+            tocreate="$tocreate $e,"
+        fi
     done
     tocreate=$(echo ${tocreate} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//' | sed 's/^[[:blank:]]*//g')
     unset IFS
