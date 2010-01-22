@@ -1,29 +1,38 @@
 # functions specific to Debian (and possibly derived distros)
 
-add_mirror() {
-    # add a mirror to the chroot's sources.list
-    mirror="$1"
-    if [ -n "$mirror" ]; then
-        if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
-            mirror="$mirror $DIST $COMPONENTS"
+add_mirrors() {
+    # feed a list of comma-separated or enter-separated mirrors,
+    # add them to the chroot's sources.list
+
+    echo "$1" | tr ',' '\n' \
+    | while read mirror dist components; do
+        if [ -z "$mirror" ] || [ "$mirror" = "none" ]; then
+            continue
         fi
-        echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+        if [ -z "$dist" ]; then
+            dist="$DIST"
+            # components are only optional if dist does not end with a trailing
+            # slash; always include them if dist is not specified.
+            components="$COMPONENTS"
+        fi
+
+        echo "deb $mirror $dist $components" >> $ROOT/etc/apt/sources.list
         case $mirror in
-            file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+            file:///*) dir=$(echo "$mirror" | sed -e 's,^file://,,g')
                 mkdir -p $ROOT/$dir
                 chroot_mount $dir $dir --bind
                 ;;
-        esac  
-    fi
+        esac
+    done
+}
+
+add_mirror() {
+    # compatibility function
+    echo "WARNING: use of deprecated add_mirror or add_multiple_mirrors"
+    echo "function. please update your ltsp-build-client plugins."
+    add_mirrors "$@"
 }
 
 add_multiple_mirrors() {
-    # feed a list of comma-separated or enter-separated mirrors,
-    # add them to sources.list
-    echo "$1" | tr ',' '\n' \
-    | while read mirror; do
-        if [ -n "$mirror" ]; then
-            add_mirror "$mirror"
-        fi
-    done
+   add_mirror "$@" 
 }
