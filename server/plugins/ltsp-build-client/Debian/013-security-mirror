@@ -20,6 +20,6 @@ case "$MODE" in
         fi
         ;;
     after-install)
-        add_mirror "$SECURITY_MIRROR"
+        add_mirrors "$SECURITY_MIRROR"
         ;;
 esac
