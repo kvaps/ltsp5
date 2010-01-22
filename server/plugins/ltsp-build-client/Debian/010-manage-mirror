@@ -43,24 +43,14 @@ case "$MODE" in
         }
         
         add_multiple_mirrors() {
-            # feed a list of comma-separated mirrors, add them to sources.list
-            mirror_list="$1"
-            if [ -z "$(echo $mirror_list | grep ,)" ] ; then
-                # only one mirror specified
-                add_mirror "$mirror_list"
-            else
-                OIFS=$IFS
-                IFS=,
-                for mirror in $mirror_list; do
-                    if [ -n "$mirror" ]; then
-                        add_mirror "$mirror"
-                    fi
-                done
-                unset IFS
-                if [ -n "$OIFS" ]; then
-                    IFS=$OIFS
+            # feed a list of comma-separated or enter-separated mirrors,
+            # add them to sources.list
+            echo "$1" | tr ',' '\n' \
+            | while read mirror; do
+                if [ -n "$mirror" ]; then
+                    add_mirror "$mirror"
                 fi
-            fi
+            done
         }
 
         sources_list="$ROOT/etc/apt/sources.list"
