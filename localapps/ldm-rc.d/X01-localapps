@@ -65,8 +65,12 @@ if boolean_is_true "$LOCAL_APPS"; then
     ngids=""
 
     while read line; do
-        gname=$(echo $line|cut -d: -f1)
-        gid=$(echo $line|cut -d: -f3)
+        # get the group id by stripping everything after the first ":"
+        gname=${line%%:*}
+        # get gid and group users by stripping everything before the second ":"
+        gid_tmp=${line#*:*:}
+        # get the gid by stripping off the everyting after the remaining ":"
+        gid=${gid_tmp%%:*}
         match=
         for e in $gnames; do
             if [ "$gname" = "$e" ]; then
