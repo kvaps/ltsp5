@@ -1,0 +1,29 @@
+# functions specific to Debian (and possibly derived distros)
+
+add_mirror() {
+    # add a mirror to the chroot's sources.list
+    mirror="$1"
+    if [ -n "$mirror" ]; then
+        if [ -z "$(echo $mirror | awk '{print $2}')" ]; then
+            mirror="$mirror $DIST $COMPONENTS"
+        fi
+        echo "deb $mirror" >> $ROOT/etc/apt/sources.list
+        case $mirror in
+            file:///*) dir="$(echo $mirror | awk '{print $1}' | sed -e 's,^file://,,g')"      
+                mkdir -p $ROOT/$dir
+                chroot_mount $dir $dir --bind
+                ;;
+        esac  
+    fi
+}
+
+add_multiple_mirrors() {
+    # feed a list of comma-separated or enter-separated mirrors,
+    # add them to sources.list
+    echo "$1" | tr ',' '\n' \
+    | while read mirror; do
+        if [ -n "$mirror" ]; then
+            add_mirror "$mirror"
+        fi
+    done
+}
