@@ -90,6 +90,7 @@ if boolean_is_true "$LOCAL_APPS"; then
             gids="$gids $gid"
         fi
     done < ${COMBINED_GROUP}
+    unset IFS
     test -n "$OLDIFS" && IFS="$OLDIFS"
     # cleanup
     dgnames=$(echo ${dgnames} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
@@ -180,7 +181,8 @@ if boolean_is_true "$LOCAL_APPS"; then
             mkdir -p "${extradir}"
             sshfs -o ${SSH_FOLLOW_SYMLINKS}allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
         done
-        IFS="$OLDIFS"
+        unset IFS
+        test -n "$OLDIFS" && IFS="$OLDIFS"
     fi
 
     # Create tmpdir for localapps menu
