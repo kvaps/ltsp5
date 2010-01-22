@@ -70,7 +70,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         match=
         for e in $gnames; do
             if [ "$gname" = "$e" ]; then
-                if [ -n "$(echo $line | grep "${LDM_USERNAME}")" ]; then
+                if [ -n "$(echo $users | grep "${LDM_USERNAME}")" ]; then
                     dgnames="$dgnames $gname,"
                 fi
                 match=1
@@ -79,13 +79,13 @@ if boolean_is_true "$LOCAL_APPS"; then
         for e in $gids; do
             if [ "$gid" = "$e" ]; then
                 match=1
-                if [ -n "$(echo $line | grep "${LDM_USERNAME}")" ]; then
+                if [ -n "$(echo $users | grep "${LDM_USERNAME}")" ]; then
                     ngids="$ngids $gname,"
                 fi
             fi
         done
         if [ -z "$match" ]; then
-            echo "$line" >>${TMPGROUP}
+            echo "$gname:$gpass:$gid:$gusers" >>${TMPGROUP}
             gnames="$gnames $gname"
             gids="$gids $gid"
         fi
