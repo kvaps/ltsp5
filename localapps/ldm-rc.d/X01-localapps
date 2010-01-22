@@ -86,8 +86,8 @@ if boolean_is_true "$LOCAL_APPS"; then
         done
         if [ -z "$match" ]; then
             echo "$gname:$gpass:$gid:$gusers" >>${TMPGROUP}
-            gnames="$gnames $gname"
-            gids="$gids $gid"
+            gnames="$gnames:$gname"
+            gids="$gids:$gid"
         fi
     done < ${COMBINED_GROUP}
     unset IFS
