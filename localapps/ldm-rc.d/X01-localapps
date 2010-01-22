@@ -125,8 +125,8 @@ if boolean_is_true "$LOCAL_APPS"; then
             done
             unset IFS
             test -n "$OLDIFS" && IFS="$OLDIFS"
-        for group in $(echo ${myGroups} | tr ',' '\n' | sort -u); do
-        /usr/sbin/usermod -a -G $group "${LDM_USERNAME}" 2>/dev/null
+            for group in $(echo ${myGroups} | tr ',' '\n' | sort -u); do
+                /usr/sbin/usermod -a -G $group "${LDM_USERNAME}" 2>/dev/null
             done
         else
             # FIXME: maybe add system groups: $tocreate into /etc/group
