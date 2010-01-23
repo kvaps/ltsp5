@@ -72,18 +72,22 @@ if boolean_is_true "$LOCAL_APPS"; then
             *:"$gname":*|*:"$gname") 
                 # group name present in the list of groups already processed.
                 match=1
-                if [ -n "$(echo $gusers | grep "${LDM_USERNAME}")" ]; then
-                    dgnames="$dgnames $gname,"
-                fi
+                case $gusers in
+                    "$LDM_USERNAME"|*,"$LDM_USERNAME",*|*,"$LDM_USERNAME"|"$LDM_USERNAME",*) 
+                        dgnames="$dgnames $gname,"
+                        ;;
+                esac
                 ;;
         esac
         case $gids in
             *:"$gid":*|*:"$gid") 
                 # gid present in the list of gids already processed.
                 match=1
-                if [ -n "$(echo $gusers | grep "${LDM_USERNAME}")" ]; then
-                    ngids="$ngids $gname,"
-                fi
+                case $gusers in
+                    "$LDM_USERNAME"|*,"$LDM_USERNAME",*|*,"$LDM_USERNAME"|"$LDM_USERNAME",*) 
+                        ngids="$ngids $gname,"
+                        ;;
+                esac
                 ;;
         esac
         if [ -z "$match" ]; then
