@@ -154,17 +154,21 @@ if boolean_is_true "$LOCAL_APPS"; then
     # Now, let's mount the home directory
     OLDIFS="$IFS"
     IFS=":"
-    getent passwd ${LDM_USERNAME} | while read user pass uid gid gecos LDM_HOME shell ; do
+    export LDM_HOME=""
+    TMP_USER_PASSWD=${LOCALAPPS_CACHE}/passwd.user
+    getent passwd ${LDM_USERNAME} > ${TMP_USER_PASSWD}
+    while read user pass uid gid gecos home shell ; do
         # First, make the mountpoint
-        export LDM_HOME
+        LDM_HOME="$home"
         mkdir -p ${LDM_HOME}
         chown "$uid":"$gid" ${LDM_HOME}
         if [ -n "${XAUTHORITY_DIR}" ]; then
             chown "$uid":"$gid" ${XAUTHORITY_DIR}
         fi
-    done
+    done < ${TMP_USER_PASSWD}
     unset IFS
     test -n "$OLDIFS" && IFS="$OLDIFS"
+    rm ${TMP_USER_PASSWD}
 
     ## Maybe do this:
     ## export HOME=${LOCALAPPS_CACHE}
