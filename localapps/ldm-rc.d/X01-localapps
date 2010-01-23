@@ -63,7 +63,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     # those 2 variables are there because if group is rejected because of the gid we need to create this group.
     dgnames=""
     ngids=""
-    
+
     OLDIFS="$IFS"
     IFS=":"
     while read gname gpass gid gusers; do
