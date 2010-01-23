@@ -155,15 +155,19 @@ if boolean_is_true "$LOCAL_APPS"; then
     OLDIFS="$IFS"
     IFS=":"
     export LDM_HOME=""
+    export USER_UID=""
+    export USER_GID=""
     TMP_USER_PASSWD=${LOCALAPPS_CACHE}/passwd.user
     getent passwd ${LDM_USERNAME} > ${TMP_USER_PASSWD}
     while read user pass uid gid gecos home shell ; do
         # First, make the mountpoint
         LDM_HOME="$home"
+        USER_UID="$uid"
+        USER_GID="$gid"
         mkdir -p ${LDM_HOME}
-        chown "$uid":"$gid" ${LDM_HOME}
+        chown "$USER_UID":"$USER_GID" ${LDM_HOME}
         if [ -n "${XAUTHORITY_DIR}" ]; then
-            chown "$uid":"$gid" ${XAUTHORITY_DIR}
+            chown "$USER_UID":"$USER_GID" ${XAUTHORITY_DIR}
         fi
     done < ${TMP_USER_PASSWD}
     unset IFS
@@ -205,7 +209,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         export TMP_XDG_DIR_LOCAL
 
         # chown the tmpdir to be owned by the user
-        chown -R $(getent passwd "${LDM_USERNAME}" | cut -d ":" -f 3-4) ${TMP_XDG_DIR_LOCAL} 
+        chown -R $USER_UID:$USER_GID ${TMP_XDG_DIR_LOCAL} 
 
         # Generate the localapp menu
         su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} TMP_XDG_DIR_LOCAL=${TMP_XDG_DIR_LOCAL} /usr/bin/ltsp-genmenu install"
