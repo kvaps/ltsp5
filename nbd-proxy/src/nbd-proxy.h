@@ -3,6 +3,7 @@
 #define SRV_RECV_BUF 1024
 #define htonll ntohll
 #define RESEND_MAX 3
+#define SEND_BUF_FACTOR 20
 
 #ifdef DEBUG
     #define PRINT_DEBUG(...) fprintf(stderr, __VA_ARGS__)
@@ -14,7 +15,7 @@ typedef unsigned long long u64;
 typedef unsigned long u32;
 
 u64 cliserv_magic = 0x00420281861253LL;
-pthread_mutex_t pnr_lock;
+pthread_mutex_t proxy_lock;
 
 struct proxy_nbd_request {
     struct nbd_request *nr;
@@ -26,8 +27,8 @@ struct thread_data {
     int server_socket;
     int server_port;
     int listen_port;
-	char *server_addr;
-	struct nbd_init_data *nid;
+    char *server_addr;
+    struct nbd_init_data *nid;
     struct proxy_nbd_request **reqs;
 };
 
@@ -58,17 +59,17 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
         (struct proxy_nbd_request*) malloc(sizeof(struct proxy_nbd_request));
     struct proxy_nbd_request *current_pnr = *first;
 
-	if(*first == NULL) {
-		*first = new_pnr;
-	} else {
-		while(current_pnr->next != NULL) 
-			current_pnr = current_pnr->next;
-		current_pnr->next = new_pnr;
-	}
+    if(*first == NULL) {
+        *first = new_pnr;
+    } else {
+        while(current_pnr->next != NULL) 
+            current_pnr = current_pnr->next;
+        current_pnr->next = new_pnr;
+    }
 
-	new_pnr->nr = nr;
-	new_pnr->next = NULL;
-	PRINT_DEBUG("[add_nbd_request] nbd_request added to linked list\n");
+    new_pnr->nr = nr;
+    new_pnr->next = NULL;
+    PRINT_DEBUG("[add_nbd_request] nbd_request added to linked list\n");
 }
 
 /* get_nbd_request_by_handle
@@ -78,14 +79,14 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
  */
 struct nbd_request *get_nbd_request_by_handle(char *handle, struct proxy_nbd_request **first) {
     struct proxy_nbd_request *current_pnr = *first;
-	if(current_pnr != NULL) {
-		do {
-			if(!strncmp(handle, current_pnr->nr->handle, sizeof((*first)->nr->handle))) {
-				//PRINT_DEBUG("[get_nbd_request_by_handle] nbd_request found!\n");
-				return current_pnr->nr;
-			}
-		} while((current_pnr = current_pnr->next) != NULL);
-	}
+    if(current_pnr != NULL) {
+        do {
+            if(!strncmp(handle, current_pnr->nr->handle, sizeof((*first)->nr->handle))) {
+                //PRINT_DEBUG("[get_nbd_request_by_handle] nbd_request found!\n");
+                return current_pnr->nr;
+            }
+        } while((current_pnr = current_pnr->next) != NULL);
+    }
     return NULL;
 }
 
@@ -97,23 +98,23 @@ struct nbd_request *get_nbd_request_by_handle(char *handle, struct proxy_nbd_req
 void rm_nbd_request(struct nbd_request *nr, struct proxy_nbd_request **first) {
     struct proxy_nbd_request *current_pnr = *first;
     struct proxy_nbd_request *previous_pnr = *first;
-	if(current_pnr != NULL) {
-		do {
-			if(current_pnr->nr == nr) {
-				PRINT_DEBUG("[rm_nbd_request] removing nbd_request\n");
-				if(current_pnr == *first) {
-					*first = current_pnr->next;
-				} else {
-					previous_pnr->next = current_pnr->next;
-					free(current_pnr);
-				}
-				break;
-			}
-			previous_pnr = current_pnr;
-		} while((current_pnr = current_pnr->next) != NULL);
-	} else {
-		PRINT_DEBUG("[rm_nbd_request] proxy_nbd_request empty... \n");
-	}
+    if(current_pnr != NULL) {
+        do {
+            if(current_pnr->nr == nr) {
+                PRINT_DEBUG("[rm_nbd_request] removing nbd_request\n");
+                if(current_pnr == *first) {
+                    *first = current_pnr->next;
+                } else {
+                    previous_pnr->next = current_pnr->next;
+                    free(current_pnr);
+                }
+                break;
+            }
+            previous_pnr = current_pnr;
+        } while((current_pnr = current_pnr->next) != NULL);
+    } else {
+        PRINT_DEBUG("[rm_nbd_request] proxy_nbd_request empty... \n");
+    }
 }
 
 /* count_nbd_request
@@ -136,15 +137,15 @@ int count_nbd_request(struct proxy_nbd_request **first) {
  *      host_longlong -- 64 bit to transform
  */
 uint64_t ntohll(uint64_t host_longlong) {
-	int x = 1;
+    int x = 1;
 
-	/* little endian */
-	if(*(char *)&x == 1)
-		return ((((uint64_t)ntohl(host_longlong)) << 32) + ntohl(host_longlong >> 32));
+    /* little endian */
+    if(*(char *)&x == 1)
+        return ((((uint64_t)ntohl(host_longlong)) << 32) + ntohl(host_longlong >> 32));
 
-	/* big endian */
-	else
-		return host_longlong;
+    /* big endian */
+    else
+        return host_longlong;
 }
 
 /* handle_to_string
