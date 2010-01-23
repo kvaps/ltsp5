@@ -68,22 +68,24 @@ if boolean_is_true "$LOCAL_APPS"; then
     IFS=":"
     while read gname gpass gid gusers; do
         match=
-        for e in $gnames; do
-            if [ "$gname" = "$e" ]; then
+        case $gnames in
+            *:"$gname":*|*:"$gname") 
+                # group name present in the list of groups already processed.
+                match=1
                 if [ -n "$(echo $gusers | grep "${LDM_USERNAME}")" ]; then
                     dgnames="$dgnames $gname,"
                 fi
-                match=1
-            fi
-        done
-        for e in $gids; do
-            if [ "$gid" = "$e" ]; then
+                ;;
+        esac
+        case $gids in
+            *:"$gid":*|*:"$gid") 
+                # gid present in the list of gids already processed.
                 match=1
                 if [ -n "$(echo $gusers | grep "${LDM_USERNAME}")" ]; then
                     ngids="$ngids $gname,"
                 fi
-            fi
-        done
+                ;;
+        esac
         if [ -z "$match" ]; then
             echo "$gname:$gpass:$gid:$gusers" >>${TMPGROUP}
             gnames="$gnames:$gname"
