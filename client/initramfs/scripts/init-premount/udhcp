@@ -93,12 +93,12 @@ case "$ip" in
         autoconf="$ip"
         ;;
     *)
-        oldifs="$IFS"
+        local oldifs="${IFS-not set}"
         IFS=':'
         read ip tftp router subnet hostname new_interface new_autoconf<<EOF
 $ip
 EOF
-        IFS="$oldifs"
+        test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
         # Prefer the interface specified by BOOTIF
         interface=${interface:-$new_interface}
         # Provide a way to use both IPAPPEND 3 *and* autoconf=dhcp :-)
@@ -198,8 +198,8 @@ tftp=${tftp:-$serverid}
 # Converts a decimal subnet mask to the bit count needed for the CIDR notation
 subnet_to_cidr()
 {
-bits=32
-oldifs="$IFS"
+local bits=32
+local oldifs="${IFS-not set}"
 IFS='.'
 for byte in $1; do
     byte=$((255-$byte))
@@ -208,7 +208,7 @@ for byte in $1; do
         byte=$(($byte/2))
     done
 done
-IFS="$oldifs"
+test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
 echo $bits
 }
 

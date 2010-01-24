@@ -13,15 +13,14 @@ generate() {
     # Build desktop file list
     if [ -n "${LOCAL_APPS_MENU_ITEMS}" ]; then
         DESKTOP_FILES=""
-        OLDIFS="$IFS"
+        local oldifs="${IFS-not set}"
         IFS=,
         for i in ${LOCAL_APPS_MENU_ITEMS}; do 
             if [ -e "/usr/share/applications/${i}.desktop" ]; then 
                 DESKTOP_FILES="${DESKTOP_FILES} /usr/share/applications/${i}.desktop" 
             fi
         done
-        unset IFS
-        test -n "$OLDIFS" && IFS="$OLDIFS"
+        test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     else
         DESKTOP_FILES=/usr/share/applications/*.desktop
     fi

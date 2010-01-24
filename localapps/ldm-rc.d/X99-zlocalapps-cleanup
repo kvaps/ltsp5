@@ -20,13 +20,13 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Unmount other mounts
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
-        OLDIFS="$IFS"
+        oldifs="${IFS-not set}"
         IFS=','
         for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             fusermount -uqz "${extradir}"
             rmdir "${extradir}"
         done
-        IFS="$OLDIFS"
+        test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
 
     rm $LOCALAPPSD_PIDFILE

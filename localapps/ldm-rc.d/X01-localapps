@@ -64,7 +64,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     dgnames=""
     ngids=""
 
-    OLDIFS="$IFS"
+    oldifs="${IFS-not set}"
     IFS=":"
     while read gname gpass gid gusers; do
         match=
@@ -96,13 +96,12 @@ if boolean_is_true "$LOCAL_APPS"; then
             gids="$gids:$gid"
         fi
     done < ${COMBINED_GROUP}
-    unset IFS
-    test -n "$OLDIFS" && IFS="$OLDIFS"
+    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     # cleanup
     dgnames=$(echo ${dgnames} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
     ngids=$(echo ${ngids} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
     tocreate=""
-    OLDIFS="$IFS"
+    oldifs="${IFS-not set}"
     IFS=,
     for e in $ngids; do
         match=
@@ -116,8 +115,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         fi
     done
     tocreate=$(echo ${tocreate} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//' | sed 's/^[[:blank:]]*//g')
-    unset IFS
-    test -n "$OLDIFS" && IFS="$OLDIFS"
+    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
 
     cp ${TMPGROUP} /etc/group
     chmod 644 /etc/group
@@ -125,14 +123,13 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     if [ -n "$myGroups" ]; then
         if [ -w /etc ]; then
-            OLDIFS="$IFS"
+            oldifs="${IFS-not set}"
             IFS=,
             for ngroup in $tocreate; do
                 ngroup=$(echo ${ngroup} | sed -e 's/ /\\\ /g') # FIXME: Problem with AD. Space not permited here.
                 groupadd -r ${ngroup}
             done
-            unset IFS
-            test -n "$OLDIFS" && IFS="$OLDIFS"
+            test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
             for group in $(echo ${myGroups} | tr ',' '\n' | sort -u); do
                 /usr/sbin/usermod -a -G $group "${LDM_USERNAME}" 2>/dev/null
             done
@@ -140,7 +137,7 @@ if boolean_is_true "$LOCAL_APPS"; then
             # FIXME: maybe add system groups: $tocreate into /etc/group
             # Read-only /etc cannot use usermod
             myGroups=$(echo ${myGroups} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
-            OLDIFS="$IFS"
+            oldifs="${IFS-not set}"
             IFS=,
             cp /etc/group $TMPGROUP
             for group in $myGroups ; do
@@ -152,13 +149,12 @@ if boolean_is_true "$LOCAL_APPS"; then
                 fi
             done
             cp $TMPGROUP /etc/group
-            unset IFS
-            test -n "$OLDIFS" && IFS="$OLDIFS"
+            test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
         fi
     fi
 
     # Now, let's mount the home directory
-    OLDIFS="$IFS"
+    oldifs="${IFS-not set}"
     IFS=":"
     export LDM_HOME=""
     export USER_UID=""
@@ -176,8 +172,7 @@ if boolean_is_true "$LOCAL_APPS"; then
             chown "$USER_UID":"$USER_GID" ${XAUTHORITY_DIR}
         fi
     done < ${TMP_USER_PASSWD}
-    unset IFS
-    test -n "$OLDIFS" && IFS="$OLDIFS"
+    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     rm ${TMP_USER_PASSWD}
 
     ## Maybe do this:
@@ -193,14 +188,13 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Mount other directories
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
-        OLDIFS="$IFS"
+        oldifs="${IFS-not set}"
         IFS=","
         for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             mkdir -p "${extradir}"
             sshfs -o ${SSH_FOLLOW_SYMLINKS}allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
         done
-        unset IFS
-        test -n "$OLDIFS" && IFS="$OLDIFS"
+        test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
 
     # Create tmpdir for localapps menu
