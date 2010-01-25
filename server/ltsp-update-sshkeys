@@ -108,6 +108,7 @@ done
 # Add any additional hosts
 for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
     cat ${SSHHOST} >> $OUTPUT
+    echo >> $OUTPUT
 done
 
 #
