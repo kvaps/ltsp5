@@ -41,13 +41,11 @@ void *client_to_server(void *data) {
 
     PRINT_DEBUG("[t_client] Init mainloop\n");
     while(1) {
-        bytes_read = recv(infos->client_socket, recv_buf, sizeof(recv_buf), 0);
+        bytes_read = recv(infos->client_socket, recv_buf, sizeof(recv_buf), MSG_WAITALL);
         if(bytes_read <= 0) {
-            PRINT_DEBUG("[t_client] Client disconnected on recv(). Reconnecting\n");
-            pthread_mutex_lock(&proxy_lock);
-            reconnect_client(infos);
-            pthread_mutex_unlock(&proxy_lock);
-            continue;
+            PRINT_DEBUG("[t_client] Client disconnected on recv(). Dying...\n");
+            cleaning(infos);
+            exit(EXIT_FAILURE);
         }
 
         struct nbd_request *new_req = (struct nbd_request*) malloc(sizeof(struct nbd_request));
@@ -60,29 +58,22 @@ void *client_to_server(void *data) {
             if(new_req->type == ntohl(NBD_CMD_READ)) {
                 PRINT_DEBUG("[t_client] Got nbd_request : handle(%s) of len(%u) and from(%lu)\n", 
                         handle_to_string(new_req->handle), ntohl(new_req->len), ntohll(new_req->from));
-                // Adding nbd_request received to queue (atomic action)
-                pthread_mutex_lock(&proxy_lock);
+
+                pthread_mutex_lock(&net_lock); 
+                // Adding nbd_request received to queue (thread safe)
                 add_nbd_request(new_req, infos->reqs);
-                pthread_mutex_unlock(&proxy_lock);
+                if(send_to_server(infos, recv_buf, bytes_read, new_req) == -1) {
+                    PRINT_DEBUG("[t_client] Failed sending nbd_request to server\n");
+                }
+                pthread_mutex_unlock(&net_lock); 
             // NBD_CMD_DISC from client
             } else if(new_req->type == ntohl(NBD_CMD_DISC)) {
                 PRINT_DEBUG("[t_client] NBD_DISCONNECT from client. Cleaning\n");
-                // On thin client infrastructure, this should not happen
-                pthread_mutex_lock(&proxy_lock);
-                reconnect_client(infos);
-                pthread_mutex_unlock(&proxy_lock);
-                continue;
+                // On thin client infrastructure, this should not happen. Quitting properly
+                cleaning(infos);
+                exit(EXIT_SUCCESS);
             }
         }
-
-        // Sending received data to server
-        if(send_to_server(infos, recv_buf, bytes_read) == -1) {
-            PRINT_DEBUG("[t_client] Client detect server disconnect. Resendig all nbd_request\n");
-            pthread_mutex_lock(&proxy_lock);
-            resend_all_nbd_requests(infos, new_req);
-            pthread_mutex_unlock(&proxy_lock);
-        }
-        // Release lock
     }
     PRINT_DEBUG("[t_client] WTF client_to_server outside while\n");
 }
@@ -96,82 +87,88 @@ void *server_to_client(void *data) {
     struct nbd_reply nr;
     struct nbd_request *current_nr = NULL;
     struct nbd_request *flag_disc = NULL;
-    char recv_buf[SRV_RECV_BUF];
+    char recv_buf[SRV_RECV_BUF * SEND_BUF_FACTOR];
     ssize_t bytes_read;
     ssize_t r_bytes;
     int discard_reply_flag = 0;
-    int size_recv_buf = SRV_RECV_BUF;
+    int out_flag = 0;
+    int size_recv_buf = sizeof(struct nbd_reply);
     char send_buf[SRV_RECV_BUF * SEND_BUF_FACTOR];
     ssize_t total_size = 0;
 
     // Main loop
     PRINT_DEBUG("[t_server] Init mainloop\n");
     while(1) {
+        PRINT_DEBUG("[t_server] recv mode\n");
         bytes_read = recv(infos->server_socket, recv_buf, size_recv_buf, MSG_WAITALL);
-        // Keep track of bytes read for specific use
+        // Keep track of bytes read for used to update nbd_request len
         r_bytes = bytes_read;
         if(bytes_read <= 0) {
             PRINT_DEBUG("[t_server] Server disconnected on recv() (bytes_read = %d). Reconnecting\n", 
                     (int) bytes_read);
-            pthread_mutex_lock(&proxy_lock);
             reconnect_server(infos);
-            pthread_mutex_unlock(&proxy_lock);
             // Sending last nbd_request modified
             if(current_nr != NULL) {
                 PRINT_DEBUG("[t_server] nbd_request count : %d\n", count_nbd_request(infos->reqs));
-                pthread_mutex_lock(&proxy_lock);
-                send_to_server(infos, (char *) current_nr, sizeof(struct nbd_request));
-                pthread_mutex_unlock(&proxy_lock);
-
-                flag_disc = current_nr;
-                discard_reply_flag = sizeof(struct nbd_reply);
+                send_to_server(infos, (char *) current_nr, sizeof(struct nbd_request), NULL);
                 PRINT_DEBUG("[t_server] Last known nbd_request sent\n");
                 PRINT_DEBUG("|-- nbd_request : handle(%s) of len(%u) and from(%lu)\n", 
                         handle_to_string(current_nr->handle), ntohl(current_nr->len), 
                         ntohll(current_nr->from));
+
+                flag_disc = current_nr;
+                discard_reply_flag = sizeof(struct nbd_reply);
             } else {
                 PRINT_DEBUG("[t_server] Resending all nbd_request after recv error from server\n");
-                pthread_mutex_lock(&proxy_lock);
-                resend_all_nbd_requests(infos, NULL);
-                pthread_mutex_unlock(&proxy_lock);
+                resend_all_nbd_requests(infos);
             }
             total_size = 0;
+            out_flag = 0;
+            size_recv_buf = sizeof(struct nbd_reply);
             continue;
         }
 
-        PRINT_DEBUG("[t_server] Bytes read : %d\n", (int)bytes_read);
+        //PRINT_DEBUG("[t_server] Bytes read : %ld\n", bytes_read);
 
         // Getting nbd_reply
         memcpy(&nr, recv_buf, sizeof(struct nbd_reply));
         // If the packet received contain a valid nbd_reply
         if(nr.magic == ntohl(NBD_REPLY_MAGIC)) {
             PRINT_DEBUG("[t_server] Got nbd_reply : handle(%s)\n", handle_to_string(nr.handle));
-            // Locking nbd_request queue
-            pthread_mutex_lock(&proxy_lock);
-            if((current_nr = get_nbd_request_by_handle(nr.handle, infos->reqs)) == NULL) {
-                PRINT_DEBUG("[t_server] nbd_reply handle unknown\n");
-            }
-            pthread_mutex_unlock(&proxy_lock);
+            // If already data in send_buf, it means that the last nbd_request is over
 
-            // Ignoring nbd_reply size for len in nbd_request
-            r_bytes -= sizeof(struct nbd_reply);
+            // Thread safe
+            current_nr = get_nbd_request_by_handle(nr.handle, infos->reqs);
+
+            if(current_nr == NULL)
+                PRINT_DEBUG("[t_server] nbd_reply handle unknown\n");
+            else {
+                // Adapting recv buffer size
+                size_recv_buf = ntohl(current_nr->len);
+                // Ignoring nbd_reply size for len of nbd_request
+                r_bytes -= sizeof(struct nbd_reply);
+            }
         } else if(current_nr == NULL) {
             PRINT_DEBUG("[t_server] Fatal error: No nbd_reply received and no nbd_request to serve\n");
+        } else {
+            out_flag = 1;
         }
 
         // Filling send_buf
-        PRINT_DEBUG("Copy %d bytes to send_buf at %d pos of send_buf\n", (int)bytes_read, (int)total_size);
+        PRINT_DEBUG("Copy %ld bytes to send_buf at %ld pos of send_buf\n", 
+                bytes_read, total_size);
         memcpy(send_buf + total_size, recv_buf, bytes_read);
         total_size += bytes_read;
 
         PRINT_DEBUG("[t_server] nbd_request in queue : %d\n", count_nbd_request(infos->reqs));
-        // Sending to client when size of send_buf is reach or the end of transmission
-        if(total_size >= sizeof(send_buf) || bytes_read < SRV_RECV_BUF || ntohl(current_nr->len) <= SRV_RECV_BUF) {
-            PRINT_DEBUG("[t_server] Sending %d bytes to client\n",(int) total_size - discard_reply_flag);
-            // Sending data to client (P -> C) (thread safe)
+        // Sending to client when all nbd_request's data received
+        if(out_flag) {
+            PRINT_DEBUG("[t_server] Sending %d bytes to client\n",(int)total_size - discard_reply_flag);
+            // Sending data to client (P -> C). On client disconnect, nbd proxy STOP!
             send_to_client(infos, send_buf + discard_reply_flag, total_size - discard_reply_flag);
             total_size = 0;
             discard_reply_flag = 0;
+            out_flag = 0;
         }
 
         // Updating current nbd_request.len of received bytes (r_bytes)
@@ -180,22 +177,16 @@ void *server_to_client(void *data) {
             current_nr->from = htonll(ntohll(current_nr->from) + r_bytes);
 
             if((current_nr->len) == 0) {
-                pthread_mutex_lock(&proxy_lock);
                 // Removing nbd_request from queue. Not useful anymore (atomic action)
                 rm_nbd_request(current_nr, infos->reqs);
                 if(current_nr == flag_disc) {
-                    PRINT_DEBUG("[t_server] Last known nbd_request done. Resending queue (count : %d)\n",count_nbd_request(infos->reqs));
-                    resend_all_nbd_requests(infos, NULL);
+                    PRINT_DEBUG("[t_server] Last known nbd_request done. Resending queue (count : %d)\n",
+                            count_nbd_request(infos->reqs));
+                    resend_all_nbd_requests(infos);
                     flag_disc = NULL;
                 }
-                pthread_mutex_unlock(&proxy_lock);
                 current_nr = NULL;
-            }
-            if(current_nr != NULL && ntohl(current_nr->len) < SRV_RECV_BUF) {
-                size_recv_buf = ntohl(current_nr->len);
-                PRINT_DEBUG("[t_server] Adjusting recv buffer to : %d\n", size_recv_buf);
-            } else {
-                size_recv_buf = SRV_RECV_BUF;
+                size_recv_buf = sizeof(struct nbd_reply);
             }
         }
     }
@@ -353,21 +344,24 @@ int create_listen_sock(int port, int addr) {
  *         infos -- struct thread_data
  *         except_nr -- nbd_request NOT to send to server
  */
-void resend_all_nbd_requests(struct thread_data *infos, struct nbd_request *except_nr) {
+void resend_all_nbd_requests(struct thread_data *infos) {
+    pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *(infos->reqs);
     if(current_pnr == NULL) {
         PRINT_DEBUG("[resend] No nbd_request in queue\n");
+        pthread_mutex_unlock(&data_lock);
         return;
     }
     do {
         // Don't send specific nbd_request
-        if(current_pnr->nr == except_nr)
+        if(current_pnr->nr == infos->except_nr)
             continue;
-        send_to_server(infos, (char*) current_pnr->nr, sizeof(struct nbd_request));
+        send_to_server(infos, (char*) current_pnr->nr, sizeof(struct nbd_request), NULL);
         PRINT_DEBUG("[resend] nbd_request : handle(%s) of len(%u) and from(%lu)\n",
                 handle_to_string(current_pnr->nr->handle), ntohl(current_pnr->nr->len),
                 ntohll(current_pnr->nr->from));
     } while((current_pnr = current_pnr->next) != NULL);
+    pthread_mutex_unlock(&data_lock);
 }
 
 /* reconnect_server
@@ -375,32 +369,14 @@ void resend_all_nbd_requests(struct thread_data *infos, struct nbd_request *exce
  *         infos -- struct thread_data
  */
 void reconnect_server(struct thread_data *infos) {
+    pthread_mutex_lock(&net_lock);
     // Close current server socket
     close(infos->server_socket);
     // New server socket
     infos->server_socket = create_connect_sock(infos->server_port, infos->server_addr);
     server_connect(infos);
+    pthread_mutex_unlock(&net_lock);
     PRINT_DEBUG("[reconnect_server] Reconnected to server\n");
-}
-
-/* reconnect_client
- *     Clean data structure and reconnect to client
- *         infos -- struct thread_data
- */
-void reconnect_client(struct thread_data *infos) {
-    // Close old client socket
-    shutdown(infos->client_socket, SHUT_RDWR);
-    close(infos->client_socket);
-    // New client socket
-    infos->client_socket = create_listen_sock(infos->listen_port, INADDR_LOOPBACK);
-    // Connect client (server negotiation sent to client)
-    client_connect(infos);
-    // Update proxy_nbd_request first element to NULL (no more elems)
-    pthread_mutex_lock(&proxy_lock);
-    PRINT_DEBUG("[reconnect_client] Cleaning nbd_request queue\n");
-    *(infos->reqs) = NULL; 
-    pthread_mutex_unlock(&proxy_lock);
-    PRINT_DEBUG("[reconnect_client] Reconnected to client\n");
 }
 
 /* server_connect
@@ -433,23 +409,13 @@ void client_connect(struct thread_data *td) {
  *    Return -1 if error detected
  *    Else 0
  */
-int send_to_client(struct thread_data *infos, char *buf, size_t size) {
-    int flag = 0;
-    int count = RESEND_MAX;
+void send_to_client(struct thread_data *infos, char *buf, size_t size) {
     // Sending to server
-    while((send(infos->client_socket, buf, size, 0) == -1)) {
-        PRINT_DEBUG("Client disconnected on send(). Reconnecting\n");
-        if(--count == 0) {
-            PRINT_DEBUG("After 3 times... Waiting 30 seconds\n");
-            sleep(30);
-            count = RESEND_MAX;
-        }
-        // Reconnect to nbd server
-        pthread_mutex_lock(&proxy_lock);
-        reconnect_client(infos);
-        pthread_mutex_unlock(&proxy_lock);
+    if((send(infos->client_socket, buf, size, 0) == -1)) {
+        PRINT_DEBUG("Client disconnected on send(). Dying...\n");
+        cleaning(infos);
+        exit(EXIT_FAILURE);
     }
-    return flag;
 }
 
 /* send_to_server
@@ -460,21 +426,13 @@ int send_to_client(struct thread_data *infos, char *buf, size_t size) {
  *    Return -1 if error detected
  *    Else 0
  */
-int send_to_server(struct thread_data *infos, char *buf, size_t size) {
-    int count = RESEND_MAX;
+int send_to_server(struct thread_data *infos, char *buf, size_t size, struct nbd_request *nr) {
     int flag = 0;
     // Sending to server
-    while((send(infos->server_socket, buf, size, 0) == -1)) {
+    if((send(infos->server_socket, buf, size, 0) == -1)) {
         flag = -1;
-        PRINT_DEBUG("Server disconnected on send(). Reconnecting\n");
-        if(--count == 0) {
-            PRINT_DEBUG("After 3 times... Waiting 30 seconds\n");
-            sleep(30);
-            count = RESEND_MAX;
-        }
-        // Reconnect to nbd server
-        reconnect_server(infos);
-    }
+        infos->except_nr = NULL;
+    } 
     return flag;
 }
 

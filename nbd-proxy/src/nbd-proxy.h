@@ -3,7 +3,7 @@
 #define SRV_RECV_BUF 1024
 #define htonll ntohll
 #define RESEND_MAX 3
-#define SEND_BUF_FACTOR 20
+#define SEND_BUF_FACTOR 127
 
 #ifdef DEBUG
     #define PRINT_DEBUG(...) fprintf(stderr, __VA_ARGS__)
@@ -15,7 +15,8 @@ typedef unsigned long long u64;
 typedef unsigned long u32;
 
 u64 cliserv_magic = 0x00420281861253LL;
-pthread_mutex_t proxy_lock;
+pthread_mutex_t data_lock;
+pthread_mutex_t net_lock;
 
 struct proxy_nbd_request {
     struct nbd_request *nr;
@@ -30,6 +31,7 @@ struct thread_data {
     char *server_addr;
     struct nbd_init_data *nid;
     struct proxy_nbd_request **reqs;
+    struct nbd_request *except_nr;
 };
 
 struct nbd_init_data {
@@ -44,10 +46,19 @@ struct nbd_init_data *nbd_connect(int);
 void client_connect(struct thread_data *);
 void server_connect(struct thread_data *);
 void reconnect_server(struct thread_data *);
-void reconnect_client(struct thread_data *);
-void resend_all_nbd_requests(struct thread_data *, struct nbd_request*);
-int send_to_server(struct thread_data *, char *, size_t);
-int send_to_client(struct thread_data *, char *, size_t);
+void resend_all_nbd_requests(struct thread_data *);
+int send_to_server(struct thread_data *, char *, size_t, struct nbd_request*);
+void send_to_client(struct thread_data *, char *, size_t);
+void cleaning(struct thread_data *);
+
+/* cleaning
+ *  Cleaning all thread to quit properly
+ *      infos -- thread data (shared data between thread)
+ */
+void cleaning(struct thread_data *infos) {
+    close(infos->client_socket);
+    close(infos->server_socket);
+}
 
 /* add_nbd_request
  *  Adding nbd_request to the chained list (proxy_nbd_request)
@@ -57,8 +68,9 @@ int send_to_client(struct thread_data *, char *, size_t);
 void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
     struct proxy_nbd_request *new_pnr = 
         (struct proxy_nbd_request*) malloc(sizeof(struct proxy_nbd_request));
+    // Thread safe operation
+    pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *first;
-
     if(*first == NULL) {
         *first = new_pnr;
     } else {
@@ -66,6 +78,7 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
             current_pnr = current_pnr->next;
         current_pnr->next = new_pnr;
     }
+    pthread_mutex_unlock(&data_lock);
 
     new_pnr->nr = nr;
     new_pnr->next = NULL;
@@ -78,16 +91,20 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
  *      first -- first proxy_nbd_request of the chained list
  */
 struct nbd_request *get_nbd_request_by_handle(char *handle, struct proxy_nbd_request **first) {
+    // Thread safe operation
+    pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *first;
     if(current_pnr != NULL) {
         do {
             if(!strncmp(handle, current_pnr->nr->handle, sizeof((*first)->nr->handle))) {
                 //PRINT_DEBUG("[get_nbd_request_by_handle] nbd_request found!\n");
+                pthread_mutex_unlock(&data_lock);
                 return current_pnr->nr;
             }
         } while((current_pnr = current_pnr->next) != NULL);
     }
     return NULL;
+    pthread_mutex_unlock(&data_lock);
 }
 
 /* rm_nbd_request
@@ -96,6 +113,8 @@ struct nbd_request *get_nbd_request_by_handle(char *handle, struct proxy_nbd_req
  *      first -- first proxy_nbd_request of the chained list
  */
 void rm_nbd_request(struct nbd_request *nr, struct proxy_nbd_request **first) {
+    // Thread safe operation
+    pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *first;
     struct proxy_nbd_request *previous_pnr = *first;
     if(current_pnr != NULL) {
@@ -115,6 +134,7 @@ void rm_nbd_request(struct nbd_request *nr, struct proxy_nbd_request **first) {
     } else {
         PRINT_DEBUG("[rm_nbd_request] proxy_nbd_request empty... \n");
     }
+    pthread_mutex_unlock(&data_lock);
 }
 
 /* count_nbd_request
