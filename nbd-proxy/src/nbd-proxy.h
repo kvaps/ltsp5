@@ -1,9 +1,9 @@
 #define NUM_THREADS 2
 #define INIT_PASSWD "NBDMAGIC"
-#define SRV_RECV_BUF 1024
+#define SRV_RECV_BUF 1040
 #define htonll ntohll
 #define RESEND_MAX 3
-#define SEND_BUF_FACTOR 127
+#define SEND_BUF_FACTOR 1024
 
 #ifdef DEBUG
     #define PRINT_DEBUG(...) fprintf(stderr, __VA_ARGS__)
@@ -31,7 +31,6 @@ struct thread_data {
     char *server_addr;
     struct nbd_init_data *nid;
     struct proxy_nbd_request **reqs;
-    struct nbd_request *except_nr;
 };
 
 struct nbd_init_data {
@@ -47,7 +46,7 @@ void client_connect(struct thread_data *);
 void server_connect(struct thread_data *);
 void reconnect_server(struct thread_data *);
 void resend_all_nbd_requests(struct thread_data *);
-int send_to_server(struct thread_data *, char *, size_t, struct nbd_request*);
+int send_to_server(struct thread_data *, char *, size_t);
 void send_to_client(struct thread_data *, char *, size_t);
 void cleaning(struct thread_data *);
 
@@ -78,11 +77,10 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
             current_pnr = current_pnr->next;
         current_pnr->next = new_pnr;
     }
-    pthread_mutex_unlock(&data_lock);
-
     new_pnr->nr = nr;
     new_pnr->next = NULL;
     PRINT_DEBUG("[add_nbd_request] nbd_request added to linked list\n");
+    pthread_mutex_unlock(&data_lock);
 }
 
 /* get_nbd_request_by_handle
@@ -174,7 +172,7 @@ uint64_t ntohll(uint64_t host_longlong) {
 char *handle_to_string(char *handle) {
     char *res = (char *) malloc(128);
 
-    sprintf(res, "%X, %X, %X, %X, %X, %X, %X, %X\n", 
+    sprintf(res, "%X, %X, %X, %X, %X, %X, %X, %X", 
             handle[0],handle[1],handle[2],handle[3],
             handle[4],handle[5],handle[6],handle[7]);
     return res;

@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <netdb.h>
 
 #include "nbd-proxy.h"
 
@@ -23,7 +24,7 @@
 void sighandler(int sig) {
     switch(sig) {
         case SIGINT:
-            printf("Ctrl+c pressed, exiting\n");
+            printf("Ctrl+C pressed, exiting\n");
             exit(EXIT_FAILURE);
             break;
     }
@@ -41,6 +42,7 @@ void *client_to_server(void *data) {
 
     PRINT_DEBUG("[t_client] Init mainloop\n");
     while(1) {
+        PRINT_DEBUG("[t_client] recv mode\n");
         bytes_read = recv(infos->client_socket, recv_buf, sizeof(recv_buf), MSG_WAITALL);
         if(bytes_read <= 0) {
             PRINT_DEBUG("[t_client] Client disconnected on recv(). Dying...\n");
@@ -49,8 +51,7 @@ void *client_to_server(void *data) {
         }
 
         struct nbd_request *new_req = (struct nbd_request*) malloc(sizeof(struct nbd_request));
-        memcpy(new_req, recv_buf, sizeof(recv_buf));
-        // Grab lock
+        memcpy(new_req, recv_buf, sizeof(struct nbd_request));
 
         // Checking if data is a valid nbd_request
         if(new_req->magic == ntohl(NBD_REQUEST_MAGIC)) {
@@ -60,12 +61,11 @@ void *client_to_server(void *data) {
                         handle_to_string(new_req->handle), ntohl(new_req->len), ntohll(new_req->from));
 
                 pthread_mutex_lock(&net_lock); 
-                // Adding nbd_request received to queue (thread safe)
-                add_nbd_request(new_req, infos->reqs);
-                if(send_to_server(infos, recv_buf, bytes_read, new_req) == -1) {
+                if(send_to_server(infos, recv_buf, bytes_read) == -1)
                     PRINT_DEBUG("[t_client] Failed sending nbd_request to server\n");
-                }
+                // Adding nbd_request received to queue (thread safe)
                 pthread_mutex_unlock(&net_lock); 
+                add_nbd_request(new_req, infos->reqs);
             // NBD_CMD_DISC from client
             } else if(new_req->type == ntohl(NBD_CMD_DISC)) {
                 PRINT_DEBUG("[t_client] NBD_DISCONNECT from client. Cleaning\n");
@@ -75,7 +75,7 @@ void *client_to_server(void *data) {
             }
         }
     }
-    PRINT_DEBUG("[t_client] WTF client_to_server outside while\n");
+    PRINT_DEBUG("[t_client] WTF... client_to_server outside of while(1)\n");
 }
 
 /* server_to_client
@@ -92,15 +92,20 @@ void *server_to_client(void *data) {
     ssize_t r_bytes;
     int discard_reply_flag = 0;
     int out_flag = 0;
-    int size_recv_buf = sizeof(struct nbd_reply);
+    int size_recv_buf = SRV_RECV_BUF;
+    int sockopt = MSG_WAITALL;
     char send_buf[SRV_RECV_BUF * SEND_BUF_FACTOR];
     ssize_t total_size = 0;
 
     // Main loop
     PRINT_DEBUG("[t_server] Init mainloop\n");
     while(1) {
-        PRINT_DEBUG("[t_server] recv mode\n");
-        bytes_read = recv(infos->server_socket, recv_buf, size_recv_buf, MSG_WAITALL);
+        PRINT_DEBUG("\n[t_server] recv mode (%d)\n", size_recv_buf);
+        // Assurance not to bust recv_buf real size
+        if(size_recv_buf > sizeof(recv_buf))
+            size_recv_buf = SRV_RECV_BUF * SEND_BUF_FACTOR;
+        // Receiving data from nbd-server
+        bytes_read = recv(infos->server_socket, recv_buf, size_recv_buf, sockopt);
         // Keep track of bytes read for used to update nbd_request len
         r_bytes = bytes_read;
         if(bytes_read <= 0) {
@@ -110,7 +115,7 @@ void *server_to_client(void *data) {
             // Sending last nbd_request modified
             if(current_nr != NULL) {
                 PRINT_DEBUG("[t_server] nbd_request count : %d\n", count_nbd_request(infos->reqs));
-                send_to_server(infos, (char *) current_nr, sizeof(struct nbd_request), NULL);
+                send_to_server(infos, (char *) current_nr, sizeof(struct nbd_request));
                 PRINT_DEBUG("[t_server] Last known nbd_request sent\n");
                 PRINT_DEBUG("|-- nbd_request : handle(%s) of len(%u) and from(%lu)\n", 
                         handle_to_string(current_nr->handle), ntohl(current_nr->len), 
@@ -118,49 +123,54 @@ void *server_to_client(void *data) {
 
                 flag_disc = current_nr;
                 discard_reply_flag = sizeof(struct nbd_reply);
+                size_recv_buf = ntohl(current_nr->len) + sizeof(struct nbd_reply);
+                sockopt = MSG_WAITALL;
             } else {
                 PRINT_DEBUG("[t_server] Resending all nbd_request after recv error from server\n");
                 resend_all_nbd_requests(infos);
+                size_recv_buf = SRV_RECV_BUF;
+                sockopt = 0;
             }
             total_size = 0;
             out_flag = 0;
-            size_recv_buf = sizeof(struct nbd_reply);
             continue;
         }
-
-        //PRINT_DEBUG("[t_server] Bytes read : %ld\n", bytes_read);
 
         // Getting nbd_reply
         memcpy(&nr, recv_buf, sizeof(struct nbd_reply));
         // If the packet received contain a valid nbd_reply
         if(nr.magic == ntohl(NBD_REPLY_MAGIC)) {
             PRINT_DEBUG("[t_server] Got nbd_reply : handle(%s)\n", handle_to_string(nr.handle));
-            // If already data in send_buf, it means that the last nbd_request is over
-
-            // Thread safe
+            // Getting corresponding nbd_request in queue (Thread safe)
             current_nr = get_nbd_request_by_handle(nr.handle, infos->reqs);
 
             if(current_nr == NULL)
-                PRINT_DEBUG("[t_server] nbd_reply handle unknown\n");
+                PRINT_DEBUG("[t_server] nbd_reply handle unknown by proxy\n");
             else {
-                // Adapting recv buffer size
-                size_recv_buf = ntohl(current_nr->len);
+                // Adapting recv buffer size to nbd_request len
+                size_recv_buf = (ntohl(current_nr->len) - (bytes_read - sizeof(struct nbd_reply)));
+                sockopt = MSG_WAITALL;
+                if(size_recv_buf == 0) {
+                    size_recv_buf = SRV_RECV_BUF;
+                    sockopt = 0;
+                    out_flag = 1;
+                }
                 // Ignoring nbd_reply size for len of nbd_request
                 r_bytes -= sizeof(struct nbd_reply);
             }
         } else if(current_nr == NULL) {
-            PRINT_DEBUG("[t_server] Fatal error: No nbd_reply received and no nbd_request to serve\n");
+            PRINT_DEBUG("[t_server] Fatal error: No nbd_reply received and no nbd_request to serve. Bad!\n");
         } else {
+            // Ready to send information to client
             out_flag = 1;
         }
 
         // Filling send_buf
-        PRINT_DEBUG("Copy %ld bytes to send_buf at %ld pos of send_buf\n", 
-                bytes_read, total_size);
+        PRINT_DEBUG("Copy %ld bytes to send_buf from %ld of send_buf\n", bytes_read, total_size);
         memcpy(send_buf + total_size, recv_buf, bytes_read);
         total_size += bytes_read;
 
-        PRINT_DEBUG("[t_server] nbd_request in queue : %d\n", count_nbd_request(infos->reqs));
+        PRINT_DEBUG("[t_server] nbd_request count : %d\n", count_nbd_request(infos->reqs));
         // Sending to client when all nbd_request's data received
         if(out_flag) {
             PRINT_DEBUG("[t_server] Sending %d bytes to client\n",(int)total_size - discard_reply_flag);
@@ -177,7 +187,7 @@ void *server_to_client(void *data) {
             current_nr->from = htonll(ntohll(current_nr->from) + r_bytes);
 
             if((current_nr->len) == 0) {
-                // Removing nbd_request from queue. Not useful anymore (atomic action)
+                // Removing nbd_request from queue. Not useful anymore (Thread safe)
                 rm_nbd_request(current_nr, infos->reqs);
                 if(current_nr == flag_disc) {
                     PRINT_DEBUG("[t_server] Last known nbd_request done. Resending queue (count : %d)\n",
@@ -186,11 +196,12 @@ void *server_to_client(void *data) {
                     flag_disc = NULL;
                 }
                 current_nr = NULL;
-                size_recv_buf = sizeof(struct nbd_reply);
+                sockopt = 0;
+                size_recv_buf = SRV_RECV_BUF;
             }
         }
     }
-    PRINT_DEBUG("[t_server] WTF server_to_client outside while\n");
+    PRINT_DEBUG("[t_server] WTF... server_to_client outside of while(1)\n");
 }
 
 /* nbd_connect
@@ -243,7 +254,7 @@ struct nbd_init_data *nbd_connect(int sock) {
 /* create_connect_sock
  *    Create a socket connected to a specific and point.
  *        port -- which port to connect to
- *        addr -- remote IP address 
+ *        addr -- remote IP address (string format)
  *
  *    Return socket file descriptor
  */
@@ -342,7 +353,6 @@ int create_listen_sock(int port, int addr) {
 /* resend_all_nbd_requests
  *     Resend all nbd_requests in memory to nbd server
  *         infos -- struct thread_data
- *         except_nr -- nbd_request NOT to send to server
  */
 void resend_all_nbd_requests(struct thread_data *infos) {
     pthread_mutex_lock(&data_lock);
@@ -352,11 +362,9 @@ void resend_all_nbd_requests(struct thread_data *infos) {
         pthread_mutex_unlock(&data_lock);
         return;
     }
+
     do {
-        // Don't send specific nbd_request
-        if(current_pnr->nr == infos->except_nr)
-            continue;
-        send_to_server(infos, (char*) current_pnr->nr, sizeof(struct nbd_request), NULL);
+        send_to_server(infos, (char*) current_pnr->nr, sizeof(struct nbd_request));
         PRINT_DEBUG("[resend] nbd_request : handle(%s) of len(%u) and from(%lu)\n",
                 handle_to_string(current_pnr->nr->handle), ntohl(current_pnr->nr->len),
                 ntohll(current_pnr->nr->from));
@@ -365,7 +373,7 @@ void resend_all_nbd_requests(struct thread_data *infos) {
 }
 
 /* reconnect_server
- *     Clean data structure and reconnect to server
+ *     Clean data structure and reconnect to server (Thread safe : net_lock)
  *         infos -- struct thread_data
  */
 void reconnect_server(struct thread_data *infos) {
@@ -426,13 +434,11 @@ void send_to_client(struct thread_data *infos, char *buf, size_t size) {
  *    Return -1 if error detected
  *    Else 0
  */
-int send_to_server(struct thread_data *infos, char *buf, size_t size, struct nbd_request *nr) {
+int send_to_server(struct thread_data *infos, char *buf, size_t size) {
     int flag = 0;
     // Sending to server
-    if((send(infos->server_socket, buf, size, 0) == -1)) {
+    if((send(infos->server_socket, buf, size, 0) == -1))
         flag = -1;
-        infos->except_nr = NULL;
-    } 
     return flag;
 }
 
@@ -442,19 +448,34 @@ int send_to_server(struct thread_data *infos, char *buf, size_t size, struct nbd
 int main(int argc, char *argv[]) {
     int server_port, listen_port, client_socket, server_socket;
     int client_th, server_th, rc;
-    char *server_address;
+    char server_address[INET_ADDRSTRLEN];
     void *status;
-    pthread_t threads[NUM_THREADS];
     struct nbd_init_data *nid;
+    pthread_t threads[NUM_THREADS];
 
     if(argc < 4) {
         printf("Usage : nbd-proxy server_address server_port listening_port\n");
         exit(1);
     }
 
-    server_address = argv[1];
+    // Server addr verification
+    if(inet_pton(AF_INET, argv[1], &server_address) == 0) {
+        struct hostent *host = gethostbyname(argv[1]);
+        if(host == NULL) { 
+            printf("Hostname or ipaddr not understand : %s\n", server_address);
+            exit(EXIT_FAILURE);
+        }
+        memcpy(server_address, inet_ntoa(*((struct in_addr **)host->h_addr_list)[0]), INET_ADDRSTRLEN);
+    } else
+        memcpy(server_address, argv[1], INET_ADDRSTRLEN);
+
+    // Port verification
     server_port = atoi(argv[2]);
     listen_port = atoi(argv[3]);
+    if((server_port < 1 || server_port > 65535) || (listen_port < 1 || listen_port > 65535)) {
+        printf("Bad port range\n");
+        exit(EXIT_FAILURE);
+    }
 
     struct thread_data *th_d1 = (struct thread_data *) malloc(sizeof(struct thread_data));
     struct proxy_nbd_request *pnr = NULL;
