@@ -15,55 +15,43 @@ case "$MODE" in
         ;;
     after-install)
         if [ -n "$KIOSK" ]; then
-            # install the webbrowser and a display manager that 
-            # is capable to do a timed autologin in the client environment
-            chroot $ROOT apt-get $APT_GET_OPTS install gdm firefox ubuntu-gdm-themes human-gtk-theme metacity devilspie ubufox
+            BROWSER=${BROWSER:-"firefox"}
+            WM=${WM:-"metacity"}
+            THEME=${THEME:-"human-gtk-theme"}
 
-            # make the necessary directories writeable to the booted client
-            echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
-            echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> $ROOT/etc/default/ltsp-client-setup
+            # create a ltspkiosk user
+            # ltspkiosk's homdir is created on the fly as a tmpdir, so no 
+            # need for one here
+            chroot $ROOT adduser --no-create-home --disabled-password --gecos ,,, ltspkiosk
 
-            # create a kiosk user
-            chroot $ROOT adduser --disabled-password --gecos ,,, kiosk
+            # create ltspkiosk directories
+            mkdir -p $ROOT/usr/local/share/ltspkiosk/home
+            mkdir -p $ROOT/usr/local/share/ltspkiosk/startup
 
-            # create a default xsession for that user
-            echo "#!/bin/sh" > $ROOT/home/kiosk/.xsession
-            # including sound
-            echo "pulseaudio -L module-detect -L module-rescue-streams -L module-native-protocol-unix -L module-volume-restore -n &" >> $ROOT/home/kiosk/.xsession
-            # make sure we have a wm
-            echo "metacity &" >> $ROOT/home/kiosk/.xsession
+            if [ "$BROWSER" = "firefox" ]; then
+                KIOSK_PACKAGES="${KIOSK_PACKAGES} ubufox devilspie"
+                # set up devilspie for fullscreen firefox
+                ln -s /usr/bin/devilspie $ROOT/usr/local/share/ltspkiosk/startup/10-devilspie
+                mkdir -p $ROOT/usr/local/share/ltspkiosk/home/.devilspie
+                echo "(if (matches (window_name) \"fox\") (undecorate) (fullscreen))" >$ROOT/usr/local/share/ltspkiosk/home/.devilspie/default.ds
+            fi
 
-            # switch to the proper theme 
-            echo "include \"/usr/share/themes/Human/gtk-2.0/gtkrc\"" >$ROOT/home/kiosk/.gtkrc-2.0
+            if [ "${WM}" = "metacity" ]; then
+                # make sure we have a wm
+                ln -s /usr/bin/metacity $ROOT/usr/local/share/ltspkiosk/startup/00-metacity
+            fi
 
-            # set up devilspie for fullscreen firefox
-            echo "devilspie &" >> $ROOT/home/kiosk/.xsession
-            mkdir -p $ROOT/home/kiosk/.devilspie
-            echo "(if (matches (window_name) \"fox\") (undecorate) (fullscreen))" >$ROOT/home/kiosk/.devilspie/default.ds
+            if [ "${THEME}" = "human-gtk-theme" ]; then
+                # switch to the proper theme 
+                echo "include \"/usr/share/themes/Human/gtk-2.0/gtkrc\"" >$ROOT/usr/local/share/ltspkiosk/home/.gtkrc-2.0
+            fi
 
-            # add firefox
-            echo "/usr/bin/firefox" >> $ROOT/home/kiosk/.xsession
+            # install the webbrowser, window manager, and theme
+            chroot $ROOT apt-get $APT_GET_OPTS install ${WM} ${BROWSER} ${THEME} ${KIOSK_PACKAGES}
 
-            # create a custom configuration for gdm
-            cp $ROOT/etc/gdm/gdm.conf $ROOT/etc/gdm/gdm-kiosk.conf
-            
-            # do some sed magic to enable autologin
-            sed -i s/AutomaticLoginEnable=false/AutomaticLoginEnable=true/ $ROOT/etc/gdm/gdm-kiosk.conf
-            sed -i s/AutomaticLogin=/AutomaticLogin=kiosk/ $ROOT/etc/gdm/gdm-kiosk.conf
-            sed -i s/TimedLoginEnable=false/TimedLoginEnable=true/ $ROOT/etc/gdm/gdm-kiosk.conf
-            sed -i s/TimedLogin=/TimedLogin=kiosk/ $ROOT/etc/gdm/gdm-kiosk.conf
-            sed -i s/TimedLoginDelay=30/TimedLoginDelay=5/ $ROOT/etc/gdm/gdm-kiosk.conf
-
-            # set the new alternative we created as default config
-            chroot $ROOT update-alternatives --install /etc/gdm/gdm-cdd.conf gdm-config-derivative /etc/gdm/gdm-kiosk.conf 55
+            # Friendly message
+            echo "To put the client in kiosk mode, set SCREEN_07=kiosk in lts.conf."
         fi
         ;;
-    finalization)
-        # make sure gdm actually starts
-        if [ -n "$KIOSK" ]; then
-            if [ -e $ROOT/etc/init.d/gdm ]; then
-                chroot $ROOT mv /etc/rc2.d/K30gdm /etc/rc2.d/S30gdm
-            fi
-        fi
 esac
 

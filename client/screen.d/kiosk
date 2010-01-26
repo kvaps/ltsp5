@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# The following script works for LTSP5.
+#
+# This software is licensed under the Gnu General Public License.
+# The full text of which can be found at http://www.LTSP.org/license.txt
+#
+#
+# NOTE: To use this session, the chroot MUST have a user with username 
+#       "ltspkiosk"
+#  
+#       Also, to customize the kiosk session, you can add "homedir" files
+#       to $chroot/usr/local/share/ltspkiosk/home/ 
+#       AND to add startup scripts that run as the user, you can add 
+#       them as executables or symlinks to executables in:
+#       $chroot/usr/local/share/ltspkiosk/startup
+
+
+PATH=/bin:$PATH; export PATH
+. /usr/share/ltsp/screen-x-common
+
+# A Kiosk user with the username "ltspkiosk" should be created in the chroot
+KIOSKUSER="ltspkiosk"
+if [ -z "$(getent passwd ${KIOSKUSER})" ]; then
+    echo "No ltspkiosk user."
+    sleep 30
+    exit
+fi
+
+if [ -z "${KIOSK_EXE}" ]; then
+    if [ -x "/usr/bin/firefox" ]; then
+        KIOSK_EXE=/usr/bin/firefox
+    elif [ -x "/usr/bin/google-chrome" ]; then
+        KIOSK_EXE=/usr/bin/google-chrome
+    elif [ -x "/usr/bin/opera" ]; then
+        KIOSK_EXE=/usr/bin/opera
+    else
+        KIOSK_EXE=unknown
+    fi
+fi
+ 
+if boolean_is_true "${KIOSK_DAEMON:-"False"}"; then
+    export XINITRC_DAEMON="True"
+fi
+
+if [ -x /usr/share/ltsp/xinitrc ]; then
+    xinitrc=/usr/share/ltsp/xinitrc
+fi
+
+# Create a tmpdir to be our homedir
+TMPDIR=$(mktemp -d /tmp/.kiosk-XXXXXX)
+chown ${KIOSKUSER} ${TMPDIR}
+
+# Edit passwd homedir entry for programs that look it up from there
+sed -i -e '\|ltspkiosk|s|[^:]*\(:[^:]*\)$|'$TMPDIR'\1|' /etc/passwd
+
+su - ${KIOSKUSER} -c "XINITRC_DAEMON=${XINITRC_DAEMON} xinit $xinitrc /usr/share/ltsp/kioskSession ${KIOSK_EXE} ${KIOSK_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br" >/dev/null
+
+rm -rf ${TMPDIR}
