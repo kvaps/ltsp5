@@ -83,6 +83,8 @@ configure_sound_volume() {
 
 configure_localdev() {
     if boolean_is_true "$LOCALDEV" ; then
+        # Make mountpoint dir
+        mkdir -p /var/run/drives
         # Make this sessions secret auth cookie for ltspfs
         if [ ! -f /var/run/ltspfs_token ]; then
             mcookie > /var/run/ltspfs_token
@@ -215,10 +217,6 @@ load_modules() {
     for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/);do
         modprobe $(echo $module|tr "*" " ")
     done
-}
-
-configure_localdev() {
-    boolean_is_true "$LOCALDEV" && mkdir -p /var/run/drives
 }
 
 configure_console() {
