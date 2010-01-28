@@ -100,4 +100,33 @@ case $VENDOR in
             done
         fi        
         ;;
+    SUSE_LINUX)
+       if [ x"$USER" != x"root" ]; then
+            echo "You have to be root to run this script"
+            exit 1
+       fi
+       echo "-------------------------------------------------------------"
+       echo "Please paste the following information on http://pastebin.com"
+       echo "post the resulting link to the mailing list or IRC channel"
+       echo "-------------------------------------------------------------"
+       echo "LSB information:"
+       lsb_release --all
+       echo "Package information:"
+       rpm -qa "*kiwi*"
+       rpm -qa "*ltsp*"
+       rpm -qa "*ldm*"
+       echo "Network information:"
+       ip addr
+       echo "kiwi-ltsp configuration:"
+       cat /etc/sysconfig/kiwi-ltsp | grep -v \#
+       kiwi-ltsp-setup -c || true
+       echo "DHCPD configuration:"
+       cat /etc/dhcpd.conf | grep -v \#
+       echo "contents of lts.conf:"
+       cat /srv/tftpboot/KIWI/lts.conf | grep -v \#
+       echo "pxelinux.cfg/default contents:"
+       cat /srv/tftpboot/pxelinux.cfg/default
+       echo "kiwi's config.default:"
+       cat /srv/tftpboot/KIWI/config.default
+       ;;
 esac
