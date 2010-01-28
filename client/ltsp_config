@@ -89,8 +89,9 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 fi
                 # Save the result so we don't go through this again
                 if [ ! -f /var/cache/ltsp/ltsp_config ]; then
-                    [ ! -d /var/cache/ltsp ] && mkdir /var/cache/ltsp
-                    echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config
+                    if [ ! -d /var/cache/ltsp ] && mkdir /var/cache/ltsp ; then
+                        echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config
+                    fi
                 fi
                 ;;
             *)
