@@ -19,8 +19,6 @@ case "$MODE" in
             test -n "$KERNEL_ARCH" && MODULE_VERSION="${MODULE_VERSION}-${KERNEL_ARCH}"
             if [ "$DIST" = "lenny" ]; then
                 module_packages="aufs squashfs"
-            else
-                module_packages="aufs"
             fi
             for fs in $module_packages ; do
                 # add appropriate module packages to list of packages to be installed
