@@ -7,7 +7,7 @@ case "$MODE" in
             # set an environment variable we can pick up later
             SQUASHFS_IMAGE="True"
         fi
-        if [ "True" = "$SQUASHFS_IMAGE" ]; then
+        if [ "True" = "$SQUASHFS_IMAGE" ] && [ "$DIST" = "lenny" ]; then
             # need to use versioned linux-image metapackages, as kernel modules
             # do not appear to have corresponding unversioned ones
             test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
