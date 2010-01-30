@@ -79,11 +79,11 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
                     # check for NBD devices
                     pid=$(nbd-client -c $DEVICE)
-                    server=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 2)
+                    server=$(cut -d '' -f 2 /proc/$pid/cmdline)
 
                     # Check for nbd-proxy
                     if [ "$server" = "127.0.0.1" ]; then
-                        port=$(ps --no-headers -p $pid -o cmd | cut -d ' ' -f 3)
+                        port=$(cut -d '' -f 3 /proc/$pid/cmdline)
                         server=$(ps --no-headers -o cmd x | grep "^nbd-proxy [[:graph:]]* [[:graph:]]* ${port}" | cut -d ' ' -f2)
                     fi
                 fi
