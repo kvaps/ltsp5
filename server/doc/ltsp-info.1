@@ -1,0 +1,35 @@
+.TH "ltsp-info" "1" "20100129" "Vagrant Cascadian" ""
+.SH "NAME"
+ltsp-info \(em display troubleshooting information about ltsp server and chroots
+.SH "SYNOPSIS"
+.PP 
+\fBltsp-info\fR
+.SH "DESCRIPTION"
+.PP 
+\fBltsp-info\fR will display information useful to troubleshooting issues on an
+LTSP server. Information should include server distro and release, versions of
+LTSP related packages installed on the server, LTSP chroots and their package
+versions, LTSP image files and lts.conf(5).
+
+.SH "OPTIONS"
+
+.IP "\fB\-\-verbose\fP
+Display more information, such as including the contents of detected files.
+.IP "\fB\-\-no\-server\-info\fP
+Do not display server information.
+
+.SH "EXAMPLE"
+.PP 
+ltsp-info
+.SH "SEE ALSO"
+.PP 
+lts.conf(5)
+.SH "AVAILABILITY"
+.PP 
+\fBltsp-info\fR is part of \fBltsp\fP package 
+and the latest versions are available in source form from 
+\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR. 
+.SH "AUTHOR"
+.PP 
+Copyright 2006-2010 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.
