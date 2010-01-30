@@ -80,10 +80,10 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                     # check for NBD devices
                     pid=$(nbd-client -c $DEVICE)
                     server=$(cut -d '' -f 2 /proc/$pid/cmdline)
+                    port=$(cut -d '' -f 3 /proc/$pid/cmdline)
 
                     # Check for nbd-proxy
                     if [ "$server" = "127.0.0.1" ]; then
-                        port=$(cut -d '' -f 3 /proc/$pid/cmdline)
                         server=$(ps --no-headers -o cmd x | grep "^nbd-proxy [[:graph:]]* [[:graph:]]* ${port}" | cut -d ' ' -f2)
                     fi
                 fi
@@ -94,6 +94,7 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                     fi
                     if [ -d /var/cache/ltsp/ ]; then
                         echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config || true
+                        echo "NBD_PORT=${port}" >> /var/cache/ltsp/ltsp_config || true
                     fi
                 fi
                 ;;
