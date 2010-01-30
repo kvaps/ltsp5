@@ -1,0 +1,30 @@
+.TH "ltsp-remoteapps" "1" 20100129
+.SH "NAME" 
+ltsp-remoteapps \(em start remote application on an LTSP server
+
+.SH "SYNOPSIS" 
+.PP 
+\fBltsp-remoteapps\fR [\-\-wait] command 
+
+.SH "DESCRIPTION" 
+.PP 
+\fBltsp-remoteapps\fR is a simple wrapper script which is used to start an
+application on an LTSP server. It uses xprop(1) to set the LTSP_RCOMMAND X
+property. On the thin-client, the ltsp-remoteappsd(8) daemon runs to listen for
+changes on the LTSP_RCOMMAND X property, and starts the command specified on the
+LTSP server.
+
+.SH "SEE ALSO" 
+.PP 
+\fBltsp-remoteappsd\fP\fB(8)\fP, 
+\fBxprop\fP\fB(1)\fP. 
+
+.SH "AVAILABILITY" 
+.PP 
+\fBltsp-remoteapps\fR is part of the \fBltsp\fP package and the latest versions
+are available in source form from \fIhttps://launchpad.net/products/ltsp\fR. 
+
+.SH "MAN PAGE AUTHOR" 
+.PP 
+Copyright 2010 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
+the terms of the GNU General Public License version 2 or any later version.
