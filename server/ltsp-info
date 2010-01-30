@@ -63,6 +63,14 @@ Debian_chroot_packages() {
     fi
 }
 
+Debian_chroot_release() {
+    if [ -x $chroot/usr/bin/lsb_release ]; then
+        echo "chroot information: $chroot"
+        ROOT=$chroot ltsp-chroot lsb_release --all
+        echo
+    fi
+}
+
 for opt in $@ ; do
     case $opt in
         --no-server-info) server_info="false" ;;
@@ -78,6 +86,9 @@ case $VENDOR in
         fi
         for chroot in $(find_chroots) ; do
             chroot_name=$(basename $chroot)
+            if [ "$verbose" = "true" ]; then
+                Debian_chroot_release
+            fi
             Debian_chroot_packages $chroot
             lts_conf_files=$(find_lts_conf $chroot)
             if [ -n "$lts_conf_files" ]; then
@@ -96,6 +107,9 @@ case $VENDOR in
         if [ -d "$BASE/images" ]; then
             for image in $(find $BASE/images/ -type f -name '*.img' ); do
                 echo found image: $image
+                if [ "$verbose" = "true" ] && [ -x /usr/bin/file ]; then
+                    file $image 
+                fi
                 echo
             done
         fi        
