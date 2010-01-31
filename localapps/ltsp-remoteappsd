@@ -21,9 +21,9 @@ while :; do
     LTSP_RCOMMAND_WAIT=$(xprop -root -notype LTSP_RCOMMAND_WAIT |sed -e 's/^LTSP_RCOMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
     if [ -n "${LTSP_RCOMMAND}" ]; then
         if [ "$LTSP_RCOMMAND_WAIT" = "true" ]; then
-            ${LTSP_RCOMMAND}
+            ssh -Y -t -S ${LDM_SOCKET} ${LDM_SERVER} "${LTSP_RCOMMAND}"
         else
-            ${LTSP_RCOMMAND} &
+            ssh -Y -t -S ${LDM_SOCKET} ${LDM_SERVER} "${LTSP_RCOMMAND}" &
         fi
     fi
     reset_xprop LTSP_RCOMMAND

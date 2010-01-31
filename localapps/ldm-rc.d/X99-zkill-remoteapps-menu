@@ -1,9 +1,0 @@
-# Remove the remoteapps directory 
-# (We use the same tmpdir as LOCAL_APPS_MENU, so if LOCAL_APPS_MENU is true
-# then it will take care of removing the tmpdir)
-
-if boolean_is_true "$REMOTE_APPS" && ! boolean_is_true "$LOCAL_APPS_MENU" && [ -n "${TMP_XDG_MENU}" ]; then
-    if [ -S ${LDM_SOCKET} ]; then
-        ssh -S ${LDM_SOCKET} ${LDM_SERVER} rm -rf "${TMP_XDG_MENU}" || true
-    fi
-fi
