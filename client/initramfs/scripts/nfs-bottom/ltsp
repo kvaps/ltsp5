@@ -11,8 +11,9 @@ if [ "${HOSTNAME}" = "(none)" ]; then
         # get defaults from lts.conf
         eval $(chroot ${rootmnt} /usr/bin/getltscfg -a)
     fi
-    # if HOSTNAME was not defined in lts.conf
-    if [ "$HOSTNAME" = "(none)" ]; then
+    # if HOSTNAME was not defined in lts.conf,
+    # or if it has been nulled by /tmp/net-*.conf
+    if [ "$HOSTNAME" = "(none)" ] || [ -z "$HOSTNAME" ]; then
         case "$HOSTNAME_EXTRA" in
             mac)
                 HOSTNAME_EXTRA=$(ip link show $DEVICE | awk '/ether/{print $2}' | tr ':' '-')
