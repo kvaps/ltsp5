@@ -138,7 +138,11 @@ if [ "$ENABLE_SSL" = "Y" ]; then
     if [ "$PORT" = "80" ]; then
         PORT="443"
     fi
-    OPTIONS="--no-check-certificate"
+    # Default to insecure but functional SSL
+    [ -z "${CHECK_CERTIFICATE}" ] && CHECK_CERTIFICATE="N"
+    if [ "${CHECK_CERTIFICATE}" = "N" ]; then
+        OPTIONS="--no-check-certificate"
+    fi
 else
     PROTO="http"
 fi
