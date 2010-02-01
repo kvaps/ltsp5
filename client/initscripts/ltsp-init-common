@@ -226,13 +226,7 @@ configure_console() {
 }
 
 configure_resolver() {
-    hostname=$(hostname)
-    if [ "(none)" = "$hostname" ] ; then
-        /etc/init.d/hostname.sh start
-        hostname="$(hostname)"
-    else
-        echo $hostname > /etc/hostname
-    fi
+    hostname=$(cat /etc/hostname)
     cat <<EOF > /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
