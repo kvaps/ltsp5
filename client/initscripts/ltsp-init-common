@@ -236,11 +236,19 @@ EOF
         cat /etc/hosts.ltsp >> /etc/hosts
     fi
 
-    if [ -n "$DNS_SERVER" ] && [ -n "$SEARCH_DOMAIN" ]; then
-        cat <<EOF > /etc/resolv.conf
-search $SEARCH_DOMAIN
-nameserver $DNS_SERVER
-EOF
+    if [ -n "$DNS_SERVER" ] || [ -n "$SEARCH_DOMAIN" ]; then
+        :>/etc/resolv.conf
+        if [ -n "$SEARCH_DOMAIN" ]; then
+            echo "search $SEARCH_DOMAIN" >> /etc/resolv.conf
+        fi
+        if [ -n "$DNS_SERVER" ]; then
+            local oldifs="${IFS-not set}"
+            IFS=','
+            for n in $DNS_SERVER; do 
+                echo "nameserver ${n}" >> /etc/resolv.conf
+            done
+            test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
+        fi
     fi
 }
 
