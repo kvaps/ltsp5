@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Gracefully exit if ltsp_chroot file is not present
+test -f ${rootmnt}/etc/ltsp_chroot || exit 0
+
 # set hostname to ltsp if none is received from dhcp
 
 read HOSTNAME < /proc/sys/kernel/hostname
