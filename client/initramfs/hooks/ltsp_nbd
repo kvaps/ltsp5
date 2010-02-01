@@ -20,10 +20,6 @@ esac
 
 . /usr/share/initramfs-tools/hook-functions
 
-for X in squashfs aufs nbd; do
-    manual_add_modules "${x}"
-done
-
 # make sure all our modules are there
 force_load nbd
 force_load squashfs
