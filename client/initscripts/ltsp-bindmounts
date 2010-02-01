@@ -1,0 +1,12 @@
+#! /bin/sh
+
+set -e
+
+# Gracefully exit if ltsp_chroot file is not present
+test -f /etc/ltsp_chroot || exit 0
+
+test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
+
+. /usr/share/ltsp/ltsp-init-common
+
+bind_mounts

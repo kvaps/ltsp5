@@ -3,6 +3,14 @@
 # Gracefully exit if ltsp_chroot file is not present
 test -f ${rootmnt}/etc/ltsp_chroot || exit 0
 
+# mount writeable filesystems if / is not already mounted writeable.
+ltsp_bindmounts=/usr/share/ltsp/ltsp-bindmounts
+if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
+    if [ -x ${rootmnt}/${ltsp_bindmounts} ]; then
+        chroot ${rootmnt} ${ltsp_bindmounts}
+    fi
+fi
+
 # set hostname to ltsp if none is received from dhcp
 
 read HOSTNAME < /proc/sys/kernel/hostname

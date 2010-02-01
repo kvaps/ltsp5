@@ -33,10 +33,6 @@ case "$1" in
         log_begin_msg "Setting up LTSP client..."
         which usplash_write >/dev/null 2>/dev/null && \
             usplash_write "TIMEOUT 120" || true
-        if [ -z "$root_write_method" ] && [ ! -w "/" ]; then
-            root_write_method="bind_mounts"
-        fi
-        [ "$root_write_method" = "bind_mounts" ] && bind_mounts
         if [ -f "/etc/ltsp/getltscfg-cluster.conf" ]; then
             # Tell the control center that we are booting and get lts.conf
             eval $(getltscfg-cluster -a -l refresh) || true
