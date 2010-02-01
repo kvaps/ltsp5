@@ -60,6 +60,12 @@ if [ -f /var/cache/ltsp/ltsp_config ]; then
     . /var/cache/ltsp/ltsp_config
 fi
 
+if [ -d /usr/share/ltsp/ltsp_config.d ]; then
+    for script in $(run_parts_list /usr/share/ltsp/ltsp_config.d) ; do
+        . $script        
+    done
+fi
+
 # set compatbility for ltsp 4.x variables
 export X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
 export LOCALDEV=${LOCALDEV:-"$LOCAL_STORAGE"}
