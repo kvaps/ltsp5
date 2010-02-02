@@ -342,3 +342,19 @@ bind_unmounts() {
     done
 }
 
+nbd_sendsigs_protection() {
+    if [ -n "$NBD_SERVER" ]; then
+        # register pids of nbd-client and nbd-proxy so that sendsigs doesn't kill
+        # them on shutdown/reboot.
+
+        # FIXME: only register pids relevent to the root filesystem.
+        nbd_pids=$(pgrep '^nbd-client|^nbd-proxy')
+        for d in /lib/init/rw/sendsigs.omit.d /var/run/sendsigs.omit.d ; do
+            if [ -d "$d" ]; then
+                for p in $nbd_pids ; do
+                    echo "$p" >> "$d"/ltsp || true
+                done
+            fi
+        done
+    fi
+}

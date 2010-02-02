@@ -50,6 +50,7 @@ case "$1" in
         configure_localdev || true
         configure_printer || true
         configure_scanner || true
+        nbd_sendsigs_protection || true
         log_end_msg 0
         ;;
     stop)
