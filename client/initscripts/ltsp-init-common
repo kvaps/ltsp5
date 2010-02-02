@@ -226,7 +226,12 @@ configure_console() {
 }
 
 configure_resolver() {
-    hostname=$(cat /etc/hostname)
+    hostname=$(cat /proc/sys/kernel/hostname)
+    if [ -z "$hostname" ] || [ "$hostname" = "(none)" ]; then
+        # ensure a default hostname, otherwise /etc/hosts may get borked.
+        hostname=ltsp
+        echo $hostname > /proc/sys/kernel/hostname || true
+    fi
     cat <<EOF > /etc/hosts
 127.0.0.1 localhost
 127.0.0.2 $hostname
