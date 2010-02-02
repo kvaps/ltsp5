@@ -78,6 +78,8 @@ export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
     if [ -n "$NBD_SERVER" ]; then
         server=$NBD_SERVER
+    elif [ -n "$NFS_SERVER" ]; then
+        server=$NFS_SERVER
     fi
     while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
         [ -n "$server" ] && break
@@ -109,6 +111,7 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 if [ "$FSTYPE" = "nfs" ] && [ "$MOUNTPOINT" = "/" ]; then
                     # NFS root
                     server=${DEVICE%%:*}
+                    NFS_SERVER=${server} > /var/cache/ltsp/ltsp_config || true
                 fi
                 ;;
         esac
