@@ -1,0 +1,42 @@
+#!/bin/sh
+
+if [ -z "$(env|grep MENU_ITEM_)" ]; then
+    MENU_ITEM_01="Linux Server"
+    MENU_COMMAND_01="ldm"
+    MENU_TITLE="Please choose a desktop: "
+fi
+
+################################################################
+
+chvt ${TTY}
+
+MENU_APPEND_PATH=${MENU_APPEND_PATH:-"/usr/share/ltsp/screen.d/"}
+if [ "$MENU_APPEND_PATH" = "none" ]; then
+    unset MENU_APPEND_PATH
+fi
+
+MENU_ITEMS_MAX=20
+unset MENU_ITEMS
+for i in $(seq -w 1 ${MENU_ITEMS_MAX}); do
+    eval THIS_ITEM=\${MENU_ITEM_$i}
+    if [ -n "${THIS_ITEM}" ]; then
+        #MENU_ITEMS="${MENU_ITEMS} \"\${MENU_ITEM_$i}\" \"\${MENU_ITEM_$i}\""
+        MENU_ITEMS="${MENU_ITEMS} \"$i\" \"\${MENU_ITEM_$i}\""
+    fi
+done
+
+MENU_CHOICE=$(mktemp /tmp/.menu-XXXXXX)
+
+unset CHOICE
+while [ -z "$CHOICE" ]; do
+    eval whiptail --menu \"$MENU_TITLE\" 0 0 ${MENU_LISTHEIGHT:-5} \
+        --nocancel --notags \
+        ${MENU_ITEMS} 2>${MENU_CHOICE}
+
+    [ -r "${MENU_CHOICE}" ] && CHOICE=$(cat ${MENU_CHOICE}) && rm $MENU_CHOICE 
+
+    if [ -n "${CHOICE}" ]; then
+        eval exec \${MENU_APPEND_PATH}\${MENU_COMMAND_$CHOICE} 
+    fi
+done
+
