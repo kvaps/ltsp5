@@ -8,11 +8,11 @@ test -f /etc/ltsp_chroot || exit 0
 # tmpfs/bind directories that get mounted with only directory structure
 # preserved
 
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hald /var/cache/ltsp"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hald /var/cache/ltsp /var/lib/urandom"
 
 # tmpfs/bind directories that get mounted with directory structure and data
 # copied
-copy_dirs="/root /home /var/cache/ltsp-localapps /etc/rsyslog.d /etc/cups /media /etc/cron.d"
+copy_dirs="/root /home /var/cache/ltsp-localapps /etc/rsyslog.d /etc/cups /media /etc/cron.d /etc/udev/rules.d"
 
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf /etc/passwd /etc/group /etc/localtime" 
