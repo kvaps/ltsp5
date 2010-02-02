@@ -80,6 +80,7 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
         server=$NBD_SERVER
     fi
     while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
+        [ -n "$server" ] && break
         case $DEVICE in
             /dev/nbd[0-9]*)
                 if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
@@ -111,7 +112,6 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 fi
                 ;;
         esac
-        [ -n "$server" ] && break
     done < /proc/mounts
 
     SERVER="${server:-192.168.0.254}"
