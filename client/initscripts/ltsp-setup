@@ -50,7 +50,6 @@ case "$1" in
         configure_localdev || true
         configure_printer || true
         configure_scanner || true
-        [ "$root_write_method" = "bind_mounts" ] && bind_unmounts
         log_end_msg 0
         ;;
     stop)
