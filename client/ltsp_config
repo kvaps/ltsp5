@@ -81,7 +81,7 @@ elif [ -n "$NFS_SERVER" ]; then
     export SERVER=$NFS_SERVER
 fi
 if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
-    while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
+    test -f /proc/mounts && while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
         case $DEVICE in
             /dev/nbd[0-9]*)
                 if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
