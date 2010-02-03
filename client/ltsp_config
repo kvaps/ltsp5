@@ -75,10 +75,12 @@ export X_CONF=${X_CONF:-"$XF86CONFIG_FILE"}
 export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 
 # Ensure a default for SERVER
-if [ -n "$NBD_SERVER" ]; then
-    export SERVER=$NBD_SERVER
-elif [ -n "$NFS_SERVER" ]; then
-    export SERVER=$NFS_SERVER
+if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
+    if [ -n "$NBD_SERVER" ]; then
+        export SERVER=$NBD_SERVER
+    elif [ -n "$NFS_SERVER" ]; then
+        export SERVER=$NFS_SERVER
+    fi
 fi
 if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
     test -f /proc/mounts && while read DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
