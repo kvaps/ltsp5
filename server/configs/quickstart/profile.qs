@@ -34,15 +34,7 @@ pre_sanity_check_config () {
 		stage_uri="${STAGE_URI}"
 	fi
 }
-if [ -z "${TIMEZONE}" ]; then
-	# For OpenRC
-	if [ -e /etc/timezone ]; then
-		TIMEZONE="$(</etc/timezone)"
-	else
-		. /etc/conf.d/clock
-	fi
-fi
-timezone ${TIMEZONE}
+
 
 # Skip all this
 skip partition
@@ -132,6 +124,18 @@ pre_install_portage_tree() {
 	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
 	sys-fs/udev extras
 	EOF
+}
+
+pre_set_timezone() {
+	if [ -z "${TIMEZONE}" ]; then
+		# For OpenRC
+		if [ -e /etc/timezone ]; then
+			TIMEZONE="$(</etc/timezone)"
+		else
+			. /etc/conf.d/clock
+		fi
+	fi
+	timezone ${TIMEZONE}
 }
 
 pre_build_kernel() {
