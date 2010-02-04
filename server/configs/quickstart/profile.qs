@@ -60,14 +60,15 @@ genkernel_opts --makeopts="${MAKEOPTS}"
 
 post_unpack_stage_tarball() {
 	if [ -n "$LOCALE" ]; then
+		echo "LANG=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
+		echo "LC_ALL=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
+	else
 		if [ -f /etc/env.d/02locale ]; then
 			cp /etc/env.d/02locale ${chroot_dir}/etc/env.d/
-		else
-			echo "LANG=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
-			echo "LC_ALL=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
 		fi
 	fi
 }
+
 pre_install_portage_tree() {
 	# bind mounting portage
 	spawn "mkdir ${chroot_dir}/usr/portage"
