@@ -22,7 +22,8 @@ int yylex(void);
 
 %%
 configuration
-	:	sections
+	:
+	|	sections
 	;
 
 includes
