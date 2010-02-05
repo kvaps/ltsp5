@@ -12,7 +12,7 @@ if [ "True" != "$LTSP_CONFIG" ]; then
 fi
 
 #
-# Get the IP address of the host to telnet into.
+# Get the IP address of the host to ssh into.
 # First look for 'SSH_HOST', if not specified, then
 # look for 'SERVER'. If that isn't specified, then use
 # the default of '192.168.0.254'
@@ -28,6 +28,7 @@ SSH_ARGS="$SSH_ARGS $SSH_HOST"
 
 export TERM=linux           # Setup the terminal type
 
+TTY=$(fgconsole)
 chvt ${TTY}
 
 # Clear the screen, to place cursor at the top
@@ -35,9 +36,9 @@ clear
 
 # Get the username
 echo -n "Username: "
-read USER
+read SSH_USER
 
-SSH_ARGS="$SSH_ARGS -l $USER"
+SSH_ARGS="$SSH_ARGS -l $SSH_USER"
 
 # Launch ssh 
 ssh ${SSH_ARGS}
