@@ -1,4 +1,28 @@
 #!/bin/sh
+#
+# This screen script allows the admin to present a console-based
+# whiptail menu for the user to choose a screen script from
+# available choices
+#
+# To use this script, specify it as the screen script to use and provide menu
+# entries, for example:
+#
+# SCREEN_07=menu
+# MENU_ITEM_01="Linux Server"
+# MENU_COMMAND_01="ldm"
+# MENU_ITEM_02="Windows Server A"
+# MENU_COMMAND_02="rdesktop 192.168.0.253"
+# MENU_ITEM_03="Windows Server B"
+# MENU_COMMAND_03="rdesktop 192.168.0.252"
+# MENU_TITLE="Please choose a desktop: "
+# 
+#
+# Get the lts.conf entries, and assign them to shell
+# variables.
+#
+if [ "True" != "$LTSP_CONFIG" ]; then
+    . /usr/share/ltsp/ltsp_config
+fi
 
 if [ -z "$(env|grep MENU_ITEM_)" ]; then
     MENU_ITEM_01="Linux Server"
@@ -8,6 +32,7 @@ fi
 
 ################################################################
 
+TTY=$(fgconsole)
 chvt ${TTY}
 
 MENU_APPEND_PATH=${MENU_APPEND_PATH:-"/usr/share/ltsp/screen.d/"}
