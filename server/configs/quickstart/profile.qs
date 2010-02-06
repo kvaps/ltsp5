@@ -59,14 +59,22 @@ tree_type none
 genkernel_opts --makeopts="${MAKEOPTS}"
 
 post_unpack_stage_tarball() {
-	if [ -n "$LOCALE" ]; then
-		echo "LANG=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
-		echo "LC_ALL=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
-	else
-		if [ -f /etc/env.d/02locale ]; then
-			cp /etc/env.d/02locale ${chroot_dir}/etc/env.d/
-		fi
-	fi
+		# protecting locale.gen from updating, /etc is set in CONFIG_PROTECT_MASK
+		export CONFIG_PROTECT="/etc/locale.gen"
+
+        if [ -n "$LOCALE" ]; then
+                echo "LANG=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
+                grep ${LOCALE} /usr/share/i18n/SUPPORTED > ${chroot_dir}/etc/locale.gen
+        else
+                if [ -f /etc/env.d/02locale ]; then
+                        cp /etc/env.d/02locale ${chroot_dir}/etc/env.d/
+                fi
+
+                cat > ${chroot_dir}/etc/locale.gen <<- EOF
+                en_US ISO-8859-1
+                en_US.UTF-8 UTF-8
+                EOF
+        fi
 }
 
 pre_install_portage_tree() {
