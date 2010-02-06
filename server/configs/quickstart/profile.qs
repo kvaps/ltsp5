@@ -97,6 +97,8 @@ pre_install_portage_tree() {
 	USE="alsa pulseaudio svg xml X -cups"
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
+	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
+
 	# TODO: don't add this by default
 	source /usr/local/portage/layman/make.conf
 	EOF
@@ -143,8 +145,6 @@ pre_build_kernel() {
 	# FIXME: upgrade to porage 2.2 to resolve blockers since 2008.0
 	spawn_chroot "emerge portage"
 
-	export CONFIG_PROTECT_MASK=""
-
 	if [[ $CCACHE == "true" ]]; then
 
 		#spawn_chroot "mkdir -p $TMP"
@@ -167,7 +167,8 @@ pre_build_kernel() {
 }
 
 pre_install_extra_packages() {
-	spawn_chroot "emerge --update --deep --newuse world"
+	spawn_chroot "emerge --newuse udev"
+	spawn_chroot "emerge --update --deep world"
 }
 
 extra_packages ldm ltsp-client ${PACKAGES}
