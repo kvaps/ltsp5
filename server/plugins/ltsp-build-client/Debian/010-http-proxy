@@ -10,6 +10,7 @@ case "$MODE" in
 	if [ -z "$option_no_guess_proxy_value" ]; then
  		if [ -z "$http_proxy" ]; then
 			eval $(apt-config shell http_proxy acquire::http::proxy)
+			[ "$http_proxy" = "false" ] && http_proxy=""
 			export http_proxy
 		fi
 	fi
