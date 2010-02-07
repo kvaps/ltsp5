@@ -28,9 +28,6 @@ SSH_ARGS="$SSH_ARGS $SSH_HOST"
 
 export TERM=linux           # Setup the terminal type
 
-TTY=$(fgconsole)
-chvt ${TTY}
-
 # Clear the screen, to place cursor at the top
 clear
 

@@ -32,9 +32,6 @@ fi
 
 ################################################################
 
-TTY=$(fgconsole)
-chvt ${TTY}
-
 MENU_APPEND_PATH=${MENU_APPEND_PATH:-"/usr/share/ltsp/screen.d/"}
 if [ "$MENU_APPEND_PATH" = "none" ]; then
     unset MENU_APPEND_PATH
