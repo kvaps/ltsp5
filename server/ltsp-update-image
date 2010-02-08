@@ -107,8 +107,11 @@ fi
 # a warning, and unmount it
 PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
 if [ -n "${PROC_MOUNTED}" ]; then
-    echo "/proc mounted in chroot ${CHROOT}, Unmounting."
-    umount ${CHROOT}/proc
+    echo "/proc mounted in chroot ${CHROOT}, unmounting."
+    if ! umount ${CHROOT}/proc; then
+        echo "${CHROOT}/proc is in use, forcing unmount." >&2
+        umount -l ${CHROOT}/proc
+    fi
 fi
 
 # Are we a chroot that wants an nbd image made?
