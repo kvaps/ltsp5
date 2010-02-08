@@ -5,13 +5,38 @@ installing alsa plugins for pulseaudio, and configuring alsa to use pulseaudio:
 
 add the following lines to /etc/asound.conf:
 
+  # Make it possible for ALSA forward to pulseaudio on thin clients.
+  # Based on idea from
+  # http://alsa.opensrc.org/index.php/Default_device_from_environment_variable
+  
   pcm.!default {
-          type pulse
+      @func refer
+      name { @func concat 
+             strings [ "pcm."
+                       { @func getenv
+                         vars [ ALSA_DEFAULT_PCM ]
+                         default "hw:0"
+                       }
+             ]
+           }
   }
   
   ctl.!default {
-          type pulse
+      @func refer
+      name { @func concat 
+             strings [ "ctl."
+                       { @func getenv
+                         vars [ ALSA_DEFAULT_CTL
+                                ALSA_DEFAULT_PCM
+                         ]
+                         default "hw:0"
+                       }
+             ]
+           }
   }
+  
+  pcm.pulse { type pulse }
+  ctl.pulse { type pulse }
 
 and then configure sound applications to talk to alsa.  in my experience, KDE
 and GNOME applications worked automatically, if the whole environments were
