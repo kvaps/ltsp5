@@ -8,7 +8,7 @@ case "$MODE" in
             if [ "$OVERRIDE_EXPORTS" = "true" ]; then
                 cat <<EOF >> /etc/exports
 # Automatically added by ltsp-server
-$BASE       *(ro,no_root_squash,async)
+$BASE       *(ro,no_root_squash,async,no_subtree_check)
 EOF
                 /etc/init.d/nfsmount restart
             else
@@ -16,7 +16,7 @@ EOF
 WARNING: no entry for $BASE in /etc/exports,
 you may want to add the following line to /etc/exports:
 
-$BASE       *(ro,no_root_squash,async)
+$BASE       *(ro,no_root_squash,async,no_subtree_check)
 
 and then run the command:
 
