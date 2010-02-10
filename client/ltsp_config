@@ -124,7 +124,12 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
 fi
 
 # Ensure a default screen if X is present
-if ! env | grep -q '^SCREEN_'; then
+unset IS_SCREEN
+for i in 01 02 03 04 05 06 07 08 09 10 11 12; do
+    eval IS_SCREEN=\${SCREEN_${i}}
+    [ -n "${IS_SCREEN}" ] && break
+done
+if [ -z "${IS_SCREEN}" ]; then
     if [ -f /etc/X11/default-display-manager ]; then
         default_display_manager="$(cat /etc/X11/default-display-manager)"
         if [ "$default_display_manager" = "/usr/sbin/ldm" ]; then
