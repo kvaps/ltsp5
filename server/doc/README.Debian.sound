@@ -14,7 +14,7 @@ add the following lines to /etc/asound.conf:
       name { @func concat 
              strings [ "pcm."
                        { @func getenv
-                         vars [ ALSA_DEFAULT_PCM ]
+                         vars [ LTSP_ALSA_DEFAULT ]
                          default "hw:0"
                        }
              ]
@@ -26,9 +26,7 @@ add the following lines to /etc/asound.conf:
       name { @func concat 
              strings [ "ctl."
                        { @func getenv
-                         vars [ ALSA_DEFAULT_CTL
-                                ALSA_DEFAULT_PCM
-                         ]
+                         vars [ LTSP_ALSA_DEFAULT ]
                          default "hw:0"
                        }
              ]
