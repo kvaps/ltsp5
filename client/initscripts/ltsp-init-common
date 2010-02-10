@@ -314,7 +314,8 @@ configure_cron() {
 }
 
 run_rcfiles() {
-    for rcfile in $(env | sort | awk -F= '$1 ~ /^RCFILE_/ { print $2 }'); do
+    for i in 01 02 03 04 05 06 07 08 09 10; do
+        eval rcfile=\${RCFILE_${i}}
         [ -x "$rcfile" ] && "$rcfile" $@
     done
 }
