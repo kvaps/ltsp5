@@ -88,7 +88,11 @@ configure_sound_volume() {
                         else
                             unset cap
                         fi
-                        amixer -c0 sset "${channel}" ${channel_vol:-$VOLUME}% unmute $cap >/dev/null 2>&1
+                        if boolean_is_true "${VOLUME_MANUAL}"; then
+                            [ -n "${channel_vol}" ] && amixer -c0 sset "${channel}" ${channel_vol}% unmute $cap >/dev/null 2>&1
+                        else
+                            amixer -c0 sset "${channel}" ${channel_vol:-$VOLUME}% unmute $cap >/dev/null 2>&1
+                        fi
                     fi
                     if [ -n "$(echo $line|grep switch)" ]; then
                         eval channel_switch="\$${channel_name}_SWITCH"
