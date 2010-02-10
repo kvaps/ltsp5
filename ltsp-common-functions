@@ -27,7 +27,7 @@ run_parts_list() {
             find_opts="-name $2*"
         fi
         for file in $(find -L $1 -mindepth 1 -maxdepth 1 -type f $find_opts | sort -n) ; do
-            basefile=$(basename $file)
+            basefile=${file##*/}
             if [ -n "$(echo "$basefile" | egrep ^[0-9a-zA-Z_\-]*$)" ]; then
                 echo $file
             fi
