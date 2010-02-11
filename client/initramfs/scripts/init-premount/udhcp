@@ -227,18 +227,6 @@ if [ -n "$hostname" ]; then
     echo "$hostname" > /proc/sys/kernel/hostname
 fi
 
-# TODO: Now with localapps and all, is it OK if we apply the DNS we get from DHCP?
-# TODO: Of course it can't happen before mounting the cow system...
-# if [ -n "$dns" ]; then
-#     : > /etc/resolv.conf    # Rewrite the file
-#     if [ -n "$domain" ]; then
-#         echo "search $domain" >> /etc/resolv.conf
-#     fi
-#     for i in $dns; do
-#         echo "nameserver $i" >> /etc/resolv.conf
-#     done
-# fi
-
 echo "$interface configured at $ip:$tftp:$router:$subnet:$hostname"
 }
 
@@ -264,7 +252,7 @@ NISDOMAIN='$domain'
 ROOTSERVER='$tftp'
 ROOTPATH='$rootpath'
 filename='$bootfile'
-DNS_SERVER='$dns0'
+DNS_SERVER='$dns'
 SEARCH_DOMAIN='$domain'
 NTPSVR='$ntpsrv'
 TIMESVR='$timesvr'
