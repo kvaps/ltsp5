@@ -11,6 +11,9 @@ if [ "True" != "$LTSP_CONFIG" ]; then
     . /usr/share/ltsp/ltsp_config
 fi
 
+# chvt to the right screen
+[ -n "${SCREEN_NUM}" ] && openvt chvt ${SCREEN_NUM}
+
 #
 # Get the IP address of the host to ssh into.
 # First look for 'SSH_HOST', if not specified, then
