@@ -26,12 +26,7 @@ run_parts_list() {
         if [ -n "$2" ]; then
             find_opts="-name $2*"
         fi
-        for file in $(find -L $1 -mindepth 1 -maxdepth 1 -type f $find_opts | sort -n) ; do
-            basefile=${file##*/}
-            if [ -n "$(echo "$basefile" | egrep ^[0-9a-zA-Z_\-]*$)" ]; then
-                echo $file
-            fi
-        done
+        find -L "$1" -mindepth 1 -maxdepth 1 -type f $find_opts | sed -n '/.*\/[0-9a-zA-Z_\-]\{1,\}$/p' | sort -n
     fi
 }
 
