@@ -12,6 +12,11 @@ case $MODE in
             LOCALE="$LANG"
         fi
 
+        # locale-gen can't handle LANG.utf8 locales, it needs LANG.UTF-8
+        if [ "$LOCALE" != "${LOCALE%utf8}" ]; then
+            LOCALE="${LOCALE%utf8}UTF-8"
+        fi
+
         if [ "$LOCALE" = "C" ]; then
             chroot $ROOT locale-gen en_GB
         else
