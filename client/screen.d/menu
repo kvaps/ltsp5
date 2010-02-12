@@ -24,13 +24,16 @@ if [ "True" != "$LTSP_CONFIG" ]; then
     . /usr/share/ltsp/ltsp_config
 fi
 
-if [ -z "$(env|grep MENU_ITEM_)" ]; then
-    MENU_ITEM_01="Linux Server"
-    MENU_COMMAND_01="ldm"
-    MENU_TITLE="Please choose a desktop: "
-fi
-
+[ -z "${MENU_TITLE}" ] && MENU_TITLE="Please choose a desktop: "
+[ -z "${MENU_ITEM_01}" ] && MENU_ITEM_01="Linux Server"
+[ -z "${MENU_COMMAND_01}" ] && MENU_COMMAND_01="ldm"
+    
 ################################################################
+
+[ -n "${SCREEN_NUM}" ] && openvt chvt ${SCREEN_NUM}
+
+# Need to specify TERM
+export TERM=linux
 
 MENU_APPEND_PATH=${MENU_APPEND_PATH:-"/usr/share/ltsp/screen.d/"}
 if [ "$MENU_APPEND_PATH" = "none" ]; then
