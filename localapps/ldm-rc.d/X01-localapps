@@ -192,7 +192,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         IFS=","
         for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             mkdir -p "${extradir}"
-            sshfs -o ${SSH_FOLLOW_SYMLINKS}allow_other,ControlPath=${LDM_SOCKET} "${LDM_SERVER}:${extradir}" "${extradir}"
+            sshfs -o "${SSH_FOLLOW_SYMLINKS}allow_other,ControlPath=${LDM_SOCKET}" "${LDM_SERVER}:${extradir}" "${extradir}"
         done
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
