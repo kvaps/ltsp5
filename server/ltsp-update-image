@@ -7,6 +7,7 @@
 #  2007, Scott Balneaves <sbalneav@ltsp.org>
 #        Warren Togami <wtogami@redhat.com>
 #  2008, Vagrant Cascadian <vagrant@freegeek.org>
+#  2010, Gideon Romm <gadi@ltsp.org>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -102,87 +103,130 @@ if [ ! -d "${CHROOT}" ]; then
     exit 1
 fi
 
-# Find out if we are really an nbd client and if so, build the image.
-# Check and see if user's left /proc mounted in chroot.  If so, issue
-# a warning, and unmount it
-PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
-if [ -n "${PROC_MOUNTED}" ]; then
-    echo "/proc mounted in chroot ${CHROOT}, unmounting."
-    if ! umount ${CHROOT}/proc; then
-        echo "${CHROOT}/proc is in use, forcing unmount." >&2
-        umount -l ${CHROOT}/proc
-    fi
-fi
+collect_ports () {
+    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE/ -mindepth 1 -maxdepth 1 -type d | grep -v images)"}
+    unset ALL_PORT_CHROOTS
+    for c in ${ALL_CHROOTS}; do
+        # NBD_PORT will be recorded by this script in the chroot
+        # For future reference
+        unset NBD_PORT 
+        [ -f ${c}/etc/ltsp/update-kernels.conf ] && . ${c}/etc/ltsp/update-kernels.conf
+        # Make sure NBD_PORT is a number
+        NBD_PORT=$(echo ${NBD_PORT}|sed -e '/[^0-9]/d')
+        ALL_PORT_CHROOTS="${ALL_PORT_CHROOTS} ${NBD_PORT}=${c}"
+    done 
+}
 
-# Are we a chroot that wants an nbd image made?
-if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
-    # make sure the images dir exists
-    if [ ! -d ${IMGDIR} ]; then
-        mkdir -p ${IMGDIR}
-    fi
+find_available_port () {
+    unset FOUND_PORT
+    # Set p to the base port
+    p=${PORT}
+    while [ -z "${FOUND_PORT}" ]; do
+        case "${PORTS_FOUND}" in
+            *-${p}-*) p=$(($p+1)) ;;
+            *) 
+                if netstat -lnp|grep :${p} >/dev/null && [ -z "$(grep ${p} /etc/inetd.conf| grep nbdrootd)" ]; then 
+                    # Port is currently in use by another service
+                    p=$(($p+1)); continue
+                else 
+                    export NBD_PORT=$p; FOUND_PORT=1; return 0 
+                fi
+                ;;
+        esac
+    done
+}
 
-    IMAGE="${IMGDIR}/${ARCH}.img"
-    rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-    mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
-    if [ "$?" != "0" ]; then
-        echo "Error: mksquashfs failed to build the ltsp image, exiting"
-        exit 1
-    fi
-    if [ -f "${IMAGE}.tmp" ]; then
-        mv "${IMAGE}.tmp" "${IMAGE}"
-        chmod 0644 "${IMAGE}"
-    fi
+assign_ports () {
+    PORTS_FOUND="--"
+    unset RUN_LUK
+    for c in $(echo ${ALL_PORT_CHROOTS}|tr ' ' '\n'| sort); do
+        NBD_PORT=${c%%=*}
+        THIS_CHROOT=${c#*=}
+        case "${PORTS_FOUND}" in
+            *-${NBD_PORT}-*) 
+                OLD_PORT=${NBD_PORT}
+                find_available_port
+                echo "Port ${OLD_PORT} already in use. Changing to ${NBD_PORT}."
+                if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
+                    mkdir "${THIS_CHROOT}/etc/ltsp"
+                fi
+                echo "BOOTPROMPT_OPTS=\"quiet splash nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                echo "NBD_PORT=${NBD_PORT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                echo "Regenerating kernel... "
+                chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
+                echo "Done."
+                echo -n "Configuring inetd... "
+                IMAGE=${IMGDIR}/${THIS_CHROOT##*/}.img 
+                sed -i -e "\|${IMAGE}|d" /etc/inetd.conf
+                update-inetd --group LTSP --add "${NBD_PORT}               stream  tcp nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
+                echo "Done."
+                echo -n "Updating pxelinux default configuration..."
+                for TFTPDIR in $TFTPDIRS ; do
+                    if [ ! -d $TFTPDIR ]; then
+                        continue       # skip directory
+                    fi
+                    PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg/default"
+                    if [ ! -f ${PXECFG} ]; then
+                        mkdir -p "${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg"
+                        echo <<EOF >${PXECFG}
+default ltsp 
 
-    # Make sure hosts.allow has the keepalive option for nbdrootd
-    if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
-        echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
-    fi
-
-    # make sure image and port are properly defined in inetd.conf
-    if grep ^${PORT} /etc/inetd.conf |grep ${IMAGE} > /dev/null 2>&1 ; then
-        echo "Info: port ${PORT} is already defined with ${IMAGE} in inetd.conf"
-        echo "Info: taking no action."
-    else
-        if [ -n "$(grep ${IMAGE} /etc/inetd.conf | grep -v '^#')" ] ; then
-            # if its already there, use its settings
-            echo "Warning: image defined with different port already in inetd.conf"
-            PORT=$(grep ${IMAGE} /etc/inetd.conf |cut -d' ' -f1)
-            echo "Info: using already defined portnumber ${PORT}"
-        else
-            if grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1 ; then
-                # make sure we use a free port
-                echo "Warning: found port in use already"
-                while grep ^${PORT} /etc/inetd.conf > /dev/null 2>&1; do
-                    PORT=$(expr ${PORT} + 1)
-                    echo "Info: raising nbdroot portnumber by one to be ${PORT}"
+label ltsp 
+kernel vmlinuz nbdport=${NBD_PORT}
+append ro initrd=initrd.img quiet splash nbdport=${NBD_PORT}
+EOF
+                        continue
+                    fi
+                    if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
+                        sed -i -e "s/nbdport=[0-9]*/nbdport=${NBD_PORT}/g" ${PXECFG}
+                    fi
                 done
-            fi
-            echo "Info: updating inetd config"
-            update-inetd --group LTSP --add "${PORT}               stream  tcp\
-            nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
-        fi
-    fi
+                echo "Done."
+                RUN_LUK=1
+                ;;
+        esac
+        PORTS_FOUND="${PORTS_FOUND}${NBD_PORT}-"
+    done 
+}
 
-    if [ ${PORT} -ne 2000 ];then
-        # seems we use a non default port, add it to pxe config and chroot
-        echo "Info: updating PXE"
-        for TFTPDIR in $TFTPDIRS ; do
-            if [ ! -d $TFTPDIR ]; then
-                continue       # skip directory
-            fi
-            PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${ARCH}/pxelinux.cfg/default"
-            if [ ! -f ${PXECFG} ]; then
-                continue
-            fi
-            if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
-                sed -i -e "s/nbdport=[0-9]*/nbdport=${PORT}/g" ${PXECFG}
-            else
-                sed -i -e "s/$/ nbdport=${PORT}/g" ${PXECFG}
-            fi
-        done
-        if [ ! -d "${CHROOT}/etc/ltsp" ]; then
-            mkdir "${CHROOT}/etc/ltsp"
-        fi
-        echo "BOOTPROMPT_OPTS=\"quiet splash nbdport=${PORT}\"" >${CHROOT}/etc/ltsp/update-kernels.conf
+generate_image () {
+    # Find out if we are really an nbd client and if so, build the image.
+    # Check and see if user's left /proc mounted in chroot.  If so, issue
+    # a warning, and unmount it
+    PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
+    if [ -n "${PROC_MOUNTED}" ]; then
+        echo "/proc mounted in chroot ${CHROOT}, Unmounting."
+        umount ${CHROOT}/proc
     fi
+    
+    # Are we a chroot that wants an nbd image made?
+    if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
+        # make sure the images dir exists
+        if [ ! -d ${IMGDIR} ]; then
+            mkdir -p ${IMGDIR}
+        fi
+    
+        IMAGE="${IMGDIR}/${ARCH}.img"
+        rm -f "${IMAGE}.tmp" >/dev/null 2>&1
+        mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
+        if [ "$?" != "0" ]; then
+            echo "Error: mksquashfs failed to build the ltsp image, exiting"
+            exit 1
+        fi
+        if [ -f "${IMAGE}.tmp" ]; then
+            mv "${IMAGE}.tmp" "${IMAGE}"
+            chmod 0644 "${IMAGE}"
+        fi
+    fi
+}
+
+collect_ports
+assign_ports
+[ -n "$RUN_LUK" ] && ltsp-update-kernels -b "${BASE}" -t "${TFTPDIRS}" -d "${TFTPBOOTDIR}"
+generate_image
+
+# Make sure hosts.allow has the keepalive option for nbdrootd
+if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
+    echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
 fi
+
