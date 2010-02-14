@@ -187,8 +187,8 @@ assign_ports () {
 default ltsp 
 
 label ltsp 
-kernel vmlinuz nbdport=${NBD_PORT}
-append ro initrd=initrd.img quiet splash nbdport=${NBD_PORT}
+kernel vmlinuz 
+append ro initrd=initrd.img ${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}
 EOF
                         continue
                     fi
