@@ -26,6 +26,17 @@
 #  MA 02110-1301, USA.
 #
 
+# source old config file
+if [ -f /etc/default/ltsp-update-image ]; then
+    . /etc/default/ltsp-update-image
+fi
+
+# source new config file
+if [ -f /etc/ltsp/ltsp-update-image.conf ]; then
+    . /etc/ltsp/ltsp-update-image.conf
+fi
+
+
 
 # Generates a squashfs image from an ltsp chroot to be served by an inetd driven
 # nbd-server process.
@@ -91,16 +102,11 @@ CONFFILE="/usr/share/initramfs-tools/conf.d/ltsp"
 CHROOT="${BASE}/${ARCH}"
 
 #
-# for updateing the pxe config
+# for updating the pxe config
 #
 
 TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
 TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
-
-# source config file
-if [ -f /etc/default/ltsp-update-image ]; then
-    . /etc/default/ltsp-update-image
-fi
 
 if [ ! -d "${CHROOT}" ]; then
     echo "Error: chroot ${CHROOT} doesn't exist."
