@@ -1,0 +1,38 @@
+case "$MODE" in
+    commandline)
+        add_option "backports-mirror" "`eval_gettext "add a backports mirror"`" "advanced" "true"
+        add_option "backports-packages" "`eval_gettext "list of packages to install from the backports repositories"`" "advanced" "true"
+        add_option "backports-dist" "`eval_gettext "distribution to pull backports from"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_backports_mirror_value" ]; then
+            BACKPORTS_MIRROR="$option_backports_mirror_value"
+        fi
+        if [ -z "$PIN_DIST" ]; then
+            if [ -n "$option_backports_dist_value" ]; then
+                PIN_DIST="$option_backports_dist_value"
+            elif [ -n "$BACKPORTS_MIRROR" ]; then
+                PIN_DIST="${DIST}-backports"
+            fi
+        fi
+        if [ -z "$PIN_PACKAGES" ]; then
+            if [ -n "$option_backports_packages_value" ]; then
+                PIN_PACKAGES="$option_backports_packages_value"
+            elif [ -n "$BACKPORTS_MIRROR" ]; then
+                PIN_PACKAGES="ltsp-client ltsp-client-core ltspfsd ltspfd-core ldm"
+            fi
+        fi
+        ;;
+    before-install)
+        if [ -n "$BACKPORTS_MIRROR" ]; then
+            if [ -z "$(echo $BACKPORTS_MIRROR | awk '{print $2}')" ]; then
+                echo "`eval_gettext "NOTE: adding default dist and components to backports mirror:"`"
+                BACKPORTS_MIRROR="$BACKPORTS_MIRROR $PIN_DIST $COMPONENTS"
+                echo "$BACKPORTS_MIRROR"
+            fi
+        fi
+        ;;
+    after-install)
+        add_mirrors "$BACKPORTS_MIRROR"
+        ;;
+esac
