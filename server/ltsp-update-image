@@ -52,6 +52,7 @@ $0 [OPTION]
   -f, --force         Force recalculating ports for all chroots, update of all kernels and fresh pxelinux.cfg files.
   -i, --image-only    Update image only and do not attempt to adjust ports or services.
   -n, --no-comp       Do not compress the image.
+  -o, --options       Pass kernel command line options to all cfgs
   -p, --port          Port you wish this nbd image to communicate on.  Default
                       is 2000.
   -h, --help          This message.
@@ -62,7 +63,7 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:e:nhif --long base:,port:,arch:,no-comp,help -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:e:nhifo: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,help -n $0 -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -76,10 +77,11 @@ while true ; do
         -p|--port) PORT=$2 ; shift 2 ;;
         -a|--arch) ARCH=$2 ; shift 2 ;;
         -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
-        -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
+        -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
         -f|--force) FORCE_NEW=1; shift 1 ;;
         -i|--image-only) IMAGE_ONLY=1; shift 1 ;;
-        -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
+        -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
+        -o|--options) BOOTPROMPT_OPTIONS=$2 ; shift 2 ;;
         -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
@@ -88,6 +90,7 @@ done
 
 # defaults
 BASE=${BASE:-"/opt/ltsp"}
+BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"quiet splash"}
 
 # make sure we dont carry trailing slashes around (LP 189237)
 BASE=$(echo ${BASE}|sed -e 's/\/$//g')
@@ -161,7 +164,7 @@ assign_ports () {
                 if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
                     mkdir "${THIS_CHROOT}/etc/ltsp"
                 fi
-                echo "BOOTPROMPT_OPTS=\"quiet splash nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 echo "NBD_PORT=${NBD_PORT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 echo "Regenerating kernel... "
                 chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
