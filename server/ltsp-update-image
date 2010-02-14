@@ -58,6 +58,7 @@ $0 [OPTION]
   -o, --options       Pass kernel command line options to all config files.
   -p, --port          Port you wish this nbd image to communicate on.  Default
                       is 2000.
+  -S, --server        Specify the NBD server IP.
   -T, --timeout       Add timeout to bootloader.
   -h, --help          This message.
 EOF
@@ -67,7 +68,7 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:e:nhifo:O:T: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,ipappend:,timeout:,help -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:e:nhifo:O:S:T: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,ipappend:,server:,timeout:,help -n $0 -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -87,6 +88,7 @@ while true ; do
         -I|--ipappend) IPAPPEND=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
         -o|--options) BOOTPROMPT_OPTIONS=$2 ; shift 2 ;;
+        -S|--server)  NBD_SERVER=$2 ; shift 2 ;;
         -T|--timeout) TIMEOUT=$2 ; shift 2 ;;
         -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
@@ -170,7 +172,11 @@ assign_ports () {
                 if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
                     mkdir "${THIS_CHROOT}/etc/ltsp"
                 fi
-                echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                if [ -n "${NBD_SERVER}" ]; then
+                    echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=${NBD_SERVER}:${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                else
+                    echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                fi
                 echo "NBD_PORT=${NBD_PORT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 [ -n "${TIMEOUT}" ] && echo "TIMEOUT=${TIMEOUT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 [ -n "${IPAPPEND}" ] && echo "IPAPPEND=${IPAPPEND}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
@@ -199,13 +205,16 @@ ${TIMEOUT_LINE}
 
 label ltsp 
 kernel vmlinuz 
-append ro initrd=initrd.img ${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}
+append ro initrd=initrd.img ${BOOTPROMPT_OPTS}
 ${IPAPPEND_LINE}
 EOF
                         continue
                     fi
                     if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
                         sed -i -e "s/nbdport=[0-9]*/nbdport=${NBD_PORT}/g" ${PXECFG}
+                    fi
+                    if grep nbdroot ${PXECFG} > /dev/null 2>&1 ; then
+                        sed -i -e "s/nbdroot=\([^:]\+\):[0-9]*/nbdroot=\1:${NBD_PORT}/" ${PXECFG}
                     fi
                 done
                 echo "Done."
