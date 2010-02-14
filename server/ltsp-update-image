@@ -33,14 +33,16 @@
 usage() {
 cat <<EOF
 $0 [OPTION]
+  -a, --arch          Architecture of this image.  Default is arch of the host.
   -b, --base          Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
-  -p, --port          Port you wish this nbd image to communicate on.  Default
-                      is 2000.
-  -n, --no-comp       Do not compress the image.
-  -e, --exclude-dirs  Exclude those dirs from the image.
   -d, --tftpbootdir   Subdir within tftpdir where ltsp kernels are.  Defaults
                       to "ltsp".
-  -a, --arch          Architecture of this image.  Default is arch of the host.
+  -e, --exclude-dirs  Exclude those dirs from the image.
+  -f, --force         Force recalculating ports for all chroots, update of all kernels and fresh pxelinux.cfg files.
+  -i, --image-only    Update image only and do not attempt to adjust ports or services.
+  -n, --no-comp       Do not compress the image.
+  -p, --port          Port you wish this nbd image to communicate on.  Default
+                      is 2000.
   -h, --help          This message.
 EOF
 }
@@ -49,7 +51,7 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:nh --long base:,port:,arch:,no-comp,help -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:e:nhif --long base:,port:,arch:,no-comp,help -n $0 -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -64,6 +66,8 @@ while true ; do
         -a|--arch) ARCH=$2 ; shift 2 ;;
         -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
+        -f|--force) FORCE_NEW=1; shift 1 ;;
+        -i|--image-only) IMAGE_ONLY=1; shift 1 ;;
         -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
         -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
@@ -110,6 +114,7 @@ collect_ports () {
         # NBD_PORT will be recorded by this script in the chroot
         # For future reference
         unset NBD_PORT 
+        [ -n "${FORCE_NEW}" ] && rm -f ${c}/etc/ltsp/update-kernels.conf 2>/dev/null
         [ -f ${c}/etc/ltsp/update-kernels.conf ] && . ${c}/etc/ltsp/update-kernels.conf
         # Make sure NBD_PORT is a number
         NBD_PORT=$(echo ${NBD_PORT}|sed -e '/[^0-9]/d')
@@ -166,6 +171,7 @@ assign_ports () {
                         continue       # skip directory
                     fi
                     PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg/default"
+                    [ -n "${FORCE_NEW}" ] && rm -f ${PXECFG} 2>/dev/null
                     if [ ! -f ${PXECFG} ]; then
                         mkdir -p "${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg"
                         echo <<EOF >${PXECFG}
@@ -220,13 +226,16 @@ generate_image () {
     fi
 }
 
-collect_ports
-assign_ports
-[ -n "$RUN_LUK" ] && ltsp-update-kernels -b "${BASE}" -t "${TFTPDIRS}" -d "${TFTPBOOTDIR}"
+if [ -z "${IMAGE_ONLY}" ]; then
+    collect_ports
+    assign_ports
+    [ -n "$RUN_LUK" ] && ltsp-update-kernels -b "${BASE}" -t "${TFTPDIRS}" -d "${TFTPBOOTDIR}"
+fi
+
 generate_image
 
 # Make sure hosts.allow has the keepalive option for nbdrootd
-if [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
+if [ -z "${IMAGE_ONLY}" ] && [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
     echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
 fi
 
