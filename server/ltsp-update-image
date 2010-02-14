@@ -49,12 +49,16 @@ $0 [OPTION]
   -d, --tftpbootdir   Subdir within tftpdir where ltsp kernels are.  Defaults
                       to "ltsp".
   -e, --exclude-dirs  Exclude those dirs from the image.
-  -f, --force         Force recalculating ports for all chroots, update of all kernels and fresh pxelinux.cfg files.
-  -i, --image-only    Update image only and do not attempt to adjust ports or services.
+  -f, --force         Force recalculating ports for all chroots, update of all 
+                      kernels and fresh pxelinux.cfg files.
+  -i, --image-only    Update image only and do not attempt to adjust ports or 
+                      services.
+  -I, --ipappend      Pass IPAPPEND value to bootloader.
   -n, --no-comp       Do not compress the image.
-  -o, --options       Pass kernel command line options to all cfgs
+  -o, --options       Pass kernel command line options to all config files.
   -p, --port          Port you wish this nbd image to communicate on.  Default
                       is 2000.
+  -T, --timeout       Add timeout to bootloader.
   -h, --help          This message.
 EOF
 }
@@ -63,7 +67,7 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:e:nhifo: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,help -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:e:nhifo:O:T: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,ipappend:,timeout:,help -n $0 -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -80,8 +84,10 @@ while true ; do
         -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
         -f|--force) FORCE_NEW=1; shift 1 ;;
         -i|--image-only) IMAGE_ONLY=1; shift 1 ;;
+        -I|--ipappend) IPAPPEND=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
         -o|--options) BOOTPROMPT_OPTIONS=$2 ; shift 2 ;;
+        -T|--timeout) TIMEOUT=$2 ; shift 2 ;;
         -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
@@ -166,6 +172,8 @@ assign_ports () {
                 fi
                 echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 echo "NBD_PORT=${NBD_PORT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                [ -n "${TIMEOUT}" ] && echo "TIMEOUT=${TIMEOUT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+                [ -n "${IPAPPEND}" ] && echo "IPAPPEND=${IPAPPEND}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 echo "Regenerating kernel... "
                 chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
                 echo "Done."
@@ -183,12 +191,16 @@ assign_ports () {
                     [ -n "${FORCE_NEW}" ] && rm -f ${PXECFG} 2>/dev/null
                     if [ ! -f ${PXECFG} ]; then
                         mkdir -p "${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg"
+                        [ -n "${TIMEOUT}" ] && TIMEOUT_LINE="timeout ${TIMEOUT}"
+                        [ -n "${IPAPPEND}" ] && IPAPPEND_LINE="IPAPPEND ${IPAPPEND}"
                         echo <<EOF >${PXECFG}
 default ltsp 
+${TIMEOUT_LINE}
 
 label ltsp 
 kernel vmlinuz 
 append ro initrd=initrd.img ${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}
+${IPAPPEND_LINE}
 EOF
                         continue
                     fi
