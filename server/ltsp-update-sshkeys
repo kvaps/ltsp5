@@ -13,6 +13,7 @@
 #        Warren Togami <wtogami@redhat.com>
 #        Eric Harrison <eharrison@k12linux.mesd.k12.or.us>
 #        Scott Balneaves <sbalneav@ltsp.org>
+#  2010, Gideon Romm <gadi@ltsp.org>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -35,6 +36,8 @@
 # Handle args
 #
 
+unset EXPORTFILE
+
 usage() {
 cat <<EOF
 $0 [OPTION]
@@ -45,7 +48,7 @@ $0 [OPTION]
 EOF
 }
 
-ARGS=$(getopt -o b:e:h --long base:,export:,help -n $0 -- "$@")
+ARGS=$(getopt -o b:e:hu --long base:,export:,update,help -n $0 -- "$@")
 
 [ $? != 0 ] && exit 1
 
@@ -55,6 +58,7 @@ while true ; do
     case "$1" in
         -b|--base)   BASE=$2 ; shift 2 ;;
         -e|--export) EXPORTFILE=$2 ; shift 2 ;;
+        -u|--update) UPDATE=1 ; shift 1 ;;
         -h|--help)   usage ; exit 0 ;; 
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
@@ -67,11 +71,19 @@ if [ -z "${CHROOTS}" ]; then
     CHROOTS=$(find ${BASE}/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
               grep -v images)
 fi
-HOSTNAME=$(hostname)
-IPS=$(/sbin/ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
-OUTPUT=$(mktemp)
 ENC="dsa rsa"
-NAMES="${HOSTNAME} ${IPS}"
+OUTPUT=$(mktemp)
+
+if [ -z "$*" ]; then
+    HOSTNAME=$(hostname)
+    IPS=$(/sbin/ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
+    NAMES="${HOSTNAME} ${IPS}"
+else
+    # We were passed hostnames and ips
+    NAMES=$*
+    EXPORTFILE=${EXPORTFILE:-"/etc/ltsp/ssh_known_hosts.auto"}
+fi
+
 # Check for LOGFILE location
 unset LOGFILE
 [ -e /var/log/syslog ]   && LOGFILE="/var/log/syslog"
@@ -92,23 +104,13 @@ fi
 # Get encryption keys
 for NAME in ${NAMES}; do
     for ENCRYPTION in ${ENC}; do
-		if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
-			echo $(echo $NAME $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
-                awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
-			logger -f $LOGFILE -t ltsp \
-                "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
-		else
-			logger -f $LOGFILE -t ltsp \
-                "No ${ENCRYPTION} key found for ${NAME}, please configure \
-                 your ssh server correctly"
-		fi
+        if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
+            ssh-keyscan -t ${ENCRYPTION} ${NAME} >> ${OUTPUT} 2>/dev/null
+            logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
+        else
+            logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
+        fi
     done
-done
-
-# Add any additional hosts
-for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
-    cat ${SSHHOST} >> $OUTPUT
-    echo >> $OUTPUT
 done
 
 #
@@ -126,8 +128,15 @@ if [ -n "${EXPORTFILE}" ]; then
         cat ${OUTPUT}
     else
         install -m 644 ${OUTPUT} ${EXPORTFILE}
+        # Now that we have our new file, use it
+        [ -n "$UPDATE" ] && ltsp-update-sshkeys
     fi
 else
+    # Add any additional hosts
+    for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
+        cat ${SSHHOST} >> $OUTPUT
+        echo >> $OUTPUT
+    done
     for CHROOT in ${CHROOTS}; do
         if [ -d ${CHROOT}/etc/ssh ]; then
             install -m 644 $OUTPUT ${CHROOT}/etc/ssh/ssh_known_hosts
