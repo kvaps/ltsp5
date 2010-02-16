@@ -102,7 +102,9 @@ pre_install_portage_tree() {
 	# TODO: allow overriding of all these variables
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
-	USE="alsa pulseaudio svg xml X -cups"
+
+	# TODO: test if hal and -crypt can be removed when xorg-server 1.8 is stable
+	USE="alsa pulseaudio svg xml X -cups hal -crypt"
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
 	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
@@ -188,8 +190,13 @@ post_install_extra_packages() {
 	# make sure this is really existing before bind mounting it
 	mkdir ${chroot_dir}/var/lib/nfs
  
-	spawn_chroot "rm /etc/init.d/net.eth0"
+	# TODO: test if can be removed when xorg-server 1.8 is stable
+	spawn_chroot "dbus-uuidgen --ensure"
 }
 
 rcadd ltsp-client-setup boot
 rcadd ltsp-client default
+
+# TODO: test if can be removed when xorg-server 1.8 is stable
+rcadd hald default
+rcadd dbus default

@@ -10,7 +10,8 @@ tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure
 # preserved
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run"
+# TODO: check if hal can be removed when xorg-server 1.8 is stable
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run /var/cache/hald"
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
