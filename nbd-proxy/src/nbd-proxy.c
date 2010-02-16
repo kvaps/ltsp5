@@ -60,12 +60,12 @@ void *client_to_server(void *data) {
                 PRINT_DEBUG("[t_client] Got nbd_request : handle(%s) of len(%u) and from(%lu)\n", 
                         handle_to_string(new_req->handle), ntohl(new_req->len), ntohll(new_req->from));
 
+                add_nbd_request(new_req, infos->reqs);
                 pthread_mutex_lock(&net_lock); 
                 if(send_to_server(infos, recv_buf, bytes_read) == -1)
                     PRINT_DEBUG("[t_client] Failed sending nbd_request to server\n");
                 /* Adding nbd_request received to queue (thread safe) */
                 pthread_mutex_unlock(&net_lock); 
-                add_nbd_request(new_req, infos->reqs);
             /* NBD_CMD_DISC from client */
             } else if(new_req->type == ntohl(NBD_CMD_DISC)) {
                 PRINT_DEBUG("[t_client] NBD_DISCONNECT from client. Cleaning\n");
@@ -558,8 +558,8 @@ int main(int argc, char *argv[]) {
     pthread_attr_setschedpolicy(&pattr_server, SCHED_FIFO);
     
     /* Thread priority */
-    param_client.sched_priority = 5;
-    param_server.sched_priority = 10;
+    param_client.sched_priority = 10;
+    param_server.sched_priority = 5;
     
     pthread_attr_setschedparam(&pattr_client, &param_client);
     pthread_attr_setschedparam(&pattr_server, &param_server);

@@ -2,7 +2,6 @@
 #define INIT_PASSWD "NBDMAGIC"
 #define SRV_RECV_BUF 1040
 #define htonll ntohll
-#define RESEND_MAX 3
 #define SEND_BUF_FACTOR 1024
 
 #ifdef DEBUG
@@ -67,7 +66,7 @@ void cleaning(struct thread_data *infos) {
 void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
     struct proxy_nbd_request *new_pnr = 
         (struct proxy_nbd_request*) malloc(sizeof(struct proxy_nbd_request));
-    // Thread safe operation
+    /* Thread safe operation */
     pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *first;
     if(*first == NULL) {
@@ -89,13 +88,12 @@ void add_nbd_request(struct nbd_request* nr, struct proxy_nbd_request **first) {
  *      first -- first proxy_nbd_request of the chained list
  */
 struct nbd_request *get_nbd_request_by_handle(char *handle, struct proxy_nbd_request **first) {
-    // Thread safe operation
+    /* Thread safe operation */
     pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *first;
     if(current_pnr != NULL) {
         do {
             if(!strncmp(handle, current_pnr->nr->handle, sizeof((*first)->nr->handle))) {
-                //PRINT_DEBUG("[get_nbd_request_by_handle] nbd_request found!\n");
                 pthread_mutex_unlock(&data_lock);
                 return current_pnr->nr;
             }
@@ -111,7 +109,7 @@ struct nbd_request *get_nbd_request_by_handle(char *handle, struct proxy_nbd_req
  *      first -- first proxy_nbd_request of the chained list
  */
 void rm_nbd_request(struct nbd_request *nr, struct proxy_nbd_request **first) {
-    // Thread safe operation
+    /* Thread safe operation */
     pthread_mutex_lock(&data_lock);
     struct proxy_nbd_request *current_pnr = *first;
     struct proxy_nbd_request *previous_pnr = *first;
