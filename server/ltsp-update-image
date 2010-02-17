@@ -168,7 +168,11 @@ assign_ports () {
             *-${NBD_PORT}-*) 
                 OLD_PORT=${NBD_PORT}
                 find_available_port
-                echo "Port ${OLD_PORT} already in use. Changing to ${NBD_PORT}."
+                if [ -n "${OLD_PORT}" ]; then
+                    echo "Port ${OLD_PORT} already in use. Changing to port ${NBD_PORT}."
+                else
+                    echo "Cannot determine assigned port. Assigning to port ${NBD_PORT}."
+                fi
                 if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
                     mkdir "${THIS_CHROOT}/etc/ltsp"
                 fi
