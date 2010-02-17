@@ -198,7 +198,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     fi
 
     # Create tmpdir for localapps menu
-    if boolean_is_true "$LOCAL_APPS_MENU" && [ -x "/usr/bin/ltsp-genmenu" ]; then
+    if boolean_is_true "$LOCAL_APPS_MENU" && ! boolean_is_true "$LTSP_FATCLIENT" && [ -x "/usr/bin/ltsp-genmenu" ]; then
         # get a temporary directory on the server
         TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
         export TMP_XDG_MENU
