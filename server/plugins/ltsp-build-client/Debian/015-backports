@@ -19,7 +19,7 @@ case "$MODE" in
             if [ -n "$option_backports_packages_value" ]; then
                 PIN_PACKAGES="$option_backports_packages_value"
             elif [ -n "$BACKPORTS_MIRROR" ]; then
-                PIN_PACKAGES="ltsp-client ltsp-client-core ltspfsd ltspfd-core ldm"
+                PIN_PACKAGES="ltsp-client ltsp-client-core ltspfsd ltspfsd-core ldm"
             fi
         fi
         ;;
