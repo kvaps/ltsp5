@@ -23,10 +23,10 @@ case $MODE in
             chroot $ROOT locale-gen $LOCALE
         fi
 
-        if [ "$LOCALE" = "C" ] && [ -f /etc/environment ]; then
-            cp /etc/environment $ROOT/etc/
+        if [ "$LOCALE" = "C" ] && [ -f /etc/default/locale ]; then
+            cp /etc/default/locale $ROOT/etc/default/
         else
-            echo "LANG=$LOCALE" >> $ROOT/etc/environment
+            echo "LANG=$LOCALE" >> $ROOT/etc/default/locale
         fi
         export LANG="$LOCALE"
 
