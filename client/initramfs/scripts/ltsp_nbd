@@ -96,9 +96,9 @@ mountroot()
     mount -o move /rofs ${rootmnt}/rofs
 
     # get the lts.conf via tftp
-    tftpath=$(echo ${filename%/*}|tr -d '"')
-    (echo "get ${tftpath:-/ltsp/i386}/lts.conf"|/bin/tftp ${NBD_ROOT_SERVER} >/dev/null 2>&1)
-    if [ -s ./lts.conf ];then
+    tftppath="$(echo "$filename" | sed -n 's,\"*\(.*/\)[^/]*,\1,p')"
+    echo "get ${tftppath:-/ltsp/i386}/lts.conf" | /bin/tftp ${NBD_ROOT_SERVER} >/dev/null 2>&1
+    if [ -s ./lts.conf ]; then
         cp ./lts.conf ${rootmnt}/etc/
     fi
 
