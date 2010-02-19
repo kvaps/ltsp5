@@ -35,6 +35,12 @@ fi
 # Need to specify TERM
 export TERM=linux
 
+# Make RDP sessions return to menu
+export RDP_DAEMON=False
+
+# Make other sessions return to menu
+export XINITRC_DAEMON=False
+
 MENU_APPEND_PATH=${MENU_APPEND_PATH:-"/usr/share/ltsp/screen.d/"}
 if [ "$MENU_APPEND_PATH" = "none" ]; then
     unset MENU_APPEND_PATH
