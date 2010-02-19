@@ -141,15 +141,15 @@ configure_swap() {
     fi
 
     if boolean_is_true "$NBD_SWAP" ; then
-        SWAP_SERVER=${SWAP_SERVER:-"$SERVER"}
-        NBD_PORT=${NBD_PORT:-"9572"}
+        NBD_SWAP_SERVER=${NBD_SWAP_SERVER:-"$SERVER"}
+        NBD_SWAP_PORT=${NBD_SWAP_PORT:-"9572"}
         modprobe nbd
         # Detect first unused nbd device, skip nbd0
         for num in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
             nbd-client -c /dev/nbd${num} > /dev/null
             [ $? -eq 1 ] && break
         done
-        nbd-client $SWAP_SERVER $NBD_PORT /dev/nbd${num} && \
+        nbd-client $NBD_SWAP_SERVER $NBD_SWAP_PORT /dev/nbd${num} && \
             swap_devices="$swap_devices /dev/nbd${num}"
     fi
 

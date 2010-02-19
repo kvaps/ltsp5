@@ -104,7 +104,7 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                     fi
                     if [ -d /var/cache/ltsp/ ]; then
                         echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config || true
-                        echo "NBD_PORT=${port}" >> /var/cache/ltsp/ltsp_config || true
+                        echo "NBD_ROOT_PORT=${port}" >> /var/cache/ltsp/ltsp_config || true
                     fi
                 fi
                 ;;
