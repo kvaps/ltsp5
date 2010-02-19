@@ -40,10 +40,18 @@ unset EXPORTFILE
 
 usage() {
 cat <<EOF
-$0 [OPTION]
+$0 [OPTION] [hostname1] [hostname2] [hostname3] ...
+
+  By specifying hostnames of other servers on the command line, an additional 
+file will be created in /etc/ltsp/ssh_known_hosts.auto which will append those keys to those of this server on subsequent calls to this script.
+
   -b, --basedir  Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
   -e, --export   Export ssh key file.  Default is 
                  \${basedir}/etc/ssh/ssk_known_hosts if unspecified.
+  -u, --update   When IP addresses of other servers are passed on the 
+                 command line, this flag will update the ssh_known_hosts
+                 in the chroot in addition to exporting an additional
+                 file with the keys to be pulled in later.
   -h, --help     This message.
 EOF
 }
@@ -129,7 +137,7 @@ if [ -n "${EXPORTFILE}" ]; then
     else
         install -m 644 ${OUTPUT} ${EXPORTFILE}
         # Now that we have our new file, use it
-        [ -n "$UPDATE" ] && ltsp-update-sshkeys
+        [ -n "$UPDATE" ] && $0
     fi
 else
     # Add any additional hosts
