@@ -120,7 +120,7 @@ for opt in $@ ; do
 done
 
 case $VENDOR in
-    Debian)
+    Debian|Ubuntu)
         if [ "$server_info" != "false" ]; then
             lsb_server_info
             Debian_server_packages
