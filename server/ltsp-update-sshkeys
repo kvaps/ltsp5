@@ -112,11 +112,17 @@ fi
 # Get encryption keys
 for NAME in ${NAMES}; do
     for ENCRYPTION in ${ENC}; do
-        if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
-            ssh-keyscan -t ${ENCRYPTION} ${NAME} >> ${OUTPUT} 2>/dev/null
-            logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
+        if [ "$NAME" = "$(hostname)" ]; then
+            if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
+                # Make a "server" hostname entry
+                ssh-keyscan -t ${ENCRYPTION} ${NAME} 2>/dev/null | sed -e "s/^[^ ]*/server/" >> ${OUTPUT} 2>/dev/null
+                ssh-keyscan -t ${ENCRYPTION} ${NAME} >> ${OUTPUT} 2>/dev/null
+                logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
+            else
+                logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
+            fi
         else
-            logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
+            ssh-keyscan -t ${ENCRYPTION} ${NAME} >> ${OUTPUT} 2>/dev/null
         fi
     done
 done
