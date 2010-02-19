@@ -26,6 +26,7 @@ else
 fi
 export BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
 
+# generic functions
 find_chroots() {
     find $BASE -mindepth 1 -maxdepth 1 -type d
 }
@@ -33,21 +34,39 @@ find_chroots() {
 find_lts_conf() {
     chroot=$1
     chroot_name=$(basename $chroot)
-    lts_conf_dirs="$chroot/etc/ /var/lib/tftpboot/ltsp/$chroot_name /srv/tftp/ltsp/$chroot_name /tftpboot/ltsp/$chroot_name"
+    lts_conf_dirs="$chroot/etc /var/lib/tftpboot/ltsp/$chroot_name /srv/tftp/ltsp/$chroot_name /tftpboot/ltsp/$chroot_name"
     for lts_conf_dir in $lts_conf_dirs ; do
         lts_conf=$lts_conf_dir/lts.conf
         if [ -f "$lts_conf" ]; then
-            echo "$lts_conf"
+            echo found: "$lts_conf"
+            if [ "$verbose" = "true" ]; then
+                cat "$lts_conf"
+            fi
+            echo
         fi
     done
 }
 
-Debian_server_info() {
+find_images() {
+    if [ -d "$BASE/images" ]; then
+        for image in $(find $BASE/images/ -type f -name '*.img' ); do
+            echo found image: $image
+            if [ "$verbose" = "true" ] && [ -x /usr/bin/file ]; then
+                file $image 
+            fi
+            echo
+        done
+    fi     
+}
+
+lsb_server_info() {
     echo server information:
     lsb_release --all
     echo
 }
 
+
+# distro specific functions
 Debian_server_packages() {
     echo server packages:
     COLUMNS=200 dpkg -l 'ltsp*' 'ldm*' | awk '/ltsp|ldm/{print $1,$2,$3}'
@@ -71,6 +90,28 @@ Debian_chroot_release() {
     fi
 }
 
+Gentoo_server_packages() {
+    echo server packages:
+    Gentoo_packages
+    echo
+}
+
+Gentoo_packages() {
+    chroot=$1
+    cat $chroot/var/db/pkg/net-misc/ltsp*/PF
+    cat $chroot/var/db/pkg/sys-fs/ltspfs-*/PF
+    cat $chroot/var/db/pkg/*/ldm*/PF
+}
+
+Gentoo_chroot_packages() {
+    chroot=$1
+    if [ -d $chroot/var/db/pkg ]; then
+        echo "packages in chroot: $chroot"
+        Gentoo_packages $chroot
+        echo
+    fi
+}
+
 for opt in $@ ; do
     case $opt in
         --no-server-info) server_info="false" ;;
@@ -81,7 +122,7 @@ done
 case $VENDOR in
     Debian)
         if [ "$server_info" != "false" ]; then
-            Debian_server_info
+            lsb_server_info
             Debian_server_packages
         fi
         for chroot in $(find_chroots) ; do
@@ -90,29 +131,21 @@ case $VENDOR in
                 Debian_chroot_release
             fi
             Debian_chroot_packages $chroot
-            lts_conf_files=$(find_lts_conf $chroot)
-            if [ -n "$lts_conf_files" ]; then
-                if [ "$verbose" = "true" ]; then
-                    for file in $lts_conf_files ; do
-                        echo found: $file
-                        cat $file
-                        echo
-                    done
-                else
-                    echo found lts.conf files: $lts_conf_files
-                    echo
-                fi
-            fi
+            find_lts_conf $chroot
         done
-        if [ -d "$BASE/images" ]; then
-            for image in $(find $BASE/images/ -type f -name '*.img' ); do
-                echo found image: $image
-                if [ "$verbose" = "true" ] && [ -x /usr/bin/file ]; then
-                    file $image 
-                fi
-                echo
-            done
-        fi        
+        find_images
+        ;;
+    Gentoo)
+        if [ "$server_info" != "false" ]; then
+            lsb_server_info
+            Gentoo_server_packages
+        fi
+        for chroot in $(find_chroots) ; do
+            chroot_name=$(basename $chroot)
+            Gentoo_chroot_packages $chroot
+            find_lts_conf $chroot
+        done
+        find_images
         ;;
     SUSE_LINUX)
        if [ x"$USER" != x"root" ]; then
