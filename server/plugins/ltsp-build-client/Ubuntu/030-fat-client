@@ -65,18 +65,31 @@ EOF
         # Prevent other display managers from starting
         mkdir -p "$ROOT/etc/X11"
         echo '/usr/sbin/ldm' > "$ROOT/etc/X11/default-display-manager"
+        echo 'ldm shared/default-x-display-manager select ldm' | chroot "$ROOT" debconf-set-selections
 
+        # Divert update-notifier.desktop to prevent it from showing up for admin users
+        mkdir -p "$ROOT/etc/xdg/ltsp-disable-autostart"
+        chroot "$ROOT" dpkg-divert --package ltsp-client --add --rename \
+            --divert /etc/xdg/ltsp-disable-autostart/update-notifier.desktop \
+            /etc/xdg/autostart/update-notifier.desktop
+
+        mkdir -p "$ROOT/usr/share/gconf/mandatory"
+        # Prevent screen locking, user switching etc
+        cat > "$ROOT/usr/share/gconf/mandatory/10_ltsp_fat_client" <<EOF
+/desktop/gnome/lockdown/disable_lock_screen                 true
+/desktop/gnome/lockdown/disable_user_switching              true
+EOF
+
+        mkdir -p "$ROOT/usr/share/gconf/defaults"
+        # Disable compiz, but allow it to be reenabled on a per user basis
+        cat > "$ROOT/usr/share/gconf/defaults/10_ltsp_fat_client" <<EOF
+/desktop/gnome/session/required_components/windowmanager    metacity
+EOF
+        
+        # Install the packages
         for package in ubuntu-standard $FAT_CLIENT_DESKTOPS; do
             echo "Installing $package"
             chroot $ROOT apt-get $APT_GET_OPTS install $package
         done
-
-        # TODO: for some reason, the previous attempt to set the
-        # default-display-manager is erased, so do it again to be sure
-        echo '/usr/sbin/ldm' > "$ROOT/etc/X11/default-display-manager"
-
-        # TODO: better put that as a file in the gconf configuration directory
-        # Disable the fast user switching applet, it doesn't work without GDM
-        chroot $ROOT gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --set --type list --list-type string /apps/panel/global/disabled_applets '[OAFIID:GNOME_FastUserSwitchApplet,OAFIID:GNOME_IndicatorApplet]' || true
     ;;
 esac
