@@ -140,6 +140,16 @@ configure_swap() {
         done
     fi
 
+    # Enable NBD_SWAP for clients with RAM < NBD_SWAP_THRESHOLD (in MB)
+    if [ -n "$NBD_SWAP_THRESHOLD" ] && [ -z "$NBD_SWAP" ] && [ -z "$swap_devices" ]; then
+        memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
+        # Clients with less than 48 MB RAM already got a network swap in ltsp_nbd
+        if [ "$memtotal" -ge 49152 ] && [ "$memtotal" -lt $((1024*$NBD_SWAP_THRESHOLD)) ]; then
+            echo "Only found ${memtotal}k main ram, trying network swap."
+            NBD_SWAP=true
+        fi
+    fi
+
     if boolean_is_true "$NBD_SWAP" ; then
         NBD_SWAP_SERVER=${NBD_SWAP_SERVER:-"$SERVER"}
         NBD_SWAP_PORT=${NBD_SWAP_PORT:-"9572"}
