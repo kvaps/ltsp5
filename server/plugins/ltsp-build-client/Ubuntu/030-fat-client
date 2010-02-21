@@ -76,16 +76,15 @@ EOF
         mkdir -p "$ROOT/usr/share/gconf/mandatory"
         # Prevent screen locking, user switching etc
         cat > "$ROOT/usr/share/gconf/mandatory/10_ltsp_fat_client" <<EOF
-/desktop/gnome/lockdown/disable_lock_screen                 true
 /desktop/gnome/lockdown/disable_user_switching              true
 EOF
 
         mkdir -p "$ROOT/usr/share/gconf/defaults"
         # Disable compiz, but allow it to be reenabled on a per user basis
         cat > "$ROOT/usr/share/gconf/defaults/10_ltsp_fat_client" <<EOF
-/desktop/gnome/session/required_components/windowmanager    metacity
+/desktop/gnome/lockdown/disable_lock_screen                 true
 EOF
-        
+
         # Install the packages
         for package in ubuntu-standard $FAT_CLIENT_DESKTOPS; do
             echo "Installing $package"
