@@ -73,14 +73,14 @@ EOF
             --divert /etc/xdg/ltsp-disable-autostart/update-notifier.desktop \
             /etc/xdg/autostart/update-notifier.desktop
 
+        # Enforce some gconf settings for all users
         mkdir -p "$ROOT/usr/share/gconf/mandatory"
-        # Prevent screen locking, user switching etc
         cat > "$ROOT/usr/share/gconf/mandatory/10_ltsp_fat_client" <<EOF
 /desktop/gnome/lockdown/disable_user_switching              true
 EOF
 
+        # The following default settings can be overriden by users
         mkdir -p "$ROOT/usr/share/gconf/defaults"
-        # Disable compiz, but allow it to be reenabled on a per user basis
         cat > "$ROOT/usr/share/gconf/defaults/10_ltsp_fat_client" <<EOF
 /desktop/gnome/lockdown/disable_lock_screen                 true
 EOF
