@@ -91,6 +91,11 @@ configure_sound_volume() {
                         if boolean_is_true "${VOLUME_MANUAL}"; then
                             [ -n "${channel_vol}" ] && echo sset "${channel}" ${channel_vol}% unmute $cap 
                         else
+                            # Set default MIC volumes to 40 if unspecified
+                            # This should resolve feedback issues
+                            case "${channel_name}" in
+                                *MIC*) [ -z "${channel_vol}" ] && channel_vol=40 ;;
+                            esac
                             echo sset "${channel}" ${channel_vol:-$VOLUME}% unmute $cap 
                         fi
                     fi
