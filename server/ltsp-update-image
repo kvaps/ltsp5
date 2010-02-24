@@ -251,7 +251,7 @@ generate_image () {
     
         IMAGE="${IMGDIR}/${ARCH}.img"
         rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-        mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
+        nice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
         if [ "$?" != "0" ]; then
             echo "Error: mksquashfs failed to build the ltsp image, exiting"
             exit 1
