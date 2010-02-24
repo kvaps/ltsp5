@@ -64,7 +64,7 @@ mountroot()
     mkdir -p /rofs
 
     # create tmpfs for writeable files
-    mount -t tmpfs tmpfs /cow
+    mount -t tmpfs -o mode=0755 tmpfs /cow
 
     # Make sure the loopback interface has an address
     ip addr add dev lo 127.0.0.1
