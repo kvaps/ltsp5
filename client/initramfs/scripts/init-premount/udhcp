@@ -161,7 +161,9 @@ ip_param=${ip:+"-r $ip"}
 # TODO: it would be nice if we could prefer the interface with the connected cable, though
 interfaces=${interface:-$interfaces}
 
-clear
+# Clear screen when quiet to dampen some noise
+[ "$quiet" = "y" ] && clear
+
 [ "$quiet" != "y" ] && echo "DHCP request for $i..."
 while [ -z "$configured" ]; do
     for i in $interfaces; do    # Make a DHCP request for each interface
