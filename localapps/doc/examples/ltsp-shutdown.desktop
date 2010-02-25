@@ -1,9 +1,11 @@
 [Desktop Entry]
-Encoding=UTF-8
 Version=1.0
 Type=Application
+TryExec=ltsp-localapps
 Exec=sh -c 'xprop -root -f LTSP_LOGOUT_ACTION 8s -set LTSP_LOGOUT_ACTION HALT && gnome-session-save --logout'
 Name=Shut down
 Name[fr]=Arrêter
+Name[el]=Τερματισμός
 Icon=gnome-session-halt
+Categories=System;
 X-LTSP-NoChange=1
