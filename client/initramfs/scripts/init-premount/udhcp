@@ -162,7 +162,7 @@ ip_param=${ip:+"-r $ip"}
 interfaces=${interface:-$interfaces}
 
 clear
-[ "$quiet" != "y" ] && log_begin_msg "DHCP request for $i..."
+[ "$quiet" != "y" ] && echo "DHCP request for $i..."
 while [ -z "$configured" ]; do
     for i in $interfaces; do    # Make a DHCP request for each interface
         if udhcpc -n -c '' -s /tmp/dhcp-script.sh -i $i $clientid_param $hostname_param $ip_param >/dev/null 2>&1; then
@@ -171,7 +171,7 @@ while [ -z "$configured" ]; do
         fi
     done
 done
-[ "$quiet" != "y" ] && log_end_msg
+[ "$quiet" != "y" ] && echo "Done."
 
 # Source the generated dhcp-info.conf file which contains the dhcp variables.
 # But assume that the command-line-provided server and hostname take precedence.
