@@ -107,7 +107,7 @@ main() {
 
             # Check if we need to switch VT
             if [ "${CURTTY_NUM}" != "${TTY_NUM}" ]; then
-                ${openvt} -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
+                ${openvt} -s -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
                 PID=$!
 
                 # Check if our current VT has a screen configured, if so, make sure we stay there
