@@ -48,6 +48,10 @@ start_sound() {
                 # Line copied from old LTSP:  Should we use it? [pere 2006-03-03]
                 #aumix-minimal -v100 -w100 -c90 -m10
                 ;;
+            [Ff][Aa][Ll][Ss][Ee]|[Nn]|[Nn][Oo])
+                # Do not do anything if SOUND_DAEMON is False, N, or No
+                true
+                ;;
             *)
                 warn "Unable to start unsupported sound daemon: '$SOUND_DAEMON'"
                 ;;
