@@ -236,6 +236,10 @@ generate_image () {
     PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
     if [ -n "${PROC_MOUNTED}" ]; then
         echo "/proc mounted in chroot ${CHROOT}, unmounting."
+        # binfmt_misc might need to be unmounted manually, see LP #534211
+        if [ $(grep ^binfmt_misc ${CHROOT}/proc/mounts 2>/dev/null | wc -l) -gt 1 ]; then
+            umount $ROOT/proc/sys/fs/binfmt_misc || true
+        fi
         if ! umount ${CHROOT}/proc; then
             echo "${CHROOT}/proc is in use, forcing unmount." >&2
             umount -l ${CHROOT}/proc
