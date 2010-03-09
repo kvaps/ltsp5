@@ -105,20 +105,10 @@ main() {
                 return 2
             fi
 
-            # Check if we need to switch VT
-            if [ "${CURTTY_NUM}" != "${TTY_NUM}" ]; then
-                ${openvt} -s -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
-                PID=$!
-
-                # Check if our current VT has a screen configured, if so, make sure we stay there
-                eval CURRENT_CMD=\$\{SCREEN_$CURRENT_NUM\}
-                if [ -n "${CURRENT_CMD}" ]; then
-                    chvt ${CURTTY_NUM}
-                fi
-                wait $PID
-            else
-                ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}
-            fi
+            # Execute the session script in the correct VT 
+            ${openvt} -s -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
+            PID=$!
+            wait $PID
             return 0
         fi
     done
