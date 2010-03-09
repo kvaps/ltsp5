@@ -153,8 +153,6 @@ chmod +x /tmp/dhcp-script.sh
 
 do_dhcp()
 {
-# Provide a way for dhcpd to recognize LTSP clients by enabling a "clientid" kernel parameter
-clientid=${clientid:-"''"}
 hostname_param=${hostname:+"-h $hostname"}
 ip_param=${ip:+"-r $ip"}
 # If a specific interface wasn't provided, try all of them
@@ -167,7 +165,9 @@ interfaces=${interface:-$interfaces}
 [ "$quiet" != "y" ] && echo "DHCP request for $i..."
 while [ -z "$configured" ]; do
     for i in $interfaces; do    # Make a DHCP request for each interface
-        if udhcpc -n -c $clientid -s /tmp/dhcp-script.sh -i $i $hostname_param $ip_param >/dev/null 2>&1; then
+        # clientid is empty to prevent duplicate leases, but can also be passed
+        # as a kernel parameter if needed (e.g. for Windows DHCP servers)
+        if udhcpc -n -c "$clientid" -s /tmp/dhcp-script.sh -i $i $hostname_param $ip_param >/dev/null 2>&1; then
             configured="true"
             break
         fi
