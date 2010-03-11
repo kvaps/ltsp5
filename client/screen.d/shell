@@ -12,4 +12,4 @@
 
 echo "tty=$(tty)"
 
-exec su
+HOME=${HOME:-/root} USER=${USER:-root} exec /bin/bash --login
