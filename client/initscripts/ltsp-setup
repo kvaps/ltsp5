@@ -44,6 +44,7 @@ case "$1" in
         configure_swap || true
         configure_syslog || true
         configure_fstab || true
+        configure_home || true
         configure_cron || true
         run_rcfiles || true
         configure_serial_mouse || true

@@ -15,8 +15,10 @@ if boolean_is_true "$LOCAL_APPS"; then
     fi
 
     # Unmount sshfs and remove the mount dir
-    fusermount -uqz ${LDM_HOME}
-    rmdir ${LDM_HOME}
+    if [ -z "$NFS_HOME" ]; then
+        fusermount -uqz ${LDM_HOME}
+        rmdir ${LDM_HOME}
+    fi
 
     # Unmount other mounts
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then

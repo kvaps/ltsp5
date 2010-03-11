@@ -188,7 +188,9 @@ if boolean_is_true "$LOCAL_APPS"; then
         follow_extra_symlinks="follow_symlinks,"
     fi
     # Mount the home directory
-    sshfs -o ${follow_home_symlinks}allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+    if [ -z "$NFS_HOME" ]; then
+        sshfs -o ${follow_home_symlinks}allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+    fi
 
     # Mount other directories
     if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then

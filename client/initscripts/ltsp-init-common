@@ -320,6 +320,22 @@ configure_fstab() {
     fi
 }
 
+configure_home() {
+    test -n "$NFS_HOME" || return 0
+
+    # if $NFS_HOME doesn't contain a <server-ip>:/ part
+    if [ "$NFS_HOME" = ${NFS_HOME#*:/} ]; then
+        NFS_HOME="$SERVER:/$NFS_HOME"
+    fi
+    if ! mount -t nfs "$NFS_HOME" /home; then
+        unset NFS_HOME
+    else
+        if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
+            echo "$NFS_HOME /home   nfs    defaults        0       0" >> /etc/fstab
+        fi
+    fi
+}
+
 configure_cron() {
     CRON_FILE=/etc/cron.d/ltsp
     if [ ! -w "/etc/cron.d" ]; then
