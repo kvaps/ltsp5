@@ -178,6 +178,12 @@ if [ -z "$LOCALDEV" ] && [ -x /usr/bin/ltspfsd ]; then
     export LOCALDEV=True
 fi
 
+# Fat clients don't use ltspfsd. If an admin needs to prevent users from
+# accessing local devices, he should do it with pklocalauthority.
+if boolean_is_true "$LTSP_FATCLIENT"; then
+    unset LOCALDEV
+fi
+
 # enable encrypted swap when cryptsetup is installed
 if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
     export ENCRYPT_SWAP=True
