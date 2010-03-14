@@ -42,37 +42,29 @@ if [ "True" != "$LTSP_CONFIG" ]; then
     . /usr/share/ltsp/ltsp_config
 fi
 
-CURTTY="/dev/tty$(fgconsole)"
-case $CURTTY in
-    /dev/tty?) CURRENT_NUM="0${CURTTY##/dev/tty}" ;;
-    /dev/tty??) CURRENT_NUM="${CURTTY##/dev/tty}" ;;
-esac
-CURTTY_NUM=${CURRENT_NUM#0}
-
 # Figure out SCREEN_NUM
 if [ -n "$1" ]; then
     SCREEN_NUM="$1"
-    TTY_NUM=${SCREEN_NUM#0}
-    TTY=/dev/tty$TTY_NUM
-    exec <$TTY >$TTY 2>&1           # redirect stdin/out/err to our tty
-else
-    # If screen_session is called from inittab/upstart, already with a
-    # controlling terminal, then just figure out what screen number we are.
-    SCREEN_NUM=${CURRENT_NUM}
-    TTY_NUM=${CURTTY_NUM}
-    TTY=${CURTTY}
+else 
+    SCREEN_NUM="$(tty)"
 fi
+
+# Wait until this is the active vt before launching the screen script
+while [ $(fgconsole) -ne ${SCREEN_NUM} ]; do
+    sleep 2
+done
+
 
 export SCREEN_NUM
 
-if [ "${SCREEN_NUM}" = "01" ]; then
-    # This is not an error on Fedora.
-    if [ ! -e /etc/rwtab ]; then
-        logger -t LTSP "Screen scripts should not be run on SCREEN_01"
-        echo "SCREEN_01 Contains a screen script ${SCREEN_SCRIPT} ${SCREEN_ARGS} Please change to another screen"
-        exit 1
-    fi
-fi
+#if [ "${SCREEN_NUM}" = "01" ]; then
+#    # This is not an error on Fedora.
+#    if [ ! -e /etc/rwtab ]; then
+#        logger -t LTSP "Screen scripts should not be run on SCREEN_01"
+#        echo "SCREEN_01 Contains a screen script ${SCREEN_SCRIPT} ${SCREEN_ARGS} Please change to another screen"
+#        exit 1
+#    fi
+#fi
 
 main() {
     if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
@@ -106,7 +98,7 @@ main() {
             fi
 
             # Execute the session script in the correct VT 
-            ${openvt} -s -f -w -c ${TTY_NUM} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
+            ${openvt} -s -f -w -c ${SCREEN_NUM#0} -- ${SCRIPT_DIR}/${SCREEN_SCRIPT} ${SCREEN_ARGS}&
             PID=$!
             wait $PID
             return 0
@@ -127,13 +119,13 @@ do
     main
     case "$?" in
         1)
-            logger -t LTSP "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
-            echo "Screen:${TTY} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+            logger -t LTSP "Screen:${SCREEN_NUM#0} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
+            echo "Screen:${SCREEN_NUM#0} - SCREEN_SCRIPT: ${SCREEN_SCRIPT} not found!"
             exit 1
             ;;
         2)
-            logger -t LTSP "Screen:${TTY} - openvt not found!  openvt is required for proper operation"
-            echo "Screen:${TTY} - openvt not found!  openvt is required for proper operation"
+            logger -t LTSP "Screen:${SCREEN_NUM#0} - openvt not found!  openvt is required for proper operation"
+            echo "Screen:${SCREEN_NUM#0} - openvt not found!  openvt is required for proper operation"
             exit 1
             ;;
     esac

@@ -58,6 +58,18 @@ case "$1" in
             log_action_end_msg=log_end_msg
         fi
 
+        if [ -z "${SCREEN_DEFAULT}" ]; then
+            for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
+                eval num=\$SCREEN_$screen
+                [ -n "$num" ] && SCREEN_DEFAULT=$screen
+            done
+        fi
+
+        # Find current tty, and if it is not the same as SCREEN_DEFAULT, chvt
+        if [ $(fgconsole) -ne ${SCREEN_DEFAULT} ]; then
+            chvt ${SCREEN_DEFAULT}
+        fi
+
         for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
             eval num=\$SCREEN_$screen
             if [ -n "$num" ]; then
