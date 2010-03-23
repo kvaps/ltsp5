@@ -94,6 +94,10 @@ case "$1" in
                 sleep 1
             done
         fi
+
+        if [ -x /bin/plymouth ]; then
+            /bin/plymouth quit --retain-splash
+        fi
 	;;
   stop)
 #	echo -n "Stopping $DESC: $NAME"
