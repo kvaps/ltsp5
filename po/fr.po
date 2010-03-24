@@ -4,14 +4,14 @@
 # Translators:
 # Cyril Brulebois <cyril.brulebois@enst-bretagne.fr>, 2006
 # Jean-Baka Domelevo-Entfellner <domelevo@gmail.com>, 2007, 2009
-#
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 0.99debian3\n"
+"Project-Id-Version: ltsp 5.1.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-13 10:32-0800\n"
-"PO-Revision-Date: 2009-04-24 11:55+0100\n"
-"Last-Translator: Stephane Graber <stgraber@ubuntu.com>\n"
+"PO-Revision-Date: 2010-01-15 12:06+0100\n"
+"Last-Translator: Jean-Baka Domelevo Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -177,7 +177,7 @@ msgstr "Indiquer les langues pour l'internationalisation"
 #: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr "indiquer la liste des modules de noyau à installer."
+msgstr "Indiquer la liste des modules de noyau à installer."
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
@@ -187,14 +187,14 @@ msgstr "indiquer la liste des modules de noyau à installer."
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
-msgstr "indiquer l'architecture cible"
+msgstr "Indiquer l'architecture cible"
 
 #: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
 "indiquer la liste des paquets à installer une fois l'installation de base "
-"(« base-install ») terminée"
+"(« base-install ») achevée"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -214,10 +214,10 @@ msgstr "Copie des paquets"
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
 #, sh-format
 msgid "done."
-msgstr "terminé"
+msgstr "Terminé"
 
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
-#, sh-format
+#, fuzzy, sh-format
 msgid "create squashfs image for use with NBD"
 msgstr "créer une image squashfs pour utilisation avec NBD"
 
@@ -277,7 +277,7 @@ msgstr "ne pas détecter automatiquement la configuration du proxy apt"
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
-msgstr "indiquer la langue (« locale ») par défaut"
+msgstr "indiquer les paramètres régionaux (« locale ») par défaut"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
@@ -352,7 +352,7 @@ msgstr "charger un fichier de configuration propre à l'utilisateur"
 #: ../server/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
-msgstr "supprimer le chroot si déjà présent"
+msgstr "purger le chroot LTSP s'il en existe un"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-dist:3
 #, sh-format
@@ -362,7 +362,7 @@ msgstr "indiquer la distribution à utiliser pour l'installation"
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
-msgstr "activer le débogage"
+msgstr "activer la prise en charge du débogage"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:22
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:33
@@ -397,7 +397,7 @@ msgstr "indiquer le répertoire d'installation de base par défaut"
 #: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
 msgid "set the name of the chroot"
-msgstr "indiquer le nom du chroot"
+msgstr "indiquer le nom du chroot."
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
@@ -410,7 +410,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr "démarre toutes (ou presque) les applications localement"
+msgstr "exécuter toutes les applications ou presque localement"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
@@ -421,7 +421,7 @@ msgstr "activer LTSP-Cluster"
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
 msgstr ""
-"obliger à ne pas construire de système squashfs (dans l'installateur Debian)"
+"obliger à ne pas construire de système squashfs (pour l'installateur Debian)"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:6
 #, sh-format
@@ -559,3 +559,10 @@ msgstr "info : l'installation du client LTSP est terminée."
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erreur : l'installation du client LTSP a échoué."
+
+#, fuzzy
+#~ msgid "add a backports mirror"
+#~ msgstr "ajouter un miroir sécurité"
+
+#~ msgid "The IP of the LTSP Cluster Control Center"
+#~ msgstr "Adresse IP du control-center de LTSP-Cluster"
