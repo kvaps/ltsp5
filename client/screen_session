@@ -49,6 +49,17 @@ else
     SCREEN_NUM="$(tty)"
 fi
 
+if [ -x /usr/bin/openvt ]; then
+    openvt=/usr/bin/openvt
+elif [ -x /bin/openvt ]; then
+    openvt=/bin/openvt
+fi
+
+# initialize the tty with openvt, so that it's possible to switch to later.
+if [ -x "${openvt}" ]; then
+    /bin/openvt -f -c ${SCREEN_NUM#0} /bin/true
+fi
+
 # Wait until this is the active vt before launching the screen script
 while [ $(fgconsole) -ne ${SCREEN_NUM} ]; do
     sleep 2
@@ -80,11 +91,7 @@ main() {
                 echo "Warning: /usr/lib/ltsp/screen.d is deprecated and will be removed in the future."
                 echo "         ${SCREEN_SCRIPT} requires updating to use /usr/share/ltsp."
             fi
-            if [ -x /usr/bin/openvt ]; then
-                openvt=/usr/bin/openvt
-            elif [ -x /bin/openvt ]; then
-                openvt=/bin/openvt
-            else
+            if [ -z "${openvt}" ]; then
                 return 2
             fi
 
