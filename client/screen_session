@@ -57,7 +57,7 @@ fi
 
 # initialize the tty with openvt, so that it's possible to switch to later.
 if [ -x "${openvt}" ]; then
-    /bin/openvt -f -c ${SCREEN_NUM#0} /bin/true
+    ${openvt} -f -c ${SCREEN_NUM#0} /bin/true
 fi
 
 # Wait until this is the active vt before launching the screen script
