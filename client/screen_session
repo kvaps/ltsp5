@@ -57,15 +57,6 @@ done
 
 export SCREEN_NUM
 
-#if [ "${SCREEN_NUM}" = "01" ]; then
-#    # This is not an error on Fedora.
-#    if [ ! -e /etc/rwtab ]; then
-#        logger -t LTSP "Screen scripts should not be run on SCREEN_01"
-#        echo "SCREEN_01 Contains a screen script ${SCREEN_SCRIPT} ${SCREEN_ARGS} Please change to another screen"
-#        exit 1
-#    fi
-#fi
-
 main() {
     if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
         # Reset the environement
