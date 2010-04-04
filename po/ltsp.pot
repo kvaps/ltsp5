@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.1.99\n"
+"Project-Id-Version: ltsp 5.2.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-18 21:02-0800\n"
+"POT-Creation-Date: 2010-04-04 10:31-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,7 +110,7 @@ msgid "Draw progress bar"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
-#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#: ../server/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr ""
@@ -129,27 +129,24 @@ msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
 msgstr ""
@@ -231,6 +228,12 @@ msgstr ""
 msgid "mount a server directory as the chroot package cache dir"
 msgstr ""
 
+#: ../server/plugins/ltsp-build-client/Debian/035-install-debs:3
+#, sh-format
+msgid ""
+"install to the chroot all the .deb files contained in the provided directory"
+msgstr ""
+
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install"
@@ -239,6 +242,26 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:3
+#, sh-format
+msgid "add a backports mirror"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:4
+#, sh-format
+msgid "list of packages to install from the backports repositories"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:5
+#, sh-format
+msgid "distribution to pull backports from"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:29
+#, sh-format
+msgid "NOTE: adding default dist and components to backports mirror:"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
@@ -307,7 +330,7 @@ msgstr ""
 msgid "set the list of kernel packages to install"
 msgstr ""
 
-#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
 msgstr ""
@@ -371,6 +394,16 @@ msgstr ""
 msgid "set the name of the chroot"
 msgstr ""
 
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
+#, sh-format
+msgid "set the security mirror location"
+msgstr ""
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
+#, sh-format
+msgid "set the update mirror location"
+msgstr ""
+
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
@@ -390,16 +423,6 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:6
-#, sh-format
-msgid "set the security mirror location"
-msgstr ""
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:7
-#, sh-format
-msgid "set the update mirror location"
 msgstr ""
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
@@ -487,42 +510,42 @@ msgstr ""
 msgid "Distro name"
 msgstr ""
 
-#: ../server/ltsp-build-client:83
+#: ../server/ltsp-build-client:89
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr ""
 
-#: ../server/ltsp-build-client:126
+#: ../server/ltsp-build-client:132
 #, sh-format
 msgid "display this help message"
 msgstr ""
 
-#: ../server/ltsp-build-client:127
+#: ../server/ltsp-build-client:133
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr ""
 
-#: ../server/ltsp-build-client:131
+#: ../server/ltsp-build-client:137
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr ""
 
-#: ../server/ltsp-build-client:135
+#: ../server/ltsp-build-client:141
 #, sh-format
 msgid "  Regular options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:139
+#: ../server/ltsp-build-client:145
 #, sh-format
 msgid "  Advanced options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:151
+#: ../server/ltsp-build-client:157
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr ""
 
-#: ../server/ltsp-build-client:153
+#: ../server/ltsp-build-client:159
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
