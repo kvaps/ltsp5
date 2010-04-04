@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-13 10:32-0800\n"
-"PO-Revision-Date: 2010-01-14 00:33+0200\n"
+"POT-Creation-Date: 2010-04-04 10:31-0700\n"
+"PO-Revision-Date: 2010-04-04 22:12+0200\n"
 "Last-Translator: Alkis Georgopoulos <alkisg@gmail.com>\n"
 "Language-Team: Greek\n"
 "MIME-Version: 1.0\n"
@@ -78,19 +78,23 @@ msgid "Cancel"
 msgstr "Ακύρωση"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
-msgid "set the list of packages to install after base-install is completed."
+msgid "set the list of packages to install after base-install is completed"
 msgstr "ορισμός της λίστας πακέτων προς εγκατάσταση μετά την ολοκλήρωση του base-install"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
-msgid "list of packages to install as part of the final installation."
+msgid "list of packages to install as part of the final installation"
 msgstr "λίστα πακέτων προς εγκατάσταση ως μέρος της τελικής εγκατάστασης"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "Set the default locale"
+msgid "set the default locale"
 msgstr "ορισμός της προεπιλεγμένης εντοπιότητας (locale)"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
@@ -109,7 +113,7 @@ msgid "Draw progress bar"
 msgstr "σχεδιασμός της μπάρας προόδου"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
-#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#: ../server/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "προτρέπει για τον ορισμό συνθηματικού του υπερχρήστη, απενεργοποιημένο από προεπιλογής"
@@ -127,27 +131,25 @@ msgid "Enabling serial console..."
 msgstr "Γίνεται ενεργοποίηση της σειριακής κονσόλας..."
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:3
+#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
-msgid "Set the mirror location"
-msgstr "ορισμός τοποθεσίας καθρέπτη"
+msgid "set the mirror location"
+msgstr "ορισμός τοποθεσίας του καθρέπτη"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr "προσθήκη ενός καθρέπτη, που έχει προτεραιότητα έναντι του προεπιλεγμένου"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr "προσθήκη ενός καθρέπτη, με μικρότερη προτεραιότητα από τον προεπιλεγμένο"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:6
+#: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
 msgstr "προσθήκη ενός καθρέπτη ασφαλείας"
@@ -164,8 +166,9 @@ msgid "keep cache of downloaded package files"
 msgstr "διατήρηση των ληφθέντων αρχείων των πακέτων στην προσωρινή μνήμη"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
 #, sh-format
-msgid "Set the distribution to be used for install"
+msgid "set the distribution to be used for install"
 msgstr "ορισμός της διανομής που θα χρησιμοποιηθεί για την εγκατάσταση"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
@@ -187,11 +190,6 @@ msgstr "ορισμός των πακέτων αρθρωμάτων του πυρ�
 #, sh-format
 msgid "set the target architecture"
 msgstr "ορισμός της αρχιτεκτονικής προορισμού"
-
-#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, sh-format
-msgid "set the list of packages to install after base-install is completed"
-msgstr "ορισμός της λίστας πακέτων προς εγκατάσταση μετά την ολοκλήρωση του base-install"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -228,6 +226,16 @@ msgstr "φόρτωση αρχικών τιμών debconf στο chroot μετά 
 msgid "mount package cache dir from server"
 msgstr "προσάρτηση του καταλόγου προσωρινής μνήμης πακέτων του εξυπηρετητή"
 
+#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
+#, sh-format
+msgid "mount a server directory as the chroot package cache dir"
+msgstr "προσάρτηση ενός καταλόγου του εξυπηρετητή ως μνήμη αποθήκευσης πακέτων του chroot"
+
+#: ../server/plugins/ltsp-build-client/Debian/035-install-debs:3
+#, sh-format
+msgid "install to the chroot all the .deb files contained in the provided directory"
+msgstr "εγκατάσταση στο chroot όλων των αρχείων .deb του δοθέντος καταλόγου"
+
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install"
@@ -237,6 +245,26 @@ msgstr "να επιτρέπονται μη υπογεγραμμένα πακέτ
 #, sh-format
 msgid "copy apt Packages files from server"
 msgstr "αντιγραφή αρχείων πακέτων apt από τον εξυπηρετητή"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:3
+#, sh-format
+msgid "add a backports mirror"
+msgstr "προσθήκη ενός καθρέπτη backports"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:4
+#, sh-format
+msgid "list of packages to install from the backports repositories"
+msgstr "λίστα πακέτων προς εγκατάσταση από τα αποθετήρια backports"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:5
+#, sh-format
+msgid "distribution to pull backports from"
+msgstr "διανομή για λήψη backports"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:29
+#, sh-format
+msgid "NOTE: adding default dist and components to backports mirror:"
+msgstr "ΣΗΜΕΙΩΣΗ: γίνεται προσθήκη της προεπιλεγμένης διανομής και συστατικών στον καθρέπτη backports:"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -269,12 +297,6 @@ msgstr "χρήση του καθορισμένου διαμεσολαβητή ht
 msgid "do not autodetect apt proxy configuration"
 msgstr "να μη γίνει αυτόματος έλεγχος των ρυθμίσεων του διαμεσολαβητή apt"
 
-#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#, sh-format
-msgid "set the default locale"
-msgstr "ορισμός της προεπιλεγμένης εντοπιότητας (locale)"
-
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
@@ -305,30 +327,20 @@ msgstr "δημιουργία εικόνας για χρήση με το NBD γι
 msgid "skip upgrade of installed packages"
 msgstr "παράλειψη αναβάθμισης των εγκατεστημένων πακέτων"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, sh-format
-msgid "set the mirror location"
-msgstr "ορισμός τοποθεσίας του καθρέπτη"
-
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
 msgstr "ορισμός της λίστας των πακέτων πυρήνα προς εγκατάσταση"
 
-#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, sh-format
-msgid "list of packages to install as part of the final installation"
-msgstr "λίστα πακέτων προς εγκατάσταση ως μέρος της τελικής εγκατάστασης"
-
-#: ../server/plugins/ltsp-build-client/Debian/010-security-mirror:8
+#: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr "ΣΗΜΕΙΩΣΗ: προσθήκη της προεπιλεγμένης διανομής και συστατικών στον καθρέπτη ασφαλείας:"
+msgstr "ΣΗΜΕΙΩΣΗ: γίνεται προσθήκη της προεπιλεγμένης διανομής και συστατικών στον καθρέπτη ασφαλείας:"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr "ΣΗΜΕΙΩΣΗ: απενεργοποίηση της πηγής ασφαλείας APT για το sid. Δεν υπάρχει."
+msgstr "ΣΗΜΕΙΩΣΗ: απενεργοποιείται η πηγή APT για τις ενημερώσεις ασφαλείας για το sid. Δεν υπάρχει."
 
 #: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
@@ -344,11 +356,6 @@ msgstr "φόρτωση ενός αρχείου ρυθμίσεων ορισμέν
 #, sh-format
 msgid "purge existing LTSP chroot if present"
 msgstr "διαγραφή του εικονικού δίσκου LTSP εάν υπάρχει"
-
-#: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#, sh-format
-msgid "set the distribution to be used for install"
-msgstr "ορισμός της διανομής που θα χρησιμοποιηθεί για την εγκατάσταση"
 
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
@@ -389,13 +396,23 @@ msgstr "ορισμός του προεπιλεγμένου βασικού κατ
 msgid "set the name of the chroot"
 msgstr "ορισμός του ονόματος του εικονικού δίσκου (chroot)"
 
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
+#, sh-format
+msgid "set the security mirror location"
+msgstr "ορισμός τοποθεσίας του καθρέπτη ασφαλείας"
+
+#: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
+#, sh-format
+msgid "set the update mirror location"
+msgstr "ορισμός τοποθεσίας του καθρέπτη ενημερώσεων"
+
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
 msgstr "χρήση του sources.list του εξυπηρετητή αντί της δημιουργίας νέου"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:5
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-fat-client:6
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
+#: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
 msgstr "εκτέλεση των περισσότερων ή όλων των εφαρμογών τοπικά"
@@ -409,16 +426,6 @@ msgstr "ενεργοποίηση του LTSP-Cluster"
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
 msgstr "εξαναγκασμένη παράλειψη του χτισίματος του squashfs (για το debian-installer)"
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:6
-#, sh-format
-msgid "set the security mirror location"
-msgstr "ορισμός τοποθεσίας του καθρέπτη ασφαλείας"
-
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-manage-mirror:7
-#, sh-format
-msgid "set the update mirror location"
-msgstr "ορισμός τοποθεσίας του καθρέπτη ενημερώσεων"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -505,43 +512,56 @@ msgstr "Αριθμός έκδοσης του release"
 msgid "Distro name"
 msgstr "Όνομα διανομής"
 
-#: ../server/ltsp-build-client:83
+#: ../server/ltsp-build-client:89
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "ΣΦΑΛΜΑ API: πρέπει να εισάγετε true ή false."
 
-#: ../server/ltsp-build-client:126
+#: ../server/ltsp-build-client:132
 #, sh-format
 msgid "display this help message"
 msgstr "εμφάνιση της παρούσης βοήθειας"
 
-#: ../server/ltsp-build-client:127
+#: ../server/ltsp-build-client:133
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "εμφάνιση βοήθειας για όλες τις επιλογές της γραμμής εντολών"
 
-#: ../server/ltsp-build-client:131
+#: ../server/ltsp-build-client:137
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Χρήση του LTSP Build Client:"
 
-#: ../server/ltsp-build-client:135
+#: ../server/ltsp-build-client:141
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Συνηθισμένες επιλογές:"
 
-#: ../server/ltsp-build-client:139
+#: ../server/ltsp-build-client:145
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Προχωρημένες επιλογές:"
 
-#: ../server/ltsp-build-client:151
+#: ../server/ltsp-build-client:157
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "πληροφορία: επιτυχής ολοκλήρωση της εγκατάστασης πελάτη LTSP"
 
-#: ../server/ltsp-build-client:153
+#: ../server/ltsp-build-client:159
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "σφάλμα: ανώμαλος τερματισμός της εγκατάστασης πελάτη LTSP"
+
+#~ msgid "set the list of packages to install after base-install is completed."
+#~ msgstr ""
+#~ "ορισμός της λίστας πακέτων προς εγκατάσταση μετά την ολοκλήρωση του base-"
+#~ "install"
+#~ msgid "list of packages to install as part of the final installation."
+#~ msgstr "λίστα πακέτων προς εγκατάσταση ως μέρος της τελικής εγκατάστασης"
+#~ msgid "Set the default locale"
+#~ msgstr "ορισμός της προεπιλεγμένης εντοπιότητας (locale)"
+#~ msgid "Set the mirror location"
+#~ msgstr "ορισμός τοποθεσίας καθρέπτη"
+#~ msgid "Set the distribution to be used for install"
+#~ msgstr "ορισμός της διανομής που θα χρησιμοποιηθεί για την εγκατάσταση"
 
