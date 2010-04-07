@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-04 10:31-0700\n"
-"PO-Revision-Date: 2010-04-04 20:03+0100\n"
+"PO-Revision-Date: 2010-04-06 23:22+0100\n"
 "Last-Translator: Américo Monteiro <a_monteiro@netcabo.pt>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgstr "Activar relatórios de progresso"
 #: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
 #, sh-format
 msgid "Print stage times (seconds)"
-msgstr "Mostrar tempos de estágios (em segundos)"
+msgstr "Mostrar tempos de fases (em segundos)"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
 #, sh-format
@@ -116,7 +116,8 @@ msgstr "Desenhar barra de progresso"
 #: ../server/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
-msgstr "aviso para definir a palavra-passe do root, predefine para desactivada"
+msgstr ""
+"aviso para definir a palavra-passe do root, predefinição para desactivada"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
@@ -204,7 +205,7 @@ msgstr "cache de pacotes descarregados"
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
 #, sh-format
 msgid "Copying packages"
-msgstr "Copiando pacotes"
+msgstr "A copiar pacotes"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
 #, sh-format
@@ -238,7 +239,7 @@ msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
 msgstr ""
 "instalar para a chroot todos os ficheiros .deb contidos no directório "
-"fornecido"
+"disponibilizado"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
@@ -248,7 +249,7 @@ msgstr "permitir pacotes não assinados durante a instalação"
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
-msgstr "copiar ficheiros de Pacotes do apt do servidor"
+msgstr "copiar ficheiros Packages do apt a partir do servidor"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:3
 #, sh-format
@@ -275,12 +276,12 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
 msgid "distribution to set up apt pinning"
-msgstr "distribuição para definir a fixação do apt"
+msgstr "distribuição para definir a fixação (pinning) do apt"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
 #, sh-format
 msgid "list of packages to install from the pinned distribution"
-msgstr "lista de pacotes a instalar da distribuição fixa"
+msgstr "lista de pacotes a instalar da distribuição fixa (pinned)"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -306,7 +307,7 @@ msgstr "não detectar automaticamente a configuração do proxy apt"
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
-msgstr "activar concurso de popularidade na chroot"
+msgstr "activar popularity-contest na chroot"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
@@ -342,13 +343,13 @@ msgstr "definir a lista de pacotes do kernel para instalar"
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
 msgstr ""
-"NOTA: adicionando distribuição predefinida e componentes ao mirror de "
+"NOTA: a adicionar distribuição predefinida e componentes ao mirror de "
 "segurança:"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr "NOTA: desactivando a fonte APT de segurança para sid. Não existe."
+msgstr "NOTA: a desactivar a fonte APT de segurança para sid. Não existe."
 
 #: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
@@ -473,12 +474,12 @@ msgstr "ERRO: %s não existe"
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:35
 #, sh-format
 msgid "Installing into: %s"
-msgstr "Instalando em: %s"
+msgstr "A instalar em: %s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
 msgid "Stage 3 URI"
-msgstr "URI de estágio 3"
+msgstr "URI de fase 3"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
@@ -523,7 +524,7 @@ msgstr "Nome da distribuição"
 #: ../server/ltsp-build-client:89
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr "ERRO da API: você precisa fornecer verdadeiro ou falso."
+msgstr "ERRO da API: precisa indicar se é verdadeiro ou falso."
 
 #: ../server/ltsp-build-client:132
 #, sh-format
@@ -543,7 +544,7 @@ msgstr "Utilização do LTSP Build Client:"
 #: ../server/ltsp-build-client:141
 #, sh-format
 msgid "  Regular options:"
-msgstr "  Opções regulares:"
+msgstr "  Opções normais:"
 
 #: ../server/ltsp-build-client:145
 #, sh-format
