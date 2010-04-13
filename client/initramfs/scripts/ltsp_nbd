@@ -97,7 +97,7 @@ mountroot()
 
     # get the lts.conf via tftp
     tftppath="$(echo "$filename" | sed -n 's,\"*\(.*/\)[^/]*,\1,p')"
-    echo "get ${tftppath:-/ltsp/i386}/lts.conf" | /bin/tftp ${NBD_ROOT_SERVER} >/dev/null 2>&1
+    echo "get ${tftppath:-/ltsp/i386/}lts.conf" | /bin/tftp ${NBD_ROOT_SERVER} >/dev/null 2>&1
     if [ -s ./lts.conf ]; then
         cp ./lts.conf ${rootmnt}/etc/
     fi
