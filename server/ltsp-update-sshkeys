@@ -86,10 +86,12 @@ if [ -z "$*" ]; then
     HOSTNAME=$(hostname)
     IPS=$(/sbin/ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
     NAMES="${HOSTNAME} ${IPS}"
+    THIS_SERVER=1
 else
     # We were passed hostnames and ips
     NAMES=$*
     EXPORTFILE=${EXPORTFILE:-"/etc/ltsp/ssh_known_hosts.auto"}
+    unset THIS_SERVER
 fi
 
 # Check for LOGFILE location
@@ -109,14 +111,22 @@ if [ -z "${CHROOTS}" -a -z "${EXPORTFILE}" ]; then
 	exit 0
 fi
 
+# Make a "server" hostname entry
+for ENCRYPTION in ${ENC}; do
+    if [ -n "$THIS_SERVER" ]; then
+        echo $(echo server $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
+            awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
+    fi
+done
+
 # Get encryption keys
 for NAME in ${NAMES}; do
     for ENCRYPTION in ${ENC}; do
-        if [ "$NAME" = "$(hostname)" ]; then
+        if [ -n "$THIS_SERVER" ]; then
             if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
                 # Make a "server" hostname entry
-                ssh-keyscan -t ${ENCRYPTION} ${NAME} 2>/dev/null | sed -e "s/^[^ ]*/server/" >> ${OUTPUT} 2>/dev/null
-                ssh-keyscan -t ${ENCRYPTION} ${NAME} >> ${OUTPUT} 2>/dev/null
+                echo $(echo $NAME $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
+                    awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
                 logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
             else
                 logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
