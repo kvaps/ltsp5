@@ -15,7 +15,7 @@ rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run /var/cache/hald
 
 # tmpfs/bind directions that get mounted with directory structure and data
 # copied
-copy_dirs="/root /home /etc/conf.d /etc/udev/rules.d /var/cache/localapps"
+copy_dirs="/root /home /etc/conf.d /etc/udev/rules.d /var/cache/ltsp-localapps"
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
