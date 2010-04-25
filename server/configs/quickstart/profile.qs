@@ -130,7 +130,6 @@ pre_install_portage_tree() {
 	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<- EOF
 	sys-apps/openrc
 	sys-apps/baselayout
-	sys-apps/sysvinit
 	EOF
 
 	# pulseaudio pulls udev[extras]
