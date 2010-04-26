@@ -27,6 +27,9 @@ if [ -z "$(getent passwd ${KIOSKUSER})" ]; then
     exit
 fi
 
+[ -n "$1" ] && KIOSK_EXE=$1
+[ -n "$2" ] && KIOSK_OPTIONS=$2
+
 if [ -z "${KIOSK_EXE}" ]; then
     if [ -x "/usr/bin/firefox" ]; then
         KIOSK_EXE=/usr/bin/firefox
