@@ -22,5 +22,5 @@ copy_dirs="/root /home /etc/conf.d /etc/udev/rules.d /var/cache/ltsp-localapps"
 temp_copy_dirs=""
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/hosts /etc/syslog-ng/syslog-ng.conf /etc/fstab 
+bindfiles="/etc/hosts /etc/syslog.conf /etc/fstab 
 /etc/resolv.conf /etc/passwd /etc/group /etc/localtime /etc/lts.conf"

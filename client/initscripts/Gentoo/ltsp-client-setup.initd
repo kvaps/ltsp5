@@ -118,18 +118,6 @@ EOF
     fi
 }
 
-configure_syslog() {
-    if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
-        SYSLOG_HOST=${SYSLOG_HOST:-"${SERVER}"}
-        cat <<EOF > /etc/syslog-ng/syslog-ng.conf
-source src { unix-stream("/dev/log"); internal(); };
-destination remote {tcp("$SYSLOG_HOST");};
-log {source(src);destination(remote);};
-
-EOF
-    fi
-}
-
 configure_fstab() {
     if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
         echo "/dev/root     /       rootfs defaults        0       0" > /etc/fstab
