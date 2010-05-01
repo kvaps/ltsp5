@@ -1,5 +1,5 @@
 #!/sbin/runscript
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -15,65 +15,68 @@ checkconfig() {
 }
 
 start() {
-        checkconfig || return 1
-        ebegin "Setting up LTSP client"
+    checkconfig || return 1
+    ebegin "Setting up LTSP client"
 
-        if [ -z "$root_write_method" ]; then
-            touch / 2> /dev/null || root_write_method="bind_mounts"
-        fi
-        [ "$root_write_method" = "bind_mounts" ] && bind_mounts
+    if [ -z "$root_write_method" ]; then
+        touch / 2> /dev/null || root_write_method="bind_mounts"
+    fi
+    [ "$root_write_method" = "bind_mounts" ] && bind_mounts
 
 
-        # This logic stolen from fedora's scripts, since neither of us get 
-        # lts.conf in the initramfs
+    # This logic stolen from fedora's scripts, since neither of us get 
+    # lts.conf in the initramfs
 
-	# Grab lts.conf from the same IP address as the mount server.
-	# (TODO: This is duplicated from ltsp_config because we don't 
-        # want to run that entire script at this point.)
+    # Grab lts.conf from the same IP address as the mount server.
+    # (TODO: This is duplicated from ltsp_config because we don't 
+    # want to run that entire script at this point.)
 
-	# check for NBD devices
-	NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/rofs /{print $1}' /proc/mounts)
-	if [ -n "$NBD_DEVICES" ]; then
-		for DEVICE in $NBD_DEVICES ; do
-			SERVER=$(pgrep -f -l $DEVICE | awk '{print $3}')
-			test -n "$SERVER" && break
-		done
-	else
-		# check for NFS root
-		SERVER=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
-	fi
+    # check for NBD devices
+    NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/rofs /{print $1}' /proc/mounts)
+    if [ -n "$NBD_DEVICES" ]; then
+        for DEVICE in $NBD_DEVICES ; do
+            SERVER=$(pgrep -f -l $DEVICE | awk '{print $3}')
+            test -n "$SERVER" && break
+        done
+    else
+        # check for NFS root
+        SERVER=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
+    fi
 
-	SERVER="${SERVER:-192.168.0.254}"
-	export SERVER
+    SERVER="${SERVER:-192.168.0.254}"
+    export SERVER
 
-	ARCH=$(uname -m | sed -e 's:i[3-6]86:x86:' -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
-	TFTPPATH="/ltsp/${ARCH}/lts.conf"
+    ARCH=$(uname -m | sed -e 's:i[3-6]86:x86:' -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
+    TFTPPATH="/ltsp/${ARCH}/lts.conf"
 
-	# Attempt to get lts.conf via tftp
-	cd /var/run
-	(echo "get ${TFTPPATH}"|tftp ${SERVER} >/dev/null 2>&1)
+    # Attempt to get lts.conf via tftp
+    cd /var/run
+    (echo "get ${TFTPPATH}"|tftp ${SERVER} >/dev/null 2>&1)
 
-	if [ -s ./lts.conf ];then
-		cp ./lts.conf /etc/lts.conf
-	fi
-	cd - > /dev/null
+    if [ -s ./lts.conf ];then
+        cp ./lts.conf /etc/lts.conf
+    fi
+    cd - > /dev/null
 
-	# back to our regularly scheduled programming
-        . /usr/share/ltsp/ltsp-init-common
+    # back to our regularly scheduled programming
 
-        load_modules || true
-        set_time || true
-        configure_console || true
-        configure_resolver || true
-        configure_swap || true
-        configure_syslog || true
-        configure_fstab || true
-        run_rcfiles || true
-#        configure_x || true
-        configure_serial_mouse || true
-        configure_localdev || true
-        configure_printer || true
-        [ "$root_write_method" = "bind_mounts" ] && bind_unmounts
+    # run local function before ltsp-init-common is loaded
+    configure_resolver || true
+
+    . /usr/share/ltsp/ltsp-init-common
+
+    load_modules || true
+    set_time || true
+    configure_keymap || true
+    configure_swap || true
+    configure_syslog || true
+    configure_fstab || true
+    run_rcfiles || true
+#    configure_x || true
+    configure_serial_mouse || true
+    configure_localdev || true
+    configure_printer || true
+    [ "$root_write_method" = "bind_mounts" ] && bind_unmounts
 }
 
 load_modules() {
@@ -85,13 +88,9 @@ load_modules() {
     #done
 }
 
-configure_localdev() {
-    boolean_is_true "$LOCALDEV" && mkdir -p /var/run/drives
-}
-
-configure_console() {
+configure_keymap() {
     if [ -n "$CONSOLE_KEYMAP" ]; then
-        sed -i 's/keymap="us"/keymap="${CONSOLE_KEYMAP}"/' /etc/conf.d/keymaps
+        sed -i "s/keymap=\"us\"/keymap=\"${CONSOLE_KEYMAP}\"/" /etc/conf.d/keymaps
     fi
 }
 
@@ -115,14 +114,6 @@ EOF
 dns_servers=( "${DNS_SERVER}" )
 dns_search="${SEARCH_DOMAIN}"
 EOF
-    fi
-}
-
-configure_fstab() {
-    if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
-        echo "/dev/root     /       rootfs defaults        0       0" > /etc/fstab
-        echo "tmpfs         /tmp    tmpfs   defaults,nosuid,nodev 0 0" >> /etc/fstab
-        mount /tmp
     fi
 }
 
@@ -159,13 +150,6 @@ bind_mounts () {
         else
             echo "WARNING: $f does not exist"
         fi
-    done
-}
-
-bind_unmounts() {
-    for dir in $temp_copy_dirs; do
-        umount $dir
-        rm -rf $tmpfs_dir/${dir#/}
     done
 }
 
