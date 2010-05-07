@@ -52,11 +52,12 @@ file will be created in /etc/ltsp/ssh_known_hosts.auto which will append those k
                  command line, this flag will update the ssh_known_hosts
                  in the chroot in addition to exporting an additional
                  file with the keys to be pulled in later.
+  -p, --port     SSH port for remote servers.
   -h, --help     This message.
 EOF
 }
 
-ARGS=$(getopt -o b:e:hu --long base:,export:,update,help -n $0 -- "$@")
+ARGS=$(getopt -o b:e:hup: --long base:,export:,update,port:,help -n $0 -- "$@")
 
 [ $? != 0 ] && exit 1
 
@@ -67,6 +68,7 @@ while true ; do
         -b|--base)   BASE=$2 ; shift 2 ;;
         -e|--export) EXPORTFILE=$2 ; shift 2 ;;
         -u|--update) UPDATE=1 ; shift 1 ;;
+        -p|--port)   SSH_PORT="-p $2" ; shift 2 ;;
         -h|--help)   usage ; exit 0 ;; 
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
@@ -132,7 +134,7 @@ for NAME in ${NAMES}; do
                 logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
             fi
         else
-            ssh-keyscan -t ${ENCRYPTION} ${NAME} >> ${OUTPUT} 2>/dev/null
+            ssh-keyscan -t ${ENCRYPTION} ${SSH_PORT} ${NAME} >> ${OUTPUT} 2>/dev/null
         fi
     done
 done
