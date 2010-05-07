@@ -134,7 +134,10 @@ for NAME in ${NAMES}; do
                 logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
             fi
         else
-            ssh-keyscan -t ${ENCRYPTION} ${SSH_PORT} ${NAME} >> ${OUTPUT} 2>/dev/null
+            NAMED_SERVER=${NAME%:*}
+            NAMED_PORT=${NAME#*:}
+            [ "${NAMED_PORT}" != "${NAMED_SERVER}" ] && SSH_PORT="-p ${NAMED_PORT}"
+            ssh-keyscan -t ${ENCRYPTION} ${SSH_PORT} ${NAME%:*} >> ${OUTPUT} 2>/dev/null
         fi
     done
 done
