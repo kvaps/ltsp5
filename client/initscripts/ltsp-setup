@@ -48,7 +48,9 @@ case "$1" in
         configure_cron || true
         run_rcfiles || true
         configure_serial_mouse || true
-        configure_localdev || true
+	# Now that ltspfsd and cdpinger are started in udev in ltspfs,
+	# starting them here only causes problems
+        #configure_localdev || true
         configure_printer || true
         configure_scanner || true
         nbd_sendsigs_protection || true
