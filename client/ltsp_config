@@ -154,7 +154,12 @@ if [ -z "${IS_SCREEN}" ]; then
 fi
 
 if [ -z "$LTSP_FATCLIENT" ] && [ -f /etc/ltsp_fat_chroot ]; then
-    export LTSP_FATCLIENT=True
+    # Don't set LTSP_FATCLIENT for low-RAM clients booting from a fat chroot
+    memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
+    FAT_RAM_THRESHOLD=${FAT_RAM_THRESHOLD:-300000}
+    if [ "$memtotal" -ge "$FAT_RAM_THRESHOLD" ]; then
+        export LTSP_FATCLIENT=True
+    fi
 fi
 
 # set defaults for sound support
