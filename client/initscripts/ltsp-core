@@ -66,7 +66,7 @@ case "$1" in
         fi
 
         # Find current tty, and if it is not the same as SCREEN_DEFAULT, chvt
-        if [ $(fgconsole) -ne ${SCREEN_DEFAULT} ]; then
+        if [ -n "${SCREEN_DEFAULT}" ] && [ $(fgconsole) -ne ${SCREEN_DEFAULT} ]; then
             chvt ${SCREEN_DEFAULT}
         fi
 
