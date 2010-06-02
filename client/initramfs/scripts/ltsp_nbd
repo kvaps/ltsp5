@@ -70,11 +70,21 @@ mountroot()
     ip addr add dev lo 127.0.0.1
     ip link set lo up
 
-    # Start nbd-proxy and wait for it to connect
-    nbd-proxy ${NBD_ROOT_SERVER} ${NBD_ROOT_PORT} ${NBD_ROOT_PORT}
+    if [ $real_ram -lt 100000 ]; then
+        # nbd-proxy is too heavy for very old thin clients
+        nbd_proxy=${nbd_proxy:-false}
+    fi
+    if [ "$nbd_proxy" = "false" ]; then
+        # nbd_proxy=true/false can also be specified on the kernel command line
+        NBD_CLIENT_ROOT_SERVER=$NBD_ROOT_SERVER
+    else
+        # Start nbd-proxy and wait for it to connect
+        nbd-proxy $NBD_ROOT_SERVER $NBD_ROOT_PORT $NBD_ROOT_PORT
+        NBD_CLIENT_ROOT_SERVER=127.0.0.1
+    fi
 
     # Mount the root device
-    if nbd-client 127.0.0.1 ${NBD_ROOT_PORT} /dev/nbd0 ; then
+    if nbd-client $NBD_CLIENT_ROOT_SERVER $NBD_ROOT_PORT /dev/nbd0 ; then
         eval $(fstype /dev/nbd0)
         if [ -z "$FSTYPE" ]; then
             echo "Warning: unable to detect filesystem, assuming squashfs."
