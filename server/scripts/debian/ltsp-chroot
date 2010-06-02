@@ -79,6 +79,8 @@ pre_chroot() {
 }
 
 post_chroot() {
+    # Stop trapping
+    trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     if boolean_is_true "$MOUNT_PROC"; then
         # binfmt_misc might need to be unmounted manually, see LP #534211
         if [ $(grep ^binfmt_misc "$ROOT/proc/mounts" 2>/dev/null | wc -l) -gt 1 ]; then
@@ -115,6 +117,6 @@ analyze_command_line $ARGS
 # Finally, fall back to using default values for any unset options
 default_options
 
+trap "post_chroot" 0 HUP INT QUIT KILL SEGV PIPE TERM
 pre_chroot
 eval LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
-post_chroot
