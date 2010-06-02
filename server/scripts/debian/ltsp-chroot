@@ -1,17 +1,120 @@
 #!/bin/sh
 
-# copyright 2009 Vagrant Cascadian <vagrant@freegeek.org>, distributed under
-# the terms of the GNU General Public License version 2 or any later version.
+# copyright 2009 Vagrant Cascadian <vagrant@freegeek.org>,
+# 2010 Alkis Georgopoulos <alkisg@gmail.com>, distributed under the
+# terms of the GNU General Public License version 2 or any later version.
 
-export LTSP_HANDLE_DAEMONS=false
-if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
-    /etc/ltsp/ltsp-chroot.conf
-fi
-if [ -z "$ROOT" ]; then
-    ROOT="/opt/ltsp/$(dpkg --print-architecture)"
-fi
-if [ ! -d "$ROOT" ]; then
-    echo "ERROR: ltsp chroot not found: $ROOT" > /dev/stderr
+usage() {
+cat <<EOF
+$0 [OPTION] command
+  -a, --arch                Architecture of the chroot.  Default is arch of the host.
+  -b, --base                Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
+  -c, --mount-package-cache Mount package cache dir from server.
+  -d, --mount-dev-pts       Mount /dev/pts from server.
+  -h, --help                This message.
+  -p, --mount-proc          Mount /proc from server.
+  -r, --copy-resolv-conf    Copy /etc/resolv.conf from server.
+EOF
+}
+
+die() {
+    echo "$@" >&2
+    exit 1
+}
+
+analyze_command_line() {
+    local done_opts
+
+    while [ -z "$done_opts" ] ; do
+        case "$1" in
+            -a|--arch) ARCH=$2 ; shift 2 ;;
+            -b|--base) BASE=$2 ; shift 2 ;;
+            -c|--mount-package-cache) MOUNT_PACKAGE_CACHE=true ; shift 1 ;;
+            -d|--mount-dev-pts) MOUNT_DEV_PTS=true; shift 1 ;;
+            -h|--help) usage ; exit 0 ;;
+            -p|--mount-proc) MOUNT_PROC=true; shift 1 ;;
+            -r|--copy-resolv-conf) COPY_RESOLV_CONF=true; shift 1 ;;
+            --) shift ; done_opts=true ;;
+            *) die "$0: Internal error!" ;;
+        esac
+    done
+    COMMAND="$@"
+}
+
+default_options() {
+    if [ -z "$ARCH" ]; then
+        if [ -x /usr/bin/dpkg ]; then
+            ARCH=$(dpkg --print-architecture)
+        # TODO: put other distro arch-detecting code here
+        else
+            ARCH=i386
+        fi
+    fi
+    BASE=${BASE:-/opt/ltsp}
+    # If $BASE contains a terminating /, remove it
+    BASE=${BASE%/}
+    ROOT=${ROOT:-$BASE/$ARCH}
+}
+
+pre_chroot() {
+    test -d "$ROOT" || die "ERROR: ltsp chroot not found: $ROOT"
+    if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
+        if ! mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"; then
+            die "Could not mount $ROOT/var/cache/apt/archives"
+        fi
+    fi
+    if boolean_is_true "$MOUNT_DEV_PTS"; then
+        if ! mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"; then
+            die "Could not mount $ROOT/dev/pts"
+        fi
+    fi
+    if boolean_is_true "$MOUNT_PROC"; then
+        if ! mount -t proc proc "$ROOT/proc"; then
+            die "Could not mount $ROOT/proc"
+        fi
+    fi
+    if boolean_is_true "$COPY_RESOLV_CONF"; then
+        cp /etc/resolv.conf "$ROOT/etc/"
+    fi
+}
+
+post_chroot() {
+    if boolean_is_true "$MOUNT_PROC"; then
+        # binfmt_misc might need to be unmounted manually, see LP #534211
+        if [ $(grep ^binfmt_misc "$ROOT/proc/mounts" 2>/dev/null | wc -l) -gt 1 ]; then
+            umount "$ROOT/proc/sys/fs/binfmt_misc"
+        fi
+        umount "$ROOT/proc"
+    fi
+    if boolean_is_true "$MOUNT_DEV_PTS"; then
+        umount "$ROOT/dev/pts"
+    fi
+    if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
+        umount "$ROOT/var/cache/apt/archives"    
+    fi
+}
+
+# Main
+
+# Parse command line arguments
+if ! ARGS=$(getopt -o +a:b:cdhpr -l 'arch:,base:,mount-package-cache,mount-dev-pts,help,mount-proc,copy-resolv-conf' -n $0 -- "$@"); then
     exit 1
 fi
-exec chroot $ROOT $@
+
+# Source the ltsp common functions, mainly for boolean_is_true
+. /usr/share/ltsp/ltsp-common-functions
+
+# First, include the configuration file, if it exists
+if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
+    . /etc/ltsp/ltsp-chroot.conf
+fi
+
+# The command line parameters override the configuration file settings
+analyze_command_line $ARGS
+
+# Finally, fall back to using default values for any unset options
+default_options
+
+pre_chroot
+eval LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
+post_chroot
