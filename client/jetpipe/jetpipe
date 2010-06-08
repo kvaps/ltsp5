@@ -80,8 +80,11 @@ class Redirector:
                 print "error receiving from socket: ", msg
              
             self.device.write(data)     
-            if self.devicetype == 'P':
-                self.device.flush()                              # parallel device
+            try:
+                if self.devicetype == 'P':
+                    self.device.flush()                              # parallel device
+            except:
+                pass
         self.device.close()
         self.alive = False
 
