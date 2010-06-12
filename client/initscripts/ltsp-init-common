@@ -199,11 +199,11 @@ configure_swap() {
     if [ -n "$swap_devices" ]; then
         for swap in /dev/ramzswap*; do
             if [ -b "$swap" ]; then
-                swapoff "$swap" && remove_ramzswap=true
+                swapoff "$swap" && remove_ramzswap=true || true
             fi
         done
         if [ -n "$remove_ramzswap" ]; then
-            rmmod ramzswap && rmmod lzo_compress && rmmod lzo_decompress || true
+            modprobe -r ramzswap || true
         fi
     fi
 }
