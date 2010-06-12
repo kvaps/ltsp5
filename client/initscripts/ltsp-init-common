@@ -193,6 +193,19 @@ configure_swap() {
         mkswap $swap
         swapon $swap
     done
+
+    # If any swap device was used, there's no need for compcache, so unload it to
+    # gain that 25% of RAM. It makes a significant difference on low end clients.
+    if [ -n "$swap_devices" ]; then
+        for swap in /dev/ramzswap*; do
+            if [ -b "$swap" ]; then
+                swapoff "$swap" && remove_ramzswap=true
+            fi
+        done
+        if [ -n "$remove_ramzswap" ]; then
+            rmmod ramzswap && rmmod lzo_compress && rmmod lzo_decompress || true
+        fi
+    fi
 }
 
 configure_printer() {
