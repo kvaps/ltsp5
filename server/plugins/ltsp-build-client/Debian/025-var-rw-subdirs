@@ -1,6 +1,6 @@
 case $MODE in
     install)
-        echo "RAMRUN=yes" >> $ROOT/etc/default/tmpfs
-        echo "RAMLOCK=yes" >> $ROOT/etc/default/tmpfs
+        echo "RAMRUN=yes" >> $ROOT/etc/default/rcS
+        echo "RAMLOCK=yes" >> $ROOT/etc/default/rcS
         ;;
 esac
