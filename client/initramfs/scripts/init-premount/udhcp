@@ -220,7 +220,7 @@ apply_configuration()
 {
 [ -z "$ip" -o -z "$tftp" -o -z "$subnet" ] && exit
 
-ip address add $ip/$(subnet_to_cidr $subnet) dev $interface
+ip address add $ip/$(subnet_to_cidr $subnet) broadcast ${broadcast:-+} dev $interface
 
 for i in $router
 do
