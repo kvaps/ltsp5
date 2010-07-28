@@ -111,7 +111,7 @@ pre_install_portage_tree() {
 	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
 
 	# TODO: don't add this by default
-	source /usr/local/portage/layman/make.conf
+	source /var/lib/layman/make.conf
 	EOF
 
 	cat > ${chroot_dir}/etc/fstab <<- EOF
