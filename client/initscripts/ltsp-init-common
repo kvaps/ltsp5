@@ -389,6 +389,7 @@ bind_mounts () {
     # set defaults
     test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
     mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
+    bind_missing=""
     # preserve directory structure
     for d in $rw_dirs ; do
         if [ -d "$d" ]; then
@@ -396,7 +397,7 @@ bind_mounts () {
             tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
             mount --bind $tmpfs_dir/$d $d
         else
-            echo "WARNING: $d does not exist"
+            bind_missing="$bind_missing $d"
         fi
     done
     # copy contents into tmpfs
@@ -406,7 +407,7 @@ bind_mounts () {
             tar -cpf - $d 2> /dev/null | tar xpf -
             mount --bind $tmpfs_dir/$d $d
         else
-            echo "WARNING: $d does not exist"
+            bind_missing="$bind_missing $d"
         fi
     done
     # mount one file on top of another
@@ -416,9 +417,12 @@ bind_mounts () {
             cp $f $tmpfs_dir/$f
             mount --bind $tmpfs_dir/$f $f
         else
-            echo "WARNING: $f does not exist"
+            bind_missing="$bind_missing $f"
         fi
     done
+    if [ -n "$bind_missing" ]; then
+        echo "note: ltsp: missing files or directories for bind mounting: $bind_missing"
+    fi
 }
 
 bind_unmounts() {
