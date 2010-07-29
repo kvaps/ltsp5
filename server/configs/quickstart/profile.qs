@@ -21,19 +21,11 @@ if [ -z "${CHROOT}" ]; then
 fi
 
 chroot_dir $CHROOT
+stage_uri="${STAGE_URI}"
 
 
 # TODO: much of this shell code can go into a pre install or post install script
 #	   seperate from the profile
-
-pre_sanity_check_config () {
-	# we can't use the wrapper stage_uri due the way the sanity check is done in quickstart
-	if [ -z "${STAGE_URI}" ]; then
-		stage_uri="http://www.funtoo.org/linux/gentoo/${arch}/stage3-${arch}-current.tar.bz2"
-	else 
-		stage_uri="${STAGE_URI}"
-	fi
-}
 
 
 # Skip all this
