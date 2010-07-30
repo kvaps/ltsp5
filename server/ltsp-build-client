@@ -119,8 +119,8 @@ debug() {
 # $2 - where to mount (skip the chroot path)
 # $3 - mount extra params
 chroot_mount() {
-    if mount $3 $1 $ROOT/$2; then
-        CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT/$2"
+    if mount $3 $1 $ROOT/${2##/}; then
+        CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT/${2##/}"
     fi
 }
 
