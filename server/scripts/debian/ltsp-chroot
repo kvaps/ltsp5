@@ -27,8 +27,8 @@ analyze_command_line() {
 
     while [ -z "$done_opts" ] ; do
         case "$1" in
-            -a|--arch) ARCH=$2 ; shift 2 ;;
-            -b|--base) BASE=$2 ; shift 2 ;;
+            -a|--arch) ARCH=$(echo $2 | sed -e "s,',,g") ; shift 2 ;;
+            -b|--base) BASE=$(echo $2 | sed -e "s,',,g") ; shift 2 ;;
             -c|--mount-package-cache) MOUNT_PACKAGE_CACHE=true ; shift 1 ;;
             -d|--mount-dev-pts) MOUNT_DEV_PTS=true; shift 1 ;;
             -h|--help) usage ; exit 0 ;;
