@@ -237,7 +237,7 @@ generate_image () {
     if [ -n "${PROC_MOUNTED}" ]; then
         echo "/proc mounted in chroot ${CHROOT}, unmounting."
         # binfmt_misc might need to be unmounted manually, see LP #534211
-        if [ $(grep ^binfmt_misc ${CHROOT}/proc/mounts 2>/dev/null | wc -l) -gt 1 ]; then
+        if grep -q "^binfmt_misc $ROOT/proc/sys/fs/binfmt_misc" $ROOT/proc/mounts; then
             umount $ROOT/proc/sys/fs/binfmt_misc || true
         fi
         if ! umount ${CHROOT}/proc; then
