@@ -11,12 +11,12 @@ case "$MODE" in
         ;;
     before-install)
         if [ "$MOUNT_CDROM" = "true" ]; then
-            mount /cdrom
+            mount /media/cdrom
         fi
         ;;
     finalization)
         if [ "$MOUNT_CDROM" = "true" ]; then
-            umount /cdrom
+            umount /media/cdrom
         fi
         ;;
 esac
