@@ -180,7 +180,8 @@ post_install_extra_packages() {
 	spawn "ln -sf /proc/mounts ${chroot_dir}/etc/mtab"
 
 	# make sure this is really existing before bind mounting it
-	mkdir ${chroot_dir}/var/lib/nfs
+	mkdir -p ${chroot_dir}/var/lib/nfs
+	mkdir -p ${chroot_dir}/var/lib/pulse
  
 	# TODO: test if can be removed when xorg-server 1.8 is stable
 	spawn_chroot "dbus-uuidgen --ensure"
