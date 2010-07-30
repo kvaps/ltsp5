@@ -173,7 +173,8 @@ pre_install_extra_packages() {
 	spawn_chroot "emerge --update --deep world"
 }
 
-extra_packages ldm ltsp-client ${PACKAGES}
+# adding a default font
+extra_packages ldm ltsp-client dejavu ${PACKAGES}
 
 post_install_extra_packages() {
 	# point /etc/mtab to /proc/mounts
