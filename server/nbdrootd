@@ -35,4 +35,4 @@ if [ -n "$2" ]; then
     nbd_timeout="-a $2"
 fi
 
-PATH=/usr/bin:/bin:$PATH nbd-server 0 $1 -r -C /dev/null $nbd_timeout > /dev/null 2>&1
+PATH=/usr/bin:/bin:$PATH exec nbd-server 0 $1 -r -C /dev/null $nbd_timeout > /dev/null 2>&1
