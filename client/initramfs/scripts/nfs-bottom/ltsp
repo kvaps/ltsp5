@@ -20,18 +20,32 @@ fi
 
 # set hostname to ltsp if none is received from dhcp
 
-read HOSTNAME < /proc/sys/kernel/hostname
-if [ "${HOSTNAME}" = "(none)" ]; then
-    HOSTNAME_BASE="ltsp"
-    # get networking configuration
-    . /tmp/net-*.conf
-    if [ -f ${rootmnt}/etc/lts.conf ] && [ -x ${rootmnt}/usr/bin/getltscfg ]; then
-        # get defaults from lts.conf
-        eval $(chroot ${rootmnt} /usr/bin/getltscfg -a)
-    fi
+# get networking configuration
+. /tmp/net-*.conf
+
+# set to defaults from DHCP if not specified in lts.conf
+if [ -z "$DNS_SERVER" ]; then
+    for dns in $IPV4DNS0 $IPV4DNS1 ; do
+        DNS_SERVER="$DNS_SERVER $dns"
+    done
+fi
+
+if [ -z "$SEARCH_DOMAIN" ] && [ -n "$DNSDOMAIN" ]; then
+    SEARCH_DOMAIN="$DNSDOMAIN"
+fi
+
+if [ -f ${rootmnt}/etc/lts.conf ] && [ -x ${rootmnt}/usr/bin/getltscfg ]; then
+    # get defaults from lts.conf
+    eval $(chroot ${rootmnt} /usr/bin/getltscfg -a)
+fi
+
+# check if hostname is set
+read TEMP_HOSTNAME < /proc/sys/kernel/hostname
+if [ "${TEMP_HOSTNAME}" = "(none)" ]; then
+    HOSTNAME_BASE=${HOSTNAME_BASE:-ltsp}
     # if HOSTNAME was not defined in lts.conf,
     # or if it has been nulled by /tmp/net-*.conf
-    if [ "$HOSTNAME" = "(none)" ] || [ -z "$HOSTNAME" ]; then
+    if [ -z "$HOSTNAME" ]; then
         case "$HOSTNAME_EXTRA" in
             mac)
                 HOSTNAME_EXTRA=$(ip link show $DEVICE | awk '/ether/{print $2}' | tr ':' '-')
