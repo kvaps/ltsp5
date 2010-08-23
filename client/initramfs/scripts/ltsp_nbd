@@ -92,7 +92,7 @@ mountroot()
         fi
         mount -o ro -t $FSTYPE /dev/nbd0 /rofs
     else
-        panic "Error: failed to connect to NBD server."
+        panic "Error: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT."
     fi
 
     # merge ro and rw filesystems
