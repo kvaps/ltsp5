@@ -42,18 +42,39 @@ analyze_command_line() {
 }
 
 default_options() {
-    if [ -z "$ARCH" ]; then
-        if [ -x /usr/bin/dpkg ]; then
-            ARCH=$(dpkg --print-architecture)
-        # TODO: put other distro arch-detecting code here
-        else
-            ARCH=i386
+    if [ -n "$ROOT" ]; then
+        # If $ROOT contains a terminating /, remove it
+        ROOT=${ROOT%/}
+        # Extract $BASE and $ARCH from $ROOT in case they're needed afterwards
+        BASE=${ROOT%/*}
+        ARCH=${ROOT##*/}
+    else
+        BASE=${BASE:-/opt/ltsp}
+        # If $BASE contains a terminating /, remove it
+        BASE=${BASE%/}
+        if [ -z "$ARCH" ]; then
+            # Prefer the chroot that corresponds to the server arch,
+            # but if that doesn't exist, use the first one available.
+            if [ -x /usr/bin/dpkg ]; then
+                ARCH=$(dpkg --print-architecture)
+            # TODO: put other distro arch-detecting code here
+            else
+                ARCH=i386
+            fi
+            if [ ! -d "$BASE/$ARCH" ]; then
+                for dir in "$BASE"/*/; do
+                    # If it's not "images" and it's not "*" because of no subdirs
+                    if [ -n "${dir##*/images/}" ] && [ -d "$dir" ]; then
+                        # Keep only the subdir name
+                        ARCH=${dir%/}
+                        ARCH=${ARCH##*/}
+                        break
+                    fi
+                done
+            fi
         fi
+        ROOT="$BASE/$ARCH"
     fi
-    BASE=${BASE:-/opt/ltsp}
-    # If $BASE contains a terminating /, remove it
-    BASE=${BASE%/}
-    ROOT=${ROOT:-$BASE/$ARCH}
 }
 
 pre_chroot() {
@@ -83,7 +104,7 @@ post_chroot() {
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     if boolean_is_true "$MOUNT_PROC"; then
         # binfmt_misc might need to be unmounted manually, see LP #534211
-        if [ $(grep ^binfmt_misc "$ROOT/proc/mounts" 2>/dev/null | wc -l) -gt 1 ]; then
+        if grep -q "^binfmt_misc $ROOT/proc/sys/fs/binfmt_misc" $ROOT/proc/mounts; then
             umount "$ROOT/proc/sys/fs/binfmt_misc"
         fi
         umount "$ROOT/proc"
