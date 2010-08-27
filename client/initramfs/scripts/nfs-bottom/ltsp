@@ -26,7 +26,11 @@ fi
 # set to defaults from DHCP if not specified in lts.conf
 if [ -z "$DNS_SERVER" ]; then
     for dns in $IPV4DNS0 $IPV4DNS1 ; do
-        DNS_SERVER="$DNS_SERVER $dns"
+        # ignore nameserver of 0.0.0.0, which ipconfig may return if both
+        # nameservers aren't specified.
+        if [ "$dns" != "0.0.0.0" ]; then
+            DNS_SERVER="$DNS_SERVER $dns"
+        fi
     done
 fi
 
