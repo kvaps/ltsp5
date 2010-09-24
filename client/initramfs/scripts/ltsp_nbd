@@ -84,7 +84,20 @@ mountroot()
     fi
 
     # Mount the root device
-    if nbd-client $NBD_CLIENT_ROOT_SERVER $NBD_ROOT_PORT /dev/nbd0 ; then
+    # Try up to 10 times with 2 sec interval in case the device isn't yet accessible
+    i=1
+    while [ $i -le 10 ]; do
+        if nbd-client $NBD_CLIENT_ROOT_SERVER $NBD_ROOT_PORT /dev/nbd0; then
+            unset i
+            break
+        else
+            echo "Warning: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT, retrying..."
+            sleep 2
+            test -x /sbin/udevadm && udevadm settle
+        fi
+        i=$(($i+1))
+    done
+    if [ -z "$i" ]; then
         eval $(fstype /dev/nbd0)
         if [ -z "$FSTYPE" ]; then
             echo "Warning: unable to detect filesystem, assuming squashfs."
