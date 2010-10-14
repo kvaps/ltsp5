@@ -221,7 +221,7 @@ if boolean_is_true "$LOCAL_APPS"; then
         su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} TMP_XDG_DIR_LOCAL=${TMP_XDG_DIR_LOCAL} /usr/bin/ltsp-genmenu install"
 
         # now, scp the directory to the /tmp dir on the server
-        scp -r -o "ControlPath $LDM_SOCKET" -o "User $LDM_USERNAME" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
+        scp -r -o "ControlPath $LDM_SOCKET" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
 
         # Clean up local
         rm -rf ${TMP_XDG_DIR_LOCAL} || true
