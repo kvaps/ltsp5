@@ -48,11 +48,11 @@ mountroot()
                NBD_SWAP_PORT=${nbdswapport:-"9572"}
     fi
 
-    # try to get swap from the server if we dont have enough ram (less than 48M)
-    min_ram=49152
+    # try to get swap from the server if we dont have enough ram (<= 64M)
+    min_ram=65536
     real_ram=$(cat /proc/meminfo |grep MemTotal|tr -d " [a-z][A-Z]:")
 
-    if [ ${real_ram} -lt ${min_ram} ];then
+    if [ ${real_ram} -le ${min_ram} ];then
         [ "$quiet" != "y" ] && log_begin_msg "Only found ${real_ram}k main ram, trying network swap."
         nbd-client ${NBD_SWAP_SERVER} ${NBD_SWAP_PORT} /dev/nbd1 -swap || true
         mkswap /dev/nbd1 || true
