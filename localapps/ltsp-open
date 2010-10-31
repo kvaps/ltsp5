@@ -1,0 +1,33 @@
+#!/bin/sh
+
+file=$1
+filename=${file##*/}
+path=${file%/*}
+
+[ -n "${LDM_SERVER}" ] || exit
+[ -n "${LDM_SOCKET}" ] || exit
+[ -n "${REMOTE_APPS_TMPDIR}" ] || exit
+
+# What is mounted from the server?
+while read dev mnt type rest; do
+    if [ -n "$(echo $dev|grep :)" ]; then
+        path_mounted=$(echo $dev|cut -d: -f2)
+        if [ -n "$(echo ${path}|grep ${path_mounted})" ]; then
+            # File path is subdirectory of path_mounted, so 
+            # should be server-accessible
+            export FILE_ACCESSIBLE=1
+            break
+        else
+            export FILE_ACCESSIBLE=0
+        fi
+    fi
+done </proc/mounts
+
+if [ "${FILE_ACCESSIBLE}" = "1" ]; then
+    ltsp-remoteapps xdg-open ${file}
+else
+    # We need to scp the file to a viewable path on the server
+    newfile="${REMOTE_APPS_TMPDIR}/${filename}"
+    scp -o "ControlPath ${LDM_SOCKET}" ${file} ${LDM_SERVER}:"${newfile}"
+    ltsp-remoteapps xdg-open ${newfile}
+fi
