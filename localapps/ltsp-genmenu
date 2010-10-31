@@ -1,7 +1,7 @@
 #!/bin/sh
 LANG=C
 
-generate() {
+setup() {
     if [ ! -d ${TMP_XDG_DIR_LOCAL} ]; then
         exit
     fi
@@ -9,7 +9,9 @@ generate() {
     for d in applications icons; do
         mkdir -p "${TMP_XDG_DIR_LOCAL}/${d}"
     done
+}
 
+generate_local() {
     # Build desktop file list
     if [ -n "${LOCAL_APPS_MENU_ITEMS}" ]; then
         DESKTOP_FILES=""
@@ -55,9 +57,56 @@ generate() {
     done
 }
 
+generate_remote() {
+    # Build desktop file list
+    DESKTOP_FILES=""
+    local oldifs="${IFS-not set}"
+    IFS=,
+    for i in ${REMOTE_APPS_MENU_ITEMS}; do 
+        # TODO: fix this part to follow xdg standard at some point, subdir applications like kde/* 
+        if [ -e "${TMP_SHARE}/applications/${i}.desktop" ]; then 
+            DESKTOP_FILES="${DESKTOP_FILES} ${TMP_SHARE}/applications/${i}.desktop" 
+        fi
+    done
+    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
+
+    # Cycle through all .desktop files in client's system applications dir
+    for desktop in ${DESKTOP_FILES}; do
+        local_desktop=${TMP_XDG_DIR_LOCAL}/applications/${desktop##*/}
+
+        # Copy client's .desktop file to local
+        cp ${desktop} ${local_desktop}
+
+        # Change Exec and TryExec to our localapps command
+        if [ -z "$(grep 'X-LTSP-NoChange=1' ${local_desktop})" ]; then
+            sed -i -e 's/^TryExec=\(.*\)/TryExec=xprop/' -e 's/^Exec=\(.*\)/Exec=ltsp-remoteapps "\1"/' ${local_desktop}
+        fi
+
+        # Find the appropriate icon and copy it into the local icons dir
+        ICON=$(grep ^Icon ${local_desktop}|sed -e 's/^Icon=\(.*\)/\1/')
+
+        # If icon is relative path, find the real icon file
+        if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
+            ICON=$(find -L ${TMP_SHARE}/icons ${TMP_SHARE}/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
+        fi
+
+        # If the icon file exists, copy it
+        if [ -e ${ICON} ]; then
+            base_ICON="${ICON##*/}" 
+            local_ICON=${TMP_XDG_DIR_LOCAL}/icons/${base_ICON}
+            cp ${ICON} ${local_ICON}
+        fi
+    done
+}
+
 case "$1" in
     install)
-        generate
+        setup
+        if [ -n "${REMOTE_APPS_MENU_ITEMS}" ]; then
+            generate_remote
+        else
+            generate_local
+        fi
     ;;
     *)
         echo "Usage: $0 install"
