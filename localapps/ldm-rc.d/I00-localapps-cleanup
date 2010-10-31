@@ -10,3 +10,10 @@ if boolean_is_true "$LOCAL_APPS"; then
         [ -e "${LOCALAPPS_CACHE}/${i}" ] && cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
     done
 fi
+
+# Created by remote apps
+if [ -w "/usr/lib/mime/packages/ltsp" ]; then
+    rm -f /usr/lib/mime/packages/ltsp
+    update-mime
+fi
+

@@ -33,3 +33,13 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     rm $LOCALAPPSD_PIDFILE
 fi
+
+# Clean up remote apps tmpdir
+if boolean_is_true "${REMOTE_APPS}" && [ -n "${REMOTE_APPS_TMPDIR}" ] ; then
+    fusermount -uqz "${REMOTE_APPS_TMPDIR}"
+    rmdir "${REMOTE_APPS_TMPDIR}"
+    if [ -w "/usr/lib/mime/packages/ltsp" ]; then
+        rm -f /usr/lib/mime/packages/ltsp
+        update-mime
+    fi
+fi
