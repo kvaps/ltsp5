@@ -203,30 +203,6 @@ if boolean_is_true "$LOCAL_APPS"; then
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
 
-    # Create tmpdir for localapps menu
-    if boolean_is_true "$LOCAL_APPS_MENU" && ! boolean_is_true "$LTSP_FATCLIENT" && [ -x "/usr/bin/ltsp-genmenu" ]; then
-        # get a temporary directory on the server
-        TMP_XDG_MENU="$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
-        export TMP_XDG_MENU
-        CLIENT_ENV="${CLIENT_ENV} XDG_DATA_DIRS=${TMP_XDG_MENU}/:/usr/local/share/:/usr/share/"
-
-        # Make the local temporary directory
-        TMP_XDG_DIR_LOCAL="$(mktemp -d /tmp/ltsp-localapps-${LDM_USERNAME}-XXXXXX)"
-        export TMP_XDG_DIR_LOCAL
-
-        # chown the tmpdir to be owned by the user
-        chown -R $USER_UID:$USER_GID ${TMP_XDG_DIR_LOCAL} 
-
-        # Generate the localapp menu
-        su - ${LDM_USERNAME} -c "LOCAL_APPS_MENU_ITEMS=${LOCAL_APPS_MENU_ITEMS} TMP_XDG_DIR_LOCAL=${TMP_XDG_DIR_LOCAL} /usr/bin/ltsp-genmenu install"
-
-        # now, scp the directory to the /tmp dir on the server
-        scp -r -o "ControlPath $LDM_SOCKET" ${TMP_XDG_DIR_LOCAL}/* ${LDM_SERVER}:${TMP_XDG_MENU}
-
-        # Clean up local
-        rm -rf ${TMP_XDG_DIR_LOCAL} || true
-    fi
-
     # attempt to create cups dir if not present
     if [ ! -d /etc/cups ]; then
         mkdir /etc/cups || true
