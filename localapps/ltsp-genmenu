@@ -16,6 +16,7 @@ generate() {
         local oldifs="${IFS-not set}"
         IFS=,
         for i in ${LOCAL_APPS_MENU_ITEMS}; do 
+            # TODO: fix this part to follow xdg standard at some point, subdir applications like kde/* 
             if [ -e "/usr/share/applications/${i}.desktop" ]; then 
                 DESKTOP_FILES="${DESKTOP_FILES} /usr/share/applications/${i}.desktop" 
             fi
