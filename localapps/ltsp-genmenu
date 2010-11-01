@@ -18,21 +18,23 @@ generate_local() {
         local oldifs="${IFS-not set}"
         IFS=,
         for i in ${LOCAL_APPS_MENU_ITEMS}; do 
-            # TODO: fix this part to follow xdg standard at some point, subdir applications like kde/* 
             if [ -e "/usr/share/applications/${i}.desktop" ]; then 
                 DESKTOP_FILES="${DESKTOP_FILES} /usr/share/applications/${i}.desktop" 
+            elif [ -d "/usr/share/applications/${i%-*}" ] && [ -e "/usr/share/applications/${i%-*}/${i##*-}.desktop" ]; then
+                DESKTOP_FILES="${DESKTOP_FILES} /usr/share/applications/${i%-*}/${i##*-}.desktop" 
             fi
         done
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     else
-        DESKTOP_FILES=/usr/share/applications/*.desktop
+        DESKTOP_FILES=$(find /usr/share/applications -regex '.*\.desktop$')
     fi
 
     # Cycle through all .desktop files in client's system applications dir
     for desktop in ${DESKTOP_FILES}; do
-        local_desktop=${TMP_XDG_DIR_LOCAL}/applications/${desktop##*/}
+        local_desktop=${TMP_XDG_DIR_LOCAL}/applications/${desktop##/usr/share/applications/}
 
         # Copy client's .desktop file to local
+        [ ! -d ${local_desktop%/*} ] && mkdir -p ${local_desktop%/*}
         cp ${desktop} ${local_desktop}
 
         # Change Exec and TryExec to our localapps command
@@ -63,18 +65,20 @@ generate_remote() {
     local oldifs="${IFS-not set}"
     IFS=,
     for i in ${REMOTE_APPS_MENU_ITEMS}; do 
-        # TODO: fix this part to follow xdg standard at some point, subdir applications like kde/* 
         if [ -e "${TMP_SHARE}/applications/${i}.desktop" ]; then 
             DESKTOP_FILES="${DESKTOP_FILES} ${TMP_SHARE}/applications/${i}.desktop" 
+        elif [ -d "/usr/share/applications/${i%-*}" ] && [ -e "/usr/share/applications/${i%-*}/${i##*-}.desktop" ]; then
+            DESKTOP_FILES="${DESKTOP_FILES} /usr/share/applications/${i%-*}/${i##*-}.desktop"
         fi
     done
     test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
 
     # Cycle through all .desktop files in client's system applications dir
     for desktop in ${DESKTOP_FILES}; do
-        local_desktop=${TMP_XDG_DIR_LOCAL}/applications/${desktop##*/}
+        local_desktop=${TMP_XDG_DIR_LOCAL}/applications/${desktop##/usr/share/applications/}
 
         # Copy client's .desktop file to local
+        [ ! -d ${local_desktop%/*} ] && mkdir -p ${local_desktop%/*}
         cp ${desktop} ${local_desktop}
 
         # Change Exec and TryExec to our localapps command
