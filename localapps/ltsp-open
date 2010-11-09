@@ -27,5 +27,6 @@ else
     # We need to scp the file to a viewable path on the server
     newfile="${REMOTE_APPS_TMPDIR}/${filename}"
     cp "${file}" "${newfile}"
+	chmod 600 "${newfile}"
     ltsp-remoteapps xdg-open "${newfile}"
 fi
