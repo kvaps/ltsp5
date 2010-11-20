@@ -1,0 +1,44 @@
+if [ "$BOOTSTRAP" = "multistrap" ]; then
+case "$MODE" in
+    install)
+        MULTISTRAP_CONF=$(mktemp /tmp/ltsp-build-client-multistrap-XXXXXX)
+        cat > $MULTISTRAP_CONF << EOF
+
+[General]
+arch=$ARCH
+directory=$ROOT
+cleanup=true
+# FIXME: only disable auth conditionally
+noauth=true
+unpack=true
+debootstrap=Base Base-extra
+aptsources=Base
+
+[Base]
+packages=apt dpkg
+source=$MIRROR
+suite=$DIST
+omitdebsrc=true
+
+[Base-extra]
+packages=
+# FIXME: parse from EXTRA_MIRROR?
+source=$MULTISTRAP_EXTRA_MIRROR
+suite=$MULTISTRAP_EXTRA_CODENAME
+omitdebsrc=true
+
+EOF
+
+        LC_ALL=C multistrap -f $MULTISTRAP_CONF
+        if [ -x "$CROSS_ARCH_EMULATOR" ]; then
+            # configured for cross architecture install.  this requires a
+            # statically built emulator such as qemu, and binfmt_misc
+            # configured to use the emulator for binaries of that architecture.
+
+            # copy the binary, as it need to be present inside the chroot
+            cp "$CROSS_ARCH_EMULATOR" $ROOT/$(dirname $CROSS_ARCH_EMULATOR)
+        fi
+        chroot $ROOT dpkg --configure -a 
+        ;;
+esac
+fi
