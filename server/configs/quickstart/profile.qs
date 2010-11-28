@@ -82,11 +82,11 @@ pre_install_portage_tree() {
 	spawn "mount /usr/portage/packages/$ARCH ${chroot_dir}/usr/portage/packages -o bind"
 	echo "${chroot_dir}/usr/portage/packages" >> /tmp/install.umount
 
-	# bind mounting portage local, for overlay packages
+	# bind mounting layman, for overlay packages
 	# TODO: remove this mounting when the ltsp ebuilds are in the tree
-	spawn "mkdir ${chroot_dir}/usr/local/portage"
-	spawn "mount /usr/local/portage ${chroot_dir}/usr/local/portage -o bind"
-	echo "${chroot_dir}/usr/local/portage" >> /tmp/install.umount
+	spawn "mkdir -p ${chroot_dir}/var/lib/layman"
+	spawn "mount /var/lib/layman ${chroot_dir}/var/lib/layman -o bind"
+	echo "${chroot_dir}/var/lib/layman" >> /tmp/install.umount
 
 	if [ -n "${MIRRORS}" ]; then
 		echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
