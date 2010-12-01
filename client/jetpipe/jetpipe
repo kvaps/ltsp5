@@ -27,6 +27,7 @@
 #redirect data from a TCP/IP connection to a serial port and vice versa
 #requires Python 2.2 'cause socket.sendall is used
 #
+
 """
 usage: jetpipe [options] <device> <port>
 Note: no security measures are implemeted. Anyone can remotely connect
@@ -41,7 +42,7 @@ import socket
 import serial
 import threading
 import getopt
-import resource      # Resource usage information.
+import daemon
 
 class Redirector:
     def __init__(self, devicename, socket):
@@ -78,8 +79,8 @@ class Redirector:
                     break
             except socket.error, msg:
                 print "error receiving from socket: ", msg
-             
-            self.device.write(data)     
+
+            self.device.write(data)
             try:
                 if self.devicetype == 'P':
                     self.device.flush()                              # parallel device
@@ -88,95 +89,7 @@ class Redirector:
         self.device.close()
         self.alive = False
 
-if __name__ == '__main__':
-
-    #parse command line options
-    try:
-        opts, args = getopt.getopt(sys.argv[1:],
-                "hb:p:rs:xy:",
-                ["help", "baud=", "rtscts", "xonxoff"])
-    except getopt.GetoptError:
-        # print help information and exit:
-        print >>sys.stderr, __doc__
-        sys.exit(2)
-
-    for o, a in opts:
-        if o in ("-h", "--help"):   #help text
-            usage()
-            sys.exit()
-        elif o in ("-b", "--baud"):   #specified baudrate
-            try:
-                baudrate = int(a)
-            except ValueError:
-                raise ValueError, "Baudrate must be a integer number"
-        elif o in ("-y", "--bytesize"):   #specified bytesize
-            bytesize = int(a)
-        elif o in ("-p", "--parity"):   #specified parity
-            parity = a
-        elif o in ("-s", "--stopbits"):   #specified stopbits
-            stopbits = int(a)
-        elif o in ("-r", "--rtscts"):
-            rtscts = True
-        elif o in ("-x", "--xonxoff"):
-            xonxoff = True
-
-    devicename = args[0]
-    port   =     args[1]
-
-
-
-    # do the UNIX double-fork magic, see Stevens' "Advanced
-    # Programming in the UNIX Environment" for details (ISBN 0201563177)
-#    try:    # do the UNIX double-fork magic, see Stevens' "Advanced
-    try:
-        pid = os.fork()
-
-        if pid > 0:
-            # exit first parent
-            sys.exit(0)
-    except OSError, e:
-        print >>sys.stderr, "fork #1 failed: %d (%s)" % (e.errno, e.strerror)
-        sys.exit(1)
-
-    # decouple from parent environment
-    os.chdir("/")
-    os.setsid()
-    os.umask(0)
-
-    # do second fork
-    try:
-        pid = os.fork()
-        if pid > 0:
-            sys.exit(0)
-    except OSError, e:
-        print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror)
-        sys.exit(1)
-
-    maxfd = resource.getrlimit(resource.RLIMIT_NOFILE)[1]
-    if (maxfd == resource.RLIM_INFINITY):
-        maxfd = MAXFD
-
-    # Iterate through and close all file descriptors.
-    for fd in range(0, maxfd):
-        try:
-            os.close(fd)
-        except OSError:   # ERROR, fd wasn't open to begin with (ignored)
-            pass
-
-    # Redirect the standard I/O file descriptors to the specified file.  Since
-    # the daemon has no controlling terminal, most daemons redirect stdin,
-    # stdout, and stderr to /dev/null.  This is done to prevent side-effects
-    # from reads and writes to the standard I/O file descriptors.
-
-    # This call to open is guaranteed to return the lowest file descriptor,
-    # which will be 0 (stdin), since it was closed above.
-    os.open('/dev/null', os.O_RDWR)  # standard input (0)
-
-    # Duplicate standard input to standard output and standard error.
-    os.dup2(0, 1)            # standard output (1)
-    os.dup2(0, 2)            # standard error (2)
-
-    print devicename, port
+def run_server(devicename, port):
     srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     srv.bind( ('', int(port)) )
     srv.listen(1)
@@ -213,4 +126,47 @@ if __name__ == '__main__':
         except socket.error, msg:
             print msg
 
-    print "\n--- exit ---"
+if __name__ == '__main__':
+
+    #parse command line options
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],
+                "dhb:p:rs:xy:",
+                [ "debug", "help", "baud=", "rtscts", "xonxoff" ])
+    except getopt.GetoptError:
+        # print help information and exit:
+        print >>sys.stderr, __doc__
+        sys.exit(2)
+
+    debug = False
+
+    for o, a in opts:
+        if o in ("-h", "--help"):         # help text
+            usage()
+            sys.exit()
+        elif o in ("-b", "--baud"):       # specified baudrate
+            try:
+                baudrate = int(a)
+            except ValueError:
+                raise ValueError, "Baudrate must be a integer number"
+        elif o in ("-y", "--bytesize"):   # specified bytesize
+            bytesize = int(a)
+        elif o in ("-p", "--parity"):     # specified parity
+            parity = a
+        elif o in ("-s", "--stopbits"):   # specified stopbits
+            stopbits = int(a)
+        elif o in ("-r", "--rtscts"):
+            rtscts = True
+        elif o in ("-x", "--xonxoff"):
+            xonxoff = True
+        elif o in ("-d", "--debug"):
+            debug = True
+
+    devicename = args[0]
+    port   =     args[1]
+
+    if debug == False:
+        with daemon.DaemonContext():
+            run_server(devicename, port)
+    else:
+        run_server(devicename, port)
