@@ -21,7 +21,10 @@ bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /et
 
 # override variables if configured via lts.conf or ltsp_config
 [ -n "$LTSP_RW_DIRS" ] && rw_dirs="$LTSP_RW_DIRS"
+[ -n "$LTSP_RW_DIRS_EXTRA" ] && rw_dirs="$rw_dirs $LTSP_RW_DIRS_EXTRA"
 [ -n "$LTSP_COPY_DIRS" ] && copy_dirs="$LTSP_COPY_DIRS"
+[ -n "$LTSP_COPY_DIRS_EXTRA" ] && copy_dirs="$rw_dirs $LTSP_COPY_DIRS_EXTRA"
 [ -n "$LTSP_BINDFILES" ] && bindfiles="$LTSP_BINDFILES"
+[ -n "$LTSP_BINDFILES_EXTRA" ] && bindfiles="$rw_dirs $LTSP_BINDFILES_EXTRA"
 
 bind_mounts
