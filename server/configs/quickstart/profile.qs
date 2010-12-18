@@ -111,16 +111,13 @@ pre_install_portage_tree() {
 	EOF
 
 	# TODO: copy this from elsewhere instead of making it here.
-	spawn "mkdir -p ${chroot_dir}/etc/portage/package.keywords"
+	# remove packages from here when they are stable
+	spawn "mkdir -p ${chroot_dir}/etc/portage"
 
-	cat >> ${chroot_dir}/etc/portage/package.keywords/ltsp <<- EOF
+	cat >> ${chroot_dir}/etc/portage/package.keywords <<- EOF
 	net-misc/ltsp-client
 	sys-fs/ltspfs
 	x11-misc/ldm
-	EOF
-
-	# temporary overrides (hopefully)
-	cat >> ${chroot_dir}/etc/portage/package.keywords/temp <<- EOF
 	sys-apps/openrc
 	sys-apps/baselayout
 	EOF
@@ -144,9 +141,6 @@ pre_set_timezone() {
 }
 
 pre_build_kernel() {
-	# FIXME: upgrade to porage 2.2 to resolve blockers since 2008.0
-	spawn_chroot "emerge portage"
-
 	if [[ $CCACHE == "true" ]]; then
 
 		#spawn_chroot "mkdir -p $TMP"
