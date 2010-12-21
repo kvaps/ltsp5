@@ -17,13 +17,7 @@ start() {
 	. /usr/share/ltsp/ltsp-init-common
 
 	#configure_x || true
-	for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
-		eval num=\$SCREEN_$screen
-			if [ -n "$num" ]; then
-				start-stop-daemon --start -b --exec /bin/sh /usr/share/ltsp/screen_session -- "$screen"
-			fi
-	done
-
+	start_screen_sessions || true
 	start_sound || true
 	configure_sound_volume || true 
 }
