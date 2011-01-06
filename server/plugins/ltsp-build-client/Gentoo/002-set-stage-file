@@ -1,23 +1,26 @@
 case "$MODE" in
+    commandline)
+        add_option "stage-uri" "`eval_gettext "Stage 3 URI"`" "advanced" "true"
+        ;;
     configure)
-	if [ -z "${STAGE_URI}" ]; then
-	    DISTFILES_BASE="http://distfiles.gentoo.org/releases/${ARCH}/autobuilds"
-	
-	    # some architectures use other names in the stagefile
-	    if [[ "${ARCH}" == "x86" ]]; then
-		STAGE_ARCH="i686"
-	    else
-		STAGE_ARCH=${ARCH}
-	    fi
+        if [ -n "$option_stage_uri_value" ] || [ -n $STAGE_URI ]; then
+            STAGE_URI="${option_stage_uri_value:-$STAGE_URI}"
+            STAGE_ARCH=${ARCH}
+            DISTFILES_BASE="http://distfiles.gentoo.org/releases/${ARCH}/autobuilds"
 
-	    # getting the correct stagefile from gentoo and grepping out hardened
-	    LATEST_STAGE=$( /usr/bin/wget -qO- ${DISTFILES_BASE}/latest-stage3.txt | grep -E ".+${STAGE_ARCH}-[^hardened]" )
-	    STAGE_URI="${DISTFILES_BASE}/${LATEST_STAGE}"
+            # some architectures use other names in the stagefile
+            if [[ "${ARCH}" == "x86" ]]; then
+                STAGE_ARCH="i686"
+            fi
 
-	    if [[ "${STAGE_URI}" != *.tar.bz2 ]]; then
-		printf "`eval_gettext "Failed finding stage in: ${STAGE_URI}"`\n"
-		STAGE_URI=""
-	    fi
-	fi
-    ;;
+            # getting the correct stagefile from gentoo and grepping out hardened
+            LATEST_STAGE=$( /usr/bin/wget -qO- ${DISTFILES_BASE}/latest-stage3.txt | grep -E ".+${STAGE_ARCH}-[^hardened]" )
+            STAGE_URI="${DISTFILES_BASE}/${LATEST_STAGE}"
+
+            if [[ "${STAGE_URI}" != *.tar.bz2 ]]; then
+                printf "`eval_gettext "Failed finding stage in: ${STAGE_URI}"`\n"
+                STAGE_URI=""
+            fi
+        fi
+        ;;
 esac

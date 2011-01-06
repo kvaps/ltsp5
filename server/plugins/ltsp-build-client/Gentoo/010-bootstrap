@@ -5,10 +5,9 @@ case "$MODE" in
         add_option "quickstart-verbose" "`eval_gettext "Show external command output"`" "advanced" "false"
         add_option "quickstart-host" "`eval_gettext "Get profile from a Quickstart server"`" "advanced" "true"
     ;;
-
     configure)
-        if [ -n "$option_quickstart_profile_value" ]; then
-            QUICKSTART_PROFILE="$option_quickstart_profile_value"
+        if [ -n "$option_quickstart_profile_value" ] || [ -n ${QUICKSTART_PROFILE} ]; then
+            QUICKSTART_PROFILE=${option_quickstart_profile_value:-$QUICKSTART_PROFILE}
             printf "`eval_gettext "Manual Quickstart: %s"`\n" $QUICKSTART_PROFILE
         else
             QUICKSTART_PROFILE="/etc/ltsp/quickstart/profile.qs"
@@ -21,14 +20,14 @@ case "$MODE" in
         fi
 
         QUICKSTART_ARGS=""
-        if [ -n "$option_quickstart_debug_value" ]; then
+        if [ -n "$option_quickstart_debug_value" ] || [ "${QUICKSTART_DEBUG}" = true ]; then
             QUICKSTART_ARGS="$QUICKSTART_ARGS --debug"
         fi
-        if [ -n "$option_quickstart_verbose_value" ]; then
+        if [ -n "$option_quickstart_verbose_value" ] || [ "${QUICKSTART_VERBOSE}" = true ]; then
             QUICKSTART_ARGS="$QUICKSTART_ARGS --verbose"
         fi
-        if [ -n "$option_quickstart_host_value" ]; then
-            QUICKSTART_ARGS="$QUICKSTART_ARGS --client=$option_quickstart_host_value"
+        if [ -n "$option_quickstart_host_value" ] || [ -n ${QUICKSTART_HOST} ]; then
+            QUICKSTART_ARGS="$QUICKSTART_ARGS --client=${option_quickstart_host_value:-$QUICKSTART_HOST}"
         fi
     ;;
     install)

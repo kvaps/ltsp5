@@ -1,6 +1,5 @@
 case "$MODE" in
     commandline)
-        add_option "stage-uri" "`eval_gettext "Stage 3 URI"`" "advanced" "true"
         add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "regular" "true"
         add_option "mirror" "`eval_gettext "Set extra mirror locations (space-separated)"`" "regular" "true"
         add_option "locale" "`eval_gettext "set the default locale"`" "advanced" "true"
@@ -17,10 +16,6 @@ case "$MODE" in
 
         if [ -n "$option_mirror_value" ]; then
             MIRRORS="$option_mirror_value"
-        fi
-
-        if [ -n "$option_stage_uri_value" ]; then
-            STAGE_URI="$option_stage_uri_value"
         fi
 
         RCS_WHITELIST="bootmisc fsck root hwclock consolefont hostname \
