@@ -70,10 +70,12 @@ mountroot()
     ip addr add dev lo 127.0.0.1
     ip link set lo up
 
-    if [ $real_ram -lt 100000 ]; then
-        # nbd-proxy is too heavy for very old thin clients
-        nbd_proxy=${nbd_proxy:-false}
-    fi
+    # Turn off nbd-proxy by default
+    nbd_proxy=${nbd_proxy:-false}
+#    if [ $real_ram -lt 100000 ]; then
+#        # nbd-proxy is too heavy for very old thin clients
+#        nbd_proxy=${nbd_proxy:-false}
+#    fi
     if [ "$nbd_proxy" = "false" ]; then
         # nbd_proxy=true/false can also be specified on the kernel command line
         NBD_CLIENT_ROOT_SERVER=$NBD_ROOT_SERVER
