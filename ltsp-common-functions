@@ -22,12 +22,7 @@ run_parts_list() {
         exit 1
     fi
 
-    if [ -d "$1" ]; then
-        if [ -n "$2" ]; then
-            find_opts="-name $2\*"
-        fi
-        find -L "$1" -mindepth 1 -maxdepth 1 -type f $find_opts | sed -n '/.*\/[0-9a-zA-Z_\-]\{1,\}$/p' | sort -n
-    fi
+    find -L "$1" -mindepth 1 -maxdepth 1 -type f -name "$2*" | sed -n '/.*\/[0-9a-zA-Z_\-]\{1,\}$/p' | sort -n
 }
 
 if [ -f /usr/share/ltsp/ltsp-vendor-functions ]; then
