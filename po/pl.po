@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-23 13:12-0800\n"
+"POT-Creation-Date: 2011-03-14 11:29-0700\n"
 "PO-Revision-Date: 2010-01-23 18:01+0100\n"
 "Last-Translator: Wiktor Wandachowicz <siryes@gmail.com>\n"
 "Language-Team: Polish <debian-l10n-polish@lists.debian.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,7 +90,7 @@ msgstr "lista pakietów do zainstalowania jako część końcowej instalacji"
 #: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #, sh-format
 msgid "set the default locale"
 msgstr "określ domyślne ustawienia językowe"
@@ -110,7 +111,7 @@ msgid "Draw progress bar"
 msgstr "Wyświetlaj pasek postępu"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
-#: ../server/plugins/ltsp-build-client/common/095-rootpass:3
+#: ../server/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "wyświetlaj prośbę o zmianę hasła administratora, domyślnie wyłączone"
@@ -232,6 +233,12 @@ msgstr "zamontuj katalog podręczny plików pakietów z serwera"
 msgid "mount a server directory as the chroot package cache dir"
 msgstr ""
 
+#: ../server/plugins/ltsp-build-client/Debian/035-install-debs:3
+#, sh-format
+msgid ""
+"install to the chroot all the .deb files contained in the provided directory"
+msgstr ""
+
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install"
@@ -241,6 +248,29 @@ msgstr "zezwól na niepodpisane pakiety w trakcie instalacji"
 #, sh-format
 msgid "copy apt Packages files from server"
 msgstr "kopiuj pliki Packages dla apt z serwera"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:3
+#, fuzzy, sh-format
+msgid "add a backports mirror"
+msgstr "dodaj źródło z poprawkami bezpieczeństwa"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:4
+#, fuzzy, sh-format
+msgid "list of packages to install from the backports repositories"
+msgstr ""
+"lista pakietów do instalacji z dystrybucji z ustawionym przypinaniem pakietów"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:5
+#, fuzzy, sh-format
+msgid "distribution to pull backports from"
+msgstr "dystrybucja dla której ustawić przypinanie pakietów"
+
+#: ../server/plugins/ltsp-build-client/Debian/015-backports:29
+#, fuzzy, sh-format
+msgid "NOTE: adding default dist and components to backports mirror:"
+msgstr ""
+"UWAGA: włączanie domyślnej dystrybucji i komponentów do źródła poprawek "
+"bezpieczeństwa:"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -429,43 +459,43 @@ msgstr "Pokazuj wyjście uruchamianych poleceń"
 msgid "Get profile from a Quickstart server"
 msgstr "Pobierz profil z serwera Quickstart"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:12
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:11
 #, sh-format
 msgid "Manual Quickstart: %s"
 msgstr "Ręczny Quickstart: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:15
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #, sh-format
 msgid "Default Quickstart profile: %s"
 msgstr "Domyślny profil Quickstart: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:19
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:18
 #, sh-format
 msgid "ERROR: %s does not exist"
 msgstr "BŁĄD: %s nie istnieje"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:35
+#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
 msgid "Installing into: %s"
 msgstr "Instalowanie do: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
+#: ../server/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
 msgstr "URI dla etapu 3"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
 msgid "Set the number of parallel build processes"
 msgstr "Określ ilość równoczesnych procesów budowania"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
 msgid "Set extra mirror locations (space-separated)"
 msgstr ""
 "Określ dodatkowe adresy serwerów dla źródeł pakietów (rozdzielone spacjami)"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:7
+#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
 msgid "list of extra packages to install as part of the initial installation."
 msgstr ""
