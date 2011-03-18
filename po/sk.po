@@ -1,19 +1,20 @@
 # ltsp gettext messages for slovak.
-# Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2010 THE ltsp'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the ltsp package.
-# Slavko <linux@slavino.sk>, 2010.
+# Slavko <linux@slavino.sk>, 2010, 2011.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.2.1\n"
+"Project-Id-Version: ltsp 5.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-14 11:29-0700\n"
-"PO-Revision-Date: 2010-04-21 22:00+0200\n"
+"PO-Revision-Date: 2011-03-14 20:30+0100\n"
 "Last-Translator: Slavko <linux@slavino.sk>\n"
-"Language-Team: Slovenský <nomail>\n"
+"Language-Team: Slovak <nomail>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: ../server/configs/ALTLinux/ltsp-login.sh:30
@@ -78,13 +79,13 @@ msgstr "Zrušiť"
 #: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
-msgstr "zoznam balíkov pre nainštalovanie po dokončení základnej inštalácie"
+msgstr "zoznam balíkov na nainštalovanie po dokončení základnej inštalácie"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
-msgstr "zoznam balíkov pre nainštalovanie počas konečnej inštalácie"
+msgstr "zoznam balíkov na nainštalovanie počas konečnej inštalácie"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
@@ -154,7 +155,7 @@ msgstr "pridá zrkadlo bezpečnostných aktualizácií"
 #: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
 #, sh-format
 msgid "set the kernel package to install."
-msgstr "nastaví balík jadra pre inštaláciu"
+msgstr "nastaví balík jadra na nainštalovanie"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
@@ -176,7 +177,7 @@ msgstr "Nastaví jazyky i18n"
 #: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr "nastaví balíky modulov jadra pre inštaláciu"
+msgstr "nastaví balíky modulov jadra na nainštalovanie"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
@@ -191,7 +192,7 @@ msgstr "nastaví cieľovú architektúru"
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
-msgstr "zoznam kľúčov pre zahrnutie do kľúčenky APT"
+msgstr "zoznam kľúčov na zahrnutie do kľúčenky APT"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
@@ -211,7 +212,7 @@ msgstr "hotovo."
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD"
-msgstr "vytvorí obraz squashfs pre NBD"
+msgstr "vytvorí obraz squashfs na použitie s NBD"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
@@ -252,7 +253,7 @@ msgstr "pridá zrkadlo backportov"
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:4
 #, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr "zoznam balíkov pre inštaláciu z backportov"
+msgstr "zoznam balíkov na inštaláciu z backportov"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:5
 #, sh-format
@@ -272,7 +273,7 @@ msgstr "distribúcia pre nastavenie APT pinningu"
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
 #, sh-format
 msgid "list of packages to install from the pinned distribution"
-msgstr "zoznam balíkov pre inštaláciu z pinnovanej distribúcie"
+msgstr "zoznam balíkov na inštaláciu z pinnovanej distribúcie"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -328,7 +329,7 @@ msgstr "preskočí aktualizáciu nainštalovaných balíkov"
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
-msgstr "nastaví zoznam balíkov jadra pre inštaláciu"
+msgstr "nastaví zoznam balíkov jadra na inštaláciu"
 
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
@@ -375,8 +376,7 @@ msgstr "CHYBA: --arch %s volané na nepodporovanej architektúre: %s"
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
-"CHYBA: nepodporovaná architektúra. Skontrolujte zadaný parameter --arch: %s"
+msgstr "CHYBA: nepodporovaná architektúra. Skontrolujte parameter --arch: %s"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:52
 #: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:33
@@ -420,12 +420,12 @@ msgstr "spúšťať väčšinu alebo všetky aplikácie lokálne"
 #: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
 msgid "enable LTSP-Cluster"
-msgstr "povoliť LTSP-Cluster"
+msgstr "povolí LTSP-Cluster"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr "vynútiť vynechanie tvorby squashfs (pre debian-installer)"
+msgstr "vynúti vynechanie tvorby squashfs (pre debian-installer)"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -445,7 +445,7 @@ msgstr "Zobrazí výstup externých príkazov"
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Get profile from a Quickstart server"
-msgstr "Získať profil z Quickstart servera"
+msgstr "Získať profil zo servera Quickstart"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:11
 #, sh-format
@@ -475,7 +475,7 @@ msgstr "Fáza 3 URI"
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
 msgid "Set the number of parallel build processes"
-msgstr "Nastaví počet paralelných buildovacích procesov"
+msgstr "Nastaví počet paralelných procesov zostavenia"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
@@ -485,7 +485,7 @@ msgstr "Nastaví umiestnenia ďalších zrkadiel (oddelené medzerami)"
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
 msgid "list of extra packages to install as part of the initial installation."
-msgstr "zoznam ďalších balíkov, inštalovaných pri počiatočnej inštalácii."
+msgstr "zoznam ďalších balíkov, inštalovaných počas počiatočnej inštalácie."
 
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
@@ -530,7 +530,7 @@ msgstr "zobrazí pomocníka pre všetky dostupné voľby príkazového riadku"
 #: ../server/ltsp-build-client:137
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr "Použitie skriptu pre vybudovanie LTSP klienta:"
+msgstr "Použitie skriptu na zostavenie klienta LTSP:"
 
 #: ../server/ltsp-build-client:141
 #, sh-format
@@ -545,9 +545,9 @@ msgstr "  Pokročilé voľby:"
 #: ../server/ltsp-build-client:157
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr "INFO: Inštalácia LTSP klienta úspešne dokončená"
+msgstr "INFO: Inštalácia klienta LTSP úspešne dokončená"
 
 #: ../server/ltsp-build-client:159
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr "CHYBA: Inštalácia LTSP klienta skončila neúspešne"
+msgstr "CHYBA: Inštalácia klienta LTSP skončila neúspešne"
