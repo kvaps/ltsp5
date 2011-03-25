@@ -1,18 +1,18 @@
-# Esko Arajärvi <edu@iki.fi>, 2009.
+# Esko Arajärvi <edu@iki.fi>, 2009, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-14 11:29-0700\n"
-"PO-Revision-Date: 2009-10-23 21:27+0300\n"
+"PO-Revision-Date: 2011-03-19 13:16+0300\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
-"Language-Team: Finnish <debian-l10n-finnish@lists.debian.org>\n"
+"Language-Team: debian-10n-finnish@lists.debian.org\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.6.1\n"
 
 #: ../server/configs/ALTLinux/ltsp-login.sh:30
 #: ../server/configs/ALTLinux/ltsp-login.sh:33
@@ -74,22 +74,21 @@ msgstr "Keskeytä"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of packages to install after base-install is completed"
-msgstr ""
-"Aseta lista perusasennuksen päättymisen jälkeen asennettavista paketeista"
+msgstr "Luo luettelo perusasennuksen jälkeen asennettavista paketeista"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install as part of the final installation"
-msgstr "Lista lopullisen asennuksen osana asennettavista paketeista"
+msgstr "Luettelo lopullisen asennuksen osana asennettavista paketeista"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default locale"
 msgstr "Aseta oletusmaa-asetus"
 
@@ -124,7 +123,7 @@ msgstr "Ota sarjakonsoli käyttöön"
 #: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
-msgstr "Otetaan sarjakonsoli käyttöön..."
+msgstr "Sarjakonsolia otetaan käyttöön..."
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
@@ -137,14 +136,14 @@ msgstr "Aseta peilipalvelimen sijainti"
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
-"Lisää peilipalvelin, joka ohittaa tärkeysjärjestyksessä oletuspeilipalvelimen"
+"Lisää peilipalvelin, joka ohittaa tärkeysjärjestyksessä "
+"oletuspeilipalvelimen"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr ""
-"Lisää peilipalvelin, joka on tärkeysjärjestyksessä oletuspeilin jälkeen"
+msgstr "Lisää peilipalvelin, joka on tärkeysjärjestyksessä oletuspeilin jälkeen"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:3
@@ -155,7 +154,7 @@ msgstr "Lisää turvapeilipalvelin"
 #: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
 #, sh-format
 msgid "set the kernel package to install."
-msgstr "Aseta asennettava ydinpaketti"
+msgstr "Valitse asennettava ydinpaketti"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
@@ -165,7 +164,7 @@ msgstr "Varastoi ladatut pakettitiedostot"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the distribution to be used for install"
 msgstr "Aseta asennuksessa käytettävä jakelu"
 
@@ -177,7 +176,7 @@ msgstr "Aseta i18n-kielet"
 #: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr "Aseta asennettavien ydinmoduulipakettien lista"
+msgstr "Aseta asennettavien ydinmoduulipakettien luettelo"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
@@ -217,7 +216,8 @@ msgstr "Luo squashfs-kuva käytettäväksi NBD:n kanssa"
 #: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
-msgstr "Lataa debconf seeding chroot-ympäristössä asennuksen jälkeen"
+msgstr ""
+"Lataa debconf-oletukset (seeding) chroot-ympäristössä asennuksen jälkeen"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
 #, sh-format
@@ -227,43 +227,46 @@ msgstr "Liitä pakettivarastohakemisto palvelimelta"
 #: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr ""
+msgstr "Liitä chroot-ympäristön pakettivarastohakemisto palvelimelta"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
 msgstr ""
+"Asenna chroot-ympäristöön kaikki annetussa hakemistossa olevat .deb-"
+"tiedostot."
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "allow unsigned packages during install"
 msgstr "Salli allekirjoittamat paketit asennuksen aikana"
 
 #: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
-msgstr "Kopioi apt-pakettitiedostot palvelimelta"
+msgstr "Kopioi aptit Packages-tiedostot palvelimelta"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "add a backports mirror"
-msgstr "Lisää turvapeilipalvelin"
+msgstr "Lisää backports-peilipalvelin"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr "Valitusta jakelusta asennettavien pakettien luettelo"
+msgstr "Backports-varastosta asennettavien pakettien luettelo"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "distribution to pull backports from"
-msgstr "Jakelu, jota aptin tulisi seurata"
+msgstr "Jakelu, jonka paketteja backportsista haetaan"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:29
 #, fuzzy, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
-msgstr "HUOM: oletusjakelu ja -komponentit lisätään turvapeilipalvelimelle:"
+msgstr ""
+"HUOM: oletusjakelu ja -komponentit lisätään backports-peilipalvelimelle:"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -277,24 +280,24 @@ msgstr "Valitusta jakelusta asennettavien pakettien luettelo"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#, fuzzy, sh-format
+#, sh-format
 msgid "a simple webkiosk mode"
 msgstr "Yksinkertainen verkkokioskitila"
 
 #: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
 #, sh-format
 msgid "mounts CDROM before installation"
-msgstr "Liittää CDROM:in ennen asennusta"
+msgstr "Liittä CDROM ennen asennusta"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
 msgid "use specified http proxy"
-msgstr "Käytä määriteltyä http-välityspalvelinta"
+msgstr "Käytä määritettyä http-välityspalvelinta"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:4
 #, sh-format
 msgid "do not autodetect apt proxy configuration"
-msgstr "Älä selvitä automaattisesti apt-välityspalvelimen asetuksia"
+msgstr "Älä selvitä automaattisesti aptin välityspalvelinasetuksia"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
@@ -304,10 +307,10 @@ msgstr "Ota popularity-contest käyttöön chroot-ympäristössä"
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
 msgid "Enabling popularity contest..."
-msgstr "Otetaan popularity contest käyttöön..."
+msgstr "Popularity contest otetaan käyttöön..."
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the components to be used in mirror"
 msgstr "Aseta peilipalvelimella käytettävät komponentit"
 
@@ -322,14 +325,14 @@ msgid "create image for use with NBD of the specified filesystem"
 msgstr "Luo levykuva käytettäväksi annetun tiedostojärjestelmän NBD:n kanssa."
 
 #: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "skip upgrade of installed packages"
 msgstr "Ohita asennettujen pakettien päivitys"
 
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of kernel packages to install"
-msgstr "Aseta asennettavien ydinpakettien lista."
+msgstr "Valitse asennettavien ydinpakettien lista."
 
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
@@ -349,7 +352,7 @@ msgid "exclude packages from the initial chroot"
 msgstr "Jätä pois paketteja ensimmäisestä chroot-ympäristöstä"
 
 #: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "load a user specific configuration file"
 msgstr "Lataa käyttäjäkohtainen asetustiedosto"
 
@@ -359,7 +362,7 @@ msgid "purge existing LTSP chroot if present"
 msgstr "Siivoa LTSP-chroot, jos sellainen on olemassa"
 
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable debug support"
 msgstr "Ota käyttöön tuki ohjelmavirheiden jäljitykselle"
 
@@ -390,22 +393,22 @@ msgid "       supported values are: %s"
 msgstr "       tuetut arvot ovat: %s"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-base:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default base install directory"
 msgstr "Aseta oletushakemisto perusasennukselle"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the name of the chroot"
 msgstr "Aseta chroot-ympäristön nimi"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the security mirror location"
 msgstr "Aseta turvapeilipalvelimen sijainti"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the update mirror location"
 msgstr "Aseta päivityspeilipalvelimen sijainti"
 
@@ -418,15 +421,15 @@ msgstr "Käytä palvelimen sources.list-tiedostoa äläkä luo uutta"
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr ""
+msgstr "Aja useimmat tai kaikki ohjelmat paikallisesti"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable LTSP-Cluster"
 msgstr "Ota LTSP-Cluster käyttöön"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
 msgstr "Pakota ohittamaan squashfs:n kääntäminen (debian-asentimelle)"
 
@@ -521,19 +524,19 @@ msgid "API ERROR: you need to provide true or false."
 msgstr "API-VIRHE: sinun tulee antaa tosi (true) tai epätosi (false)"
 
 #: ../server/ltsp-build-client:132
-#, fuzzy, sh-format
+#, sh-format
 msgid "display this help message"
 msgstr "Näytä tämä ohjeviesti"
 
 #: ../server/ltsp-build-client:133
-#, fuzzy, sh-format
+#, sh-format
 msgid "display help for all available commandline options"
 msgstr "Näytä kaikkien käytettävissä olevien komentorivivalitsimien ohje"
 
 #: ../server/ltsp-build-client:137
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr "LTSP Build Clientin käyttö:"
+msgstr "LTSP Build Clientin (käännösohjelman) käyttö:"
 
 #: ../server/ltsp-build-client:141
 #, sh-format
@@ -548,9 +551,9 @@ msgstr "  Lisävalitsimet:"
 #: ../server/ltsp-build-client:157
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr "info: LTSP-asiakkaan asennus päättyi onnistuneesti"
+msgstr "Info: LTSP-asiakkaan asennus päättyi onnistuneesti"
 
 #: ../server/ltsp-build-client:159
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr "virhe: LTSP-asiakkaan asennus päättyi poikkeavasti"
+msgstr "Virhe: LTSP-asiakkaan asennus päättyi poikkeavasti"
