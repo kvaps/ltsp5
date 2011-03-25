@@ -50,6 +50,7 @@ if [ "$LTSP_CONFIG" = "True" ]; then
 fi
 
 # Read in lts.conf entries.
+set -f
 if [ -f /etc/lts.conf ]; then
     eval $(getltscfg -a) || true
 fi
@@ -65,6 +66,7 @@ if [ -d /usr/share/ltsp/ltsp_config.d ]; then
         . $script        
     done
 fi
+set +f
 
 # set compatbility for ltsp 4.x variables
 export X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
