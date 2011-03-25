@@ -1,16 +1,16 @@
 #
 # Catalan translation for ltsp package.
-# Copyright © 2009 LTSP Debian/Ubuntu Maintainers.
+# Copyright © 2011 LTSP Debian/Ubuntu Maintainers.
 # This file is distributed under the same license as the ltsp package.
 #
-# Jordà Polo <jorda@ettin.org>, 2006, 2007, 2008, 2009.
+# Jordà Polo <jorda@ettin.org>, 2006, 2007, 2008, 2009, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 5.1.91\n"
+"Project-Id-Version: 5.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-14 11:29-0700\n"
-"PO-Revision-Date: 2009-12-27 10:50+0100\n"
+"PO-Revision-Date: 2011-03-17 21:00+0100\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
 "Language-Team: Catalan <debian-l10n-catalan@lists.debian.org>\n"
 "Language: ca\n"
@@ -78,15 +78,14 @@ msgstr "Cancel·la"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
-"indica la llista de paquets a instal·lar després que base-install hagi "
-"acabat."
+"indica la llista de paquets a instal·lar després que base-install hagi acabat"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr "llista de paquets a instal·lar com a part de la instal·lació final."
 
@@ -94,9 +93,9 @@ msgstr "llista de paquets a instal·lar com a part de la instal·lació final."
 #: ../server/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default locale"
-msgstr "Estableix el locale predeterminat"
+msgstr "estableix el locale predeterminat"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
 #, sh-format
@@ -134,9 +133,9 @@ msgstr "S'està habilitant la consola sèrie..."
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the mirror location"
-msgstr "Estableix la ubicació de la rèplica"
+msgstr "estableix la ubicació de la rèplica"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
@@ -169,9 +168,9 @@ msgstr "manté una cau dels fitxers de paquets descarregats"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #: ../server/plugins/ltsp-build-client/common/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the distribution to be used for install"
-msgstr "Estableix la distribució que s'utilitzarà per a la instal·lació"
+msgstr "estableix la distribució que s'utilitzarà per a la instal·lació"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
@@ -214,9 +213,9 @@ msgid "done."
 msgstr "fet."
 
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "create squashfs image for use with NBD"
-msgstr "crea una imatge squashfs per a utilitzar amb NBD."
+msgstr "crea una imatge squashfs per a utilitzar amb NBD"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
@@ -232,16 +231,18 @@ msgstr "munta el directori de la cau de paquets des del servidor"
 #: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr ""
+msgstr "munta un directori del servidor com a directori cau de paquets"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
 msgstr ""
+"instal·la al chroot tots els fitxers .deb que hi hagi al directori "
+"especificat"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "allow unsigned packages during install"
 msgstr "permet paquets no signats durant la instal·lació."
 
@@ -251,26 +252,26 @@ msgid "copy apt Packages files from server"
 msgstr "copia els fitxers «Packages» de l'apt del servidor"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "add a backports mirror"
-msgstr "afegeix una rèplica de seguretat"
+msgstr "afegeix una rèplica de backports"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr "llista de paquets de la distribució etiquetada a instal·lar"
+msgstr "llista de paquets dels repositoris de backports a instal·lar"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "distribution to pull backports from"
-msgstr "distribució per configurar l'etiquetatge de l'apt"
+msgstr "distribució des de la qual baixar els backports"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:29
-#, fuzzy, sh-format
+#, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
 msgstr ""
 "NOTA: s'està afegint la distribució i els components predeterminats a la "
-"rèplica de seguretat:"
+"rèplica de backports:"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -284,9 +285,9 @@ msgstr "llista de paquets de la distribució etiquetada a instal·lar"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#, fuzzy, sh-format
+#, sh-format
 msgid "a simple webkiosk mode"
-msgstr "un mode quiosc-web simple."
+msgstr "un mode quiosc-web simple"
 
 #: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
 #, sh-format
@@ -314,9 +315,9 @@ msgid "Enabling popularity contest..."
 msgstr "S'està activant el concurs de popularitat..."
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the components to be used in mirror"
-msgstr "Estableix els components que s'utilitzaran en la rèplica"
+msgstr "estableix els components que s'utilitzaran en la rèplica"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
 #, sh-format
@@ -330,14 +331,14 @@ msgstr ""
 "crea una imatge del sistema de fitxers especificat per a utilitzar amb NBD"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "skip upgrade of installed packages"
-msgstr "omet l'actualització dels paquets instal·lats."
+msgstr "omet l'actualització dels paquets instal·lats"
 
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of kernel packages to install"
-msgstr "indica la llista de paquets del nucli que s'han d'instal·lar."
+msgstr "indica la llista de paquets del nucli que s'han d'instal·lar"
 
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
@@ -359,9 +360,9 @@ msgid "exclude packages from the initial chroot"
 msgstr "exclou paquets del chroot inicial"
 
 #: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "load a user specific configuration file"
-msgstr "Carrega un fitxer de configuració específic d'usuari"
+msgstr "carrega un fitxer de configuració específic d'usuari"
 
 #: ../server/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
@@ -369,9 +370,9 @@ msgid "purge existing LTSP chroot if present"
 msgstr "elimina el chroot de l'LTSP si existeix"
 
 #: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable debug support"
-msgstr "Habilita el suport per a la depuració"
+msgstr "habilita el suport per a la depuració"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:22
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:33
@@ -399,24 +400,24 @@ msgid "       supported values are: %s"
 msgstr "       els valors permesos són: %s"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-base:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default base install directory"
-msgstr "Estableix el directori d'instal·lació base predeterminat"
+msgstr "estableix el directori d'instal·lació base predeterminat"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the name of the chroot"
-msgstr "Estableix el nom del chroot."
+msgstr "estableix el nom del chroot"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the security mirror location"
-msgstr "Estableix la ubicació de la rèplica de seguretat"
+msgstr "estableix la ubicació de la rèplica de seguretat"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the update mirror location"
-msgstr "Estableix la ubicació de la rèplica d'actualitzacions"
+msgstr "estableix la ubicació de la rèplica d'actualitzacions"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
@@ -427,17 +428,17 @@ msgstr "utilitza el sources.list del servidor en comptes de generar-lo"
 #: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr ""
+msgstr "executa la majoria o totes les aplicacions localment"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable LTSP-Cluster"
-msgstr "Habilita el clúster LTSP"
+msgstr "habilita el clúster LTSP"
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr "força l'omissió de l'squashfs (per al debian-installer)."
+msgstr "força l'omissió de l'squashfs (per al debian-installer)"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -533,14 +534,14 @@ msgid "API ERROR: you need to provide true or false."
 msgstr "ERROR DE LA API: heu d'indicar «true» o «false»."
 
 #: ../server/ltsp-build-client:132
-#, fuzzy, sh-format
+#, sh-format
 msgid "display this help message"
-msgstr "Mostra aquest missatge d'ajuda"
+msgstr "mostra aquest missatge d'ajuda"
 
 #: ../server/ltsp-build-client:133
-#, fuzzy, sh-format
+#, sh-format
 msgid "display help for all available commandline options"
-msgstr "Mostra l'ajuda per a totes les opcions disponibles a la línia d'ordres"
+msgstr "mostra l'ajuda per a totes les opcions disponibles a la línia d'ordres"
 
 #: ../server/ltsp-build-client:137
 #, sh-format
