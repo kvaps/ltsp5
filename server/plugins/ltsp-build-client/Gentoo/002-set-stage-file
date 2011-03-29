@@ -3,8 +3,13 @@ case "$MODE" in
         add_option "stage-uri" "`eval_gettext "Stage 3 URI"`" "advanced" "true"
         ;;
     configure)
-        if [ -n "$option_stage_uri_value" ] || [ -n $STAGE_URI ]; then
+        if [ -n "$option_stage_uri_value" ] || [ -n "$STAGE_URI" ]; then
             STAGE_URI="${option_stage_uri_value:-$STAGE_URI}"
+            PROTOCOL=$(echo ${STAGE_URI} | sed -e 's|://.\+$||')
+        fi
+
+        # only download if stage not local
+        if [[ "$PROTOCOL" != "file" ]]; then
             STAGE_ARCH=${ARCH}
             DISTFILES_BASE="http://distfiles.gentoo.org/releases/${ARCH}/autobuilds"
 
