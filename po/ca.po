@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: 5.2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-14 11:29-0700\n"
-"PO-Revision-Date: 2011-03-17 21:00+0100\n"
+"PO-Revision-Date: 2011-03-30 17:48+0200\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
 "Language-Team: Catalan <debian-l10n-catalan@lists.debian.org>\n"
 "Language: ca\n"
@@ -164,7 +164,7 @@ msgstr "indica el paquet del nucli a instal·lar."
 #: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
-msgstr "manté una cau dels fitxers de paquets descarregats"
+msgstr "mantén una cau dels fitxers de paquets descarregats"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #: ../server/plugins/ltsp-build-client/common/001-set-dist:3
@@ -380,7 +380,7 @@ msgstr "habilita el suport per a la depuració"
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr "ERROR: --arch %s cridat per a una arquitectura no suportada: %s"
+msgstr "ERROR: s'ha cridat --arch %s per a una arquitectura no suportada: %s"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:51
 #: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:32
@@ -389,7 +389,8 @@ msgstr "ERROR: --arch %s cridat per a una arquitectura no suportada: %s"
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
-"ERROR: arquitectura no suportada. Comproveu el vostre argument --arch: %s"
+"ERROR: l'arquitectura no està suportada. Comproveu el vostre argument --"
+"arch: %s"
 
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:52
 #: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:33
@@ -458,7 +459,7 @@ msgstr "Mostra sortida d'ordres externes"
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Get profile from a Quickstart server"
-msgstr "Obté el perfil d'un servidor Quickstart"
+msgstr "Obtén el perfil d'un servidor Quickstart"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:11
 #, sh-format
@@ -561,9 +562,9 @@ msgstr "  Opcions avançades:"
 #: ../server/ltsp-build-client:157
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr "info: La instal·lació del client LTSP ha finalitzat amb èxit"
+msgstr "info: la instal·lació del client LTSP ha finalitzat amb èxit"
 
 #: ../server/ltsp-build-client:159
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr "error: La instal·lació del client LTSP no ha acabat correctament"
+msgstr "error: la instal·lació del client LTSP no ha acabat correctament"
