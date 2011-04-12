@@ -102,6 +102,9 @@ for TFTPDIR in $TFTPDIRS ; do
             if [ "$COPYTFTP" = "true" ]; then
                 mkdir -p $TFTPBOOT/$CHROOT_NAME
                 cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
+
+                # Make sure permissions are always correct (LP: #759115)
+                chmod -f 644 $TFTPBOOT/$CHROOT_NAME/vmlinuz-* $TFTPBOOT/$CHROOT_NAME/initrd.img-* $TFTPBOOT/$CHROOT_NAME/nbi.img-*
             fi
 
             # OFW on Mac is lame, they cannot tftp from directories
