@@ -117,8 +117,6 @@ pre_install_portage_tree() {
 	net-misc/ltsp-client
 	sys-fs/ltspfs
 	x11-misc/ldm
-	sys-apps/openrc
-	sys-apps/baselayout
 	EOF
 
 	# pulseaudio pulls udev[extras]
