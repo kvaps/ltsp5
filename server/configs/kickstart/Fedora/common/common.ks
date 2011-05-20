@@ -165,7 +165,7 @@ shadow-utils
 sqlite
 system-release
 rsyslog
-system-config-display
+#system-config-display
 system-config-firewall-tui
 tar
 tftp
