@@ -54,8 +54,6 @@ pulseaudio-esound-compat
 elfutils-libelf
 ethtool
 expat
-fedora-release
-fedora-release-notes
 filesystem
 findutils
 fontconfig
@@ -165,6 +163,7 @@ sed
 setup
 shadow-utils
 sqlite
+system-release
 rsyslog
 system-config-display
 system-config-firewall-tui
