@@ -31,6 +31,11 @@ case "$LTSPDIST" in
         export RELEASEDEF=9
         export TFTPDIR=/tftpboot
     ;;
+    el6)
+        export VENDORDEF="Fedora"
+        export RELEASEDEF=el6
+        export TFTPDIR=/var/lib/tftpboot
+    ;;
     *)
         echo "ERROR: $LTSPDIST is unsupported."
         exit 1
