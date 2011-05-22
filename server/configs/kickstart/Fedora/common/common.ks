@@ -64,7 +64,7 @@ gdbm
 glib2
 glibc-common
 gnutls
-gphoto2
+#gphoto2
 grep
 gzip
 hpijs
@@ -75,7 +75,7 @@ iproute
 iputils
 kpartx
 krb5-libs
-kudzu
+#kudzu
 less
 libacl
 libattr
@@ -84,7 +84,7 @@ libdmx
 libdrm
 libexif
 libfontenc
-libFS
+#libFS
 libgcc
 libgcrypt
 libgpg-error
@@ -151,7 +151,7 @@ psmisc
 pulseaudio-utils
 pulseaudio-module-x11
 python
-python-sqlite2
+#python-sqlite2
 python-urlgrabber
 readline
 rpm
@@ -181,7 +181,7 @@ xorg-x11-fonts-100dpi
 xorg-x11-server-utils
 xorg-x11-server-Xorg
 xorg-x11-xauth
-xorg-x11-xfs
+#xorg-x11-xfs
 xorg-x11-xkb-utils
 xorg-x11-xinit
 xterm
