@@ -1,0 +1,3 @@
+ltsp-vmclient used to run qemu-kvm in SDL mode for convenient PXE boot testing.
+Later versions of qemu-kvm no longer support SDL mode, and it is far easier to
+test through virt-manager.
