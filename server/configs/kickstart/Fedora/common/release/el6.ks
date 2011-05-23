@@ -1,4 +1,6 @@
 %packages --excludedocs
+# needed for lspci
+pciutils
 plymouth-system-theme
 dejavu-sans-fonts
 dejavu-sans-mono-fonts
