@@ -9,3 +9,7 @@ if [ -e /etc/event.d/tty1 ]; then
         echo > /etc/event.d/tty$NUM
     done
 fi        
+# Fedora 13+ and EL6 with Upstart
+if [ -e /etc/init/start-ttys.conf ]; then
+    echo > /etc/init/start-ttys.conf
+fi
