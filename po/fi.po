@@ -127,7 +127,7 @@ msgstr "Sarjakonsolia otetaan käyttöön..."
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the mirror location"
 msgstr "Aseta peilipalvelimen sijainti"
 
@@ -209,7 +209,7 @@ msgid "done."
 msgstr "valmis."
 
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "create squashfs image for use with NBD"
 msgstr "Luo squashfs-kuva käytettäväksi NBD:n kanssa"
 
