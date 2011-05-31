@@ -282,7 +282,7 @@ set_time() {
 }
 
 load_modules() {
-    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/);do
+    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/g);do
         modprobe $(echo $module|tr "*" " ")
     done
 }
@@ -375,9 +375,10 @@ configure_cron() {
 }
 
 run_rcfiles() {
-    for i in 01 02 03 04 05 06 07 08 09 10; do
-        eval rcfile=\${RCFILE_${i}}
-        [ -x "$rcfile" ] && "$rcfile" $@
+    for rcfile in $(env|grep ^RCFILE_|sed -e s/^RCFILE_[0-9]*\=//|sed -e s/\ /*/g); do
+        rcf=`echo $rcfile |sed -e s/\*/\ /g`
+        rcexe=`echo $rcfile |sed -e s/\*.*//`
+        [ -x $rcexe ] && $rcf
     done
 }
 
