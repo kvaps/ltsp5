@@ -51,9 +51,6 @@ if ! env|grep XRANDR_OUTPUT >/dev/null; then
             if [ -z "${THIS_MODE}" ]; then
                 if [ -z "${XRANDR_MODE_0}" ]; then
                     eval XRANDR_OUTPUT_${o}=\"\$XRANDR_OUTPUT_${o} --auto\"
-                else
-                    eval XRANDR_MODE_${o}=\$XRANDR_MODE_$(($o-1))
-                    eval XRANDR_NEWMODE_${o}=\$XRANDR_NEWMODE_$(($o-1))
                 fi
             fi
             unset THIS_MODE
