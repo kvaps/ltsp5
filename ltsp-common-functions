@@ -28,3 +28,12 @@ run_parts_list() {
 if [ -f /usr/share/ltsp/ltsp-vendor-functions ]; then
     . /usr/share/ltsp/ltsp-vendor-functions
 fi
+
+# nc -q is default behavior on RHEL/Fedora, detect nc version
+nc_output=`LANG=C nc -q 2>&1` ||:
+case "$nc_output" in
+   *"option requires an argument"*) nc_q_param="-q -1" ;;
+   *"invalid option -- q "*) unset nc_q_param ;;
+   *"invalid option -- 'q' "*) unset nc_q_param ;;
+esac
+unset nc_output
