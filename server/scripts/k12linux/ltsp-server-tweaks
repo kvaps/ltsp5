@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# NAT to ltspbr0
+WANIFACE=$(route -n |grep ^0\.0\.0\.0 |awk {'print $8'})
+LANIFACE=ltspbr0
+echo 1 > /proc/sys/net/ipv4/ip_forward
+/sbin/iptables -t nat -A POSTROUTING -o $WANIFACE -j MASQUERADE
+/sbin/iptables -A FORWARD -i $WANIFACE -o ltspbr0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+/sbin/iptables -A FORWARD -i ltspbr0 -o $WANIFACE -j ACCEPT
+
+# Disable "Switch User" option
+gconftool-2 --config-source xml:merged:/etc/gconf/gconf.xml.mandatory --set /desktop/gnome/lockdown/disable_user_switching --type=bool true
+
+# Disable GNOME PackageKit update applet
+rm -f /etc/xdg/autostart/gpk-update-icon.desktop
