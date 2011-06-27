@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Screen script that launches xfreerdp/rdesktop. Can be called from lts.conf
+# like this:
+#   SCREEN_07="xfreerdp -f --plugin rdpsnd server"
+# or like this:
+#   SCREEN_07="rdesktop"
+#
+# Copyright (c) 2011 Alkis Georgopoulos <http://alkisg.mysch.gr>
+#
+# This software is licensed under the GNU General Public License version 2,
+# the full text of which can be found in the COPYING file.
+
+. /usr/share/ltsp/screen-x-common
+
+# The same screen script can be used for rdesktop too, by just symlinking
+# screen.d/rdesktop to screen.d/xfreerdp.
+basename=${0##*/}
+
+# Make XINITRC_DAEMON default to "True", to prevent X from restarting after
+# logout. If you don't want that, force XINITRC_DAEMON=False in lts.conf.
+export XINITRC_DAEMON=${XINITRC_DAEMON-True}
+
+if [ -x /usr/share/ltsp/xinitrc ]; then
+    xinitrc=/usr/share/ltsp/xinitrc
+fi
+
+# If no parameters were passed, set some reasonable defaults.
+if [ $# -eq 0 ]; then
+    # Setting "-u user" in $RDP_OPTIONS will override "-u ''" below.
+    set -- -f -u ''
+    RDP_SERVER=${RDP_SERVER:-server}
+fi
+
+exec xinit $xinitrc "$basename" "$@" $RDP_OPTIONS $RDP_SERVER -- "$DISPLAY" "vt${TTY}" $X_ARGS
