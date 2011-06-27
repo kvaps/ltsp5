@@ -48,7 +48,9 @@ if boolean_is_true "$XINITRC_DAEMON"; then
     xsetroot -cursor_name top_left_arrow
     unset BREAK_LOOP
     while [ -z "$BREAK_LOOP" ]; do
-        eval $COMMAND
+        # "$@" executes the command while preserving parameters with spaces and
+        # empty parameters, e.g. -u ''
+        "$@"
         ret=$?
         if [ "$ret" != "0" ]; then
             if [ -z "$XINITRC_COMMAND_ON_ERROR" ]; then
@@ -71,5 +73,5 @@ if boolean_is_true "$XINITRC_DAEMON"; then
     [ -n "$XINITRC_COMMAND_ON_EXIT" ] && eval ${XINITRC_COMMAND_ON_EXIT}
     set -e
 else
-    eval exec $COMMAND
+    exec "$@"
 fi
