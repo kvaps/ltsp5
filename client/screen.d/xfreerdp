@@ -19,17 +19,19 @@ basename=${0##*/}
 
 # Make XINITRC_DAEMON default to "True", to prevent X from restarting after
 # logout. If you don't want that, force XINITRC_DAEMON=False in lts.conf.
-export XINITRC_DAEMON=${XINITRC_DAEMON-True}
-
-if [ -x /usr/share/ltsp/xinitrc ]; then
-    xinitrc=/usr/share/ltsp/xinitrc
-fi
+export XINITRC_DAEMON="${XINITRC_DAEMON-True}"
 
 # If no parameters were passed, set some reasonable defaults.
 if [ $# -eq 0 ]; then
-    # Setting "-u user" in $RDP_OPTIONS will override "-u ''" below.
-    set -- -f -u ''
+    RDP_OPTIONS=${RDP_OPTIONS:--f -u ''}
     RDP_SERVER=${RDP_SERVER:-server}
 fi
 
-exec xinit $xinitrc "$basename" "$@" $RDP_OPTIONS $RDP_SERVER -- "$DISPLAY" "vt${TTY}" $X_ARGS
+COMMAND="$basename $* $RDP_OPTIONS $RDP_SERVER"
+
+# The following logic is described at the top of xinitrc.
+if [ -x /usr/share/ltsp/xinitrc ]; then
+    exec xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" $X_ARGS >/dev/null
+else
+    eval "exec xinit $COMMAND -- $DISPLAY vt${TTY} $X_ARGS >/dev/null"
+fi
