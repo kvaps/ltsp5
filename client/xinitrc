@@ -21,6 +21,20 @@
 #  MA 02110-1301, USA.
 #
 
+# xinit won't allow "--" to be used in the command line of the client:
+#   xinit [ [ client ] options ... ] [ -- [ server ] [ display ] options ... ]
+# Moreover, the lts.conf SCREEN_XX variables are usually formatted using a
+# quoted shell-like syntax, and they require either eval or sourcing in order
+# to be properly evaluated.
+# For those reasons, screen.d scripts should pass a single argument to
+# xinitrc, e.g.:
+#   xinit /usr/share/ltsp/xinitrc "$* $LTS_OPTION1 $LTS_OPTION2"
+# And that command will then be executed by xinitrc using eval.
+# Note though that when xinitrc isn't present, screen scripts should use eval
+# themselves instead (while losing the ability to pass "--" to programs), e.g.:
+#   eval xinit "$* $LTS_OPTION1 $LTS_OPTION2"
+# Quoting the parameters is necessary in both cases to avoid glob expansion.
+
 . /usr/share/ltsp/ltsp-common-functions
 
 XINITRCDIR=/usr/share/ltsp/xinitrc.d
@@ -48,9 +62,8 @@ if boolean_is_true "$XINITRC_DAEMON"; then
     xsetroot -cursor_name top_left_arrow
     unset BREAK_LOOP
     while [ -z "$BREAK_LOOP" ]; do
-        # "$@" executes the command while preserving parameters with spaces and
-        # empty parameters, e.g. -u ''
-        "$@"
+        # Quotes prevent possible glob expansion before the eval call
+        eval "$COMMAND"
         ret=$?
         if [ "$ret" != "0" ]; then
             if [ -z "$XINITRC_COMMAND_ON_ERROR" ]; then
@@ -73,5 +86,5 @@ if boolean_is_true "$XINITRC_DAEMON"; then
     [ -n "$XINITRC_COMMAND_ON_EXIT" ] && eval ${XINITRC_COMMAND_ON_EXIT}
     set -e
 else
-    exec "$@"
+    eval "exec $COMMAND"
 fi
