@@ -1,7 +1,9 @@
-if [ -n "$LTSP_CLIENT" ]; then
-        /usr/bin/asoundconf set-pulseaudio
-else
-    if [ ! type pulseaudio > /dev/null 2>&1 ]; then
-            /usr/bin/asoundconf unset-pulseaudio
+if [ -x /usr/bin/asoundconf ]; then
+    if [ -n "$LTSP_CLIENT" ]; then
+            /usr/bin/asoundconf set-pulseaudio
+    else
+        if [ ! type pulseaudio > /dev/null 2>&1 ]; then
+                /usr/bin/asoundconf unset-pulseaudio
+        fi
     fi
 fi
