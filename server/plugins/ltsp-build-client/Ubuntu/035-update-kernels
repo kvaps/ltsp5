@@ -1,4 +1,12 @@
 case "$MODE" in
+    commandline)
+        add_option "tftp-dirs" "`eval_gettext "TFTP dirs to update kernel in (space-separated)"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_tftp_dirs_value" ]; then
+            TFTPDIRS="$option_tftp_dirs_value"
+        fi
+        ;;
     finalization)
         /usr/sbin/ltsp-update-kernels
         ;;
