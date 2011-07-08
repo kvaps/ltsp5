@@ -91,8 +91,14 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 if [ "$MOUNTPOINT" = "/rofs" ] || [ "$MOUNTPOINT" = "/" ]; then
                     # check for NBD devices
                     pid=$(nbd-client -c $DEVICE)
-                    server=$(cut -d '' -f 2 /proc/$pid/cmdline)
-                    port=$(cut -d '' -f 3 /proc/$pid/cmdline)
+
+                    if grep -q '\-N' /proc/$pid/cmdline; then
+                        server=$(cut -d '' -f 2 /proc/$pid/cmdline)
+                        name=$(cut -d '' -f 5 /proc/$pid/cmdline)
+                    else
+                        server=$(cut -d '' -f 2 /proc/$pid/cmdline)
+                        port=$(cut -d '' -f 3 /proc/$pid/cmdline)
+                    fi
 
                     # Check for nbd-proxy
                     if [ "$server" = "127.0.0.1" ]; then
@@ -106,7 +112,11 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                     fi
                     if [ -d /var/cache/ltsp/ ]; then
                         echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config || true
-                        echo "NBD_ROOT_PORT=${port}" >> /var/cache/ltsp/ltsp_config || true
+                        if [ -n "$name" ]; then
+                            echo "NBD_ROOT_NAME=${name}" >> /var/cache/ltsp/ltsp_config || true
+                        else
+                            echo "NBD_ROOT_PORT=${port}" >> /var/cache/ltsp/ltsp_config || true
+                        fi
                     fi
                 fi
                 ;;
