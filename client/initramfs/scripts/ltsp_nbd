@@ -34,18 +34,24 @@ mountroot()
     configure_networking
 
     if [ -n "${nbdroot}" ]; then
-               NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
-               NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
+        # <host>:<port>
+        NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
+        NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
     else
-               NBD_ROOT_SERVER="${ROOTSERVER}"
-               NBD_ROOT_PORT=${nbdport:-"2000"}
+        NBD_ROOT_SERVER="${ROOTSERVER}"
+        if [ -n "$nbdname" ]; then
+            NBD_ROOT_NAME=${nbdname}
+        else
+            NBD_ROOT_PORT=${nbdport:-"2000"}
+        fi
     fi
+
     if [ -n "${nbdswap}" ]; then
-               NBD_SWAP_SERVER=$( echo "${nbdswap}" | sed 's/:.*//')
-               NBD_SWAP_PORT=$( echo "${nbdswap}" | sed 's/.*://')
+        NBD_SWAP_SERVER=$( echo "${nbdswap}" | sed 's/:.*//')
+        NBD_SWAP_PORT=$( echo "${nbdswap}" | sed 's/.*://')
     else
-               NBD_SWAP_SERVER="${NBD_ROOT_SERVER}"
-               NBD_SWAP_PORT=${nbdswapport:-"9572"}
+        NBD_SWAP_SERVER="${NBD_ROOT_SERVER}"
+        NBD_SWAP_PORT=${nbdswapport:-"9572"}
     fi
 
     # try to get swap from the server if we dont have enough ram (<= 64M)
@@ -76,7 +82,7 @@ mountroot()
 #        # nbd-proxy is too heavy for very old thin clients
 #        nbd_proxy=${nbd_proxy:-false}
 #    fi
-    if [ "$nbd_proxy" = "false" ]; then
+    if [ "$nbd_proxy" = "false" ] || [ -n "$NBD_ROOT_NAME" ]; then
         # nbd_proxy=true/false can also be specified on the kernel command line
         NBD_CLIENT_ROOT_SERVER=$NBD_ROOT_SERVER
     else
@@ -85,15 +91,26 @@ mountroot()
         NBD_CLIENT_ROOT_SERVER=127.0.0.1
     fi
 
+    # Prepare the nbd-client command line
+    if [ -n "$NBD_ROOT_NAME" ]; then
+        NBD_OPTIONS="$NBD_CLIENT_ROOT_SERVER /dev/nbd0 -N $NBD_ROOT_NAME"
+    else
+        NBD_OPTIONS="$NBD_CLIENT_ROOT_SERVER $NBD_ROOT_PORT /dev/nbd0"
+    fi
+
     # Mount the root device
     # Try up to 10 times with 2 sec interval in case the device isn't yet accessible
     i=1
     while [ $i -le 10 ]; do
-        if nbd-client $NBD_CLIENT_ROOT_SERVER $NBD_ROOT_PORT /dev/nbd0; then
+        if nbd-client $NBD_OPTIONS; then
             unset i
             break
         else
-            echo "Warning: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT, retrying..."
+            if [ -n "$NBD_ROOT_NAME" ]; then
+                echo "Warning: failed to connect to NBD server $NBD_ROOT_SERVER on share $NBD_ROOT_NAME, retrying..."
+            else
+                echo "Warning: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT, retrying..."
+            fi
             sleep 2
             test -x /sbin/udevadm && udevadm settle
         fi
@@ -107,7 +124,11 @@ mountroot()
         fi
         mount -o ro -t $FSTYPE /dev/nbd0 /rofs
     else
-        panic "Error: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT."
+        if [ -n "$NBD_ROOT_NAME" ]; then
+            panic "Error: failed to connect to NBD server $NBD_ROOT_SERVER on share $NBD_ROOT_NAME."
+        else
+            panic "Error: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT."
+        fi
     fi
 
     # merge ro and rw filesystems
@@ -130,7 +151,11 @@ mountroot()
     # write some useful information
     mkdir -p ${rootmnt}/var/cache/ltsp/
     echo NBD_SERVER=${NBD_ROOT_SERVER} > ${rootmnt}/var/cache/ltsp/ltsp_config
-    echo NBD_ROOT_PORT=${NBD_ROOT_PORT} >> ${rootmnt}/var/cache/ltsp/ltsp_config
+    if [ -n "$NBD_ROOT_NAME" ]; then
+        echo NBD_ROOT_NAME=${NBD_ROOT_NAME} >> ${rootmnt}/var/cache/ltsp/ltsp_config
+    else
+        echo NBD_ROOT_PORT=${NBD_ROOT_PORT} >> ${rootmnt}/var/cache/ltsp/ltsp_config
+    fi
 
     # make the chroot's /etc/mtab a file rather than a link
     # because mountall.conf complains loudly
