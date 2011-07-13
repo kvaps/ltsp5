@@ -5,7 +5,7 @@ install
 
 repo --name=released-14-i686 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=fedora-14&arch=i386
 repo --name=updates-14-i686 --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f14&arch=i386
-repo --name=temporary-14-i686 --baseurl=http://k12linux-temp/~k12linux/rpm/f14/i686/
+repo --name=temporary-14-i686 --baseurl=http://mplug.org/~k12linux/rpm/f14/i686/
 
 %include ../common/common.ks
 %include ../common/arch/i686.ks
