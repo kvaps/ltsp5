@@ -436,7 +436,7 @@ nbd_sendsigs_protection() {
 
         # FIXME: only register pids relevent to the root filesystem.
         nbd_pids=$(pgrep '^nbd-client|^nbd-proxy')
-        for d in /lib/init/rw/sendsigs.omit.d /var/run/sendsigs.omit.d ; do
+        for d in /run/sendsigs.omit.d /lib/init/rw/sendsigs.omit.d /var/run/sendsigs.omit.d ; do
             if [ -d "$d" ]; then
                 for p in $nbd_pids ; do
                     echo "$p" >> "$d"/ltsp || true
