@@ -13,7 +13,7 @@ case "$MODE" in
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --include=$INCLUDE"
         fi
         if [ -n "$DEBOOTSTRAP_KEYRING" ]; then
-            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --keyring $DEBOOTSTRAP_KEYRING"
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --keyring=$DEBOOTSTRAP_KEYRING"
         fi
         if [ -x "$CROSS_ARCH_EMULATOR" ]; then
             DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --foreign"
