@@ -25,7 +25,7 @@ case "$MODE" in
             exit 1
         fi
         # Install base packages
-        LC_ALL=C debootstrap $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
+        LC_ALL=C ${DEBOOTSTRAP:-"debootstrap"} $DEBOOTSTRAPOPTS --arch $ARCH $DIST $ROOT $MIRROR
         if [ -x "$CROSS_ARCH_EMULATOR" ]; then
             # configured for cross architecture install.  this requires a
             # statically built emulator such as qemu, and binfmt_misc
