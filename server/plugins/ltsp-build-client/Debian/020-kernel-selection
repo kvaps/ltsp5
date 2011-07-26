@@ -15,7 +15,7 @@ case "$MODE" in
                 kfreebsd-*)
                     KERNEL_BASE="kfreebsd-image"
                     # need to figure out a generic unversioned one:
-                    KERNEL_VERSION="7"
+                    KERNEL_VERSION="8"
                     ;;
             esac
             case $ARCH in
