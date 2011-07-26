@@ -7,24 +7,9 @@ case "$MODE" in
             # set an environment variable we can pick up later
             SQUASHFS_IMAGE="True"
         fi
-        if [ "True" = "$SQUASHFS_IMAGE" ] && [ "$DIST" = "lenny" ]; then
-            # need to use versioned linux-image metapackages, as kernel modules
-            # do not appear to have corresponding unversioned ones
-            test -z "$KERNEL_VERSION" && KERNEL_VERSION="2.6"
-        fi
         ;;
     before-install)
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
-            MODULE_VERSION=${KERNEL_VERSION}
-            test -n "$KERNEL_ARCH" && MODULE_VERSION="${MODULE_VERSION}-${KERNEL_ARCH}"
-            if [ "$DIST" = "lenny" ]; then
-                module_packages="aufs squashfs"
-            fi
-            for fs in $module_packages ; do
-                # add appropriate module packages to list of packages to be installed
-                LATE_PACKAGES="$LATE_PACKAGES ${fs}-modules-${MODULE_VERSION}"
-            done
-
             BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet ip=dhcp boot=ltsp_nbd"}
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
