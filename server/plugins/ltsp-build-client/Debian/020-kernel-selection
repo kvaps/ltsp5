@@ -8,7 +8,7 @@ case "$MODE" in
             KERNEL_PACKAGES="$(echo $option_kernel_packages_value | tr ',' ' ')"
         fi
         if [ -n "$option_kernel_variant_value" ]; then
-            KERNEL_ARCH="$(echo $option_kernel_variant_value | tr ',' ' ')"
+            KERNEL_VARIANT="$(echo $option_kernel_variant_value | tr ',' ' ')"
         fi
         ;;
     before-install)
@@ -24,19 +24,19 @@ case "$MODE" in
             esac
             case $ARCH in
                 i386|kfreebsd-i386)
-                    KERNEL_ARCH="486"
+                    KERNEL_VARIANT="486"
                     ;;
                 kfreebsd-amd64)
-                    KERNEL_ARCH="amd64"
+                    KERNEL_VARIANT="amd64"
                     ;;
                 sparc) # only 64 bit kernel is supported in Debian Lenny+
-                    KERNEL_ARCH="sparc64"
+                    KERNEL_VARIANT="sparc64"
                     ;;
                 alpha)
-                    KERNEL_ARCH="alpha-generic"
+                    KERNEL_VARIANT="alpha-generic"
                     ;;
                 powerpc|amd64) 
-                    KERNEL_ARCH="$ARCH"
+                    KERNEL_VARIANT="$ARCH"
                     ;;
                 *)
                     # generic kernel unknown, select the running kernel
@@ -51,7 +51,7 @@ case "$MODE" in
             esac
             if [ -z "$KERNEL_PACKAGES" ]; then
                 test -n "$KERNEL_VERSION" && KERNEL_BASE="$KERNEL_BASE-$KERNEL_VERSION"
-                test -n "$KERNEL_ARCH" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_ARCH"
+                test -n "$KERNEL_VARIANT" && KERNEL_PACKAGES="$KERNEL_BASE-$KERNEL_VARIANT"
             fi
         fi
         test -n "$KERNEL_PACKAGES" && LATE_PACKAGES="$LATE_PACKAGES $KERNEL_PACKAGES"
