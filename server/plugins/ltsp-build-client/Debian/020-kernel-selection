@@ -1,10 +1,14 @@
 case "$MODE" in
     commandline)
         add_option "kernel-packages" "`eval_gettext "set the list of kernel packages to install"`" "advanced" "true"
+        add_option "kernel-variant" "`eval_gettext "set the kernel variant to install"`" "advanced" "true"
         ;;
     configure)
         if [ -n "$option_kernel_packages_value" ]; then
             KERNEL_PACKAGES="$(echo $option_kernel_packages_value | tr ',' ' ')"
+        fi
+        if [ -n "$option_kernel_variant_value" ]; then
+            KERNEL_ARCH="$(echo $option_kernel_variant_value | tr ',' ' ')"
         fi
         ;;
     before-install)
