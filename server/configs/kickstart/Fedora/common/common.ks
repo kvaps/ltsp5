@@ -18,6 +18,7 @@ reboot
 
 # this could probably be slimmed-down quite a bit
 %packages --excludedocs
+k12linux-release
 ltsp-client
 ltspfsd
 ldm
