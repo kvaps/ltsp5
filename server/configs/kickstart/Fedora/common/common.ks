@@ -195,7 +195,6 @@ zlib
 -acpid
 -alsa-lib
 -alsa-lib-devel
--anacron
 -apmd
 -aspell
 -aspell-en
@@ -206,9 +205,7 @@ zlib
 -autofs
 -bc
 -binutils
--bluez-gnome
 -bluez-libs
--bluez-utils
 -bzip2
 -ccid
 -comps-extras
@@ -234,10 +231,8 @@ zlib
 -ed
 -eject
 -fbset
--fedora-logos
 -file
 -finger
--firstboot-tui
 -freetype-devel
 -ftp
 -GConf2
@@ -251,8 +246,6 @@ zlib
 -hal
 -hdparm
 -hesiod
--htmlview
--ifd-egate
 -ipsec-tools
 -iptables
 -iptables-ipv6
@@ -337,7 +330,6 @@ zlib
 -readahead
 -redhat-lsb
 -redhat-menus
--rhpl
 -rmt
 -rng-utils
 -rootfiles
@@ -357,7 +349,6 @@ zlib
 -sudo
 -symlinks
 -syslinux
--sysreport
 -system-config-network-tui
 -talk
 -tcpdump
@@ -373,7 +364,6 @@ zlib
 -usbutils
 -usermode
 -vconfig
--vixie-cron
 -wget
 -wireless-tools
 -words
