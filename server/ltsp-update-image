@@ -50,11 +50,12 @@ $0 [OPTION]
                       to "ltsp".
   -e, --exclude-dirs  Exclude those dirs from the image.
   -f, --force         Force recalculating ports for all chroots, update of all 
-                      kernels and fresh pxelinux.cfg files.
+                      kernels, fresh pxelinux.cfg files and restart nbd-server.
   -i, --image-only    Update image only and do not attempt to adjust ports or 
                       services.
   -I, --ipappend      Pass IPAPPEND value to bootloader.
   -n, --no-comp       Do not compress the image.
+  -N, --nbd-named     Use nbd-server named entries
   -o, --options       Pass kernel command line options to all config files.
   -p, --port          Port you wish this nbd image to communicate on.  Default
                       is 2000.
@@ -68,7 +69,7 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:e:nhifo:O:S:T: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,ipappend:,server:,timeout:,help -n $0 -- "$@")
+ARGS=$(getopt -o b:p:a:e:nNhifo:O:S:T: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,ipappend:,no-comp,nbd-named,server:,timeout:,help -n $0 -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -87,6 +88,7 @@ while true ; do
         -i|--image-only) IMAGE_ONLY=1; shift 1 ;;
         -I|--ipappend) IPAPPEND=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
+        -N|--nbd-named) NBD_NAMED="1" ; shift 1 ;;
         -o|--options) BOOTPROMPT_OPTIONS=$2 ; shift 2 ;;
         -S|--server)  NBD_SERVER=$2 ; shift 2 ;;
         -T|--timeout) TIMEOUT=$2 ; shift 2 ;;
@@ -99,6 +101,7 @@ done
 # defaults
 BASE=${BASE:-"/opt/ltsp"}
 BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"quiet splash"}
+NBD_NAMED=${NBD_NAMED:-"0"}
 
 # make sure we dont carry trailing slashes around (LP 189237)
 BASE=$(echo ${BASE}|sed -e 's/\/$//g')
@@ -111,6 +114,15 @@ fi
 IMGDIR="${BASE}/images"
 CONFFILE="/usr/share/initramfs-tools/conf.d/ltsp"
 CHROOT="${BASE}/${ARCH}"
+
+# Generate nbd-server configuration
+if [ "$NBD_NAMED" = "1" ] && [ ! -d /etc/nbd-server ]; then
+    echo "Your system doesn't have a /etc/nbd-server directory."
+    echo "Assuming inetd is needed to export the image"
+    NBD_NAMED="0"
+else
+    NBD_NAME="ltsp_$ARCH"
+fi
 
 #
 # for updating the pxe config
@@ -161,6 +173,7 @@ find_available_port () {
 assign_ports () {
     PORTS_FOUND="--"
     unset RUN_LUK
+
     for c in $(echo ${ALL_PORT_CHROOTS}|tr ' ' '\n'| sort); do
         NBD_PORT=${c%%=*}
         THIS_CHROOT=${c#*=}
@@ -173,25 +186,31 @@ assign_ports () {
                 else
                     echo "Cannot determine assigned port. Assigning to port ${NBD_PORT}."
                 fi
+
                 if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
                     mkdir "${THIS_CHROOT}/etc/ltsp"
                 fi
+
                 if [ -n "${NBD_SERVER}" ]; then
                     echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=${NBD_SERVER}:${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 else
                     echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdport=${NBD_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 fi
+
                 echo "NBD_PORT=${NBD_PORT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 [ -n "${TIMEOUT}" ] && echo "TIMEOUT=${TIMEOUT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
                 [ -n "${IPAPPEND}" ] && echo "IPAPPEND=${IPAPPEND}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+
                 echo "Regenerating kernel... "
                 chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
                 echo "Done."
+
                 echo -n "Configuring inetd... "
                 IMAGE=${IMGDIR}/${THIS_CHROOT##*/}.img 
                 sed -i -e "\|${IMAGE}|d" /etc/inetd.conf
                 update-inetd --group LTSP --add "${NBD_PORT}               stream  tcp nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
                 echo "Done."
+
                 echo -n "Updating pxelinux default configuration..."
                 for TFTPDIR in $TFTPDIRS ; do
                     if [ ! -d $TFTPDIR ]; then
@@ -214,9 +233,11 @@ ${IPAPPEND_LINE}
 EOF
                         continue
                     fi
+
                     if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
                         sed -i -e "s/nbdport=[0-9]*/nbdport=${NBD_PORT}/g" ${PXECFG}
                     fi
+
                     if grep nbdroot ${PXECFG} > /dev/null 2>&1 ; then
                         sed -i -e "s/nbdroot=\([^:]\+\):[0-9]*/nbdroot=\1:${NBD_PORT}/" ${PXECFG}
                     fi
@@ -226,7 +247,61 @@ EOF
                 ;;
         esac
         PORTS_FOUND="${PORTS_FOUND}${NBD_PORT}-"
-    done 
+    done
+}
+
+assign_name () {
+    THIS_CHROOT=$CHROOT
+
+    if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
+        mkdir "${THIS_CHROOT}/etc/ltsp"
+    fi
+
+    if [ -n "${NBD_SERVER}" ]; then
+        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdserver=${NBD_SERVER} nbdname=${NBD_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+    else
+        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdname=${NBD_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+    fi
+
+    echo "NBD_NAME=${NBD_NAME}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+    [ -n "${TIMEOUT}" ] && echo "TIMEOUT=${TIMEOUT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+    [ -n "${IPAPPEND}" ] && echo "IPAPPEND=${IPAPPEND}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+
+    echo "Regenerating kernel... "
+    chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
+    echo "Done."
+
+    echo -n "Updating pxelinux default configuration..."
+    for TFTPDIR in $TFTPDIRS ; do
+        if [ ! -d $TFTPDIR ]; then
+            continue       # skip directory
+        fi
+
+        PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg/default"
+        [ -n "${FORCE_NEW}" ] && rm -f ${PXECFG} 2>/dev/null
+
+        if [ ! -f ${PXECFG} ]; then
+            mkdir -p "${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg"
+            [ -n "${TIMEOUT}" ] && TIMEOUT_LINE="timeout ${TIMEOUT}"
+            [ -n "${IPAPPEND}" ] && IPAPPEND_LINE="IPAPPEND ${IPAPPEND}"
+            echo <<EOF >${PXECFG}
+default ltsp 
+${TIMEOUT_LINE}
+
+label ltsp 
+kernel vmlinuz 
+append ro initrd=initrd.img ${BOOTPROMPT_OPTS}
+${IPAPPEND_LINE}
+EOF
+            continue
+        fi
+
+        if grep nbdname ${PXECFG} > /dev/null 2>&1 ; then
+            sed -i -e "s/nbdname=.* /nbdname=${NBD_NAME} /g" ${PXECFG}
+        fi
+    done
+    echo "Done."
+    RUN_LUK=1
 }
 
 generate_image () {
@@ -245,14 +320,14 @@ generate_image () {
             umount -l ${CHROOT}/proc
         fi
     fi
-    
+
     # Are we a chroot that wants an nbd image made?
     if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
         # make sure the images dir exists
         if [ ! -d ${IMGDIR} ]; then
             mkdir -p ${IMGDIR}
         fi
-    
+
         IMAGE="${IMGDIR}/${ARCH}.img"
         rm -f "${IMAGE}.tmp" >/dev/null 2>&1
         nice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
@@ -264,12 +339,24 @@ generate_image () {
             mv "${IMAGE}.tmp" "${IMAGE}"
             chmod 0644 "${IMAGE}"
         fi
+
+        if [ "$NBD_NAMED" = "1" ]; then
+            /usr/share/ltsp/scripts/nbd-update-config --add $NBD_NAME $IMAGE
+            echo "The nbd-server daemon doesn't allow for live configuration update."
+            echo "To pick up the changes, the daemon needs to be restarted."
+            echo "If it's a new LTSP chroot. Run /etc/init.d/nbd-server restart"
+            echo "THIS WILL DISCONNECT ALL YOUR CLIENTS (they'll need to be rebooted)"
+        fi
     fi
 }
 
 if [ -z "${IMAGE_ONLY}" ]; then
-    collect_ports
-    assign_ports
+    if [ "$NBD_NAMED" = "0" ]; then
+        collect_ports
+        assign_ports
+    else
+        assign_name
+    fi
     [ -n "$RUN_LUK" ] && ltsp-update-kernels -b "${BASE}" -t "${TFTPDIRS}" -d "${TFTPBOOTDIR}"
 fi
 
