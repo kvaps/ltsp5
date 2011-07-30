@@ -115,8 +115,9 @@ fi
 
 # Make a "server" hostname entry
 for ENCRYPTION in ${ENC}; do
-    if [ -n "$THIS_SERVER" ]; then
-        echo $(echo server $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
+    pubkey=/etc/ssh/ssh_host_${ENCRYPTION}_key.pub
+    if [ -n "$THIS_SERVER" ] && [ -f "$pubkey" ] ; then
+        echo $(echo server $(cat "$pubkey" | \
             awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
     fi
 done
@@ -125,9 +126,10 @@ done
 for NAME in ${NAMES}; do
     for ENCRYPTION in ${ENC}; do
         if [ -n "$THIS_SERVER" ]; then
-            if [ -f /etc/ssh/ssh_host_${ENCRYPTION}_key.pub ]; then
+            pubkey=/etc/ssh/ssh_host_${ENCRYPTION}_key.pub
+            if [ -f "$pubkey" ]; then
                 # Make a "server" hostname entry
-                echo $(echo $NAME $(cat /etc/ssh/ssh_host_${ENCRYPTION}_key.pub | \
+                echo $(echo $NAME $(cat "$pubkey" | \
                     awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
                 logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
             else
