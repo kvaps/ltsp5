@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import argparse
+import argparse, os
 try:
     # Python 3
     from configparser import ConfigParser
