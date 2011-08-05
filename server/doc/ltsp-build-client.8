@@ -52,6 +52,14 @@ Displays the ltsp\-build\-client help message.
 Select the mirror to download packages from. file:/// and http:// URLs are
 supported.
 
+.IP "\fB\-\-purge\-chroot\fP" 10 
+Purges the existing LTSP chroot if present.
+
+
+.IP "\fB\-\-tftp-dirs\fP \fIdirs\fR" 10
+Sets TFTP dirs to update kernel in. Defaults to
+"/var/lib/tftpboot /tftpboot /srv/tftp".
+
 .SH "CONFIG FILE"
 .PP
 \fBltsp\-build\-client\fR will read a configuration file to override built-in
@@ -87,5 +95,6 @@ are available in source form from \fIhttps://launchpad.net/products/ltsp\fR.
 Peter Savage \- silentk \- cbx33 
 debug@silentkeystroke.co.uk
 .PP 
-updated 2006, 2009 by Vagrant Cascadian <vagrant@freegeek.org> 
+updated 2006, 2009 by Vagrant Cascadian <vagrant@freegeek.org>,
+2011 by Wim Muskee <wimmuskee@gmail.com>
 .\" created by instant / docbook\-to\-man, Fri 21 Apr 2006, 06:18
