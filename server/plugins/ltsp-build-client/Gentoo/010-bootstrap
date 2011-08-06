@@ -41,7 +41,7 @@ case "$MODE" in
 
         PACKAGES="${PACKAGES}" STAGE_URI="${STAGE_URI}" MIRRORS="${MIRRORS}" \
         MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" \
-        ARCH="${ARCH}" NAME="${CHROOT}" \
+        ARCH="${ARCH}" NAME="${CHROOT}" EXCLUDE="${EXCLUDE}" \
         quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
         # And reset to the original value
         ROOT=${TEMPROOT}

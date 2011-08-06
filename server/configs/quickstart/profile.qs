@@ -100,6 +100,8 @@ pre_install_portage_tree() {
 
 	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
 	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
+	CLEAN_DELAY=0
+	EMERGE_WARNING_DELAY=0
 
 	# TODO: don't add this by default
 	source /var/lib/layman/make.conf
@@ -168,6 +170,11 @@ pre_install_extra_packages() {
 extra_packages ldm ltsp-client dejavu ${PACKAGES}
 
 post_install_extra_packages() {
+	# remove excluded packages
+	for package in ${EXCLUDE}; do
+		spawn_chroot "emerge --unmerge ${package}"
+	done
+
 	# point /etc/mtab to /proc/mounts
 	spawn "ln -sf /proc/mounts ${chroot_dir}/etc/mtab"
 
