@@ -46,10 +46,7 @@ tree_type none
 
 # TODO: only skip it if we are passed a built kernel
 # skip build_kernel
-# TODO: do these
-#kernel_config_uri
-#kernel_sources (defaults to gentoo sources)
-genkernel_opts --makeopts="${MAKEOPTS}"
+
 
 post_unpack_stage_tarball() {
 		# protecting locale.gen from updating, /etc is set in CONFIG_PROTECT_MASK
@@ -140,10 +137,17 @@ pre_set_timezone() {
 }
 
 pre_build_kernel() {
+	if [ -n "${KERNEL_CONFIG_URI}" ]; then
+		kernel_config_uri "${KERNEL_CONFIG_URI}"
+	fi
+
+	if [ -n "${KERNEL_SOURCES}" ]; then
+ 		kernel_sources "${KERNEL_SOURCES}"
+ 	fi
+
+    genkernel_opts --makeopts="${MAKEOPTS}"
+
 	if [[ $CCACHE == "true" ]]; then
-
-		#spawn_chroot "mkdir -p $TMP"
-
 		spawn_chroot "emerge ccache"
 		spawn_chroot "mkdir -p /var/tmp/ccache"
 		spawn "mkdir -p /var/tmp/ccache/${ARCH}"

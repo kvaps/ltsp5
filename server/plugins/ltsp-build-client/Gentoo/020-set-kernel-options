@@ -1,0 +1,14 @@
+case "$MODE" in
+	commandline)
+		add_option "kernel-sources" "`eval_gettext "Set kernel sources package, defaults to latest gentoo-sources"`" "advanced" "true"
+		add_option "kernel-config-uri" "`eval_gettext "Set URI of custom kernel config"`" "advanced" "true"
+		;;
+	configure)
+		if [ -n "$option_kernel_sources_value" ] || [ -n "$KERNEL_SOURCES" ]; then
+			KERNEL_SOURCES="${option_kernel_sources_value:-$KERNEL_SOURCES}"
+		fi
+		if [ -n "$option_kernel_config_uri_value" ] || [ -n "$KERNEL_CONFIG_URI" ]; then
+			KERNEL_CONFIG_URI="${option_kernel_config_uri_value:-$KERNEL_CONFIG_URI}"
+		fi
+		;;
+esac
