@@ -9,7 +9,7 @@ case $MODE in
         ;;
     before-install)
         # include locales in initial deboostrap
-        if [ -n "$INCLUDE" ]; then
+        if [ -z "$INCLUDE" ]; then
             INCLUDE="locales"
         else
             INCLUDE="$INCLUDE,locales"
