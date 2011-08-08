@@ -182,9 +182,12 @@ post_install_extra_packages() {
 	# point /etc/mtab to /proc/mounts
 	spawn "ln -sf /proc/mounts ${chroot_dir}/etc/mtab"
 
-	# make sure this is really existing before bind mounting it
+	# make sure these exist
 	mkdir -p ${chroot_dir}/var/lib/nfs
 	mkdir -p ${chroot_dir}/var/lib/pulse
+	
+	# required for openrc's bootmisc
+	mkdir -p ${chroot_dir}/var/lib/misc
 }
 
 rcadd ltsp-client-setup boot
