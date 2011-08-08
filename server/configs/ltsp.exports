@@ -1,0 +1,5 @@
+# default NFS exports for LTSP.
+# install as /etc/exports.d/ltsp.exports for newer versions of 
+# nfs-kernel-server, or use an an example /etc/exports file for older versions.
+
+/opt/ltsp/      *(ro,no_root_squash,async,no_subtree_check)
