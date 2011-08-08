@@ -1,0 +1,22 @@
+case "$MODE" in
+    commandline)
+        add_option "eatmydata" "`eval_gettext "use eatmydata to speed up build times, at risk of data not getting written to disk"`" "advanced" "false"
+        ;;
+    configure)
+        if [ -n "$option_eatmydata_value" ]; then
+            # load libeatmydata
+            libeatmydata=/usr/lib/libeatmydata/libeatmydata.so
+            if [ -n "$LD_PRELOAD" ]; then
+                export LD_PRELOAD="$libeatmydata $LD_PRELOAD"
+            else
+                export LD_PRELOAD="$libeatmydata"
+            fi
+            # install eatmydata package early during debootstrap
+            if [ -z "$INCLUDE" ]; then
+                INCLUDE="eatmydata"
+            else
+                INCLUDE="$INCLUDE,eatmydata"
+            fi 
+        fi
+        ;;
+esac
