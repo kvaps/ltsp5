@@ -24,8 +24,6 @@ ltspfsd
 ldm
 alsa-utils
 alsa-plugins-pulseaudio
-aspell
-aspell-en
 atk
 audit-libs
 audit-libs-python
