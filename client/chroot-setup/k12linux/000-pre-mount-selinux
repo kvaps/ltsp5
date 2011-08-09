@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mount /proc
+cat /proc/mounts |grep selinux |grep -q selinux
+if [ $? -eq 0 ]; then
+  mount /selinux
+fi
