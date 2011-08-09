@@ -192,3 +192,11 @@ yum
 yum-metadata-parser
 zlib
 %end
+
+%post
+if [ -f /usr/sbin/plymouth-set-default-theme ]; then
+  /usr/sbin/plymouth-set-default-theme -r
+  /usr/sbin/ltsp-rewrap-latest-kernel
+fi
+%end
+
