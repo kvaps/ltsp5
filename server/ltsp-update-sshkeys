@@ -133,7 +133,10 @@ for NAME in ${NAMES}; do
                     awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
                 logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
             else
-                logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
+                # missing ecdsa is valid
+                if [ "$ENCRYPTION" != "ecdsa" ]; then
+                    logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
+                fi
             fi
         else
             NAMED_SERVER=${NAME%:*}
