@@ -1,6 +1,7 @@
 #!/bin/sh
 
-if [ -e /selinux/enforce ]; then
-  umount /selinux
-fi
-umount /proc
+# FIXME: This breaks chroot-creator
+#if [ -e /selinux/enforce ]; then
+#  umount /selinux
+#fi
+#umount /proc

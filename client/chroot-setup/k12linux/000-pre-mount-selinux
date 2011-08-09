@@ -1,7 +1,6 @@
 #!/bin/sh
 
-mount /proc
-cat /proc/mounts |grep selinux |grep -q selinux
-if [ $? -eq 0 ]; then
-  mount /selinux
-fi
+# Mount /proc if not already mounted
+[ ! -d /proc/self/ ] && mount /proc
+# Mount /selinux if supported
+cat /proc/mounts |grep selinux |grep -q selinux && [ ! -e /selinux/enforce ] && mount /selinux
