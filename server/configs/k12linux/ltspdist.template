@@ -2,8 +2,8 @@ if [ -e /etc/rpm/macros.dist ]; then
     LTSPDIST=`cat /etc/rpm/macros.dist |grep %dist |awk {'print $2'} | sed 's/\.//'`
 fi
 if [ -z "$LTSPDIST" ]; then
-    # Fallback to Fedora 9 chroot if host OS is not detected.
-    LTSPDIST=fc9
+    # Host OS is not detected.
+    LTSPDIST="Your operating system"
 fi
 case "$LTSPDIST" in
     fc9)
@@ -24,6 +24,11 @@ case "$LTSPDIST" in
     fc12)
         export VENDORDEF="Fedora"
         export RELEASEDEF=12
+        export TFTPDIR=/var/lib/tftpboot
+    ;;
+    fc14)
+        export VENDORDEF="Fedora"
+        export RELEASEDEF=14
         export TFTPDIR=/var/lib/tftpboot
     ;;
     el5)
