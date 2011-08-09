@@ -174,8 +174,6 @@ else
     for CHROOT in ${CHROOTS}; do
         if [ -d ${CHROOT}/etc/ssh ]; then
             install -m 644 $OUTPUT ${CHROOT}/etc/ssh/ssh_known_hosts
-        else
-            echo "WARNING: ${CHROOT}/etc/ssh not found. skipping..."
         fi
     done
 fi
