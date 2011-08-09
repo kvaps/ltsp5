@@ -1,4 +1,3 @@
 #!/bin/sh
 
-# FIXME: This breaks chroot-creator
-#umount /proc
+umount /proc
