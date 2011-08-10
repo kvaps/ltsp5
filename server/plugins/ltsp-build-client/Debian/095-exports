@@ -4,7 +4,13 @@ case "$MODE" in
         ;;
     finalization)
         # Export LTSP chroot using NFS to the LTSP client network
-        if ! grep -q "^$BASE" /etc/exports ; then
+        check_exports=/etc/exports
+        if x in /etc/exports.d/*.exports ; do
+            if [ -f "$x" ]; then
+                check_exports="$check_exports $x"
+            fi
+        fi
+        if ! grep -q "^$BASE" $check_exports ; then
             if [ -z "$NFS_EXPORT_STRING" ]; then
                 NFS_EXPORT_STRING='*(ro,no_root_squash,async,no_subtree_check)'
             fi
