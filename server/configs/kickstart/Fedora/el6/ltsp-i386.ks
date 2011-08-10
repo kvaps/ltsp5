@@ -11,4 +11,17 @@ repo --name=temporary-el6-i686  --baseurl=http://mplug.org/~k12linux/rpm/el6/i68
 
 %include ../common/common.ks
 %include ../common/arch/i686.ks
-%include ../common/release/el6.ks
+#%include ../common/release/el6.ks
+
+# EL6 i686 uses a custom kernel
+#   * Disable PAE
+#   * Enable nbd.ko
+#   * Turn off many other drivers to make it smaller
+%packages --excludedocs
+kernel-thinclient.i686
+glibc.i686
+openssl.i686
+wraplinux
+mkelfimage
+%end
+
