@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# Skip first time (optimization)
+if [ -f /etc/dracut.conf.d/skip-first-time.conf ]; then
+    rm -f /etc/dracut.conf.d/skip-first-time.conf
+    exit 0
+fi
+
 if [ -f /boot/initramfs-$1.img ]; then
     INITRD=initramfs-$1.img
     rm -f /boot/initrd-$1.img

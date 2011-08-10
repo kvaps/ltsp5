@@ -1,0 +1,3 @@
+# Skip dracut on the first run, avoid running it twice during install
+# This file is deleted by chroot-creator kickstart prior to ltsp-rewrap-latest-kernel
+exit 0
