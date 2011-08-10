@@ -19,9 +19,9 @@
 #include <poll.h>
 #include <math.h>
 
-/* Always 64 bits on 32 bit platforms. */
 typedef unsigned long long u64;
 typedef unsigned int u32;
+typedef unsigned short u16;
 
 /* Return value from the main proxy functions. */
 enum proxy_state {
@@ -39,16 +39,40 @@ enum proxy_state {
     P_OK
 };
 
+enum handshake_state {
+    HS_INIT,
+
+    HS_HELLO,
+
+    HS_NS_HELLO_SERVER,
+
+    HS_NS_HELLO_CLIENT,
+
+    HS_OLD,
+
+    HS_OPTION,
+
+    HS_OPTION_DATA,
+    
+    HS_DATA,
+};
+
 enum server_state {
-    /* Initial state. Unused. */
+    /* Initial state. */
     S_INIT,
+
+    /* Polling for connections. */
+    S_NOPOLL,
 
     /* Asynchronous connection. */
     S_CONNECTING,
 
-    /* NBD handshake. */
+    /* Delay before next connection attempt. */
+    S_CONNECT_DELAY,
+
+    /* NBD handshake */
     S_HANDSHAKING,
-    
+
     /* Ready to read protocol data. */
     S_READING,
 
@@ -60,11 +84,14 @@ enum server_state {
 };
 
 enum client_state {
-    /* Initial state. Unused. */
+    /* Initial state. */
     C_INIT,
 
     /* Listening for client connection. */
     C_LISTENING,
+
+    /* NBD handshake, old style. */
+    C_HANDSHAKING,
 
     /* The client is sending requests. */
     C_READING,
@@ -79,7 +106,6 @@ struct proxy_nbd_request {
     /* Set to 1 when the header for this request does not need to be
        resent to the client. */
     int reply_header_sent;
-
 
     struct nbd_request *nr;
     struct proxy_nbd_request *next;
@@ -113,19 +139,57 @@ struct buf_queue {
     struct buf *last;
 };
 
-struct nbd_init_data {
+/* This structure is common between the 2 types of handshake. */
+struct nbd_hello {
     char init_passwd[8];
     u64 magic;
+} __attribute__ ((packed));
+
+/* New style handshake: initialization data. */
+struct nbd_ns_server_init_data {
+    u16 zeroes;
+} __attribute__ ((packed));
+
+/* New style handshake: initialization data from the client. */
+struct nbd_ns_client_init_data {
+    u32 zeroes;
+} __attribute__ ((packed));
+
+/* New style handshake: handshake option data. */
+struct nbd_ns_opt {
+    u64 magic;
+    u32 option;
+    u32 size;
+} __attribute__ ((packed));
+
+/* New style handshake: block device data. */
+struct nbd_ns_nbd_data {
+    u64 size;
+    u16 flags;
+    char zeros[124];
+} __attribute__ ((packed));
+
+/* Old style handshake initialization data. */
+struct nbd_init_data {
     u64 size;
     u32 flags;
     char zeros[124];
-};
+} __attribute__ ((packed));
 
 /* Commande line options. */
 struct buf_queue server_out_queue;
 struct buf_queue server_in_queue;
 struct buf_queue client_out_queue;
 struct buf_queue client_in_queue;
+
+/* Handshake data: option sent by the client. */
+struct nbd_ns_opt hs_opt;
+
+/* Handshake data: data attached to the option. */
+char *hs_opt_data;
+
+/* Initialization data from the client: currently all zeroes. */
+struct nbd_ns_client_init_data hs_client_init_data;
 
 /* Boolean for the debug mode. */
 int debug_mode;
@@ -158,12 +222,20 @@ int backoff_max;
 const char init_passwd[] = "NBDMAGIC";
 
 u64 cliserv_magic = 0x00420281861253LL;
+u64 cliserv_new_magic = 0x49484156454F5054LL;
+
+/* New style handshake needs to be done only when listening on this
+   port. */
+u16 NBD_IANA_PORT = 10809;
 
 /* Server-side state. */
 enum server_state s_state;
 
 /* Client-side state. */
 enum client_state c_state;
+
+/* Handshake state. */
+enum handshake_state h_state;
 
 char *handle_to_string(char *handle) {
     static char res[128];
@@ -734,11 +806,7 @@ int resend_all_nbd_requests(struct proxy_nbd_request *pnr) {
     return 0;
 }
 
-/* 
- * Accept the connection from the client then immediately queue the
- * handshare informations to be sent.
- */
-int client_accept_and_handshake(int listen_socket, int *client_socket, struct nbd_init_data *nid) {
+int client_accept(int listen_socket, int *client_socket) {
     int newfd, opt;
 
     if ((newfd = accept(listen_socket, NULL, 0)) < 0) {
@@ -757,102 +825,8 @@ int client_accept_and_handshake(int listen_socket, int *client_socket, struct nb
         return -1;
     }   
 
-    /* Queue the handshake data. */
-    size_t s = sizeof(nid->init_passwd) 
-        + sizeof(nid->magic)
-        + sizeof(nid->size)
-        + sizeof(nid->flags)
-        + sizeof(nid->zeros);
-    struct buf *sb = alloc_buf(s, 0);
-    void *ptr;
-
-    sb->len = s;
-    
-    ptr = sb->data;
-    memcpy(ptr, nid->init_passwd, sizeof(nid->init_passwd));
-    ptr += sizeof(nid->init_passwd);
-
-    u64 magic = htonll(nid->magic);
-    memcpy(ptr, &magic, sizeof(nid->magic));
-    ptr += sizeof(nid->magic);
-
-    u64 size = htonll(nid->size);
-    memcpy(ptr, &size, sizeof(nid->size));
-    ptr += sizeof(nid->size);
-
-    u32 flags = htonl(nid->flags);
-    memcpy(ptr, &flags, sizeof(nid->flags));
-    ptr += sizeof(nid->flags);
-    
-    memset(ptr, 0, sizeof(nid->zeros));
-
-    queue_buf(&client_out_queue, sb);
-    
-    /* Return the client socket. */
     *client_socket = newfd;
 
-    return 0;
-}
-
-/*
- * Place a request to read what is needed for the server handshake.
- */
-int server_start_handshake(struct nbd_init_data *nid) {
-    int sz;
-    struct buf *rb_handshake;
-
-    PRINT_DEBUG_FUNC("Starting server handshake.\n");
-
-    sz = sizeof(nid->init_passwd) 
-        + sizeof(nid->magic)
-        + sizeof(nid->size)
-        + sizeof(nid->flags)
-        + sizeof(nid->zeros);
-
-    rb_handshake = alloc_buf(sz, 0);
-    if (rb_handshake == NULL)
-        return -1;
-
-    queue_buf(&server_in_queue, rb_handshake);
-
-    return 0;
-}
-
-int server_finish_handshake(struct buf *rb, struct nbd_init_data *nid) {
-    void *ptr = rb->data;
-
-    /* Read the initialization data components.  */
-    memcpy(nid->init_passwd, ptr, sizeof(nid->init_passwd));
-    ptr += sizeof(nid->init_passwd);
-
-    memcpy(&nid->magic, ptr, sizeof(nid->magic));
-    nid->magic = ntohll(nid->magic);
-    ptr += sizeof(nid->magic);
-
-    memcpy(&nid->size, ptr, sizeof(nid->size));
-    nid->size = ntohll(nid->size);
-    ptr += sizeof(nid->size);
-        
-    memcpy(&nid->flags, ptr, sizeof(nid->flags));
-    nid->flags = ntohl(nid->flags);
-    ptr += sizeof(nid->flags);
-
-    /* Check the handshake magic validity. */
-    if (nid->magic != cliserv_magic) {
-        PRINT_DEBUG_FUNC("Protocol error: not enough magic.\n");
-        return -1;
-    }
-        
-    /* Check the handshake password. */
-    if (memcmp(nid->init_passwd, &init_passwd, 8) != 0) {
-        PRINT_DEBUG_FUNC("Protocol error: invalid password.\n");
-        return -1;
-    }
-
-    /* All is well, ready to read some requests. */
-    PRINT_DEBUG_FUNC("Done with server handshake.\n");
-    PRINT_DEBUG_FUNC("Device size: %llu.\n", nid->size);
-        
     return 0;
 }
 
@@ -1029,6 +1003,36 @@ int check_idle_state() {
     return 0;
 }
 
+void handshake_set_state(enum handshake_state newstate) {
+    if (debug_mode) {
+        if (h_state == newstate) return;
+
+        if (newstate == HS_INIT) {
+            PRINT_DEBUG_FUNC("Moving to HS_INIT state.\n");
+        }
+        else if (newstate == HS_HELLO) {
+            PRINT_DEBUG_FUNC("Moving to HS_HELLO state.\n");
+        }
+        else if (newstate == HS_NS_HELLO_SERVER) {
+            PRINT_DEBUG_FUNC("Moving to HS_NS_HELLO_SERVER state.\n");
+        }
+        else if (newstate == HS_NS_HELLO_CLIENT) {
+            PRINT_DEBUG_FUNC("Moving to HS_NS_HELLO_CLIENT state.\n");
+        }
+        else if (newstate == HS_OPTION) {
+            PRINT_DEBUG_FUNC("Moving to HS_OPTION state.\n");
+        }
+        else if (newstate == HS_OPTION_DATA) {
+            PRINT_DEBUG_FUNC("Moving to HS_OPTION_DATA state.\n");
+        }
+        else if (newstate == HS_DATA) {
+            PRINT_DEBUG_FUNC("Moving to HS_DATA state.\n");
+        }
+    }
+
+    h_state = newstate;
+}
+
 /* 
  * Verbose change of the server state.
  */
@@ -1041,6 +1045,9 @@ void server_set_state(enum server_state newstate) {
         }
         else if (newstate == S_CONNECTING) {
             PRINT_DEBUG_FUNC("Moving to S_CONNECTING state.\n");
+        }
+        else if (newstate == S_CONNECT_DELAY) {
+            PRINT_DEBUG_FUNC("Moving to S_CONNECT_DELAY state.\n");
         }
         else if (newstate == S_HANDSHAKING) {
             PRINT_DEBUG_FUNC("Moving to S_HANDSHAKING state.\n");
@@ -1066,6 +1073,9 @@ void client_set_state(enum client_state newstate) {
         if (newstate == C_LISTENING) {
             PRINT_DEBUG_FUNC("Moving to C_LISTENING state.\n");
         }
+        else if (newstate == C_HANDSHAKING) {
+            PRINT_DEBUG_FUNC("Moving to C_HANDSHAKING state.\n");
+        }
         else if (newstate == C_READING) {
             PRINT_DEBUG_FUNC("Moving to C_READING state.\n");
         }
@@ -1077,6 +1087,286 @@ void client_set_state(enum client_state newstate) {
     c_state = newstate;
 }
 
+/*
+ * State machine for the old style of handshake.
+ */
+int server_old_handshake(struct buf *input_buf) {
+    struct buf *out_buf = NULL;
+
+    if (h_state == HS_OLD && input_buf == NULL) {
+        /* Read the server data. */
+        out_buf = alloc_buf(sizeof(struct nbd_init_data), 0);
+        if (out_buf == NULL)
+            return -1;
+
+        queue_buf(&server_in_queue, out_buf);
+    } 
+    
+    if (s_state == HS_OLD && input_buf != NULL) {
+        /* If the client is handshaking too, send it the server data. */
+        if (c_state == C_HANDSHAKING)
+            queue_buf(&client_out_queue, input_buf);
+
+        server_set_state(S_READING);
+        
+        if (c_state == C_HANDSHAKING)
+            client_set_state(C_READING);
+    }
+
+    return 0;
+}
+
+/*
+ * This contraption is a state machine able to asynchronously do the
+ * handshake of the new style of protocol.
+ */
+int server_handshake(struct buf *input_buf) {
+    struct buf *out_buf = NULL;
+    size_t sz;
+
+    /* Read the server data. */
+    if (h_state == HS_INIT) {
+        out_buf = alloc_buf(sizeof(struct nbd_hello), 0);
+        if (out_buf == NULL)
+            return -1;
+        
+        queue_buf(&server_in_queue, out_buf);
+
+        handshake_set_state(HS_HELLO);
+    }
+
+    /* Complete the old handshake. */
+    if (h_state == HS_OLD)
+        return server_old_handshake(input_buf);
+
+    if (h_state == HS_HELLO && input_buf != NULL) {
+        struct nbd_hello *hello_data = ((struct nbd_hello *)input_buf->data);
+
+        queue_buf(&client_out_queue, input_buf);
+        input_buf = NULL;
+
+        /* Old style handshake. */
+        if (ntohll(hello_data->magic) == cliserv_magic) {
+            PRINT_DEBUG_FUNC("Using old style handshake.\n");
+            
+            handshake_set_state(HS_OLD);
+            server_old_handshake(NULL);
+        }
+        else {
+            PRINT_DEBUG_FUNC("Using new style handshake.\n");
+
+            /* Queue all the static size data that can be read. */           
+            out_buf = alloc_buf(sizeof(struct nbd_ns_server_init_data), 0);
+            if (out_buf == NULL)
+                return -1;
+            queue_buf(&server_in_queue, out_buf);
+
+            /* Queue the handshake data to be received from the
+               client. */
+            out_buf = alloc_buf(sizeof(hs_client_init_data), 0);
+            if (out_buf == NULL)
+                return -1;
+            queue_buf(&client_in_queue, out_buf);
+
+            out_buf = alloc_buf(sizeof(hs_opt), 0);
+            if (out_buf == NULL)
+                return -1;
+            queue_buf(&client_in_queue, out_buf);
+            
+            handshake_set_state(HS_NS_HELLO_SERVER);
+        }
+    }
+
+    if (h_state == HS_NS_HELLO_SERVER && input_buf != NULL) {
+        struct nbd_ns_server_init_data *init_data = ((struct nbd_ns_server_init_data *)input_buf->data);
+
+        /* If the client is in handshake, he wants to received the
+           data. */
+        if (c_state == C_HANDSHAKING) {
+            queue_buf(&client_out_queue, input_buf);
+            input_buf = NULL;
+        }
+        /* Otherwise, simply discard the data. */
+        else {
+            /* Discard the data. */
+            free_buf(input_buf);
+
+            /* Copy the cached response for the next step. */
+            input_buf = alloc_buf(sizeof(hs_client_init_data), 0);
+            if (input_buf == NULL)
+                return -1;
+            memcpy(input_buf->data, &hs_client_init_data, sizeof(struct nbd_ns_client_init_data));
+        }
+
+        handshake_set_state(HS_NS_HELLO_CLIENT);
+    }
+
+    /* Get the reply data back from the client, send them to the
+       server. */
+    if (h_state == HS_NS_HELLO_CLIENT && input_buf != NULL) {
+        /* Immediately forward the data to the server. */
+        queue_buf(&server_out_queue, input_buf);
+        input_buf = NULL;
+        
+        /* Use the option we cached if the client isn't in handshake
+           mode. */
+        if (c_state != C_HANDSHAKING) {
+            /* Cache the client zeroes. */
+            memcpy(&hs_client_init_data, input_buf->data, sizeof(hs_client_init_data));
+
+            /* Discard the read data. */
+            free_buf(input_buf);
+
+            /* Copy the cached response for the next step. */
+            input_buf = alloc_buf(sizeof(hs_client_init_data), 0);
+            if (input_buf == NULL)
+                return -1;
+            memcpy(input_buf->data, &hs_opt, sizeof(struct nbd_ns_opt));
+        }
+
+        handshake_set_state(HS_OPTION);
+    }
+
+    if (h_state == HS_OPTION && input_buf != NULL) {
+        /* Pick the option length from the packet. */
+        sz = ntohl(((struct nbd_ns_opt *)input_buf->data)->size);
+
+        /* Immediately forward the data to the server. */
+        queue_buf(&server_out_queue, input_buf);
+        input_buf = NULL;
+        
+        /* If the client is handshaking, he will send its option data. */
+        if (c_state == C_HANDSHAKING) {
+            /* The size of the option is set above. */
+            out_buf = alloc_buf(sz, 0);
+            if (out_buf == NULL)
+                return -1;
+            queue_buf(&client_in_queue, out_buf);
+        }
+        /* Othersize, just use the cached option. */
+        else {
+            free_buf(input_buf);
+
+            input_buf = alloc_buf(sz, 0);
+            if (input_buf == NULL)
+                return -1;
+            memcpy(input_buf->data, hs_opt_data, sz);
+        }
+
+        /* Queue the server block device data. */
+        out_buf = alloc_buf(sizeof(struct nbd_ns_nbd_data), 0);
+        if (out_buf == NULL)
+            return -1;
+        queue_buf(&server_in_queue, out_buf);
+
+        /* Move to HS_OPTION_DATA to read the option data from the
+           client. */
+        handshake_set_state(HS_OPTION_DATA);
+    }
+    
+    /* Prepare to receive block device data from the server. */
+    if (h_state == HS_OPTION_DATA && input_buf != NULL) {
+        /* Immediately forward the option data to the server. */
+        queue_buf(&server_out_queue, input_buf);
+        input_buf = NULL;
+
+        /* Move to HS_DATA to read the block device data from the
+           server. */
+        handshake_set_state(HS_DATA);
+    }
+
+    /* Forward the block device data. */
+    if (h_state == HS_DATA && input_buf != NULL) {
+        if (c_state == C_HANDSHAKING) {
+            /* Immediately forward the data to the client. */
+            queue_buf(&client_out_queue, input_buf);
+            
+            /* After this has been sent, we expect that both the client
+               and the server will be ready. */
+            client_set_state(C_READING);
+        } 
+        server_set_state(S_READING);
+    }
+
+    return 0;
+}
+
+int proxy_poll(struct pollfd *fds, int nbconn, int listen_socket, int server_socket, int client_socket) {
+    int poll_timeout = -1;
+    int nbpoll;
+    const int server = 0, client = 1;
+
+    server_in_queue.fd = server_socket;
+    server_out_queue.fd = server_socket;
+    fds[server].fd = server_socket;
+    fds[server].events = 0;
+    fds[client].events = 0;
+    fds[server].revents = 0;
+    fds[client].revents = 0;
+
+    /* Check if we need to trap new connections. */
+    if (c_state == C_LISTENING) {
+        fds[client].fd = listen_socket;
+        fds[client].events |= (POLLIN | POLLOUT);
+    }
+    /* Once we have one client we no longer care about the
+       listening socket. */
+    else {
+        fds[client].fd = client_socket;
+
+        if (client_out_queue.first)
+            fds[client].events |= POLLOUT;
+        if (client_in_queue.first)
+            fds[client].events |= POLLIN;
+    }
+
+    /* Check if we have to wait for the server connection to
+       complete. */
+    if (s_state == S_CONNECTING)
+        fds[server].events |= (POLLIN | POLLOUT);
+    else {
+        /* Don't poll on the server socket if we are in a delay
+           state. */
+        if (s_state == S_CONNECT_DELAY)
+            poll_timeout = (-backoff_max / pow(nbconn, 0.4)) + (backoff_max + backoff_min);
+        else {
+            if (s_state != S_NOPOLL) {
+                if (server_out_queue.first)
+                    fds[server].events |= POLLOUT;
+                if (server_in_queue.first)
+                    fds[server].events |= POLLIN;
+            }
+        }
+    }
+
+    if (s_state == S_NOPOLL)
+        nbpoll = poll(&fds[1], 1, -1);
+    else
+        nbpoll = poll(fds, 2, poll_timeout);
+
+    /* Timeout. */
+    if (nbpoll == 0) return 0;
+
+    /* Check for poll error. */
+    if (nbpoll < 0) {
+            
+        /* Interruption by signal: nevermind */
+        if (errno == EINTR) {
+            PRINT_DEBUG_FUNC("Loop interrupted by signal.\n");
+            return 0;
+        }
+            
+        /* Any other kind of error with poll makes us exit the
+           loop. */
+        PRINT_DEBUG_FUNC("poll() error: %m\n");            
+        client_set_state(C_DISCONNECTING);
+
+        return -1;
+    }
+
+    return 0;
+}
+
 /* main
  *    entry point
  */
@@ -1084,19 +1374,15 @@ int main(int argc, char *argv[]) {
     int opt;
     int server_port, listen_port;
     int client_socket = -1, server_socket = -1, listen_socket = -1;
-    int nbconn = 0;
+    int nbconn = 0;    
     char server_address[INET_ADDRSTRLEN];    
     char *smax, *smin;
-    struct nbd_init_data init_data;
-
-    if(argc < 4) {
-    }
 
     stay_attached = 0;
     debug_mode = 0;
     conn_strikes = 0;
-    backoff_min = 0;
-    backoff_max = 60;
+    backoff_min = 5;
+    backoff_max = 30;
 
     while ((opt = getopt(argc, argv, "adc:e:v")) != -1) {
         switch (opt) {
@@ -1173,7 +1459,7 @@ int main(int argc, char *argv[]) {
         sigaddset(&set, SIGUSR2);
         sigaddset(&set, SIGCHLD);
 
-        /* Block SIGUSR2 and SIGCHLD from happening until we are
+        /* Block SIGUSR2 and SIGCLD from happening until we are
            ready. */
         sigprocmask(SIG_BLOCK, &set, NULL);
 
@@ -1233,13 +1519,9 @@ int main(int argc, char *argv[]) {
     while (c_state != C_DISCONNECTING && s_state != S_FUKUSHIMA) {
         struct pollfd fds[2];
         const int server = 0, client = 1;
-        int nbpoll;
-        int backoff_sleep;
 
-        /* Start the asynchronous connection to the server. */
+        /* Start the asynchronous connection to the servcer. */
         if (s_state == S_INIT) {
-            int c;
-
             /* Flush the server queues. If this is a reconnection, we
                want to start with empty queues. */
             reset_buf_queue(&server_out_queue);
@@ -1265,100 +1547,15 @@ int main(int argc, char *argv[]) {
                 continue;
             }
 
-            /* Wait just a bit. */
-            if (nbconn > 0) {
-                backoff_sleep = (-backoff_max / pow(nbconn, 0.4)) + (backoff_max + backoff_min);
-                fprintf(stderr, "nbd-proxy: sleeping %d seconds (retry no: %d).\n", backoff_sleep, nbconn);
-                sleep(backoff_sleep);
-            }
-
-            c = server_connect(server_socket, server_address, server_port);
-            nbconn++;
-
-            /* Connection error: retry. */
-            if (c < 0)
-                server_set_state(S_INIT);
-            
-            /* Asynchronous connect not completed, wait until it is
-               to start the handshare. */
-            else if (c == 0) {
-                if (conn_strikes != 0)
-                    PRINT_DEBUG_FUNC("Connection attempt %d of %d.\n", nbconn, conn_strikes);
-
-                server_set_state(S_CONNECTING);
-            }
-
-            /* Connected immediately. Start the handshake immediately. */
-            else { 
-                if (server_start_handshake(&init_data) < 0)
-                    server_set_state(S_FUKUSHIMA);
-                else
-                    server_set_state(S_HANDSHAKING);
-
-                /* Reset the connection count when connected. */
-                nbconn = 0;
-            }
-
-            /* Must repoll, of course. */
-            continue;
+            /* The do-nothing, state. */
+            server_set_state(S_NOPOLL);
         }
-
-        server_in_queue.fd = server_socket;
-        server_out_queue.fd = server_socket;
-        fds[server].fd = server_socket;
-        fds[server].events = 0;
-        fds[client].events = 0;
 
         /* Put the default read requests on the queues if needed. */
-        if (check_idle_state() < 0)
-            return -1;            
+        if (check_idle_state() < 0) break;
 
-        /* Check if we need to trap new connections. */
-        if (c_state == C_LISTENING) {
-            fds[client].fd = listen_socket;
-            fds[client].events |= (POLLIN | POLLOUT);
-        }
-        /* Once we have one client we no longer care about the listen
-           socket. */
-        else {
-            fds[client].fd = client_socket;
-
-            if (client_out_queue.first)
-                fds[client].events |= POLLOUT;
-            if (client_in_queue.first)
-                fds[client].events |= POLLIN;
-        }
-
-        /* Check if we have to wait for the server connection to
-           complete. */
-        if (s_state == S_CONNECTING)
-            fds[server].events |= (POLLIN | POLLOUT);
-        else {
-            if (server_out_queue.first)
-                fds[server].events |= POLLOUT;
-            if (server_in_queue.first)
-                fds[server].events |= POLLIN;
-        }
-
-        nbpoll = poll(fds, 2, -1);
-
-        /* Not possible without timeout in poll(). */
-        if (nbpoll == 0) continue;
-
-        /* Check for poll error. */
-        if (nbpoll < 0) {
-            
-            /* Interruption by signal: nevermind */
-            if (errno == EINTR) {
-                PRINT_DEBUG_FUNC("Loop interrupted by signal.\n");
-                continue;
-            }
-            
-            /* Any other kind of error with poll makes us exit the
-               loop. */
-            PRINT_DEBUG_FUNC("poll() error: %m\n");            
-            client_set_state(C_DISCONNECTING);
-        }
+        /* Poll for events on the sockets. */
+        if (proxy_poll(fds, nbconn, listen_socket, server_socket, client_socket) < 0) break;
 
         /* The client wants to hangup or poll has problems waiting for
            the client. This means that we should disconnect since its
@@ -1399,58 +1596,73 @@ int main(int argc, char *argv[]) {
             if (socket_errno(fds[server].fd) != 0)
                 server_set_state(S_INIT);
 
-            else if (server_start_handshake(&init_data) < 0) 
-                server_set_state(S_FUKUSHIMA);
-
-            else {
-                server_set_state(S_HANDSHAKING);
-
-                /* Reset the connection count when connected. */
-                nbconn = 0;
-            }
+            server_set_state(S_HANDSHAKING);
+            server_handshake(NULL);
+            
+            /* Reset the connection count when connected. */
+            nbconn = 0;
 
             /* Must re-poll after handshake is started. */
             continue;
         }
 
         /* Complete handshake on the server side. */
-        if (s_state == S_HANDSHAKING && fds[server].revents & POLLIN) {
+        if (s_state == S_HANDSHAKING && (fds[server].revents & POLLIN | fds[client].revents & POLLIN)) {
             struct buf *rb = NULL;
 
-            if (read_queue(&server_in_queue, &rb) < 0) {
+            if (fds[server].revents & POLLIN && read_queue(&server_in_queue, &rb) < 0) {
                 server_set_state(S_INIT);
                 continue;
             }
-
-            /* Received some data. */
-            else if (rb != NULL) {
-                if (server_finish_handshake(rb, &init_data) < 0) 
-                    server_set_state(S_INIT);
-                else {
-                    server_set_state(S_READING);
-
-                    if (resend_all_nbd_requests(pnr) < 0)
-                        server_set_state(S_FUKUSHIMA);
-                }
-                
-                /* Remove the reception buffer. */
-                free_buf(rb);
+            
+            if (fds[client].revents & POLLIN && read_queue(&client_in_queue, &rb) < 0) {
+                break;
             }
 
+            /* Received some data. */
+            else if (s_state == S_HANDSHAKING && rb != NULL) {
+                if (server_handshake(rb) < 0) 
+                    server_set_state(S_INIT);
+                
+                if (s_state == S_READING && resend_all_nbd_requests(pnr) < 0)
+                    server_set_state(S_FUKUSHIMA);
+            }
+            
             /* This makes sure we don't try to re-read again without a
                poll. */
             continue;
         }
 
         /* Accept connection on the client side. */
-        if (s_state == S_READING && c_state == C_LISTENING && fds[client].revents & POLLIN) {
-            if (client_accept_and_handshake(listen_socket, &client_socket, &init_data) < 0)
-                client_set_state(C_DISCONNECTING);
-            else
-                client_set_state(C_READING);
+        if (c_state == C_LISTENING && fds[client].revents & POLLIN) {
+            int c;
 
+            /* Start connecting to the server. */
+            if (s_state == S_NOPOLL) {
+                c = server_connect(server_socket, server_address, server_port);
+
+                /* Immediate connection. */
+                if (c == 1)
+                    server_set_state(S_HANDSHAKING);
+                else if (c == 0)
+                    server_set_state(S_CONNECTING);
+                else if (c < 0)
+                    server_set_state(S_INIT);
+
+                nbconn++;
+            }
+
+            /* Accept the connection from the client. */
+            if (client_accept(listen_socket, &client_socket) < 0)
+                client_set_state(C_DISCONNECTING);
+            
+            client_set_state(C_HANDSHAKING);
+
+            /* Configure the client queue. */            
             client_in_queue.fd = client_socket;
             client_out_queue.fd = client_socket;
+
+            continue;
         }
 
         /* Data ready from the server. */
