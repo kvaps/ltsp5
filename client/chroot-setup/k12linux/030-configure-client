@@ -47,26 +47,8 @@ sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
 # Silence /etc/mtab* removal errors
 sed -i 's/^rm -f \/etc\/mtab/#rm -f \/etc\/mtab/' /etc/rc.d/rc.sysinit
 
-# Fix rc.sysinit symlink broken by earlier ltsp-client (pre F12)
-if [ -f /etc/rc.sysinit ]; then
-    rm -f /etc/rc.sysinit
-    ln -sf rc.d/rc.sysinit /etc/rc.sysinit
-fi
-
 # Silence local filesystems mount errors during bootup
 sed -i '/^sysfs/d' /etc/fstab
-
-# pre-F10: /var/lib/random-seed rwtab
-/bin/grep -q "random-seed" /etc/rwtab 2> /dev/null
-if [ $? -ne 0 ]; then
-    echo "files  /var/lib/random-seed" >> /etc/rwtab.d/k12linux-local.rwtab
-fi
-
-# TEMPORARY: /var/lib/pulse/ must exist (we can remove this soon)
-mkdir -p /var/lib/pulse/
-
-# install /etc/sysconfig/mkinitrd for client kernel upgrades
-cp -f /etc/sysconfig/mkinitrd.ltsp-template /etc/sysconfig/mkinitrd
 
 # F10+: install default boot-duration so plymouth can guess the startup progress bar better
 if [ -e /var/lib/plymouth/boot-duration ]; then

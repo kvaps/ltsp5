@@ -63,19 +63,17 @@ class ChrootCreator(imgcreate.ImageCreator):
         self.__bindroot.mount()
 
         # NOTE: This part is LTSP specific
-        # Copy mkinitrd configuration into /etc/sysconfig/mkinitrd before package installation
-        # This allows mkinitrd to DTRT the first time.
+        # Copy configuration into chroot prior to package installation
         imgcreate.fs.makedirs(self._instroot + "/etc/sysconfig")
         imgcreate.fs.makedirs(self._instroot + "/etc/sysconfig/network-scripts")
         imgcreate.fs.makedirs(self._instroot + "/etc/kernel")
         imgcreate.fs.makedirs(self._instroot + "/etc/kernel/postinst.d")
         imgcreate.fs.makedirs(self._instroot + "/etc/dracut.conf.d")
-        shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-dracut",self._instroot + "/etc/dracut.conf")
-        shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-dracut-skip-first-time",self._instroot + "/etc/dracut.conf.d/skip-first-time.conf")
-        shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-mkinitrd",self._instroot + "/etc/sysconfig/mkinitrd")
-        shutil.copyfile("/etc/ltsp/mkinitrd/sysconfig-network",self._instroot + "/etc/sysconfig/network")
-        shutil.copyfile("/etc/ltsp/mkinitrd/ifcfg-eth0",self._instroot + "/etc/sysconfig/network-scripts/ifcfg-eth0")
-        shutil.copyfile("/etc/ltsp/mkinitrd/ltsp-postinst.d",self._instroot + "/etc/kernel/postinst.d/ltsp")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-dracut",self._instroot + "/etc/dracut.conf")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-dracut-skip-first-time",self._instroot + "/etc/dracut.conf.d/skip-first-time.conf")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-network",self._instroot + "/etc/sysconfig/network")
+        shutil.copyfile("/etc/ltsp/dracut/ifcfg-eth0",self._instroot + "/etc/sysconfig/network-scripts/ifcfg-eth0")
+        shutil.copyfile("/etc/ltsp/dracut/ltsp-postinst.d",self._instroot + "/etc/kernel/postinst.d/ltsp")
         os.chmod(self._instroot + "/etc/kernel/postinst.d/ltsp",0755)
         # Create empty file to mark that this is a LTSP chroot
         open(self._instroot + "/etc/ltsp_chroot", 'w').write('')
