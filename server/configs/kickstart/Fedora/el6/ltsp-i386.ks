@@ -10,8 +10,8 @@ repo --name=epel6-i686          --mirrorlist=https://mirrors.fedoraproject.org/m
 repo --name=temporary-el6-i686  --baseurl=http://mplug.org/~k12linux/rpm/el6/i686/
 
 %include ../common/common.ks
-%include ../common/arch/i686.ks
-#%include ../common/release/el6.ks
+#%include ../common/arch/i686.ks
+%include ../common/release/el6.ks
 
 # EL6 i686 uses a custom kernel
 #   * Disable PAE
