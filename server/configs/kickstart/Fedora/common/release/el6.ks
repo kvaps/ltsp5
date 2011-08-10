@@ -1,4 +1,5 @@
 %packages --excludedocs
+epel-release
 # needed for lspci
 pciutils
 plymouth-system-theme
