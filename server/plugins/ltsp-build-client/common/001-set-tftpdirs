@@ -7,7 +7,4 @@ case "$MODE" in
             TFTPDIRS="$option_tftp_dirs_value"
         fi
         ;;
-    finalization)
-        /usr/sbin/ltsp-update-kernels
-        ;;
 esac
