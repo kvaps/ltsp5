@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # NAT to ltspbr0
-iptables -t nat -L |grep -q MASQUERADE
-if [ $? -ne 0 ]; then
 WANIFACE=$(route -n |grep ^0\.0\.0\.0 |awk {'print $8'})
 LANIFACE=ltspbr0
-echo 1 > /proc/sys/net/ipv4/ip_forward
-/sbin/iptables -t nat -A POSTROUTING -o $WANIFACE -j MASQUERADE
-/sbin/iptables -A FORWARD -i $WANIFACE -o ltspbr0 -m state --state RELATED,ESTABLISHED -j ACCEPT
-/sbin/iptables -A FORWARD -i ltspbr0 -o $WANIFACE -j ACCEPT
+# Skip if already setup
+iptables-save |grep  -q "A FORWARD -i ltspbr0 -o"
+if [ $? -ne 0 ]; then
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    /sbin/iptables -t nat -A POSTROUTING -o $WANIFACE -j MASQUERADE
+    /sbin/iptables -A FORWARD -i $WANIFACE -o ltspbr0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+    /sbin/iptables -A FORWARD -i ltspbr0 -o $WANIFACE -j ACCEPT
 fi
 
 # Disable "Switch User" option
