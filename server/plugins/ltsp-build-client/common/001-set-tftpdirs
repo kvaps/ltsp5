@@ -4,7 +4,7 @@ case "$MODE" in
         ;;
     configure)
         if [ -n "$option_tftp_dirs_value" ]; then
-            TFTPDIRS="$option_tftp_dirs_value"
+            export TFTPDIRS="$option_tftp_dirs_value"
         fi
         ;;
 esac
