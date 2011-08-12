@@ -69,6 +69,7 @@ class ChrootCreator(imgcreate.ImageCreator):
         imgcreate.fs.makedirs(self._instroot + "/etc/kernel")
         imgcreate.fs.makedirs(self._instroot + "/etc/kernel/postinst.d")
         imgcreate.fs.makedirs(self._instroot + "/etc/dracut.conf.d")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-mkinitrd",self._instroot + "/etc/sysconfig/mkinitrd")
         shutil.copyfile("/etc/ltsp/dracut/sysconfig-dracut",self._instroot + "/etc/dracut.conf")
         shutil.copyfile("/etc/ltsp/dracut/sysconfig-dracut-skip-first-time",self._instroot + "/etc/dracut.conf.d/skip-first-time.conf")
         shutil.copyfile("/etc/ltsp/dracut/sysconfig-network",self._instroot + "/etc/sysconfig/network")

@@ -6,6 +6,11 @@ if [ -z "$LTSPDIST" ]; then
     LTSPDIST="Your operating system"
 fi
 case "$LTSPDIST" in
+    fc11)
+        export VENDORDEF="Fedora"
+        export RELEASEDEF=11
+        export TFTPDIR=/var/lib/tftpboot
+    ;;
     fc14)
         export VENDORDEF="Fedora"
         export RELEASEDEF=14

@@ -1,6 +1,8 @@
 #!/bin/bash
-# Run dracut and postinst.d/* on the latest installed kernel again
+# Run dracut or mkinitrd and postinst.d/* on the latest installed kernel again
 
 NAME=`ls /boot/vmlinuz-* |sed 's/vmlinuz-//' | sort -nr | head -n1 | xargs basename`
-/sbin/new-kernel-pkg --mkinitrd --dracut --install $NAME
+unset DRACUTARG
+[ -x /sbin/dracut ] && DRACUTARG=--dracut
+/sbin/new-kernel-pkg --mkinitrd $DRACUTARG --install $NAME
 /sbin/new-kernel-pkg --rpmposttrans $NAME
