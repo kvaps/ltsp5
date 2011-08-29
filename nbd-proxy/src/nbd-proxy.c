@@ -1381,7 +1381,7 @@ int main(int argc, char *argv[]) {
     stay_attached = 0;
     debug_mode = 0;
     conn_strikes = 0;
-    backoff_min = 5;
+    backoff_min = 0;
     backoff_max = 30;
 
     while ((opt = getopt(argc, argv, "adc:e:v")) != -1) {
