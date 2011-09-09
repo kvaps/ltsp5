@@ -35,7 +35,9 @@ case "$1" in
             usplash_write "TIMEOUT 120" || true
         if [ -f "/etc/ltsp/getltscfg-cluster.conf" ]; then
             # Tell the control center that we are booting and get lts.conf
+            set -f
             eval $(getltscfg-cluster -a -l refresh) || true
+            set +f
         fi
         load_modules || true
         configure_resolver || true
