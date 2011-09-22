@@ -352,12 +352,14 @@ configure_home() {
     if [ "$NFS_HOME" = ${NFS_HOME#*:/} ]; then
         NFS_HOME="$SERVER:/$NFS_HOME"
     fi
+    MNTPT=$(echo ${NFS_HOME}|cut -d: -f2)
+    [ -n "${MNTPT}" ] && mkdir -p "${MNTPT}" 2>/dev/null
     NFS_HOME_OPTIONS=${NFS_HOME_OPTIONS:-defaults}
-    if ! mount -t nfs -o "$NFS_HOME_OPTIONS" "$NFS_HOME" /home; then
+    if ! mount -t nfs -o "$NFS_HOME_OPTIONS" "$NFS_HOME" "${MNTPT}"; then
         unset NFS_HOME
     else
         if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
-            echo "$NFS_HOME /home   nfs    $NFS_HOME_OPTIONS        0       0" >> /etc/fstab
+            echo "$NFS_HOME ${MNTPT}   nfs    $NFS_HOME_OPTIONS        0       0" >> /etc/fstab
         fi
     fi
 }
