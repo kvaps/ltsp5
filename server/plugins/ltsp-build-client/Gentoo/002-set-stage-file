@@ -19,7 +19,7 @@ case "$MODE" in
             fi
 
             # getting the correct stagefile from gentoo and grepping out hardened
-            LATEST_STAGE=$( /usr/bin/wget -qO- ${DISTFILES_BASE}/latest-stage3.txt | grep -E ".+${STAGE_ARCH}-[^hardened]" )
+            LATEST_STAGE=$( /usr/bin/wget -qO- ${DISTFILES_BASE}/latest-stage3.txt | grep ${STAGE_ARCH}-[0-9]\{8\}" )
             STAGE_URI="${DISTFILES_BASE}/${LATEST_STAGE}"
 
             if [[ "${STAGE_URI}" != *.tar.bz2 ]]; then
