@@ -1,33 +1,46 @@
 case "$MODE" in
     commandline)
-        add_option "quickstart-profile" "`eval_gettext "Path to Quickstart profile"`" "advanced" "true"
-        add_option "quickstart-debug" "`eval_gettext "Debug Quickstart"`" "advanced" "false"
-        add_option "quickstart-verbose" "`eval_gettext "Show external command output"`" "advanced" "false"
-        add_option "quickstart-host" "`eval_gettext "Get profile from a Quickstart server"`" "advanced" "true"
+        add_option "installer" "`eval_gettext "Gentoo installer to use, defaults to quickstart"`" "advanced" "true"
+        add_option "installer-profile" "`eval_gettext "Path to installer profile"`" "advanced" "true"
+        add_option "installer-debug" "`eval_gettext "Debug installer"`" "advanced" "false"
+        add_option "installer-verbose" "`eval_gettext "Show installer external command output"`" "advanced" "false"
     ;;
     configure)
-        if [ -n "$option_quickstart_profile_value" ] || [ -n "$QUICKSTART_PROFILE" ]; then
-            QUICKSTART_PROFILE=${option_quickstart_profile_value:-$QUICKSTART_PROFILE}
-            printf "`eval_gettext "Manual Quickstart: %s"`\n" $QUICKSTART_PROFILE
+		if [ -n "$option_installer_value" ] || [ -n "$INSTALLER" ]; then
+			INSTALLER=${option_installer_value:-$INSTALLER}
+
+			case "$INSTALLER" in 
+			quickstart|kicktoo)
+				printf "`eval_gettext "Using installer: %s"`\n" $INSTALLER ;;
+            *)			
+				printf "`eval_gettext "ERROR: unsupported installer. Check your --installer argument: %s"`\n", $INSTALLER
+				printf "`eval_gettext "       supported values are: %s"`\n", "quickstart kicktoo"
+				exit 1
+			esac
+		else
+			INSTALLER="quickstart"
+			printf "`eval_gettext "Using installer: %s"`\n" $INSTALLER
+		fi
+
+        if [ -n "$option_installer_profile_value" ] || [ -n "$INSTALLER_PROFILE" ]; then
+            INSTALLER_PROFILE=${option_installer_profile_value:-$INSTALLER_PROFILE}
+            printf "`eval_gettext "Custom installer profile: %s"`\n" $INSTALLER_PROFILE
         else
-            QUICKSTART_PROFILE="/etc/ltsp/quickstart/profile.qs"
-            printf "`eval_gettext "Default Quickstart profile: %s"`\n" $QUICKSTART_PROFILE
+            INSTALLER_PROFILE="/etc/ltsp/profiles/quickstart.profile"
+            printf "`eval_gettext "Default installer profile: %s"`\n" $INSTALLER_PROFILE
         fi
 
-        if [ ! -e $QUICKSTART_PROFILE ]; then
-            printf "`eval_gettext "ERROR: %s does not exist"`\n" $QUICKSTART_PROFILE
+        if [ ! -e $INSTALLER_PROFILE ]; then
+            printf "`eval_gettext "ERROR: %s does not exist"`\n" $INSTALLER_PROFILE
             exit 1
         fi
 
-        QUICKSTART_ARGS=""
-        if [ -n "$option_quickstart_debug_value" ] || [ "${QUICKSTART_DEBUG}" = true ]; then
-            QUICKSTART_ARGS="$QUICKSTART_ARGS --debug"
+        INSTALLER_ARGS=""
+        if [ -n "$option_installer_debug_value" ] || [ "${INSTALLER_DEBUG}" = true ]; then
+            INSTALLER_ARGS="$QUICKSTART_ARGS --debug"
         fi
-        if [ -n "$option_quickstart_verbose_value" ] || [ "${QUICKSTART_VERBOSE}" = true ]; then
-            QUICKSTART_ARGS="$QUICKSTART_ARGS --verbose"
-        fi
-        if [ -n "$option_quickstart_host_value" ] || [ -n "$QUICKSTART_HOST" ]; then
-            QUICKSTART_ARGS="$QUICKSTART_ARGS --client ${option_quickstart_host_value:-$QUICKSTART_HOST}"
+        if [ -n "$option_installer_verbose_value" ] || [ "${INSTALLER_VERBOSE}" = true ]; then
+            INSTALLER_ARGS="$INSTALLER_ARGS --verbose"
         fi
     ;;
     install)
@@ -43,7 +56,7 @@ case "$MODE" in
         MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" \
         ARCH="${ARCH}" NAME="${CHROOT}" EXCLUDE="${EXCLUDE}" \
         KERNEL_CONFIG_URI="${KERNEL_CONFIG_URI}" KERNEL_SOURCES="${KERNEL_SOURCES}" \
-        quickstart $QUICKSTART_ARGS $QUICKSTART_PROFILE
+        $INSTALLER $INSTALLER_ARGS $INSTALLER_PROFILE
         
         # And reset to the original value
         ROOT=${TEMPROOT}
