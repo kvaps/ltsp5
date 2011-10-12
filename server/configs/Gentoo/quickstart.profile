@@ -114,7 +114,6 @@ pre_install_portage_tree() {
 
 	cat >> ${chroot_dir}/etc/portage/package.keywords <<- EOF
 	net-misc/ltsp-client
-	sys-fs/ltspfs
 	x11-misc/ldm
 	EOF
 
