@@ -21,8 +21,16 @@ fi
 
 chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
-tree_type none
 rootpw password
+makeconf MAKEOPTS "${MAKEOPTS}"
+makeconf USE "alsa pulseaudio svg xml X -cups"
+makeconf EMERGE_DEFAULT_OPTS "--usepkg --buildpkg"
+makeconf CONFIG_PROTECT_MASK "/etc /etc/conf.d /etc/init.d"
+makeconf CLEAN_DELAY 0
+makeconf EMERGE_WARNING_DELAY 0
+if [ -n "${MIRRORS}" ]; then
+	makeconf GENTOO_MIRRORS "${MIRRORS}"
+fi
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone UTC
@@ -33,7 +41,6 @@ rcadd ltsp-client default
 
 
 # Step control extra functions
-skip unpack_repo_tree
 
 post_unpack_stage_tarball() {
 	# protecting locale.gen from updating, /etc is set in CONFIG_PROTECT_MASK
@@ -52,9 +59,7 @@ post_unpack_stage_tarball() {
 		en_US.UTF-8 UTF-8
 		EOF
 	fi
-}
 
-pre_fetch_repo_tree() {
 	# bind mounting portage
 	spawn "mkdir ${chroot_dir}/usr/portage"
 	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
@@ -72,22 +77,8 @@ pre_fetch_repo_tree() {
 	spawn "mount /var/lib/layman ${chroot_dir}/var/lib/layman -o bind"
 	echo "${chroot_dir}/var/lib/layman" >> /tmp/install.umount
 
-	if [ -n "${MIRRORS}" ]; then
-		echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
-	fi
-
-	# TODO: allow overriding of all these variables
-	cat >> ${chroot_dir}/etc/make.conf <<- EOF
-	MAKEOPTS="${MAKEOPTS}"
-
-	USE="alsa pulseaudio svg xml X -cups"
-
-	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
-	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
-	CLEAN_DELAY=0
-	EMERGE_WARNING_DELAY=0
-
 	# TODO: don't add this by default
+	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	source /var/lib/layman/make.conf
 	EOF
 
