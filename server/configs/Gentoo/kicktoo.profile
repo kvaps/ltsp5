@@ -22,14 +22,14 @@ fi
 chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
 rootpw password
-makeconf MAKEOPTS "${MAKEOPTS}"
-makeconf USE "alsa pulseaudio svg xml X -cups"
-makeconf EMERGE_DEFAULT_OPTS "--usepkg --buildpkg"
-makeconf CONFIG_PROTECT_MASK "/etc /etc/conf.d /etc/init.d"
-makeconf CLEAN_DELAY 0
-makeconf EMERGE_WARNING_DELAY 0
+makeconf_line MAKEOPTS "${MAKEOPTS}"
+makeconf_line USE "alsa pulseaudio svg xml X -cups"
+makeconf_line EMERGE_DEFAULT_OPTS "--usepkg --buildpkg"
+makeconf_line CONFIG_PROTECT_MASK "/etc /etc/conf.d /etc/init.d"
+makeconf_line CLEAN_DELAY 0
+makeconf_line EMERGE_WARNING_DELAY 0
 if [ -n "${MIRRORS}" ]; then
-	makeconf GENTOO_MIRRORS "${MIRRORS}"
+	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
 fi
 kernel_sources gentoo-sources
 kernel_builder genkernel
