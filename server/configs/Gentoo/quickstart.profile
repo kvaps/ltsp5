@@ -146,7 +146,7 @@ pre_build_kernel() {
 
     genkernel_opts --makeopts="${MAKEOPTS}"
 
-	if [[ $CCACHE == "true" ]]; then
+	if [ "${CCACHE} == "true" ]; then
 		spawn_chroot "emerge ccache"
 		spawn_chroot "mkdir -p /var/tmp/ccache"
 		spawn "mkdir -p /var/tmp/ccache/${ARCH}"
@@ -155,10 +155,8 @@ pre_build_kernel() {
 
 		cat >> ${chroot_dir}/etc/make.conf <<- EOF
 		FEATURES="ccache"
+		CCACHE_SIZE="4G"
 		EOF
-
-		export CCACHE_DIR="/var/tmp/ccache"
-		export CCACHE_SIZE="4G"
 
 		genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
 	fi

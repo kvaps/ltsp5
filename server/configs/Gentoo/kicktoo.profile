@@ -31,6 +31,10 @@ makeconf_line EMERGE_WARNING_DELAY 0
 if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
 fi
+if [ "${CCACHE} == "true" ]; then
+	makeconf_line FEATURES "ccache"
+	makeconf_line CCACHE_SIZE "4G"
+fi
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone UTC
@@ -125,20 +129,13 @@ pre_build_kernel() {
 
     genkernel_opts --makeopts="${MAKEOPTS}"
 
-	# perhaps in kicktoo program
-	if [[ $CCACHE == "true" ]]; then
-		run_emerge ccache
+	if [ ${CCACHE} == "true" ]; then
+		spawn_chroot "emerge ccache"
+		
 		spawn_chroot "mkdir -p /var/tmp/ccache"
 		spawn "mkdir -p /var/tmp/ccache/${ARCH}"
 		spawn "mount /var/tmp/ccache/${ARCH} ${chroot_dir}/var/tmp/ccache -o bind"
 		echo "${chroot_dir}/var/tmp/ccache" >> /tmp/install.umount
-
-		cat >> ${chroot_dir}/etc/make.conf <<- EOF
-		FEATURES="ccache"
-		EOF
-
-		export CCACHE_DIR="/var/tmp/ccache"
-		export CCACHE_SIZE="4G"
 
 		genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
 	fi
