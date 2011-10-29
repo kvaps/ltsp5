@@ -148,6 +148,15 @@ mountroot()
         cp ./lts.conf ${rootmnt}/etc/
     fi
 
+    # prohibit network-manager from messing with the boot interface
+    if [ -w "$rootmnt/etc/network/interfaces" ]; then
+        if [ -n "$DEVICE" ]; then
+            echo ""
+            echo "auto $DEVICE"
+            echo "iface $DEVICE inet manual"
+        fi >> "$rootmnt/etc/network/interfaces" 2>/dev/null || true
+    fi
+
     # write some useful information
     mkdir -p ${rootmnt}/var/cache/ltsp/
     echo NBD_ROOT_HOST=${NBD_ROOT_HOST} > ${rootmnt}/var/cache/ltsp/ltsp_config

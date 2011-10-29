@@ -37,14 +37,6 @@ case "$MODE" in
             return 0
         fi
 
-        # Mark some packages as incompatible with the fat client system
-        mkdir -p "$ROOT/etc/apt/preferences.d"
-        cat > "$ROOT/etc/apt/preferences.d/fat-client-blacklist" <<EOF
-Package: network-manager modemmanager ubufox apport jockey-common
-Pin: origin ""
-Pin-Priority: -1
-EOF
-
         # Reenable recommented packages installation for fat clients
         APT_GET_OPTS=$(echo "$APT_GET_OPTS" | sed 's/--no-install-recommends//')
     ;;
