@@ -172,7 +172,7 @@ configure_swap() {
     fi
 
     if boolean_is_true "$NBD_SWAP" ; then
-        NBD_SWAP_SERVER=${NBD_SWAP_SERVER:-"$SERVER"}
+        NBD_SWAP_HOST=${NBD_SWAP_HOST:-"$SERVER"}
         NBD_SWAP_PORT=${NBD_SWAP_PORT:-"9572"}
         modprobe nbd
         # Detect first unused nbd device, skip nbd0
@@ -180,7 +180,7 @@ configure_swap() {
             nbd-client -c /dev/nbd${num} > /dev/null
             [ $? -eq 1 ] && break
         done
-        nbd-client $NBD_SWAP_SERVER $NBD_SWAP_PORT /dev/nbd${num} -swap && \
+        nbd-client $NBD_SWAP_HOST $NBD_SWAP_PORT /dev/nbd${num} -swap && \
             swap_devices="$swap_devices /dev/nbd${num}"
     fi
 
@@ -432,7 +432,7 @@ bind_unmounts() {
 }
 
 nbd_sendsigs_protection() {
-    if [ -n "$NBD_SERVER" ]; then
+    if [ -n "$NBD_ROOT_HOST" ]; then
         # register pids of nbd-client and nbd-proxy so that sendsigs doesn't kill
         # them on shutdown/reboot.
 

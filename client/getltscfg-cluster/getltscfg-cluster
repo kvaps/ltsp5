@@ -118,7 +118,7 @@ if [ ! -f "$cache_info" ]; then
     if [ -f /var/cache/ltsp/ltsp_config ]; then
         . /var/cache/ltsp/ltsp_config
     fi
-    echo ROOT_SRV=$NBD_SERVER >> $cache_info
+    echo ROOT_SRV=$NBD_ROOT_HOST >> $cache_info
 fi
 
 . $cache_info

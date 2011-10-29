@@ -35,10 +35,10 @@ mountroot()
 
     if [ -n "${nbdroot}" ]; then
         # <host>:<port>
-        NBD_ROOT_SERVER=$( echo "${nbdroot}" | sed 's/:.*//')
+        NBD_ROOT_HOST=$( echo "${nbdroot}" | sed 's/:.*//')
         NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
     else
-        NBD_ROOT_SERVER="${ROOTSERVER}"
+        NBD_ROOT_HOST="${ROOTSERVER}"
         if [ -n "$nbdname" ]; then
             NBD_ROOT_NAME=${nbdname}
         else
@@ -47,10 +47,10 @@ mountroot()
     fi
 
     if [ -n "${nbdswap}" ]; then
-        NBD_SWAP_SERVER=$( echo "${nbdswap}" | sed 's/:.*//')
+        NBD_SWAP_HOST=$( echo "${nbdswap}" | sed 's/:.*//')
         NBD_SWAP_PORT=$( echo "${nbdswap}" | sed 's/.*://')
     else
-        NBD_SWAP_SERVER="${NBD_ROOT_SERVER}"
+        NBD_SWAP_HOST="${NBD_ROOT_HOST}"
         NBD_SWAP_PORT=${nbdswapport:-"9572"}
     fi
 
@@ -60,7 +60,7 @@ mountroot()
 
     if [ ${real_ram} -le ${min_ram} ];then
         [ "$quiet" != "y" ] && log_begin_msg "Only found ${real_ram}k main ram, trying network swap."
-        nbd-client ${NBD_SWAP_SERVER} ${NBD_SWAP_PORT} /dev/nbd1 -swap || true
+        nbd-client ${NBD_SWAP_HOST} ${NBD_SWAP_PORT} /dev/nbd1 -swap || true
         mkswap /dev/nbd1 || true
         swapon /dev/nbd1 || true
         [ "$quiet" != "y" ] && log_end_msg
@@ -84,18 +84,18 @@ mountroot()
 #    fi
     if [ "$nbd_proxy" = "false" ] || [ -n "$NBD_ROOT_NAME" ]; then
         # nbd_proxy=true/false can also be specified on the kernel command line
-        NBD_CLIENT_ROOT_SERVER=$NBD_ROOT_SERVER
+        NBD_CLIENT_ROOT_HOST=$NBD_ROOT_HOST
     else
         # Start nbd-proxy and wait for it to connect
-        nbd-proxy $NBD_ROOT_SERVER $NBD_ROOT_PORT $NBD_ROOT_PORT
-        NBD_CLIENT_ROOT_SERVER=127.0.0.1
+        nbd-proxy $NBD_ROOT_HOST $NBD_ROOT_PORT $NBD_ROOT_PORT
+        NBD_CLIENT_ROOT_HOST=127.0.0.1
     fi
 
     # Prepare the nbd-client command line
     if [ -n "$NBD_ROOT_NAME" ]; then
-        NBD_OPTIONS="$NBD_CLIENT_ROOT_SERVER /dev/nbd0 -N $NBD_ROOT_NAME"
+        NBD_OPTIONS="$NBD_CLIENT_ROOT_HOST /dev/nbd0 -N $NBD_ROOT_NAME"
     else
-        NBD_OPTIONS="$NBD_CLIENT_ROOT_SERVER $NBD_ROOT_PORT /dev/nbd0"
+        NBD_OPTIONS="$NBD_CLIENT_ROOT_HOST $NBD_ROOT_PORT /dev/nbd0"
     fi
 
     # Mount the root device
@@ -107,9 +107,9 @@ mountroot()
             break
         else
             if [ -n "$NBD_ROOT_NAME" ]; then
-                echo "Warning: failed to connect to NBD server $NBD_ROOT_SERVER on share $NBD_ROOT_NAME, retrying..."
+                echo "Warning: failed to connect to NBD server $NBD_ROOT_HOST on share $NBD_ROOT_NAME, retrying..."
             else
-                echo "Warning: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT, retrying..."
+                echo "Warning: failed to connect to NBD server $NBD_ROOT_HOST:$NBD_ROOT_PORT, retrying..."
             fi
             sleep 2
             test -x /sbin/udevadm && udevadm settle
@@ -125,9 +125,9 @@ mountroot()
         mount -o ro -t $FSTYPE /dev/nbd0 /rofs
     else
         if [ -n "$NBD_ROOT_NAME" ]; then
-            panic "Error: failed to connect to NBD server $NBD_ROOT_SERVER on share $NBD_ROOT_NAME."
+            panic "Error: failed to connect to NBD server $NBD_ROOT_HOST on share $NBD_ROOT_NAME."
         else
-            panic "Error: failed to connect to NBD server $NBD_ROOT_SERVER:$NBD_ROOT_PORT."
+            panic "Error: failed to connect to NBD server $NBD_ROOT_HOST:$NBD_ROOT_PORT."
         fi
     fi
 
@@ -143,14 +143,14 @@ mountroot()
 
     # get the lts.conf via tftp
     tftppath="$(echo "$filename" | sed -n 's,\"*\(.*/\)[^/]*,\1,p')"
-    echo "get ${tftppath:-/ltsp/i386/}lts.conf" | /bin/tftp ${NBD_ROOT_SERVER} >/dev/null 2>&1
+    echo "get ${tftppath:-/ltsp/i386/}lts.conf" | /bin/tftp ${NBD_ROOT_HOST} >/dev/null 2>&1
     if [ -s ./lts.conf ]; then
         cp ./lts.conf ${rootmnt}/etc/
     fi
 
     # write some useful information
     mkdir -p ${rootmnt}/var/cache/ltsp/
-    echo NBD_SERVER=${NBD_ROOT_SERVER} > ${rootmnt}/var/cache/ltsp/ltsp_config
+    echo NBD_ROOT_HOST=${NBD_ROOT_HOST} > ${rootmnt}/var/cache/ltsp/ltsp_config
     if [ -n "$NBD_ROOT_NAME" ]; then
         echo NBD_ROOT_NAME=${NBD_ROOT_NAME} >> ${rootmnt}/var/cache/ltsp/ltsp_config
     else

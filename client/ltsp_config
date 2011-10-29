@@ -78,8 +78,8 @@ export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
 
 # Ensure a default for SERVER
 if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
-    if [ -n "$NBD_SERVER" ]; then
-        export SERVER=$NBD_SERVER
+    if [ -n "$NBD_ROOT_HOST" ]; then
+        export SERVER=$NBD_ROOT_HOST
     elif [ -n "$NFS_SERVER" ]; then
         export SERVER=$NFS_SERVER
     fi
@@ -111,7 +111,7 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                         mkdir -p /var/cache/ltsp || true
                     fi
                     if [ -d /var/cache/ltsp/ ]; then
-                        echo "NBD_SERVER=${server}" > /var/cache/ltsp/ltsp_config || true
+                        echo "NBD_ROOT_HOST=${server}" > /var/cache/ltsp/ltsp_config || true
                         if [ -n "$name" ]; then
                             echo "NBD_ROOT_NAME=${name}" >> /var/cache/ltsp/ltsp_config || true
                         else
