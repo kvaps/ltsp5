@@ -31,10 +31,11 @@ makeconf_line EMERGE_WARNING_DELAY 0
 if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
 fi
-if [ "${CCACHE} == "true" ]; then
+if [ "${CCACHE}" == "true" ]; then
 	makeconf_line FEATURES "ccache"
 	makeconf_line CCACHE_SIZE "4G"
 fi
+locale_set en_US.UTF-8
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone UTC
@@ -47,23 +48,6 @@ rcadd ltsp-client default
 # Step control extra functions
 
 post_unpack_stage_tarball() {
-	# protecting locale.gen from updating, /etc is set in CONFIG_PROTECT_MASK
-	export CONFIG_PROTECT="/etc/locale.gen"
-
-	if [ -n "$LOCALE" ]; then
-		echo "LANG=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
-		grep ${LOCALE} /usr/share/i18n/SUPPORTED > ${chroot_dir}/etc/locale.gen
-	else
-		if [ -f /etc/env.d/02locale ]; then
-			cp /etc/env.d/02locale ${chroot_dir}/etc/env.d/
-		fi
-
-		cat > ${chroot_dir}/etc/locale.gen <<- EOF
-		en_US ISO-8859-1
-		en_US.UTF-8 UTF-8
-		EOF
-	fi
-
 	# bind mounting portage
 	spawn "mkdir ${chroot_dir}/usr/portage"
 	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
@@ -129,7 +113,7 @@ pre_build_kernel() {
 
     genkernel_opts --makeopts="${MAKEOPTS}"
 
-	if [ ${CCACHE} == "true" ]; then
+	if [ "${CCACHE}" == "true" ]; then
 		spawn_chroot "emerge ccache"
 		
 		spawn_chroot "mkdir -p /var/tmp/ccache"

@@ -146,7 +146,7 @@ pre_build_kernel() {
 
     genkernel_opts --makeopts="${MAKEOPTS}"
 
-	if [ "${CCACHE} == "true" ]; then
+	if [ "${CCACHE}" == "true" ]; then
 		spawn_chroot "emerge ccache"
 		spawn_chroot "mkdir -p /var/tmp/ccache"
 		spawn "mkdir -p /var/tmp/ccache/${ARCH}"
