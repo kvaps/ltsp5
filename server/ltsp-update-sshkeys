@@ -107,7 +107,7 @@ fi
 
 # Any chroots found, and not exporting?
 # fixes bug #207485 per Andy Rabagliati
-if [ -z "${CHROOTS}" -a -z "${EXPORTFILE}" ]; then
+if [ -z "${CHROOTS}" ] && [ -z "${EXPORTFILE}" ]; then
 	logger -f $LOGFILE -t ltsp \
         "No client chroots found, please run ltsp-build-client"
 	exit 0
