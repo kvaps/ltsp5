@@ -1,0 +1,2 @@
+# set to determine if ltsp_config has already been sourced
+export LTSP_CONFIG=${LTSP_CONFIG:-"True"}

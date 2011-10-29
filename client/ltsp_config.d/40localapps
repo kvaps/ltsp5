@@ -1,0 +1,4 @@
+# set defaults for local apps support
+if [ -z "$LOCAL_APPS" ] && ([ -x /usr/bin/sshfs ] || [ -n "$NFS_HOME" ]); then
+    export LOCAL_APPS=True
+fi

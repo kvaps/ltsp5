@@ -1,0 +1,7 @@
+# set compatbility for ltsp 4.x variables
+export X_VIDEO_RAM=${X_VIDEO_RAM:-"$X_VIDEORAM"}
+export LOCALDEV=${LOCALDEV:-"$LOCAL_STORAGE"}
+export X_CONF=${X_CONF:-"$XF86CONFIG_FILE"}
+
+# work around common typo with horizontal sync variables
+export X_HORZSYNC=${X_HORZSYNC:-"$X_HORIZSYNC"}
