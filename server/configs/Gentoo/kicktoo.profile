@@ -19,6 +19,10 @@ if [ -z "${CHROOT}" ]; then
 	CHROOT="${BASE}/${NAME}"
 fi
 
+if [ -z "${LOCALE}" ]; then
+	LOCALE="en_US.UTF-8"
+fi
+
 chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
 rootpw password
@@ -35,7 +39,7 @@ if [ "${CCACHE}" == "true" ]; then
 	makeconf_line FEATURES "ccache"
 	makeconf_line CCACHE_SIZE "4G"
 fi
-locale_set en_US.UTF-8
+locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone UTC
