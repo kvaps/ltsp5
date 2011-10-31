@@ -1,6 +1,0 @@
-case "$MODE" in
-    finalization)
-        # drop wait on /sbin/udevsettle during boot
-        chroot $ROOT sed -i s/\\/sbin\\/udevsettle/\\/bin\\/true/g /etc/init.d/udev
-        ;;
-esac
