@@ -73,13 +73,14 @@ start_sound() {
 
 configure_sound_volume() {
     if boolean_is_true "$SOUND" ; then
+        CARD_NUM=${1:-0}
         # Set up sound volume
         ## Set higher volume than default if not specified by lts.conf
     
         [ -z "$VOLUME" ]           && VOLUME=90
         [ -z "$PCM_VOLUME" ]       && PCM_VOLUME=90
         
-        LANG=C amixer -c0 scontents | while read line; do
+        LANG=C amixer -c${CARD_NUM} scontents | while read line; do
             if [ -n "$(echo $line|grep 'Simple mixer control')" ]; then
                 channel=$(echo $line|sed -e 's/^Simple mixer control //')
             else
@@ -122,7 +123,7 @@ configure_sound_volume() {
                 fi
                 unset channel
             fi
-        done | amixer -c0 --stdin >/dev/null 2>&1
+        done | amixer -c${CARD_NUM} --stdin >/dev/null 2>&1
     fi
 }
 
