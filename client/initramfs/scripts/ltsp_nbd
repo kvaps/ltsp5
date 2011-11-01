@@ -173,15 +173,6 @@ mountroot()
         :>${rootmnt}/etc/mtab
     fi
 
-    # Remove unwanted upstart services
-    for s in plymouth-stop \
-             tty2 tty3 tty4 tty5 tty6 \
-             ureadahead \
-             ureadahead-other
-    do
-        rm -f ${rootmnt}/etc/init/${s}.conf 2>/dev/null 
-    done
-
     [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/nfs-bottom"
     run_scripts /scripts/nfs-bottom
     [ "$quiet" != "y" ] && log_end_msg

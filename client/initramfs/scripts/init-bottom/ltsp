@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Parse command line options
+for x in $(cat /proc/cmdline); do
+    case $x in
+        ltsp) LTSP_BOOT=Y
+              break 
+              ;;
+    esac
+done
+
+if [ "${LTSP_BOOT}" = "Y" ]; then
+    [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
+    [ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
+    mount -o bind /proc ${rootmnt}/proc
+    chroot ${rootmnt} /usr/share/ltsp/initramfs-scripts
+    umount ${rootmnt}/proc
+fi

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+. /usr/share/ltsp/ltsp_config
+
+scriptsdir=/usr/share/ltsp/initramfs-scripts.d
+[ -z "${scriptsdir} ] && exit
+for script in $(run_parts_list ${scriptsdir}) ; do 
+    . ${script}
+done
+
