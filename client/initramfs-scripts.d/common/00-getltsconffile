@@ -1,0 +1,13 @@
+# This file is sourced
+
+NBD_ROOT_HOST=server
+[ -f "/var/cache/ltsp/ltsp_config" ] && . /var/cache/ltsp/ltsp_config
+
+# get the lts.conf via tftp
+cd /etc
+tftppath="$(echo "$filename" | sed -n 's,\"*\(.*/\)[^/]*,\1,p')"
+echo "get ${tftppath:-/ltsp/i386/}lts.conf" | /bin/tftp ${NBD_ROOT_HOST} >/dev/null 2>&1
+
+# Get the lts.conf vars into the environment
+. /usr/share/ltsp/ltsp_config
+true

@@ -1,9 +1,17 @@
 #!/bin/sh
 
-. /usr/share/ltsp/ltsp_config
+. /usr/share/ltsp/ltsp-common-functions
+[ -f "/etc/ltsp/initramfs-scripts.conf" ] && . /etc/ltsp/initramfs-scripts.conf
 
 scriptsdir=/usr/share/ltsp/initramfs-scripts.d
-[ -z "${scriptsdir} ] && exit
+if [ -n "${DISTRO} ]; then
+   scriptsdir="${scriptsdir}/${DISTRO}"
+else
+   scriptsdir="${scriptsdir}/common"
+fi
+
+[ ! -d "${scriptsdir} ] && exit
+
 for script in $(run_parts_list ${scriptsdir}) ; do 
     . ${script}
 done
