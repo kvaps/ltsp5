@@ -6,6 +6,6 @@ for s in plymouth-stop \
          ureadahead \
          ureadahead-other
 do
-    rm -f ${rootmnt}/etc/init/${s}.conf 2>/dev/null
+    rm -f /etc/init/${s}.conf 2>/dev/null
 done
 true
