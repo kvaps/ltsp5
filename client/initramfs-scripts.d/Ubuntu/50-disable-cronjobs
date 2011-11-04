@@ -1,0 +1,11 @@
+# This file is sourced
+
+# Disable several cronjobs that are usually present but that 
+# Cause unnecessary load
+
+for f in /etc/cron.daily/man-db \
+         /etc/cron.weekly/man-db \
+         /etc/cron.weekly/apt-xapian-index
+do
+    rm -f ${f} 2>/dev/null
+done
