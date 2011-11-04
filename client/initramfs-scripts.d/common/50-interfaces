@@ -1,0 +1,11 @@
+# This file is sourced
+
+# prohibit network-manager from messing with the boot interface
+if [ -w "/etc/network/interfaces" ]; then
+    if [ -n "$DEVICE" ]; then
+        echo ""
+        echo "auto $DEVICE"
+        echo "iface $DEVICE inet manual"
+    fi >> "/etc/network/interfaces" 2>/dev/null || true
+fi
+

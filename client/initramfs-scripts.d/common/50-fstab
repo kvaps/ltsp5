@@ -1,0 +1,4 @@
+# This file is sourced
+
+configure_fstab || true
+configure_home || true

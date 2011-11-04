@@ -1,0 +1,7 @@
+# This file is sourced
+
+for rcfile in $(env|grep ^RCFILE_|sed -e s/^RCFILE_[0-9]*\=//|sed -e s/\ /*/g); do
+        rcf=`echo $rcfile |sed -e s/\*/\ /g`
+        rcexe=`echo $rcfile |sed -e s/\*.*//`
+        [ -x $rcexe ] && echo $rcf >> /etc/rc.local
+done

@@ -1,3 +1,1 @@
-# This file is sourced
-
-nbd_sendsigs_protection || true
+../common/50-sendsigs

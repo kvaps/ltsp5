@@ -1,4 +1,1 @@
-# This file is sourced
-
-configure_fstab || true
-configure_home || true
+../common/50-fstab

@@ -1,0 +1,3 @@
+# This file is sourced
+
+nbd_sendsigs_protection || true
