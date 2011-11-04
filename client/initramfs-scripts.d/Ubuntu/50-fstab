@@ -1,0 +1,6 @@
+# This file is sourced
+
+. /usr/share/ltsp/ltsp-init-common
+
+configure_fstab || true
+configure_home || true

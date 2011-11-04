@@ -21,6 +21,14 @@ rint (($1%(256-$5)*256+$2%(256-$6))*256+$3%(256-$7))*256+$4%(256-$8) }')
     fi
     echo "$HOSTNAME" > /proc/sys/kernel/hostname
 fi
+
+cat <<EOF > /etc/hosts
+127.0.0.1 localhost
+127.0.0.2 $HOSTNAME
+$SERVER server
+EOF
+if [ -f /etc/hosts.ltsp ]; then
+    cat /etc/hosts.ltsp >> /etc/hosts
+fi
+
 cat /proc/sys/kernel/hostname > /etc/hostname || true
-
-
