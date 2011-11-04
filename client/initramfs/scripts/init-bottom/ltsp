@@ -12,6 +12,18 @@ done
 if [ "${LTSP_BOOT}" = "Y" ]; then
     [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
     [ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
+
+    # mount writeable filesystems if / is not already mounted writeable.
+    ltsp_bindmounts=/usr/share/ltsp/ltsp-bindmounts
+    if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
+        if [ -x ${rootmnt}/${ltsp_bindmounts} ]; then
+            chroot ${rootmnt} ${ltsp_bindmounts}
+        fi
+    fi
+
+    # get networking configuration into environment
+    . /tmp/net-*.conf
+
     mount -o bind /proc ${rootmnt}/proc
     chroot ${rootmnt} /usr/share/ltsp/initramfs-scripts
     umount ${rootmnt}/proc
