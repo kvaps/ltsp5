@@ -1,0 +1,5 @@
+# This file is sourced
+# FIXME: This should happen out of udev, but perhaps
+# udev needs to be retriggered for coldplug devices 
+# once switched to the rootfs
+configure_localdev || true
