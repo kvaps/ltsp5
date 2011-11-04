@@ -50,24 +50,24 @@ rcadd ltsp-client default
 
 
 # Step control extra functions
+mount_bind() {
+	local source="${1}"
+	local dest="${2}"
+
+	spawn "mkdir -p ${source}"
+	spawn "mkdir -p ${dest}"
+	spawn "mount ${source} ${dest} -o bind"
+	echo "${dest}" >> /tmp/install.umount
+}
 
 post_unpack_stage_tarball() {
-	# bind mounting portage
-	spawn "mkdir ${chroot_dir}/usr/portage"
-	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
-	echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
-
-	# bind mounting binary package dir
-	spawn "mkdir -p /usr/portage/packages/$ARCH"
-	spawn_chroot "mkdir -p /usr/portage/packages"
-	spawn "mount /usr/portage/packages/$ARCH ${chroot_dir}/usr/portage/packages -o bind"
-	echo "${chroot_dir}/usr/portage/packages" >> /tmp/install.umount
-
+	# bind mounting portage and binary package dir
+	mount_bind "/usr/portage" "${chroot_dir}/usr/portage"
+	mount_bind "/usr/portage/packages/${ARCH}" "${chroot_dir}/usr/portage/packages"
+	
 	# bind mounting layman, for overlay packages
 	# TODO: remove this mounting when the ltsp ebuilds are in the tree
-	spawn "mkdir -p ${chroot_dir}/var/lib/layman"
-	spawn "mount /var/lib/layman ${chroot_dir}/var/lib/layman -o bind"
-	echo "${chroot_dir}/var/lib/layman" >> /tmp/install.umount
+	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
 	# TODO: don't add this by default
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
@@ -119,12 +119,7 @@ pre_build_kernel() {
 
 	if [ "${CCACHE}" == "true" ]; then
 		spawn_chroot "emerge ccache"
-		
-		spawn_chroot "mkdir -p /var/tmp/ccache"
-		spawn "mkdir -p /var/tmp/ccache/${ARCH}"
-		spawn "mount /var/tmp/ccache/${ARCH} ${chroot_dir}/var/tmp/ccache -o bind"
-		echo "${chroot_dir}/var/tmp/ccache" >> /tmp/install.umount
-
+		mount_bind "/var/tmp/ccache/${ARCH}" "${chroot_dir}/var/tmp/ccache"
 		genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
 	fi
 }

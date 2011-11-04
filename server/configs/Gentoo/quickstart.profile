@@ -44,9 +44,16 @@ cron none
 rootpw password
 tree_type none
 
-# TODO: only skip it if we are passed a built kernel
-# skip build_kernel
 
+mount_bind() {
+	local source="${1}"
+	local dest="${2}"
+
+	spawn "mkdir -p ${source}"
+	spawn "mkdir -p ${dest}"
+	spawn "mount ${source} ${dest} -o bind"
+	echo "${dest}" >> /tmp/install.umount
+}
 
 post_unpack_stage_tarball() {
 		# protecting locale.gen from updating, /etc is set in CONFIG_PROTECT_MASK
@@ -68,22 +75,13 @@ post_unpack_stage_tarball() {
 }
 
 pre_install_portage_tree() {
-	# bind mounting portage
-	spawn "mkdir ${chroot_dir}/usr/portage"
-	spawn "mount /usr/portage ${chroot_dir}/usr/portage -o bind"
-	echo "${chroot_dir}/usr/portage" >> /tmp/install.umount
-
-	# bind mounting binary package dir
-	spawn "mkdir -p /usr/portage/packages/$ARCH"
-	spawn_chroot "mkdir -p /usr/portage/packages"
-	spawn "mount /usr/portage/packages/$ARCH ${chroot_dir}/usr/portage/packages -o bind"
-	echo "${chroot_dir}/usr/portage/packages" >> /tmp/install.umount
+	# bind mounting portage and binary package dir
+	mount_bind "/usr/portage" "${chroot_dir}/usr/portage"
+	mount_bind "/usr/portage/packages/${ARCH}" "${chroot_dir}/usr/portage/packages"
 
 	# bind mounting layman, for overlay packages
 	# TODO: remove this mounting when the ltsp ebuilds are in the tree
-	spawn "mkdir -p ${chroot_dir}/var/lib/layman"
-	spawn "mount /var/lib/layman ${chroot_dir}/var/lib/layman -o bind"
-	echo "${chroot_dir}/var/lib/layman" >> /tmp/install.umount
+	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
 	if [ -n "${MIRRORS}" ]; then
 		echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
@@ -148,10 +146,7 @@ pre_build_kernel() {
 
 	if [ "${CCACHE}" == "true" ]; then
 		spawn_chroot "emerge ccache"
-		spawn_chroot "mkdir -p /var/tmp/ccache"
-		spawn "mkdir -p /var/tmp/ccache/${ARCH}"
-		spawn "mount /var/tmp/ccache/${ARCH} ${chroot_dir}/var/tmp/ccache -o bind"
-		echo "${chroot_dir}/var/tmp/ccache" >> /tmp/install.umount
+		mount_bind "/var/tmp/ccache/${ARCH}" "${chroot_dir}/var/tmp/ccache"
 
 		cat >> ${chroot_dir}/etc/make.conf <<- EOF
 		FEATURES="ccache"
