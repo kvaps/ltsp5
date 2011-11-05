@@ -115,9 +115,13 @@ pre_install_portage_tree() {
 	x11-misc/ldm
 	EOF
 
-	# pulseaudio pulls udev[extras]
 	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
+	# req by pulseaudio
 	sys-fs/udev extras
+	# req by xorg-server
+	dev-libs/libxml2 python
+	# req by mesa
+	x11-libs/libdrm libkms
 	EOF
 }
 
