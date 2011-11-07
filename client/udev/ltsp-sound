@@ -7,7 +7,7 @@
 	[ -r "/usr/share/ltsp/ltsp-init-common" ] && . /usr/share/ltsp/ltsp-init-common
 	DEV_BASENAME="${DEVNAME##*/}"
 	N="${DEV_BASENAME#controlC}"
-	/sbin/alsa-utils start $N
+	[ -x "/sbin/alsa-utils" ] && /sbin/alsa-utils start $N
 	configure_sound_volume $N
 ) &
 
