@@ -19,5 +19,4 @@ start() {
 	#configure_x || true
 	start_screen_sessions || true
 	start_sound || true
-	configure_sound_volume || true 
 }
