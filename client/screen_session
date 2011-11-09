@@ -74,6 +74,7 @@ main() {
         eval $(getltscfg-cluster -a -l prompt)
     fi
     eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
+    [ -z "${SCREEN_CMD}" ] && sleep 2 && return
     SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
     SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 

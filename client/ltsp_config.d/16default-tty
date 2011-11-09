@@ -1,0 +1,9 @@
+# This file is sourced
+
+if [ -z "${SCREEN_DEFAULT}" ]; then
+    for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
+        eval num=\$SCREEN_$screen
+        [ -n "$num" ] && SCREEN_DEFAULT=$screen
+    done
+fi
+
