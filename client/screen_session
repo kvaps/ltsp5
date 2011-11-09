@@ -58,10 +58,6 @@ if [ -x "${openvt}" ]; then
     ${openvt} -f -c ${SCREEN_NUM#0} /bin/true
 fi
 
-# Wait until this is the active vt before launching the screen script
-while [ $(fgconsole) -ne ${SCREEN_NUM} ]; do
-    sleep 2
-done
 
 
 export SCREEN_NUM
@@ -73,8 +69,15 @@ main() {
         . /usr/share/ltsp/ltsp_config
         eval $(getltscfg-cluster -a -l prompt)
     fi
+
+    # Wait until this is the active vt before launching the screen script
+    while [ $(fgconsole) -ne ${SCREEN_NUM} ]; do
+        sleep 2
+    done
+
     eval SCREEN_CMD=\$\{SCREEN_$SCREEN_NUM\}
-    [ -z "${SCREEN_CMD}" ] && sleep 2 && return
+    [ -z "${SCREEN_CMD}" ] && return
+
     SCREEN_SCRIPT=`echo $SCREEN_CMD | cut -f1 -d" "`
     SCREEN_ARGS=`echo $SCREEN_CMD | cut -f2- -d" " -s`
 
