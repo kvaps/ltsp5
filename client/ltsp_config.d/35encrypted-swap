@@ -1,4 +1,4 @@
 # enable encrypted swap when cryptsetup is installed
 if [ -z "$ENCRYPT_SWAP" ] && [ -x /sbin/cryptsetup ]; then
-    export ENCRYPT_SWAP=True
+    set_lts_var ENCRYPT_SWAP True
 fi

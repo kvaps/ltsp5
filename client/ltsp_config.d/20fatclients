@@ -3,6 +3,6 @@ if [ -z "$LTSP_FATCLIENT" ] && [ -f /etc/ltsp_fat_chroot ] && [ -f /proc/meminfo
     memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
     FAT_RAM_THRESHOLD=${FAT_RAM_THRESHOLD:-300}
     if [ "$memtotal" -ge $((1024*$FAT_RAM_THRESHOLD)) ]; then
-        export LTSP_FATCLIENT=True
+        set_lts_var LTSP_FATCLIENT True
     fi
 fi

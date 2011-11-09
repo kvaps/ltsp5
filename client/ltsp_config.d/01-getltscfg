@@ -1,0 +1,6 @@
+# Get lts.conf params
+if [ -f /etc/lts.conf ]; then
+    eval $(getltscfg -a 2>/dev/null) || true
+    eval $(getltscfg -a 2>/dev/null|grep -v export >> ${ltsp_config_env}) || true
+fi
+

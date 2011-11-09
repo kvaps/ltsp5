@@ -7,9 +7,7 @@
 # Get the lts.conf entries, and assign them to shell
 # variables.
 #
-if [ "True" != "$LTSP_CONFIG" ]; then
-    . /usr/share/ltsp/ltsp_config
-fi
+. /usr/share/ltsp/ltsp_config
 
 # chvt to the right screen
 [ -n "${SCREEN_NUM}" ] && openvt chvt ${SCREEN_NUM}

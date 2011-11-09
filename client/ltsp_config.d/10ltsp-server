@@ -1,9 +1,9 @@
 # Ensure a default for SERVER
 if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
     if [ -n "$NBD_ROOT_HOST" ]; then
-        export SERVER=$NBD_ROOT_HOST
+        set_lts_var SERVER $NBD_ROOT_HOST
     elif [ -n "$NFS_SERVER" ]; then
-        export SERVER=$NFS_SERVER
+        set_lts_var SERVER $NFS_SERVER
     fi
 fi
 if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
@@ -46,13 +46,12 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 if [ "$FSTYPE" = "nfs" ] && [ "$MOUNTPOINT" = "/" ]; then
                     # NFS root
                     server=${DEVICE%%:*}
-                    NFS_SERVER=${server} > /var/cache/ltsp/ltsp_config || true
+                    echo NFS_SERVER=${server} > /var/cache/ltsp/ltsp_config || true
                 fi
                 ;;
         esac
         [ -n "$server" ] && break
     done < /proc/mounts
 
-    SERVER="${server:-192.168.0.254}"
-    export SERVER
+    set_lts_var SERVER "${server:-192.168.0.254}"
 fi

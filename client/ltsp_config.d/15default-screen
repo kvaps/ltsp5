@@ -22,8 +22,8 @@ if [ -z "${IS_SCREEN}" ]; then
         # Do nothing, these daemons (xdm, gdm, kdm, wdm, etc.) should configure themselves.
         true
     elif [ -x /usr/sbin/ldm ]; then
-        export SCREEN_07=ldm
+        set_lts_var SCREEN_07 ldm
     elif [ -x /usr/bin/X ]; then
-        export SCREEN_07=xdmcp
+        set_lts_var SCREEN_07 xdmcp
     fi
 fi

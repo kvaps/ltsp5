@@ -11,6 +11,7 @@
 #        Oliver Grawert <ogra@canonical.com>
 #        Warren Togami <wtogami@redhat.com>
 #        Gideon Romm <ltsp@symbio-technologies.com>
+#  2011, Gideon Romm <ltsp@symbio-technologies.com>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -44,26 +45,75 @@
 # anything that calls ltsp_config will have ltsp-common-functions sourced
 (PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
 
-# Don't source this file if it has been sourced already
-if [ "$LTSP_CONFIG" = "True" ]; then 
+# Once lts.conf params are processed, they should all be stored
+# in a quickly source-able file: /var/cache/ltsp/ltsp_config_env
+# If this file does not exist, it means we need to process lts.conf
+# If it does exist, we can either just source it, OR if we are asked
+# to process lts.conf again, we should read in all the environemnt
+# variables that were set last time and unset them before processing the
+# lts.conf again
+ltsp_config_env=/var/cache/ltsp/ltsp_config_env
+
+# Make sure cache dir exists
+mkdir -p /var/cache/ltsp
+
+# This function will set the lts.conf var and will be used by ltsp_config.d/
+# scripts
+set_lts_var() {
+    var=$1
+    val=$2
+    [ -z "$var" ] && return
+    if [ -n "$val" ]; then
+        eval $var="$val"
+        export $var
+        echo "$var=\"$val\"" >> ${ltsp_config_env}
+    else
+        unset $var
+        sed -ie '/$var=/d' ${ltsp_config_env}
+    fi    
+}
+
+# This function will reset the lts.conf params that were previously set
+reset_lts_env() {
+    [ -r "${ltsp_config_env}" ] || return
+    oldifs="${IFS-not set}"
+    IFS='='
+    while read var val; do
+        unset $var
+        export $var
+    done < ${ltsp_config_env}
+    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
+    rm -f ${ltsp_config_env} 2>/dev/null
     return 0
-fi
+}
 
-# Read in lts.conf entries.
-set -f
-if [ -f /etc/lts.conf ]; then
-    eval $(getltscfg -a) || true
-fi
-if [ -f /var/cache/getltscfg-cluster/lts.conf ]; then
-    eval $(getltscfg -a -c /var/cache/getltscfg-cluster/lts.conf) || true
-fi
-if [ -f /var/cache/ltsp/ltsp_config ]; then
-    . /var/cache/ltsp/ltsp_config
-fi
+# This function sets all vars from cache
+set_lts_from_cache() {
+    [ -r "${ltsp_config_env}" ] || return
+    # Make all vars we are about to set exported
+    set -a
+    . ${ltsp_config_env}
+    set +a
+}
 
-if [ -d /usr/share/ltsp/ltsp_config.d ]; then
-    for script in $(run_parts_list /usr/share/ltsp/ltsp_config.d) ; do
-        . $script        
-    done
+# This function will process the lts.conf params
+process_lts_conf() {
+    set -f 
+    if [ -d /usr/share/ltsp/ltsp_config.d ]; then
+        for script in $(run_parts_list /usr/share/ltsp/ltsp_config.d) ; do
+            . $script        
+        done
+    fi
+    set +f
+}
+
+if [ ! -r "${ltsp_config_env}" ]; then
+    process_lts_conf
+else 
+    if boolean_is_true "${PROCESS_LTS_CONF}"; then
+        reset_lts_env
+        process_lts_conf
+    else
+        set_lts_from_cache
+    fi
 fi
-set +f

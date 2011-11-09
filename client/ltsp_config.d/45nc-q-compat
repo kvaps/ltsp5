@@ -6,3 +6,4 @@ case "$nc_output" in
    *"invalid option -- 'q' "*) unset nc_q_param ;;
 esac
 unset nc_output
+set_lts_var nc_q_param "$nc_q_param"

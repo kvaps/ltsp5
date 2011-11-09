@@ -1,15 +1,15 @@
 # set defaults for sound support
 if boolean_is_true "$LTSP_FATCLIENT"; then
-    export SOUND=False
+    set_lts_var SOUND False
 elif [ -z "$SOUND_DAEMON" ]; then
     if [ -x /usr/bin/pulseaudio ]; then
-        export SOUND_DAEMON=pulse
+        set_lts_var SOUND_DAEMON pulse
     elif [ -x /usr/bin/esd ]; then
-        export SOUND_DAEMON=esd
+        set_lts_var SOUND_DAEMON esd
     elif [ -x /usr/bin/nasd ]; then
-        export SOUND_DAEMON=nasd
+        set_lts_var SOUND_DAEMON nasd
     fi
     if [ -z "$SOUND" ] && [ -n "$SOUND_DAEMON" ]; then
-        export SOUND=True
+        set_lts_var SOUND True
     fi
 fi

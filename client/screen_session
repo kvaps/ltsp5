@@ -37,10 +37,8 @@ SCRIPT_DIRS="/etc/ltsp/screen.d /usr/share/ltsp/screen.d /usr/lib/ltsp/screen.d"
 (PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
 
 # Load LTSP configuration
-if [ "True" != "$LTSP_CONFIG" ]; then
-    # ltsp_config sources ltsp-common-functions
-    . /usr/share/ltsp/ltsp_config
-fi
+# ltsp_config sources ltsp-common-functions
+. /usr/share/ltsp/ltsp_config
 
 # Figure out SCREEN_NUM
 if [ -n "$1" ]; then
