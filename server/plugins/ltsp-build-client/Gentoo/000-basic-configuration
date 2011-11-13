@@ -1,7 +1,7 @@
 case "$MODE" in
     commandline)
-        add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "regular" "true"
-        add_option "mirror" "`eval_gettext "Set extra mirror locations (space-separated)"`" "regular" "true"
+        add_option "jobs" "`eval_gettext "Set the number of parallel build processes"`" "advanced" "true"
+        add_option "mirror" "`eval_gettext "Set extra mirror locations (space-separated)"`" "advanced" "true"
         add_option "locale" "`eval_gettext "set the default locale"`" "advanced" "true"
         add_option "packages" "`eval_gettext "list of extra packages to install as part of the initial installation."`" "advanced" "true"
         ;;
