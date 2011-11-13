@@ -1,9 +1,5 @@
 # setting config vars
-if [ -z "${ARCH}" ]; then
-	ARCH="x86"
-fi
-
-if [ "${ARCH}" = "x86" ]; then
+if [ "${ARCH}" = "i486" ] || [ "${ARCH}" = "i686" ]; then
 	use_linux32
 fi
 
