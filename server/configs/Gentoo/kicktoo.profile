@@ -75,13 +75,7 @@ post_unpack_stage_tarball() {
 	EOF
 
 	# TODO: copy this from elsewhere instead of making it here.
-	# remove packages from here when they are stable
 	spawn "mkdir -p ${chroot_dir}/etc/portage"
-
-	cat >> ${chroot_dir}/etc/portage/package.keywords <<- EOF
-	net-misc/ltsp-client
-	x11-misc/ldm
-	EOF
 
 	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
 	# req by pulseaudio
