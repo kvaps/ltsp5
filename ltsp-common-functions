@@ -25,6 +25,15 @@ run_parts_list() {
     find -L "$1" -mindepth 1 -maxdepth 1 -type f -name "$2*" | sed -n '/.*\/[0-9a-zA-Z_\-]\{1,\}$/p' | sort -n
 }
 
+detect_vendor() {
+    if [ -e /etc/sysconfig/ltspdist ]; then
+        . /etc/sysconfig/ltspdist
+        echo "$VENDORDEF"
+    else
+        echo $(lsb_release --id --short | tr " " "_")
+    fi
+}
+
 if [ -f /usr/share/ltsp/ltsp-vendor-functions ]; then
     . /usr/share/ltsp/ltsp-vendor-functions
 fi
