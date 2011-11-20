@@ -18,13 +18,12 @@
 #  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 
-if [ -e /etc/sysconfig/ltspdist ]; then
-    . /etc/sysconfig/ltspdist
-    VENDOR=$VENDORDEF
-else
-    VENDOR=$(lsb_release --id --short | tr " " "_")
-fi
-export BASE=${BASE:-/opt/ltsp}                       # LTSP base directory
+# Source the ltsp common functions for vendor detect
+. /usr/share/ltsp/ltsp-common-functions
+
+VENDOR=$(detect_vendor)                       # Linux distribution
+export BASE=${BASE:-/opt/ltsp}                # LTSP base directory
+
 
 # generic functions
 find_chroots() {
