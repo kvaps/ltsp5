@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # copyright 2009 Vagrant Cascadian <vagrant@freegeek.org>,
-# 2010 Alkis Georgopoulos <alkisg@gmail.com>, distributed under the
+# 2010 Alkis Georgopoulos <alkisg@gmail.com>,
+# 2011 Wim Muskee <wimmuskee@gmail.com>, distributed under the
 # terms of the GNU General Public License version 2 or any later version.
 
 usage() {
@@ -55,12 +56,17 @@ default_options() {
         if [ -z "$ARCH" ]; then
             # Prefer the chroot that corresponds to the server arch,
             # but if that doesn't exist, use the first one available.
-            if [ -x /usr/bin/dpkg ]; then
-                ARCH=$(dpkg --print-architecture)
-            # TODO: put other distro arch-detecting code here
-            else
-                ARCH=i386
-            fi
+            case "$VENDOR" in
+                Debian|Ubuntu)
+                    if [ -x /usr/bin/dpkg ]; then
+                        ARCH=$(dpkg --print-architecture)
+                    else
+                        ARCH=i386
+                    fi ;;
+                Gentoo)
+                    ARCH=i686 ;;
+            esac
+
             if [ ! -d "$BASE/$ARCH" ]; then
                 for dir in "$BASE"/*/; do
                     # If it's not "images" and it's not "*" because of no subdirs
@@ -79,15 +85,41 @@ default_options() {
 
 pre_chroot() {
     test -d "$ROOT" || die "ERROR: ltsp chroot not found: $ROOT"
+
     if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
-        if ! mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"; then
-            die "Could not mount $ROOT/var/cache/apt/archives"
-        fi
+        case "$VENDOR" in
+            Debian|Ubuntu)
+                if ! mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"; then
+                    die "Could not mount $ROOT/var/cache/apt/archives"
+                fi ;;
+            Gentoo)
+                if ! mount --bind /usr/portage "$ROOT/usr/portage"; then
+                    die "Could not mount $ROOT/usr/portage"
+                fi
+                if ! mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"; then
+                    die "Could not mount $ROOT/usr/portage/packages"
+                fi
+                # remove if ltsp ever in portage tree
+                if ! mount --bind "/var/lib/layman" "$ROOT/var/lib/layman"; then
+                    die "Could not mount $ROOT/var/lib/layman"
+                fi ;;
+            *)
+                echo "Mounting the package cache is not available for your distribution." ;;
+         esac
     fi
     if boolean_is_true "$MOUNT_DEV_PTS"; then
-        if ! mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"; then
-            die "Could not mount $ROOT/dev/pts"
-        fi
+        case "$VENDOR" in
+            Debian|Ubuntu)
+                if ! mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"; then
+                    die "Could not mount $ROOT/dev/pts"
+                fi ;;
+            Gentoo)
+                if ! mount --bind /dev "$ROOT/dev"; then
+                    die "Could not mount $ROOT/dev"
+                fi ;;
+            *)
+                echo "Mounting dev is not available for your distribution." ;;
+        esac
     fi
     if boolean_is_true "$MOUNT_PROC"; then
         if ! mount -t proc proc "$ROOT/proc"; then
@@ -103,18 +135,34 @@ post_chroot() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     if boolean_is_true "$MOUNT_PROC"; then
-        # binfmt_misc might need to be unmounted manually, see LP #534211
-        if grep -q "^binfmt_misc $ROOT/proc/sys/fs/binfmt_misc" $ROOT/proc/mounts; then
-            umount "$ROOT/proc/sys/fs/binfmt_misc"
+        if [ "$VENDOR" = "Debian" ] || [ "$VENDOR" = "Ubuntu" ]; then
+            # binfmt_misc might need to be unmounted manually, see LP #534211
+            if grep -q "^binfmt_misc $ROOT/proc/sys/fs/binfmt_misc" $ROOT/proc/mounts; then
+                umount "$ROOT/proc/sys/fs/binfmt_misc"
+            fi
         fi
         umount "$ROOT/proc"
     fi
-    if boolean_is_true "$MOUNT_DEV_PTS"; then
-        umount "$ROOT/dev/pts"
-    fi
-    if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
-        umount "$ROOT/var/cache/apt/archives"    
-    fi
+
+    case "$VENDOR" in
+        Debian|Ubuntu)
+            if boolean_is_true "$MOUNT_DEV_PTS"; then
+                umount "$ROOT/dev/pts"
+            fi
+            if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
+                umount "$ROOT/var/cache/apt/archives"
+            fi ;;
+        Gentoo)
+            if boolean_is_true "$MOUNT_DEV_PTS"; then
+                umount "$ROOT/dev"
+            fi
+            if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
+                # remove layman part if ltsp ever in portage tree
+                umount "$ROOT/var/lib/layman"
+                umount "$ROOT/usr/portage/packages"
+                umount "$ROOT/usr/portage"
+            fi ;;
+    esac
 }
 
 # Main
@@ -122,6 +170,14 @@ post_chroot() {
 # Parse command line arguments
 if ! ARGS=$(getopt -o +a:b:cdhpr -l 'arch:,base:,mount-package-cache,mount-dev-pts,help,mount-proc,copy-resolv-conf' -n $0 -- "$@"); then
     exit 1
+fi
+
+# get linux distro
+if [ -e /etc/sysconfig/ltspdist ]; then
+    . /etc/sysconfig/ltspdist
+    VENDOR=$VENDORDEF
+else
+    VENDOR=$(lsb_release --id --short | tr " " "_")
 fi
 
 # Source the ltsp common functions, mainly for boolean_is_true
@@ -140,4 +196,4 @@ default_options
 
 trap "post_chroot" 0 HUP INT QUIT KILL SEGV PIPE TERM
 pre_chroot
-eval LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
+LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
