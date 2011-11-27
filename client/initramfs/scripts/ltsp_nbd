@@ -132,7 +132,7 @@ mountroot()
     fi
 
     # merge ro and rw filesystems
-    mount -t aufs -o dirs=/cow=rw:/rofs=ro aufs ${rootmnt}
+    mount -t overlayfs -o upperdir=/cow,lowerdir=/rofs overlayfs ${rootmnt}
 
     # make the filesystems accessible
     mkdir -p ${rootmnt}/cow
