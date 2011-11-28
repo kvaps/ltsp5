@@ -4,13 +4,13 @@
 [ -f "/etc/ltsp/initramfs-scripts.conf" ] && . /etc/ltsp/initramfs-scripts.conf
 
 scriptsdir=/usr/share/ltsp/initramfs-scripts.d
-if [ -n "${DISTRO} ]; then
+if [ -n "${DISTRO}" ]; then
    scriptsdir="${scriptsdir}/${DISTRO}"
 else
    scriptsdir="${scriptsdir}/common"
 fi
 
-[ ! -d "${scriptsdir} ] && exit
+[ ! -d "${scriptsdir}" ] && exit
 
 for script in $(run_parts_list ${scriptsdir}) ; do 
     . ${script}
