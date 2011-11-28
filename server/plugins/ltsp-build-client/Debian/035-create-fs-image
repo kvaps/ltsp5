@@ -13,7 +13,7 @@ case "$MODE" in
         ;;
     before-install)
         if [ -n "$FS_IMAGE_TYPE" ]; then
-            FS_IMAGE_SIZE=${FS_IMAGE_SIZE:-"1000"}
+            FS_IMAGE_SIZE=${FS_IMAGE_SIZE:-"2024"}
             FS_IMAGE_FILE=${FS_IMAGE_FILE:-"$BASE/images/$CHROOT.img"}
 
             # ensure needed directories exist
