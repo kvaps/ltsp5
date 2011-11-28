@@ -12,13 +12,31 @@ done
 if [ "${LTSP_BOOT}" = "Y" ]; then
     [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
     [ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
-
     # mount writeable filesystems if / is not already mounted writeable.
-    ltsp_bindmounts=/usr/share/ltsp/ltsp-bindmounts
     if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
-        if [ -x ${rootmnt}/${ltsp_bindmounts} ]; then
-            chroot ${rootmnt} ${ltsp_bindmounts}
-        fi
+        mkdir -p /rofs /cow
+        mount -t tmpfs -o mode=0755 tmpfs /cow
+        mount -o move ${rootmnt} /rofs
+        # detect which unionfs to use
+        while read x ; do
+            for y in $x ; do
+                case $y in
+                    aufs) 
+                        UNION_TYPE=aufs
+                        UNION_OPTS="dirs=/cow=rw:/rofs=ro"
+                        ;;
+                    overlayfs) 
+                        UNION_TYPE=overlayfs
+                        UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
+                        ;;
+                esac
+            done
+        done < /proc/filesystems    
+        mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
+        for dir in /rofs /cow ; do
+	        mkdir -p ${rootmnt}${dir}
+        	mount -o move ${dir} ${rootmnt}${dir}
+        done
     fi
 
     # get networking configuration into environment

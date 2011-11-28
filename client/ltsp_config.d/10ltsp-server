@@ -43,10 +43,12 @@ if [ -z "$SERVER" ] || [ "$SERVER" = "auto" ]; then
                 fi
                 ;;
             *)
-                if [ "$FSTYPE" = "nfs" ] && [ "$MOUNTPOINT" = "/" ]; then
-                    # NFS root
-                    server=${DEVICE%%:*}
-                    echo NFS_SERVER=${server} > /var/cache/ltsp/ltsp_config || true
+                if [ "$FSTYPE" = "nfs" ]; then
+                    if [ "$MOUNTPOINT" = "/" ] || [ "$MOUNTPOINT" = "/rofs" ]; then
+                        # NFS root
+                        server=${DEVICE%%:*}
+                        echo NFS_SERVER=${server} > /var/cache/ltsp/ltsp_config || true
+                    fi
                 fi
                 ;;
         esac
