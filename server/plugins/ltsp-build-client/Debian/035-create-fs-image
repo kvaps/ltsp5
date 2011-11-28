@@ -39,17 +39,11 @@ case "$MODE" in
             NBD_ROOT_HOST=${NBD_ROOT_HOST:-"192.168.0.1"}
             NBD_ROOT_PORT=${NBD_ROOT_PORT:-"2000"}
             # set to use NBD root from nbd-client package
-            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp boot=local nbdroot=$NBD_ROOT_HOST,$NBD_ROOT_PORT"}
+            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp ltsp boot=local nbdroot=$NBD_ROOT_HOST,$NBD_ROOT_PORT"}
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
             echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
             initramfs_scripts=$ROOT/usr/share/initramfs-tools/scripts/
-            if [ -f "$initramfs_scripts/nfs-bottom/ltsp" ] && [ ! -f "$initramfs_scripts/local-bottom/ltsp" ]; then
-                # copy hook so it gets run when boot=local
-                # FIXME: this is a bit hackish
-                mkdir -p $initramfs_scripts/local-bottom/
-                cp $initramfs_scripts/nfs-bottom/ltsp $initramfs_scripts/local-bottom/
-            fi
         fi
     ;;
     finalization)
