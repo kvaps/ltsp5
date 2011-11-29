@@ -191,4 +191,4 @@ default_options
 
 trap "post_chroot" 0 HUP INT QUIT KILL SEGV PIPE TERM
 pre_chroot
-LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
+eval LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
