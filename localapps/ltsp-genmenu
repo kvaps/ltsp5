@@ -47,7 +47,7 @@ generate_local() {
 
         # If icon is relative path, find the real icon file
         if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
-            ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
+            ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*\(png\|xpm\|svg\)'|head -1)
         fi
 
         # If the icon file exists, copy it
@@ -91,7 +91,7 @@ generate_remote() {
 
         # If icon is relative path, find the real icon file
         if [ -n "${ICON}" ] && [ "${ICON}" = "${ICON##*/}" ]; then
-            ICON=$(find -L ${TMP_SHARE}/icons ${TMP_SHARE}/pixmaps -type f -regex '.*'${ICON}'.*[png|xpm|svg]?'|head -1)
+            ICON=$(find -L /usr/share/icons /usr/share/pixmaps -type f -regex '.*'${ICON}'.*\(png\|xpm\|svg\)'|head -1)
         fi
 
         # If the icon file exists, copy it
