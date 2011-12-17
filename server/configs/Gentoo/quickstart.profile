@@ -102,9 +102,6 @@ pre_install_portage_tree() {
 	# DO NOT DELETE
 	EOF
 
-	# TODO: copy this from elsewhere instead of making it here.
-	spawn "mkdir -p ${chroot_dir}/etc/portage"
-
 	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
 	# req by pulseaudio
 	sys-fs/udev extras
