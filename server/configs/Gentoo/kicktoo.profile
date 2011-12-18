@@ -28,13 +28,17 @@ makeconf_line EMERGE_DEFAULT_OPTS "--usepkg --buildpkg"
 makeconf_line CONFIG_PROTECT_MASK "/etc /etc/conf.d /etc/init.d"
 makeconf_line CLEAN_DELAY 0
 makeconf_line EMERGE_WARNING_DELAY 0
+makeconf_line INSTALL_MASK "TODO.bz2 AUTHORS.bz2 NEWS.bz2 README.bz2 ChangeLog.bz2"
+
 if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
 fi
+
 if [ "${CCACHE}" == "true" ]; then
 	makeconf_line FEATURES "ccache"
 	makeconf_line CCACHE_SIZE "4G"
 fi
+
 locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel

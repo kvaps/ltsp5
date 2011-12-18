@@ -93,6 +93,7 @@ pre_install_portage_tree() {
 	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
 	CLEAN_DELAY=0
 	EMERGE_WARNING_DELAY=0
+	INSTALL_MASK="TODO.bz2 AUTHORS.bz2 NEWS.bz2 README.bz2 ChangeLog.bz2"
 
 	# TODO: don't add this by default
 	source /var/lib/layman/make.conf
