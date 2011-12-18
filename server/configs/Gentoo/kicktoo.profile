@@ -19,6 +19,10 @@ if [ -z "${LOCALE}" ]; then
 	LOCALE="en_US.UTF-8"
 fi
 
+if [ -z "${TIMEZONE}" ]; then
+	TIMEZONE="$(</etc/timezone)"
+fi
+
 chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
 rootpw password
@@ -42,7 +46,7 @@ fi
 locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel
-timezone UTC
+timezone ${TIMEZONE}
 extra_packages ldm ltsp-client dejavu sysklogd ${PACKAGES}
 rcadd sysklogd default
 rcadd ltsp-client-setup boot
@@ -86,19 +90,6 @@ post_unpack_stage_tarball() {
 	# req by mesa
 	x11-libs/libdrm libkms
 	EOF
-}
-
-pre_setup_timezone() {
-	# retrieve chroot timezone from server
-	if [ -z "${TIMEZONE}" ]; then
-		# For OpenRC
-		if [ -e /etc/timezone ]; then
-			TIMEZONE="$(</etc/timezone)"
-		else
-			. /etc/conf.d/clock
-		fi
-	fi
-	timezone ${TIMEZONE}
 }
 
 pre_build_kernel() {

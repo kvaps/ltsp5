@@ -16,6 +16,10 @@ if [ -z "${CHROOT}" ]; then
 	CHROOT="${BASE}/${NAME}"
 fi
 
+if [ -z "${TIMEZONE}" ]; then
+	TIMEZONE="$(</etc/timezone)"
+fi
+
 chroot_dir $CHROOT
 stage_uri="${STAGE_URI}"
 
@@ -39,6 +43,7 @@ logger sysklogd
 cron none
 rootpw password
 tree_type none
+timezone ${TIMEZONE}
 
 
 mount_bind() {
@@ -111,18 +116,6 @@ pre_install_portage_tree() {
 	# req by mesa
 	x11-libs/libdrm libkms
 	EOF
-}
-
-pre_set_timezone() {
-	if [ -z "${TIMEZONE}" ]; then
-		# For OpenRC
-		if [ -e /etc/timezone ]; then
-			TIMEZONE="$(</etc/timezone)"
-		else
-			. /etc/conf.d/clock
-		fi
-	fi
-	timezone ${TIMEZONE}
 }
 
 pre_build_kernel() {
