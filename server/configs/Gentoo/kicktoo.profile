@@ -61,7 +61,6 @@ mount_bind() {
 	spawn "mkdir -p ${source}"
 	spawn "mkdir -p ${dest}"
 	spawn "mount ${source} ${dest} -o bind"
-	echo "${dest}" >> /tmp/install.umount
 }
 
 post_unpack_stage_tarball() {
