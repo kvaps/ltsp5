@@ -64,8 +64,7 @@ set_lts_var() {
     val=$2
     [ -z "$var" ] && return
     if [ -n "$val" ]; then
-        eval $var="$val"
-        export $var
+        export "$var"="$val"
         echo "$var=\"$val\"" >> ${ltsp_config_env}
     else
         unset $var
