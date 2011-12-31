@@ -1,5 +1,5 @@
 #!/sbin/runscript
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -72,7 +72,6 @@ start() {
     configure_syslog || true
     configure_fstab || true
     run_rcfiles || true
-#    configure_x || true
     configure_serial_mouse || true
     configure_localdev || true
     configure_printer || true

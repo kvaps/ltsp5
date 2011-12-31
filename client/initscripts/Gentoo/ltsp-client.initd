@@ -1,5 +1,5 @@
 #!/sbin/runscript
-# Copyright 1999-2008 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -10,13 +10,8 @@ depend() {
 
 start() {
 	ebegin "Starting LTSP Client"
-	# CONFIGURE_X does not seem to work atm, and since X can configure itself
-	# pretty well, we may remove it some day, force it off for now
-	CONFIGURE_X=${CONFIGURE_X:-F}
-	export CONFIGURE_X
 	. /usr/share/ltsp/ltsp-init-common
 
-	#configure_x || true
 	start_screen_sessions || true
 	start_sound || true
 }

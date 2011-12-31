@@ -37,7 +37,7 @@ case "$MODE" in
 
         INSTALLER_ARGS=""
         if [ -n "$option_installer_debug_value" ] || [ "${INSTALLER_DEBUG}" = true ]; then
-            INSTALLER_ARGS="$QUICKSTART_ARGS --debug"
+            INSTALLER_ARGS="$INSTALLER_ARGS --debug"
         fi
         if [ -n "$option_installer_verbose_value" ] || [ "${INSTALLER_VERBOSE}" = true ]; then
             INSTALLER_ARGS="$INSTALLER_ARGS --verbose"
