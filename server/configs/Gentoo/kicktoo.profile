@@ -1,5 +1,5 @@
 # setting config vars
-if [ "${ARCH}" = "i486" ] || [ "${ARCH}" = "i686" ]; then
+if [ "${MAIN_ARCH}" = "x86" ]; then
 	use_linux32
 fi
 
@@ -27,12 +27,6 @@ chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
 rootpw password
 makeconf_line MAKEOPTS "${MAKEOPTS}"
-makeconf_line USE "alsa pulseaudio svg xml X -cups"
-makeconf_line EMERGE_DEFAULT_OPTS "--usepkg --buildpkg"
-makeconf_line CONFIG_PROTECT_MASK "/etc /etc/conf.d /etc/init.d"
-makeconf_line CLEAN_DELAY 0
-makeconf_line EMERGE_WARNING_DELAY 0
-makeconf_line INSTALL_MASK "TODO.bz2 AUTHORS.bz2 NEWS.bz2 README.bz2 ChangeLog.bz2"
 
 if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
@@ -81,14 +75,9 @@ post_unpack_stage_tarball() {
 	# DO NOT DELETE
 	EOF
 
-	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
-	# req by pulseaudio
-	sys-fs/udev extras
-	# req by xorg-server
-	dev-libs/libxml2 python
-	# req by mesa
-	x11-libs/libdrm libkms
-	EOF
+	# linking ltsp profile from overlay
+	rm ${chroot_dir}/etc/make.profile
+	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/make.profile"
 }
 
 pre_build_kernel() {

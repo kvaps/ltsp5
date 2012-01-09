@@ -1,6 +1,6 @@
 install_mode chroot
 
-if [ "${ARCH}" = "i486" ] || [ "${ARCH}" = "i686" ]; then
+if [ "${MAIN_ARCH}" = "x86" ]; then
 	use_linux32
 fi
 
@@ -88,19 +88,9 @@ pre_install_portage_tree() {
 		echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
 	fi
 
-	# TODO: allow overriding of all these variables
+	# TODO: don't add this by default
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
-
-	USE="alsa pulseaudio svg xml X -cups"
-
-	EMERGE_DEFAULT_OPTS="--usepkg --buildpkg"
-	CONFIG_PROTECT_MASK="/etc /etc/conf.d /etc/init.d"
-	CLEAN_DELAY=0
-	EMERGE_WARNING_DELAY=0
-	INSTALL_MASK="TODO.bz2 AUTHORS.bz2 NEWS.bz2 README.bz2 ChangeLog.bz2"
-
-	# TODO: don't add this by default
 	source /var/lib/layman/make.conf
 	EOF
 
@@ -108,14 +98,9 @@ pre_install_portage_tree() {
 	# DO NOT DELETE
 	EOF
 
-	cat >> ${chroot_dir}/etc/portage/package.use <<- EOF
-	# req by pulseaudio
-	sys-fs/udev extras
-	# req by xorg-server
-	dev-libs/libxml2 python
-	# req by mesa
-	x11-libs/libdrm libkms
-	EOF
+	# linking ltsp profile from overlay
+	rm ${chroot_dir}/etc/make.profile
+	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/make.profile"
 }
 
 pre_build_kernel() {
