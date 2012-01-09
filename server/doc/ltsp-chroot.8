@@ -1,0 +1,56 @@
+.TH "ltsp-chroot" "8" "2011-12-31" "" ""
+.SH "NAME"
+ltsp\-chroot \- Chroots into a specific LTSP thin client chroot 
+
+.SH "SYNOPSIS"
+.PP 
+\fBltsp\-chroot\fR  <options>
+
+.SH "DESCRIPTION"
+.PP 
+\fBltsp\-chroot\fR chroots into a specified LTSP chroot. Optional arguments
+can be provided to customize the chroot location as well as extra mounts.
+If present, default arguments will be read from the configuration file 
+/etc/ltsp/ltsp\-chroot.conf, and overwritten with used command line options.
+
+.SH "OPTIONS"
+.PP 
+.IP "\fB\-a\fP \fB\-\-arch\fP \fIarch\fR" 10 
+Sets the architecture of the target chroot. Defaults vary by distribution.
+
+.IP "\fB\-b\fP \fB\-\-base\fP \fIdir\fR" 10 
+Sets the path of the target chroot. Defaults to /opt/ltsp/.
+
+.IP "\fB\-c\fP \fB\-\-mount\-package\-cache\fP" 10 
+If set, mounts the server package directories to the chroot previous to
+chrooting. Settings vary by distribution.
+
+.IP "\fB\-d\fP \fB\-\-mount\-dev\-pts\fP" 10 
+If set, mounts the server dev directories to the chroot previous to
+chrooting. Settings vary by distribution.
+
+.IP "\fB\-p\fP \fB\-\-mount\-proc\fP" 10 
+If set, mounts the server proc to the chroot previous to
+chrooting.
+
+.IP "\fB\-p\fP \fB\-\-copy\-resolv\-conf\fP" 10 
+If set, copies the server resolv.conf to the chroot previous to
+chrooting.
+
+.IP "\fB\-h\fP \fB\-\-help\fP" 10 
+Displays the ltsp\-chroot help message.
+
+.SH "SEE ALSO"
+.PP 
+\fBltsp\-build\-client\fP\fB(8)\fP, 
+
+.SH "AVAILABILITY"
+.PP 
+\fBltsp\-chroot\fR is part of \fBltsp\fP package and the latest versions
+are available in source form from \fIhttps://launchpad.net/products/ltsp\fR. 
+
+.SH "MAN PAGE AUTHOR"
+.PP 
+Wim Muskee <wimmmuskee@gmail.com>
+.PP 
+
