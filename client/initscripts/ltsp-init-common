@@ -311,14 +311,25 @@ EOF
     fi
 
     if [ -n "$DNS_SERVER" ] || [ -n "$SEARCH_DOMAIN" ]; then
-        :>/etc/resolv.conf
+        if [ -x $rootmnt/sbin/resolvconf ] && ( [ -L $rootmnt/etc/resolv.conf ] || [ -e $rootmnt/var/lib/resolvconf/convert ] ); then
+            mkdir -p /run/resolvconf/interface/
+            resolv_method=resolvconf
+            resolv=/run/resolvconf/interface/LTSP
+        else
+            resolv_method=static
+            resolv=$rootmnt/etc/resolv.conf
+        fi
+        > $resolv
         if [ -n "$SEARCH_DOMAIN" ]; then
-            echo "search $SEARCH_DOMAIN" >> /etc/resolv.conf
+            echo "search $SEARCH_DOMAIN" >> $resolv
         fi
         if [ -n "$DNS_SERVER" ]; then
             for n in $DNS_SERVER; do 
-                echo "nameserver ${n}" >> /etc/resolv.conf
+                echo "nameserver ${n}" >> $resolv
             done
+        fi
+        if [ "$resolv_method" = "static" ]; then
+            resolvconf -a LTSP
         fi
     fi
 }
