@@ -8,7 +8,7 @@ case "$MODE" in
             i386)
                 # We ideally want non-PAE but install media
                 # doesn't have it, so use PAE in that case
-                apt-cache show linux-image-generic 2> /dev/null > /dev/null && \
+                chroot $ROOT apt-cache show linux-image-generic 2> /dev/null > /dev/null && \
                     KERNEL_ARCH="generic" || KERNEL_ARCH="generic-pae"
             ;;
 
