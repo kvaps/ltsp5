@@ -38,7 +38,11 @@ mountroot()
         NBD_ROOT_HOST=$( echo "${nbdroot}" | sed 's/:.*//')
         NBD_ROOT_PORT=$( echo "${nbdroot}" | sed 's/.*://')
     else
-        NBD_ROOT_HOST="${ROOTSERVER}"
+        if [ -n "${nbdserver}" ]; then
+            NBD_ROOT_HOST="${nbdserver}"
+        else
+            NBD_ROOT_HOST="${ROOTSERVER}"
+        fi
         if [ -n "$nbdname" ]; then
             NBD_ROOT_NAME=${nbdname}
         else
