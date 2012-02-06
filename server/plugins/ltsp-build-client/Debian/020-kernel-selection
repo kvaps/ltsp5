@@ -22,9 +22,6 @@ case "$MODE" in
             case $ARCH in
                 kfreebsd-*)
                     KERNEL_BASE="kfreebsd-image"
-                    # kfreebsd doesn't currently have completely unversioned 
-                    # package names:
-                    KERNEL_VERSION=${KERNEL_VERSION:-"8"}
                     ;;
             esac
             case $ARCH in
