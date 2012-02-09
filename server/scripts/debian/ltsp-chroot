@@ -11,16 +11,13 @@ $0 [OPTION] command
   -a, --arch                Architecture of the chroot.  Default is arch of the host.
   -b, --base                Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
   -c, --mount-package-cache Mount package cache dir from server.
-  -d, --mount-dev-pts       Mount /dev/pts from server.
+  -d, --mount-dev           Mount /dev from server.
   -h, --help                This message.
+  -m, --mount-all           Mount all server dirs mentioned in this message.
   -p, --mount-proc          Mount /proc from server.
   -r, --copy-resolv-conf    Copy /etc/resolv.conf from server.
+  -t, --mount-dev-pts       Mount /dev/pts from server.
 EOF
-}
-
-die() {
-    echo "$@" >&2
-    exit 1
 }
 
 analyze_command_line() {
@@ -31,10 +28,12 @@ analyze_command_line() {
             -a|--arch) ARCH=$(echo $2 | sed -e "s,',,g") ; shift 2 ;;
             -b|--base) BASE=$(echo $2 | sed -e "s,',,g") ; shift 2 ;;
             -c|--mount-package-cache) MOUNT_PACKAGE_CACHE=true ; shift 1 ;;
-            -d|--mount-dev-pts) MOUNT_DEV_PTS=true; shift 1 ;;
+            -d|--mount-dev) MOUNT_DEV=true; shift 1 ;;
             -h|--help) usage ; exit 0 ;;
+            -m|--mount-all) MOUNT_ALL=true; shift 1 ;;
             -p|--mount-proc) MOUNT_PROC=true; shift 1 ;;
             -r|--copy-resolv-conf) COPY_RESOLV_CONF=true; shift 1 ;;
+            -t|--mount-dev-pts) MOUNT_DEV_PTS=true; shift 1 ;;
             --) shift ; done_opts=true ;;
             *) die "$0: Internal error!" ;;
         esac
@@ -86,94 +85,66 @@ default_options() {
 pre_chroot() {
     test -d "$ROOT" || die "ERROR: ltsp chroot not found: $ROOT"
 
+    if boolean_is_true "$MOUNT_ALL"; then
+        MOUNT_PACKAGE_CACHE=true
+        MOUNT_DEV=true
+        MOUNT_PROC=true
+        MOUNT_DEV_PTS=true
+    fi
     if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
         case "$VENDOR" in
             Debian|Ubuntu)
-                if ! mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"; then
-                    die "Could not mount $ROOT/var/cache/apt/archives"
-                fi ;;
+                mark_mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"
+                ;;
             Gentoo)
-                if ! mount --bind /usr/portage "$ROOT/usr/portage"; then
-                    die "Could not mount $ROOT/usr/portage"
-                fi
-                if ! mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"; then
-                    die "Could not mount $ROOT/usr/portage/packages"
-                fi
+                mark_mount --bind /usr/portage "$ROOT/usr/portage"
+                mark_mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"
                 # remove if ltsp ever in portage tree
-                if ! mount --bind "/var/lib/layman" "$ROOT/var/lib/layman"; then
-                    die "Could not mount $ROOT/var/lib/layman"
-                fi ;;
+                mark_mount --bind "/var/lib/layman" "$ROOT/var/lib/layman"
+                ;;
             *)
-                echo "Mounting the package cache is not available for your distribution." ;;
+                echo "Mounting the package cache is not available for your distribution."
+                ;;
          esac
+    fi
+    if boolean_is_true "$MOUNT_DEV"; then
+        mark_mount --bind "/dev" "$ROOT/dev"
+    fi
+    if boolean_is_true "$MOUNT_PROC"; then
+        mark_mount -t proc proc "$ROOT/proc"
+    fi
+    if boolean_is_true "$COPY_RESOLV_CONF"; then
+        cp /etc/resolv.conf "$ROOT/etc/"
     fi
     if boolean_is_true "$MOUNT_DEV_PTS"; then
         case "$VENDOR" in
             Debian|Ubuntu)
-                if ! mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"; then
-                    die "Could not mount $ROOT/dev/pts"
-                fi ;;
-            Gentoo)
-                if ! mount --bind /dev "$ROOT/dev"; then
-                    die "Could not mount $ROOT/dev"
-                fi ;;
+                mark_mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"
+                ;;
             *)
-                echo "Mounting dev is not available for your distribution." ;;
+                echo "Mounting dev/pts is not available for your distribution."
+                ;;
         esac
-    fi
-    if boolean_is_true "$MOUNT_PROC"; then
-        if ! mount -t proc proc "$ROOT/proc"; then
-            die "Could not mount $ROOT/proc"
-        fi
-    fi
-    if boolean_is_true "$COPY_RESOLV_CONF"; then
-        cp /etc/resolv.conf "$ROOT/etc/"
     fi
 }
 
 post_chroot() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
-    if boolean_is_true "$MOUNT_PROC"; then
-        if [ "$VENDOR" = "Debian" ] || [ "$VENDOR" = "Ubuntu" ]; then
-            # binfmt_misc might need to be unmounted manually, see LP #534211
-            if grep -q "^binfmt_misc $ROOT/proc/sys/fs/binfmt_misc" $ROOT/proc/mounts; then
-                umount "$ROOT/proc/sys/fs/binfmt_misc"
-            fi
-        fi
-        umount "$ROOT/proc"
-    fi
-
-    case "$VENDOR" in
-        Debian|Ubuntu)
-            if boolean_is_true "$MOUNT_DEV_PTS"; then
-                umount "$ROOT/dev/pts"
-            fi
-            if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
-                umount "$ROOT/var/cache/apt/archives"
-            fi ;;
-        Gentoo)
-            if boolean_is_true "$MOUNT_DEV_PTS"; then
-                umount "$ROOT/dev"
-            fi
-            if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
-                # remove layman part if ltsp ever in portage tree
-                umount "$ROOT/var/lib/layman"
-                umount "$ROOT/usr/portage/packages"
-                umount "$ROOT/usr/portage"
-            fi ;;
-    esac
+    umount_marked
 }
 
 # Main
 
 # Parse command line arguments
-if ! ARGS=$(getopt -o +a:b:cdhpr -l 'arch:,base:,mount-package-cache,mount-dev-pts,help,mount-proc,copy-resolv-conf' -n $0 -- "$@"); then
+if ! ARGS=$(getopt -o +a:b:cdhmprt -l 'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf,mount-dev-pts' -n $0 -- "$@"); then
     exit 1
 fi
 
 # Source the ltsp common functions
 . /usr/share/ltsp/ltsp-common-functions
+
+require_root
 
 # First, include the configuration file, if it exists
 if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
