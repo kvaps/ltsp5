@@ -17,7 +17,7 @@ case "$MODE" in
             FAT_CLIENT_DESKTOPS=""
 
             # Code taken from 030-artwork
-            for cdd in ed x k; do
+            for cdd in ed k l myth x; do
                 if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then
                     if dpkg -l | grep -q "${cdd}ubuntu-desktop"; then
                         FAT_CLIENT_DESKTOPS="$FAT_CLIENT_DESKTOPS ${cdd}ubuntu-desktop"
@@ -53,29 +53,6 @@ case "$MODE" in
         # Notify the user about the different defaults
         echo "--fat-client was specified, all clients will boot as fat clients by default."
         echo "To modify this behavior, put LTSP_FATCLIENT=False in lts.conf."
-
-        # Prevent other display managers from starting
-        mkdir -p "$ROOT/etc/X11"
-        echo '/usr/sbin/ldm' > "$ROOT/etc/X11/default-display-manager"
-        echo 'ldm shared/default-x-display-manager select ldm' | chroot "$ROOT" debconf-set-selections
-
-        # Divert update-notifier.desktop to prevent it from showing up for admin users
-        mkdir -p "$ROOT/etc/xdg/ltsp-disable-autostart"
-        chroot "$ROOT" dpkg-divert --package ltsp-client --add --rename \
-            --divert /etc/xdg/ltsp-disable-autostart/update-notifier.desktop \
-            /etc/xdg/autostart/update-notifier.desktop
-
-        # Enforce some gconf settings for all users
-        mkdir -p "$ROOT/usr/share/gconf/mandatory"
-        cat > "$ROOT/usr/share/gconf/mandatory/10_ltsp_fat_client" <<EOF
-/desktop/gnome/lockdown/disable_user_switching              true
-EOF
-
-        # The following default settings can be overriden by users
-        mkdir -p "$ROOT/usr/share/gconf/defaults"
-        cat > "$ROOT/usr/share/gconf/defaults/10_ltsp_fat_client" <<EOF
-/desktop/gnome/lockdown/disable_lock_screen                 true
-EOF
 
         # Install the packages
         for package in ubuntu-standard $FAT_CLIENT_DESKTOPS; do
