@@ -21,22 +21,6 @@ case "$MODE" in
             APT_GET_OPTS="$APT_GET_OPTS -o APT::Install-Recommends=false"
 
             EARLY_PACKAGES="$EARLY_PACKAGES $KIOSK_PACKAGES"
-
-            # add the display manager to the whitelist
-            if [ -n "$KIOSK_DM" ]; then
-                if [ -n "$RCS_WHITELIST" ]; then
-                    RCS_WHITELIST="$RCS_WHITELIST $KIOSK_DM"
-                fi
-                if [ -n "$RC2_WHITELIST" ]; then
-                    RC2_WHITELIST="$RC2_WHITELIST $KIOSK_DM"
-                fi
-                if [ -n "$RC6_WHITELIST" ]; then
-                    RC6_WHITELIST="$RC6_WHITELIST $KIOSK_DM"
-                fi
-                if [ -n "$RC0_WHITELIST" ]; then
-                    RC0_WHITELIST="$RC0_WHITELIST $KIOSK_DM"
-                fi
-            fi
         fi
         ;;
     after-install)

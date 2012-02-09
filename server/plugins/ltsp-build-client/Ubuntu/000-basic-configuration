@@ -6,10 +6,6 @@ case "$MODE" in
         MIRROR=${MIRROR:-"http://archive.ubuntu.com/ubuntu"}
         COMPONENTS=${COMPONENTS:-"main restricted universe multiverse"}
         EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client ldm dbus"}
-        RCS_WHITELIST=${RCS_WHITELIST:-"mountkernfs.sh mountdevsubfs.sh hostname.sh loopback udev module-init-tools procps.sh etc-setserial ltsp-client-setup setserial console-setup console-screen.kbd.sh"}
-        RC2_WHITELIST=${RC2_WHITELIST:-"klogd sysklogd ltsp-client-core usplash rmnologin dbus"}
-        RC6_WHITELIST=${RC6_WHITELIST:-"reboot"}
-        RC0_WHITELIST=${RC0_WHITELIST:-"halt"}
         OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"true"}
         export DEBIAN_PRIORITY=critical
         ;;
