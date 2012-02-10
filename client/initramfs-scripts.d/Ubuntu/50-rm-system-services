@@ -1,0 +1,57 @@
+# Remove some system services that don't make sense in live sessions.
+# The user can add more items by declaring space separated RM_SYSTEM_SERVICES
+# or RM_THIN_SYSTEM_SERVICES lists in lts.conf. The RM_THIN_SYSTEM_SERVICES list
+# is ignored by fat clients.
+
+# For readability, include a comment line for each service.
+
+# Save sound card(s') mixer state(s)
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES alsa-store"
+# Record successful boot for GRUB
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES grub-common"
+# Light Display Manager
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES lightdm"
+# Modem manager
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES modemmanager"
+# Hide the splash screen
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES plymouth-stop"
+# Store software rfkill state
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES rfkill-store"
+# Getty
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES tty2 tty3 tty4 tty5 tty6"
+# Check if unattended upgrades are being applied
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES unattended-upgrades"
+# Save and restore random seed between restarts
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES urandom"
+# Read required files in advance
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES ureadahead"
+# Read required files in advance for other mountpoints
+RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES ureadahead-other"
+
+# AppArmor initialization
+RM_THIN_SERVICES="$RM_THIN_SERVICES apparmor"
+# Automatic crash report generation
+RM_THIN_SERVICES="$RM_THIN_SERVICES apport"
+# Deferred execution scheduler
+RM_THIN_SERVICES="$RM_THIN_SERVICES atd"
+# mDNS/DNS-SD daemon
+RM_THIN_SERVICES="$RM_THIN_SERVICES avahi-daemon"
+# Bluetooth daemon
+RM_THIN_SERVICES="$RM_THIN_SERVICES bluetooth"
+# CUPS Printing spooler and server
+RM_THIN_SERVICES="$RM_THIN_SERVICES cups"
+# Braille terminal driver 
+RM_THIN_SERVICES="$RM_THIN_SERVICES brltty"
+# Collects and submits kernel crash signatures
+RM_THIN_SERVICES="$RM_THIN_SERVICES kerneloops"
+# Uncomplicated Firewall
+RM_THIN_SERVICES="$RM_THIN_SERVICES ufw"
+
+rm_services="$RM_SYSTEM_SERVICES"
+if ! boolean_is_true "$LTSP_FATCLIENT"; then
+    rm_services="$rm_services RM_THIN_SERVICES"
+fi
+
+for service in $rm_services; do
+    rm -f /etc/rc?.d/???"$service" "/etc/init.d/$service" "/etc/init/$service.conf"
+done
