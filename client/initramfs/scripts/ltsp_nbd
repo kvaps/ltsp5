@@ -45,6 +45,7 @@ mountroot()
         fi
         if [ -n "$nbdname" ]; then
             NBD_ROOT_NAME=${nbdname}
+            NBD_ROOT_PORT=${nbdport:-"10809"}
         else
             NBD_ROOT_PORT=${nbdport:-"2000"}
         fi
@@ -86,7 +87,7 @@ mountroot()
 #        # nbd-proxy is too heavy for very old thin clients
 #        nbd_proxy=${nbd_proxy:-false}
 #    fi
-    if [ "$nbd_proxy" = "false" ] || [ -n "$NBD_ROOT_NAME" ]; then
+    if [ "$nbd_proxy" = "false" ]; then
         # nbd_proxy=true/false can also be specified on the kernel command line
         NBD_CLIENT_ROOT_HOST=$NBD_ROOT_HOST
     else
