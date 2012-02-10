@@ -8,6 +8,7 @@
 #        Warren Togami <wtogami@redhat.com>
 #  2008, Vagrant Cascadian <vagrant@freegeek.org>
 #  2010, Gideon Romm <gadi@ltsp.org>
+#  2012, Alkis Georgopoulos <alkisg@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -26,20 +27,14 @@
 #  MA 02110-1301, USA.
 #
 
-# source old config file
-if [ -f /etc/default/ltsp-update-image ]; then
-    . /etc/default/ltsp-update-image
-fi
-
-# source new config file
+# source configuration file
 if [ -f /etc/ltsp/ltsp-update-image.conf ]; then
     . /etc/ltsp/ltsp-update-image.conf
 fi
 
 
-
-# Generates a squashfs image from an ltsp chroot to be served by an inetd driven
-# nbd-server process.
+# Generates a squashfs image from an ltsp chroot to be served by an nbd-server
+# process.
 
 usage() {
 cat <<EOF
@@ -51,17 +46,17 @@ $0 [OPTION]
   -e, --exclude-dirs  Exclude those dirs from the image.
   -f, --force         Force recalculating ports for all chroots, update of all 
                       kernels, fresh pxelinux.cfg files and restart nbd-server.
+  -h, --help          This message.
   -i, --image-only    Update image only and do not attempt to adjust ports or 
                       services.
   -I, --ipappend      Pass IPAPPEND value to bootloader.
   -n, --no-comp       Do not compress the image.
-  -N, --nbd-named     Use nbd-server named entries
   -o, --options       Pass kernel command line options to all config files.
+  -O, --openbsd-inetd Use old inetd method instead of named NBD exports.
   -p, --port          Port you wish this nbd image to communicate on.  Default
                       is 2000.
   -S, --server        Specify the NBD server IP.
   -T, --timeout       Add timeout to bootloader.
-  -h, --help          This message.
 EOF
 }
 
@@ -69,7 +64,8 @@ EOF
 # Handle command line args
 #
 
-ARGS=$(getopt -o b:p:a:e:nNhifo:O:S:T: --long base:,port:,arch:,no-comp,tftpbootdir:,exclude-dirs:,force,image-only,options:,ipappend:,no-comp,nbd-named,server:,timeout:,help -n $0 -- "$@")
+ARGS=$(getopt -n "$0" -o a:b:d:e:fhiI:no:Op:S:T:h --long \
+    arch:,base:,tftpbootdir:,exclude-dirs:,force,help,image-only,ipappend:,no-comp,options:,openbsd-inetd,port:,server:,timeout: -- "$@")
 
 if [ "$?" != "0" ]; then
     exit 1                          # getopt failed
@@ -79,20 +75,20 @@ eval set -- "${ARGS}"
 
 while true ; do
     case "$1" in
-        -b|--base) BASE=$2 ; shift 2 ;;
-        -p|--port) PORT=$2 ; shift 2 ;;
         -a|--arch) ARCH=$2 ; shift 2 ;;
+        -b|--base) BASE=$2 ; shift 2 ;;
         -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
         -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
         -f|--force) FORCE_NEW=1; shift 1 ;;
+        -h|--help) usage ; exit 0 ;;
         -i|--image-only) IMAGE_ONLY=1; shift 1 ;;
         -I|--ipappend) IPAPPEND=$2 ; shift 2 ;;
         -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
-        -N|--nbd-named) NBD_NAMED="1" ; shift 1 ;;
         -o|--options) BOOTPROMPT_OPTIONS=$2 ; shift 2 ;;
+        -O|--openbsd-inetd) NBD_NAMED="0" ; shift 1 ;;
+        -p|--port) PORT=$2 ; shift 2 ;;
         -S|--server)  NBD_ROOT_HOST=$2 ; shift 2 ;;
         -T|--timeout) TIMEOUT=$2 ; shift 2 ;;
-        -h|--help) usage ; exit 0 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
     esac
@@ -101,7 +97,7 @@ done
 # defaults
 BASE=${BASE:-"/opt/ltsp"}
 BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"quiet splash"}
-NBD_NAMED=${NBD_NAMED:-"0"}
+NBD_NAMED=${NBD_NAMED:-"1"}
 
 # make sure we dont carry trailing slashes around (LP 189237)
 BASE=$(echo ${BASE}|sed -e 's/\/$//g')
