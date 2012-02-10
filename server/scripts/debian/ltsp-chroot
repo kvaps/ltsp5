@@ -137,14 +137,13 @@ post_chroot() {
 # Main
 
 # Parse command line arguments
-if ! ARGS=$(getopt -o +a:b:cdhmprt -l 'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf,mount-dev-pts' -n $0 -- "$@"); then
+if ! ARGS=$(getopt -n "$0" -o +a:b:cdhmprt -l \
+    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf,mount-dev-pts' -- "$@"); then
     exit 1
 fi
 
 # Source the ltsp common functions
 . /usr/share/ltsp/ltsp-common-functions
-
-require_root
 
 # First, include the configuration file, if it exists
 if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
@@ -159,6 +158,8 @@ analyze_command_line $ARGS
 
 # Finally, fall back to using default values for any unset options
 default_options
+
+require_root
 
 trap "post_chroot" 0 HUP INT QUIT KILL SEGV PIPE TERM
 pre_chroot
