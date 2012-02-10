@@ -24,6 +24,7 @@ esac
 force_load nbd
 force_load squashfs
 force_load overlayfs
+force_load aufs
 
 # Copy across the binaries
 copy_exec /sbin/nbd-client /sbin
