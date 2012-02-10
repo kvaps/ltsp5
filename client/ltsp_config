@@ -68,7 +68,7 @@ set_lts_var() {
         echo "$var=\"$val\"" >> ${ltsp_config_env}
     else
         unset $var
-        sed -ie '/$var=/d' ${ltsp_config_env}
+        sed -i -e '/$var=/d' ${ltsp_config_env}
     fi    
 }
 
