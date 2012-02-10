@@ -1,0 +1,12 @@
+# Save some useful initrams vars
+
+# The boot interface name comes from /tmp/net-*.conf
+test -n "$DEVICE" || return 0
+echo "DEVICE=$DEVICE" >> /var/cache/ltsp/ltsp_config
+
+# Also save the MAC address of the boot interface
+LTSP_CLIENT_MAC=$(ip -oneline -family inet link show dev "$DEVICE" | sed -n '/.*ether[[:space:]]*\([[:xdigit:]:]*\).*/{s//\1/;y/abcdef-/ABCDEF:/;p}')
+if [ -n "$LTSP_CLIENT_MAC" ]; then
+    export LTSP_CLIENT_MAC
+    echo "$LTSP_CLIENT_MAC" >> /var/cache/ltsp/ltsp_config
+fi
