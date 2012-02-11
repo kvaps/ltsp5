@@ -1,18 +1,17 @@
 #!/bin/sh
 
 . /usr/share/ltsp/ltsp-common-functions
-[ -f "/etc/ltsp/initramfs-scripts.conf" ] && . /etc/ltsp/initramfs-scripts.conf
+test -f "/etc/ltsp/initramfs-scripts.conf" && . /etc/ltsp/initramfs-scripts.conf
 
-scriptsdir=/usr/share/ltsp/initramfs-scripts.d
-if [ -n "${DISTRO}" ]; then
-   scriptsdir="${scriptsdir}/${DISTRO}"
+VENDOR=${VENDOR:-$(detect_vendor)}
+if [ -d "/usr/share/ltsp/initramfs-scripts.d/$VENDOR" ]; then
+    scriptsdir="/usr/share/ltsp/initramfs-scripts.d/$VENDOR"
+elif [ -d "/usr/share/ltsp/initramfs-scripts.d/common" ]; then
+    scriptsdir="/usr/share/ltsp/initramfs-scripts.d/common"
 else
-   scriptsdir="${scriptsdir}/common"
+    exit 1
 fi
 
-[ ! -d "${scriptsdir}" ] && exit
-
-for script in $(run_parts_list ${scriptsdir}) ; do 
-    . ${script}
+for script in $(run_parts_list "$scriptsdir") ; do 
+    . "$script"
 done
-
