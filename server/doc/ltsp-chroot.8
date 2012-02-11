@@ -1,4 +1,4 @@
-.TH "ltsp-chroot" "8" "2011-12-31" "" ""
+.TH "ltsp-chroot" "8" "2012-02-11" "" ""
 .SH "NAME"
 ltsp\-chroot \- Chroots into a specific LTSP thin client chroot 
 
@@ -25,12 +25,15 @@ Sets the path of the target chroot. Defaults to /opt/ltsp/.
 If set, mounts the server package directories to the chroot previous to
 chrooting. Settings vary by distribution.
 
-.IP "\fB\-d\fP \fB\-\-mount\-dev\-pts\fP" 10 
-If set, mounts the server dev directories to the chroot previous to
-chrooting. Settings vary by distribution.
+.IP "\fB\-d\fP \fB\-\-mount\-dev\fP" 10 
+If set, mounts the server dev and devpts directories to the chroot previous to
+chrooting.
 
 .IP "\fB\-p\fP \fB\-\-mount\-proc\fP" 10 
-If set, mounts the server proc to the chroot previous to
+If set, mounts the server proc to the chroot previous to chrooting.
+
+.IP "\fB\-m\fP \fB\-\-mount\-all\fP" 10 
+If set, mounts the proc, dev and package directories to the chroot before
 chrooting.
 
 .IP "\fB\-p\fP \fB\-\-copy\-resolv\-conf\fP" 10 
