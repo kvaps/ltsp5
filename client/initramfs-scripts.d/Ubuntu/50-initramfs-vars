@@ -8,5 +8,5 @@ echo "DEVICE=$DEVICE" >> /var/cache/ltsp/ltsp_config
 LTSP_CLIENT_MAC=$(ip -oneline -family inet link show dev "$DEVICE" | sed -n '/.*ether[[:space:]]*\([[:xdigit:]:]*\).*/{s//\1/;y/abcdef-/ABCDEF:/;p}')
 if [ -n "$LTSP_CLIENT_MAC" ]; then
     export LTSP_CLIENT_MAC
-    echo "$LTSP_CLIENT_MAC" >> /var/cache/ltsp/ltsp_config
+    echo "LTSP_CLIENT_MAC=$LTSP_CLIENT_MAC" >> /var/cache/ltsp/ltsp_config
 fi
