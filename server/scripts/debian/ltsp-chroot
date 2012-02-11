@@ -16,7 +16,6 @@ $0 [OPTION] command
   -m, --mount-all           Mount all server dirs mentioned in this message.
   -p, --mount-proc          Mount /proc from server.
   -r, --copy-resolv-conf    Copy /etc/resolv.conf from server.
-  -t, --mount-dev-pts       Mount /dev/pts from server.
 EOF
 }
 
@@ -33,7 +32,6 @@ analyze_command_line() {
             -m|--mount-all) MOUNT_ALL=true; shift 1 ;;
             -p|--mount-proc) MOUNT_PROC=true; shift 1 ;;
             -r|--copy-resolv-conf) COPY_RESOLV_CONF=true; shift 1 ;;
-            -t|--mount-dev-pts) MOUNT_DEV_PTS=true; shift 1 ;;
             --) shift ; done_opts=true ;;
             *) die "$0: Internal error!" ;;
         esac
@@ -89,7 +87,6 @@ pre_chroot() {
         MOUNT_PACKAGE_CACHE=true
         MOUNT_DEV=true
         MOUNT_PROC=true
-        MOUNT_DEV_PTS=true
     fi
     if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
         case "$VENDOR" in
@@ -109,22 +106,13 @@ pre_chroot() {
     fi
     if boolean_is_true "$MOUNT_DEV"; then
         mark_mount --bind "/dev" "$ROOT/dev"
+        mark_mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"
     fi
     if boolean_is_true "$MOUNT_PROC"; then
         mark_mount -t proc proc "$ROOT/proc"
     fi
     if boolean_is_true "$COPY_RESOLV_CONF"; then
         cp /etc/resolv.conf "$ROOT/etc/"
-    fi
-    if boolean_is_true "$MOUNT_DEV_PTS"; then
-        case "$VENDOR" in
-            Debian|Ubuntu)
-                mark_mount -t devpts -o rw,noexec,nosuid,gid=5,mode=620 devpts "$ROOT/dev/pts"
-                ;;
-            *)
-                echo "Mounting dev/pts is not available for your distribution."
-                ;;
-        esac
     fi
 }
 
@@ -138,7 +126,7 @@ post_chroot() {
 
 # Parse command line arguments
 if ! ARGS=$(getopt -n "$0" -o +a:b:cdhmprt -l \
-    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf,mount-dev-pts' -- "$@"); then
+    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf' -- "$@"); then
     exit 1
 fi
 
