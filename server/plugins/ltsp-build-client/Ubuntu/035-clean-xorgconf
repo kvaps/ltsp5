@@ -1,7 +1,0 @@
-case "$MODE" in
-    finalization)
-        if [ -f $ROOT/etc/X11/xorg.conf ]; then
-            rm $ROOT/etc/X11/xorg.conf
-        fi
-        ;;
-esac
