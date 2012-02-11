@@ -1,6 +1,0 @@
-case "$MODE" in
-    after-install)
-        # We don't need plymouth to stop using its init scripts
-        rm -f $ROOT/etc/init/plymouth-stop.conf
-        ;;
-esac
