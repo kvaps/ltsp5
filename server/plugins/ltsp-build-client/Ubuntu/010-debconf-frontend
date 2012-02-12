@@ -1,18 +1,1 @@
-case "$MODE" in
-    configure)
-        unset DEBIAN_HAS_FRONTEND
-        unset DEBIAN_FRONTEND
-        unset DEBCONF_FRONTEND
-        unset DEBCONF_REDIR
-        # Avoid debconf mailing notes.
-        DEBCONF_ADMIN_EMAIL=""
-        export DEBCONF_ADMIN_EMAIL
-
-        DEBCONF_READFD=0
-        export DEBCONF_READFD
-        DEBCONF_WRITEFD=3
-        export DEBCONF_WRITEFD
-        DEBIAN_FRONTEND=passthrough
-        export DEBIAN_FRONTEND
-        ;;
-esac
+../Debian/010-debconf-frontend
