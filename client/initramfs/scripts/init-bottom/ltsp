@@ -43,6 +43,6 @@ if [ "${LTSP_BOOT}" = "Y" ]; then
     . /tmp/net-*.conf
 
     mount -o bind /proc ${rootmnt}/proc
-    chroot ${rootmnt} /usr/share/ltsp/initramfs-scripts
+    chroot ${rootmnt} /usr/share/ltsp/initramfs-scripts noinit
     umount ${rootmnt}/proc
 fi

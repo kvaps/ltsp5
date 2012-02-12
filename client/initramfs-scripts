@@ -15,3 +15,9 @@ fi
 for script in $(run_parts_list "$scriptsdir") ; do 
     . "$script"
 done
+
+# init=/usr/share/ltsp/initramfs-scripts can be used to launch this script,
+# which should then chain to /sbin/init.
+# To run it from the initramfs instead, pass any parameter, e.g.
+# chroot "$rootmnt" /usr/share/ltsp/initramfs-scripts noinit
+test $# -eq 0 && exec /sbin/init
