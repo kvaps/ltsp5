@@ -18,13 +18,13 @@ fi
 # Apply the dns info that was received from dhcp or from lts.conf
 if [ -n "$DNS_SERVER" ] || [ -n "$SEARCH_DOMAIN" ]; then
     # Deal with resolvconf
-    if [ -x $rootmnt/sbin/resolvconf ] && ( [ -L $rootmnt/etc/resolv.conf ] || [ -e $rootmnt/var/lib/resolvconf/convert ] ); then
+    if [ -x /sbin/resolvconf ] && ( [ -L /etc/resolv.conf ] || [ -e /var/lib/resolvconf/convert ] ); then
         mkdir -p /run/resolvconf/interface/
         resolv_method=resolvconf
         resolv=/run/resolvconf/interface/LTSP
     else
         resolv_method=static
-        resolv=$rootmnt/etc/resolv.conf
+        resolv=/etc/resolv.conf
     fi
 
     # Check if $resolv is writable
