@@ -202,7 +202,7 @@ int stay_attached;
 int backoff_min;
 int backoff_max;
 
-#define NBD_PROXY_VERSION "2.1.0"
+#define NBD_PROXY_VERSION "2.1.1"
 
 #define PRINT_DEBUG_FUNC(FMT, ...)                              \
     do {                                                        \
@@ -1137,7 +1137,7 @@ int server_handshake(struct buf *input_buf) {
 
     if (h_state == HS_HELLO && input_buf != NULL) {
         struct nbd_hello *hello_data = ((struct nbd_hello *)input_buf->data);
-        int old_hs = ntohll(hello_data->magic);
+        u64 old_hs = ntohll(hello_data->magic);
 
         if (c_state == C_HANDSHAKING) 
             queue_buf(&client_out_queue, input_buf);
@@ -1300,7 +1300,9 @@ int server_handshake(struct buf *input_buf) {
             /* After this has been sent, we expect that both the client
                and the server will be ready. */
             client_set_state(C_READING);
-        } 
+        } else
+            free_buf(input_buf);
+
         server_set_state(S_READING);
     }
 
@@ -1571,12 +1573,14 @@ int main(int argc, char *argv[]) {
             c = server_connect(server_socket, server_address, server_port);
 
             /* Immediate connection. */
-            if (c == 0)
+            if (c == 0) {
                 server_set_state(S_HANDSHAKING);
-            else if (c < 0)
+                nbconn = 0;
+            }
+            else if (c < 0) {
                 server_set_state(S_INIT);
-
-            nbconn++;
+                nbconn++;
+            }
         }
 
         /* Put the default read requests on the queues if needed. */
@@ -1615,30 +1619,28 @@ int main(int argc, char *argv[]) {
         }                
 
         /* Complete handshake on the server side. */
-        if (s_state == S_HANDSHAKING && (fds[server].revents & POLLIN | fds[client].revents & POLLIN)) {
+        if (s_state == S_HANDSHAKING) {
             struct buf *rb = NULL;
 
             if (fds[server].revents & POLLIN && read_queue(&server_in_queue, &rb) < 0) {
                 server_set_state(S_INIT);
                 continue;
             }
-            
-            if (fds[client].revents & POLLIN && read_queue(&client_in_queue, &rb) < 0) {
-                break;
+
+            if (c_state != C_READING) {
+                if (fds[client].revents & POLLIN && read_queue(&client_in_queue, &rb) < 0) {
+                    break;
+                }
             }
 
             /* Received some data. */
-            else if (s_state == S_HANDSHAKING && rb != NULL) {
+            if (s_state == S_HANDSHAKING && rb != NULL) {
                 if (server_handshake(rb) < 0) 
                     server_set_state(S_INIT);
                 
                 if (s_state == S_READING && resend_all_nbd_requests(pnr) < 0)
                     server_set_state(S_FUKUSHIMA);
-            }
-            
-            /* This makes sure we don't try to re-read again without a
-               poll. */
-            continue;
+            }            
         }
         
         /* Accept connection on the client side. */
@@ -1659,8 +1661,9 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        /* Data ready from the server. */
-        if (fds[server].revents & POLLIN) {
+        /* Data ready from the server. Only read from the server in
+           S_READING mode. Reading for the handshake is done above. */
+        if (fds[server].revents & POLLIN && s_state == S_READING) {
             struct buf *rb = NULL;
 
             if (read_queue(&server_in_queue, &rb) < 0) {
@@ -1689,8 +1692,10 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        /* Data ready from the client. */
-        if (fds[client].revents & POLLIN) {
+        /* Data ready from the client. Only read from the client in
+           C_READING mode. Reading from the client for handshake is
+           done above. */
+        if (fds[client].revents & POLLIN && c_state == C_READING) {
             struct buf *rb = NULL;
 
             if (read_queue(&client_in_queue, &rb) < 0) {
