@@ -9,9 +9,13 @@
 
 for x in $(cat /proc/cmdline); do
     case "$x" in
-        ltsp|init=/sbin/init-ltsp)
+        init=/sbin/init-ltsp)
             LTSP_BOOT=true
-            test "$x" = "ltsp" && CALL_SCRIPTS=true
+            break
+            ;;
+        ltsp)
+            LTSP_BOOT=true
+            CALL_SCRIPTS=true
             break
             ;;
     esac
