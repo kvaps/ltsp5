@@ -56,6 +56,8 @@ fi
 # TODO: better copy those to the root file system, as they can't be passed
 # as environment variables when init=/sbin/init-ltsp is used.
 . /tmp/net-*.conf
+mkdir ${rootmnt}/var/cache/ltsp/
+cp /tmp/net-*.conf ${rootmnt}/var/cache/ltsp/
 
 if [ -n "$CALL_SCRIPTS" ]; then
     mount -o bind /proc "$rootmnt/proc"
