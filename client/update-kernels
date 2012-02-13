@@ -54,11 +54,11 @@ fi
 
 if [ -z "$BOOTPROMPT_OPTS" ]; then
     if [ "$VENDOR" = "Ubuntu" ]; then
-        BOOTPROMPT_OPTS="quiet splash ltsp"
+        BOOTPROMPT_OPTS="root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash"
     elif [ "$VENDOR" = "Debian" ]; then
-        BOOTPROMPT_OPTS="quiet root=/dev/nfs ip=dhcp boot=nfs ltsp"
+        BOOTPROMPT_OPTS="quiet root=/dev/nfs ip=dhcp boot=nfs init=/sbin/init-ltsp"
     else
-        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp ltsp"
+        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp init=/sbin/init-ltsp"
     fi
 fi
 

@@ -96,7 +96,7 @@ done
 
 # defaults
 BASE=${BASE:-"/opt/ltsp"}
-BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"quiet splash"}
+BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash"}
 NBD_NAMED=${NBD_NAMED:-"1"}
 
 # make sure we dont carry trailing slashes around (LP 189237)
@@ -254,9 +254,9 @@ assign_name () {
     fi
 
     if [ -n "${NBD_ROOT_HOST}" ]; then
-        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdserver=${NBD_ROOT_HOST} nbdname=${NBD_ROOT_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=${NBD_ROOT_HOST}:${NBD_ROOT_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
     else
-        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdname=${NBD_ROOT_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=:${NBD_ROOT_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
     fi
 
     echo "NBD_ROOT_NAME=${NBD_ROOT_NAME}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
@@ -292,8 +292,8 @@ EOF
             continue
         fi
 
-        if grep nbdname ${PXECFG} > /dev/null 2>&1 ; then
-            sed -i -e "s/nbdname=.* /nbdname=${NBD_ROOT_NAME} /g" ${PXECFG}
+        if grep nbdroot ${PXECFG} > /dev/null 2>&1 ; then
+            sed -i -e "s/nbdroot=.* /nbdroot=:${NBD_ROOT_NAME} /g" ${PXECFG}
         fi
     done
     echo "Done."
