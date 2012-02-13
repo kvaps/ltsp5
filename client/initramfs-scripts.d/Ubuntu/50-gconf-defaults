@@ -1,5 +1,0 @@
-# The following default settings can be overriden by users
-test -d "/usr/share/gconf/defaults" || return 0
-cat > "/usr/share/gconf/defaults/10_ltsp_client" <<EOF
-/desktop/gnome/lockdown/disable_lock_screen                 true
-EOF 

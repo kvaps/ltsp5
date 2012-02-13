@@ -1,5 +1,0 @@
-# Enforce some gconf settings for all users
-test -d "/usr/share/gconf/mandatory" || return 0
-cat > "/usr/share/gconf/mandatory/10_ltsp_client" <<EOF
-/desktop/gnome/lockdown/disable_user_switching              true
-EOF
