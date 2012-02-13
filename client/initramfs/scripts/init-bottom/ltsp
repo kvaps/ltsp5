@@ -1,48 +1,60 @@
 #!/bin/sh
 
-# Parse command line options
+# We support two methods to call the init-ltsp.d scripts.
+# The first method is to pass "ltsp" in the kernel command line, which calls
+# the scripts with `chroot` while still in the initramfs, i.e. at the end of
+# this script.
+# The second is to pass "init=/sbin/init-ltsp", which will execute the scripts
+# in the real system and chain to /sbin/init after that.
+
 for x in $(cat /proc/cmdline); do
-    case $x in
-        ltsp) LTSP_BOOT=Y
-              break 
-              ;;
+    case "$x" in
+        ltsp|init=/sbin/init-ltsp)
+            LTSP_BOOT=true
+            test "$x" = "ltsp" && CALL_SCRIPTS=true
+            break
+            ;;
     esac
 done
 
-if [ "${LTSP_BOOT}" = "Y" ]; then
-    [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
-    [ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
-    # mount writeable filesystems if / is not already mounted writeable.
-    if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
-        mkdir -p /rofs /cow
-        mount -t tmpfs -o mode=0755 tmpfs /cow
-        mount -o move ${rootmnt} /rofs
-        # detect which unionfs to use
-        while read x ; do
-            for y in $x ; do
-                case $y in
-                    aufs) 
-                        UNION_TYPE=aufs
-                        UNION_OPTS="dirs=/cow=rw:/rofs=ro"
-                        ;;
-                    overlayfs) 
-                        UNION_TYPE=overlayfs
-                        UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
-                        ;;
-                esac
-            done
-        done < /proc/filesystems    
-        mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
-        for dir in /rofs /cow ; do
-	        mkdir -p ${rootmnt}${dir}
-        	mount -o move ${dir} ${rootmnt}${dir}
+test -n "$LTSP_BOOT" || exit
+
+[ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
+[ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
+# mount writeable filesystems if / is not already mounted writeable.
+if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
+    mkdir -p /rofs /cow
+    mount -t tmpfs -o mode=0755 tmpfs /cow
+    mount -o move ${rootmnt} /rofs
+    # detect which unionfs to use
+    while read x ; do
+        for y in $x ; do
+            case $y in
+                aufs) 
+                    UNION_TYPE=aufs
+                    UNION_OPTS="dirs=/cow=rw:/rofs=ro"
+                    ;;
+                overlayfs) 
+                    UNION_TYPE=overlayfs
+                    UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
+                    ;;
+            esac
         done
-    fi
+    done < /proc/filesystems    
+    mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
+    for dir in /rofs /cow ; do
+        mkdir -p ${rootmnt}${dir}
+    	mount -o move ${dir} ${rootmnt}${dir}
+    done
+fi
 
-    # get networking configuration into environment
-    . /tmp/net-*.conf
+# get networking configuration into environment
+# TODO: better copy those to the root file system, as they can't be passed
+# as environment variables when init=/sbin/init-ltsp is used.
+. /tmp/net-*.conf
 
-    mount -o bind /proc ${rootmnt}/proc
-    chroot ${rootmnt} /usr/share/ltsp/initramfs-scripts noinit
-    umount ${rootmnt}/proc
+if [ -n "$CALL_SCRIPTS" ]; then
+    mount -o bind /proc "$rootmnt/proc"
+    EXEC_INIT=false chroot "$rootmnt" /sbin/init-ltsp
+    umount "$rootmnt/proc"
 fi
