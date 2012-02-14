@@ -1,13 +1,18 @@
-# This file is sourced
-
-NBD_ROOT_HOST=server
-[ -f "/var/cache/ltsp/ltsp_config" ] && . /var/cache/ltsp/ltsp_config
-
 # get the lts.conf via tftp
+
+test -f "/var/cache/ltsp/ltsp_config" && . /var/cache/ltsp/ltsp_config
+
+# $filename comes from net-eth0.conf and is usually "/<path>/pxelinux.0".
+# If it contains a path, we want to construct "/<path>/lts.conf".
+# If it doesn't, we want just "lts.conf" without inserting a slash, as some tftp
+# servers have problems with it. Finally, if $filename isn't set, we want to
+# default to "/ltsp/i386/lts.conf".
+fileonly=${filename##*/}
+pathonly=${filename%$fileonly}
+
 cd /etc
-tftppath="$(echo "$filename" | sed -n 's,\"*\(.*/\)[^/]*,\1,p')"
-echo "get ${tftppath:-/ltsp/i386/}lts.conf" | /bin/tftp ${NBD_ROOT_HOST} >/dev/null 2>&1
+tftp "$NBD_ROOT_HOST" -c get ${pathonly:-/ltsp/i386/}lts.conf
+cd -
 
 # Get the lts.conf vars into the environment
 . /usr/share/ltsp/ltsp_config
-true

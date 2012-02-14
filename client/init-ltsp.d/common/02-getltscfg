@@ -1,4 +1,0 @@
-# This file is sourced.
-
-#/usr/bin/getltscfg -a 2>/dev/null
-. /usr/share/ltsp/ltsp_config
