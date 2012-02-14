@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# This is just a wrapper script that accepts the same parameters as nbd-client,
+# and launches nbd-proxy to connect to the specified server,
+# and nbd-client to connect to the nbd-proxy in localhost.
+# Maybe at some point nbd-proxy itself can accept that syntax, so the wrapper
+# won't be needed anymore.
+# It might be ran from the initramfs, so only busybox utilities should be used.
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 host port nbd_device [-block-size|-b block size] [-timeout|-t timeout] [-swap|-s] [-sdp|-S] [-persist|-p] [-nofork|-n]
+For more info, see the nbd-client man page." >&2
+    exit 1
+fi
+
+# To make the initramfs nbd script call nbd-client-proxy instead of nbd-client,
+# specify NBDCLIENT=nbd-client-proxy in the kernel command line.
+# Then the local-top/nbd initramfs script will call nbd-client-proxy this way:
+# $NBDCLIENT $nbdsrv ${nbdpath:+-N} $nbdpath $nbdport $nbdrootdev -swap -persist
+host="$1"
+if [ "$2" = "-N" ]; then
+    port=10809
+else
+    port="$2"
+fi
+
+nbd-proxy "$host" "$port" "$port"
+
+# Remove the host parameter and chain to nbd-client with the rest of the command
+# line.
+shift
+exec nbd-client localhost "$@"

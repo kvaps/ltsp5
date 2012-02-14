@@ -32,3 +32,4 @@ copy_exec /sbin/mkswap /sbin
 copy_exec /sbin/swapon /sbin
 copy_exec /usr/bin/tftp /bin
 copy_exec /usr/sbin/nbd-proxy /sbin/nbd-proxy
+copy_exec /usr/sbin/nbd-client-proxy /sbin/nbd-client-proxy
