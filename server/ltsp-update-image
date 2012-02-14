@@ -264,7 +264,9 @@ generate_image () {
 
         IMAGE="${IMGDIR}/${ARCH}.img"
         rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-        nice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
+        test -x /usr/bin/nice && nice=nice || unset nice
+        test -x /usr/bin/ionice && ionice=ionice || unset ionice
+        $nice $ionice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
         if [ "$?" != "0" ]; then
             echo "Error: mksquashfs failed to build the ltsp image, exiting"
             exit 1
