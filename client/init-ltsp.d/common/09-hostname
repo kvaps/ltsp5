@@ -1,4 +1,5 @@
 if [ -z "$HOSTNAME" ]; then
+    HOSTNAME_BASE=${HOSTNAME_BASE:-ltsp}
     case "$HOSTNAME_EXTRA" in
         mac)
             HOSTNAME_EXTRA=$(ip link show $DEVICE | awk '/ether/{print $2}' | tr ':' '-')
@@ -11,6 +12,7 @@ if [ -z "$HOSTNAME" ]; then
 fi
 
 hostname "$HOSTNAME"
+echo "$HOSTNAME" > /etc/hostname
 
 cat <<EOF > /etc/hosts
 127.0.0.1 localhost
