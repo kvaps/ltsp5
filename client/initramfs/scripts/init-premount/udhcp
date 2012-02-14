@@ -265,6 +265,13 @@ LOGSVR='$logsvr'" > /tmp/net-$interface.conf
 mkdir -p /conf
 # Only export the lines that have something after the =
 sed -n "/[^=]*=[' ]*$/!s/.*/export &/p" "/tmp/net-$interface.conf" > /conf/param.conf
+
+# This is completely unrelated to udhcp and is only here to work around a bug
+# which makes /sbin/wait-for-root delay for 30 seconds when the root disk is
+# mounted with nbd:
+# https://bugs.launchpad.net/ubuntu/+source/nbd/+bug/696435
+# Please remove it when the bug is resolved.
+echo "ROOTDELAY=1" >> /conf/param.conf
 }
 
 # Main
