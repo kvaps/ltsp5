@@ -12,7 +12,23 @@ else
     exit 1
 fi
 
-for script in $(run_parts_list "$scriptsdir") ; do 
+# Provide a break=<script-name> kernel parameter which will offer a shell just
+# before sourcing that script.
+for x in $(cat /proc/cmdline); do
+    case "$x" in
+        break=[0-9][0-9]-*)
+            breakscript="$scriptsdir/${x#break=}"
+            break;
+            ;;
+    esac
+done
+
+for script in $(run_parts_list "$scriptsdir") ; do
+    if [ "$script" = "$breakscript" ]; then
+        echo "Spawning shell before $script" >&2
+        bash -l
+        echo "Continuing ltsp-init execution" >&2
+    fi
     . "$script"
 done
 
