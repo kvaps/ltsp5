@@ -3,6 +3,12 @@
 # check if hostname is set
 read TEMP_HOSTNAME < /proc/sys/kernel/hostname
 if [ "${TEMP_HOSTNAME}" = "(none)" ]; then
+    # get networking variables from cached file.
+    for netfile in /var/cache/ltsp/net-*.conf ; do
+        if [ -f "$netfile" ]; then
+            . "$netfile"
+        fi  
+    done
     HOSTNAME_BASE=${HOSTNAME_BASE:-ltsp}
     # if HOSTNAME was not defined in lts.conf,
     # or if it has been nulled by /tmp/net-*.conf
