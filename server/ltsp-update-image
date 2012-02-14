@@ -200,6 +200,8 @@ assign_ports () {
                 echo "Regenerating kernel... "
                 chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
                 echo "Done."
+                # run ltsp-update-kernels later...
+                RUN_LUK=1
 
                 echo -n "Configuring inetd... "
                 IMAGE=${IMGDIR}/${THIS_CHROOT##*/}.img 
@@ -207,39 +209,6 @@ assign_ports () {
                 update-inetd --group LTSP --add "${NBD_ROOT_PORT}               stream  tcp nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
                 echo "Done."
 
-                echo -n "Updating pxelinux default configuration..."
-                for TFTPDIR in $TFTPDIRS ; do
-                    if [ ! -d $TFTPDIR ]; then
-                        continue       # skip directory
-                    fi
-                    PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg/default"
-                    [ -n "${FORCE_NEW}" ] && rm -f ${PXECFG} 2>/dev/null
-                    if [ ! -f ${PXECFG} ]; then
-                        mkdir -p "${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg"
-                        [ -n "${TIMEOUT}" ] && TIMEOUT_LINE="timeout ${TIMEOUT}"
-                        [ -n "${IPAPPEND}" ] && IPAPPEND_LINE="IPAPPEND ${IPAPPEND}"
-                        echo <<EOF >${PXECFG}
-default ltsp 
-${TIMEOUT_LINE}
-
-label ltsp 
-kernel vmlinuz 
-append ro initrd=initrd.img ${BOOTPROMPT_OPTS}
-${IPAPPEND_LINE}
-EOF
-                        continue
-                    fi
-
-                    if grep nbdport ${PXECFG} > /dev/null 2>&1 ; then
-                        sed -i -e "s/nbdport=[0-9]*/nbdport=${NBD_ROOT_PORT}/g" ${PXECFG}
-                    fi
-
-                    if grep nbdroot ${PXECFG} > /dev/null 2>&1 ; then
-                        sed -i -e "s/nbdroot=\([^:]\+\):[0-9]*/nbdroot=\1:${NBD_ROOT_PORT}/" ${PXECFG}
-                    fi
-                done
-                echo "Done."
-                RUN_LUK=1
                 ;;
         esac
         PORTS_FOUND="${PORTS_FOUND}${NBD_ROOT_PORT}-"
@@ -265,37 +234,6 @@ assign_name () {
 
     echo "Regenerating kernel... "
     chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
-    echo "Done."
-
-    echo -n "Updating pxelinux default configuration..."
-    for TFTPDIR in $TFTPDIRS ; do
-        if [ ! -d $TFTPDIR ]; then
-            continue       # skip directory
-        fi
-
-        PXECFG="${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg/default"
-        [ -n "${FORCE_NEW}" ] && rm -f ${PXECFG} 2>/dev/null
-
-        if [ ! -f ${PXECFG} ]; then
-            mkdir -p "${TFTPDIR}/${TFTPBOOTDIR}/${THIS_CHROOT##*/}/pxelinux.cfg"
-            [ -n "${TIMEOUT}" ] && TIMEOUT_LINE="timeout ${TIMEOUT}"
-            [ -n "${IPAPPEND}" ] && IPAPPEND_LINE="IPAPPEND ${IPAPPEND}"
-            echo <<EOF >${PXECFG}
-default ltsp 
-${TIMEOUT_LINE}
-
-label ltsp 
-kernel vmlinuz 
-append ro initrd=initrd.img ${BOOTPROMPT_OPTS}
-${IPAPPEND_LINE}
-EOF
-            continue
-        fi
-
-        if grep nbdroot ${PXECFG} > /dev/null 2>&1 ; then
-            sed -i -e "s/nbdroot=.* /nbdroot=:${NBD_ROOT_NAME} /g" ${PXECFG}
-        fi
-    done
     echo "Done."
     RUN_LUK=1
 }
