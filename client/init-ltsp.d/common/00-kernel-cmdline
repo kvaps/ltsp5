@@ -46,7 +46,8 @@ if [ -n "$nbd" ]; then
     export NBD_ROOT_HOST="$netsrv"
     echo "NBD_ROOT_HOST=$NBD_ROOT_HOST"
     case "$netport" in
-	    *[^0-9]*)
+            # in dash ^ doesn't mean not, we need to use ! instead
+	    *[!0-9]*)
 		    # non-numeric characters, assume a name rather than a port
 		    netpath="$netport"
 		    unset netport
