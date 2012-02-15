@@ -186,9 +186,13 @@ EOF
         follow_home_symlinks="follow_symlinks,"
         follow_extra_symlinks="follow_symlinks,"
     fi
-    # Mount the home directory
-    if [ -z "$NFS_HOME" ]; then
+    # If the user's home directory is not located in the root device, assume
+    # that it has already been mounted with other means, e.g. with FSTAB_x.
+    if [ $(stat -c %m "$LDM_HOME") != "/" ]; then
+        export SSH_HOME=true
         sshfs -o ${follow_home_symlinks}allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+    else
+        unset SSH_HOME
     fi
 
     # Mount other directories
