@@ -74,7 +74,7 @@ umount_marked() {
         if [ "$dir%/proc}" != "$dir" ] && 
             ( [ "$VENDOR" = "Debian" ] || [ "$VENDOR" = "Ubuntu" ] ) &&
             [ -d "$dir/sys/fs/binfmt_misc" ] && [ -f "$dir/mounts" ] &&
-            grep -q ^binfmt_misc "$dir/sys/fs/binfmt_misc" "$dir/mounts"; then
+            grep -q "^binfmt_misc $dir/sys/fs/binfmt_misc" "$dir/mounts"; then
             if ! umount "$dir/sys/fs/binfmt_misc"; then
                 echo "Couldn't unmount $dir/sys/fs/binfmt_misc." >&2
             fi
