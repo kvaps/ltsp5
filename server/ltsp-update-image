@@ -238,6 +238,62 @@ assign_name () {
     RUN_LUK=1
 }
 
+# Creates an nbd-server configuration file for the specified nbd image, if it
+# doesn't already exist. If it does, no action is performed.
+# Additionally, if /etc/nbd-server/config doesn't exist, it creates it,
+# it generates a configuration file for swap, and it starts nbd-server."
+create_nbd_config() {
+    local exportname section conffile
+
+    exportname="$1"
+    test -f "$exportname" || return 1
+    section=${exportname##*/}
+    section=${section%.*}
+    conffile="/etc/nbd-server/conf.d/ltsp_$section.conf"
+    if [ -f "$conffile" ]; then
+        echo "Configuration file $conffile already exists, no action taken."
+        return
+    fi
+
+    cat >"$conffile" <<EOF
+[ltsp_$section]
+exportname = $exportname
+readonly = true
+EOF
+    echo "A new configuration file has been created for image $exportname."
+
+    if [ -f "/etc/nbd-server/config" ]; then
+        echo \
+"For nbd-server to re-read its configuration, you need to manually run:
+    service nbd-server restart
+THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
+        return
+    fi
+
+    cat > "/etc/nbd-server/config" <<EOF
+[generic]
+user = nobody
+group = nogroup
+oldstyle = false
+includedir = /etc/nbd-server/conf.d
+EOF
+
+    if [ ! -f "/etc/nbd-server/conf.d/swap.conf" ]; then
+        mkdir -p "/etc/nbd-server/conf.d"
+        cat > "/etc/nbd-server/conf.d/swap.conf" <<EOF
+[swap]
+exportname = /tmp/nbd-swap/%s
+prerun = nbdswapd %s
+postrun = rm -f %s
+EOF
+    fi
+
+    # We can assume that nbd-server wasn't running without a config file
+    if ! invoke-rc.d nbd-server start; then
+        echo "Failed to start nbd-server." >&2
+    fi
+}
+
 generate_image () {
     # Find out if we are really an nbd client and if so, build the image.
     # Check and see if user's left /proc mounted in chroot.  If so, issue
@@ -277,11 +333,7 @@ generate_image () {
         fi
 
         if [ "$NBD_NAMED" = "1" ]; then
-            /usr/share/ltsp/scripts/nbd-update-config --add $NBD_ROOT_NAME $IMAGE
-            echo "The nbd-server daemon doesn't allow for live configuration update."
-            echo "To pick up the changes, the daemon needs to be restarted."
-            echo "If it's a new LTSP chroot. Run /etc/init.d/nbd-server restart"
-            echo "THIS WILL DISCONNECT ALL YOUR CLIENTS (they'll need to be rebooted)"
+            create_nbd_config "$IMAGE"
         fi
     fi
 }
