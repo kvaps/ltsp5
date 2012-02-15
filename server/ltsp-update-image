@@ -108,7 +108,6 @@ if [ -z "${ARCH}" ]; then
 fi
 
 IMGDIR="${BASE}/images"
-CONFFILE="/usr/share/initramfs-tools/conf.d/ltsp"
 CHROOT="${BASE}/${ARCH}"
 
 # Generate nbd-server configuration
@@ -295,7 +294,9 @@ EOF
 }
 
 generate_image () {
-    # Find out if we are really an nbd client and if so, build the image.
+    # Check if the chroot initramfs supports nbd booting
+    test -f "${CHROOT}/usr/share/initramfs-tools/scripts/local-top/nbd" || return
+
     # Check and see if user's left /proc mounted in chroot.  If so, issue
     # a warning, and unmount it
     PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
@@ -311,30 +312,28 @@ generate_image () {
         fi
     fi
 
-    # Are we a chroot that wants an nbd image made?
-    if $(grep nbd "${CHROOT}/${CONFFILE}" > /dev/null 2>&1); then
-        # make sure the images dir exists
-        if [ ! -d ${IMGDIR} ]; then
-            mkdir -p ${IMGDIR}
-        fi
+    # make sure the images dir exists
+    if [ ! -d ${IMGDIR} ]; then
+        mkdir -p ${IMGDIR}
+    fi
 
-        IMAGE="${IMGDIR}/${ARCH}.img"
-        rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-        test -x /usr/bin/nice && nice=nice || unset nice
-        test -x /usr/bin/ionice && ionice=ionice || unset ionice
-        $nice $ionice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
-        if [ "$?" != "0" ]; then
-            echo "Error: mksquashfs failed to build the ltsp image, exiting"
-            exit 1
-        fi
-        if [ -f "${IMAGE}.tmp" ]; then
-            mv "${IMAGE}.tmp" "${IMAGE}"
-            chmod 0644 "${IMAGE}"
-        fi
+    IMAGE="${IMGDIR}/${ARCH}.img"
+    rm -f "${IMAGE}.tmp" >/dev/null 2>&1
+    test -x /usr/bin/nice && nice=nice || unset nice
+    test -x /usr/bin/ionice && ionice=ionice || unset ionice
+    $nice $ionice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
+    if [ "$?" != "0" ]; then
+        rm -f "${IMAGE}.tmp"
+        echo "Error: mksquashfs failed to build the ltsp image, exiting"
+        exit 1
+    fi
+    if [ -f "${IMAGE}.tmp" ]; then
+        mv "${IMAGE}.tmp" "${IMAGE}"
+        chmod 0644 "${IMAGE}"
+    fi
 
-        if [ "$NBD_NAMED" = "1" ]; then
-            create_nbd_config "$IMAGE"
-        fi
+    if [ "$NBD_NAMED" = "1" ]; then
+        create_nbd_config "$IMAGE"
     fi
 }
 
