@@ -13,6 +13,10 @@ For more info, see the nbd-client man page." >&2
     exit 1
 fi
 
+# Make sure the loopback interface has an address for nbd-proxy
+ip addr add dev lo 127.0.0.1
+ip link set lo up
+
 # To make the initramfs nbd script call nbd-client-proxy instead of nbd-client,
 # specify NBDCLIENT=nbd-client-proxy in the kernel command line.
 # Then the local-top/nbd initramfs script will call nbd-client-proxy this way:
@@ -29,4 +33,4 @@ nbd-proxy "$host" "$port" "$port"
 # Remove the host parameter and chain to nbd-client with the rest of the command
 # line.
 shift
-exec nbd-client localhost "$@"
+exec nbd-client 127.0.0.1 "$@"
