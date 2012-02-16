@@ -69,6 +69,8 @@ $MARKED_MOUNTS"
 }
 
 umount_marked() {
+    [ -z "$MARKED_MOUNTS" ] && return
+
     echo "$MARKED_MOUNTS" | while read dir; do
         # binfmt_misc might need to be unmounted manually, see LP #534211
         if [ "$dir%/proc}" != "$dir" ] && 
