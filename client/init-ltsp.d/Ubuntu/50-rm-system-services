@@ -2,6 +2,8 @@
 # The user can add more items by declaring space separated RM_SYSTEM_SERVICES
 # or RM_THIN_SYSTEM_SERVICES lists in lts.conf. The RM_THIN_SYSTEM_SERVICES list
 # is ignored by fat clients.
+# Hint: for really low RAM thin clients, set the following in lts.conf:
+# RM_THIN_SYSTEM_SERVICES="anacron cron dbus rsyslog tty1 upstart-udev-bridge"
 
 # For readability, include a comment line for each service.
 
@@ -28,28 +30,32 @@ RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES ureadahead"
 # Read required files in advance for other mountpoints
 RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES ureadahead-other"
 
+# ACPI daemon
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES acpid"
 # AppArmor initialization
-RM_THIN_SERVICES="$RM_THIN_SERVICES apparmor"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES apparmor"
 # Automatic crash report generation
-RM_THIN_SERVICES="$RM_THIN_SERVICES apport"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES apport"
 # Deferred execution scheduler
-RM_THIN_SERVICES="$RM_THIN_SERVICES atd"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES atd"
 # mDNS/DNS-SD daemon
-RM_THIN_SERVICES="$RM_THIN_SERVICES avahi-daemon"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES avahi-daemon"
 # Bluetooth daemon
-RM_THIN_SERVICES="$RM_THIN_SERVICES bluetooth"
-# CUPS Printing spooler and server
-RM_THIN_SERVICES="$RM_THIN_SERVICES cups"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES bluetooth"
 # Braille terminal driver 
-RM_THIN_SERVICES="$RM_THIN_SERVICES brltty"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES brltty"
+# CUPS Printing spooler and server
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES cups"
 # Collects and submits kernel crash signatures
-RM_THIN_SERVICES="$RM_THIN_SERVICES kerneloops"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES kerneloops"
 # Uncomplicated Firewall
-RM_THIN_SERVICES="$RM_THIN_SERVICES ufw"
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES ufw"
+# Bridge socket events into upstart
+RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES upstart-socket-bridge"
 
 rm_services="$RM_SYSTEM_SERVICES"
 if ! boolean_is_true "$LTSP_FATCLIENT"; then
-    rm_services="$rm_services RM_THIN_SERVICES"
+    rm_services="$rm_services $RM_THIN_SYSTEM_SERVICES"
 fi
 
 for service in $rm_services; do
