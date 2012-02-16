@@ -11,8 +11,8 @@ fileonly=${filename##*/}
 pathonly=${filename%$fileonly}
 
 cd /etc
-tftp "$NBD_ROOT_HOST" -c get ${pathonly:-/ltsp/i386/}lts.conf
-cd -
+tftp "$NBD_ROOT_HOST" -c get ${pathonly:-/ltsp/i386/}lts.conf >/dev/null
+cd - >/dev/null
 
 # Get the lts.conf vars into the environment
 . /usr/share/ltsp/ltsp_config
