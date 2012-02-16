@@ -4,9 +4,9 @@
 
 case "$(cat /var/run/ltsp-logout-action)" in
         REBOOT)
-            exec reboot -fp
+            exec reboot
             ;;
         HALT)
-            exec poweroff -fp
+            exec poweroff
             ;;
 esac
