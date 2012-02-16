@@ -6,7 +6,7 @@ if boolean_is_true "$USE_LOCAL_SWAP" ; then
 fi
 
 # Set NBD_SWAP=true by default for clients with RAM < NBD_SWAP_THRESHOLD
-if [ -z "$NBD_SWAP"]; then
+if [ -z "$NBD_SWAP" ]; then
     # Set reasonable defaults for NBD_SWAP_THRESHOLD (in MB)
     if [ -z "$NBD_SWAP_THRESHOLD" ]; then
         if boolean_is_true "$LTSP_FATCLIENT"; then
