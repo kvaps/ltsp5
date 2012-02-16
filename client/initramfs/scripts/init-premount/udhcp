@@ -272,6 +272,10 @@ sed -n "/[^=]*=[' ]*$/!s/.*/export &/p" "/tmp/net-$interface.conf" > /conf/param
 # https://bugs.launchpad.net/ubuntu/+source/nbd/+bug/696435
 # Please remove it when the bug is resolved.
 echo "ROOTDELAY=1" >> /conf/param.conf
+
+# Another unrelated fix, we always hit try_failure_hooks at boot
+# though we clearly don't want to run it, so just redefine the function
+echo "try_failure_hooks() {:;}" >> /conf/param.conf
 }
 
 # Main

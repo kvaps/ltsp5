@@ -96,7 +96,7 @@ done
 
 # defaults
 BASE=${BASE:-"/opt/ltsp"}
-BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash"}
+BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash vt.handoff=7"}
 NBD_NAMED=${NBD_NAMED:-"1"}
 
 # make sure we dont carry trailing slashes around (LP 189237)
