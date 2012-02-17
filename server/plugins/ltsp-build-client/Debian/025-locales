@@ -16,16 +16,12 @@ case $MODE in
         fi
         ;;
     install)
-        if [ -f /etc/locale.gen ]; then
-            cp /etc/locale.gen $ROOT/etc/
-        fi
-        if [ -f /etc/default/locale ]; then
-            cp /etc/default/locale $ROOT/etc/default
-        fi
-
-        if [ -f /etc/default/console-setup ]; then
-            cp /etc/default/console-setup $ROOT/etc/default/console-setup
-        fi
+        for f in /etc/locale.gen /etc/default/locale \
+            /etc/default/console-setup /etc/default/keyboard; do
+            if [ -f "$f" ]; then
+                cp "$f" "$ROOT/$f"
+            fi
+        done
         
         if [ -n "$LOCALE" ]; then
             export LANG=$(echo "$LOCALE" | awk '{print $1}')
