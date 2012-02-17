@@ -30,3 +30,9 @@ force_load aufs
 copy_exec /sbin/nbd-client /sbin
 copy_exec /usr/sbin/nbd-proxy /sbin/nbd-proxy
 copy_exec /usr/sbin/nbd-client-proxy /sbin/nbd-client-proxy
+
+# Work around LP bug #696435
+mkdir -p ${DESTDIR}/lib/udev/rules.d
+cat > ${DESTDIR}/lib/udev/rules.d/60-squashfs.rules <<EOF
+KERNEL=="nbd0", ENV{ID_FS_TYPE}="squashfs"
+EOF
