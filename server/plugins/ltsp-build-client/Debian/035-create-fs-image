@@ -37,7 +37,7 @@ case "$MODE" in
     after-install)
         if [ -n "$FS_IMAGE_TYPE" ]; then
             # set to use NBD root from nbd-client package
-            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp init=/sbin/init-ltsp"}
+            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp init=/sbin/init-ltsp nbdroot=:ltsp_${CHROOT}"}
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
             echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
