@@ -11,57 +11,42 @@ case "$MODE" in
             # set an environment variable we can pick up later
             KIOSK="True"
 
-            # install the webbrowser and a display manager that 
-            # is capable to do a timed autologin in the client environment
             KIOSK_BROWSER=${KIOSK_BROWSER:-"iceweasel"}
-            KIOSK_DM=${KIOSK_DM:-"gdm"}
             KIOSK_WM=${KIOSK_WM:-"metacity"}
-            KIOSK_PACKAGES=${KIOSK_PACKAGES:-"$KIOSK_BROWSER $KIOSK_DM $KIOSK_WM"}
-            # do not install recommended packages
-            APT_GET_OPTS="$APT_GET_OPTS -o APT::Install-Recommends=false"
+            KIOSK_PACKAGES="${KIOSK_PACKAGES} devilspie"
 
-            EARLY_PACKAGES="$EARLY_PACKAGES $KIOSK_PACKAGES"
+            # install the webbrowser and related packages
+            EARLY_PACKAGES="$EARLY_PACKAGES $KIOSK_BROWSER $KIOSK_PACKAGES"
         fi
         ;;
     after-install)
         if [ "True" = "$KIOSK" ]; then
-            # make the necessary directories writeable to the booted client
-            echo 'copy_dirs="$copy_dirs /home"' >> $ROOT/etc/default/ltsp-client-setup
-            echo 'rw_dirs="$rw_dirs /var/lib/gdm"' >> $ROOT/etc/default/ltsp-client-setup
+            # create a ltspkiosk user
+            # ltspkiosk's homdir is created on the fly as a tmpdir, so no 
+            # need for one here
+            chroot $ROOT adduser --no-create-home --disabled-password --gecos ,,, ltspkiosk
 
-            # create a kiosk user
-            chroot $ROOT adduser --disabled-password --gecos ,,, kiosk
+            # create ltspkiosk directories
+            mkdir -p $ROOT/usr/local/share/ltspkiosk/home
+            mkdir -p $ROOT/usr/local/share/ltspkiosk/startup
 
-            # create a default xsession for that user
-            echo "#!/bin/sh" > $ROOT/home/kiosk/.xsession
-            # including sound
-            #echo "pulseaudio -L module-detect -L module-rescue-streams -L module-native-protocol-unix -L module-volume-restore -n &" >> $ROOT/home/kiosk/.xsession
-            # make sure we have a wm
-            echo "$KIOSK_WM &" >> $ROOT/home/kiosk/.xsession
-            echo "/usr/bin/$KIOSK_BROWSER --fullscreen" >> $ROOT/home/kiosk/.xsession
-
-            # switch to the proper theme 
-            #echo "include \"/usr/share/themes/Human/gtk-2.0/gtkrc\"" >$ROOT/home/kiosk/.gtkrc-2.0
-
-            if [ "$KIOSK_DM" = "gdm" ]; then
-                # create a custom configuration for gdm with autologin
-                gdm_conf=$ROOT/etc/gdm/gdm.conf
-
-                if ! egrep -q '^\[daemon]' $gdm_conf ; then
-                    echo '[daemon]' >> $gdm_conf
-                fi
-
-                GDM_KIOSK_OPTS=${GDM_KIOSK_OPTS:-"AutomaticLoginEnable=true AutomaticLogin=kiosk TimedLoginEnable=true TimedLogin=kiosk TimedLoginDelay=5"}
-                for line in $GDM_KIOSK_OPTS ; do
-                    opt="$(echo $line | cut -d = -f 1)"
-                    val="$(echo $line | cut -d = -f 2)"
-                    if ! egrep -q ^"$opt"= $gdm_conf ; then
-                        sed -i -e "s,\[daemon\],[daemon]\n$opt=,g" $gdm_conf
-                    fi
-                    sed -i -e "s,$opt=.*,$line,g" $gdm_conf
-                done
+            if [ "$KIOSK_BROWSER" = "iceweasel" ]; then
+                # set up devilspie for fullscreen firefox
+                ln -s /usr/bin/devilspie $ROOT/usr/local/share/ltspkiosk/startup/10-devilspie
+                mkdir -p $ROOT/usr/local/share/ltspkiosk/home/.devilspie
+                echo "(if (matches (window_name) \"iceweasel\") (undecorate) (fullscreen))" >$ROOT/usr/local/share/ltspkiosk/home/.devilspie/default.ds
             fi
+
+            if [ "${KIOSK_WM}" = "metacity" ]; then
+                # make sure we have a wm
+                ln -s /usr/bin/metacity $ROOT/usr/local/share/ltspkiosk/startup/00-metacity
+            fi
+
         fi
+
+        # install window manager without recommends, otherwise metacity pulls in
+        # half or more of gnome... not ideal, but it works.
+        chroot $ROOT apt-get $APT_GET_OPTS --no-install-recommends install $KIOSK_WM
         ;;
 esac
 
