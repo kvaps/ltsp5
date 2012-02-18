@@ -10,7 +10,7 @@ case "$MODE" in
         ;;
     before-install)
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
-            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet ip=dhcp boot=ltsp_nbd"}
+            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp init=/sbin/init-ltsp"}
             export BOOTPROMPT_OPTS
             mkdir -p $ROOT/etc/ltsp/
             echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
