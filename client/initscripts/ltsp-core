@@ -20,8 +20,8 @@ DESC="LTSP client"
 NAME=ltsp-client
 SCRIPTNAME=/etc/init.d/$NAME
 
-# Gracefully exit if ltsp_chroot file is not present
-test -f /etc/ltsp_chroot || exit 0
+# Gracefully exit if an LTSP boot was not requested
+grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
 
 # handle localization settings
 if [ -r /etc/default/locale ]; then
