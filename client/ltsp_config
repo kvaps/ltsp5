@@ -63,12 +63,12 @@ set_lts_var() {
     var=$1
     val=$2
     [ -z "$var" ] && return
+    sed -i -e "/$var=/d" ${ltsp_config_env}
     if [ -n "$val" ]; then
         export "$var"="$val"
         echo "$var=\"$val\"" >> ${ltsp_config_env}
     else
         unset $var
-        sed -i -e '/$var=/d' ${ltsp_config_env}
     fi    
 }
 
