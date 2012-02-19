@@ -1,7 +1,5 @@
 # get the lts.conf via tftp
 
-test -f "/var/cache/ltsp/ltsp_config" && . /var/cache/ltsp/ltsp_config
-
 # $filename comes from net-eth0.conf and is usually "/<path>/pxelinux.0".
 # If it contains a path, we want to construct "/<path>/lts.conf".
 # If it doesn't, we want just "lts.conf" without inserting a slash, as some tftp
@@ -13,6 +11,10 @@ pathonly=${filename%$fileonly}
 cd /etc
 tftp "$NBD_ROOT_HOST" -c get ${pathonly:-/ltsp/i386/}lts.conf >/dev/null
 cd - >/dev/null
+
+# This is the first time we'll be sourcing ltsp_config.
+# Delete the cache files in case they exist in the underlying root rofs.
+rm -f /var/cache/ltsp/ltsp_config /var/cache/ltsp/ltsp_config_env
 
 # Get the lts.conf vars into the environment
 . /usr/share/ltsp/ltsp_config
