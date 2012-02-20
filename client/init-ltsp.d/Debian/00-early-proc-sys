@@ -1,0 +1,5 @@
+# workaround Debian bug in initramfs-tools:
+# http://bugs.debian.org/660297
+
+mountpoint -q /sys || mount -t sysfs -o nodev,noexec,nosuid sysfs /sys
+mountpoint -q /proc || mount -t proc -o nodev,noexec,nosuid proc /proc
