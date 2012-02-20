@@ -1,0 +1,32 @@
+case "$MODE" in
+    commandline)
+        # Add a command line switch to ltsp-build-client that installs desktop
+        # meta-packages so that diskless workstations can run everything locally
+        add_option "fat-client-desktop" "`eval_gettext "run most or all applications locally"`" "advanced" "true"
+        ;;
+
+    configure)
+        # Check what the sysadmin chose to install. If (s)he is lazy and didn't
+        # specify one, then we install the desktop meta-packages that are
+        # already installed on the server.
+
+        if [ -n "$option_fat_client_desktop_value" ]; then
+            FAT_CLIENT_DESKTOPS="$(echo $option_fat_client_desktop_value | tr ',' ' ')"
+            EARLY_PACKAGES="$EARLY_PACKAGES $FAT_CLIENT_DESKTOPS"
+        fi
+        ;;
+
+    after-install)
+        if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
+            return 0
+        fi
+
+        # Tag that the user requested a fat chroot, so that we can set
+        # appropriate defaults when the clients boot
+        echo FAT_CLIENT_DESKTOPS="'$(echo $FAT_CLIENT_DESKTOPS)'" >> $ROOT/etc/ltsp_fat_chroot
+
+        # Notify the user about the different defaults
+        echo "--fat-client was specified, all clients will boot as fat clients by default."
+        echo "To modify this behavior, put LTSP_FATCLIENT=False in lts.conf."
+        ;;
+esac
