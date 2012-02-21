@@ -268,11 +268,17 @@ EOF
 THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
         return
     fi
+    
+    # if user/group nbd exist, configure 
+    nbd_user=$(getent passwd nbd | cut -d : -f 1)
+    nbd_group=$(getent group nbd | cut -d : -f 1)
+    test -z "$nbd_user" && nbd_user=nobody
+    test -z "$nbd_group" && nbd_group=nogroup
 
     cat > "/etc/nbd-server/config" <<EOF
 [generic]
-user = nobody
-group = nogroup
+user = $nbd_user
+group = $nbd_group
 oldstyle = false
 includedir = /etc/nbd-server/conf.d
 EOF
