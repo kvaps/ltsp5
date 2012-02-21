@@ -96,6 +96,11 @@ while true ; do
     esac
 done
 
+if [ "$LTSP_UPDATE_IMAGE_DISABLED" = "True" ]; then
+    echo "$0 is currently disabled. To enable, edit /etc/ltsp/ltsp-update-image.conf."
+    exit 0
+fi
+
 # defaults
 BASE=${BASE:-"/opt/ltsp"}
 BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash vt.handoff=7"}
