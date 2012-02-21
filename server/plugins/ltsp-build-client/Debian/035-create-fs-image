@@ -34,17 +34,15 @@ case "$MODE" in
             mount -o loop $FS_IMAGE_FILE.new $ROOT
         fi
     ;;
-    after-install)
-        if [ -n "$FS_IMAGE_TYPE" ]; then
-            # set to use NBD root from nbd-client package
-            BOOTPROMPT_OPTS=${BOOTPROMPT_OPTS:-"quiet root=/dev/nbd0 ip=dhcp init=/sbin/init-ltsp nbdroot=:ltsp_${CHROOT}"}
-            export BOOTPROMPT_OPTS
-            mkdir -p $ROOT/etc/ltsp/
-            echo "BOOTPROMPT_OPTS=\"$BOOTPROMPT_OPTS\"" >> $ROOT/etc/ltsp/update-kernels.conf
-        fi
-    ;;
     finalization)
         if [ -n "$FS_IMAGE_TYPE" ]; then
+            # call ltsp-update-image to update the nbd-server connfiguration
+            # and set pxelinux and other boot parameters.
+            ltsp-update-image --skip-image
+
+            # configure ltsp-update-image to not handle image generation.
+            echo SKIP_IMAGE=True >> /etc/ltsp/ltsp-update-image.conf
+
             # add $ROOT to list of files to be unmounted.  done in finalization
             # phase so it is the last to be unmounted.
             CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT"
