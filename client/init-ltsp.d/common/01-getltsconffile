@@ -12,7 +12,7 @@ if [ -n "$NBD_ROOT_HOST" ]; then
     tftp "$NBD_ROOT_HOST" -c get ${pathonly:-/ltsp/i386/}lts.conf $lts_conf_temp >/dev/null
     # only overwrite lts.conf if it has non-zero size.
     if [ -s "$lts_conf_temp" ]; then
-        mv "$lts_conf_temp" lts.conf
+        mv "$lts_conf_temp" /etc/lts.conf
     else
         rm "$lts_conf_temp"
     fi
