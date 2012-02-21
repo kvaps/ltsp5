@@ -12,6 +12,11 @@ else
     exit 1
 fi
 
+# workaround Debian bug in initramfs-tools:
+# http://bugs.debian.org/660297
+mountpoint -q /sys || mount -t sysfs -o nodev,noexec,nosuid sysfs /sys
+mountpoint -q /proc || mount -t proc -o nodev,noexec,nosuid proc /proc
+
 # Provide a break=<script-name> kernel parameter which will offer a shell just
 # before sourcing that script.
 for x in $(cat /proc/cmdline); do
