@@ -1,0 +1,9 @@
+case "$MODE" in
+    finalization)
+        if [ "True" != "$SQUASHFS_IMAGE" ] && [ -z "$FS_IMAGE_TYPE" ]; then
+            echo '# ltsp-update-image disabled, as LTSP is currently configured to use NFS.' >> /etc/ltsp/ltsp-update-image.conf
+            echo '# remove or comment out the "exit 0" line to enable it.' >> /etc/ltsp/ltsp-update-image.conf
+            echo 'exit 0' >> /etc/ltsp/ltsp-update-image.conf
+        fi
+        ;;
+esac
