@@ -1,6 +1,7 @@
 # set defaults for sound support
 if boolean_is_true "$LTSP_FATCLIENT"; then
-    set_lts_var SOUND False
+    # For fat clients we want to set the sound volume but not start any daemon
+    set_lts_var SOUND_DAEMON False
 elif [ -z "$SOUND_DAEMON" ]; then
     if [ -x /usr/bin/pulseaudio ]; then
         set_lts_var SOUND_DAEMON pulse

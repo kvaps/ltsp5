@@ -72,7 +72,7 @@ start_sound() {
 }
 
 configure_sound_volume() {
-    if boolean_is_true "$SOUND" ; then
+    if boolean_is_true "${SOUND:-True}" ; then
         CARD_NUM=${1:-0}
         # Set up sound volume
         ## Set higher volume than default if not specified by lts.conf
