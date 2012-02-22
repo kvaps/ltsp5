@@ -82,24 +82,17 @@ case "$1" in
         fi
 	;;
   stop)
-#	echo -n "Stopping $DESC: $NAME"
-#	d_stop
-#	echo "."
+    # This means that an LTSP client is shutting down or rebooting.
+    # Try to cleanly close any open network connections.
+    if [ -x /usr/share/ltsp/nbd-disconnect ]; then
+        /usr/share/ltsp/nbd-disconnect &
+    fi
 	;;
   restart|force-reload)
-	#
-	#	If the "reload" option is implemented, move the "force-reload"
-	#	option to the "reload" entry above. If not, "force-reload" is
-	#	just the same as "restart".
-	#
-	echo -n "Restarting $DESC: $NAME"
-	d_stop
-	sleep 1
-	d_start
-	echo "."
+    echo "$NAME does not support restarting, reboot your client instead." >&2
+    exit 1
 	;;
   *)
-	# echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
 	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
 	exit 1
 	;;

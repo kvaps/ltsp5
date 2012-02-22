@@ -4,24 +4,24 @@
 # the nbd-server process on the server doesn't terminate.
 # Called by init scripts on reboot or shutdown.
 
-case "$1" in
-    reboot)
-        key="b"
-        message="Rebooting NOW."
-        ;;
-    shutdown)
+case "$RUNLEVEL" in
+    0)
         key="o"
         message="Shutting down NOW."
         ;;
+    6)
+        key="b"
+        message="Rebooting NOW."
+        ;;
     *)
-        echo "Usage: $0 reboot|shutdown"
+        echo "nbd-disconnect should only be called by initscripts on reboot/shutdown." >&2
         exit 1
         ;;
 esac
 
 disconnect() {
     echo "$message" >&2
-    /sbin/nbd-client -d /dev/nbd0
+    nbd-client -d /dev/nbd0
     echo $key > /proc/sysrq-trigger
 }
 
@@ -34,6 +34,9 @@ while read device etc; do
             ;;
     esac
 done < /proc/swaps
+
+# If we're not using an nbd root, exit
+grep -qw "nbdroot" /proc/cmdline || exit 0
 
 trap "disconnect" 0 HUP INT QUIT KILL SEGV PIPE TERM
 sync
