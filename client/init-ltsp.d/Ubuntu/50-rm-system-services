@@ -2,58 +2,59 @@
 # The user can add more items by declaring space separated RM_SYSTEM_SERVICES
 # or RM_THIN_SYSTEM_SERVICES lists in lts.conf. The RM_THIN_SYSTEM_SERVICES list
 # is ignored by fat clients.
+# KEEP_SYSTEM_SERVICES is a space separated whitelist of services.
 # Hint: for really low RAM thin clients, set the following in lts.conf:
 # RM_THIN_SYSTEM_SERVICES="anacron cron dbus rsyslog tty1 upstart-udev-bridge"
 
-# For readability, include a comment line for each service.
+while read service description; do
+    case " $KEEP_SYSTEM_SERVICES " in
+        *" $service "*)
+            ;;
+        *)
+            RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES $service"
+            ;;
+    esac
+done <<EOF
+alsa-restore          # Restore sound card(s') mixer state(s)
+alsa-store            # Save sound card(s') mixer state(s)
+grub-common           # Record successful boot for GRUB
+lightdm               # Light Display Manager
+modemmanager          # Modem manager
+nbd-client            # Network Block Device client (we use nbd-disconnect)
+plymouth-stop         # Hide the splash screen
+rfkill-store          # Store software rfkill state
+tty2                  # Getty
+tty3                  # Getty
+tty4                  # Getty
+tty5                  # Getty
+tty6                  # Getty
+unattended-upgrades   # Check if unattended upgrades are being applied
+urandom               # Save and restore random seed between restarts
+ureadahead            # Read required files in advance
+ureadahead-other      # Read required files in advance for other mountpoints
+EOF
 
-# Save sound card(s') mixer state(s)
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES alsa-store"
-# Record successful boot for GRUB
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES grub-common"
-# Light Display Manager
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES lightdm"
-# Modem manager
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES modemmanager"
-# Network Block Device client (we use nbd-disconnect instead)
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES nbd-client"
-# Hide the splash screen
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES plymouth-stop"
-# Store software rfkill state
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES rfkill-store"
-# Getty
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES tty2 tty3 tty4 tty5 tty6"
-# Check if unattended upgrades are being applied
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES unattended-upgrades"
-# Save and restore random seed between restarts
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES urandom"
-# Read required files in advance
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES ureadahead"
-# Read required files in advance for other mountpoints
-RM_SYSTEM_SERVICES="$RM_SYSTEM_SERVICES ureadahead-other"
-
-# ACPI daemon
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES acpid"
-# AppArmor initialization
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES apparmor"
-# Automatic crash report generation
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES apport"
-# Deferred execution scheduler
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES atd"
-# mDNS/DNS-SD daemon
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES avahi-daemon"
-# Bluetooth daemon
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES bluetooth"
-# Braille terminal driver 
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES brltty"
-# CUPS Printing spooler and server
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES cups"
-# Collects and submits kernel crash signatures
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES kerneloops"
-# Uncomplicated Firewall
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES ufw"
-# Bridge socket events into upstart
-RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES upstart-socket-bridge"
+while read service description; do
+    case " $KEEP_SYSTEM_SERVICES " in
+        *" $service "*)
+            ;;
+        *)
+            RM_THIN_SYSTEM_SERVICES="$RM_THIN_SYSTEM_SERVICES $service"
+            ;;
+    esac
+done <<EOF
+acpid                 # ACPI daemon
+apparmor              # AppArmor initialization
+apport                # Automatic crash report generation
+atd                   # Deferred execution scheduler
+avahi-daemon          # mDNS/DNS-SD daemon
+bluetooth             # Bluetooth daemon
+brltty                # Braille terminal driver
+cups                  # CUPS Printing spooler and server
+kerneloops            # Collects and submits kernel crash signatures
+ufw                   # Uncomplicated Firewall
+upstart-socket-bridge # Bridge socket events into upstart
+EOF
 
 rm_services="$RM_SYSTEM_SERVICES"
 if ! boolean_is_true "$LTSP_FATCLIENT"; then
