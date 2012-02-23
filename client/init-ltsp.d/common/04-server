@@ -24,11 +24,11 @@ else
                         server=$(ps --no-headers -o cmd x | grep "^nbd-proxy [[:graph:]]* [[:graph:]]* ${port}" | cut -d ' ' -f2)
                     fi
                 fi
-                echo "NBD_ROOT_HOST=${server}" > /var/cache/ltsp/ltsp_config || true
+                echo "NBD_ROOT_HOST=${server}" >> /var/cache/ltsp/ltsp_config
                 if [ -n "$name" ]; then
-                    echo "NBD_ROOT_NAME=${name}" >> /var/cache/ltsp/ltsp_config || true
+                    echo "NBD_ROOT_NAME=${name}" >> /var/cache/ltsp/ltsp_config
                 else
-                    echo "NBD_ROOT_PORT=${port}" >> /var/cache/ltsp/ltsp_config || true
+                    echo "NBD_ROOT_PORT=${port}" >> /var/cache/ltsp/ltsp_config
                 fi
                 ;;
             *)
@@ -36,7 +36,7 @@ else
                     if [ "$MOUNTPOINT" = "/" ] || [ "$MOUNTPOINT" = "/rofs" ]; then
                         # NFS root
                         server=${DEVICE%%:*}
-                        echo NFS_SERVER=${server} > /var/cache/ltsp/ltsp_config || true
+                        echo NFS_SERVER=${server} >> /var/cache/ltsp/ltsp_config
                     fi
                 fi
                 ;;
