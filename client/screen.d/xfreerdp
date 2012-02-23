@@ -17,6 +17,17 @@
 # screen.d/rdesktop to screen.d/xfreerdp.
 basename=${0##*/}
 
+if ! type $basename >/dev/null 2>&1; then
+    echo "$basename couldn't be found."
+    if [ "$basename" = "rdesktop" ]; then
+        echo "Some distributions have now switched to 'xfreerdp' instead of 'rdesktop'."
+        echo "You may want to change your SCREEN_XX entry to that instead."
+        echo "Please note that RDP_OPTIONS will need updating for xfreerdp."
+    fi
+    read nothing
+    exit 1
+fi
+
 # Make XINITRC_DAEMON default to "True", to prevent X from restarting after
 # logout. If you don't want that, force XINITRC_DAEMON=False in lts.conf.
 export XINITRC_DAEMON="${XINITRC_DAEMON-True}"
