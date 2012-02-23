@@ -13,6 +13,7 @@ for x in $(cat /proc/cmdline); do
             ;;
         nfsroot=*)
             netroot="${x#nfsroot=}"
+            nfs=true
             break
             ;;
     esac
@@ -46,7 +47,6 @@ if [ -n "$nbd" ]; then
     export NBD_ROOT_HOST="$netsrv"
     echo "NBD_ROOT_HOST=$NBD_ROOT_HOST"
     case "$netport" in
-            # in dash ^ doesn't mean not, we need to use ! instead
 	    *[!0-9]*)
 		    # non-numeric characters, assume a name rather than a port
 		    netpath="$netport"
@@ -61,7 +61,7 @@ if [ -n "$nbd" ]; then
         export NBD_ROOT_PORT="$netport"
         echo "NBD_ROOT_PORT=$NBD_ROOT_PORT"
     fi
-else
+elif [ -n "$nfs" ]; then
     export NFS_SERVER="$netsrv"
     echo "NFS_SERVER=$NFS_SERVER"
 fi >> /var/cache/ltsp/ltsp_config

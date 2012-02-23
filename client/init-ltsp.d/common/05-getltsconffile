@@ -5,11 +5,11 @@
 # If it doesn't, we want just "lts.conf" without inserting a slash, as some tftp
 # servers have problems with it. Finally, if $filename isn't set, we want to
 # default to "/ltsp/i386/lts.conf".
-if [ -n "$NBD_ROOT_HOST" ]; then
+if [ -n "$SERVER" ]; then
     fileonly=${filename##*/}
     pathonly=${filename%$fileonly}
     lts_conf_temp=$(mktemp)
-    tftp "$NBD_ROOT_HOST" -c get ${pathonly:-/ltsp/i386/}lts.conf $lts_conf_temp >/dev/null
+    tftp "$SERVER" -c get ${pathonly:-/ltsp/i386/}lts.conf $lts_conf_temp >/dev/null
     # only overwrite lts.conf if it has non-zero size.
     if [ -s "$lts_conf_temp" ]; then
         mv "$lts_conf_temp" /etc/lts.conf
@@ -17,10 +17,6 @@ if [ -n "$NBD_ROOT_HOST" ]; then
         rm "$lts_conf_temp"
     fi
 fi
-
-# This is the first time we'll be sourcing ltsp_config.
-# Delete the cache files in case they exist in the underlying root rofs.
-rm -f /var/cache/ltsp/ltsp_config /var/cache/ltsp/ltsp_config_env
 
 # Get the lts.conf vars into the environment
 . /usr/share/ltsp/ltsp_config
