@@ -16,7 +16,7 @@
 # Get the IP address of the host to ssh into.
 # First look for 'SSH_HOST', if not specified, then
 # look for 'SERVER'. If that isn't specified, then use
-# the default of '192.168.0.254'
+# the default of '192.168.0.1'
 #
 
 unset SSH_ARGS
