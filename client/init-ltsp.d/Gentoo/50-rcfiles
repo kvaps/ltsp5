@@ -1,0 +1,3 @@
+# This file is sourced
+
+rc-update add ltsp-client default

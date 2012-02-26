@@ -1,0 +1,53 @@
+# This is not the preferred solution
+# rather bind or union mount from initramfs
+
+# tmpfs directory mounted when using tmpfs/bind
+tmpfs_dir=/var/lib/ltsp-client-setup
+
+# size of tmpfs mount
+tmpfs_size=10m
+
+# tmpfs/bind directions that get mounted with only directory structure preserved
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run /var/lib/pulse"
+
+# tmpfs/bind directions that get mounted with directory structure and data copied
+copy_dirs="/root /home /etc/conf.d /etc/runlevels /etc/udev/rules.d /var/cache/ltsp /var/cache/ltsp-localapps"
+
+# tmpfs/bind files that mounted on top of other files
+bindfiles="/etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/passwd /etc/group /etc/localtime /etc/lts.conf /etc/mtab"
+
+
+# set defaults
+test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
+mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
+# preserve directory structure
+for d in $rw_dirs ; do
+    if [ -d "$d" ]; then
+        cd $tmpfs_dir
+        tar --no-recursion -cpf - $(find $d -type d 2> /dev/null) 2> /dev/null | tar xpf -
+        mount --bind $tmpfs_dir/$d $d
+    else
+        echo "WARNING: $d does not exist"
+    fi
+done
+# copy contents into tmpfs
+for d in $copy_dirs; do
+    if [ -d "$d" ]; then
+        cd $tmpfs_dir
+        tar -cpf - $d 2> /dev/null | tar xpf -
+        mount --bind $tmpfs_dir/$d $d
+    else
+        echo "WARNING: $d does not exist"
+    fi
+done
+
+# mount one file on top of another
+for f in $bindfiles ; do
+    if [ -e "$f" ]; then
+        mkdir -p "$(dirname $tmpfs_dir/$f)"
+        cp $f $tmpfs_dir/$f
+        mount --bind $tmpfs_dir/$f $f
+    else
+        echo "WARNING: $f does not exist"
+    fi
+done

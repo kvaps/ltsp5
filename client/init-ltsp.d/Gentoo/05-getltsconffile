@@ -1,0 +1,22 @@
+# Attempt to get lts.conf via tftp
+
+arch=$(uname -m | sed -e 's:i[3-6]86:x86:' -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
+tftppath="/ltsp/${arch}/lts.conf"
+lts_conf_temp=$(mktemp)
+
+tftp "$SERVER" -c get ${tftppath} $lts_conf_temp >/dev/null
+
+# or if tftp gives a buffer overflow error, use curl
+# https://bugs.archlinux.org/task/28103
+# curl "tftp://${SERVER}${tftppath}" -o $lts_conf_temp >/dev/null
+
+# only overwrite lts.conf if it has non-zero size.
+if [ -s "$lts_conf_temp" ]; then
+	# doing copy, getting inter-device move fail (because of bind mounts?)
+    cp "$lts_conf_temp" /etc/lts.conf
+fi
+
+rm "$lts_conf_temp"
+
+# Get the lts.conf vars into the environment
+. /usr/share/ltsp/ltsp_config
