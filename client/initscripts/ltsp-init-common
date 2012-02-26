@@ -221,39 +221,6 @@ configure_swap() {
     fi
 }
 
-configure_printer() {
-    for I in 0 1 2; do
-        eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
-        if [ -n "${DEVICE}" ]; then
-            eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} 
-            eval BAUD=\$\{PRINTER_${I}_SPEED:-"9600"\}
-            eval SIZE=\$\{PRINTER_${I}_DATABITS:-"8"\}
-            eval PARITY=\$\{PRINTER_${I}_PARITY:-"none"\}
-            eval FLOW=\$\{PRINTER_${I}_FLOWCTRL:-"soft"\}
-
-            JETPIPE_ARGS=
-            [ -n "$BAUD" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -b ${BAUD}"
-            [ -n "$SIZE" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -y ${SIZE}"
-            [ -n "$PARITY" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -p ${PARITY}"
-            if [ -n "$FLOW" ]; then
-                if [ "$FLOW" = "soft" ]; then
-                    JETPIPE_ARGS="${JETPIPE_ARGS} -x"  
-                else
-                    JETPIPE_ARGS="${JETPIPE_ARGS} -r" 
-                fi
-            fi
-
-            /usr/sbin/jetpipe ${JETPIPE_ARGS} ${DEVICE} ${PORT}
-        fi
-    done
-}
-
-configure_scanner() {
-    if boolean_is_true "$SCANNER" ; then
-        saned -a
-    fi
-}
-
 configure_serial_mouse() {
       if [ -n "$X_MOUSE_DEVICE" ] && \
           [ -n "$X_MOUSE_PROTOCOL" ] && \
@@ -262,36 +229,6 @@ configure_serial_mouse() {
               *ttyS*) inputattach --"$X_MOUSE_PROTOCOL" "$X_MOUSE_DEVICE" & ;;
           esac
       fi
-}
-
-set_time() {
-    # Set up timezone
-    if [ -n "$TIMEZONE" ] && [ -e "/usr/share/zoneinfo/$TIMEZONE" ]; then
-        cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
-    fi
-
-    # Set timeserver to $SERVER if set to autodetect
-    if [ "$TIMESERVER" = "auto" ]; then
-        TIMESERVER=${SERVER}
-    fi
-
-    # Set up timeserver
-    if [ -n "$TIMESERVER" ]; then
-        ntpdate $TIMESERVER && hwclock --systohc --${HWCLOCK:-"utc"} --noadjfile || true
-    fi
-
-}
-
-load_modules() {
-    for module in $(env|grep ^MODULE_|sed -e s/^MODULE_[0-9]*\=//|sed -e s/\ /*/g);do
-        modprobe $(echo $module|tr "*" " ")
-    done
-}
-
-configure_console() {
-    if [ -n "$CONSOLE_KEYMAP" ]; then
-        ckbcomp -model pc105 "$CONSOLE_KEYMAP" | loadkeys
-    fi
 }
 
 configure_resolver() {
@@ -334,21 +271,6 @@ EOF
     fi
 }
 
-configure_syslog() {
-    if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
-        syslog_conf=/etc/syslog.conf
-        if [ -d /etc/rsyslog.d ]; then
-            syslog_conf=/etc/rsyslog.d/ltsp.conf   
-            touch $syslog_conf
-        fi
-        if [ -f "$syslog_conf" ]; then
-            cat <<EOF > "$syslog_conf"
-*.* @${SYSLOG_HOST:-$SERVER}
-EOF
-        fi
-    fi
-}
-
 configure_fstab() {
     if [ -z "$CONFIGURE_FSTAB" ] || boolean_is_true "$CONFIGURE_FSTAB" ; then
         echo "/dev/root     /       rootfs defaults        0       0" > /etc/fstab
@@ -374,18 +296,6 @@ configure_home() {
             echo "$NFS_HOME ${MNTPT}   nfs    $NFS_HOME_OPTIONS        0       0" >> /etc/fstab
         fi
     fi
-}
-
-configure_cron() {
-    CRON_FILE=/etc/cron.d/ltsp
-    if [ ! -w "/etc/cron.d" ]; then
-        echo "Warning: /etc/cron.d is not writeable."
-        return 1
-    fi
-    if [ -n "$SHUTDOWN_TIME" ] ; then
-        echo $SHUTDOWN_TIME | awk -F : '{print $2" "$1" * * * root test ! -S \"$(ls -1 /var/run/ldm_socket_* | head -1)\" && PATH=\$PATH:/sbin/ poweroff" }' >> $CRON_FILE
-    fi
-    env | sed -n 's/^CRONTAB_[0-9][0-9]=//p' >> $CRON_FILE
 }
 
 run_rcfiles() {
@@ -441,23 +351,6 @@ bind_unmounts() {
         umount $dir
         rm -rf $tmpfs_dir/${dir#/}
     done
-}
-
-nbd_sendsigs_protection() {
-    if [ -n "$NBD_ROOT_HOST" ]; then
-        # register pids of nbd-client and nbd-proxy so that sendsigs doesn't kill
-        # them on shutdown/reboot.
-
-        # FIXME: only register pids relevent to the root filesystem.
-        nbd_pids=$(pgrep '^nbd-client|^nbd-proxy')
-        for d in /run/sendsigs.omit.d /lib/init/rw/sendsigs.omit.d /var/run/sendsigs.omit.d ; do
-            if [ -d "$d" ]; then
-                for p in $nbd_pids ; do
-                    echo "$p" >> "$d"/ltsp || true
-                done
-            fi
-        done
-    fi
 }
 
 start_screen_sessions() {

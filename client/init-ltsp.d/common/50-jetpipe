@@ -1,3 +1,24 @@
-# This file is sourced
+for I in 0 1 2; do
+    eval DEVICE=\$\{PRINTER_${I}_DEVICE\}
+    if [ -n "${DEVICE}" ]; then
+        eval PORT=\$\{PRINTER_${I}_PORT:="910${I}"\} 
+        eval BAUD=\$\{PRINTER_${I}_SPEED:-"9600"\}
+        eval SIZE=\$\{PRINTER_${I}_DATABITS:-"8"\}
+        eval PARITY=\$\{PRINTER_${I}_PARITY:-"none"\}
+        eval FLOW=\$\{PRINTER_${I}_FLOWCTRL:-"soft"\}
 
-configure_printer || true
+        JETPIPE_ARGS=
+        [ -n "$BAUD" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -b ${BAUD}"
+        [ -n "$SIZE" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -y ${SIZE}"
+        [ -n "$PARITY" ] && JETPIPE_ARGS="${JETPIPE_ARGS} -p ${PARITY}"
+        if [ -n "$FLOW" ]; then
+            if [ "$FLOW" = "soft" ]; then
+                JETPIPE_ARGS="${JETPIPE_ARGS} -x"  
+            else
+                JETPIPE_ARGS="${JETPIPE_ARGS} -r" 
+            fi
+        fi
+
+        /usr/sbin/jetpipe ${JETPIPE_ARGS} ${DEVICE} ${PORT}
+    fi
+done

@@ -1,3 +1,14 @@
-# This file is sourced
+if [ -n "$NBD_ROOT_HOST" ]; then
+    # register pids of nbd-client and nbd-proxy so that sendsigs doesn't kill
+    # them on shutdown/reboot.
 
-nbd_sendsigs_protection || true
+    # FIXME: only register pids relevent to the root filesystem.
+    nbd_pids=$(pgrep '^nbd-client|^nbd-proxy')
+    for d in /run/sendsigs.omit.d /lib/init/rw/sendsigs.omit.d /var/run/sendsigs.omit.d ; do
+        if [ -d "$d" ]; then
+            for p in $nbd_pids ; do
+                echo "$p" >> "$d"/ltsp || true
+            done
+        fi
+    done
+fi
