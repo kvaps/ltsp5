@@ -1,3 +1,5 @@
 # This file is sourced
 
 rc-update add ltsp-client default
+rc-update add sysklogd default
+rc-update add vixie-cron default

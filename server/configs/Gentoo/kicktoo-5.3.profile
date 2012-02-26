@@ -41,9 +41,7 @@ locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone ${TIMEZONE}
-extra_packages ldm ltsp-client dejavu sysklogd vixie-cron ${PACKAGES}
-rcadd sysklogd default
-rcadd vixie-cron default
+extra_packages ldm ltsp-client dejavu ${PACKAGES}
 
 
 # Step control extra functions

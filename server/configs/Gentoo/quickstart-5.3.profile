@@ -35,8 +35,8 @@ skip install_bootloader
 skip configure_bootloader
 
 tree_type none
-logger sysklogd
-cron vixie-cron
+logger none
+cron none
 rootpw password
 tree_type none
 timezone ${TIMEZONE}
