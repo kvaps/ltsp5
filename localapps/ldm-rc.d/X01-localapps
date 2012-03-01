@@ -43,7 +43,7 @@ if boolean_is_true "$LOCAL_APPS"; then
     # (/usr/bin/id is only needed because getent evidently does not return groups
     # added by pam_group (bug in pam_group?)
 
-    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C /usr/bin/id | sed -e 's/^.*groups=//' -e 's/) .*$/)/'|cut -d= -f2|sed -e 's/[0-9]*(//g' -e 's/)//g')
+    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C LANGUAGE=C /usr/bin/id | sed -e 's/^.*groups=//' -e 's/) .*$/)/'|cut -d= -f2|sed -e 's/[0-9]*(//g' -e 's/)//g')
 
     # concatenate groups from different sources, stripping off prefixed and
     # trailing commas
