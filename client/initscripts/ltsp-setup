@@ -31,8 +31,6 @@ test -f /etc/default/ltsp-client-setup && . /etc/default/ltsp-client-setup
 case "$1" in
     start)
         log_begin_msg "Setting up LTSP client..."
-        which usplash_write >/dev/null 2>/dev/null && \
-            usplash_write "TIMEOUT 120" || true
         if [ -f "/etc/ltsp/getltscfg-cluster.conf" ]; then
             # Tell the control center that we are booting and get lts.conf
             set -f
