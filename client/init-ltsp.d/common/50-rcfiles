@@ -1,7 +1,4 @@
-# This file is sourced
+# Sample rc.local may end with "exit 0", remove it if it's in the last line
+sed '${/^exit 0$/d;}' -i /etc/rc.local
 
-for rcfile in $(env|grep ^RCFILE_|sed -e s/^RCFILE_[0-9]*\=//|sed -e s/\ /*/g); do
-        rcf=`echo $rcfile |sed -e s/\*/\ /g`
-        rcexe=`echo $rcfile |sed -e s/\*.*//`
-        [ -x $rcexe ] && echo $rcf >> /etc/rc.local
-done
+env | sed -n 's/^RCFILE_[0-9][0-9]=//p' >> /etc/rc.local
