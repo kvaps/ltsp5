@@ -354,22 +354,21 @@ bind_unmounts() {
 }
 
 start_screen_sessions() {
-    if [ -z "${SCREEN_DEFAULT}" ]; then
-        for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
-            eval num=\$SCREEN_$screen
-            [ -n "$num" ] && SCREEN_DEFAULT=$screen
-        done
-    fi
+    # If no default was found, there's no SCREEN_xx to be started, so exit
+    test -n "$SCREEN_DEFAULT" || return
 
-    # Find current tty, and if it is not the same as SCREEN_DEFAULT, chvt
-    if [ -n "${SCREEN_DEFAULT}" ] && [ $(fgconsole) -ne ${SCREEN_DEFAULT} ]; then
-        chvt ${SCREEN_DEFAULT}
-    fi
+    # Start the default screen and make it the active tty
+    openvt -c "${SCREEN_DEFAULT#0}" -s -- /usr/share/ltsp/screen_session "$SCREEN_DEFAULT"
 
-    for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
-        eval num=\$SCREEN_$screen
-        if [ -n "$num" ]; then
-            start-stop-daemon --start -b --exec /usr/share/ltsp/screen_session -- "$screen"
+    # Give the default screen a head start
+    sleep 1
+
+    # Launch the other screens without switching to them
+    for i in 01 02 03 04 05 06 07 08 09 10 11 12; do
+        test "$i" -eq "$SCREEN_DEFAULT" && continue
+        eval "screen=\$SCREEN_$i"
+        if [ -n "$screen" ]; then
+            openvt -c "${i#0}" -- /usr/share/ltsp/screen_session "$i"
         fi
     done
 }

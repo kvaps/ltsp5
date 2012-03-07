@@ -28,8 +28,6 @@
     
 ################################################################
 
-[ -n "${SCREEN_NUM}" ] && openvt chvt ${SCREEN_NUM}
-
 # Need to specify TERM
 export TERM=linux
 
