@@ -132,7 +132,7 @@ start_screen_sessions() {
     test -n "$SCREEN_DEFAULT" || return
 
     # Start the default screen and make it the active tty
-    openvt -c "${SCREEN_DEFAULT#0}" -s -- /usr/share/ltsp/screen_session "$SCREEN_DEFAULT"
+    openvt -f -c "${SCREEN_DEFAULT#0}" -s -- /usr/share/ltsp/screen_session "$SCREEN_DEFAULT"
 
     # Give the default screen a head start
     sleep 1
@@ -142,7 +142,7 @@ start_screen_sessions() {
         test "$i" -eq "$SCREEN_DEFAULT" && continue
         eval "screen=\$SCREEN_$i"
         if [ -n "$screen" ]; then
-            openvt -c "${i#0}" -- /usr/share/ltsp/screen_session "$i"
+            openvt -f -c "${i#0}" -- /usr/share/ltsp/screen_session "$i"
         fi
     done
 }
