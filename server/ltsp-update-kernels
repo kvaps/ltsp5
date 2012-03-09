@@ -12,6 +12,7 @@
 #        Warren Togami <wtogami@redhat.com>
 #        Oliver Grawert <ogra@canonical.com>
 #  2009, Warren Togami <wtogami@redhat.com>
+#  2012, Alkis Georgopoulos <alkisg@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -34,7 +35,7 @@ set -e
 
 usage() {
 cat <<EOF
-$0 [OPTION]
+$0 [OPTION] [ARCH...]
   -b, --basedir     Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
   -t, --tftpdirs    List of tftpd dirs to update in. Defaults to
                     "/var/lib/tftpboot /tftpboot /srv/tftp".
@@ -95,69 +96,63 @@ for TFTPDIR in $TFTPDIRS ; do
                                   grep -v images)"}
 
     for CHROOT in $ALL_CHROOTS ; do
-        if [ -x $CHROOT/bin/true ]; then
-            echo "Updating $TFTPDIR directories for chroot: $CHROOT"
-            export CHROOT_NAME="$(basename $CHROOT)"
-
-            if [ "$COPYTFTP" = "true" ]; then
-                mkdir -p $TFTPBOOT/$CHROOT_NAME
-                cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
-
-                # Make sure permissions are always correct (LP: #759115)
-                chmod -f 644 $TFTPBOOT/$CHROOT_NAME/vmlinuz-* $TFTPBOOT/$CHROOT_NAME/initrd.img-* $TFTPBOOT/$CHROOT_NAME/nbi.img-* || true
-            fi
-
-            # OFW on Mac is lame, they cannot tftp from directories
-            if [ -e $TFTPBOOT/$CHROOT_NAME/yaboot ]; then
-                ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPDIR/yaboot
-                ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPDIR/yaboot.conf
-            fi
-        else
+        if [ ! -x $CHROOT/bin/true ]; then
             # not a valid chroot
             echo "Skipping invalid chroot: $CHROOT"
+            continue
         fi
-    done
-    # Update selinux file contexts if necessary
-    [ -f /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR > /dev/null
 
-    ### Cleanup old kernels and images from tftpboot directory ###
-    # Find $version from vmlinuz-* filename
-    # if corresponding /opt/ltsp/$arch/lib/modules/$version is missing
-    # then delete kernel and images from tftpboot directory
-    #
-    # Some distros wont match vmlinuz-*, but this is at least safe
-    # because it will simply cleanup nothing.
-    removefiles() {
-        # Common
-        rm -f $archpath/vmlinuz-$version
-        rm -f $archpath/config-$version
-        rm -f $archpath/System.map-$version
-        # Fedora
-        rm -f $archpath/initrd-$version.img
-        rm -f $archpath/initramfs-$version.img
-        rm -f $archpath/elf-$version.img
-        rm -f $archpath/wraplinux-nbi-$version.img
-        rm -f $archpath/aout-$version.img
-        rm -f $archpath/symvers-$version.gz
-        # Debian
-        rm -f $archpath/initrd.img-$version
-        rm -f $archpath/nbi.img-$version
-        # Ubuntu
-        rm -f $archpath/abi-$version
-        rm -f $archpath/vmcoreinfo-$version
-    }
-    # Loop through every arch
-    for archpath in $(find $TFTPDIR/$TFTPBOOTDIR -mindepth 1 -maxdepth 1 -type d); do
-        arch=`basename $archpath`
+        echo "Updating $TFTPDIR directories for chroot: $CHROOT"
+        CHROOT_NAME="$(basename $CHROOT)"
+
+        if [ "$COPYTFTP" = "true" ]; then
+            mkdir -p $TFTPBOOT/$CHROOT_NAME
+            cp -a $CHROOT/boot/. $TFTPBOOT/$CHROOT_NAME/
+
+            # Make sure permissions are always correct (LP: #759115)
+            chmod -f 644 $TFTPBOOT/$CHROOT_NAME/vmlinuz-* $TFTPBOOT/$CHROOT_NAME/initrd.img-* $TFTPBOOT/$CHROOT_NAME/nbi.img-* || true
+        fi
+
+        # OFW on Mac is lame, they cannot tftp from directories
+        if [ -e $TFTPBOOT/$CHROOT_NAME/yaboot ]; then
+            ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPDIR/yaboot
+            ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPDIR/yaboot.conf
+        fi
+
+        ### Cleanup old kernels and images from tftpboot directory ###
+        # Find $version from vmlinuz-* filename,
+        # if corresponding /opt/ltsp/$CHROOT_NAME/lib/modules/$version is
+        # missing, then delete kernel and images from tftpboot directory.
+        #
+        # Some distros won't match vmlinuz-*, but this is at least safe
+        # because it will simply cleanup nothing.
+
         # Loop through every vmlinuz-* file
-        for kernelpath in $(find $TFTPDIR/$TFTPBOOTDIR/$arch -name 'vmlinuz-*'); do
+        for kernelpath in $(find $TFTPBOOT/$CHROOT_NAME -name 'vmlinuz-*'); do
             kernel=`basename $kernelpath`
             version=${kernel##vmlinuz-}
-            if [ ! -d $BASE/$arch/lib/modules/$version ]; then
+            if [ ! -d $BASE/$CHROOT_NAME/lib/modules/$version ]; then
                 echo "Removing $kernelpath"
-                removefiles
+                # Common
+                rm -f $TFTPBOOT/$CHROOT_NAME/vmlinuz-$version
+                rm -f $TFTPBOOT/$CHROOT_NAME/config-$version
+                rm -f $TFTPBOOT/$CHROOT_NAME/System.map-$version
+                # Fedora
+                rm -f $TFTPBOOT/$CHROOT_NAME/initrd-$version.img
+                rm -f $TFTPBOOT/$CHROOT_NAME/initramfs-$version.img
+                rm -f $TFTPBOOT/$CHROOT_NAME/elf-$version.img
+                rm -f $TFTPBOOT/$CHROOT_NAME/wraplinux-nbi-$version.img
+                rm -f $TFTPBOOT/$CHROOT_NAME/aout-$version.img
+                rm -f $TFTPBOOT/$CHROOT_NAME/symvers-$version.gz
+                # Debian
+                rm -f $TFTPBOOT/$CHROOT_NAME/initrd.img-$version
+                rm -f $TFTPBOOT/$CHROOT_NAME/nbi.img-$version
+                # Ubuntu
+                rm -f $TFTPBOOT/$CHROOT_NAME/abi-$version
+                rm -f $TFTPBOOT/$CHROOT_NAME/vmcoreinfo-$version
             fi
         done
     done
+    # Update selinux file contexts if necessary
+    [ -f /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR > /dev/null
 done
-exit 0
