@@ -32,6 +32,10 @@ if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
 fi
 
+if [ -n "${VIDEO_CARDS}" ]; then
+	makeconf_line VIDEO_CARDS "${VIDEO_CARDS}"
+fi
+
 if [ "${CCACHE}" == "true" ]; then
 	makeconf_line FEATURES "ccache"
 	makeconf_line CCACHE_SIZE "4G"

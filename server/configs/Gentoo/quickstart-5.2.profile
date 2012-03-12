@@ -85,7 +85,11 @@ pre_install_portage_tree() {
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
 	if [ -n "${MIRRORS}" ]; then
-		echo "GENTOO_MIRRORS="${MIRRORS}"" >> ${chroot_dir}/etc/make.conf
+		echo "GENTOO_MIRRORS=\"${MIRRORS}\"" >> ${chroot_dir}/etc/make.conf
+	fi
+	
+	if [ -n "${VIDEO_CARDS}" ]; then
+		echo "VIDEO_CARDS=\"${VIDEO_CARDS}\"" >> ${chroot_dir}/etc/make.conf
 	fi
 
 	# TODO: don't add this by default

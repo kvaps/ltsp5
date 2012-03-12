@@ -56,6 +56,7 @@ case "$MODE" in
         MAKEOPTS="${MAKEOPTS}" LOCALE="${LOCALE}" BASE="${BASE}" \
         ARCH="${ARCH}" MAIN_ARCH="${MAIN_ARCH}" NAME="${CHROOT}" EXCLUDE="${EXCLUDE}" \
         KERNEL_CONFIG_URI="${KERNEL_CONFIG_URI}" KERNEL_SOURCES="${KERNEL_SOURCES}" \
+        VIDEO_CARDS="${VIDEO_CARDS}" \
         $INSTALLER $INSTALLER_ARGS $INSTALLER_PROFILE
         
         # And reset to the original value
