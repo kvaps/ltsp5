@@ -3,7 +3,8 @@ test -z "$LTSP_FATCLIENT" || return
 test -f /proc/meminfo || return
 
 # process_lts_conf() unsets glob expansion (set -f), so we need to use `find`
-if [ -n "$(find /usr/share/xsessions/ -name '*.desktop' 2>/dev/null)" ]; then
+# blacklist Xsession.desktop (installed by xinit on Gentoo)
+if [ -n "$(find /usr/share/xsessions/ -not -name Xsession.desktop -name '*.desktop' 2>/dev/null)" ]; then
     # Don't set LTSP_FATCLIENT for low-RAM clients booting from a fat chroot
     memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
     FAT_RAM_THRESHOLD=${FAT_RAM_THRESHOLD:-300}
