@@ -1,6 +1,6 @@
 # Attempt to get lts.conf via tftp
 
-arch=$(uname -m | sed -e 's:i[3-6]86:x86:' -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
+arch=$(uname -m | sed -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
 tftppath="/ltsp/${arch}/lts.conf"
 lts_conf_temp=$(mktemp)
 
