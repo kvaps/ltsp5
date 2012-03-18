@@ -115,8 +115,12 @@ for TFTPDIR in $TFTPDIRS ; do
 
         # OFW on Mac is lame, they cannot tftp from directories
         if [ -e $TFTPBOOT/$CHROOT_NAME/yaboot ]; then
-            ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPDIR/yaboot
-            ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPDIR/yaboot.conf
+            if [ ! -e $TFTPDIR/yaboot ]; then
+                ln -sf ltsp/$CHROOT_NAME/yaboot $TFTPDIR/yaboot
+            fi
+            if [ ! -e $TFTPDIR/yaboot.conf ]; then
+                ln -sf ltsp/$CHROOT_NAME/yaboot.conf $TFTPDIR/yaboot.conf
+            fi
         fi
 
         ### Cleanup old kernels and images from tftpboot directory ###
