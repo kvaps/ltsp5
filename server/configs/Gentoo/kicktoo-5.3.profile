@@ -84,7 +84,6 @@ post_unpack_stage_tarball() {
 	# make sure the new unstable versions get installed
 	cat > ${chroot_dir}/etc/portage/package.keywords <<- EOF
 	net-misc/ltsp-client
-	sys-fs/ltspfs
 	EOF
 
 	# linking ltsp profile from overlay
