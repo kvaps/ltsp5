@@ -14,16 +14,7 @@ case "$MODE" in
         if [ -n "$option_fat_client_desktop_value" ]; then
             FAT_CLIENT_DESKTOPS="$(echo $option_fat_client_desktop_value | tr ',' ' ')"
         elif [ -n "$option_fat_client_value" ]; then
-            FAT_CLIENT_DESKTOPS=""
-
-            # Code taken from 030-artwork
-            for cdd in ed k l myth x; do
-                if [ $(dpkg-query -W --showformat='${Package}' ${cdd}ubuntu-desktop 2>/dev/null) ]; then
-                    if dpkg -l | grep -q "${cdd}ubuntu-desktop"; then
-                        FAT_CLIENT_DESKTOPS="$FAT_CLIENT_DESKTOPS ${cdd}ubuntu-desktop"
-                    fi
-                fi
-            done
+            FAT_CLIENT_DESKTOPS="$(dpkg -l | sed -n 's/^ii *\(.*buntu-desktop\).*/\1/p')"
         else
             # If fat client isn't enabled, just continue
             return 0

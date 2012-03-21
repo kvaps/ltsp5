@@ -1,15 +1,12 @@
 case "$MODE" in
     finalization)
-        for cdd in ed x k; do
-            if dpkg -l | grep -q "${cdd}ubuntu-desktop"; then
-                chroot $ROOT apt-get $APT_GET_OPTS install ldm-${ccd}ubuntu-theme
-                if [ -d $ROOT/usr/share/ldm/themes/${cdd}ubuntu ]; then
-                    chroot $ROOT /usr/sbin/update-alternatives --set ldm-theme /usr/share/ldm/themes/${cdd}ubuntu
-                    return
-                fi
+        desktops=$(dpkg -l | sed -n 's/^ii *\(.*buntu-desktop\).*/\1/p' |
+            grep -v '^ubuntu-desktop$')
+        for d in $desktops ubuntu-desktop; do
+            name=${d%-desktop}
+            if chroot "$ROOT" apt-get $APT_GET_OPTS install ldm-$name-theme; then
+                return
             fi
         done
-        chroot $ROOT apt-get $APT_GET_OPTS install ldm-ubuntu-theme
-        chroot $ROOT /usr/sbin/update-alternatives --set ldm-theme /usr/share/ldm/themes/ubuntu
     ;;
 esac
