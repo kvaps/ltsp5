@@ -14,7 +14,7 @@ case "$MODE" in
         if [ -n "$option_fat_client_desktop_value" ]; then
             FAT_CLIENT_DESKTOPS="$(echo $option_fat_client_desktop_value | tr ',' ' ')"
         elif [ -n "$option_fat_client_value" ]; then
-            FAT_CLIENT_DESKTOPS="$(dpkg -l | sed -n 's/^ii *\(.*buntu-desktop\).*/\1/p')"
+            FAT_CLIENT_DESKTOPS="$(dpkg -l | sed -n 's/^ii.*\<\(.*buntu-desktop\)\>.*/\1/p')"
         else
             # If fat client isn't enabled, just continue
             return 0
