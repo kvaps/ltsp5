@@ -1,1 +1,3 @@
 #This is set by rpm package that is installed in the chroot
+#for the Suse maintainer:
+#the 010-chroot-tagging plugin is removed from common, this can be removed safely 

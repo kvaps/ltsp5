@@ -1,5 +1,0 @@
-case "$MODE" in
-    after-install)
-        echo LTSP_CHROOT=$ROOT >> $ROOT/etc/ltsp_chroot
-        ;;
-esac
