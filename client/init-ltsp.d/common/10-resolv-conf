@@ -1,4 +1,11 @@
-# This file is sourced.
+# If DNS_SERVER=auto, check if a DNS service is running on the LTSP server.
+if [ "$DNS_SERVER" = "auto" ] && [ -n "$SERVER" ]; then
+    if nc -w 1 -z "$SERVER" 53; then
+        DNS_SERVER="$SERVER"
+    else
+        unset DNS_SERVER
+    fi
+fi
 
 # set to defaults from DHCP if not specified in lts.conf
 if [ -z "$DNS_SERVER" ]; then
