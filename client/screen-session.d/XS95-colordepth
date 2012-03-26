@@ -1,5 +1,10 @@
 ### color depth
 
+# Default to 16 bpp for thin clients
+if boolean_is_true "${X_SMART_COLOR_DEPTH:-True}" && ! boolean_is_true "${LTSP_FATCLIENT}"; then
+    X_COLOR_DEPTH=16
+fi
+
 if [ -n "$X_COLOR_DEPTH" ]; then
     # Set color depth if X_CONF has been set to our internally generated
     # XCONF file OR if no user-defined X_CONF file was specified.
