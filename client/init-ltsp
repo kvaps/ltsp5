@@ -3,14 +3,7 @@
 . /usr/share/ltsp/ltsp-common-functions
 test -f "/etc/ltsp/init-ltsp.conf" && . /etc/ltsp/init-ltsp.conf
 
-VENDOR=${VENDOR:-$(detect_vendor)}
-if [ -d "/usr/share/ltsp/init-ltsp.d/$VENDOR" ]; then
-    scriptsdir="/usr/share/ltsp/init-ltsp.d/$VENDOR"
-elif [ -d "/usr/share/ltsp/init-ltsp.d/common" ]; then
-    scriptsdir="/usr/share/ltsp/init-ltsp.d/common"
-else
-    exit 1
-fi
+scriptsdir="/usr/share/ltsp/init-ltsp.d/"
 
 # workaround Debian bug in initramfs-tools:
 # http://bugs.debian.org/660297
