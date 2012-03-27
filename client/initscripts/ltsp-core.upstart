@@ -23,12 +23,12 @@ pre-start script
         eval $(getltscfg-cluster -a -l boot) || true
     fi
 
-    start_screen_sessions || true
-    start_sound || true
-
     if [ -x /bin/plymouth ]; then
         /bin/plymouth quit --retain-splash || true
     fi
+
+    start_screen_sessions || true
+    start_sound || true
 end script
 
 post-stop script

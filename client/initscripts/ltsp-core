@@ -44,14 +44,14 @@ case "$1" in
             eval $(getltscfg-cluster -a -l boot) || true
         fi
 
+        if [ -x /bin/plymouth ]; then
+            /bin/plymouth quit --retain-splash
+        fi
+
         start_screen_sessions || true
         start_sound || true
 
         log_action_end_msg 0
-
-        if [ -x /bin/plymouth ]; then
-            /bin/plymouth quit --retain-splash
-        fi
 	;;
   stop)
     # This means that an LTSP client is shutting down or rebooting.
