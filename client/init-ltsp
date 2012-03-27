@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /usr/share/ltsp/ltsp-common-functions
+. /usr/share/ltsp/ltsp-client-functions
 test -f "/etc/ltsp/init-ltsp.conf" && . /etc/ltsp/init-ltsp.conf
 
 scriptsdir="/usr/share/ltsp/init-ltsp.d/"

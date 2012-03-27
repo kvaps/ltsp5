@@ -18,8 +18,8 @@
 #  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 
-# Source the ltsp common functions for vendor detect
-. /usr/share/ltsp/ltsp-common-functions
+# Source the ltsp server functions for vendor detect
+. /usr/share/ltsp/ltsp-server-functions
 
 VENDOR=$(detect_vendor)                       # Linux distribution
 export BASE=${BASE:-/opt/ltsp}                # LTSP base directory

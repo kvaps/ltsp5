@@ -2,7 +2,7 @@
 ### Methods to be called by plugins
 ##################################
 
-. /usr/share/ltsp/ltsp-common-functions 
+. /usr/share/ltsp/ltsp-server-functions 
 
 # Load plugins.
 #

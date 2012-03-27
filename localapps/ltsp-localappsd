@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. /usr/share/ltsp/ltsp-common-functions
+. /usr/share/ltsp/ltsp-client-functions
 
 logit() {
     logger -t ltsp-localappsd -p daemon.info $1

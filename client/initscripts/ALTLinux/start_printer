@@ -8,7 +8,7 @@
 
 PNUM=$1
 
-. /usr/share/ltsp/ltsp-common-functions
+. /usr/share/ltsp/ltsp-client-functions
 
 eval DEVICE=\$PRINTER_${PNUM}_DEVICE
 

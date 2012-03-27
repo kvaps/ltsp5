@@ -19,7 +19,7 @@ SourceIfNotEmpty /etc/default/ltsp-client-setup
 LOCKFILE=/var/lock/subsys/ltsp-client-swap
 RETVAL=0
 
-SourceIfNotEmpty /usr/share/ltsp/ltsp-common-functions
+SourceIfNotEmpty /usr/share/ltsp/ltsp-client-functions
 [ -f /etc/ltsp_chroot ] && SourceIfNotEmpty /usr/share/ltsp/ltsp_config || exit 0
 
 FST=`which fstyp 2>/dev/null` || FST=`which fstype 2>/dev/null` || FST=`which sfdisk 2>/dev/null` || FST=`which fdisk 2>/dev/null` || FST=`which file 2>/dev/null`

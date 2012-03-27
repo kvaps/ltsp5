@@ -33,8 +33,8 @@
 
 set -e
 
-# Source the ltsp common functions for vendor detect
-. /usr/share/ltsp/ltsp-common-functions
+# Source the ltsp server functions for vendor detect
+. /usr/share/ltsp/ltsp-server-functions
 
 export TERM=linux							  # make sure we're using a known terminal type
 export TEXTDOMAIN=ltsp                        # gettext domain (.mo file name)

@@ -36,14 +36,14 @@
 #
 #
 
-# Source ltsp-common-functions if we have not already (needed in some functions)
+# Source ltsp-client-functions if we have not already (needed in some functions)
 # We set PATH to empty string here (in the subshell), because shell will look
 # for boolean_is_true in PATH if it doesn't find it as a built-in function
 # That search is a waste of time and so, we avoid it by not giving a PATH.
 #
 # Also, let's call this at the very beginning to make absolutely sure that 
-# anything that calls ltsp_config will have ltsp-common-functions sourced
-(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
+# anything that calls ltsp_config will have ltsp-client-functions sourced
+(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-client-functions || true
 
 # Once lts.conf params are processed, they should all be stored
 # in a quickly source-able file: /var/cache/ltsp/ltsp_config_env

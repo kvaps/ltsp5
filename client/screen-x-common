@@ -29,8 +29,8 @@
 
 . /usr/share/ltsp/ltsp_config
 
-# Source ltsp-common-functions if we have not already (needed in some functions)
-(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-common-functions || true
+# Source ltsp-client-functions if we have not already (needed in some functions)
+(PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-client-functions || true
 
 #
 # Compute tty and display

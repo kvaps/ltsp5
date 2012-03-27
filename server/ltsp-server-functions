@@ -85,3 +85,12 @@ umount_marked() {
 if [ -f /usr/share/ltsp/ltsp-vendor-functions ]; then
     . /usr/share/ltsp/ltsp-vendor-functions
 fi
+
+# Source tool-specific functions, if they're provided.
+# Recursive inclusions shouldn't ever happen, but let's prevent them anyway.
+if [ -z "$ltsp_tool" ]; then
+    ltsp_tool=${0##*/}
+    if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then
+        . "/usr/share/ltsp/$ltsp_tool-functions"
+    fi
+fi

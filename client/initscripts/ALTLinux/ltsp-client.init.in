@@ -19,7 +19,7 @@ SourceIfNotEmpty /etc/sysconfig/ltsp-client
 LOCKFILE=/var/lock/subsys/ltsp-client
 RETVAL=0
 
-SourceIfNotEmpty /usr/share/ltsp/ltsp-common-functions
+SourceIfNotEmpty /usr/share/ltsp/ltsp-client-functions
 [ -f /etc/ltsp_chroot ] && SourceIfNotEmpty /usr/share/ltsp/ltsp_config || exit 0
 
 # Set variable

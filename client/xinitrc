@@ -35,7 +35,7 @@
 #   eval xinit "$* $LTS_OPTION1 $LTS_OPTION2"
 # Quoting the parameters is necessary in both cases to avoid glob expansion.
 
-. /usr/share/ltsp/ltsp-common-functions
+. /usr/share/ltsp/ltsp-client-functions
 
 XINITRCDIR=/usr/share/ltsp/xinitrc.d
 

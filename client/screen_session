@@ -31,7 +31,7 @@
 #
 
 # Load LTSP configuration
-# ltsp_config sources ltsp-common-functions
+# ltsp_config sources ltsp-client-functions
 . /usr/share/ltsp/ltsp_config
 
 case "$1" in
