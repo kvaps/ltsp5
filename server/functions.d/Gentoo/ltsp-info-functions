@@ -1,0 +1,29 @@
+# Local functions
+
+packages() {
+    chroot=$1
+    cat $chroot/var/db/pkg/net-misc/ltsp*/PF
+    cat $chroot/var/db/pkg/sys-fs/ltspfs-*/PF
+    cat $chroot/var/db/pkg/*/ldm*/PF
+}
+
+# Gentoo-specific function overrides for ltsp-info
+
+server_packages() {
+    echo server packages:
+    Gentoo_packages
+    echo
+}
+
+chroot_packages() {
+    chroot=$1
+    if [ -d $chroot/var/db/pkg ]; then
+        echo "packages in chroot: $chroot"
+        Gentoo_packages $chroot
+        echo
+    fi
+}
+
+chroot_release() {
+    :
+}

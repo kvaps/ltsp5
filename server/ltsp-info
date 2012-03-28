@@ -1,6 +1,7 @@
 #!/bin/sh
 
 #  Copyright (c) 2006-2009 Vagrant Cascadian <vagrant@freegeek.org>
+#  2012, Alkis Georgopoulos <alkisg@gmail.com>
 
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -17,13 +18,6 @@
 #  Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
 #  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-
-# Source the ltsp server functions for vendor detect
-. /usr/share/ltsp/ltsp-server-functions
-
-VENDOR=$(detect_vendor)                       # Linux distribution
-export BASE=${BASE:-/opt/ltsp}                # LTSP base directory
-
 
 # generic functions
 find_chroots() {
@@ -58,7 +52,8 @@ find_images() {
     fi     
 }
 
-lsb_server_info() {
+# Distros may override that if they don't support lsb_release
+server_info() {
     echo server information:
     lsb_release --all
     echo
@@ -66,50 +61,22 @@ lsb_server_info() {
 
 
 # distro specific functions
-Debian_server_packages() {
-    echo server packages:
-    COLUMNS=200 dpkg -l 'ltsp*' 'ldm*' | awk '/ltsp|ldm/{print $1,$2,$3}'
-    echo
+server_packages() {
+    die "Your distro needs to implement function server_packages in order to support $0."
 }
 
-Debian_chroot_packages() {
-    chroot=$1
-    if [ -f $chroot/var/lib/dpkg/status ]; then
-        echo "packages in chroot: $chroot"
-        COLUMNS=200 dpkg --root=$chroot -l 'ltsp*' 'ldm*' | awk '/ltsp-client|ldm|ltspfs/{print $1,$2,$3}'
-        echo
-    fi
+chroot_packages() {
+    die "Your distro needs to implement function chroot_packages in order to support $0."
 }
 
-Debian_chroot_release() {
-    if [ -x $chroot/usr/bin/lsb_release ]; then
-        echo "chroot information: $chroot"
-        ROOT=$chroot ltsp-chroot lsb_release --all
-        echo
-    fi
+chroot_release() {
+    die "Your distro needs to implement function chroot_release in order to support $0."
 }
 
-Gentoo_server_packages() {
-    echo server packages:
-    Gentoo_packages
-    echo
-}
+# ltsp-server-functions also sources distro specific function overrides
+. /usr/share/ltsp/ltsp-server-functions
 
-Gentoo_packages() {
-    chroot=$1
-    cat $chroot/var/db/pkg/net-misc/ltsp*/PF
-    cat $chroot/var/db/pkg/sys-fs/ltspfs-*/PF
-    cat $chroot/var/db/pkg/*/ldm*/PF
-}
-
-Gentoo_chroot_packages() {
-    chroot=$1
-    if [ -d $chroot/var/db/pkg ]; then
-        echo "packages in chroot: $chroot"
-        Gentoo_packages $chroot
-        echo
-    fi
-}
+export BASE=${BASE:-/opt/ltsp}                # LTSP base directory
 
 for opt in $@ ; do
     case $opt in
@@ -118,61 +85,16 @@ for opt in $@ ; do
     esac
 done
 
-case $VENDOR in
-    Debian|Ubuntu)
-        if [ "$server_info" != "false" ]; then
-            lsb_server_info
-            Debian_server_packages
-        fi
-        for chroot in $(find_chroots) ; do
-            chroot_name=$(basename $chroot)
-            if [ "$verbose" = "true" ]; then
-                Debian_chroot_release
-            fi
-            Debian_chroot_packages $chroot
-            find_lts_conf $chroot
-        done
-        find_images
-        ;;
-    Gentoo)
-        if [ "$server_info" != "false" ]; then
-            lsb_server_info
-            Gentoo_server_packages
-        fi
-        for chroot in $(find_chroots) ; do
-            chroot_name=$(basename $chroot)
-            Gentoo_chroot_packages $chroot
-            find_lts_conf $chroot
-        done
-        find_images
-        ;;
-    SUSE_LINUX)
-       if [ x"$USER" != x"root" ]; then
-            echo "You have to be root to run this script"
-            exit 1
-       fi
-       echo "-------------------------------------------------------------"
-       echo "Please paste the following information on http://pastebin.com"
-       echo "post the resulting link to the mailing list or IRC channel"
-       echo "-------------------------------------------------------------"
-       echo "LSB information:"
-       lsb_release --all
-       echo "Package information:"
-       rpm -qa "*kiwi*"
-       rpm -qa "*ltsp*"
-       rpm -qa "*ldm*"
-       echo "Network information:"
-       ip addr
-       echo "kiwi-ltsp configuration:"
-       cat /etc/sysconfig/kiwi-ltsp | grep -v \#
-       kiwi-ltsp-setup -c || true
-       echo "DHCPD configuration:"
-       cat /etc/dhcpd.conf | grep -v \#
-       echo "contents of lts.conf:"
-       cat /srv/tftpboot/KIWI/lts.conf | grep -v \#
-       echo "pxelinux.cfg/default contents:"
-       cat /srv/tftpboot/pxelinux.cfg/default
-       echo "kiwi's config.default:"
-       cat /srv/tftpboot/KIWI/config.default
-       ;;
-esac
+if [ "$server_info" != "false" ]; then
+    server_info
+    server_packages
+fi
+for chroot in $(find_chroots) ; do
+    chroot_name=$(basename $chroot)
+    if [ "$verbose" = "true" ]; then
+        chroot_release
+    fi
+    chroot_packages $chroot
+    find_lts_conf $chroot
+done
+find_images
