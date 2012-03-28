@@ -2,16 +2,22 @@
 
 packages() {
     chroot=$1
-    cat $chroot/var/db/pkg/net-misc/ltsp*/PF
-    cat $chroot/var/db/pkg/sys-fs/ltspfs-*/PF
-    cat $chroot/var/db/pkg/*/ldm*/PF
+    if [ -d $chroot/var/db/pkg/net-misc/ltsp* ]; then
+        cat $chroot/var/db/pkg/net-misc/ltsp*/PF
+    fi
+    if [ -d $chroot/var/db/pkg/sys-fs/ltspfs-* ]; then
+        cat $chroot/var/db/pkg/sys-fs/ltspfs-*/PF
+    fi
+    if [ -d $chroot/var/db/pkg/*/ldm* ]; then
+        cat $chroot/var/db/pkg/*/ldm*/PF
+    fi
 }
 
 # Gentoo-specific function overrides for ltsp-info
 
 server_packages() {
     echo server packages:
-    Gentoo_packages
+    packages
     echo
 }
 
@@ -19,11 +25,15 @@ chroot_packages() {
     chroot=$1
     if [ -d $chroot/var/db/pkg ]; then
         echo "packages in chroot: $chroot"
-        Gentoo_packages $chroot
+        packages $chroot
         echo
     fi
 }
 
 chroot_release() {
-    :
+    if [ -x $chroot/usr/bin/lsb_release ]; then
+        echo "chroot information: $chroot"
+        ROOT=$chroot ltsp-chroot lsb_release --all
+        echo
+    fi
 }
