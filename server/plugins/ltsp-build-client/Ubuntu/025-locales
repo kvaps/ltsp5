@@ -30,8 +30,10 @@ case $MODE in
         fi
         export LANG="$LOCALE"
 
-        if [ -f /etc/default/console-setup ]; then
-            cp /etc/default/console-setup $ROOT/etc/default/console-setup
-        fi
+        for f in /etc/default/console-setup /etc/default/keyboard; do
+            if [ -f "$f" ]; then
+                cp "$f" "$ROOT/$f"
+            fi
+        done
         ;;
 esac

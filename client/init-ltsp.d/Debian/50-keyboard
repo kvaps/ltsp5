@@ -1,0 +1,8 @@
+for file in /etc/default/console-setup /etc/default/keyboard; do
+    test -f "$file" || continue
+
+    test -n "$XKBMODEL" && sed -i "s/XKBMODEL=.*/XKBMODEL=\"$XKBMODEL\"/" "$file"
+    test -n "$XKBLAYOUT" && sed -i "s/XKBLAYOUT=.*/XKBLAYOUT=\"$XKBLAYOUT\"/" "$file"
+    test -n "$XKBVARIANT" && sed -i "s/XKBVARIANT=.*/XKBVARIANT=\"$XKBVARIANT\"/" "$file"
+    test -n "$XKBOPTIONS" && sed -i "s/XKBOPTIONS=.*/XKBOPTIONS=\"$XKBOPTIONS\"/" "$file"
+done
