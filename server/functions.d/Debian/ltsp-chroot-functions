@@ -1,0 +1,5 @@
+# Debian-specific function overrides for ltsp-chroot
+
+mount_package_cache() {
+    mark_mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"
+}

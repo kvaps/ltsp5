@@ -5,6 +5,8 @@
 # 2011 Wim Muskee <wimmuskee@gmail.com>, distributed under the
 # terms of the GNU General Public License version 2 or any later version.
 
+# generic functions
+
 usage() {
 cat <<EOF
 $0 [OPTION] command
@@ -89,20 +91,7 @@ pre_chroot() {
         MOUNT_PROC=true
     fi
     if boolean_is_true "$MOUNT_PACKAGE_CACHE"; then
-        case "$VENDOR" in
-            Debian|Ubuntu)
-                mark_mount --bind /var/cache/apt/archives "$ROOT/var/cache/apt/archives"
-                ;;
-            Gentoo)
-                mark_mount --bind /usr/portage "$ROOT/usr/portage"
-                mark_mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"
-                # remove if ltsp ever in portage tree
-                mark_mount --bind "/var/lib/layman" "$ROOT/var/lib/layman"
-                ;;
-            *)
-                echo "Mounting the package cache is not available for your distribution."
-                ;;
-         esac
+        mount_package_cache
     fi
     if boolean_is_true "$MOUNT_DEV"; then
         mark_mount --bind "/dev" "$ROOT/dev"
@@ -120,6 +109,11 @@ post_chroot() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     umount_marked
+}
+
+# distro specific functions
+mount_package_cache() {
+    echo "Mounting the package cache is not available for your distribution."
 }
 
 # Main

@@ -1,0 +1,8 @@
+# Gentoo-specific function overrides for ltsp-chroot
+
+mount_package_cache() {
+    mark_mount --bind /usr/portage "$ROOT/usr/portage"
+    mark_mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"
+    # remove if ltsp ever in portage tree
+    mark_mount --bind "/var/lib/layman" "$ROOT/var/lib/layman"
+}
