@@ -55,16 +55,7 @@ default_options() {
         if [ -z "$ARCH" ]; then
             # Prefer the chroot that corresponds to the server arch,
             # but if that doesn't exist, use the first one available.
-            case "$VENDOR" in
-                Debian|Ubuntu)
-                    if [ -x /usr/bin/dpkg ]; then
-                        ARCH=$(dpkg --print-architecture)
-                    else
-                        ARCH=i386
-                    fi ;;
-                Gentoo)
-                    ARCH=i686 ;;
-            esac
+            ARCH=$(detect_arch)
 
             if [ ! -d "$BASE/$ARCH" ]; then
                 for dir in "$BASE"/*/; do
@@ -131,9 +122,6 @@ fi
 if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
     . /etc/ltsp/ltsp-chroot.conf
 fi
-
-# Detect linux distribution
-VENDOR=$(detect_vendor)
 
 # The command line parameters override the configuration file settings
 analyze_command_line $ARGS
