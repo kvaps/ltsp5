@@ -1,0 +1,5 @@
+# SUSE_LINUX-specific function overrides for the common functions
+
+detect_arch() {
+    echo $(uname -m | sed -e s/i.86/i386/ -e s/ppc.*/powerpc/)
+}

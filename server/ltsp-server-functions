@@ -88,8 +88,15 @@ umount_marked() {
     done
 }
 
-if [ -f /usr/share/ltsp/ltsp-vendor-functions ]; then
-    . /usr/share/ltsp/ltsp-vendor-functions
+# Sourcing distro specific overrides.
+# The included overrides are the same, either one can be available
+# because the client and server packages can be installed on the 
+# same system.
+if [ -f /usr/share/ltsp/ltsp-client-vendor-functions ]; then
+    . /usr/share/ltsp/ltsp-client-vendor-functions
+fi
+if [ -f /usr/share/ltsp/ltsp-server-vendor-functions ]; then
+    . /usr/share/ltsp/ltsp-server-vendor-functions
 fi
 
 # Source tool-specific functions, if they're provided.
