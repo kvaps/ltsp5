@@ -1,0 +1,9 @@
+# Debian-specific function overrides for the common functions
+
+detect_arch() {
+    if [ -x /usr/bin/dpkg ]; then
+        echo $(dpkg --print-architecture)
+    else
+        echo "i386"
+    fi
+}

@@ -1,0 +1,5 @@
+# Gentoo-specific function overrides for the common functions
+
+detect_arch() {
+    echo $(uname -m | sed -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
+}

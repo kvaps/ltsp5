@@ -34,6 +34,12 @@ detect_vendor() {
     fi
 }
 
+# Distros may override this function to implement their own
+# architecture detection.
+detect_arch() {
+    echo $(uname -m)
+}
+
 require_root()
 {
     if [ ${UID:-$(id -u)} -ne 0 ]; then
