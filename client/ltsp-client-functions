@@ -1,1 +1,9 @@
-../server/ltsp-server-functions
+# Common functions shared by LTSP scripts
+if [ -f /usr/share/ltsp/ltsp-client-common-functions ]; then
+    . /usr/share/ltsp/ltsp-client-common-functions
+fi
+
+# Sourcing distro specific overrides.
+if [ -f /usr/share/ltsp/ltsp-server-vendor-functions ]; then
+    . /usr/share/ltsp/ltsp-server-vendor-functions
+fi
