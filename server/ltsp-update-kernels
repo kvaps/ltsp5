@@ -46,6 +46,42 @@ $0 [OPTION] [ARCH...]
 EOF
 }
 
+# distro specific functions
+
+# Find $version from vmlinuz-* filename,
+# if corresponding /opt/ltsp/$CHROOT_NAME/lib/modules/$version is
+# missing, then delete kernel and images from tftpboot directory.
+#
+# Some distros won't match vmlinuz-*, but this is at least safe
+# because it will simply cleanup nothing.
+cleanup_kernels() {
+    # Loop through every vmlinuz-* file
+    for kernelpath in $(find $TFTPBOOT/$CHROOT_NAME -name 'vmlinuz-*'); do
+        kernel=`basename $kernelpath`
+        version=${kernel##vmlinuz-}
+        if [ ! -d $BASE/$CHROOT_NAME/lib/modules/$version ]; then
+            echo "Removing $kernelpath"
+            # Common
+            rm -f $TFTPBOOT/$CHROOT_NAME/vmlinuz-$version
+            rm -f $TFTPBOOT/$CHROOT_NAME/config-$version
+            rm -f $TFTPBOOT/$CHROOT_NAME/System.map-$version
+            # Fedora
+            rm -f $TFTPBOOT/$CHROOT_NAME/initrd-$version.img
+            rm -f $TFTPBOOT/$CHROOT_NAME/initramfs-$version.img
+            rm -f $TFTPBOOT/$CHROOT_NAME/elf-$version.img
+            rm -f $TFTPBOOT/$CHROOT_NAME/wraplinux-nbi-$version.img
+            rm -f $TFTPBOOT/$CHROOT_NAME/aout-$version.img
+            rm -f $TFTPBOOT/$CHROOT_NAME/symvers-$version.gz
+            # Debian
+            rm -f $TFTPBOOT/$CHROOT_NAME/initrd.img-$version
+            rm -f $TFTPBOOT/$CHROOT_NAME/nbi.img-$version
+            # Ubuntu
+            rm -f $TFTPBOOT/$CHROOT_NAME/abi-$version
+            rm -f $TFTPBOOT/$CHROOT_NAME/vmcoreinfo-$version
+        fi
+    done
+}
+
 #
 # Handle args
 #
@@ -68,6 +104,9 @@ while true ; do
         *) echo "Internal error!" ; exit 1 ;;
     esac
 done
+
+# ltsp-server-functions also sources distro specific function overrides
+. /usr/share/ltsp/ltsp-server-functions
 
 if [ -f /etc/ltsp/ltsp-update-kernels.conf ]; then
     . /etc/ltsp/ltsp-update-kernels.conf
@@ -123,39 +162,8 @@ for TFTPDIR in $TFTPDIRS ; do
             fi
         fi
 
-        ### Cleanup old kernels and images from tftpboot directory ###
-        # Find $version from vmlinuz-* filename,
-        # if corresponding /opt/ltsp/$CHROOT_NAME/lib/modules/$version is
-        # missing, then delete kernel and images from tftpboot directory.
-        #
-        # Some distros won't match vmlinuz-*, but this is at least safe
-        # because it will simply cleanup nothing.
-
-        # Loop through every vmlinuz-* file
-        for kernelpath in $(find $TFTPBOOT/$CHROOT_NAME -name 'vmlinuz-*'); do
-            kernel=`basename $kernelpath`
-            version=${kernel##vmlinuz-}
-            if [ ! -d $BASE/$CHROOT_NAME/lib/modules/$version ]; then
-                echo "Removing $kernelpath"
-                # Common
-                rm -f $TFTPBOOT/$CHROOT_NAME/vmlinuz-$version
-                rm -f $TFTPBOOT/$CHROOT_NAME/config-$version
-                rm -f $TFTPBOOT/$CHROOT_NAME/System.map-$version
-                # Fedora
-                rm -f $TFTPBOOT/$CHROOT_NAME/initrd-$version.img
-                rm -f $TFTPBOOT/$CHROOT_NAME/initramfs-$version.img
-                rm -f $TFTPBOOT/$CHROOT_NAME/elf-$version.img
-                rm -f $TFTPBOOT/$CHROOT_NAME/wraplinux-nbi-$version.img
-                rm -f $TFTPBOOT/$CHROOT_NAME/aout-$version.img
-                rm -f $TFTPBOOT/$CHROOT_NAME/symvers-$version.gz
-                # Debian
-                rm -f $TFTPBOOT/$CHROOT_NAME/initrd.img-$version
-                rm -f $TFTPBOOT/$CHROOT_NAME/nbi.img-$version
-                # Ubuntu
-                rm -f $TFTPBOOT/$CHROOT_NAME/abi-$version
-                rm -f $TFTPBOOT/$CHROOT_NAME/vmcoreinfo-$version
-            fi
-        done
+        # Cleanup old kernels and images from tftpboot directory
+        cleanup_kernels
     done
     # Update selinux file contexts if necessary
     [ -f /selinux/enforce ] && /sbin/restorecon -R $TFTPDIR > /dev/null

@@ -1,0 +1,17 @@
+# Gentoo-specific function overrides for ltsp-update-kernels
+
+cleanup_kernels() {
+    for kernelpath in $(find $TFTPBOOT/$CHROOT_NAME -name 'kernel-genkernel*'); do
+        kernel=`basename $kernelpath`
+        archversion=${kernel##kernel-genkernel-}
+        arch=$(echo $archversion | awk -F "-" '{print $1}')
+        version=$(echo $archversion | sed s/$arch-//)
+
+        if [ ! -d $BASE/$CHROOT_NAME/lib/modules/$version ]; then
+          echo "Removing $kernelpath"
+          rm -f $TFTPBOOT/$CHROOT_NAME/kernel-genkernel-$arch-$version
+          rm -f $TFTPBOOT/$CHROOT_NAME/initramfs-genkernel-$arch-$version
+          rm -f $TFTPBOOT/$CHROOT_NAME/System.map-genkernel-$arch-$version
+        fi
+    done
+}
