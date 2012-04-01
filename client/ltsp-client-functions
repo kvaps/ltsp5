@@ -4,6 +4,6 @@ if [ -f /usr/share/ltsp/ltsp-client-common-functions ]; then
 fi
 
 # Sourcing distro specific overrides.
-if [ -f /usr/share/ltsp/ltsp-server-vendor-functions ]; then
-    . /usr/share/ltsp/ltsp-server-vendor-functions
+if [ -f /usr/share/ltsp/ltsp-client-vendor-functions ]; then
+    . /usr/share/ltsp/ltsp-client-vendor-functions
 fi
