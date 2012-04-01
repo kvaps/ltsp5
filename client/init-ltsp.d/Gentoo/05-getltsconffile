@@ -1,13 +1,13 @@
 # Attempt to get lts.conf via tftp
 
-arch=$(uname -m | sed -e 's:x86_64:amd64:' -e 's:parisc:hppa:')
+arch=$(detect_arch)
 tftppath="/ltsp/${arch}/lts.conf"
 lts_conf_temp=$(mktemp)
 
 tftp "$SERVER" -c get ${tftppath} $lts_conf_temp >/dev/null
 
 # or if tftp gives a buffer overflow error, use curl
-# https://bugs.archlinux.org/task/28103
+# https://bugs.gentoo.org/show_bug.cgi?id=357083
 # curl "tftp://${SERVER}${tftppath}" -o $lts_conf_temp >/dev/null
 
 # only overwrite lts.conf if it has non-zero size.

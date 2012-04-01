@@ -2,15 +2,12 @@
 
 packages() {
     chroot=$1
-    if [ -d $chroot/var/db/pkg/net-misc/ltsp* ]; then
-        cat $chroot/var/db/pkg/net-misc/ltsp*/PF
-    fi
-    if [ -d $chroot/var/db/pkg/sys-fs/ltspfs-* ]; then
-        cat $chroot/var/db/pkg/sys-fs/ltspfs-*/PF
-    fi
-    if [ -d $chroot/var/db/pkg/*/ldm* ]; then
-        cat $chroot/var/db/pkg/*/ldm*/PF
-    fi
+    pkgdir="$chroot/var/db/pkg"
+    for dir in $pkgdir/net-misc/ltsp* $pkgdir/*/ldm* $pkgdir/sys-fs/ltspfs-*; do
+        if [ -f "$dir/PF" ]; then
+            cat "$dir/PF"
+        fi
+    done
 }
 
 # Gentoo-specific function overrides for ltsp-info
