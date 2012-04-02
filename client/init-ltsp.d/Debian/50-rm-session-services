@@ -5,7 +5,7 @@
 # For readability, include the comment line from service.desktop.
 
 # Notify about new hardware drivers available for the system
-RM_SESSION_SERVICES="$RM_SESSION_SERVICES jockey-gtk"
+RM_SESSION_SERVICES="$RM_SESSION_SERVICES jockey-gtk jockey-kde"
 
 # Check for available updates automatically
 RM_SESSION_SERVICES="$RM_SESSION_SERVICES update-notifier"
