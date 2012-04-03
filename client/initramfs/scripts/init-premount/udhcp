@@ -1,7 +1,5 @@
 #!/bin/sh
 ################################################################################
-# Notes - TODO: delete after reading :-)
-################################################################################
 # Except for any bugs, it should be able to cope with the following scenarios:
 # 
 # 1) One NIC, no kernel parameters:
@@ -26,11 +24,6 @@
 #    It'll use DHCP on the specified device but override server-ip and hostname with the static ones.
 #10) Two or more NICs, IPAPPEND 3 and autoconf=dhcp:
 #    It'll use DHCP on the specified NIC and override server-ip and hostname with the static ones.
-#
-#
-# My favorite pxelinux.cfg/default includes both IPAPPEND 3 and autoconf=dhcp.
-# This makes it work *optimally* (i.e. DHCP request only for the boot interface) in *any* case.
-#
 ################################################################################
 
 PREREQ=""
@@ -47,6 +40,9 @@ prereqs)
     exit 0
     ;;
 esac
+
+# Exit if an LTSP boot was not requested
+grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
 
 bring_up_interfaces()
 {
