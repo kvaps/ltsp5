@@ -7,7 +7,7 @@ You need to set up one static interface where you will attach the
 thin clients, install two packages and run one command.
 
 Configure your spare interface for the thin clients to have the 
-IP 192.168.0.1, then run command below:
+IP 192.168.67.1, then run command below:
 
 sudo apt-get install ltsp-server-standalone openssh-server
 

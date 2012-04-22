@@ -3,7 +3,7 @@
 #
 # Change this to suite your hosts
 #
-HOSTS="192.168.0.254 192.168.0.253 192.168.0.252 192.168.0.251"
+HOSTS="192.168.67.1 192.168.67.2 192.168.67.3 192.168.67.4"
 
 # Genrate a random number
 SEED=$(dd if=/dev/random bs=128 count=1 2>/dev/null | cksum | cut -d' ' -f1)

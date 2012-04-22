@@ -19,7 +19,7 @@
 # Get the IP address of the host to telnet into.
 # First look for 'TELNET_HOST', if not specified, then
 # look for 'SERVER'. If that isn't specified, then use
-# the default of '192.168.0.1'
+# the default of '192.168.67.1'
 #
 
 if [ $# -ge 1 ]; then

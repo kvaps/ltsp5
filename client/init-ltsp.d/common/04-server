@@ -45,6 +45,6 @@ else
     done < /proc/mounts
 
     SERVER="${server:-$ROOTSERVER}"
-    export SERVER="${SERVER:-192.168.0.1}"
+    export SERVER="${SERVER:-192.168.67.1}"
 fi
 echo "SERVER=$SERVER" >> /var/cache/ltsp/ltsp_config

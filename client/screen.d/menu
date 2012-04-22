@@ -11,9 +11,9 @@
 # MENU_ITEM_01="Linux Server"
 # MENU_COMMAND_01="ldm"
 # MENU_ITEM_02="Windows Server A"
-# MENU_COMMAND_02="rdesktop 192.168.0.253"
+# MENU_COMMAND_02="rdesktop 192.168.67.253"
 # MENU_ITEM_03="Windows Server B"
-# MENU_COMMAND_03="rdesktop 192.168.0.252"
+# MENU_COMMAND_03="rdesktop 192.168.67.252"
 # MENU_TITLE="Please choose a desktop: "
 # 
 #

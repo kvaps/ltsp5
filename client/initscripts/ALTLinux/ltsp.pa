@@ -12,8 +12,8 @@
 ### Load several protocols
 #load-module module-esound-protocol-unix
 #load-module module-native-protocol-unix
-#load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1;192.168.1.0/24
-#load-module module-esound-protocol-tcp auth-ip-acl=127.0.0.1;192.168.1.0/24
+#load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1;192.168.67.0/24
+#load-module module-esound-protocol-tcp auth-ip-acl=127.0.0.1;192.168.67.0/24
 
 ### Automatically restore the volume of playback streams
 #load-module module-volume-restore
