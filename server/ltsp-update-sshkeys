@@ -14,6 +14,7 @@
 #        Eric Harrison <eharrison@k12linux.mesd.k12.or.us>
 #        Scott Balneaves <sbalneav@ltsp.org>
 #  2010, Gideon Romm <gadi@ltsp.org>
+#  2012, Alkis Georgopoulos <alkisg@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -32,152 +33,85 @@
 #  MA 02110-1301, USA.
 #
 
-#
-# Handle args
-#
-
-unset EXPORTFILE
+# /etc/ltsp/ltsp-update-sshkeys.conf is automatically sourced if it exists
+. /usr/share/ltsp/ltsp-server-functions
 
 usage() {
-cat <<EOF
-$0 [OPTION] [hostname1] [hostname2] [hostname3] ...
+    cat <<EOF
+$0 [OPTION] [host1] [host2] [host3] ...
 
-  By specifying hostnames of other servers on the command line, an additional 
-file will be created in /etc/ltsp/ssh_known_hosts.auto which will append those keys to those of this server on subsequent calls to this script.
+If any hosts are specified, their SSH keys are exported in a file,
+by default /etc/ltsp/ssh_known_hosts.auto.
+Otherwise, all LTSP chroots are updated to trust the SSH keys of this server
+along with any additional keys in /etc/ltsp/ssh_known_hosts.* files.
 
-  -b, --basedir  Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
-  -e, --export   Export ssh key file.  Default is 
-                 \${basedir}/etc/ssh/ssk_known_hosts if unspecified.
-  -u, --update   When IP addresses of other servers are passed on the 
-                 command line, this flag will update the ssh_known_hosts
-                 in the chroot in addition to exporting an additional
-                 file with the keys to be pulled in later.
-  -p, --port     SSH port for remote servers.
+  -b, --base     Base of ltsp chroot. Default is /opt/ltsp if unspecified.
+  -e, --export   File name to export the hosts SSH keys to (- for stdout).
+                 Default is /etc/ltsp/ssh_known_hosts.auto if unspecified.
   -h, --help     This message.
+  -p, --port     SSH port for remote servers.
+  -u, --update   Update the chroot SSH keys even if hosts are specified.
 EOF
 }
 
-ARGS=$(getopt -o b:e:hup: --long base:,export:,update,port:,help -n $0 -- "$@")
+# One may run the following command to replace the hostnames/IPs with *:
+#   sed 's/^[^# ][^ ]* /* /' -i /opt/ltsp/i386/etc/ssh/ssh_known_hosts
+# This way the clients will trust those hosts even if their IP changes.
+# In general that should be avoided though, it's safer to connect by hostname.
+# The boot server is always known as "server", and others can be declared in
+# DNS, in CHROOT/etc/hosts.ltsp, or with HOSTS_xx lts.conf directives.
+# LDM_SERVER entries should match whatever was specified in the SSH keys.
 
+# Parse command line arguments
+ARGS=$(getopt -o b:e:hp:u --long base:,export:,help,port:,update -n $0 -- "$@")
 [ $? != 0 ] && exit 1
-
-eval set -- "${ARGS}"
-
+eval set -- "$ARGS"
 while true ; do
     case "$1" in
         -b|--base)   BASE=$2 ; shift 2 ;;
-        -e|--export) EXPORTFILE=$2 ; shift 2 ;;
-        -u|--update) UPDATE=1 ; shift 1 ;;
-        -p|--port)   SSH_PORT="-p $2" ; shift 2 ;;
+        -e|--export) EXPORT=$2 ; shift 2 ;;
         -h|--help)   usage ; exit 0 ;; 
+        -p|--port)   PORT="$2" ; shift 2 ;;
+        -u|--update) UPDATE=1 ; shift 1 ;;
         --) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
     esac
 done
 
-# Set up variables
-BASE=${BASE:-"/opt/ltsp"}
-if [ -z "${CHROOTS}" ]; then
-    CHROOTS=$(find ${BASE}/ -mindepth 1 -maxdepth 1 -type d 2>/dev/null | \
-              grep -v images)
-fi
-ENC="dsa rsa ecdsa"
-OUTPUT=$(mktemp)
-
-if [ -z "$*" ]; then
-    HOSTNAME=$(hostname)
-    IPS=$(/sbin/ip -o -f inet addr show | sed -e 's,.* \(.*\)/.*,\1,' | grep -v '^127')
-    NAMES="${HOSTNAME} ${IPS}"
-    THIS_SERVER=1
-else
-    # We were passed hostnames and ips
-    NAMES=$*
-    EXPORTFILE=${EXPORTFILE:-"/etc/ltsp/ssh_known_hosts.auto"}
-    unset THIS_SERVER
-fi
-
-# Check for LOGFILE location
-unset LOGFILE
-[ -e /var/log/syslog ]   && LOGFILE="/var/log/syslog"
-[ -e /var/log/messages ] && LOGFILE="/var/log/messages"
-if [ -z "$LOGFILE" ]; then
-    echo "ERROR: Neither /var/log/messages nor /var/log/syslog exists.  Unable to log."
-    exit 0
-fi
-
-# Any chroots found, and not exporting?
-# fixes bug #207485 per Andy Rabagliati
-if [ -z "${CHROOTS}" ] && [ -z "${EXPORTFILE}" ]; then
-	logger -f $LOGFILE -t ltsp \
-        "No client chroots found, please run ltsp-build-client"
-	exit 0
-fi
-
-# Make a "server" hostname entry
-for ENCRYPTION in ${ENC}; do
-    pubkey=/etc/ssh/ssh_host_${ENCRYPTION}_key.pub
-    if [ -n "$THIS_SERVER" ] && [ -f "$pubkey" ] ; then
-        echo $(echo server $(cat "$pubkey" | \
-            awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
-    fi
-done
-
-# Get encryption keys
-for NAME in ${NAMES}; do
-    for ENCRYPTION in ${ENC}; do
-        if [ -n "$THIS_SERVER" ]; then
-            pubkey=/etc/ssh/ssh_host_${ENCRYPTION}_key.pub
-            if [ -f "$pubkey" ]; then
-                # Make a "server" hostname entry
-                echo $(echo $NAME $(cat "$pubkey" | \
-                    awk '{split ($0, a, " "); print a[1]" "a[2]" "}')) >> $OUTPUT
-                logger -f $LOGFILE -t ltsp "# Creating ${ENCRYPTION}-hostkey for ${NAME}"
-            else
-                # missing ecdsa is valid
-                if [ "$ENCRYPTION" != "ecdsa" ]; then
-                    logger -f $LOGFILE -t ltsp "No ${ENCRYPTION} key found for ${NAME}, please configure your ssh server correctly"
-                fi
-            fi
-        else
-            NAMED_SERVER=${NAME%:*}
-            NAMED_PORT=${NAME#*:}
-            [ "${NAMED_PORT}" != "${NAMED_SERVER}" ] && SSH_PORT="-p ${NAMED_PORT}"
-            ssh-keyscan -t ${ENCRYPTION} ${SSH_PORT} ${NAME%:*} >> ${OUTPUT} 2>/dev/null
-        fi
-    done
-done
-
-#
-# export file
-# We need this for multiple host support.  This way, we can do an
-# ltsp-update-sshkeys --export ssh_known_hosts.myname
-# and install this file in the /etc/ltsp dir, where it will be picked up
-# by the above.
-# Note that ltsp-update-sshkeys --export - cats to stdout
-# If no export specified, then update local chroots.
-#
-
-if [ -n "${EXPORTFILE}" ]; then
-    if [ "${EXPORTFILE}" = "-" ]; then
-        cat ${OUTPUT}
+# If any hosts were specified, export their ssh keys to a file
+if [ $# -gt 0 ]; then
+    if [ "$EXPORT" = "-" ]; then
+        EXPORT="/dev/stdout"
     else
-        install -m 644 ${OUTPUT} ${EXPORTFILE}
-        # Now that we have our new file, use it
-        [ -n "$UPDATE" ] && $0
+        EXPORT="${EXPORT:-/etc/ltsp/ssh_known_hosts.auto}"
     fi
+    # We want the stderr of ssh-keyscan, but not its annoying "server info"
+    ssh-keyscan -t dsa,rsa,ecdsa ${PORT:+-p $PORT} "$@" 2>&1 >"$EXPORT" |
+        grep -v ^# >&2
 else
-    # Add any additional hosts
-    for SSHHOST in $(ls /etc/ltsp/ssh_known_hosts.* 2> /dev/null); do
-        cat ${SSHHOST} >> $OUTPUT
-        echo >> $OUTPUT
-    done
-    for CHROOT in ${CHROOTS}; do
-        if [ -d ${CHROOT}/etc/ssh ]; then
-            install -m 644 $OUTPUT ${CHROOT}/etc/ssh/ssh_known_hosts
-        fi
-    done
+    UPDATE=1
 fi
 
-rm -f ${OUTPUT}
-
-exit 0
+# UPDATE is either set with -u or automatically when no hostnames are passed
+if [ -n "$UPDATE" ]; then
+    if [ -z "$CHROOTS" ]; then
+        BASE=${BASE:-"/opt/ltsp"}
+        CHROOTS=$(find "$BASE/" -mindepth 1 -maxdepth 1 -type d -not -name images)
+    fi
+    for chroot in $CHROOTS; do
+        test -d "$chroot/etc/ssh" || continue
+        # Do the work once; next times, use cp
+        if [ -z "$firstfile" ]; then
+            firstfile="$chroot/etc/ssh/ssh_known_hosts"
+            {
+                sed 's/^/server /' /etc/ssh/ssh_host_*_key.pub
+                find /etc/ltsp/ -type f -name "ssh_known_hosts.*" -exec cat {} + 2>/dev/null
+            } > "$firstfile"
+        else
+            cp "$firstfile" "$chroot/etc/ssh/ssh_known_hosts"
+        fi
+    done
+    if [ -z "$firstfile" ]; then
+        die "No LTSP chroots found, please run ltsp-build-client"
+    fi
+fi
