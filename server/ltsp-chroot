@@ -58,14 +58,8 @@ default_options() {
             ARCH=$(detect_arch)
 
             if [ ! -d "$BASE/$ARCH" ]; then
-                for dir in "$BASE"/*/; do
-                    # If it's not "images" and it's not "*" because of no subdirs
-                    if [ -n "${dir##*/images/}" ] && [ -d "$dir" ]; then
-                        # Keep only the subdir name
-                        ARCH=${dir%/}
-                        ARCH=${ARCH##*/}
-                        break
-                    fi
+                for ARCH in $(find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images -printf "%f\n"); do
+                    test -x "$BASE/$ARCH/bin/true" && break
                 done
             fi
         fi
@@ -115,13 +109,8 @@ if ! ARGS=$(getopt -n "$0" -o +a:b:cdhmpr -l \
     exit 1
 fi
 
-# Source the ltsp server functions
+# This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
-
-# First, include the configuration file, if it exists
-if [ -f /etc/ltsp/ltsp-chroot.conf ]; then
-    . /etc/ltsp/ltsp-chroot.conf
-fi
 
 # The command line parameters override the configuration file settings
 analyze_command_line $ARGS

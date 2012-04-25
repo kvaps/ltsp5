@@ -108,8 +108,9 @@ while true ; do
     esac
 done
 
-# ltsp-server-functions also sources distro specific function overrides
+# This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
+require_root
 
 BASE=${BASE:-"/opt/ltsp"}
 TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
@@ -129,7 +130,7 @@ if [ $# -eq 0 ]; then
                 find "$BASE/images/" -mindepth 1 -maxdepth 1 -type f \
                     -name '*.img' -printf "%f\n" | sed 's/.img$//'
             fi
-        } | sort | uniq
+        } | sort -u
     )
 fi
 
@@ -142,7 +143,7 @@ for tftpdir in $TFTPDIRS; do
     tftpboot="$tftpdir/$TFTPBOOTDIR"
     tftpboot=${tftpboot%/}
 
-    for arch in "$@" ; do
+    for arch in "$@"; do
         # Loop-mount NBD images in order to copy their kernels.
         # This ensures that the TFTP kernels are the same versions as in the
         # NBD exported image (e.g. user updated chroot but hasn't ran

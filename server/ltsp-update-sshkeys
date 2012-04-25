@@ -96,7 +96,7 @@ fi
 if [ -n "$UPDATE" ]; then
     if [ -z "$CHROOTS" ]; then
         BASE=${BASE:-"/opt/ltsp"}
-        CHROOTS=$(find "$BASE/" -mindepth 1 -maxdepth 1 -type d -not -name images)
+        CHROOTS=$(find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images)
     fi
     for chroot in $CHROOTS; do
         test -d "$chroot/etc/ssh" || continue
