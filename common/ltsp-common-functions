@@ -1,8 +1,30 @@
 # Common functions shared by LTSP scripts
 
+# Multiple inclusions shouldn't ever happen, but let's prevent them anyway
+if [ -n "$sourced_ltsp_common_functions" ]; then
+    echo "Warning: $0 tried to include ltsp-common-functions multiple times." >&2
+    return 0
+else
+    sourced_ltsp_common_functions=true
+fi
+
 die() {
-    echo "$@" >&2
+    warn "$@"
     exit 1
+}
+
+log()
+{
+    if [ -x /usr/bin/logger ]; then
+        logger -s -t "$0" "$*"
+    else
+        warn "$0: $*"
+    fi
+}
+
+warn()
+{
+    echo "$@" >&2
 }
 
 boolean_is_true(){
@@ -11,6 +33,30 @@ boolean_is_true(){
        [Tt][Rr][Uu][Ee]|[Yy]|[Yy][Ee][Ss]) return 0 ;;
        *) return 1 ;;
     esac
+}
+
+run_parts()
+# Parameters:
+# $1: Directory with main scripts
+# $2: Directory with override scripts, defaults to ''
+# $3: Script matching regex, defaults to '[0-9]*'
+{
+    if [ ! -d "$1" ]; then
+        warn "Not a directory: $1"
+        return 1
+    fi
+    # We do want to source the scripts in a subshell, so that they affect each
+    # other, but not the callee script.
+    # ${2:+"$2"} means "preserve spaces, but don't pass a parameter if empty"
+    find "$1" ${2:+"$2"} -maxdepth 1 -type f -name ${3:-'[0-9]*'} \
+        -printf '%f\n' 2>/dev/null | sort | uniq | 
+        while read script; do
+            if [ -n "$2" ] && [ -f "$2/$script" ]; then
+                . "$2/$script"
+            else
+                . "$1/$script"
+            fi
+        done
 }
 
 # list files in a directory consisting only of alphanumerics, hyphens and
@@ -52,38 +98,53 @@ require_root()
 # Use the normal mount syntax, e.g.
 #   mark_mount -t proc proc "$ROOT/proc"
 mark_mount() {
-    local dir
+    local dir old_marked_mounts
 
     # The last parameter is the dir we need to remember to unmount
     dir=$(eval "echo \$$#")
-    if mount "$@"; then
-        # Use newlines to separate dirs, in case they contain spaces
-        if [ -z "$MARKED_MOUNTS" ]; then
-            MARKED_MOUNTS="$dir"
-        else
-            MARKED_MOUNTS="$dir
-$MARKED_MOUNTS"
-        fi
+    # If the user presses Ctrl+C while mount is still running, there's
+    # a possibility that it will succeed but it won't go inside the if.
+    # So mark the dir before mount.
+    # Use newlines to separate dirs, in case they contain spaces
+    old_marked_mounts="$MARKED_MOUNTS"
+    if [ -z "$MARKED_MOUNTS" ]; then
+        MARKED_MOUNTS="$dir"
     else
+        MARKED_MOUNTS="$dir
+$MARKED_MOUNTS"
+    fi
+    if ! mount "$@"; then
+        MARKED_MOUNTS="$old_marked_mounts"
         die "Could not mount $dir."
     fi
 }
 
 umount_marked() {
-    [ -z "$MARKED_MOUNTS" ] && return
+    [ -z "$MARKED_MOUNTS" ] && return 0
 
+    # Wait until all buffers are flushed, otherwise umount might fail
+    sync
     echo "$MARKED_MOUNTS" | while read dir; do
         if ! umount "$dir"; then
-            echo "Couldn't unmount $dir." >&2
+            warn "Couldn't unmount $dir."
         fi
     done
+    unset MARKED_MOUNTS
 }
 
-# Source tool-specific functions, if they're provided.
-# Recursive inclusions shouldn't ever happen, but let's prevent them anyway.
-if [ -z "$ltsp_tool" ]; then
-    ltsp_tool=${0##*/}
-    if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then
-        . "/usr/share/ltsp/$ltsp_tool-functions"
-    fi
+# By default, we want all our scripts to stop on errors
+set -e
+
+# Source common settings, e.g. BASE
+if [ -f /etc/ltsp/common.conf ]; then
+    . /etc/ltsp/common.conf
+fi
+
+# Source tool-specific settings and functions, if they're provided
+ltsp_tool=${0##*/}
+if [ -f "/etc/ltsp/$ltsp_tool.conf" ]; then
+    . "/etc/ltsp/$ltsp_tool.conf"
+fi
+if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then
+    . "/usr/share/ltsp/$ltsp_tool-functions"
 fi
