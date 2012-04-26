@@ -21,26 +21,6 @@ $0 [OPTION] command
 EOF
 }
 
-analyze_command_line() {
-    local done_opts
-
-    while [ -z "$done_opts" ] ; do
-        case "$1" in
-            -a|--arch) ARCH=$(echo $2 | sed -e "s,',,g") ; shift 2 ;;
-            -b|--base) BASE=$(echo $2 | sed -e "s,',,g") ; shift 2 ;;
-            -c|--mount-package-cache) MOUNT_PACKAGE_CACHE=true ; shift 1 ;;
-            -d|--mount-dev) MOUNT_DEV=true; shift 1 ;;
-            -h|--help) usage ; exit 0 ;;
-            -m|--mount-all) MOUNT_ALL=true; shift 1 ;;
-            -p|--mount-proc) MOUNT_PROC=true; shift 1 ;;
-            -r|--copy-resolv-conf) COPY_RESOLV_CONF=true; shift 1 ;;
-            --) shift ; done_opts=true ;;
-            *) die "$0: Internal error!" ;;
-        esac
-    done
-    COMMAND="$@"
-}
-
 default_options() {
     if [ -n "$ROOT" ]; then
         # If $ROOT contains a terminating /, remove it
@@ -101,19 +81,30 @@ mount_package_cache() {
     echo "Mounting the package cache is not available for your distribution."
 }
 
-# Main
-
-# Parse command line arguments
-if ! ARGS=$(getopt -n "$0" -o +a:b:cdhmpr -l \
-    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf' -- "$@"); then
-    exit 1
-fi
-
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
 # The command line parameters override the configuration file settings
-analyze_command_line $ARGS
+if ! args=$(getopt -n "$0" -o +a:b:cdhmpr -l \
+    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf' -- "$@"); then
+    exit 1
+fi
+eval "set -- $args"
+while true; do
+    case "$1" in
+        -a|--arch) shift; ARCH=$1 ;;
+        -b|--base) shift; BASE=$1 ;;
+        -c|--mount-package-cache) MOUNT_PACKAGE_CACHE=true ;;
+        -d|--mount-dev) MOUNT_DEV=true ;;
+        -h|--help) usage; exit 0 ;;
+        -m|--mount-all) MOUNT_ALL=true ;;
+        -p|--mount-proc) MOUNT_PROC=true ;;
+        -r|--copy-resolv-conf) COPY_RESOLV_CONF=true ;;
+        --) shift; break ;;
+        *) die "$0: Internal error!" ;;
+    esac
+    shift
+done
 
 # Finally, fall back to using default values for any unset options
 default_options
@@ -122,4 +113,4 @@ require_root
 
 trap "post_chroot" 0 HUP INT QUIT KILL SEGV PIPE TERM
 pre_chroot
-eval LTSP_HANDLE_DAEMONS=false chroot "$ROOT" $COMMAND
+LTSP_HANDLE_DAEMONS=false chroot "$ROOT" "$@"
