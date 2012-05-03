@@ -25,7 +25,7 @@ case "$MODE" in
 
             if [ -z "$MKFS_OPTS" ]; then
                 case $FS_IMAGE_TYPE in
-                    ext2|ext3) MKFS_OPTS="-q -F" ;;
+                    ext2|ext3|ext4) MKFS_OPTS="-q -F" ;;
                 esac
             fi
 
