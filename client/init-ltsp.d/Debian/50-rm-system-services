@@ -22,6 +22,7 @@ allowed_services() {
 rm_services="$RM_SYSTEM_SERVICES $(allowed_services "
 alsa-restore          # Restore sound card(s') mixer state(s)
 alsa-store            # Save sound card(s') mixer state(s)
+exim4                 # exim4 Mail Transport Agent
 grub-common           # Record successful boot for GRUB
 lightdm               # Light Display Manager
 modemmanager          # Modem manager
