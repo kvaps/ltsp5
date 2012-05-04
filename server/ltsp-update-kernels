@@ -194,5 +194,7 @@ for tftpdir in $TFTPDIRS; do
         cleanup_kernels
     done
     # Update selinux file contexts if necessary
-    [ -f /selinux/enforce ] && /sbin/restorecon -R "$tftpdir" > /dev/null
+    if [ -f /selinux/enforce ] && [ -x /sbin/restorecon ]; then
+        restorecon -R "$tftpdir" > /dev/null
+    fi
 done
