@@ -112,6 +112,9 @@ pre_build_kernel() {
 pre_install_extra_packages() {
 	spawn_chroot "emerge --newuse udev"
 	spawn_chroot "emerge --update --deep world"
+	# emerge python-2.7 to deal with "python_get_implementational_package is not installed" issues
+	# these occur when emerging binary packages which are compiled against a new Python version
+	spawn_chroot "emerge python:2.7"
 }
 
 post_install_extra_packages() {
