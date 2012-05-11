@@ -3,9 +3,6 @@
 # /etc/dnsmasq.conf.
 # You may modify this file to suit your needs, or create new ones in dnsmasq.d/.
 
-# Disable the DNS server functionality of dnsmasq by setting port=0
-port=0
-
 # Log lots of extra information about DHCP transactions.
 #log-dhcp
 
@@ -44,7 +41,7 @@ dhcp-no-override
 
 # The known types are x86PC, PC98, IA64_EFI, Alpha, Arc_x86,
 # Intel_Lean_Client, IA32_EFI, BC_EFI, Xscale_EFI and X86-64_EFI
-pxe-service=X86PC, "Boot from network", /pxelinux
+pxe-service=X86PC, "Boot from network", /ltsp/i386/pxelinux
 
 # A boot service type of 0 is special, and will abort the
 # net boot procedure and continue booting from local media.
@@ -56,6 +53,9 @@ enable-tftp
 # The TFTP directory. Sometimes /srv/tftp is used instead.
 tftp-root=/var/lib/tftpboot/
 
+# Disable the DNS server functionality of dnsmasq by setting port=0
+port=0
+
 # Don't listen on lo, to prevent conflicts with Ubuntu's local resolver hack (LP: #959037).
-except-interface=lo
-bind-interfaces
+#except-interface=lo
+#bind-interfaces
