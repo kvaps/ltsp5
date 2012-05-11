@@ -1,14 +1,15 @@
-# Example configuration for using dnsmasq as a dhcp and tftp server.  
-# Install the dnsmasq package and copy this file to /etc/dnsmasq.d/ltsp.conf
-# You may need to disable the tftp options if another tftp server is installed.
+# Configures dnsmasq for PXE client booting.
+# All the files in /etc/dnsmasq.d/ override the main dnsmasq configuration in
+# /etc/dnsmasq.conf.
+# You may modify this file to suit your needs, or create new ones in dnsmasq.d/.
 
-# Don't function as a DNS server
+# Disable the DNS server functionality of dnsmasq by setting port=0
 port=0
 
-# Uncomment the following to log DHCP transactions
+# Log lots of extra information about DHCP transactions.
 #log-dhcp
 
-# ip ranges to hand out
+# IP ranges to hand out.
 dhcp-range=192.168.67.20,192.168.67.250,1h
 
 # If another DHCP server is present on the network, you may use a proxy range
@@ -16,26 +17,45 @@ dhcp-range=192.168.67.20,192.168.67.250,1h
 # (needs dnsmasq 2.48+)
 #dhcp-range=10.0.2.2,proxy
 
-# Rootpath option, for NFS
+# The boot filename is relative to tftp-root.
+# NFS rootpath option isn't used with NBD, but some broken clients require it.
 dhcp-option=17,/opt/ltsp/i386
 
-# define common netboot types 
+# Define common netboot types.
 dhcp-vendorclass=etherboot,Etherboot
 dhcp-vendorclass=pxe,PXEClient
 dhcp-vendorclass=ltsp,"Linux ipconfig"
 
 # Set the boot filename depending on the client vendor identifier
+# The boot filename is relative to tftp-root.
 dhcp-boot=net:pxe,/ltsp/i386/pxelinux.0
 dhcp-boot=net:etherboot,/ltsp/i386/nbi.img
 dhcp-boot=net:ltsp,/ltsp/i386/lts.conf
 
-# Kill multicast
+# Kill multicast.
 dhcp-option=vendor:pxe,6,2b
 
 # Disable re-use of the DHCP servername and filename fields as extra
 # option space. That's to avoid confusing some old or broken DHCP clients.
 dhcp-no-override
 
-# enable the TFTP server (needs dnsmasq 2.36+). 
+# We don't want a PXE menu since we're using a graphical PXELinux menu.
+#pxe-prompt="Press F8 for boot menu", 3
+
+# The known types are x86PC, PC98, IA64_EFI, Alpha, Arc_x86,
+# Intel_Lean_Client, IA32_EFI, BC_EFI, Xscale_EFI and X86-64_EFI
+pxe-service=X86PC, "Boot from network", /pxelinux
+
+# A boot service type of 0 is special, and will abort the
+# net boot procedure and continue booting from local media.
+#pxe-service=X86PC, "Boot from local hard disk", 0
+
+# Comment the following to disable the TFTP server functionality of dnsmasq.
 enable-tftp
+
+# The TFTP directory. Sometimes /srv/tftp is used instead.
 tftp-root=/var/lib/tftpboot/
+
+# Don't listen on lo, to prevent conflicts with Ubuntu's local resolver hack (LP: #959037).
+except-interface=lo
+bind-interfaces
