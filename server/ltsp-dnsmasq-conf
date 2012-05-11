@@ -30,15 +30,12 @@ ip route show | while read line; do
     subnet=${line%%/*}
     case "$subnet" in
         127.0.0.1|169.254.0.0|192.168.67.0|*[!0-9.]*)
-            continue
+            # do nothing on these networks
+            ;;
+    	*) 
+            echo "dhcp-range=$subnet,proxy" >> "$conf"
             ;;
     esac
-    # Update dhcp-range if it exists, otherwise add it.
-    if grep -q '^dhcp-range' "$conf" ; then
-        sed -i -e "s/^dhcp-range=.*/dhcp-range=$subnet,proxy/g" "$conf"
-    else
-        echo "dhcp-range=$subnet,proxy" >> "$conf"
-    fi
 done
 
 invoke-rc.d dnsmasq restart
