@@ -1,6 +1,6 @@
 case "$MODE" in
     commandline)
-        add_option "installer" "`eval_gettext "Gentoo installer to use, defaults to quickstart"`" "advanced" "true"
+        add_option "installer" "`eval_gettext "Gentoo installer to use, defaults to kicktoo"`" "advanced" "true"
         add_option "installer-profile" "`eval_gettext "Path to installer profile"`" "advanced" "true"
         add_option "installer-debug" "`eval_gettext "Debug installer"`" "advanced" "false"
         add_option "installer-verbose" "`eval_gettext "Show installer external command output"`" "advanced" "false"
@@ -18,7 +18,7 @@ case "$MODE" in
 				exit 1
 			esac
 		else
-			INSTALLER="quickstart"
+			INSTALLER="kicktoo"
 			printf "`eval_gettext "Using installer: %s"`\n" $INSTALLER
 		fi
 
@@ -26,7 +26,7 @@ case "$MODE" in
             INSTALLER_PROFILE=${option_installer_profile_value:-$INSTALLER_PROFILE}
             printf "`eval_gettext "Custom installer profile: %s"`\n" $INSTALLER_PROFILE
         else
-            INSTALLER_PROFILE="/etc/ltsp/profiles/quickstart.profile"
+            INSTALLER_PROFILE="/etc/ltsp/profiles/kicktoo.profile"
             printf "`eval_gettext "Default installer profile: %s"`\n" $INSTALLER_PROFILE
         fi
 
