@@ -1,0 +1,4 @@
+if [ -x /usr/sbin/sshd ]; then
+    rm -f /etc/ssh/ssh_host_*
+    dpkg-reconfigure openssh-server
+fi

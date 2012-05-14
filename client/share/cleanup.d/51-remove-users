@@ -1,0 +1,4 @@
+getent passwd | awk -F: '$3>=500 && $3<=60000 { print $1; }' |
+    while read user; do
+        userdel "$user"
+    done

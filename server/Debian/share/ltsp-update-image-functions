@@ -1,0 +1,15 @@
+# Debian-specific function overrides for ltsp-update-image
+
+lock_package_management() {
+    test -f /var/lib/dpkg/lock || return 0
+
+    if lsof -t /var/lib/dpkg/lock; then
+        warn "A package management process is active, waiting for it to finish..."
+        warn "Press Ctrl+C to abort"
+        while lsof -t /var/lib/dpkg/lock; do
+            sleep 10
+        done
+    fi
+    tail -F /var/lib/dpkg/lock &
+    lockpid=$!
+}

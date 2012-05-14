@@ -1,0 +1,5 @@
+# Delete all old log files
+find /var/log/ -type f -name '*.old' -o -name '*.1' -o -name '*.gz' -delete
+
+# Empty the rest
+find /var/log/ -type f -exec truncate -s 0 {} +

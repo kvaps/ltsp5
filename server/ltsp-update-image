@@ -27,345 +27,309 @@
 #  MA 02110-1301, USA.
 #
 
-# source configuration file
-if [ -f /etc/ltsp/ltsp-update-image.conf ]; then
-    . /etc/ltsp/ltsp-update-image.conf
-fi
-
-
-# Generates a squashfs image from an ltsp chroot to be served by an nbd-server
-# process.
-
 usage() {
-cat <<EOF
-$0 [OPTION]
-  -a, --arch          Architecture of this image.  Default is arch of the host.
-  -b, --base          Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
-  -d, --tftpbootdir   Subdir within tftpdir where ltsp kernels are.  Defaults
-                      to "ltsp".
-  -e, --exclude-dirs  Exclude those dirs from the image.
-  -f, --force         Force recalculating ports for all chroots, update of all 
-                      kernels, fresh pxelinux.cfg files and restart nbd-server.
-  -h, --help          This message.
-  -i, --image-only    Update image only and do not attempt to adjust ports or 
-                      services.
-  -I, --ipappend      Pass IPAPPEND value to bootloader.
-  -n, --no-comp       Do not compress the image.
-  -o, --options       Pass kernel command line options to all config files.
-  -O, --openbsd-inetd Use old inetd method instead of named NBD exports.
-  -p, --port          Port you wish this nbd image to communicate on.  Default
-                      is 2000.
-  -s, --skip-image    Do not generate an image, but perform other actions.
-  -S, --server        Specify the NBD server IP.
-  -T, --timeout       Add timeout to bootloader.
+    cat <<EOF
+Usage: $0 [OPTION] [CHROOT...]
+Generates an NBD image from an LTSP chroot, to be served by nbd-server.
+Chroot can be a full path or a subdirectory of the LTSP base directory,
+and it defaults to the host architecture if unset.
+
+Options:
+  -b, --base=          The LTSP base directory. Defaults to "/opt/ltsp".
+  -c, --cleanup        Temporarily remove user accounts, logs, caches etc from
+                       the chroot before exporting the image. The chroot arch
+                       is required to be compatible with the server arch.
+  -d, --tftp-boot-dir= The LTSP subdirectory within the TFTP base directory.
+                       Defaults to "ltsp".
+  -e, --exclude=       List of dirs/files to exclude from the image.
+                       This is in addition to /etc/ltsp/nbd-exclude.conf.
+  -f, --config-nbd     Generate appropriate nbd-server configuration files.
+                       It's automatically set if NFS isn't used or if other LTSP
+                       generated nbd-server configuration files already exist.
+  -h, --help           This message.
+  -m, --no-compress    Don't compress the generated image.
+  -n, --no-backup      Don't backup chroot.img to chroot.img.old.
+  -r, --revert         Swap chroot.img with chroot.img.old and update kernels.
+  -t, --tftp-dirs=     Space-separated list of TFTP directories to update.
+                       Defaults to "/var/lib/tftpboot /tftpboot /srv/tftp".
 EOF
 }
 
-#
-# Handle command line args
-#
-
-ARGS=$(getopt -n "$0" -o a:b:d:e:fhiI:no:Op:sS:T:h --long \
-    arch:,base:,tftpbootdir:,exclude-dirs:,force,help,image-only,ipappend:,no-comp,options:,openbsd-inetd,port:,skip-image,server:,timeout: -- "$@")
-
-if [ "$?" != "0" ]; then
-    exit 1                          # getopt failed
-fi
-
-eval set -- "${ARGS}"
-
-while true ; do
-    case "$1" in
-        -a|--arch) ARCH=$2 ; shift 2 ;;
-        -b|--base) BASE=$2 ; shift 2 ;;
-        -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
-        -e|--exclude-dirs) EX_DIRS=$(echo $2| sed -e 's/dev\|tmp\|proc\|var//g') ; shift 2 ;;
-        -f|--force) FORCE_NEW=1; shift 1 ;;
-        -h|--help) usage ; exit 0 ;;
-        -i|--image-only) IMAGE_ONLY=1; shift 1 ;;
-        -I|--ipappend) IPAPPEND=$2 ; shift 2 ;;
-        -n|--no-comp) NO_COMP="-noF -noD -noI -no-exports" ; shift 1 ;;
-        -o|--options) BOOTPROMPT_OPTIONS=$2 ; shift 2 ;;
-        -O|--openbsd-inetd) NBD_NAMED="0" ; shift 1 ;;
-        -p|--port) PORT=$2 ; shift 2 ;;
-        -s|--skip-image) SKIP_IMAGE=True ; shift 1 ;;
-        -S|--server)  NBD_ROOT_HOST=$2 ; shift 2 ;;
-        -T|--timeout) TIMEOUT=$2 ; shift 2 ;;
-        --) shift ; break ;;
-        *) echo "Internal error!" ; exit 1 ;;
-    esac
-done
-
-if [ "$LTSP_UPDATE_IMAGE_DISABLED" = "True" ]; then
-    echo "$0 is currently disabled. To enable, edit /etc/ltsp/ltsp-update-image.conf."
-    exit 0
-fi
-
-# defaults
-BASE=${BASE:-"/opt/ltsp"}
-BOOTPROMPT_OPTIONS=${BOOTPROMPT_OPTIONS:-"root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash vt.handoff=7"}
-NBD_NAMED=${NBD_NAMED:-"1"}
-
-# make sure we dont carry trailing slashes around (LP 189237)
-BASE=$(echo ${BASE}|sed -e 's/\/$//g')
-
-PORT=${PORT:-"2000"}
-if [ -z "${ARCH}" ]; then
-    ARCH=$(dpkg --print-architecture)
-fi
-
-IMGDIR="${BASE}/images"
-CHROOT="${BASE}/${ARCH}"
-
-# Generate nbd-server configuration
-if [ "$NBD_NAMED" = "1" ] && [ ! -d /etc/nbd-server ]; then
-    echo "Your system doesn't have a /etc/nbd-server directory."
-    echo "Assuming inetd is needed to export the image"
-    NBD_NAMED="0"
-else
-    NBD_ROOT_NAME="ltsp_$ARCH"
-fi
-
-#
-# for updating the pxe config
-#
-
-TFTPBOOTDIR=${TFTPBOOTDIR:-"ltsp"}
-TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
-
-if [ ! -d "${CHROOT}" ]; then
-    echo "Error: chroot ${CHROOT} doesn't exist."
-    exit 1
-fi
-
-collect_ports () {
-    ALL_CHROOTS=${ALL_CHROOTS:-"$(find $BASE/ -mindepth 1 -maxdepth 1 -type d | grep -v images)"}
-    unset ALL_PORT_CHROOTS
-    for c in ${ALL_CHROOTS}; do
-        # NBD_ROOT_PORT will be recorded by this script in the chroot
-        # For future reference
-        unset NBD_ROOT_PORT
-        [ -n "${FORCE_NEW}" ] && rm -f ${c}/etc/ltsp/update-kernels.conf 2>/dev/null
-        [ -f ${c}/etc/ltsp/update-kernels.conf ] && . ${c}/etc/ltsp/update-kernels.conf
-        # Make sure NBD_ROOT_PORT is a number
-        NBD_ROOT_PORT=$(echo ${NBD_ROOT_PORT}|sed -e '/[^0-9]/d')
-        ALL_PORT_CHROOTS="${ALL_PORT_CHROOTS} ${NBD_ROOT_PORT}=${c}"
-    done 
+trap_cleanup() {
+    # Don't stop on errors within this function
+    set +e
+    # Stop trapping
+    trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
+    umount_marked
+    rmdir "$cu_chroot"
+    rmdir "$cu_cow"
+    rmdir "$cu_rofs"
+    rmdir "$cu_base"
+    unlock_package_management
+    set -e
 }
 
-find_available_port () {
-    unset FOUND_PORT
-    # Set p to the base port
-    p=${PORT}
-    while [ -z "${FOUND_PORT}" ]; do
-        case "${PORTS_FOUND}" in
-            *-${p}-*) p=$(($p+1)) ;;
-            *) 
-                if netstat -lnp|grep :${p} >/dev/null && [ -z "$(grep ${p} /etc/inetd.conf| grep nbdrootd)" ]; then 
-                    # Port is currently in use by another service
-                    p=$(($p+1)); continue
-                else 
-                    export NBD_ROOT_PORT=$p; FOUND_PORT=1; return 0 
-                fi
-                ;;
-        esac
-    done
-}
+# Create a temporary copy of the chroot and run ltsp-cleanup in it.
+run_cleanup() {
+    local chroot name
+    chroot=$1
+    name=$2
 
-assign_ports () {
-    PORTS_FOUND="--"
-    unset RUN_LUK
-
-    for c in $(echo ${ALL_PORT_CHROOTS}|tr ' ' '\n'| sort); do
-        NBD_ROOT_PORT=${c%%=*}
-        THIS_CHROOT=${c#*=}
-        case "${PORTS_FOUND}" in
-            *-${NBD_ROOT_PORT}-*) 
-                OLD_PORT=${NBD_ROOT_PORT}
-                find_available_port
-                if [ -n "${OLD_PORT}" ]; then
-                    echo "Port ${OLD_PORT} already in use. Changing to port ${NBD_ROOT_PORT}."
-                else
-                    echo "Cannot determine assigned port. Assigning to port ${NBD_ROOT_PORT}."
-                fi
-
-                if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
-                    mkdir "${THIS_CHROOT}/etc/ltsp"
-                fi
-
-                if [ -n "${NBD_ROOT_HOST}" ]; then
-                    echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=${NBD_ROOT_HOST}:${NBD_ROOT_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-                else
-                    echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdport=${NBD_ROOT_PORT}\"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-                fi
-
-                echo "NBD_ROOT_PORT=${NBD_ROOT_PORT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-                [ -n "${TIMEOUT}" ] && echo "TIMEOUT=${TIMEOUT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-                [ -n "${IPAPPEND}" ] && echo "IPAPPEND=${IPAPPEND}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-
-                echo "Regenerating kernel... "
-                chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
-                echo "Done."
-                # run ltsp-update-kernels later...
-                RUN_LUK=1
-
-                echo -n "Configuring inetd... "
-                IMAGE=${IMGDIR}/${THIS_CHROOT##*/}.img 
-                sed -i -e "\|${IMAGE}|d" /etc/inetd.conf
-                update-inetd --group LTSP --add "${NBD_ROOT_PORT}               stream  tcp nowait  nobody /usr/sbin/tcpd /usr/sbin/nbdrootd ${IMAGE}"
-                echo "Done."
-
-                ;;
-        esac
-        PORTS_FOUND="${PORTS_FOUND}${NBD_ROOT_PORT}-"
-    done
-}
-
-assign_name () {
-    THIS_CHROOT=$CHROOT
-
-    if [ ! -d "${THIS_CHROOT}/etc/ltsp" ]; then
-        mkdir "${THIS_CHROOT}/etc/ltsp"
+    if [ ! -x "$chroot/usr/share/ltsp/ltsp-cleanup" ]; then
+        warn "Script $chroot/usr/share/ltsp/ltsp-cleanup does not exist, cannot cleanup the chroot."
+        return 0
     fi
+    lock_package_management
+    cu_base=$(mktemp -d)
+    cu_rofs="$cu_base/rofs"
+    cu_cow="$cu_base/cow"
+    cu_chroot="$cu_base/$name"
+    mkdir "$cu_rofs"
+    mkdir "$cu_cow"
+    mkdir "$cu_chroot"
+    trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
+    mark_mount --bind "$chroot" "$cu_rofs"
+    mark_mount -t tmpfs -o mode=0755 tmpfs "$cu_cow"
 
-    if [ -n "${NBD_ROOT_HOST}" ]; then
-        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=${NBD_ROOT_HOST}:${NBD_ROOT_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-    else
-        echo "BOOTPROMPT_OPTS=\"${BOOTPROMPT_OPTIONS} nbdroot=:${NBD_ROOT_NAME} \"" >${THIS_CHROOT}/etc/ltsp/update-kernels.conf
+    # If this is the first time that run_cleanup() is called,
+    # ensure that the overlayfs or aufs module are loaded.
+    if [ -z "$union_type" ]; then
+        # '' is to check if some of them is already loaded
+        for module in '' overlayfs aufs; do
+            if [ -n "$module" ]; then
+                modprobe "$module" || true
+            fi
+            # detect which unionfs to use
+            while read nodev filesystem; do
+                filesystem=${filesystem:-$nodev}
+                case "$filesystem" in
+                    overlayfs) 
+                        union_type=overlayfs
+                        union_opts="upperdir=$cu_cow,lowerdir=$cu_rofs"
+                        # We prefer overlayfs to aufs, so break when found
+                        break
+                        ;;
+                    aufs) 
+                        union_type=aufs
+                        union_opts="dirs=$cu_cow=rw:$cu_rofs=ro"
+                        ;;
+                esac
+            done < /proc/filesystems
+            test -n "$union_type" && break
+        done
+        test -n "$union_type" || die "No overlayfs or aufs support detected"
+        mark_mount -t "$union_type" -o "$union_opts" "$union_type" "$cu_chroot"
     fi
-
-    echo "NBD_ROOT_NAME=${NBD_ROOT_NAME}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-    [ -n "${TIMEOUT}" ] && echo "TIMEOUT=${TIMEOUT}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-    [ -n "${IPAPPEND}" ] && echo "IPAPPEND=${IPAPPEND}" >>${THIS_CHROOT}/etc/ltsp/update-kernels.conf
-
-    echo "Regenerating kernel... "
-    chroot ${THIS_CHROOT} /usr/share/ltsp/update-kernels
-    echo "Done."
-    RUN_LUK=1
+    chroot "$cu_chroot" /usr/share/ltsp/ltsp-cleanup --yes
 }
 
-# Creates an nbd-server configuration file for the specified nbd image, if it
-# doesn't already exist. If it does, no action is performed.
-# Additionally, if /etc/nbd-server/config doesn't exist, it creates it,
-# it generates a configuration file for swap, and it starts nbd-server."
+# Create the master nbd-server configuration file, and configuration files for
+# the specified NBD image and for NBD swap, if they don't already exist.
+# Also set $nbd_action appropriately.
 create_nbd_config() {
-    local exportname section conffile
+    local image name
+    image="$1"
 
-    exportname="$1"
-    test -f "$exportname" || return 1
-    section=${exportname##*/}
-    section=${section%.*}
-    conffile="/etc/nbd-server/conf.d/ltsp_$section.conf"
-    if [ -f "$conffile" ]; then
-        echo "Configuration file $conffile already exists, no action taken."
-        return
-    fi
+    test -f "$image" || return 1
+    name=${image##*/}
+    name=${name%.*}
+    mkdir -p "/etc/nbd-server/conf.d"
 
-    cat >"$conffile" <<EOF
-[ltsp_$section]
-exportname = $exportname
-readonly = true
-EOF
-    echo "A new configuration file has been created for image $exportname."
-
-    if [ -f "/etc/nbd-server/config" ]; then
-        echo \
-"For nbd-server to re-read its configuration, you need to manually run:
-    service nbd-server restart
-THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
-        return
-    fi
-    
-    # if user/group nbd exist, configure 
-    nbd_user=$(getent passwd nbd | cut -d : -f 1)
-    nbd_group=$(getent group nbd | cut -d : -f 1)
-    test -z "$nbd_user" && nbd_user=nobody
-    test -z "$nbd_group" && nbd_group=nogroup
-
-    cat > "/etc/nbd-server/config" <<EOF
+    if [ ! -f "/etc/nbd-server/config" ]; then
+        # If user/group nbd exist, use them
+        nbd_user=$(getent passwd nbd | cut -d : -f 1)
+        nbd_user=${nbd_user:-nobody}
+        nbd_group=$(getent group nbd | cut -d : -f 1)
+        nbd_group=${nbd_group:-nogroup}
+        cat > "/etc/nbd-server/config" <<EOF
 [generic]
 user = $nbd_user
 group = $nbd_group
-oldstyle = false
 includedir = /etc/nbd-server/conf.d
 EOF
+        echo "Created /etc/nbd-server/config"
+        # We can assume that nbd-server wasn't running without a config file
+        nbd_action=start
+    fi
+
+    # Configuration file upgrade, remove it e.g. in 2015.
+    if [ -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
+        if [ "$(sed -n '1s/\[ltsp_\(.*\)\]/\1/p' "/etc/nbd-server/conf.d/ltsp_$name.conf")" = "$name" ]; then
+            echo "Removing old configuration file /etc/nbd-server/conf.d/ltsp_$name.conf in order to upgrade it"
+            rm -f "/etc/nbd-server/conf.d/ltsp_$name.conf"
+        fi
+    fi
+
+    if [ ! -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
+        cat >"/etc/nbd-server/conf.d/ltsp_$name.conf" <<EOF
+[$BASE/$name]
+image = $image
+readonly = true
+EOF
+        echo "Created /etc/nbd-server/conf.d/ltsp_$name.conf"
+        nbd_action=${nbd_action:-restart}
+    fi
 
     if [ ! -f "/etc/nbd-server/conf.d/swap.conf" ]; then
-        mkdir -p "/etc/nbd-server/conf.d"
         cat > "/etc/nbd-server/conf.d/swap.conf" <<EOF
 [swap]
-exportname = /tmp/nbd-swap/%s
+image = /tmp/nbd-swap/%s
 prerun = nbdswapd %s
 postrun = rm -f %s
 EOF
+        echo "Created /etc/nbd-server/conf.d/swap.conf"
+        nbd_action=${nbd_action:-restart}
     fi
 
-    # We can assume that nbd-server wasn't running without a config file
-    if ! invoke-rc.d nbd-server start; then
-        echo "Failed to start nbd-server." >&2
-    fi
-}
-
-generate_image () {
-    # Check if the chroot initramfs supports nbd booting
-    test -f "${CHROOT}/usr/share/initramfs-tools/scripts/local-top/nbd" || return
-
-    # Check and see if user's left /proc mounted in chroot.  If so, issue
-    # a warning, and unmount it
-    PROC_MOUNTED=$(chroot ${CHROOT} test -f /proc/cpuinfo && echo True)
-    if [ -n "${PROC_MOUNTED}" ]; then
-        echo "/proc mounted in chroot ${CHROOT}, unmounting."
-        # binfmt_misc might need to be unmounted manually, see LP #534211
-        if grep -q "^binfmt_misc $ROOT/proc/sys/fs/binfmt_misc" $ROOT/proc/mounts; then
-            umount $ROOT/proc/sys/fs/binfmt_misc || true
-        fi
-        if ! umount ${CHROOT}/proc; then
-            echo "${CHROOT}/proc is in use, forcing unmount." >&2
-            umount -l ${CHROOT}/proc
-        fi
-    fi
-
-    # make sure the images dir exists
-    if [ ! -d ${IMGDIR} ]; then
-        mkdir -p ${IMGDIR}
-    fi
-
-    IMAGE="${IMGDIR}/${ARCH}.img"
-    rm -f "${IMAGE}.tmp" >/dev/null 2>&1
-    test -x /usr/bin/nice && nice=nice || unset nice
-    test -x /usr/bin/ionice && ionice=ionice || unset ionice
-    $nice $ionice mksquashfs "${CHROOT}" "${IMAGE}.tmp" $NO_COMP -e cdrom ${EX_DIRS}
-    if [ "$?" != "0" ]; then
-        rm -f "${IMAGE}.tmp"
-        echo "Error: mksquashfs failed to build the ltsp image, exiting"
-        exit 1
-    fi
-    if [ -f "${IMAGE}.tmp" ]; then
-        mv "${IMAGE}.tmp" "${IMAGE}"
-        chmod 0644 "${IMAGE}"
-    fi
-
-    if [ "$NBD_NAMED" = "1" ]; then
-        create_nbd_config "$IMAGE"
+    # Make sure hosts.allow has the keepalive option for nbdswapd
+    if ! grep -qsw nbdswapd /etc/hosts.allow; then
+        echo 'nbdswapd: ALL: keepalive' >> /etc/hosts.allow
     fi
 }
 
-if [ -z "${IMAGE_ONLY}" ]; then
-    if [ "$NBD_NAMED" = "0" ]; then
-        collect_ports
-        assign_ports
+generate_image() {
+    local chroot name imgdir nice ionice
+    chroot=$1
+
+    # If the chroot is a subdir of $BASE, make it an absolute path
+    if [ "$chroot" != "/" ]; then
+        chroot=${chroot%/}
+        test -d "$BASE/$chroot" && chroot="$BASE/$chroot"
+    fi
+    test -d "$chroot" || die "Chroot $chroot does not exist."
+    name=${chroot##*/}
+    name=${name%.*}
+    # If the chroot has no name part, e.g. /, name it after the host arch
+    name=${name:-$(detect_arch)}
+    imgdir=$BASE/images
+    mkdir -p "$imgdir"
+
+    if [ "$REVERT" = true ]; then
+        test -f "$imgdir/$name.img.old" ||
+            die "$imgdir/$name.img.old is missing, cannot revert to it"
+        if [ -f "$imgdir/$name.img" ]; then
+            # Swap old with new file
+            mv "$imgdir/$name.img" "$imgdir/$name.img.tmp"
+            mv "$imgdir/$name.img.old" "$imgdir/$name.img"
+            mv "$imgdir/$name.img.tmp" "$imgdir/$name.img.old"
+        else
+            mv "$imgdir/$name.img.old" "$imgdir/$name.img"
+        fi
+        echo "Reverted to $imgdir/$name.img.old, please reboot your clients."
     else
-        assign_name
+        test -f "$chroot/usr/share/initramfs-tools/scripts/local-top/nbd" ||
+            die "Chroot $chroot does not appear to support NBD booting."
+
+        cu_chroot=$chroot
+        if [ "$CLEANUP" = true ]; then
+            # run_cleanup sets cu_chroot=$cu_base/$name for mksquashfs
+            run_cleanup "$chroot" "$name"
+        fi
+
+        test -x /usr/bin/nice && nice=nice || unset nice
+        test -x /usr/bin/ionice && ionice=ionice || unset ionice
+        if ! $nice $ionice mksquashfs "$cu_chroot" "$imgdir/$name.img.tmp" \
+            -no-recovery -noappend -wildcards -ef /etc/ltsp/nbd-exclude.conf \
+            ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports}
+        then
+            rm -f "$imgdir/$name.img.tmp"
+            die "mksquashfs failed to build the LTSP image, exiting"
+        fi
+        if [ -f "$imgdir/$name.img" ] && [ "$NO_BACKUP" != true ]; then
+            mv "$imgdir/$name.img" "$imgdir/$name.img.old"
+        fi
+        mv "$imgdir/$name.img.tmp" "$imgdir/$name.img"
     fi
-    [ -n "$RUN_LUK" ] && ltsp-update-kernels -b "${BASE}" -t "${TFTPDIRS}" -d "${TFTPBOOTDIR}"
+    create_nbd_config "$imgdir/$name.img"
+
+    ltsp-update-kernels ${BASE:+-b "$BASE"} \
+        ${TFTP_BOOT_DIR:+-d "$TFTP_BOOT_DIR"} \
+        ${TFTP_DIRS:+-t "$TFTP_DIRS"} "$name"
+
+    if [ "$cu_chroot" != "$chroot" ] && [ "$REVERT" != true ]; then
+        trap_cleanup
+    fi
+}
+
+
+# Distro specific functions
+
+lock_package_management() {
+    warn "Your distro doesn't support package management locking, continuing without locking..."
+}
+
+unlock_package_management() {
+    if [ -n "$lockpid" ]; then
+        kill "$lockpid" || true
+        unset lockpid
+    fi
+}
+
+
+# This also sources vendor functions and .conf file settings
+. /usr/share/ltsp/ltsp-client-functions
+
+if ! args=$(getopt -n "$0" -o "b:cd:e:fhmnrt:" \
+    -l "base:,cleanup,tftp-boot-dir:,exclude:,config-nbd,help,no-compress,no-backup,revert,tftp-dirs:" -- "$@")
+then
+    exit 1
+fi
+eval "set -- $args"
+while true ; do
+    case "$1" in
+        -b|--base) shift; BASE=$1 ;;
+        -c|--cleanup) CLEANUP=true ;;
+        -d|--tftp-boot-dir) shift; TFTP_BOOT_DIR=$1 ;;
+        -e|--exclude) shift; EXCLUDE=$1 ;;
+        -f|--config-nbd) CONFIG_NBD=true ;;
+        -h|--help) usage; exit 0 ;;
+        -m|--no-compress) NO_COMPRESS=true ;;
+        -n|--no-backup) NO_BACKUP=true ;;
+        -r|--revert) REVERT=$1 ;;
+        -t|--tftp-dirs) shift; TFTP_DIRS=$1 ;;
+        --) shift ; break ;;
+        *) die "$0: Internal error!" ;;
+    esac
+    shift
+done
+require_root
+
+BASE=${BASE:-/opt/ltsp}
+# Remove trailing /, if present
+BASE=${BASE%/}
+if [ -z "$CONFIG_NBD" ]; then
+    if [ -d /etc/nbd-server/conf.d ] &&
+        [ -n "$(find /etc/nbd-server/conf.d/ -type f -name 'ltsp_*.conf' ! -name ltsp_swap.conf)" ]
+    then
+        CONFIG_NBD=true
+    fi
+    if [ -z "$CONFIG_NBD" ]; then
+        if grep -qsr ^/opt/ltsp /etc/exports /etc/exports.d/; then
+            die "Your system seems to be using NFS to serve LTSP chroots.
+If you're absolutely certain you want to switch to NBD, run:
+    $0 --config-nbd $*"
+        fi
+    fi
 fi
 
-if [ "$SKIP_IMAGE" != "True" ]; then
-    generate_image
+# Chroots can be specified in the command line. If not, update all of them.
+if [ $# -eq 0 ]; then
+    set -- $(find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
+        -printf "%f\n")
 fi
+test $# -gt 0 || die "No chroots found in $BASE"
 
-# Make sure hosts.allow has the keepalive option for nbdrootd
-if [ -z "${IMAGE_ONLY}" ] && [ -z "$(grep nbdrootd /etc/hosts.allow)" ]; then
-    echo 'nbdrootd: ALL: keepalive' >> /etc/hosts.allow
+for chroot in "$@"; do
+    generate_image "$chroot"
+done
+
+if [ "$nbd_action" = start ]; then
+    if ! invoke-rc.d nbd-server start; then
+        warn "Failed to start nbd-server."
+    fi
+elif [ "$restart_nbd" = restart ]; then
+    warn \
+"For nbd-server to re-read its configuration, you need to manually run:
+    service nbd-server restart
+THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
 fi
-

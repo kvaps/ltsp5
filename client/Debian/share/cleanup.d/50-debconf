@@ -1,0 +1,3 @@
+if [ -s /var/cache/debconf/passwords.dat ]; then
+    truncate -s 0 /var/cache/debconf/passwords.dat
+fi

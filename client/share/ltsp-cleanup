@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+#  Copyright (c) 2012 Alkis Georgopoulos <alkisg@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, you can find it on the World Wide
+#  Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
+#  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+
+usage()
+{
+    cat <<EOF
+Usage: $0 [OPTION]
+Prepares a disk for network publishing, by deleting logs, caches and by
+removing or regenerating sensitive data like user accounts and host keys.
+Note that /etc/ltsp/nbd-exclude.conf contains a long list of files and
+directories to be excluded from the published image; there's no need for
+ltsp-cleanup to delete those as well.
+
+Options:
+  -h, --help    This message.
+  -y, --yes     Assume Yes to all queries and do not prompt.
+EOF
+}
+
+unset YES
+
+# This also sources vendor functions and .conf file settings
+. /usr/share/ltsp/ltsp-client-functions
+
+if ! args=$(getopt -n "$0" -o "hy" -l "help,yes" -- "$@"); then
+    exit 1
+fi
+eval "set -- $args"
+while true; do
+    case "$1" in
+        -h|--help) usage; exit 0 ;;
+        -y|--yes) YES=true ;;
+        --) shift; break ;;
+        *) die "$0: Internal error!" ;;
+    esac
+    shift
+done
+
+require_root
+if ! boolean_is_true "$YES"; then
+    cat <<EOF
+This will prepare the disk for network publishing, by deleting logs, caches and
+by removing or regenerating sensitive data like user accounts and host keys.
+
+EOF
+    read -p "Are you sure you want to do that [Y/n]? " YES
+fi
+if boolean_is_true "$YES"; then
+    run_parts /usr/share/ltsp/cleanup.d /etc/ltsp/cleanup.d
+fi

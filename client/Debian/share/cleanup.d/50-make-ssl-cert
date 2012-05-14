@@ -1,0 +1,3 @@
+if [ -x /usr/sbin/make-ssl-cert ]; then
+    make-ssl-cert generate-default-snakeoil --force-overwrite || true
+fi
