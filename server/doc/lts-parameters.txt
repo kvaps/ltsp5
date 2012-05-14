@@ -1,3 +1,0 @@
-The lts-parameters.txt file is no longer maintained.
-Please see the lts.conf(5) man page, available in the
-ltsp-docs package.
