@@ -267,7 +267,7 @@ unlock_package_management() {
 
 
 # This also sources vendor functions and .conf file settings
-. /usr/share/ltsp/ltsp-client-functions
+. /usr/share/ltsp/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o "b:cd:e:fhmnrt:" \
     -l "base:,cleanup,tftp-boot-dir:,exclude:,config-nbd,help,no-compress,no-backup,revert,tftp-dirs:" -- "$@")
