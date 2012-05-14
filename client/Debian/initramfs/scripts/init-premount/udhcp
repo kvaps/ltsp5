@@ -135,10 +135,10 @@ echo '#!/bin/sh
 [ "$1" = "bound" ] || exit;
 
 echo "# This file contains whatever information was provided by the DHCP server" > /tmp/dhcp-info.conf
-for var in interface ip siaddr sname boot_file subnet timezone router \
-    timesvr namesvr dns logsvr cookiesvr lprsvr hostname bootsize domain \
-    swapsvr rootpath ipttl mtu broadcast ntpsrv wins lease dhcptype serverid \
-      message tftp bootfile; do
+for var in bootfile bootsize broadcast dns domain hostname ipttl lease lprsrv \
+    message msstaticroutes mtu nisdomain nissrv ntpsrv rootpath router routes \
+    search serverid sipsrv staticroutes subnet swapsrv tftp timezone wins wpad \
+    boot_file interface ip mask siaddr; do
         eval value=\"\$$var\"
         if [ -n "$value" ]; then
             echo $var="\"$value\"" >> /tmp/dhcp-info.conf
@@ -161,7 +161,7 @@ interfaces=${interface:-$interfaces}
 [ "$quiet" != "y" ] && echo "DHCP request for $i..."
 while [ -z "$configured" ]; do
     for i in $interfaces; do    # Make a DHCP request for each interface
-        if udhcpc -n -C -s /tmp/dhcp-script.sh -i $i $hostname_param $ip_param >/dev/null 2>&1; then
+        if udhcpc -n -C -O rootpath -s /tmp/dhcp-script.sh -i $i $hostname_param $ip_param >/dev/null 2>&1; then
             configured="true"
             break
         fi
@@ -191,6 +191,14 @@ boot_file=$bootfile
 tftp=${tftp:-$siaddr}
 tftp=${tftp:-$sname}
 tftp=${tftp:-$serverid}
+
+# Ensure a default rootpath if it doesn't exist
+if [ -z "$rootpath" ]; then
+    if [ -f /conf/arch.conf ]; then
+        rootpath=$(. /conf/arch.conf; echo "${DPKG_ARCH:+/opt/ltsp/$DPKG_ARCH}")
+    fi
+    rootpath=${rootpath:-/opt/ltsp/i386}
+fi
 }
 
 # Converts a decimal subnet mask to the bit count needed for the CIDR notation
@@ -246,16 +254,16 @@ IPV4DNS0='$dns0'
 IPV4DNS1='$dns1'
 HOSTNAME='$hostname'
 DNSDOMAIN='$domain'
-NISDOMAIN='$domain'
+NISDOMAIN='$nisdomain'
 ROOTSERVER='$tftp'
 ROOTPATH='$rootpath'
 filename='$bootfile'
 DNS_SERVER='$dns'
-SEARCH_DOMAIN='$domain'
-NTPSVR='$ntpsrv'
-TIMESVR='$timesvr'
+SEARCH_DOMAIN='$search'
+NTPSVR='$ntpsvr'
+TIMESVR='$ntpsvr'
 TIMEZONE='$timezone'
-LOGSVR='$logsvr'" > /tmp/net-$interface.conf
+SWAPSVR='$swapsvr'" > /tmp/net-$interface.conf
 
 # Write the file that'll be sourced by the callee function run_scripts
 mkdir -p /conf
@@ -275,5 +283,3 @@ fi
 sanitize_configuration
 apply_configuration
 export_configuration
-
-# TODO: replace DEVICE=eth0 with DEVICE=${DEVICE:-eth0} in local-top/nbd
