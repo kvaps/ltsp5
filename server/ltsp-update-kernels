@@ -32,93 +32,149 @@
 #
 
 usage() {
-cat <<EOF
-$0 [OPTION] [ARCH...]
-  -b, --basedir     Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
-  -t, --tftpdirs    List of tftpd dirs to update in. Defaults to
-                    "/var/lib/tftpboot /tftpboot /srv/tftp".
-  -c, --copytftp    Copy files.  Defaults to "true".
-  -d, --tftpbootdir Subdir within tftpdir where ltsp kernels are.  Defaults
-                    to "ltsp".
-  -h, --help        This message.
+    cat <<EOF
+Usage: $0 [OPTION] [CHROOT...]
+Copies the chroot kernels to the TFTP directory.
+
+Options:
+  -b, --base=          The LTSP base directory. Defaults to "/opt/ltsp".
+  -d, --tftp-boot-dir= The LTSP subdirectory within the TFTP base directory.
+                       Defaults to "ltsp".
+  -h, --help           This message.
+  -t, --tftp-dirs=     Space-separated list of TFTP directories to update.
+                       Defaults to "/var/lib/tftpboot /tftpboot /srv/tftp".
 EOF
 }
 
-cleanup() {
+trap_cleanup() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     umount_marked
     rmdir "$mnt"
 }
 
+update_kernels() {
+    local name tftpdir tftpboot chroot 
+    name=$1
+    tftpdir=$2
+
+    tftpboot="$tftpdir/$TFTP_BOOT_DIR"
+    tftpboot=${tftpboot%/}
+
+    # Loop-mount NBD images in order to copy their kernels.
+    # This ensures that the TFTP kernels are the same versions as in the
+    # NBD exported image (e.g. user updated chroot but hasn't ran
+    # ltsp-update-image yet).
+    # It also makes it easier to transfer NBD images from other sources to
+    # the LTSP server (no need to transfer the kernels separately).
+    # Finally, it also allows for btrfs or ext loopback images.
+    unset chroot
+    if [ -f "$BASE/images/$name.img" ]; then
+        if [ -z "$mnt" ]; then
+            mnt=$(mktemp -d)
+            trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
+        else
+            umount_marked
+        fi
+        if mark_mount -o loop,ro "$BASE/images/$name.img" "$mnt"; then
+            chroot="$mnt"
+        fi
+    fi
+    if [ -z "$chroot" ] && [ -x "$BASE/$name/bin/true" ]; then
+        chroot="$BASE/$name"
+    fi
+    if [ -z "$chroot" ]; then
+        echo "Skipping invalid chroot: $name"
+        continue
+    fi
+    echo "Updating $tftpdir directories for chroot: $name"
+
+    mkdir -p "$tftpboot/$name"
+    cp -a "$chroot/boot/." "$tftpboot/$name/"
+
+    # Ensure that the kernel is readable (LP: #759115)
+    chmod +r "$tftpboot/$name/vmlinuz-"*
+
+    # OFW on Mac is lame, they cannot tftp from directories
+    if [ -e "$tftpboot/$name/yaboot" ]; then
+        if [ ! -e "$tftpdir/yaboot" ]; then
+            ln -sf "$TFTP_BOOT_DIR/$name/yaboot" "$tftpdir/yaboot"
+        fi
+        if [ ! -e "$tftpdir/yaboot.conf" ]; then
+            ln -sf "$TFTP_BOOT_DIR/$name/yaboot.conf" "$tftpdir/yaboot.conf"
+        fi
+    fi
+
+    # Cleanup old kernels and images from tftpboot directory
+    cleanup_kernels "$name" "$tftpboot" "$chroot"
+}
+
 # distro specific functions
 
 # For all kernels in TFTP, find the kernel $version from vmlinuz-* filename.
-# If the corresponding /opt/ltsp/$arch/lib/modules/$version is missing,
+# If the corresponding /opt/ltsp/$name/lib/modules/$version is missing,
 # then delete kernel and images for this version from tftpboot directory.
 # Distros that don't match vmlinuz-* should override this function.
 cleanup_kernels() {
+    local name tftpboot chroot
+    name=$1
+    tftpboot=$2
+    chroot=$3
+
     # Loop through every vmlinuz-* file
-    for kernelpath in $(find "$tftpboot/$arch/" -name 'vmlinuz-*'); do
+    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*'); do
         kernel=${kernelpath##*/}
         version=${kernel#vmlinuz-}
         if [ ! -d "$chroot/lib/modules/$version" ]; then
             echo "Removing $kernelpath"
             # Common
-            rm -f "$tftpboot/$arch/vmlinuz-$version"
-            rm -f "$tftpboot/$arch/config-$version"
-            rm -f "$tftpboot/$arch/System.map-$version"
+            rm -f "$tftpboot/$name/vmlinuz-$version"
+            rm -f "$tftpboot/$name/config-$version"
+            rm -f "$tftpboot/$name/System.map-$version"
             # Fedora
-            rm -f "$tftpboot/$arch/initrd-$version.img"
-            rm -f "$tftpboot/$arch/initramfs-$version.img"
-            rm -f "$tftpboot/$arch/elf-$version.img"
-            rm -f "$tftpboot/$arch/wraplinux-nbi-$version.img"
-            rm -f "$tftpboot/$arch/aout-$version.img"
-            rm -f "$tftpboot/$arch/symvers-$version.gz"
+            rm -f "$tftpboot/$name/initrd-$version.img"
+            rm -f "$tftpboot/$name/initramfs-$version.img"
+            rm -f "$tftpboot/$name/elf-$version.img"
+            rm -f "$tftpboot/$name/wraplinux-nbi-$version.img"
+            rm -f "$tftpboot/$name/aout-$version.img"
+            rm -f "$tftpboot/$name/symvers-$version.gz"
             # Debian
-            rm -f "$tftpboot/$arch/initrd.img-$version"
-            rm -f "$tftpboot/$arch/nbi.img-$version"
+            rm -f "$tftpboot/$name/initrd.img-$version"
+            rm -f "$tftpboot/$name/nbi.img-$version"
             # Ubuntu
-            rm -f "$tftpboot/$arch/abi-$version"
-            rm -f "$tftpboot/$arch/vmcoreinfo-$version"
+            rm -f "$tftpboot/$name/abi-$version"
+            rm -f "$tftpboot/$name/vmcoreinfo-$version"
         fi
     done
 }
 
-#
-# Handle args
-#
+# This also sources vendor functions and .conf file settings
+. /usr/share/ltsp/ltsp-client-functions
 
-ARGS=$(getopt -o b:t:c:d:h --long base:,tftpdirs:,copytftp:,tftpbootdir:,help \
-       -n $0 -- "$@")
-
-[ $? != 0 ] && exit 1
-
-eval set -- "${ARGS}"
-
+if ! args=$(getopt -n "$0" -o b:d:ht: \
+    -l base:,tftp-boot-dir:,help,tftp-dirs -- "$@")
+then
+    exit 1
+fi
+eval "set -- $args"
 while true ; do
     case "$1" in
-        -b|--base)        BASE=$2 ; shift 2 ;;
-        -t|--tftpdirs)    TFTPDIRS=$2 ; shift 2 ;;
-        -c|--copytftp)    COPYTFTP=$2 ; shift 2 ;;
-        -d|--tftpbootdir) TFTPBOOTDIR=$2 ; shift 2 ;;
-        -h|--help)        usage ; exit 0 ;;
+        -b|--base) shift; BASE=$1 ;;
+        -d|--tftp-boot-dir) shift; TFTP_BOOT_DIR=$1 ;;
+        -h|--help) usage; exit 0 ;;
+        -t|--tftp-dirs) shift; TFTP_DIRS=$1 ;;
         --) shift ; break ;;
-        *) echo "Internal error!" ; exit 1 ;;
+        *) die "$0: Internal error!" ;;
     esac
+    shift
 done
-
-# This also sources vendor functions and .conf file settings
-. /usr/share/ltsp/ltsp-server-functions
 require_root
 
 BASE=${BASE:-"/opt/ltsp"}
-TFTPDIRS=${TFTPDIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
-COPYTFTP=${COPYTFTP:-"true"}
-TFTPBOOTDIR=${TFTPBOOTDIR-"ltsp"}
-# If someone configures his tftpd to serve files directly from his chroot,
-# he should also set TFTPDIRS=/opt/ltsp, COPYTFTP=false and TFTPBOOTDIR="" in
-# ltsp-update-kernels.conf.
+# Remove trailing /, if present
+BASE=${BASE%/}
+TFTP_BOOT_DIR=${TFTP_BOOT_DIR:-"ltsp"}
+TFTP_DIRS=${TFTP_DIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
 
 # Chroots can be specified in the command line. If not, update all of them.
 if [ $# -eq 0 ]; then
@@ -133,65 +189,15 @@ if [ $# -eq 0 ]; then
         } | sort -u
     )
 fi
+test $# -gt 0 || die "No chroots found in $BASE"
 
-for tftpdir in $TFTPDIRS; do
+for tftpdir in $TFTP_DIRS; do
     if [ ! -d "$tftpdir" ]; then
         # skip directory
         continue
     fi
-
-    tftpboot="$tftpdir/$TFTPBOOTDIR"
-    tftpboot=${tftpboot%/}
-
-    for arch in "$@"; do
-        # Loop-mount NBD images in order to copy their kernels.
-        # This ensures that the TFTP kernels are the same versions as in the
-        # NBD exported image (e.g. user updated chroot but hasn't ran
-        # ltsp-update-image yet).
-        # It also makes it easier to transfer NBD images from other sources to
-        # the LTSP server (no need to transfer the kernels separately).
-        # Finally, it also allows for btrfs or ext loopback images.
-        unset chroot
-        if [ -f "$BASE/images/$arch.img" ]; then
-            if [ -z "$mnt" ]; then
-                mnt=$(mktemp -d)
-                trap "cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
-            else
-                umount_marked
-            fi
-            if mark_mount -o loop,ro "$BASE/images/$arch.img" "$mnt"; then
-                chroot="$mnt"
-            fi
-        fi
-        if [ -z "$chroot" ] && [ -x "$BASE/$arch/bin/true" ]; then
-            chroot="$BASE/$arch"
-        fi
-        if [ -z "$chroot" ]; then
-            echo "Skipping invalid chroot: $arch"
-            continue
-        fi
-        echo "Updating $tftpdir directories for chroot: $arch"
-
-        if [ "$COPYTFTP" = "true" ]; then
-            mkdir -p "$tftpboot/$arch"
-            cp -a "$chroot/boot/." "$tftpboot/$arch/"
-
-            # Ensure that the kernel is readable (LP: #759115)
-            chmod +r "$tftpboot/$arch/vmlinuz-"*
-        fi
-
-        # OFW on Mac is lame, they cannot tftp from directories
-        if [ -e "$tftpboot/$arch/yaboot" ]; then
-            if [ ! -e "$tftpdir/yaboot" ]; then
-                ln -sf "$TFTPBOOTDIR/$arch/yaboot" "$tftpdir/yaboot"
-            fi
-            if [ ! -e "$tftpdir/yaboot.conf" ]; then
-                ln -sf "$TFTPBOOTDIR/$arch/yaboot.conf" "$tftpdir/yaboot.conf"
-            fi
-        fi
-
-        # Cleanup old kernels and images from tftpboot directory
-        cleanup_kernels
+    for name in "$@"; do
+        update_kernels "$name" "$tftpdir"
     done
     # Update selinux file contexts if necessary
     if [ -f /selinux/enforce ] && [ -x /sbin/restorecon ]; then
