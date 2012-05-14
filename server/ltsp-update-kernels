@@ -149,7 +149,7 @@ cleanup_kernels() {
 }
 
 # This also sources vendor functions and .conf file settings
-. /usr/share/ltsp/ltsp-client-functions
+. /usr/share/ltsp/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o b:d:ht: \
     -l base:,tftp-boot-dir:,help,tftp-dirs -- "$@")
