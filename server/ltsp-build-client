@@ -45,7 +45,6 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
 PLUGINS_BASE=$MODULES_BASE/plugins            # base plugin repository
 SCRIPT=ltsp-build-client
 PLUGIN_DIRS="/etc/ltsp/plugins/$SCRIPT $PLUGINS_BASE/$SCRIPT/$VENDOR-custom $PLUGINS_BASE/$SCRIPT/$VENDOR $PLUGINS_BASE/$SCRIPT/common"
-VENDOR_FUNCTIONS="$PLUGINS_BASE/$SCRIPT/$VENDOR-functions"
 
 PARAMS="config:"                              # store commandline params for getopt
 HELP_MESSAGE=""                               # store regular help messages
@@ -53,13 +52,6 @@ ADVANCED_HELP_MESSAGE=""                      # store advanced help messages
 
 . gettext.sh
 
-# load plugin functions
-. $PLUGINS_BASE/functions
-
-# load vendor-specific plugins
-if [ -f "$VENDOR_FUNCTIONS" ]; then
-    . "$VENDOR_FUNCTIONS"
-fi
 
 ##################################
 ### Methods to be called by plugins
@@ -119,6 +111,73 @@ chroot_mount() {
     if mount $3 $1 $ROOT/${2##/}; then
         CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT/${2##/}"
     fi
+}
+
+# Load plugins.
+#
+# Params:
+# $1 - mode (configure|run)
+# needs variable PLUGIN_DIRS defined
+load_plugins() {
+    set -- "$@"
+    MODE=$1
+    debug "Loading plugins in MODE=$MODE:"
+    FILENAMES=""
+    NAMES=""
+    for dir in $PLUGIN_DIRS ; do
+        if [ -d "$dir" ]; then
+            FILENAMES="$FILENAMES $(run_parts_list $dir)"
+        fi
+    done
+    for file in $FILENAMES ; do
+        NAMES="$NAMES $(basename $file)"
+    done
+    NAMES="$(echo $NAMES | tr "\t " "\n" | sort -u)"
+    for name in $NAMES ; do
+        for dir in $PLUGIN_DIRS ; do
+            filename="$dir/$name"
+            if [ -f "$filename" ]; then 
+                debug "Loading plugin: $MODE: $filename"
+                . "$filename"
+                break
+            fi
+        done
+    done
+}
+
+# Confirms that ROOT is a chroot
+# Success: return 0
+# Failure: exit 1
+#          return 1 if --return-on-fail
+confirm_chroot() {
+    if [ -z $ROOT ]; then
+        echo "ERROR: ROOT is not defined."
+        exit 1
+    fi
+    if [ ! -e $ROOT/bin/true ]; then
+        [ "$1" = "--return-on-fail" ] && return 1
+        echo "ERROR: $ROOT is not a valid chroot."
+        exit 1
+    fi
+    return 0
+}
+
+# Detect latest installed kernel
+# Outputs version to $kernelversion
+detect_latest_kernel() {
+    confirm_chroot
+
+    # If /dev/null does not exist, create it (basename needs it)
+    [   ! -e /dev/null ] && /sbin/MAKEDEV null
+
+    # If not already specified by the command line, try to find the latest kernel automatically
+    unset kernelversion
+    kernelversion="`ls -d $ROOT/lib/modules/2* | sort -nr | head -n1 | xargs basename`"
+    if [ ! -d $ROOT/lib/modules/$kernelversion ]; then
+        echo "ERROR: $0: Unable to detect installed kernel version."
+        exit 1
+    fi
+    return 0
 }
 
 ####################################
