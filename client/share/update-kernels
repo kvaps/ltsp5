@@ -7,6 +7,7 @@
 #  2007, Vagrant Cascadian <vagrant@freegeek.org>
 #        Scott Balneaves <sbalneav@ltsp.org>
 #  2008, Vagrant Cascadian <vagrant@freegeek.org>
+#  2012, Alkis Georgopoulos <alkisg@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -29,29 +30,29 @@
 # access to the NFS mount point. (much of this code was originally in
 # server/ltsp-update-kernels). --vagrant 20060801
 
-if [ -f /etc/ltsp/update-kernels.conf ]; then
-    . /etc/ltsp/update-kernels.conf
-fi
-
-BOOT=${BOOT:-"/boot"}
-SUB_ARCH=${SUB_ARCH:-"$(uname -m)"}
-VENDOR=${VENDOR:-"$(lsb_release -i -s)"}
-
-case $0 in
-  /etc/kernel/post*.d*) QUIET=true ;;
-esac
-
 msg() {
     if [ "$QUIET" != "true" ]; then
        echo $@
     fi
 }
 
-if [ -z "$CHROOT_NAME" ]; then
-    # FIXME: replace with a common function
-    CHROOT_NAME="$(dpkg --print-architecture)"
-fi
 
+# This also sources vendor functions and .conf file settings
+. /usr/share/ltsp/ltsp-client-functions
+require_root
+
+BOOT=${BOOT:-"/boot"}
+SUB_ARCH=${SUB_ARCH:-"$(uname -m)"}
+VENDOR=${VENDOR:-"$(detect_vendor)"}
+CHROOT_NAME=${CHROOT_NAME:-"$(detect_arch)"}
+
+case "$0" in
+    /etc/kernel/post*.d*) QUIET=true ;;
+esac
+
+# TODO: when a pxemenus package is implemented, distros should replace the
+# following code with an /etc/ltsp/update-kernels.conf (or similar) conffile
+# with their supported kernel command lines, for NFS, NBD, AoE, iSCSI etc.
 if [ -z "$BOOTPROMPT_OPTS" ]; then
     if [ "$VENDOR" = "Ubuntu" ]; then
         BOOTPROMPT_OPTS="root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash vt.handoff=7"
