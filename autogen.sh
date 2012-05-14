@@ -3,6 +3,6 @@ set -e
 cd localapps/
 ./autogen.sh
 cd -
-cd nbd-proxy/
+cd client/nbd-proxy/
 ./autogen.sh
 cd -
