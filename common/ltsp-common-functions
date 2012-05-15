@@ -8,6 +8,11 @@ else
     sourced_ltsp_common_functions=true
 fi
 
+warn()
+{
+    echo "$@" >&2
+}
+
 die() {
     warn "$@"
     exit 1
@@ -16,15 +21,35 @@ die() {
 log()
 {
     if [ -x /usr/bin/logger ]; then
-        logger -s -t "$0" "$*"
+        logger -s -t "${0##/}" "$*"
     else
-        warn "$0: $*"
+        warn "${0##/}: $*"
     fi
 }
 
-warn()
+# To debug LTSP scripts, set ltsp.debug=<scriptname> in the kernel
+# command line, or run debug=<scriptname> <scriptname>.
+# $0 is automatically prefixed in debug messages.
+# TODO: merge ltsp-build-client's debug with this one.
+debug()
 {
-    echo "$@" >&2
+    local x
+
+    if [ -z "$debug" ]; then
+        if [ -f /proc/cmdline ]; then
+            for x in $(cat /proc/cmdline); do
+                case "$x" in
+                    ltsp.debug=*)
+                        debug=${x#ltsp.debug=}
+                    ;;
+                esac
+            done
+        fi
+        debug=${debug:-false}
+    fi
+    if [ "$debug" = "${0##*/}" ]; then
+        log "$@"
+    fi
 }
 
 boolean_is_true(){
@@ -134,6 +159,7 @@ umount_marked() {
 
 # By default, we want all our scripts to stop on errors
 set -e
+debug "Started"
 
 # Source common settings, e.g. BASE
 if [ -f /etc/ltsp/common.conf ]; then
