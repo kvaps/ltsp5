@@ -40,10 +40,6 @@ case "$MODE" in
             # and set pxelinux and other boot parameters.
             ltsp-update-image --skip-image
 
-            # configure ltsp-update-image to not handle image generation.
-            mkdir -p /etc/ltsp/
-            echo SKIP_IMAGE=True >> /etc/ltsp/ltsp-update-image.conf
-
             # add $ROOT to list of files to be unmounted.  done in finalization
             # phase so it is the last to be unmounted.
             CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT"
