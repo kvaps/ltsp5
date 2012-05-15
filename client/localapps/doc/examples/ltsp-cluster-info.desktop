@@ -2,6 +2,7 @@
 Version=1.0
 Type=Application
 Exec=ltsp-cluster-info
+TryExec=ltsp-cluster-info
 Name=Thin client information
 Name[fr]=Information sur le client léger
 Name[el]=Πληροφορίες για τον thin client
