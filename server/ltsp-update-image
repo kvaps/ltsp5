@@ -163,7 +163,7 @@ EOF
     if [ ! -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
         cat >"/etc/nbd-server/conf.d/ltsp_$name.conf" <<EOF
 [$BASE/$name]
-image = $image
+exportname = $image
 readonly = true
 EOF
         echo "Created /etc/nbd-server/conf.d/ltsp_$name.conf"
@@ -173,7 +173,7 @@ EOF
     if [ ! -f "/etc/nbd-server/conf.d/swap.conf" ]; then
         cat > "/etc/nbd-server/conf.d/swap.conf" <<EOF
 [swap]
-image = /tmp/nbd-swap/%s
+exportname = /tmp/nbd-swap/%s
 prerun = nbdswapd %s
 postrun = rm -f %s
 EOF
