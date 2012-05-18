@@ -290,17 +290,5 @@ for kernel in $ALL_KERNELS ; do
                 msg "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
             fi
         fi
-        if which tip22 >/dev/null ; then
-            # mips: tip22
-            case $kernel in
-                *ip32*) tip=tip32 ;;
-                *) tip=tip22 ;;
-            esac
-            if [ ! -f "$BOOT/$initrd" ]; then
-                # feed a fake initrd, as tip* requires it 
-                dd if=/dev/zero of="$BOOT/$initrd" bs=1 count=1
-            fi
-            $tip $kernel $BOOT/$initrd $BOOT/$nbi.tmp && mv $BOOT/$nbi.tmp $BOOT/$nbi
-        fi
     fi
 done
