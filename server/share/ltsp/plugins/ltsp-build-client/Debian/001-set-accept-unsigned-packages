@@ -7,7 +7,7 @@ case "$MODE" in
             # FIXME: handle if APT_GET_OPTS has other values set.
             APT_GET_OPTS="$APT_GET_OPTS --force-yes"
             # requires debootstrap 1.0.30
-            DEBOOTSTRAP_OPTS="$DEBOOTSTRAP_OPTS --no-check-gpg"
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --no-check-gpg"
         fi
         ;;
 esac
