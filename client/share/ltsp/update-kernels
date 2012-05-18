@@ -252,19 +252,6 @@ for kernel in $ALL_KERNELS ; do
                 -o $BOOT/legacy-"$nbi" $kernel $MKNBI_LINUX_INITRD_OPT
 
         fi
-        if which netabootwrap >/dev/null; then
-            # alpha: aboot
-            ABOOT_INITRD_OPT=""
-            if [ -f "$BOOT/$initrd" ]; then
-                ABOOT_INITRD_OPT="-i $BOOT/$initrd"
-            fi
-            netabootwrap -t $BOOT/$nbi -k $kernel $ABOOT_INITRD_OPT
-        else
-            if [ -z "$netabootwrap_seen" ]; then
-                netabootwrap_seen=true
-                msg "Skipping netabootwrap images.  Install the aboot package if you need them."
-            fi
-        fi
         if which elftoaout >/dev/null ; then
             # sparc: sparc-utils
             SPARC_INITRD_OPT=""
