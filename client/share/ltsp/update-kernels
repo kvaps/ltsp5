@@ -302,18 +302,5 @@ for kernel in $ALL_KERNELS ; do
             fi
             $tip $kernel $BOOT/$initrd $BOOT/$nbi.tmp && mv $BOOT/$nbi.tmp $BOOT/$nbi
         fi
-        case $SUB_ARCH in
-            # arm
-            arm*)
-                if [ -f "$BOOT/$initrd" ]; then
-                    cat $kernel > $BOOT/$nbi.tmp
-                    cat $BOOT/$initrd >> $BOOT/$nbi.tmp
-                    mv $BOOT/$nbi.tmp $BOOT/$nbi
-                else
-                    # copy kernel directly to nbi image
-                    cp $kernel $BOOT/$nbi
-                fi
-                ;;
-        esac
     fi
 done
