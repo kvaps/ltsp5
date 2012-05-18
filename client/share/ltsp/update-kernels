@@ -42,7 +42,6 @@ msg() {
 require_root
 
 BOOT=${BOOT:-"/boot"}
-SUB_ARCH=${SUB_ARCH:-"$(uname -m)"}
 VENDOR=${VENDOR:-"$(detect_vendor)"}
 CHROOT_NAME=${CHROOT_NAME:-"$(detect_arch)"}
 
@@ -195,14 +194,8 @@ for kernel in $ALL_KERNELS ; do
                     version=${basename##vmlinux-}
                 ;;
             esac
-            case $SUB_ARCH in
-                sparc*) 
-                    realnbi="nbi.img-$version-$SUB_ARCH"
-                ;;
-                *)
-                    realnbi="nbi.img-$version"
-                ;;
-            esac
+
+            realnbi="nbi.img-$version"
             if [ -f "$BOOT/$realnbi" ]; then
                 ln -sf $realnbi $BOOT/$nbi
             fi
@@ -251,31 +244,6 @@ for kernel in $ALL_KERNELS ; do
             mknbi-linux $MKNBI_LINUX_OPTS --append="$MKNBI_LINUX_APPEND" \
                 -o $BOOT/legacy-"$nbi" $kernel $MKNBI_LINUX_INITRD_OPT
 
-        fi
-        if which elftoaout >/dev/null ; then
-            # sparc: sparc-utils
-            SPARC_INITRD_OPT=""
-            piggyback_cmd=""
-            case $SUB_ARCH in
-                sparc64) piggyback_cmd=piggyback64 ;;
-                sparc32) piggyback_cmd=piggyback32 ;;
-            esac
-            sysmap=$BOOT/System.map-$version
-            nbi=$nbi-$SUB_ARCH
-
-            # TODO: proper tempfile handline
-            gzip -cd $kernel > $BOOT/$nbi.tmp
-            elftoaout -o $BOOT/$nbi $BOOT/$nbi.tmp
-            rm $BOOT/$nbi.tmp
-            if [ -f "$BOOT/$initrd" ]; then
-                SPARC_INITRD_OPT="$BOOT/$initrd"
-            fi
-            $piggyback_cmd $BOOT/$nbi $sysmap $SPARC_INITRD_OPT
-        else
-            if [ -z "$sparc_piggyback_seen" ]; then
-                sparc_piggyback_seen=true
-                msg "Skipping sparc piggyback images. Install the sparc-utils package if you need them."
-            fi
         fi
     fi
 done
