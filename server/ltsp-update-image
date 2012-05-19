@@ -56,8 +56,11 @@ EOF
 }
 
 trap_cleanup() {
-    # Don't stop on errors within this function
+    # Don't stop on errors within this function.
+    # local - means "restore flags on function exit".
+    local -
     set +e
+
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     umount_marked
@@ -66,7 +69,6 @@ trap_cleanup() {
     rmdir "$cu_rofs"
     rmdir "$cu_base"
     unlock_package_management
-    set -e
 }
 
 # Create a temporary copy of the chroot and run ltsp-cleanup in it.

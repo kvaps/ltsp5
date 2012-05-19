@@ -1,3 +1,6 @@
+# Server scripts should be ready for and even rely on "-e" being set.
+set -e
+
 # Common functions shared by LTSP scripts
 if [ -f /usr/share/ltsp/ltsp-server-common-functions ]; then
     . /usr/share/ltsp/ltsp-server-common-functions

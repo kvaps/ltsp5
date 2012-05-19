@@ -157,9 +157,6 @@ umount_marked() {
     unset MARKED_MOUNTS
 }
 
-# By default, we want all our scripts to stop on errors
-# but it's too fragile, so disable for now.
-#set -e
 debug "Started"
 
 # Source common settings, e.g. BASE

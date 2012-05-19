@@ -49,11 +49,9 @@ export COMMAND
 # other
 XINITRCFILES=$(run_parts_list $XINITRCDIR)
 if [ -n "$XINITRCFILES" ]; then
-  set +e
-  for XINITRCFILE in $XINITRCFILES; do
-    . $XINITRCFILE
-  done
-  set -e
+    for XINITRCFILE in $XINITRCFILES; do
+        . $XINITRCFILE
+    done
 fi
 
 if boolean_is_true "$XINITRC_DAEMON"; then
@@ -84,7 +82,6 @@ if boolean_is_true "$XINITRC_DAEMON"; then
         fi
     done
     [ -n "$XINITRC_COMMAND_ON_EXIT" ] && eval ${XINITRC_COMMAND_ON_EXIT}
-    set -e
 else
     eval "exec $COMMAND"
 fi
