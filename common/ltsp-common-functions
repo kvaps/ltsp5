@@ -158,7 +158,8 @@ umount_marked() {
 }
 
 # By default, we want all our scripts to stop on errors
-set -e
+# but it's too fragile, so disable for now.
+#set -e
 debug "Started"
 
 # Source common settings, e.g. BASE
