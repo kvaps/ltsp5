@@ -93,7 +93,7 @@ update_kernels() {
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
     # Ensure that the kernel is readable (LP: #759115)
-    chmod +r "$tftpboot/$name/vmlinuz-"*
+    chmod +r "$tftpboot/$name/vmlinu{z,x}-"*
 
     # OFW on Mac is lame, they cannot tftp from directories
     if [ -e "$tftpboot/$name/yaboot" ]; then
@@ -122,13 +122,16 @@ cleanup_kernels() {
     chroot=$3
 
     # Loop through every vmlinuz-* file
-    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*'); do
+    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*' -o name 'vmlinux-*'); do
         kernel=${kernelpath##*/}
-        version=${kernel#vmlinuz-}
+        case $kernel in
+            vmlinuz-*) version=${kernel#vmlinuz-} ;;
+            vmlinux-*) version=${kernel#vmlinux-} ;;
+        esac
         if [ ! -d "$chroot/lib/modules/$version" ]; then
             echo "Removing $kernelpath"
             # Common
-            rm -f "$tftpboot/$name/vmlinuz-$version"
+            rm -f "$tftpboot/$name/$kernel"
             rm -f "$tftpboot/$name/config-$version"
             rm -f "$tftpboot/$name/System.map-$version"
             # Fedora
