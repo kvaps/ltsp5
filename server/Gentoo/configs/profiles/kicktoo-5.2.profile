@@ -130,4 +130,7 @@ post_install_extra_packages() {
 	
 	# required for openrc's bootmisc
 	mkdir -p ${chroot_dir}/var/lib/misc
+	
+	# required in 5.2 clients
+	touch ${chroot_dir}/etc/ltsp_chroot
 }
