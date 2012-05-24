@@ -230,7 +230,7 @@ generate_image() {
 
         test -f /etc/ltsp/nbd-exclude.conf && EXCLUDE_FILE="/etc/ltsp/nbd-exclude.conf"
         test -x /usr/bin/nice && nice=nice || unset nice
-        test -x /usr/bin/ionice && ionice=ionice || unset ionice
+        test -x /usr/bin/ionice && /usr/bin/ionice -c3 true 2>/dev/null && ionice=ionice || unset ionice
         if ! $nice $ionice mksquashfs "$cu_chroot" "$imgdir/$name.img.tmp" \
             -no-recovery -noappend -wildcards ${EXCLUDE_FILE:+-ef "$EXCLUDE_FILE"} \
             ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports}
