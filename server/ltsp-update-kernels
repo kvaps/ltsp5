@@ -122,7 +122,7 @@ cleanup_kernels() {
     chroot=$3
 
     # Loop through every vmlinuz-* file
-    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*' -o name 'vmlinux-*'); do
+    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*' -o -name 'vmlinux-*'); do
         kernel=${kernelpath##*/}
         case $kernel in
             vmlinuz-*) version=${kernel#vmlinuz-} ;;
