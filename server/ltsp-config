@@ -166,7 +166,7 @@ config_lts_conf() {
     done
 }
 
-config_nbd() {
+config_nbd_server() {
     local image name conf
     image="$1"
 
