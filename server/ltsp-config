@@ -168,11 +168,6 @@ config_lts_conf() {
 
 config_nbd_server() {
     local image name conf
-    image="$1"
-
-    test -f "$image" || return 1
-    name=${image##*/}
-    name=${name%.*}
     mkdir -p "/etc/nbd-server/conf.d"
 
     if [ ! -f "/etc/nbd-server/config" ]; then
@@ -209,6 +204,8 @@ EOF
     fi
 
     for image in $(find "$BASE/images/" -type f -name '*.img'); do
+        name=${image##*/}
+        name=${name%.*}
          # Configuration file upgrade, remove it e.g. in 2015.
         if [ -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
             if [ "$(sed -n '1s/\[ltsp_\(.*\)\]/\1/p' "/etc/nbd-server/conf.d/ltsp_$name.conf")" = "$name" ]; then
