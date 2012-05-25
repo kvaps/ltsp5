@@ -1,0 +1,271 @@
+#!/bin/sh
+
+#  Copyright (c) 2012, Alkis Georgopoulos <alkisg@gmail.com>
+#  Copyright (c) 2012, Vagrant Cascadian <vagrant@freegeek.org>
+
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, you can find it on the World Wide
+#  Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
+#  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+
+usage() {
+    cat <<EOF
+Usage: $0 TOOL [OPTION]
+Configures certain parts of an LTSP server.
+
+Tools and options:
+  dnsmasq                Configure dnsmasq.
+    --no-proxy-dhcp      Don't enable proxyDHCP mode for detected subnets.
+  isc-dhcp-server        Configure isc-dhcp-server.
+  lts.conf               Create a sample lts.conf.
+  nbd-server             Configure nbd-server.
+
+Generic options for most tools:
+  -h, --help             This message.
+  -l, --language=        Preferred language for configuration files.
+  -o, --overwrite        Overwrite existing configuration files.
+EOF
+}
+
+# Provide /usr/sbin/service on systems that don't have it.
+service() {
+    if [ -x /usr/sbin/invoke-rc.d ]; then
+        invoke-rc.d "$@"
+    else
+        /usr/sbin/service "$@"
+    fi
+}
+
+# Replace a line matching a regex in a file with other line(s),
+# or append them at the end of file if no match is found.
+# Both $match and $replace must be valid sed expressions.
+replace_line() {
+    local match replace file
+    match=$1
+    replace=$2
+    file=$3
+
+    test -f "$file" || die "File not found: $file"
+
+    if grep -q "$match" "$file"; then
+        sed "s/$match/$replace/" -i "$file"
+    else
+        echo -e "$replace" >> "$file"
+    fi
+}
+
+# Replace the "i386" in the example files with the default chroot name.
+replace_arch() {
+    local conf default
+    conf=$1
+
+    if [ -f "$conf" ]; then
+        default=$(default_chroot)
+        if [ "$default" != "i386" ]; then
+            sed "s/i386/$default/" -i "$conf"
+        fi
+    else
+        warn "File $conf not found."
+    fi
+}
+
+# Copy a file from /usr/share/doc/ltsp-server/examples/$1 to $2,
+# uncompressing it if necessary.
+install_example() {
+    local src dst dstdir language
+    src=$1
+    dst=$2
+
+    if [ "$overwrite" != "true" ] && [ -f "$dst" ]; then
+        die "File $dst exists and --overwrite was not specified, aborting"
+    fi
+    dstdir=${dst%/*}
+    if [ ! -d "$dstdir" ]; then
+        die "Directory $dstdir doesn't exist, maybe the tool you want to configure isn't installed?"
+    fi
+
+    # Prefer localized examples, if they exist.
+    LANGUAGE=${LANGUAGE:-$LANG}
+    for language in "$LANGUAGE" "${LANGUAGE%%.*}" "${LANGUAGE%%_*}" ""; do
+        language=${language+:"-$language"}
+        if [ -f "/usr/share/doc/ltsp-server/examples/$src$language" ]; then
+            cp "/usr/share/doc/ltsp-server/examples/$src$language" "$dst"
+        elif [ -f "/usr/share/doc/ltsp-server/examples/$src$language.gz" ]; then
+            zcat "/usr/share/doc/ltsp-server/examples/$src$language.gz" > "$dst"
+        else
+            continue
+        fi
+        replace_arch "$dst"
+        echo "Created $dst"
+        return 0
+    done
+    die "Example file $src not found."
+}
+
+proxy_subnets() {
+    local line subnet separator
+
+    ip route show | while read line; do
+        subnet=${line%%/*}
+        case "$subnet" in
+            127.0.0.1|169.254.0.0|192.168.67.0|*[!0-9.]*)
+                # do nothing on these networks
+                ;;
+            *)
+                echo "${separator}dhcp-range=$subnet,proxy"
+                # Insert a separator only after the first line
+                separator="\n"
+                ;;
+        esac
+    done
+}
+
+config_dnsmasq() {
+    local conf
+
+    conf="/etc/dnsmasq.d/ltsp-server-dnsmasq.conf"
+    install_example "ltsp-server-dnsmasq.conf" "$conf"
+
+    if [ "$NO_PROXY_DHCP" != "true" ]; then
+        proxy_lines=$(proxy_subnets)
+        if [ -n "$proxy_lines" ]; then
+            replace_line "^#dhcp-range=.*,proxy" "$proxy_lines" "$conf"
+        fi
+    fi
+    service dnsmasq restart
+}
+
+config_isc_dhcp_server() {
+    local conf
+
+    conf="/etc/ltsp/dhcpd.conf"
+    install_example "dhcpd.conf" "$conf"
+    service isc-dhcp-server restart
+}
+
+config_lts_conf() {
+    local default tftpdir conf
+
+    default=$(default_chroot)
+    for tftpdir in "$TFTP_DIRS"; do
+        conf="$tftpdir/$TFTP_BOOT_DIR/lts.conf"
+        if [ -d "${conf%/*}" ]; then
+            install_example "lts.conf" "$conf"
+        fi
+    done
+}
+
+config_nbd() {
+    local image name conf
+    image="$1"
+
+    test -f "$image" || return 1
+    name=${image##*/}
+    name=${name%.*}
+    mkdir -p "/etc/nbd-server/conf.d"
+
+    if [ ! -f "/etc/nbd-server/config" ]; then
+        # If user/group nbd exist, use them
+        nbd_user=$(getent passwd nbd | cut -d : -f 1)
+        nbd_user=${nbd_user:-nobody}
+        nbd_group=$(getent group nbd | cut -d : -f 1)
+        nbd_group=${nbd_group:-nogroup}
+        cat > "/etc/nbd-server/config" <<EOF
+[generic]
+user = $nbd_user
+group = $nbd_group
+includedir = /etc/nbd-server/conf.d
+EOF
+        echo "Created /etc/nbd-server/config"
+        # We can assume that nbd-server wasn't running without a config file
+        nbd_action=start
+    fi
+
+    if [ ! -f "/etc/nbd-server/conf.d/swap.conf" ]; then
+        cat > "/etc/nbd-server/conf.d/swap.conf" <<EOF
+[swap]
+exportname = /tmp/nbd-swap/%s
+prerun = nbdswapd %s
+postrun = rm -f %s
+EOF
+        echo "Created /etc/nbd-server/conf.d/swap.conf"
+        nbd_action=${nbd_action:-restart}
+    fi
+
+    # Make sure hosts.allow has the keepalive option for nbdswapd
+    if ! grep -qsw nbdswapd /etc/hosts.allow; then
+        echo 'nbdswapd: ALL: keepalive' >> /etc/hosts.allow
+    fi
+
+    for image in $(find "$BASE/images/" -type f -name '*.img'); do
+         # Configuration file upgrade, remove it e.g. in 2015.
+        if [ -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
+            if [ "$(sed -n '1s/\[ltsp_\(.*\)\]/\1/p' "/etc/nbd-server/conf.d/ltsp_$name.conf")" = "$name" ]; then
+                echo "Removing old configuration file /etc/nbd-server/conf.d/ltsp_$name.conf in order to upgrade it"
+                rm -f "/etc/nbd-server/conf.d/ltsp_$name.conf"
+            fi
+        fi
+
+        if [ ! -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
+            cat >"/etc/nbd-server/conf.d/ltsp_$name.conf" <<EOF
+[$BASE/$name]
+exportname = $image
+readonly = true
+EOF
+            echo "Created /etc/nbd-server/conf.d/ltsp_$name.conf"
+            nbd_action=${nbd_action:-restart}
+        fi
+    done
+
+    if [ "$nbd_action" = start ]; then
+        if ! service nbd-server start; then
+            warn "Failed to start nbd-server."
+        fi
+    elif [ "$restart_nbd" = restart ]; then
+        warn \
+    "For nbd-server to re-read its configuration, you need to manually run:
+    service nbd-server restart
+THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
+    fi
+}
+
+# This also sources vendor functions and .conf file settings
+. /usr/share/ltsp/ltsp-server-functions
+
+if ! args=$(getopt -n "$0" -l no-proxy-dhcp -- "$@")
+then
+    exit 1
+fi
+eval "set -- $args"
+while true ; do
+    case "$1" in
+        --no-proxy-dhcp) NO_PROXY_DHCP=true ;;
+        -h|--help) usage; exit 0 ;;
+        -l|--language) shift; LANGUAGE=$1 ;;
+        -o|--overwrite) OVERWRITE=true ;;
+        --) shift ; break ;;
+        *) die "$0: Internal error!" ;;
+    esac
+    shift
+done
+
+case "$1" in
+    dnsmasq|isc-dhcp-server|lts.conf|nbd-server)
+        config_function=$(echo "config_$1" | tr -c "[a-z]" "_")
+        ;;
+    *) die "$(usage)" ;;
+esac
+require_root
+
+$config_function

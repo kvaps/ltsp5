@@ -1,3 +1,38 @@
+list_chroots() {
+    local chroot_types name
+    chroot_types=",${1:-"nfs,nbd"},"
+
+    {
+        if [ "${chroot_types#*,nfs,}" != "$chroot_types" ]; then
+            find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
+                -printf "%f\n" |
+                while IFS= read -r name; do
+                    if [ -x "$BASE/$name/bin/true" ]; then
+                        echo "$name"
+                    fi
+                done
+        fi
+        if [ "${chroot_types#*,nbd,}" != "$chroot_types" ] &&
+            [ -d "$BASE/images/" ]
+        then
+            find "$BASE/images/" -mindepth 1 -maxdepth 1 -type f \
+                -name '*.img' -printf "%f\n" | sed 's/.img$//'
+        fi
+    } | sort -u
+}
+
+default_chroot() {
+    local arch first
+    arch=$(detect_arch)
+
+    if [ -x "$BASE/$arch/bin/true" ] || [ -f "$BASE/images/$arch.img" ]; then
+        echo "$arch"
+    else
+        first=$(list_chroots | head -n 1)
+        echo "${first:-$arch}"
+    fi
+}
+
 # Server scripts should be ready for and even rely on "-e" being set.
 set -e
 
@@ -6,7 +41,14 @@ if [ -f /usr/share/ltsp/ltsp-server-common-functions ]; then
     . /usr/share/ltsp/ltsp-server-common-functions
 fi
 
-# Sourcing distro specific overrides.
+# Some variables are needed by many server scripts, assign them default values.
+BASE=${BASE:-"/opt/ltsp"}
+# Remove trailing /, if present
+BASE=${BASE%/}
+TFTP_BOOT_DIR=${TFTP_BOOT_DIR:-"ltsp"}
+TFTP_DIRS=${TFTP_DIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
+
+# Source distro specific overrides.
 if [ -f /usr/share/ltsp/ltsp-server-vendor-functions ]; then
     . /usr/share/ltsp/ltsp-server-vendor-functions
 fi
