@@ -243,7 +243,7 @@ THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -l no-proxy-dhcp -- "$@")
+if ! args=$(getopt -n "$0" -o "hlo" -l help,language,overwrite,no-proxy-dhcp -- "$@")
 then
     exit 1
 fi
