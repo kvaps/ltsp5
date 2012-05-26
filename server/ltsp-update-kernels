@@ -93,7 +93,9 @@ update_kernels() {
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
     # Ensure that the kernel is readable (LP: #759115)
-    chmod +r "$tftpboot/$name/vmlinu{z,x}-"* || true
+    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*' -o -name 'vmlinux-*'); do
+    	chmod +r "$kernelpath"
+    done
 
     # OFW on Mac is lame, they cannot tftp from directories
     if [ -e "$tftpboot/$name/yaboot" ]; then
