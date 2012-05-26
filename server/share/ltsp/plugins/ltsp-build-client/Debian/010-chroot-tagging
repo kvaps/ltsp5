@@ -5,11 +5,13 @@ case "$MODE" in
         fi
         ;;
     finalization)
-        client_version=$(dpkg --root=$ROOT -l ltsp-client-core | awk '/^ii/{print $3}')
-        # Remove ltsp_chroot tag if ltsp-client-core version is recent enough,
-        # to allow for possibility of backports.
-        if [ -f $ROOT/etc/ltsp_chroot ] && dpkg --compare-versions "$client_version" ge "5.3.7" ; then
-            rm $ROOT/etc/ltsp_chroot
+        if [ -f $ROOT/etc/ltsp_chroot ]; then
+            client_version=$(dpkg --root=$ROOT -l ltsp-client-core | awk '/^ii/{print $3}')
+            if dpkg --compare-versions "$client_version" ge "5.3.7" ; then
+                # Remove ltsp_chroot tag if ltsp-client-core version is recent enough,
+                # to allow for possibility of backports.
+                rm $ROOT/etc/ltsp_chroot
+            fi
         fi
         ;;
 esac
