@@ -5,7 +5,7 @@ case "$MODE" in
         ;;
     before-install)
         SECURITY_MIRROR=${SECURITY_MIRROR:-"http://security.ubuntu.com/ubuntu"}
-        UPDATES_MIRROR=${UPDATES_MIRROR:-"http://archive.ubuntu.com/ubuntu"}
+        UPDATES_MIRROR=${UPDATES_MIRROR:-"$MIRROR"}
         ;;
     configure)
         if [ -n "$option_security_mirror_value" ]; then
