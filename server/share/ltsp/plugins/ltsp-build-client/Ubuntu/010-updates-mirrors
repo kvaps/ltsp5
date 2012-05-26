@@ -16,7 +16,7 @@ case "$MODE" in
         fi
         ;;
     after-install)
-        add_mirrors "$SECURITY_MIRROR $DIST-security $COMPONENTS"
         add_mirrors "$UPDATES_MIRROR $DIST-updates $COMPONENTS"
+        add_mirrors "$SECURITY_MIRROR $DIST-security $COMPONENTS"
         ;;
 esac
