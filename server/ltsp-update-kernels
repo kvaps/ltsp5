@@ -69,7 +69,10 @@ update_kernels() {
     # the LTSP server (no need to transfer the kernels separately).
     # Finally, it also allows for btrfs or ext loopback images.
     unset chroot
-    if [ -f "$BASE/images/$name.img" ]; then
+    if [ -x "$BASE/$name/bin/true" ]; then
+        chroot="$BASE/$name"
+    fi
+    if [ -z "$chroot" ] && [ -f "$BASE/images/$name.img" ]; then
         if [ -z "$mnt" ]; then
             mnt=$(mktemp -d)
             trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
@@ -79,9 +82,6 @@ update_kernels() {
         if mark_mount -o loop,ro "$BASE/images/$name.img" "$mnt"; then
             chroot="$mnt"
         fi
-    fi
-    if [ -z "$chroot" ] && [ -x "$BASE/$name/bin/true" ]; then
-        chroot="$BASE/$name"
     fi
     if [ -z "$chroot" ]; then
         echo "Skipping invalid chroot: $name"
