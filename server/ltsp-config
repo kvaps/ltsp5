@@ -167,8 +167,7 @@ config_lts_conf() {
 }
 
 config_nbd_server() {
-    local image name conf
-    mkdir -p "/etc/nbd-server/conf.d"
+    local restart_nbd image name
 
     if [ ! -f "/etc/nbd-server/config" ]; then
         # If user/group nbd exist, use them
@@ -183,10 +182,10 @@ group = $nbd_group
 includedir = /etc/nbd-server/conf.d
 EOF
         echo "Created /etc/nbd-server/config"
-        # We can assume that nbd-server wasn't running without a config file
-        nbd_action=start
+        restart_nbd=true
     fi
 
+    mkdir -p "/etc/nbd-server/conf.d"
     if [ ! -f "/etc/nbd-server/conf.d/swap.conf" ]; then
         cat > "/etc/nbd-server/conf.d/swap.conf" <<EOF
 [swap]
@@ -195,12 +194,7 @@ prerun = nbdswapd %s
 postrun = rm -f %s
 EOF
         echo "Created /etc/nbd-server/conf.d/swap.conf"
-        nbd_action=${nbd_action:-restart}
-    fi
-
-    # Make sure hosts.allow has the keepalive option for nbdswapd
-    if ! grep -qsw nbdswapd /etc/hosts.allow; then
-        echo 'nbdswapd: ALL: keepalive' >> /etc/hosts.allow
+        restart_nbd=true
     fi
 
     for image in $(find "$BASE/images/" -type f -name '*.img'); do
@@ -221,19 +215,19 @@ exportname = $image
 readonly = true
 EOF
             echo "Created /etc/nbd-server/conf.d/ltsp_$name.conf"
-            nbd_action=${nbd_action:-restart}
+            restart_nbd=true
         fi
     done
 
-    if [ "$nbd_action" = start ]; then
-        if ! service nbd-server start; then
-            warn "Failed to start nbd-server."
-        fi
-    elif [ "$restart_nbd" = restart ]; then
-        warn \
-    "For nbd-server to re-read its configuration, you need to manually run:
+    if [ "$restart_nbd" = true ]; then
+        # If nbd-server is already running, warn the user, else start it.
+        if pgrep nbd-server >/dev/null; then
+            warn "For nbd-server to re-read its configuration, you need to manually run:
     service nbd-server restart
 THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
+        elif ! service nbd-server start; then
+            warn "Failed to start nbd-server."
+        fi
     fi
 }
 
