@@ -99,7 +99,8 @@ if [ -n "$UPDATE" ]; then
         CHROOTS=$(find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images)
     fi
     for chroot in $CHROOTS; do
-        test -d "$chroot/etc/ssh" || continue
+        test -x "$chroot/bin/true" || continue
+        mkdir -p "$chroot/etc/ssh"
         # Do the work once; next times, use cp
         if [ -z "$firstfile" ]; then
             firstfile="$chroot/etc/ssh/ssh_known_hosts"
