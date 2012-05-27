@@ -36,10 +36,6 @@ case "$MODE" in
     ;;
     finalization)
         if [ -n "$FS_IMAGE_TYPE" ]; then
-            # call ltsp-update-image to update the nbd-server connfiguration
-            # and set pxelinux and other boot parameters.
-            ltsp-update-image --skip-image
-
             # add $ROOT to list of files to be unmounted.  done in finalization
             # phase so it is the last to be unmounted.
             CHROOT_MOUNTED="$CHROOT_MOUNTED $ROOT"
@@ -50,6 +46,9 @@ case "$MODE" in
             if [ -f "$FS_IMAGE_FILE".new ]; then
                 mv "$FS_IMAGE_FILE".new "$FS_IMAGE_FILE"
             fi
+
+            # Call ltsp-config to update the nbd-server configuration.
+            ltsp-config nbd-server
         fi
     ;;
 esac
