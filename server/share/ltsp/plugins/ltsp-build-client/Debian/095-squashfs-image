@@ -12,10 +12,6 @@ case "$MODE" in
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
             DEBIAN_OLD_FRONTEND=$DEBIAN_FRONTEND
 
-            if [ -n "$CHROOT" ]; then
-                UPDATE_IMAGE_OPTIONS="-a ${CHROOT}"
-            fi
-
             DEBIAN_FRONTEND=noninteractive
             export DEBIAN_FRONTEND
 
