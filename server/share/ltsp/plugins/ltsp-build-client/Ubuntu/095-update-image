@@ -12,6 +12,10 @@ case "$MODE" in
         if [ -n "$BUILD_IMAGE" ]; then
             DEBIAN_OLD_FRONTEND=$DEBIAN_FRONTEND
 
+            if [ -n "$CHROOT" ]; then
+                UPDATE_IMAGE_OPTIONS="${CHROOT}"
+            fi
+
             DEBIAN_FRONTEND=noninteractive
             export DEBIAN_FRONTEND
 
