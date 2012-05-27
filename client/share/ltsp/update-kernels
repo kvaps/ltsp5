@@ -30,6 +30,14 @@
 # access to the NFS mount point. (much of this code was originally in
 # server/ltsp-update-kernels). --vagrant 20060801
 
+case "$0" in
+    /etc/kernel/post*.d*)
+        # Relaunch update-kernels with its correct basename so that
+        # ltsp-client-functions includes /etc/ltsp/update-kernels.conf.
+        QUIET=true exec /usr/share/ltsp/update-kernels "$@"
+        ;;
+esac
+
 msg() {
     if [ "$QUIET" != "true" ]; then
        echo $@
@@ -44,10 +52,6 @@ require_root
 BOOT=${BOOT:-"/boot"}
 VENDOR=${VENDOR:-"$(detect_vendor)"}
 CHROOT_NAME=${CHROOT_NAME:-"$(detect_arch)"}
-
-case "$0" in
-    /etc/kernel/post*.d*) QUIET=true ;;
-esac
 
 # TODO: when a pxemenus package is implemented, distros should replace the
 # following code with an /etc/ltsp/update-kernels.conf (or similar) conffile
