@@ -25,13 +25,11 @@ case "$MODE" in
             DEBIAN_FRONTEND=noninteractive
             export DEBIAN_FRONTEND
 
-            /usr/sbin/ltsp-update-image ${UPDATE_IMAGE_OPTIONS}
+            /usr/sbin/ltsp-update-image --config-nbd ${UPDATE_IMAGE_OPTIONS}
 
             DEBIAN_FRONTEND=$DEBIAN_OLD_FRONTEND
             export DEBIAN_FRONTEND
 
-            # Configure nbd-server
-            ltsp-config nbd-server
         fi
         ;;
 esac
