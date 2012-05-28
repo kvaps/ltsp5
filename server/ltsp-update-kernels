@@ -61,18 +61,17 @@ update_kernels() {
     tftpboot="$tftpdir/$TFTP_BOOT_DIR"
     tftpboot=${tftpboot%/}
 
-    # Loop-mount NBD images in order to copy their kernels.
-    # This ensures that the TFTP kernels are the same versions as in the
-    # NBD exported image (e.g. user updated chroot but hasn't ran
-    # ltsp-update-image yet).
-    # It also makes it easier to transfer NBD images from other sources to
-    # the LTSP server (no need to transfer the kernels separately).
-    # Finally, it also allows for btrfs or ext loopback images.
+    # Loop-mounting NBD images in order to copy their kernels is supported
+    # in order to allow for btrfs or ext loopback images, or images transferred
+    # from other sources to the LTSP server.
+    # But if both the chroot and the NBD image exist, the chroot is preferred,
+    # to make updating BOOTPROMPT_OPTS in update-kernels.conf easier.
+    # A PREFER_NBD_IMAGE environment variable is supported though, to make it
+    # possible for `ltsp-update-image --revert` to use the NBD kernels.
     unset chroot
-    if [ -x "$BASE/$name/bin/true" ]; then
+    if [ -x "$BASE/$name/bin/true" ] && [ "$PREFER_NBD_IMAGE" != true ]; then
         chroot="$BASE/$name"
-    fi
-    if [ -z "$chroot" ] && [ -f "$BASE/images/$name.img" ]; then
+    elif [ -f "$BASE/images/$name.img" ]; then
         if [ -z "$mnt" ]; then
             mnt=$(mktemp -d)
             trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM

@@ -180,7 +180,7 @@ generate_image() {
         mv "$imgdir/$name.img.tmp" "$imgdir/$name.img"
     fi
 
-    ltsp-update-kernels ${BASE:+-b "$BASE"} \
+    PREFER_NBD_IMAGE="$REVERT" ltsp-update-kernels ${BASE:+-b "$BASE"} \
         ${TFTP_BOOT_DIR:+-d "$TFTP_BOOT_DIR"} \
         ${TFTP_DIRS:+-t "$TFTP_DIRS"} "$name"
 
