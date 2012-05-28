@@ -98,7 +98,9 @@ install_example() {
     # Prefer localized examples, if they exist.
     LANGUAGE=${LANGUAGE:-$LANG}
     for language in "$LANGUAGE" "${LANGUAGE%%.*}" "${LANGUAGE%%_*}" ""; do
-        language=${language+:"-$language"}
+        if [ -n "$language" ]; then
+            language=${language+:"-$language"}
+        fi
         if [ -f "/usr/share/doc/ltsp-server/examples/$src$language" ]; then
             cp "/usr/share/doc/ltsp-server/examples/$src$language" "$dst"
         elif [ -f "/usr/share/doc/ltsp-server/examples/$src$language.gz" ]; then
