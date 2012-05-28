@@ -42,7 +42,7 @@ Options:
   -d, --tftp-boot-dir= The LTSP subdirectory within the TFTP base directory.
                        Defaults to "ltsp".
   -e, --exclude=       List of dirs/files to exclude from the image.
-                       This is in addition to /etc/ltsp/nbd-exclude.conf.
+                       This is in addition to /etc/ltsp/ltsp-update-image.excludes.
   -f, --config-nbd     Generate appropriate nbd-server configuration files.
                        It's automatically set if NFS isn't used or if other LTSP
                        generated nbd-server configuration files already exist.
@@ -164,7 +164,7 @@ generate_image() {
             run_cleanup "$chroot" "$name"
         fi
 
-        test -f /etc/ltsp/nbd-exclude.conf && EXCLUDE_FILE="/etc/ltsp/nbd-exclude.conf"
+        test -f /etc/ltsp/ltsp-update-image.excludes && EXCLUDE_FILE="/etc/ltsp/ltsp-update-image.excludes"
         test -x /usr/bin/nice && nice=nice || unset nice
         test -x /usr/bin/ionice && /usr/bin/ionice -c3 true 2>/dev/null && ionice=ionice || unset ionice
         if ! $nice $ionice mksquashfs "$cu_chroot" "$imgdir/$name.img.tmp" \
