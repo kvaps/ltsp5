@@ -38,7 +38,7 @@
 
 usage() {
     cat <<EOF
-$0 [OPTION] [host1] [host2] [host3] ...
+$0 [OPTION] [host...]
 
 If any hosts are specified, their SSH keys are exported in a file,
 by default /etc/ltsp/ssh_known_hosts.auto.

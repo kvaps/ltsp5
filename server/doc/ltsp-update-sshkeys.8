@@ -1,25 +1,50 @@
-.TH "ltsp-update-sshkeys" "8" 
-.SH "NAME" 
-ltsp-update-sshkeys \(em Updates the LTSP server's ssh host keys on the client 
-.SH "SYNOPSIS" 
-.PP 
-\fBltsp-update-sshkeys\fR 
-.SH "DESCRIPTION" 
-.PP 
-\fBltsp-update-sshkeys\fR updates the current ltsp servers 
-sshkeys in the client chroot.  This is required for example if the ltsp server changes 
-ip address. 
-.SH "SEE ALSO" 
-.PP 
-\fBltsp-build-client\fP\fB(8)\fP, 
-\fBltsp-update-kernels\fP\fB(8)\fP. 
-.SH "AVAILABILITY" 
-.PP 
-\fBltsp-update-sshkeys\fR is part of \fBltsp\fP package 
-and the latest versions are available in source form from 
-\fIhttps://launchpad.net/products/ltsp (link to URL https://launchpad.net/products/ltsp) \fR. 
-.SH "MAN PAGE AUTHOR" 
-.PP 
-Peter Savage \- silentk \- cbx33 
-debug@silentkeystroke.co.uk 
-.\" created by instant / docbook-to-man, Fri 21 Apr 2006, 06:15 
+.TH "ltsp\-update\-sshkeys" "8" "2012-05-28"
+.SH "NAME"
+ltsp\-update\-sshkeys \- Update LTSP chroots to trust the server ssh keys
+
+.SH "SYNOPSIS"
+.PP
+\fBltsp\-update\-sshkeys\fR [OPTION] [host...]
+
+.SH "DESCRIPTION"
+.PP
+If any hosts are specified, their SSH keys are exported in a file,
+by default /etc/ltsp/ssh_known_hosts.auto.
+Otherwise, all LTSP chroots are updated to trust the SSH keys of this server
+along with any additional keys in /etc/ltsp/ssh_known_hosts.* files.
+
+.SH "OPTIONS"
+.PP
+
+.IP "\fB\-b\fP \fB\-\-base\fP" 13
+Base of ltsp chroot. Default is /opt/ltsp if unspecified.
+
+.IP "\fB\-e\fP \fB\-\-export\fP"
+File name to export the hosts SSH keys to (\- for stdout).
+Default is /etc/ltsp/ssh_known_hosts.auto if unspecified.
+
+.IP "\fB\-h\fP \fB\-\-help\fP"
+The application help page.
+
+.IP "\fB\-p\fP \fB\-\-port\fP"
+SSH port for remote servers.
+
+.IP "\fB\-u\fP \fB\-\-update\fP"
+Update the chroot SSH keys even if hosts are specified.
+
+.SH "SEE ALSO"
+.PP
+\fBltsp\-build\-client\fP(8),
+\fBltsp\-update\-kernels\fP(8),
+\fBssh\-keyscan\fP(1),
+\fBsshd\fP(8).
+
+.SH "AVAILABILITY"
+.PP
+\fBltsp\-update\-sshkeys\fR is part of \fBltsp\fP package and the latest
+versions are available in source form from \fIhttps://launchpad.net/ltsp\fR.
+
+.SH "MAN PAGE AUTHOR"
+.PP
+Copyright 2012 Alkis Georgopoulos <alkisg@gmail.com>, distributed under
+the terms of the GNU General Public License version 2 or any later version.
