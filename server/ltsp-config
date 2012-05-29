@@ -161,7 +161,7 @@ config_lts_conf() {
 
     default=$(default_chroot)
     for tftpdir in $TFTP_DIRS ; do
-        conf="$tftpdir/$TFTP_BOOT_DIR/lts.conf"
+        conf="$tftpdir/$TFTP_BOOT_DIR/$default/lts.conf"
         if [ -d "${conf%/*}" ]; then
             install_example "lts.conf" "$conf"
         fi
