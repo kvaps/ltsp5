@@ -1,0 +1,5 @@
+# Copy the server SSH keys to /etc/ssh/ssh_known_hosts.
+{
+    sed 's/^/server /' /etc/ssh/ssh_host_*_key.pub
+    find /etc/ltsp/ -type f -name "ssh_known_hosts.*" -exec cat {} + 2>/dev/null
+} > /etc/ssh/ssh_known_hosts
