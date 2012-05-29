@@ -1,0 +1,3 @@
+# Remove it if ltsp-client-core.postinst calls update-kernels in the future.
+
+test -d /boot/pxelinux.cfg || /usr/share/ltsp/update-kernels
