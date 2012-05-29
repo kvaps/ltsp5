@@ -13,9 +13,9 @@ for kernel in \
 do
     version=${kernel#/boot/vmlinuz-}
     if [ -f "/boot/initrd.img-$version" ] && [ -f "/boot/nbi.img-$version" ]; then
-        ln -sf "$kernel" /boot/vmlinuz
-        ln -sf "/boot/initrd.img-$version" /boot/initrd.img
-        ln -sf "/boot/nbi.img-$version" /boot/nbi.img
+        ln -sf "vmlinuz-$version" /boot/vmlinuz
+        ln -sf "initrd.img-$version" /boot/initrd.img
+        ln -sf "nbi.img-$version" /boot/nbi.img
         break
     fi
 done
