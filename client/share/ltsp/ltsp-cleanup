@@ -25,8 +25,8 @@ usage()
 Usage: $0 [OPTION]
 Prepares a disk for network publishing, by deleting logs, caches and by
 removing or regenerating sensitive data like user accounts and host keys.
-Note that /etc/ltsp/nbd-exclude.conf contains a long list of files and
-directories to be excluded from the published image; there's no need for
+Note that /etc/ltsp/ltsp-update-image.excludes contains a long list of files
+and directories to be excluded from the published image; there's no need for
 ltsp-cleanup to delete those as well.
 
 Options:
