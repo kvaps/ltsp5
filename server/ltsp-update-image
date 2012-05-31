@@ -71,9 +71,31 @@ trap_cleanup() {
     unlock_package_management
 }
 
+# Get a sorted list of all "real" mount points under $chroot,
+# with $chroot included, even if it's not a mount point.
+get_mounts() {
+    local chroot mounts type point excluded found_chroot
+    chroot=$1
+
+    excluded=",${EXCLUDED_MOUNTS:-/home},"
+    echo "$chroot"
+    while read type point rest; do
+        case "$excluded" in
+            ,$point,) continue ;;
+        esac
+        case "$type" in
+            gvfs*|none|proc|tmpfs|udev) continue ;;
+        esac
+        case "$point/" in
+            $chroot/|/dev/*|/proc/*|/run/*|/sys/*) continue ;;
+            ${chroot%/}/*) echo "$point" ;;
+        esac
+    done < /proc/mounts | sort -u
+}
+
 # Create a temporary copy of the chroot and run ltsp-cleanup in it.
 run_cleanup() {
-    local chroot name
+    local chroot name point
     chroot=$1
     name=$2
 
@@ -90,7 +112,11 @@ run_cleanup() {
     mkdir "$cu_cow"
     mkdir "$cu_chroot"
     trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
-    mark_mount --bind "$chroot" "$cu_rofs"
+    while IFS= read -r point; do
+        mark_mount --bind "$chroot${point%/}" "$cu_rofs${point%/}"
+    done <<EOF
+$(get_mounts "$chroot")
+EOF
     mark_mount -t tmpfs -o mode=0755 tmpfs "$cu_cow"
 
     # If this is the first time that run_cleanup() is called,
