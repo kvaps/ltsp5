@@ -87,7 +87,7 @@ install_example() {
     src=$1
     dst=$2
 
-    if [ "$overwrite" != "true" ] && [ -f "$dst" ]; then
+    if [ "$OVERWRITE" != "true" ] && [ -f "$dst" ]; then
         die "File $dst exists and --overwrite was not specified, aborting"
     fi
     dstdir=${dst%/*}
