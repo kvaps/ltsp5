@@ -21,10 +21,10 @@ esac
 . /usr/share/initramfs-tools/hook-functions
 
 # make sure all our modules are there
-force_load nbd
-force_load squashfs
-force_load overlayfs
-force_load aufs
+manual_add_modules nbd
+manual_add_modules squashfs
+manual_add_modules overlayfs
+manual_add_modules aufs
 auto_add_modules net
 
 # Copy across the binaries
