@@ -2,7 +2,7 @@ list_chroots() {
     local chroot_types name
     chroot_types=",${1:-"nfs,nbd"},"
 
-    {
+    if [ -d "$BASE" ]; then
         if [ "${chroot_types#*,nfs,}" != "$chroot_types" ]; then
             find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
                 -printf "%f\n" |
@@ -18,7 +18,7 @@ list_chroots() {
             find "$BASE/images/" -mindepth 1 -maxdepth 1 -type f \
                 -name '*.img' -printf "%f\n" | sed 's/.img$//'
         fi
-    } | sort -u
+    fi | sort -u
 }
 
 default_chroot() {
