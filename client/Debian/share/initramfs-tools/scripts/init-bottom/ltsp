@@ -49,7 +49,11 @@ fi
 
 # Copy networking configuration to the root file system
 mkdir -p "$rootmnt/var/cache/ltsp/"
-cp /tmp/net-*.conf "$rootmnt/var/cache/ltsp/"
+for netconf in /tmp/net-*.conf ; do
+    if [ -f "$netconf" ]; then
+        cp "$netconf" "$rootmnt/var/cache/ltsp/"
+    fi
+done
 
 if [ -n "$CALL_SCRIPTS" ]; then
     mount -o bind /proc "$rootmnt/proc"
