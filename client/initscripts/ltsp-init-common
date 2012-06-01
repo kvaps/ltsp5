@@ -30,7 +30,6 @@ start_sound() {
                 --high-priority \
                 --log-target=syslog \
                 -L $PULSE_DETECT \
-                -L "module-esound-protocol-tcp auth-anonymous=1" \
                 -L "module-native-protocol-tcp auth-anonymous=1" \
                 -L $PULSE_VOLUME_RESTORE \
                 -L module-rescue-streams \
