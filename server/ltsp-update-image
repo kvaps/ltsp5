@@ -181,9 +181,6 @@ generate_image() {
         fi
         echo "Reverted to $imgdir/$name.img.old, please reboot your clients."
     else
-        test -f "$chroot/usr/share/initramfs-tools/scripts/local-top/nbd" ||
-            die "Chroot $chroot does not appear to support NBD booting."
-
         cu_chroot=$chroot
         if [ "$CLEANUP" = true ]; then
             # run_cleanup sets cu_chroot=$cu_base/$name for mksquashfs
