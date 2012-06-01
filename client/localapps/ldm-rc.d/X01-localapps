@@ -201,7 +201,7 @@ EOF
         IFS=","
         for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
             mkdir -p "${extradir}"
-            sshfs -o "${follow_extra_symlinks}allow_other,ControlPath=${LDM_SOCKET}" "${LDM_SERVER}:${extradir}" "${extradir}"
+            sshfs -o "${follow_extra_symlinks}allow_other,nonempty,ControlPath=${LDM_SOCKET}" "${LDM_SERVER}:${extradir}" "${extradir}"
         done
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
