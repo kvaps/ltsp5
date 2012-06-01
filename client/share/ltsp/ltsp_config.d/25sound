@@ -5,10 +5,6 @@ if boolean_is_true "$LTSP_FATCLIENT"; then
 elif [ -z "$SOUND_DAEMON" ]; then
     if [ -x /usr/bin/pulseaudio ]; then
         set_lts_var SOUND_DAEMON pulse
-    elif [ -x /usr/bin/esd ]; then
-        set_lts_var SOUND_DAEMON esd
-    elif [ -x /usr/bin/nasd ]; then
-        set_lts_var SOUND_DAEMON nasd
     fi
     if [ -z "$SOUND" ] && [ -n "$SOUND_DAEMON" ]; then
         set_lts_var SOUND True
