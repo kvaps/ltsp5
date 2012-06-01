@@ -103,25 +103,17 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
         esac
     fi
 
-    if [ -n "$TIMEOUT" ]; then
-        TIMEOUT="timeout $TIMEOUT"
-    fi
-
-    if [ -n "$IPAPPEND" ]; then
-        IPAPPEND="ipappend $IPAPPEND"
-    fi
-
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
     cat > $PXECFG/default <<EOF
 default ${PXELINUX_DEFAULT:-"ltsp"}
-$TIMEOUT
+${TIMEOUT:+timeout $TIMEOUT}
 
 label ltsp
 kernel vmlinuz
 append ro initrd=initrd.img $BOOTPROMPT_OPTS
-$IPAPPEND
+ipappend ${IPAPPEND:-2}
 
 EOF
 
