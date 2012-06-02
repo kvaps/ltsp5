@@ -38,15 +38,6 @@ Generic options for most tools:
 EOF
 }
 
-# Provide /usr/sbin/service on systems that don't have it.
-service() {
-    if [ -x /usr/sbin/invoke-rc.d ]; then
-        invoke-rc.d "$@"
-    else
-        /usr/sbin/service "$@"
-    fi
-}
-
 # Replace a line matching a regex in a file with other line(s),
 # or append them at the end of file if no match is found.
 # Both $match and $replace must be valid sed expressions.
@@ -229,6 +220,13 @@ THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
             warn "Failed to start nbd-server."
         fi
     fi
+}
+
+# distro specific functions
+
+# Keeping this separate function to clearly show it can be distro specific. 
+service() {
+    /usr/sbin/service "$@"
 }
 
 # This also sources vendor functions and .conf file settings

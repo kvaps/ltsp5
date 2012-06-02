@@ -1,0 +1,7 @@
+# Debian-specific function overrides for ltsp-config
+
+service() {
+    if [ -x /usr/sbin/invoke-rc.d ]; then
+        invoke-rc.d "$@"
+    fi
+}

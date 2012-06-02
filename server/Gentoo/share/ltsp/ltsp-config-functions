@@ -1,0 +1,7 @@
+# Gentoo-specific function overrides for ltsp-config
+
+service() {
+    if [ -x /sbin/rc-service ]; then
+        rc-service "$@"
+    fi
+}
