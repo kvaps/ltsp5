@@ -1,7 +1,7 @@
-if [ -z "$SYSLOG" ] || [ "$SYSLOG" = "remote" ]; then
+if [ -n "$SYSLOG_HOST" ]; then
     syslog_conf=/etc/syslog.conf
     if [ -d /etc/rsyslog.d ]; then
-        syslog_conf=/etc/rsyslog.d/ltsp.conf   
+        syslog_conf=/etc/rsyslog.d/90-ltsp.conf   
         touch $syslog_conf
     fi
     if [ -f "$syslog_conf" ]; then
