@@ -28,7 +28,7 @@ EOF
 
 # Source global configuration file
 if [ -f /etc/ltsp/directory.conf ]; then
-    SERVER=`cat /etc/ltsp/directory.conf | awk -F / '{print \$3}'`
+    CC_SERVER=`cat /etc/ltsp/directory.conf | awk -F / '{print \$3}'`
 fi
 if [ -f /etc/ltsp/getltscfg-cluster.conf ]; then
     . /etc/ltsp/getltscfg-cluster.conf
@@ -50,7 +50,7 @@ eval set -- "${ARGS}"
 
 while true ; do
     case "$1" in
-        -s|--server) SERVER=$2 ; shift 2 ;;
+        -s|--server) CC_SERVER=$2 ; shift 2 ;;
         -p|--port) PORT=$2 ; shift 2 ;;
         -t|--timeout) TIMEOUT=$2 ; shift 2 ;;
         -l|--log) LOG=$2 ; shift 2 ;;
@@ -74,7 +74,7 @@ EXPORT_CONF=${EXPORT_CONF:-"N"}
 LOG=${LOG:-"boot"}
 INTERFACE=$(ip route | grep default | cut -d " " -f5)
 
-if [ -z "$SERVER" ]; then
+if [ -z "$CC_SERVER" ]; then
     echo "Error : --server option is mandatory"
     usage
     exit 1
@@ -148,7 +148,7 @@ else
 fi
 
 PAGE=${PAGE:-"ltsp-cluster-control/Terminal"}
-URL="$PROTO://$SERVER:$PORT/$PAGE"
+URL="$PROTO://$CC_SERVER:$PORT/$PAGE"
 
 # -q : quiet
 # -O - : output to stdout

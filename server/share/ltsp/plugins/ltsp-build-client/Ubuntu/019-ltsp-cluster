@@ -16,7 +16,7 @@ case "$MODE" in
                 echo NOTE: booleans must be answered as uppercase Y or N
                 NOTFIRST=true
                 echo -n "Server name: "
-                read SERVER
+                read CC_SERVER
                 echo -n "Port (default: 80): "
                 read PORT
                 [ -z "$PORT" ] && PORT="80"
@@ -30,7 +30,7 @@ case "$MODE" in
                 read TIMEOUT
                 [ -z "$TIMEOUT" ] && TIMEOUT="2"
 
-                [ -z "$SERVER" ] && continue
+                [ -z "$CC_SERVER" ] && continue
                 [ -z "$(echo ${PORT} | grep '^[0-9]*$')" ] && continue
                 [ "$PORT" -gt "65535" ] || [ "$PORT" -lt "0" ] && continue
                 [ "$ENABLE_SSL" != "Y" ] && [ "$ENABLE_SSL" != "N" ] && continue
@@ -38,7 +38,7 @@ case "$MODE" in
                 [ -z "$(echo ${TIMEOUT} | grep '^[0-9]*$')" ] && continue
                 break
             done
-            echo SERVER=$SERVER > $ROOT/etc/ltsp/getltscfg-cluster.conf
+            echo CC_SERVER=$CC_SERVER > $ROOT/etc/ltsp/getltscfg-cluster.conf
             echo PORT=$PORT >> $ROOT/etc/ltsp/getltscfg-cluster.conf
             echo ENABLE_SSL=$ENABLE_SSL >> $ROOT/etc/ltsp/getltscfg-cluster.conf
             echo INVENTORY=$INVENTORY >> $ROOT/etc/ltsp/getltscfg-cluster.conf
