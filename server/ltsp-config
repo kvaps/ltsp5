@@ -25,16 +25,18 @@ Usage: $0 TOOL [OPTION]
 Configures certain parts of an LTSP server.
 
 Tools and options:
-  dnsmasq                Configure dnsmasq.
-    --no-proxy-dhcp      Don't enable proxyDHCP mode for detected subnets.
-  isc-dhcp-server        Configure isc-dhcp-server.
-  lts.conf               Create a sample lts.conf.
-  nbd-server             Configure nbd-server.
+  dnsmasq            Configure dnsmasq.
+    --no-proxy-dhcp  Don't enable proxyDHCP mode for detected subnets.
+  isc-dhcp-server    Configure isc-dhcp-server.
+  lts.conf           Create a sample lts.conf.
+  nbd-server         Configure nbd-server.
 
 Generic options for most tools:
-  -h, --help             This message.
-  -l, --language=        Preferred language for configuration files.
-  -o, --overwrite        Overwrite existing configuration files.
+  -d, --directory    The examples directory.
+                     Defaults to "/usr/share/doc/ltsp-server/examples".
+  -h, --help         This message.
+  -l, --language=    Preferred language for configuration files.
+  -o, --overwrite    Overwrite existing configuration files.
 EOF
 }
 
@@ -74,7 +76,7 @@ replace_arch() {
 # Copy a file from /usr/share/doc/ltsp-server/examples/$1 to $2,
 # uncompressing it if necessary.
 install_example() {
-    local src dst dstdir language
+    local src dst dstdir language sname sext
     src=$1
     dst=$2
 
@@ -87,13 +89,18 @@ install_example() {
     fi
 
     # Prefer localized examples, if they exist.
+    sname=${src%%.*}
+    if [ "$sname" != "$src" ]; then
+        sext=".${src#*.}"
+    fi
+    DIRECTORY=${DIRECTORY:-/usr/share/doc/ltsp-server/examples}
     LANGUAGE=${LANGUAGE:-$LANG}
-    for language in "$LANGUAGE" "${LANGUAGE%%.*}" "${LANGUAGE%%_*}" ""; do
+    for language in "${LANGUAGE%%:*}" "${LANGUAGE%%.*}" "${LANGUAGE%%_*}" ""; do
         language=${language:+"-$language"}
-        if [ -f "/usr/share/doc/ltsp-server/examples/$src$language" ]; then
-            cp "/usr/share/doc/ltsp-server/examples/$src$language" "$dst"
-        elif [ -f "/usr/share/doc/ltsp-server/examples/$src$language.gz" ]; then
-            zcat "/usr/share/doc/ltsp-server/examples/$src$language.gz" > "$dst"
+        if [ -f "$DIRECTORY/$sname$language$sext" ]; then
+            cp "$DIRECTORY/$sname$language$sext" "$dst"
+        elif [ -f "$DIRECTORY/$sname$language$sext.gz" ]; then
+            zcat "$DIRECTORY/$sname$language$sext.gz" > "$dst"
         else
             continue
         fi
@@ -232,17 +239,22 @@ service() {
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -o "hlo" -l help,language,overwrite,no-proxy-dhcp -- "$@")
+if ! args=$(getopt -n "$0" -o "d:hl:o" \
+    -l directory,help,language,overwrite,no-proxy-dhcp -- "$@")
 then
     exit 1
 fi
 eval "set -- $args"
 while true ; do
     case "$1" in
-        --no-proxy-dhcp) NO_PROXY_DHCP=true ;;
+        -d|--directory) shift; DIRECTORY=$1 ;;
         -h|--help) usage; exit 0 ;;
+        # If we ever localize ltsp-config, LANGUAGE will also be used in
+        # the messages it displays, but we assume it's OK since the user
+        # specified it.
         -l|--language) shift; LANGUAGE=$1 ;;
         -o|--overwrite) OVERWRITE=true ;;
+        --no-proxy-dhcp) NO_PROXY_DHCP=true ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
     esac
