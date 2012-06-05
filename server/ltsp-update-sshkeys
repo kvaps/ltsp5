@@ -45,6 +45,7 @@ by default /etc/ltsp/ssh_known_hosts.auto.
 Otherwise, all LTSP chroots are updated to trust the SSH keys of this server
 along with any additional keys in /etc/ltsp/ssh_known_hosts.* files.
 
+Options:
   -b, --base     Base of ltsp chroot. Default is /opt/ltsp if unspecified.
   -e, --export   File name to export the hosts SSH keys to (- for stdout).
                  Default is /etc/ltsp/ssh_known_hosts.auto if unspecified.
