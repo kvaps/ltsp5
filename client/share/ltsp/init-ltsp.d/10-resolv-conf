@@ -1,12 +1,3 @@
-# If DNS_SERVER=auto, check if a DNS service is running on the LTSP server.
-if [ "$DNS_SERVER" = "auto" ] && [ -n "$SERVER" ]; then
-    if nc -w 1 -z "$SERVER" 53; then
-        DNS_SERVER="$SERVER"
-    else
-        unset DNS_SERVER
-    fi
-fi
-
 # set to defaults from DHCP if not specified in lts.conf
 if [ -z "$DNS_SERVER" ]; then
     for dns in $IPV4DNS0 $IPV4DNS1 ; do
@@ -14,6 +5,18 @@ if [ -z "$DNS_SERVER" ]; then
         # nameservers aren't specified.
         if [ "$dns" != "0.0.0.0" ]; then
             DNS_SERVER="$DNS_SERVER $dns"
+        fi
+    done
+fi
+
+# If no DNS_SERVER was defined in lts.conf or in DHCP (e.g. IPAPPEND=3),
+# check the LTSP server, gateway, and Google Public DNS.
+if [ -z "$DNS_SERVER" ] && [ -x /usr/bin/dig ]; then
+    gateway=$(LANG=C ip route | sed -n 's/default via \([0-9.]*\).*/\1/p')
+    for dns in $SERVER $gateway 8.8.8.8; do
+        if dig +time=1 +tries=1 +short "@$dns" localhost >/dev/null 2>&1; then
+            DNS_SERVER="$dns"
+            break
         fi
     done
 fi
