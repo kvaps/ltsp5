@@ -50,8 +50,6 @@ Options:
   -m, --no-compress    Don't compress the generated image.
   -n, --no-backup      Don't backup chroot.img to chroot.img.old.
   -r, --revert         Swap chroot.img with chroot.img.old and update kernels.
-  -t, --tftp-dirs=     Space-separated list of TFTP directories to update.
-                       Defaults to "/var/lib/tftpboot /tftpboot /srv/tftp".
 EOF
 }
 
@@ -230,8 +228,8 @@ unlock_package_management() {
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -o "b:cd:e:fhmnrt:" \
-    -l "base:,cleanup,tftp-boot-dir:,exclude:,config-nbd,help,no-compress,no-backup,revert,tftp-dirs:" -- "$@")
+if ! args=$(getopt -n "$0" -o "b:cd:e:fhmnr" \
+    -l "base:,cleanup,tftp-boot-dir:,exclude:,config-nbd,help,no-compress,no-backup,revert" -- "$@")
 then
     exit 1
 fi
@@ -247,7 +245,6 @@ while true ; do
         -m|--no-compress) NO_COMPRESS=true ;;
         -n|--no-backup) NO_BACKUP=true ;;
         -r|--revert) REVERT=$1 ;;
-        -t|--tftp-dirs) shift; TFTP_DIRS=$1 ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
     esac

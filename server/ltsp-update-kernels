@@ -41,8 +41,6 @@ Options:
   -d, --tftp-boot-dir= The LTSP subdirectory within the TFTP base directory.
                        Defaults to "ltsp".
   -h, --help           This message.
-  -t, --tftp-dirs=     Space-separated list of TFTP directories to update.
-                       Defaults to "/var/lib/tftpboot /tftpboot /srv/tftp".
 EOF
 }
 
@@ -155,8 +153,8 @@ cleanup_kernels() {
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -o b:d:ht: \
-    -l base:,tftp-boot-dir:,help,tftp-dirs -- "$@")
+if ! args=$(getopt -n "$0" -o b:d:h \
+    -l "base:,tftp-boot-dir:,help" -- "$@")
 then
     exit 1
 fi
@@ -166,7 +164,6 @@ while true ; do
         -b|--base) shift; BASE=$1 ;;
         -d|--tftp-boot-dir) shift; TFTP_BOOT_DIR=$1 ;;
         -h|--help) usage; exit 0 ;;
-        -t|--tftp-dirs) shift; TFTP_DIRS=$1 ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
     esac
@@ -178,7 +175,6 @@ BASE=${BASE:-"/opt/ltsp"}
 # Remove trailing /, if present
 BASE=${BASE%/}
 TFTP_BOOT_DIR=${TFTP_BOOT_DIR:-"ltsp"}
-TFTP_DIRS=${TFTP_DIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
 
 # Chroots can be specified in the command line. If not, update all of them.
 if [ $# -eq 0 ]; then
