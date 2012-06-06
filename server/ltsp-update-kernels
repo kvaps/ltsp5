@@ -34,12 +34,13 @@
 usage() {
     cat <<EOF
 Usage: $0 [OPTION] [CHROOT...]
-Copies the chroot kernels to the TFTP directory.
+Copies the chroot kernels to the TFTP directory. The TFTP directory
+can be set in /etc/ltsp/common-server.conf using a TFTP_DIR and a
+TFTP_BOOT_DIR. The default TFTP directories are 
+/var/lib/tftpboot/ltsp, /tftpboot/ltsp and /srv/tftp/ltsp.
 
 Options:
   -b, --base=          The LTSP base directory. Defaults to "/opt/ltsp".
-  -d, --tftp-boot-dir= The LTSP subdirectory within the TFTP base directory.
-                       Defaults to "ltsp".
   -h, --help           This message.
 EOF
 }
@@ -153,8 +154,8 @@ cleanup_kernels() {
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -o b:d:h \
-    -l "base:,tftp-boot-dir:,help" -- "$@")
+if ! args=$(getopt -n "$0" -o b:h \
+    -l "base:,help" -- "$@")
 then
     exit 1
 fi
@@ -162,7 +163,6 @@ eval "set -- $args"
 while true ; do
     case "$1" in
         -b|--base) shift; BASE=$1 ;;
-        -d|--tftp-boot-dir) shift; TFTP_BOOT_DIR=$1 ;;
         -h|--help) usage; exit 0 ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
@@ -174,7 +174,6 @@ require_root
 BASE=${BASE:-"/opt/ltsp"}
 # Remove trailing /, if present
 BASE=${BASE%/}
-TFTP_BOOT_DIR=${TFTP_BOOT_DIR:-"ltsp"}
 
 # Chroots can be specified in the command line. If not, update all of them.
 if [ $# -eq 0 ]; then

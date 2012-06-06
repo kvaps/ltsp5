@@ -39,8 +39,6 @@ Options:
   -c, --cleanup        Temporarily remove user accounts, logs, caches etc from
                        the chroot before exporting the image. The chroot arch
                        is required to be compatible with the server arch.
-  -d, --tftp-boot-dir= The LTSP subdirectory within the TFTP base directory.
-                       Defaults to "ltsp".
   -e, --exclude=       List of dirs/files to exclude from the image.
                        This is in addition to /etc/ltsp/ltsp-update-image.excludes.
   -f, --config-nbd     Generate appropriate nbd-server configuration files.
@@ -228,8 +226,8 @@ unlock_package_management() {
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -o "b:cd:e:fhmnr" \
-    -l "base:,cleanup,tftp-boot-dir:,exclude:,config-nbd,help,no-compress,no-backup,revert" -- "$@")
+if ! args=$(getopt -n "$0" -o "b:ce:fhmnr" \
+    -l "base:,cleanup,exclude:,config-nbd,help,no-compress,no-backup,revert" -- "$@")
 then
     exit 1
 fi
@@ -238,7 +236,6 @@ while true ; do
     case "$1" in
         -b|--base) shift; BASE=$1 ;;
         -c|--cleanup) CLEANUP=true ;;
-        -d|--tftp-boot-dir) shift; TFTP_BOOT_DIR=$1 ;;
         -e|--exclude) shift; EXCLUDE=$1 ;;
         -f|--config-nbd) CONFIG_NBD=true ;;
         -h|--help) usage; exit 0 ;;
