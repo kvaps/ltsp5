@@ -32,7 +32,7 @@ Tools and options:
   nbd-server         Configure nbd-server.
 
 Generic options for most tools:
-  -d, --directory    A directory to search for configuration templates,
+  -d, --directory=   A directory to search for configuration templates,
                      in addition to "/usr/share/doc/ltsp-server/examples".
   -h, --help         This message.
   -l, --language=    Preferred language for configuration files.
@@ -93,7 +93,6 @@ install_example() {
     if [ "$sname" != "$src" ]; then
         sext=".${src#*.}"
     fi
-    DIRECTORY=${DIRECTORY:-}
     LANGUAGE=${LANGUAGE:-$LANG}
     for dir in "$DIRECTORY" /usr/share/doc/ltsp-server/examples; do
         test -d "$dir" || continue
