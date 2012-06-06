@@ -32,8 +32,8 @@ Tools and options:
   nbd-server         Configure nbd-server.
 
 Generic options for most tools:
-  -d, --directory    The examples directory.
-                     Defaults to "/usr/share/doc/ltsp-server/examples".
+  -d, --directory    A directory to search for configuration templates,
+                     in addition to "/usr/share/doc/ltsp-server/examples".
   -h, --help         This message.
   -l, --language=    Preferred language for configuration files.
   -o, --overwrite    Overwrite existing configuration files.
@@ -76,7 +76,7 @@ replace_arch() {
 # Copy a file from /usr/share/doc/ltsp-server/examples/$1 to $2,
 # uncompressing it if necessary.
 install_example() {
-    local src dst dstdir language sname sext
+    local src dst dstdir language sname sext dir
     src=$1
     dst=$2
 
@@ -93,20 +93,23 @@ install_example() {
     if [ "$sname" != "$src" ]; then
         sext=".${src#*.}"
     fi
-    DIRECTORY=${DIRECTORY:-/usr/share/doc/ltsp-server/examples}
+    DIRECTORY=${DIRECTORY:-}
     LANGUAGE=${LANGUAGE:-$LANG}
-    for language in "${LANGUAGE%%:*}" "${LANGUAGE%%.*}" "${LANGUAGE%%_*}" ""; do
-        language=${language:+"-$language"}
-        if [ -f "$DIRECTORY/$sname$language$sext" ]; then
-            cp "$DIRECTORY/$sname$language$sext" "$dst"
-        elif [ -f "$DIRECTORY/$sname$language$sext.gz" ]; then
-            zcat "$DIRECTORY/$sname$language$sext.gz" > "$dst"
-        else
-            continue
-        fi
-        replace_arch "$dst"
-        echo "Created $dst"
-        return 0
+    for dir in "$DIRECTORY" /usr/share/doc/ltsp-server/examples; do
+        test -d "$dir" || continue
+        for language in "${LANGUAGE%%:*}" "${LANGUAGE%%.*}" "${LANGUAGE%%_*}" ""; do
+            language=${language:+"-$language"}
+            if [ -f "$dir/$sname$language$sext" ]; then
+                cp "$dir/$sname$language$sext" "$dst"
+            elif [ -f "$dir/$sname$language$sext.gz" ]; then
+                zcat "$dir/$sname$language$sext.gz" > "$dst"
+            else
+                continue
+            fi
+            replace_arch "$dst"
+            echo "Created $dst"
+            return 0
+        done
     done
     die "Example file $src not found."
 }
