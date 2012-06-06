@@ -20,6 +20,22 @@
 #  MA 02110-1301, USA.
 
 # generic functions
+usage() {
+    cat <<EOF
+Usage: $0 [OPTION]
+Displays information useful to troubleshooting issues on an LTSP
+server. Information should include server distro and release, 
+versions of LTSP related packages installed on the server, LTSP
+chroots and their package versions, LTSP image files and lts.conf(5).
+
+Options:
+  -h, --help           This message.
+  -n, --no-server-info Do not display server information.
+  -v, --verbose        Display more information, such as including the contents
+                       of detected files.
+EOF
+}
+
 find_chroots() {
     find $BASE -mindepth 1 -maxdepth 1 -type d
 }
@@ -80,7 +96,8 @@ export BASE=${BASE:-/opt/ltsp}                # LTSP base directory
 
 for opt in $@ ; do
     case $opt in
-        --no-server-info) server_info="false" ;;
+        --help|-h) usage; exit 0 ;;
+        --no-server-info|-n) server_info="false" ;;
         --verbose|-v) verbose="true" ;;
     esac
 done
