@@ -192,6 +192,7 @@ EOF
 exportname = /tmp/nbd-swap/%s
 prerun = nbdswapd %s
 postrun = rm -f %s
+authfile = /etc/ltsp/nbd-server.allow
 EOF
         echo "Created /etc/nbd-server/conf.d/swap.conf"
         restart_nbd=true
@@ -213,6 +214,7 @@ EOF
 [$BASE/$name]
 exportname = $image
 readonly = true
+authfile = /etc/ltsp/nbd-server.allow
 EOF
             echo "Created /etc/nbd-server/conf.d/ltsp_$name.conf"
             restart_nbd=true
