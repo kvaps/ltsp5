@@ -70,17 +70,19 @@ trap_cleanup() {
 # Get a sorted list of all "real" mount points under $chroot,
 # with $chroot included, even if it's not a mount point.
 get_mounts() {
-    local chroot mounts type point excluded found_chroot
+    local chroot mounts src system point type rest excluded found_chroot
     chroot=$1
 
     excluded=",${EXCLUDED_MOUNTS:-/home},"
     echo "$chroot"
-    while read type point rest; do
+    while read system point type rest; do
         case "$excluded" in
             ,$point,) continue ;;
         esac
+        # Avoid CDs, USB sticks, virtual file systems etc.
         case "$type" in
-            gvfs*|none|proc|tmpfs|udev) continue ;;
+            btrfs|ext*) true ;;
+            *) continue ;;
         esac
         case "$point/" in
             $chroot/|/dev/*|/proc/*|/run/*|/sys/*) continue ;;
