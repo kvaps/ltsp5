@@ -42,11 +42,10 @@ case "$MODE" in
                 ln -s /usr/bin/metacity $ROOT/usr/local/share/ltspkiosk/startup/00-metacity
             fi
 
+            # install window manager without recommends, otherwise metacity pulls in
+            # half or more of gnome... not ideal, but it works.
+            chroot $ROOT apt-get $APT_GET_OPTS --no-install-recommends install $KIOSK_WM
         fi
-
-        # install window manager without recommends, otherwise metacity pulls in
-        # half or more of gnome... not ideal, but it works.
-        chroot $ROOT apt-get $APT_GET_OPTS --no-install-recommends install $KIOSK_WM
         ;;
 esac
 
