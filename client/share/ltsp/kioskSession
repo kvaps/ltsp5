@@ -4,17 +4,41 @@ KIOSK_EXE=$1
 KIOSKHOME=/usr/local/share/ltspkiosk/home
 KIOSKSTARTUP=/usr/local/share/ltspkiosk/startup
 
-TMPDIR=$(getent passwd ltspkiosk| cut -d: -f6)
-export HOME=${TMPDIR}
+KIOSKUSER=${KIOSKUSER:-"ltspkiosk"}
+KIOSK_WM=${KIOSK_WM:-"/usr/bin/metacity"}
+KIOSK_USER_STARTUP=${HOME}/.kiosk-startup
+
+mkdir -p ${KIOSK_USER_STARTUP}
+
+case $KIOSK_EXE in
+    *firefox|*iceweasel) 
+        if [ -x /usr/bin/devilspie ]; then
+            # set up devilspie for fullscreen firefox
+            ln -s /usr/bin/devilspie ${KIOSK_USER_STARTUP}/10-devilspie
+            mkdir -p ${HOME}/.devilspie
+            echo "(if (matches (window_name) \"$(basename ${KIOSK_EXE})\") (undecorate) (fullscreen))" > ${HOME}/.devilspie/default.ds
+        fi
+    ;;
+esac
+
+if [ -x "${KIOSK_WM}" ]; then
+    ln -s ${KIOSK_WM} ${KIOSK_USER_STARTUP}/00-kiosk-wm
+fi
 
 # Copy a default homedir if present
 if [ -d  "${KIOSKHOME}" ]; then
-    cp -r ${KIOSKHOME}/* ${KIOSKHOME}/.??* ${TMPDIR}
+    cp -r ${KIOSKHOME}/* ${KIOSKHOME}/.??* ${HOME}
 fi
 
-[ -n "${XAUTHORITY}" ] && cp -a ${XAUTHORITY} ${TMPDIR}
+for file in ${KIOSKSTARTUP}/* ; do
+    if [ -f "${file}" ]; then
+        ln -s "${file}" ${KIOSK_USER_STARTUP}/$(basename ${file}) 
+    fi
+done
 
-for i in ${KIOSKSTARTUP}/* ; do
+[ -n "${XAUTHORITY}" ] && cp -a ${XAUTHORITY} ${HOME}
+
+for i in ${KIOSK_USER_STARTUP}/* ; do
     [ -x "${i}" ] && eval "${i}" &
 done
 

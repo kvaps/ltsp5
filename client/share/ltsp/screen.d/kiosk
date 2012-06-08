@@ -6,26 +6,14 @@
 # The full text of which can be found at http://www.LTSP.org/license.txt
 #
 #
-# NOTE: To use this session, the chroot MUST have a user with username 
-#       "ltspkiosk"
-#  
-#       Also, to customize the kiosk session, you can add "homedir" files
+#       To customize the kiosk session, you can add "homedir" files
 #       to $chroot/usr/local/share/ltspkiosk/home/ 
 #       AND to add startup scripts that run as the user, you can add 
 #       them as executables or symlinks to executables in:
 #       $chroot/usr/local/share/ltspkiosk/startup
 
-
 PATH=/bin:$PATH; export PATH
 . /usr/share/ltsp/screen-x-common
-
-# A Kiosk user with the username "ltspkiosk" should be created in the chroot
-KIOSKUSER="ltspkiosk"
-if [ -z "$(getent passwd ${KIOSKUSER})" ]; then
-    echo "No ltspkiosk user."
-    sleep 30
-    exit
-fi
 
 [ -n "$1" ] && KIOSK_EXE=$1
 [ -n "$2" ] && KIOSK_OPTIONS=$2
@@ -50,12 +38,18 @@ if [ -x /usr/share/ltsp/xinitrc ]; then
     xinitrc=/usr/share/ltsp/xinitrc
 fi
 
+KIOSKUSER=${KIOSKUSER:-"ltspkiosk"}
+if [ -z "$(getent passwd ${KIOSKUSER})" ]; then
+    # create a ltspkiosk user
+    adduser --no-create-home --disabled-password --gecos ,,, ${KIOSKUSER}
+fi
+
 # Create a tmpdir to be our homedir
 TMPDIR=$(mktemp -d /tmp/.kiosk-XXXXXX)
 chown ${KIOSKUSER} ${TMPDIR}
 
 # Edit passwd homedir entry for programs that look it up from there
-sed -i -e '\|ltspkiosk|s|[^:]*\(:[^:]*\)$|'$TMPDIR'\1|' /etc/passwd
+sed -i -e '\|'${KIOSKUSER}'|s|[^:]*\(:[^:]*\)$|'$TMPDIR'\1|' /etc/passwd
 
 su - ${KIOSKUSER} -c "XINITRC_DAEMON=${XINITRC_DAEMON} xinit $xinitrc /usr/share/ltsp/kioskSession ${KIOSK_EXE} ${KIOSK_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br" >/dev/null
 

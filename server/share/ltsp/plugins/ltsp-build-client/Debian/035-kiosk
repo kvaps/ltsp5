@@ -21,27 +21,6 @@ case "$MODE" in
         ;;
     after-install)
         if [ "True" = "$KIOSK" ]; then
-            # create a ltspkiosk user
-            # ltspkiosk's homdir is created on the fly as a tmpdir, so no 
-            # need for one here
-            chroot $ROOT adduser --no-create-home --disabled-password --gecos ,,, ltspkiosk
-
-            # create ltspkiosk directories
-            mkdir -p $ROOT/usr/local/share/ltspkiosk/home
-            mkdir -p $ROOT/usr/local/share/ltspkiosk/startup
-
-            if [ "$KIOSK_BROWSER" = "iceweasel" ]; then
-                # set up devilspie for fullscreen firefox
-                ln -s /usr/bin/devilspie $ROOT/usr/local/share/ltspkiosk/startup/10-devilspie
-                mkdir -p $ROOT/usr/local/share/ltspkiosk/home/.devilspie
-                echo "(if (matches (window_name) \"iceweasel\") (undecorate) (fullscreen))" >$ROOT/usr/local/share/ltspkiosk/home/.devilspie/default.ds
-            fi
-
-            if [ "${KIOSK_WM}" = "metacity" ]; then
-                # make sure we have a wm
-                ln -s /usr/bin/metacity $ROOT/usr/local/share/ltspkiosk/startup/00-metacity
-            fi
-
             # install window manager without recommends, otherwise metacity pulls in
             # half or more of gnome... not ideal, but it works.
             chroot $ROOT apt-get $APT_GET_OPTS --no-install-recommends install $KIOSK_WM

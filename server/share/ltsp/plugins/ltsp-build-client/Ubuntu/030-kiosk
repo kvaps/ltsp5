@@ -19,27 +19,8 @@ case "$MODE" in
             WM=${WM:-"metacity"}
             THEME=${THEME:-"human-gtk-theme"}
 
-            # create a ltspkiosk user
-            # ltspkiosk's homdir is created on the fly as a tmpdir, so no 
-            # need for one here
-            chroot $ROOT adduser --no-create-home --disabled-password --gecos ,,, ltspkiosk
-
             # create ltspkiosk directories
             mkdir -p $ROOT/usr/local/share/ltspkiosk/home
-            mkdir -p $ROOT/usr/local/share/ltspkiosk/startup
-
-            if [ "$BROWSER" = "firefox" ]; then
-                KIOSK_PACKAGES="${KIOSK_PACKAGES} ubufox devilspie"
-                # set up devilspie for fullscreen firefox
-                ln -s /usr/bin/devilspie $ROOT/usr/local/share/ltspkiosk/startup/10-devilspie
-                mkdir -p $ROOT/usr/local/share/ltspkiosk/home/.devilspie
-                echo "(if (matches (window_name) \"fox\") (undecorate) (fullscreen))" >$ROOT/usr/local/share/ltspkiosk/home/.devilspie/default.ds
-            fi
-
-            if [ "${WM}" = "metacity" ]; then
-                # make sure we have a wm
-                ln -s /usr/bin/metacity $ROOT/usr/local/share/ltspkiosk/startup/00-metacity
-            fi
 
             if [ "${THEME}" = "human-gtk-theme" ]; then
                 # switch to the proper theme 
