@@ -6,7 +6,7 @@ KIOSKSTARTUP=/usr/local/share/ltspkiosk/startup
 
 KIOSKUSER=${KIOSKUSER:-"ltspkiosk"}
 KIOSK_WM=${KIOSK_WM:-"/usr/bin/metacity"}
-KIOSK_USER_STARTUP=${HOME}/.kiosk-startup
+KIOSK_USER_STARTUP="${HOME}/.kiosk-startup"
 
 mkdir -p ${KIOSK_USER_STARTUP}
 
@@ -32,7 +32,7 @@ fi
 
 for file in ${KIOSKSTARTUP}/* ; do
     if [ -f "${file}" ]; then
-        ln -s "${file}" ${KIOSK_USER_STARTUP}/$(basename ${file}) 
+        ln -s "${file}" "${KIOSK_USER_STARTUP}/$(basename ${file})"
     fi
 done
 
