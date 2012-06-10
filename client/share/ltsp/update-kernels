@@ -141,21 +141,29 @@ default ${PXELINUX_DEFAULT:-"ltsp"}
 ${TIMEOUT:+timeout $TIMEOUT}
 
 label ltsp
+menu label LTSP
 kernel vmlinuz
 append ro initrd=initrd.img $BOOTPROMPT_OPTS
 ipappend ${IPAPPEND:-2}
 
 EOF
 
+    # Add entries for each kernel and boot method,
+    # Which needs a corresponding CMDLINE_ for each defined method.
+    # i.e. CMDLINE_NFS or CMDLINE_NBD
+    # Also requires that CMDLINE_LINUX_DEFAULT is set to a sane value.
     for version in $(kernel_versions) ; do
-        cat >> $PXECFG/default <<EOF
+        for method in $BOOT_METHODS ; do
+            cat >> $PXECFG/default <<EOF
 
-label ltsp-$version
+label ltsp-$method-$version
+menu label LTSP, using $method, with Linux $version
 kernel vmlinuz-$version
-append ro initrd=initrd.img-$version $BOOTPROMPT_OPTS
+append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
+        done
     done
 
     if [ -f "$PXELINUX_APPEND_FILE" ]; then
