@@ -44,6 +44,34 @@ msg() {
     fi
 }
 
+# List kernel versions in a descending order, while also respecting the e.g.
+#   LIST_KERNELS="generic generic-pae *"
+# order that the user may have put in $CHROOT/etc/ltsp/update-kernels.conf.
+# Distros are required to set e.g. KERNEL_PREFIX="vmlinuz-*', KERNEL_SUFFIX="".
+# The * goes where the version is expected to go.
+kernel_versions() {
+    local - kernels arch loop_kernels kernel
+
+    # Disable glob expansion for this function
+    set -f
+    for kernel in $(find "/boot/" -type f -name "$KERNEL_PREFIX$KERNEL_SUFFIX" -printf "%f\n"); do
+        # Append a descending number to the version
+        i=1000
+        for arch in ${LIST_KERNELS:-*}; do
+            i=$(($i-1))
+            case "$kernel" in
+                $KERNEL_PREFIX$arch$KERNEL_SUFFIX)
+                    version_arch=${kernel#${KERNEL_PREFIX%*}}
+                    version_arch=${version_arch%${KERNEL_SUFFIX#*}}
+                    version=${version_arch#$arch}
+                    version=${version_arch%$arch}
+                    echo "$version-$i $version_arch"
+                    break 1
+                    ;;
+            esac
+        done
+    done | sort -frV | awk '{ print $2 }'
+}
 
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-client-functions
@@ -107,6 +135,8 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
         mkdir $PXECFG
     fi
     cat > $PXECFG/default <<EOF
+# This file is regenerated when update-kernels runs.
+# Do not edit, see /etc/ltsp/update-kernels.conf instead.
 default ${PXELINUX_DEFAULT:-"ltsp"}
 ${TIMEOUT:+timeout $TIMEOUT}
 
@@ -116,6 +146,17 @@ append ro initrd=initrd.img $BOOTPROMPT_OPTS
 ipappend ${IPAPPEND:-2}
 
 EOF
+
+    for version in $(kernel_versions) ; do
+        cat >> $PXECFG/default <<EOF
+
+label ltsp-$version
+kernel vmlinuz-$version
+append ro initrd=initrd.img-$version $BOOTPROMPT_OPTS
+ipappend ${IPAPPEND:-2}
+
+EOF
+    done
 
     if [ -f "$PXELINUX_APPEND_FILE" ]; then
         cat "$PXELINUX_APPEND_FILE" >> $PXECFG/default
