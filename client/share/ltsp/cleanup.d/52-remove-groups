@@ -1,4 +1,4 @@
 getent group | awk -F: '$3>=500 && $3<=60000 { print $1; }' |
     while read group; do
-        userdel "$group"
+        groupdel "$group"
     done
