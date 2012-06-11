@@ -108,6 +108,21 @@ image=/ltsp/$CHROOT_NAME/vmlinux
         append="$BOOTPROMPT_OPTS"
 EOF
 
+    kversions=$(LIST_KERNELS="vmlinux-" kernel_versions)
+    if [ -n "$kversions" ]; then
+        for version in $kversions ; do
+            for method in $BOOT_METHODS ; do
+                cat >> $BOOT/yaboot.conf <<EOF
+
+image=/ltsp/$CHROOT_NAME/vmlinux-${version}
+        label=ltsp-$method-$version
+        initrd=/ltsp/$CHROOT_NAME/initrd.img-${version}
+        append="$CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)"
+
+EOF
+            done
+        done
+    fi
 else
     msg "Skipping yaboot configuration. install yaboot package if you need it."
 fi
