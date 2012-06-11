@@ -8,6 +8,7 @@
 #        Scott Balneaves <sbalneav@ltsp.org>
 #  2008, Vagrant Cascadian <vagrant@freegeek.org>
 #  2012, Alkis Georgopoulos <alkisg@gmail.com>
+#  2012, Vagrant Cascadian <vagrant@freegeek.org>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -135,16 +136,34 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
     if [ ! -d $PXECFG ]; then
         mkdir $PXECFG
     fi
-    cat > $PXECFG/default <<EOF
-# This file is regenerated when update-kernels runs.
-# Do not edit, see /etc/ltsp/update-kernels.conf instead.
+
+    if [ ! -f $PXECFG/default ]; then
+        cat > $PXECFG/default <<EOF
+# This file may be safely edited, and changes will be preserved.
 default ${PXELINUX_DEFAULT:-"ltsp"}
+ontimeout ${ONTIMEOUT:-"ltsp"}
 ${TIMEOUT:+timeout $TIMEOUT}
 
+include pxelinux.cfg/ltsp
+include pxelinux.cfg/memtest
+
+EOF
+    fi
+
+    cat > $PXECFG/ltsp <<EOF
+# This file is regenerated when update-kernels runs.
+# Do not edit, see /etc/ltsp/update-kernels.conf instead.
+
+EOF
+
+    # Only use the first boot method.
+    method=$(echo $BOOT_METHODS | awk '{print $1}')
+    cat >> $PXECFG/ltsp <<EOF
+
 label ltsp
-menu label LTSP
+menu label LTSP, using $method
 kernel vmlinuz
-append ro initrd=initrd.img $BOOTPROMPT_OPTS
+append ro initrd=initrd.img $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
@@ -153,7 +172,8 @@ EOF
         if [ -f "$syslinux_dir/ifcpu64.c32" ]; then
             cp "$syslinux_dir/ifcpu64.c32" $BOOT
         fi
-        cat >> $PXECFG/default <<EOF
+        cat >> $PXECFG/ltsp <<EOF
+
 menu begin ltsp-autodetect
 menu label Autodetect 64-bit, PAE or 32-bit kernels
 
@@ -175,7 +195,7 @@ EOF
             esac
             # only return the newest kernel of appropriate type.
             version=$(LIST_KERNELS="$list_kernels *" kernel_versions | head -n 1)
-            cat >> $PXECFG/default <<EOF
+            cat >> $PXECFG/ltsp <<EOF
 
 label ltsp-$type
 menu label LTSP, using $method, with Linux $version
@@ -185,7 +205,7 @@ ipappend ${IPAPPEND:-2}
 
 EOF
         done
-        cat >> $PXECFG/default <<EOF
+        cat >> $PXECFG/ltsp <<EOF
 menu end
 EOF
     fi
@@ -196,14 +216,14 @@ EOF
     # Also requires that CMDLINE_LINUX_DEFAULT is set to a sane value.
     kversions=$(kernel_versions)
     if [ -n "$kversions" ]; then
-        cat >> $PXECFG/default <<EOF
+        cat >> $PXECFG/ltsp <<EOF
 menu begin ltsp-other
 menu label Other LTSP boot options
 
 EOF
         for version in $kversions ; do
             for method in $BOOT_METHODS ; do
-                cat >> $PXECFG/default <<EOF
+                cat >> $PXECFG/ltsp <<EOF
 
 label ltsp-$method-$version
 menu label LTSP, using $method, with Linux $version
@@ -214,13 +234,9 @@ ipappend ${IPAPPEND:-2}
 EOF
             done
         done
-        cat >> $PXECFG/default <<EOF
+        cat >> $PXECFG/ltsp <<EOF
 menu end
 EOF
-    fi
-
-    if [ -f "$PXELINUX_APPEND_FILE" ]; then
-        cat "$PXELINUX_APPEND_FILE" >> $PXECFG/default
     fi
 
     memtest_bin='memtest86+.bin memtest86.bin'
@@ -233,8 +249,9 @@ EOF
             memtest="$memtest_name"
         fi
         if [ -f $BOOT/$memtest ]; then
-            cat >> $PXECFG/default <<EOF
-
+            cat > $PXECFG/memtest <<EOF
+# This file is regenerated when update-kernels runs.
+# Do not edit, see /etc/ltsp/update-kernels.conf instead.
 label $memtest_name
 kernel $memtest
 
