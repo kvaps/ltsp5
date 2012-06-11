@@ -172,11 +172,8 @@ EOF
         fi
         cat >> $PXECFG/ltsp <<EOF
 
-menu begin ltsp-autodetect
-menu label Autodetect 64-bit, PAE or 32-bit kernels
-
 label ifcpu64
-menu label Autodetect 64-bit, PAE or 32-bit kernels
+menu label LTSP, Autodetect 64-bit, PAE or 32-bit kernels
 kernel ifcpu64.c32
 append ltsp-64 -- ltsp-PAE -- ltsp-32
 
@@ -196,6 +193,7 @@ EOF
             cat >> $PXECFG/ltsp <<EOF
 
 label ltsp-$type
+menu hide
 menu label LTSP, using $method, with Linux $version
 kernel vmlinuz-$version
 append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
@@ -203,9 +201,7 @@ ipappend ${IPAPPEND:-2}
 
 EOF
         done
-        cat >> $PXECFG/ltsp <<EOF
-menu end
-EOF
+
     fi
 
     # Add entries for each kernel and boot method,
