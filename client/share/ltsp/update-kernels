@@ -128,6 +128,7 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
         case $PXELINUX_DEFAULT in
             # set a timeout, otherwise the menu will wait indefinitely
             menu|vesamenu) TIMEOUT=${TIMEOUT:-"50"} ;;
+            ifcpu64) IFCPU64=true ;;
         esac
     fi
 
@@ -148,7 +149,10 @@ ipappend ${IPAPPEND:-2}
 
 EOF
 
-    if [ "$PXELINUX_DEFAULT" = "ifcpu64" ]; then
+    if boolean_is_true "$IFCPU64" ; then
+        if [ -f "$syslinux_dir/ifcpu64.c32" ]; then
+            cp "$syslinux_dir/ifcpu64.c32" $BOOT
+        fi
         cat >> $PXECFG/default <<EOF
 menu begin ltsp-autodetect
 menu label Autodetect 64-bit, PAE or 32-bit kernels
