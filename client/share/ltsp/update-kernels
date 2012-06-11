@@ -82,18 +82,18 @@ BOOT=${BOOT:-"/boot"}
 VENDOR=${VENDOR:-"$(detect_vendor)"}
 CHROOT_NAME=${CHROOT_NAME:-"$(detect_arch)"}
 
-# TODO: when a pxemenus package is implemented, distros should replace the
-# following code with an /etc/ltsp/update-kernels.conf (or similar) conffile
-# with their supported kernel command lines, for NFS, NBD, AoE, iSCSI etc.
-if [ -z "$BOOTPROMPT_OPTS" ]; then
-    if [ "$VENDOR" = "Ubuntu" ]; then
-        BOOTPROMPT_OPTS="root=/dev/nbd0 init=/sbin/init-ltsp quiet splash plymouth:force-splash vt.handoff=7"
-    elif [ "$VENDOR" = "Debian" ]; then
-        BOOTPROMPT_OPTS="quiet root=/dev/nfs ip=dhcp boot=nfs init=/sbin/init-ltsp"
-    else
-        BOOTPROMPT_OPTS="root=/dev/nfs ip=dhcp init=/sbin/init-ltsp"
-    fi
-fi
+# Ensure default values for BOOT_METHODS, CMDLINE_LINUX_DEFAULTS, CMDLINE_NFS 
+# and CMDLINE_NBD. Distros *should* ship an /etc/ltsp/update-kernels.conf with
+# appropriate values for their distro.
+BOOT_METHODS=${BOOT_METHODS:-"NFS NBD"}
+CMDLINE_LINUX_DEFAULTS=${CMDLINE_LINUX_DEFAULTS:-"ro init=/sbin/init-ltsp"}
+CMDLINE_NFS=${CMDLINE_NFS:-"root=/dev/nfs ip=dhcp"}
+CMDLINE_NBD=${CMDLINE_NBD:-"root=/dev/nbd0 ip=dhcp"}
+
+# Set a default BOOTPROMPT_OPTS using the first defined in BOOT_METHODS
+boot_method_default=$(echo $BOOT_METHODS | awk '{print $1}')
+cmdline_method_default=$(eval echo '$CMDLINE_'$boot_method_default)
+BOOTPROMPT_OPTS="$CMDLINE_LINUX_DEFAULTS $cmdline_method_default"
 
 if [ -f /usr/lib/yaboot/yaboot ]; then
     cp -a -v /usr/lib/yaboot/yaboot $BOOT
@@ -156,14 +156,12 @@ EOF
 
 EOF
 
-    # Only use the first boot method.
-    method=$(echo $BOOT_METHODS | awk '{print $1}')
     cat >> $PXECFG/ltsp <<EOF
 
 label ltsp
-menu label LTSP, using $method
+menu label LTSP, using $boot_method_default
 kernel vmlinuz
-append ro initrd=initrd.img $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+append ro initrd=initrd.img $BOOTPROMPT_OPTS
 ipappend ${IPAPPEND:-2}
 
 EOF
