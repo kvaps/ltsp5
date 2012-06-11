@@ -152,9 +152,16 @@ EOF
     # Which needs a corresponding CMDLINE_ for each defined method.
     # i.e. CMDLINE_NFS or CMDLINE_NBD
     # Also requires that CMDLINE_LINUX_DEFAULT is set to a sane value.
-    for version in $(kernel_versions) ; do
-        for method in $BOOT_METHODS ; do
-            cat >> $PXECFG/default <<EOF
+    kversions=$(kernel_versions)
+    if [ -n "$kversions" ]; then
+        cat >> $PXECFG/default <<EOF
+menu begin ltsp-other
+menu label Other LTSP boot options
+
+EOF
+        for version in $kversions ; do
+            for method in $BOOT_METHODS ; do
+                cat >> $PXECFG/default <<EOF
 
 label ltsp-$method-$version
 menu label LTSP, using $method, with Linux $version
@@ -163,8 +170,12 @@ append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLIN
 ipappend ${IPAPPEND:-2}
 
 EOF
+            done
         done
-    done
+        cat >> $PXECFG/default <<EOF
+menu end
+EOF
+    fi
 
     if [ -f "$PXELINUX_APPEND_FILE" ]; then
         cat "$PXELINUX_APPEND_FILE" >> $PXECFG/default
