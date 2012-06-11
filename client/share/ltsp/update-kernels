@@ -164,7 +164,11 @@ EOF
         for type in 64 PAE 32 ; do
             # get appropriate kernel from LIST_KERNELS_64, LIST_KERNELS_PAE, 
             # and LIST_KERNELS_32 variables.
-            list_kernels=$(eval echo '$LIST_KERNELS_'$type)
+            case $type in
+                64) list_kernels="$LIST_KERNELS_64 $LIST_KERNELS_PAE $LIST_KERNELS_32" ;;
+                PAE) list_kernels="$LIST_KERNELS_PAE $LIST_KERNELS_32" ;;
+                32) list_kernels="$LIST_KERNELS_32" ;;
+            esac
             # only return the newest kernel of appropriate type.
             version=$(LIST_KERNELS="$list_kernels *" kernel_versions | head -n 1)
             cat >> $PXECFG/default <<EOF
