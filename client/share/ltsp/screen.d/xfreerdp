@@ -12,6 +12,8 @@
 # the full text of which can be found in the COPYING file.
 
 . /usr/share/ltsp/screen-x-common
+# xfreerdp segfaults if HOME is unset.
+export HOME=$(HOME:-/root}
 
 # The same screen script can be used for rdesktop too, by just symlinking
 # screen.d/rdesktop to screen.d/xfreerdp.
