@@ -255,6 +255,18 @@ EOF
         done
     fi
 
+    cat > $PXECFG/ltsp <<EOF
+# This file is regenerated when update-kernels runs.
+# Do not edit, see /etc/ltsp/update-kernels.conf instead.
+
+EOF
+
+    for file in $PXECFG/ltsp-* ; do
+        if [ -f "$file" ]; then
+            cat "$file" >> $PXECFG/ltsp
+        fi
+    done
+
     memtest_bin='memtest86+.bin memtest86.bin'
     for memtest in $memtest_bin ; do
         memtest_name=$(basename $memtest .bin)
