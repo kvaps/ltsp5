@@ -171,15 +171,18 @@ EOF
 
 EOF
 
-    cat >> $PXECFG/ltsp <<EOF
+    for method in $BOOT_METHODS ; do
+    	cat >> $PXECFG/ltsp <<EOF
 
-label ltsp
-menu label LTSP, using $boot_method_default
+label ltsp-$method
+menu label LTSP, using $method
 kernel vmlinuz
-append ro initrd=initrd.img $BOOTPROMPT_OPTS
+append ro initrd=initrd.img $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
+
+    done
 
     if boolean_is_true "$IFCPU64" ; then
         if [ -f "$syslinux_dir/ifcpu64.c32" ]; then
