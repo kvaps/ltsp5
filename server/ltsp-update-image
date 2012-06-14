@@ -201,9 +201,7 @@ generate_image() {
         mv "$imgdir/$name.img.tmp" "$imgdir/$name.img"
     fi
 
-    PREFER_NBD_IMAGE="$REVERT" ltsp-update-kernels ${BASE:+-b "$BASE"} \
-        ${TFTP_BOOT_DIR:+-d "$TFTP_BOOT_DIR"} \
-        ${TFTP_DIRS:+-t "$TFTP_DIRS"} "$name"
+    PREFER_NBD_IMAGE="$REVERT" ltsp-update-kernels ${BASE:+-b "$BASE"} "$name"
 
     if [ "$cu_chroot" != "$chroot" ] && [ "$REVERT" != true ]; then
         trap_cleanup
