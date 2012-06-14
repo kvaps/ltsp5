@@ -31,5 +31,6 @@ var/log/*.1
 var/log/*.gz
 var/log/*.old
 var/mail/*
+var/spool/squid3/*
 var/tmp/.*
 var/tmp/*
