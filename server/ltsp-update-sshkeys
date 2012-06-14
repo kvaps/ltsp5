@@ -105,10 +105,13 @@ if [ -n "$UPDATE" ]; then
         # Do the work once; next times, use cp
         if [ -z "$firstfile" ]; then
             firstfile="$chroot/etc/ssh/ssh_known_hosts"
-            {
-                sed 's/^/server /' /etc/ssh/ssh_host_*_key.pub
-                find /etc/ltsp/ -type f -name "ssh_known_hosts.*" -exec cat {} + 2>/dev/null
-            } > "$firstfile"
+            echo '# ssh keys for LTSP' > "$firstfile"
+            for key in $(find /etc/ssh/ -type f -name 'ssh_host_*_key.pub'); do
+                sed 's,/^/server /' "$key" >> "$firstfile"
+            done
+            for file in $(find /etc/ltsp/ -type f -name 'ssh_known_hosts.*') ; do
+                cat "$file" >> "$firstfile"
+            done
         else
             cp "$firstfile" "$chroot/etc/ssh/ssh_known_hosts"
         fi
