@@ -155,8 +155,8 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
     if [ ! -f $PXECFG/default ]; then
         cat > $PXECFG/default <<EOF
 # This file may be safely edited, and changes will be preserved.
-default ${PXELINUX_DEFAULT:-"ltsp"}
-ontimeout ${ONTIMEOUT:-"ltsp"}
+default ${PXELINUX_DEFAULT:-"ltsp-$boot_method_default"}
+ontimeout ${ONTIMEOUT:-"ltsp-$boot_method_default"}
 ${TIMEOUT:+timeout $TIMEOUT}
 
 include pxelinux.cfg/ltsp
