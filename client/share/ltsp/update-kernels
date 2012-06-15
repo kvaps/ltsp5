@@ -108,7 +108,7 @@ image=/ltsp/$CHROOT_NAME/vmlinux
         append="$BOOTPROMPT_OPTS"
 EOF
 
-    kversions=$(LIST_KERNELS="vmlinux-" kernel_versions)
+    kversions=$(kernel_versions)
     if [ -n "$kversions" ]; then
         for version in $kversions ; do
             for method in $BOOT_METHODS ; do
