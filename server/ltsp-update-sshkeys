@@ -107,7 +107,7 @@ if [ -n "$UPDATE" ]; then
             firstfile="$chroot/etc/ssh/ssh_known_hosts"
             echo '# ssh keys for LTSP' > "$firstfile"
             for key in $(find /etc/ssh/ -type f -name 'ssh_host_*_key.pub'); do
-                sed 's,/^/server /' "$key" >> "$firstfile"
+                sed 's/^/server /' "$key" >> "$firstfile"
             done
             for file in $(find /etc/ltsp/ -type f -name 'ssh_known_hosts.*') ; do
                 cat "$file" >> "$firstfile"
