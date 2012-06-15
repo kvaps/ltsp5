@@ -11,9 +11,11 @@ if [ -n "$TIMESERVER" ]; then
     fi
 
     # Modify /etc/ntp.conf
-    sed -i -e '/^server/d' /etc/ntp.conf
+    if [ -f "/etc/ntp.conf" ]; then
+        sed -i -e '/^server/d' /etc/ntp.conf
+    fi
     echo "server ${TIMESERVER}" >>/etc/ntp.conf
 
     # Modify /etc/default/ntpdate
-    sed -e 's/^NTPSERVERS=".*"/NTPSERVER="'$TIMESERVER'"/' /etc/default/ntpdate
+    sed -i -e 's/^NTPSERVERS=".*"/NTPSERVER="'$TIMESERVER'"/' /etc/default/ntpdate
 fi
