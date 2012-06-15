@@ -168,14 +168,17 @@ EOF
     pxelinux_include_files=""
     for method in $BOOT_METHODS ; do
         pxelinux_include_files="$pxelinux_include_files ltsp-$method"
+        # Get the preferred default kernel, preferred 32-bit kernel, or any 
+        # kernel.
+        version=$(LIST_KERNELS="$LIST_KERNELS_DEFAULT $LIST_KERNELS_32 *" kernel_versions | head -n 1)
     	cat > $PXECFG/ltsp-$method <<EOF
 # This file is regenerated when update-kernels runs.
 # Do not edit, see /etc/ltsp/update-kernels.conf instead.
 
 label ltsp-$method
 menu label LTSP, using $method
-kernel vmlinuz
-append ro initrd=initrd.img $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+kernel vmlinuz${version:+-"$version"}
+append ro initrd=initrd.img${version:+-"$version"} $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
