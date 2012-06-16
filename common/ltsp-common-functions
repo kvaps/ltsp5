@@ -166,6 +166,10 @@ fi
 
 # Source tool-specific settings and functions, if they're provided
 ltsp_tool=${0##*/}
+if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then
+    . "/usr/share/ltsp/$ltsp_tool-functions"
+fi
+
 if [ -f "/etc/ltsp/$ltsp_tool.conf" ]; then
     . "/etc/ltsp/$ltsp_tool.conf"
 fi
@@ -173,7 +177,4 @@ if [ -d "/etc/ltsp/$ltsp_tool.conf.d" ]; then
     for file in $(run_parts_list "/etc/ltsp/$ltsp_tool.conf.d") ; do
         . "$file"
     done
-fi
-if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then
-    . "/usr/share/ltsp/$ltsp_tool-functions"
 fi
