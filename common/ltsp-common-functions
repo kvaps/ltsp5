@@ -170,6 +170,7 @@ if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then
     . "/usr/share/ltsp/$ltsp_tool-functions"
 fi
 
+# Source tool-specific configuration files
 if [ -f "/etc/ltsp/$ltsp_tool.conf" ]; then
     . "/etc/ltsp/$ltsp_tool.conf"
 fi
