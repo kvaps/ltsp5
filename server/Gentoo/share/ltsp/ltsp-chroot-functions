@@ -1,6 +1,12 @@
 # Gentoo-specific function overrides for ltsp-chroot
 
 mount_package_cache() {
+    # client arch can be set in client build process
+    # useful if chroot name is different from arch
+    if [ -f $ROOT/etc/ltsp/arch.conf ]; then
+        ARCH=$(cat $ROOT/etc/ltsp/arch.conf)
+    fi
+
     mark_mount --bind /usr/portage "$ROOT/usr/portage"
     mark_mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"
     # remove if ltsp ever in portage tree

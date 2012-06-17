@@ -24,4 +24,9 @@ case "$MODE" in
             ;;
         esac     
         ;;
+    finalization)
+        # use to determine client arch later
+        mkdir -p "$ROOT/etc/ltsp"
+        echo "$ARCH" > "$ROOT/etc/ltsp/arch.conf"
+        ;;
 esac
