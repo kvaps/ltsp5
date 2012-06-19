@@ -35,7 +35,7 @@ usage() {
     cat <<EOF
 Usage: $0 [OPTION] [CHROOT...]
 Copies the chroot kernels to the TFTP directory. The TFTP directory
-can be set in /etc/ltsp/common-server.conf using a TFTP_DIR and a
+can be set in /etc/ltsp/ltsp-server.conf using a TFTP_DIR and a
 TFTP_BOOT_DIR. The default TFTP directories are 
 /var/lib/tftpboot/ltsp, /tftpboot/ltsp and /srv/tftp/ltsp.
 

@@ -159,11 +159,6 @@ umount_marked() {
 
 debug "Started"
 
-# Source common settings, e.g. BASE
-if [ -f /etc/ltsp/common-server.conf ]; then
-    . /etc/ltsp/common-server.conf
-fi
-
 # Source tool-specific settings and functions, if they're provided
 ltsp_tool=${0##*/}
 if [ -f "/usr/share/ltsp/$ltsp_tool-functions" ]; then

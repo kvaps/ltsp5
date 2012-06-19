@@ -36,9 +36,9 @@ default_chroot() {
 # Server scripts should be ready for and even rely on "-e" being set.
 set -e
 
-# Common functions shared by LTSP scripts
-if [ -f /usr/share/ltsp/ltsp-server-common-functions ]; then
-    . /usr/share/ltsp/ltsp-server-common-functions
+# Source common server settings, e.g. BASE
+if [ -f /etc/ltsp/ltsp-server.conf ]; then
+    . /etc/ltsp/ltsp-server.conf
 fi
 
 # Some variables are needed by many server scripts, assign them default values.
@@ -47,6 +47,11 @@ BASE=${BASE:-"/opt/ltsp"}
 BASE=${BASE%/}
 TFTP_BOOT_DIR=${TFTP_BOOT_DIR:-"ltsp"}
 TFTP_DIRS=${TFTP_DIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
+
+# Common functions shared by LTSP scripts
+if [ -f /usr/share/ltsp/ltsp-server-common-functions ]; then
+    . /usr/share/ltsp/ltsp-server-common-functions
+fi
 
 # Source distro specific overrides.
 if [ -f /usr/share/ltsp/ltsp-server-vendor-functions ]; then

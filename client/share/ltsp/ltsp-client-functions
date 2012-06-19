@@ -1,3 +1,8 @@
+# Source common client settings.
+if [ -f /etc/ltsp/ltsp-client.conf ]; then
+    . /etc/ltsp/ltsp-client.conf
+fi
+
 # Common functions shared by LTSP scripts
 if [ -f /usr/share/ltsp/ltsp-client-common-functions ]; then
     . /usr/share/ltsp/ltsp-client-common-functions
