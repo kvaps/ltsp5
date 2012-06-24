@@ -9,7 +9,7 @@
 # authentication, and instead leverage the authentication already set up on
 # the server.
 
-if boolean_is_true "$LOCAL_APPS"; then
+if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
 
     # Set up local uids/gids
 
@@ -206,16 +206,12 @@ EOF
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
 
-    # attempt to create cups dir if not present
-    if [ ! -d /etc/cups ]; then
-        mkdir /etc/cups || true
-    fi
-
-    # if cups is installed in the chroot, use LDM_SERVER for printing
+    # if cups is installed in the chroot, use LDM_SERVER for printing,
+    # unless the user has enabled remote printer browsing via CUPS.
     if [ -d /etc/cups ]; then
         if [ -n "${CUPS_SERVER}" ]; then
             echo "ServerName ${CUPS_SERVER}" > /etc/cups/client.conf
-        else
+        elif ! grep -qsi "^Browsing on" /etc/cups/cupsd.conf; then
             echo "ServerName ${LDM_SERVER}" > /etc/cups/client.conf
         fi
     fi

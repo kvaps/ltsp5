@@ -1,0 +1,4 @@
+# Remove saved server printers
+if [ -f /etc/cups/printers.conf ]; then
+    sed "/^#/!d" -i /etc/cups/printers.conf
+fi
