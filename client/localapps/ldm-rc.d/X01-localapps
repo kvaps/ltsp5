@@ -206,6 +206,12 @@ EOF
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
 
+    # /etc/cups is usually not shipped by the cups-client package, so attempt
+    # to create it (it might fail if bind mounts are used).
+    if [ ! -d /etc/cups ]; then
+        mkdir /etc/cups || true
+    fi
+
     # if cups is installed in the chroot, use LDM_SERVER for printing,
     # unless the user has enabled remote printer browsing via CUPS.
     if [ -d /etc/cups ]; then
