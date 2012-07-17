@@ -149,6 +149,12 @@ pre_install_extra_packages() {
 extra_packages ldm ltsp-client dejavu ${PACKAGES}
 
 post_install_extra_packages() {
+	# apply localepurge
+	spawn_chroot "emerge localepurge"
+	cat ${chroot_dir}/etc/locale.gen | awk '{print $1}' > ${chroot_dir}/etc/locale.nopurge
+	spawn_chroot "localepurge"
+	spawn_chroot "emerge --unmerge localepurge"
+
 	# remove excluded packages
 	for package in ${EXCLUDE}; do
 		spawn_chroot "emerge --unmerge ${package}"
