@@ -123,7 +123,8 @@ proxy_subnets() {
                 # do nothing on these networks
                 ;;
             *)
-                echo "${separator}dhcp-range=$subnet,proxy"
+                # echo in dash translates "\n", use printf to keep it
+                printf "%s" "${separator}dhcp-range=$subnet,proxy"
                 # Insert a separator only after the first line
                 separator="\n"
                 ;;
