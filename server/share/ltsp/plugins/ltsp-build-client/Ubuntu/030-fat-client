@@ -27,9 +27,6 @@ case "$MODE" in
         if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
             return 0
         fi
-
-        # Reenable recommented packages installation for fat clients
-        APT_GET_OPTS=$(echo "$APT_GET_OPTS" | sed 's/--no-install-recommends//')
     ;;
 
     after-install)
