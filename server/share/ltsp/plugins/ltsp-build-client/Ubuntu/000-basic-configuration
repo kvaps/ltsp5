@@ -8,5 +8,6 @@ case "$MODE" in
         EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
         OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"true"}
         export DEBIAN_PRIORITY=critical
+        BOOTSTRAP=${BOOTSTRAP:-"debootstrap"}
         ;;
 esac
