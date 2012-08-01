@@ -263,12 +263,12 @@ SEARCH_DOMAIN='$search'
 NTPSVR='$ntpsvr'
 TIMESVR='$ntpsvr'
 TIMEZONE='$timezone'
-SWAPSVR='$swapsvr'" > /tmp/net-$interface.conf
+SWAPSVR='$swapsvr'" > /run/net-$interface.conf
 
 # Write the file that'll be sourced by the callee function run_scripts
 mkdir -p /conf
 # Only export the lines that have something after the =
-sed -n "/[^=]*=[' ]*$/!s/.*/export &/p" "/tmp/net-$interface.conf" > /conf/param.conf
+sed -n "/[^=]*=[' ]*$/!s/.*/export &/p" "/run/net-$interface.conf" > /conf/param.conf
 }
 
 # Main
