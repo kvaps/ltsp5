@@ -4,9 +4,11 @@ case "$MODE" in
         add_option "updates-mirror" "`eval_gettext "set the update mirror location"`" "advanced" "true"
         ;;
     before-install)
-        if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then
+        if [ "$ARCH" = "i386" ] || [ "$ARCH" = "amd64" ]; then
+            MIRROR=${MIRROR:-"http://archive.ubuntu.com/ubuntu"}
             SECURITY_MIRROR=${SECURITY_MIRROR:-"http://security.ubuntu.com/ubuntu"}
         else
+            MIRROR=${MIRROR:-"http://ports.ubuntu.com/ubuntu-ports"}
             SECURITY_MIRROR=${SECURITY_MIRROR:-"http://ports.ubuntu.com/ubuntu-ports"}
         fi
         UPDATES_MIRROR=${UPDATES_MIRROR:-"$MIRROR"}
