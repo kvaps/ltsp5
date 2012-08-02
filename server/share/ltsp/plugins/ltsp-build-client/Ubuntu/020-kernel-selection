@@ -16,8 +16,8 @@ case "$MODE" in
                 KERNEL_ARCH="$(uname -m)"
             ;;
 
-            armel)
-                KERNEL_ARCH="imx51"
+            armel|armhf)
+                KERNEL_ARCH="omap4"
             ;;
 
             *)
