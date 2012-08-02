@@ -3,11 +3,16 @@ case "$MODE" in
         ARCH=${ARCH:-"$(dpkg --print-architecture)"}
         APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
         DIST=${DIST:-"$(lsb_release -s -c)"}
-        MIRROR=${MIRROR:-"http://archive.ubuntu.com/ubuntu"}
         COMPONENTS=${COMPONENTS:-"main restricted universe multiverse"}
         EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
         OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"true"}
         export DEBIAN_PRIORITY=critical
         BOOTSTRAP=${BOOTSTRAP:-"debootstrap"}
+
+        if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then
+            MIRROR=${MIRROR:-"http://archive.ubuntu.com/ubuntu"}
+        else
+            MIRROR=${MIRROR:-"http://ports.ubuntu.com/ubuntu-ports"}
+        fi
         ;;
 esac
