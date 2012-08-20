@@ -309,7 +309,7 @@ ${TIMEOUT:+timeout $TIMEOUT}
 label ltsp-$boot_method_default
 kernel uImage${version:+-"$version"}
 initrd uInitrd${version:+-"$version"}
-append ro $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+append ro $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$boot_method_default)
 EOF
 
     mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
