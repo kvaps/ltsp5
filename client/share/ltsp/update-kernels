@@ -289,6 +289,41 @@ else
     msg "Skipping PXE configuration.  Install the syslinux package if you need it."
 fi
 
+
+if ([ "$(detect_arch)" = "armhf" ] || [ "$(detect_arch)" = "armel" ]) && which mkimage >/dev/null; then
+    PXECFG=$BOOT/pxelinux.cfg
+
+    if [ ! -d $PXECFG ]; then
+        mkdir $PXECFG
+    fi
+
+    version=$(LIST_KERNELS="$LIST_KERNELS_DEFAULT $LIST_KERNELS_ARM *" kernel_versions | head -n 1)
+    cat > $PXECFG/default <<EOF
+# This file is regenerated when update-kernels runs.
+# Do not edit, see /etc/ltsp/update-kernels.conf instead.
+
+default ${PXELINUX_DEFAULT:-"ltsp-$boot_method_default"}
+ontimeout ${ONTIMEOUT:-"ltsp-$boot_method_default"}
+${TIMEOUT:+timeout $TIMEOUT}
+
+label ltsp-$boot_method_default
+kernel uImage${version:+-"$version"}
+initrd uInitrd${version:+-"$version"}
+append ro $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+EOF
+
+    mkimage -A arm -O linux -T kernel -C none -a 0x80008000 -e 0x80008000 \
+        -n "LTSP kernel" -d $BOOT/vmlinuz${version:+-"$version"} \
+        $BOOT/uImage${version:+-"$version"}
+    mkimage -A arm -O linux -T ramdisk -C none -a 0x0 -e 0x0 \
+        -n "LTSP initrd" -d $BOOT/initrd.img${version:+-"$version"} \
+        $BOOT/uInitrd${version:+-"$version"}
+
+else
+    msg "Skipping ARM configuration.  Install the flash-kernel package if you need it."
+fi
+
+
 # allow specifying a specific kernel image to update, from kernel postinst
 if [ -f "$2" ]; then
     ALL_KERNELS="$2"
