@@ -31,3 +31,6 @@ auto_add_modules net
 copy_exec /sbin/nbd-client /sbin
 copy_exec /usr/sbin/nbd-proxy /sbin/nbd-proxy
 copy_exec /usr/sbin/nbd-client-proxy /sbin/nbd-client-proxy
+
+# Cleanup empty ROOT= string if written in conf/param.conf
+sed "/^ROOT=\"\"$/d" -i $DESTDIR/conf/param.conf
