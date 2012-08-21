@@ -8,7 +8,7 @@ tmpfs_dir=/var/lib/ltsp-client-setup
 tmpfs_size=10m
 
 # tmpfs/bind directions that get mounted with only directory structure preserved
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /var/run /var/lib/pulse /var/lib/dbus"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /run /var/lib/pulse /var/lib/dbus"
 
 # tmpfs/bind directions that get mounted with directory structure and data copied
 copy_dirs="/root /home /etc/conf.d /etc/cron.d /etc/runlevels /etc/udev/rules.d /var/cache/ltsp /var/cache/ltsp-localapps"
