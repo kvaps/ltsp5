@@ -10,5 +10,5 @@ fi
 
 # Set up timeserver
 if [ -n "$TIMESERVER" ]; then
-    ntpdate $TIMESERVER && hwclock --systohc --${HWCLOCK:-"utc"} --noadjfile || true
+    ntpdate -p 1 $TIMESERVER && hwclock --systohc --${HWCLOCK:-"utc"} --noadjfile || true
 fi
