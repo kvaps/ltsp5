@@ -2,4 +2,10 @@
 
 rc-update add ltsp-client default
 rc-update add sysklogd default
-rc-update add vixie-cron default
+
+# one of the possible cron tools, only 1 can be installed
+rc-service -e vixie-cron && rc-update add vixie-cron default
+rc-service -e bcron && rc-update add bcron default
+rc-service -e cronie && rc-update add cronie default
+rc-service -e dcron && rc-update add dcron default
+rc-service -e fcron && rc-update add fcron default
