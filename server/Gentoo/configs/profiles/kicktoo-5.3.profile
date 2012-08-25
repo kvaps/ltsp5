@@ -27,6 +27,7 @@ chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
 rootpw password
 makeconf_line MAKEOPTS "${MAKEOPTS}"
+makeconf_line DRACUT_MODULES "nbd nfs"
 
 if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
