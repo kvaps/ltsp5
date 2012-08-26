@@ -1,5 +1,8 @@
 # Ensure a default for SERVER. It may be overriden later on by lts.conf.
-if [ -n "$NBD_ROOT_HOST" ]; then
+if [ -n "$SERVER" ]; then
+    # if already exported by cmdline script, don't do the following steps 
+    export SERVER="$SERVER"
+elif [ -n "$NBD_ROOT_HOST" ]; then
     export SERVER="$NBD_ROOT_HOST"
 elif [ -n "$NFS_SERVER" ]; then
     export SERVER="$NFS_SERVER"

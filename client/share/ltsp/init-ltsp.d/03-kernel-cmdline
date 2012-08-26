@@ -1,4 +1,4 @@
-# Get NBD_ROOT_HOST or NFS_SERVER from the kernel command line.
+# Get NBD_ROOT_HOST, NFS_SERVER and LTSP vars from the kernel command line.
 
 if [ -n "$NBD_ROOT_HOST" ] || [ -n "$NFS_SERVER" ]; then
     return
@@ -9,12 +9,13 @@ for x in $(cat /proc/cmdline); do
         nbdroot=*)
             netroot="${x#nbdroot=}"
             nbd=true
-            break
             ;;
         nfsroot=*)
             netroot="${x#nfsroot=}"
             nfs=true
-            break
+            ;;
+        ltsp.*=*)
+            ltsp_vars="${ltsp_vars} ${x#ltsp.}"
             ;;
     esac
 done
@@ -65,3 +66,13 @@ elif [ -n "$nfs" ]; then
     export NFS_SERVER="$netsrv"
     echo "NFS_SERVER=$NFS_SERVER"
 fi >> /var/cache/ltsp/ltsp_config
+
+# export LTSP variables
+for x in $(echo ${ltsp_vars}); do
+    var=$(echo ${x} | cut -d= -f1 | tr '[a-z]' '[A-Z]')
+    value=$(echo ${x} | cut -d= -f2)
+
+    if [ -n "$var" ] && [ -n "$value" ]; then
+        export "$var"="$value"
+    fi
+done
