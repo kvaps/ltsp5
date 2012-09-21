@@ -45,7 +45,7 @@ locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone ${TIMEZONE}
-extra_packages ldm ltsp-client dejavu sysklogd ${PACKAGES}
+extra_packages ldm ltsp-client sysklogd ${PACKAGES}
 rcadd sysklogd default
 rcadd ltsp-client-setup boot
 rcadd ltsp-client default

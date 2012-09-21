@@ -144,8 +144,7 @@ pre_install_extra_packages() {
 	spawn_chroot "emerge python:2.7"
 }
 
-# adding a default font
-extra_packages ldm ltsp-client dejavu ${PACKAGES}
+extra_packages ldm ltsp-client ${PACKAGES}
 
 post_install_extra_packages() {
 	# remove excluded packages

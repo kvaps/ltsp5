@@ -46,7 +46,7 @@ locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel
 timezone ${TIMEZONE}
-extra_packages ldm ltsp-client dejavu ${PACKAGES}
+extra_packages ldm ltsp-client ${PACKAGES}
 
 
 # Step control extra functions
