@@ -265,6 +265,8 @@ TIMESVR='$ntpsvr'
 TIMEZONE='$timezone'
 SWAPSVR='$swapsvr'" > /run/net-$interface.conf
 
+# Also make a /tmp symlink for backwards compatibility
+ln -sf /run/net-$interface.conf /tmp/net-$interface.conf
 # Write the file that'll be sourced by the callee function run_scripts
 mkdir -p /conf
 # Only export the lines that have something after the =
