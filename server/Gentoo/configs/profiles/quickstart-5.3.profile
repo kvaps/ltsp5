@@ -77,7 +77,6 @@ pre_install_portage_tree() {
 	mount_bind "/usr/portage/packages/${ARCH}" "${chroot_dir}/usr/portage/packages"
 
 	# bind mounting layman, for overlay packages
-	# TODO: remove this mounting when the ltsp ebuilds are in the tree
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
 	if [ -n "${MIRRORS}" ]; then
@@ -88,7 +87,6 @@ pre_install_portage_tree() {
 		echo "VIDEO_CARDS=\"${VIDEO_CARDS}\"" >> ${chroot_dir}/etc/make.conf
 	fi
 
-	# TODO: don't add this by default
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
 	source /var/lib/layman/make.conf
@@ -103,11 +101,6 @@ pre_install_portage_tree() {
 	<net-misc/ltsp-client-5.3
 	EOF
 	
-	# make sure the new unstable versions get installed
-	cat > ${chroot_dir}/etc/portage/package.keywords <<- EOF
-	net-misc/ltsp-client
-	EOF
-
 	# linking ltsp profile from overlay
 	rm ${chroot_dir}/etc/make.profile
 	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/make.profile"

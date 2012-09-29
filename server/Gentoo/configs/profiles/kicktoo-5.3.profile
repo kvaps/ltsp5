@@ -65,10 +65,8 @@ post_unpack_stage_tarball() {
 	mount_bind "/usr/portage/packages/${ARCH}" "${chroot_dir}/usr/portage/packages"
 	
 	# bind mounting layman, for overlay packages
-	# TODO: remove this mounting when the ltsp ebuilds are in the tree
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
-	# TODO: don't add this by default
 	cat >> ${chroot_dir}/etc/make.conf <<- EOF
 	source /var/lib/layman/make.conf
 	EOF
@@ -82,11 +80,6 @@ post_unpack_stage_tarball() {
 	<net-misc/ltsp-client-5.3
 	EOF
 	
-	# make sure the new unstable versions get installed
-	cat > ${chroot_dir}/etc/portage/package.keywords <<- EOF
-	net-misc/ltsp-client
-	EOF
-
 	# linking ltsp profile from overlay
 	rm ${chroot_dir}/etc/make.profile
 	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/make.profile"
