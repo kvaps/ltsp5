@@ -43,7 +43,7 @@ DISPLAY=":$TTY"
 DISP="$DISPLAY"
 
 error_delay() {
-    echo -n -e "\n\rERROR: $1"
+    printf "\n\rERROR: %s" "$1"
     read CMD
 }
 
