@@ -157,6 +157,17 @@ umount_marked() {
     unset MARKED_MOUNTS
 }
 
+read_prompt() {
+    # Shell agnostic "read -p" implementation
+
+    # Only output if on an interactive terminal
+    if [ -t 0 ]; then
+        echo -n "$1"
+    fi
+    shift
+    read "$@"
+}
+
 debug "Started"
 
 # Source tool-specific settings and functions, if they're provided
