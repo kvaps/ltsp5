@@ -54,7 +54,7 @@ replace_line() {
     if grep -q "$match" "$file"; then
         sed "s/$match/$replace/" -i "$file"
     else
-        echo -e "$replace" >> "$file"
+        printf "%s\n" "$foo" >> "$file"
     fi
 }
 
