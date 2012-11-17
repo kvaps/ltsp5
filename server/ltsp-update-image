@@ -145,6 +145,24 @@ EOF
         done
         test -n "$union_type" || die "No overlayfs or aufs support detected"
         mark_mount -t "$union_type" -o "$union_opts" "$union_type" "$cu_chroot"
+        if [ "aufs" = "$union_type" ]; then
+            # Aufs doesn't handle sub-mounts, so mount each needed sub-mount
+            # directly. If we do not mount the sub-mounts directly, systems 
+            # with a separate /boot partition end up with no kernels for 
+            # network boot.
+            while IFS= read -r point; do
+                case "$point" in
+                    "$cu_rofs"*|/) 
+                    ;;
+                    *)
+                    mkdir -p "$cu_cow${point%/}"
+                    mark_mount -t "$union_type" -o "dirs=$cu_cow${point%/}=rw:$cu_rofs${point%/}=ro" "$union_type" "$cu_chroot${point%/}"
+                    ;;
+                esac
+            done <<EOF
+$(get_mounts "$chroot")
+EOF
+	fi
     fi
     chroot "$cu_chroot" /usr/share/ltsp/ltsp-cleanup --yes
 }
