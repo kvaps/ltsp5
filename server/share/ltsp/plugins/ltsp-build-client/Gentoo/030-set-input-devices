@@ -1,0 +1,10 @@
+case "$MODE" in
+	commandline)
+		add_option "input-devices" "`eval_gettext "Set input device drivers to install"`" "advanced" "true"
+		;;
+	configure)
+		if [ -n "$option_input_devices_value" ] || [ -n "$INPUT_DEVICES" ]; then
+			INPUT_DEVICES="${option_input_devices_value:-$INPUT_DEVICES}"
+		fi
+		;;
+esac

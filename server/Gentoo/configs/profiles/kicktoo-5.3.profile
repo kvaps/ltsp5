@@ -33,6 +33,10 @@ if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
 fi
 
+if [ -n "${INPUT_DEVICES}" ]; then
+	makeconf_line INPUT_DEVICES "${INPUT_DEVICES}"
+fi
+
 if [ -n "${VIDEO_CARDS}" ]; then
 	makeconf_line VIDEO_CARDS "${VIDEO_CARDS}"
 fi

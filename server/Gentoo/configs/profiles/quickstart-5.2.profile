@@ -87,6 +87,10 @@ pre_install_portage_tree() {
 	if [ -n "${MIRRORS}" ]; then
 		echo "GENTOO_MIRRORS=\"${MIRRORS}\"" >> ${chroot_dir}/etc/make.conf
 	fi
+
+	if [ -n "${INPUT_DEVICES}" ]; then
+		echo "INPUT_DEVICES=\"${INPUT_DEVICES}\"" >> ${chroot_dir}/etc/make.conf
+	fi
 	
 	if [ -n "${VIDEO_CARDS}" ]; then
 		echo "VIDEO_CARDS=\"${VIDEO_CARDS}\"" >> ${chroot_dir}/etc/make.conf
