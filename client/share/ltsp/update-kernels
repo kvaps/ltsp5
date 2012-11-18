@@ -51,7 +51,9 @@ msg() {
 # Distros are required to set e.g. KERNEL_PREFIX="vmlinuz-*', KERNEL_SUFFIX="".
 # The * goes where the version is expected to go.
 kernel_versions() {
-    local - kernels arch loop_kernels kernel
+    local orig_flags kernels arch loop_kernels kernel
+    # Save values of flags, and restore them later.
+    orig_flags=$(set +o)
 
     # Disable glob expansion for this function
     set -f
@@ -72,6 +74,7 @@ kernel_versions() {
             esac
         done
     done | sort -frV | awk '{ print $2 }'
+    eval "$orig_flags"
 }
 
 # This also sources vendor functions and .conf file settings
