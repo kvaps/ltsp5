@@ -53,8 +53,9 @@ EOF
 
 trap_cleanup() {
     # Don't stop on errors within this function.
-    # local - means "restore flags on function exit".
-    local -
+    # Save and restore flags in a way that works with dash and bash.
+    local orig_flags
+    orig_flags=$(set +o)
     set +e
 
     # Stop trapping
@@ -65,6 +66,7 @@ trap_cleanup() {
     rmdir "$cu_rofs"
     rmdir "$cu_base"
     unlock_package_management
+    eval "$orig_flags"
 }
 
 # Get a sorted list of all "real" mount points under $chroot,
