@@ -5,8 +5,10 @@ case "$MODE" in
     configure)
         if [ -n "$option_chroot_value" ]; then
             CHROOT="$option_chroot_value"
+        elif [ -n "${CHROOT}" ]; then
+            CHROOT=${CHROOT}
         else
-            CHROOT="$ARCH"
+            CHROOT=${ARCH}
         fi
         ;; 
 esac
