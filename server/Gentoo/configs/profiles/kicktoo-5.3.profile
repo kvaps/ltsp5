@@ -89,6 +89,12 @@ post_unpack_stage_tarball() {
 	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/make.profile"
 }
 
+pre_install_initramfs_builder() {
+	if [ -n "${INITRAMFS_BUILDER}" ]; then
+		initramfs_builder "${INITRAMFS_BUILDER}"
+	fi
+}
+
 pre_build_kernel() {
 	if [ -n "${KERNEL_CONFIG_URI}" ]; then
 		kernel_config_uri "${KERNEL_CONFIG_URI}"
@@ -104,6 +110,23 @@ pre_build_kernel() {
 		spawn_chroot "emerge ccache"
 		mount_bind "/var/tmp/ccache/${ARCH}" "${chroot_dir}/var/tmp/ccache"
 		genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
+	fi
+}
+
+pre_build_initramfs() {
+	if [ "${INITRAMFS_BUILDER}" == "dracut" ]; then
+		moduledir=$(ls -1r ${chroot_dir}/lib/modules | head -n 1)
+		kernelversion=$(echo ${moduledir} | cut -d "-" -f 1)
+		name="initramfs-dracut-${MAIN_ARCH}-${kernelversion}-gentoo"
+		dracut_initramfs_opts -m \"kernel-modules nbd nfs network base\" --filesystems \"squashfs\" /boot/${name} ${moduledir}
+	fi
+}
+
+post_build_initramfs() {
+	if [ "${INITRAMFS_BUILDER}" == "dracut" ]; then
+		for imagepath in $(find "${chroot_dir}/boot/" -name '*-dracut-*'); do
+			chmod +r "$imagepath"
+		done
 	fi
 }
 

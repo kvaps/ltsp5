@@ -15,6 +15,7 @@ cleanup_kernels() {
           echo "Removing $kernelpath"
           rm -f "$tftpboot/$name/kernel-genkernel-$archversion"
           rm -f "$tftpboot/$name/initramfs-genkernel-$archversion"
+          rm -f "$tftpboot/$name/initramfs-dracut-$archversion"
           rm -f "$tftpboot/$name/System.map-genkernel-$archversion"
         fi
     done

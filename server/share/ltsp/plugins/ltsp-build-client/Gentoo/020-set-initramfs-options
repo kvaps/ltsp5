@@ -1,0 +1,10 @@
+case "$MODE" in
+	commandline)
+		add_option "initramfs-builder" "`eval_gettext "Set initramfs builder, defaults to genkernel"`" "advanced" "true"
+		;;
+	configure)
+		if [ -n "$option_initramfs_builder_value" ] || [ -n "$INITRAMFS_BUILDER" ]; then
+			INITRAMFS_BUILDER="${option_initramfs_builder_value:-$INITRAMFS_BUILDER}"
+		fi
+		;;
+esac
