@@ -1,6 +1,6 @@
 # Automatically set LTSP_FATCLIENT=True if the image supports local logins
-test -z "$LTSP_FATCLIENT" || return
-test -f /proc/meminfo || return
+test -z "$LTSP_FATCLIENT" || return 0
+test -f /proc/meminfo || return 0
 
 # process_lts_conf() unsets glob expansion (set -f), so we need to use `find`
 # blacklist Xsession.desktop (installed by xinit on Gentoo)
