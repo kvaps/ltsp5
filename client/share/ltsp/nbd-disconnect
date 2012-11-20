@@ -32,6 +32,16 @@ while read device etc; do
             swapoff "$device"
             nbd-client -d "$device"
             ;;
+        /dev/mapper/swap[0-9])
+            nbd_device=$(cryptsetup status "$device" | awk '/device:/{print $2}')
+            swapoff "$device"
+            cryptsetup remove "$device"
+            case "$nbd_device" in
+                /dev/nbd[1-9]) 
+                    nbd-client -d "$nbd_device"
+                    ;;
+            esac
+            ;;
     esac
 done < /proc/swaps
 
