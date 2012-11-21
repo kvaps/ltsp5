@@ -90,9 +90,9 @@ update_kernels() {
     mkdir -p "$tftpboot/$name"
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
-    # Ensure that the kernel is readable (LP: #759115)
-    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*' -o -name 'vmlinux-*'); do
-    	chmod +r "$kernelpath"
+    # Ensure that the files are readable (LP: #759115) (Dracut initramfs)
+    for filepath in $(find "$tftpboot/$name/"); do
+    	chmod +r "$filepath"
     done
 
     # OFW on Mac is lame, they cannot tftp from directories
