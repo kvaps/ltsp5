@@ -85,19 +85,19 @@ pre_install_portage_tree() {
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
 	if [ -n "${MIRRORS}" ]; then
-		echo "GENTOO_MIRRORS=\"${MIRRORS}\"" >> ${chroot_dir}/etc/make.conf
+		echo "GENTOO_MIRRORS=\"${MIRRORS}\"" >> ${chroot_dir}/etc/portage/make.conf
 	fi
 
 	if [ -n "${INPUT_DEVICES}" ]; then
-		echo "INPUT_DEVICES=\"${INPUT_DEVICES}\"" >> ${chroot_dir}/etc/make.conf
+		echo "INPUT_DEVICES=\"${INPUT_DEVICES}\"" >> ${chroot_dir}/etc/portage/make.conf
 	fi
 	
 	if [ -n "${VIDEO_CARDS}" ]; then
-		echo "VIDEO_CARDS=\"${VIDEO_CARDS}\"" >> ${chroot_dir}/etc/make.conf
+		echo "VIDEO_CARDS=\"${VIDEO_CARDS}\"" >> ${chroot_dir}/etc/portage/make.conf
 	fi
 
 	# TODO: don't add this by default
-	cat >> ${chroot_dir}/etc/make.conf <<- EOF
+	cat >> ${chroot_dir}/etc/portage/make.conf <<- EOF
 	MAKEOPTS="${MAKEOPTS}"
 	source /var/lib/layman/make.conf
 	EOF
@@ -131,7 +131,7 @@ pre_build_kernel() {
 		spawn_chroot "emerge ccache"
 		mount_bind "/var/tmp/ccache/${ARCH}" "${chroot_dir}/var/tmp/ccache"
 
-		cat >> ${chroot_dir}/etc/make.conf <<- EOF
+		cat >> ${chroot_dir}/etc/portage/make.conf <<- EOF
 		FEATURES="ccache"
 		CCACHE_SIZE="4G"
 		EOF

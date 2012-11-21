@@ -75,7 +75,7 @@ post_unpack_stage_tarball() {
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
 	# TODO: don't add this by default
-	cat >> ${chroot_dir}/etc/make.conf <<- EOF
+	cat >> ${chroot_dir}/etc/portage/make.conf <<- EOF
 	source /var/lib/layman/make.conf
 	EOF
 

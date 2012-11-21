@@ -71,7 +71,7 @@ post_unpack_stage_tarball() {
 	# bind mounting layman, for overlay packages
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
 
-	cat >> ${chroot_dir}/etc/make.conf <<- EOF
+	cat >> ${chroot_dir}/etc/portage/make.conf <<- EOF
 	source /var/lib/layman/make.conf
 	EOF
 
