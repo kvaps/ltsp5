@@ -122,14 +122,6 @@ pre_build_initramfs() {
 	fi
 }
 
-post_build_initramfs() {
-	if [ "${INITRAMFS_BUILDER}" == "dracut" ]; then
-		for imagepath in $(find "${chroot_dir}/boot/" -name '*-dracut-*'); do
-			chmod +r "$imagepath"
-		done
-	fi
-}
-
 pre_install_extra_packages() {
 	spawn_chroot "emerge --newuse udev"
 	spawn_chroot "emerge --update --deep world"
