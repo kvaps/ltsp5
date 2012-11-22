@@ -112,8 +112,8 @@ pre_install_portage_tree() {
 	EOF
 
 	# linking ltsp profile from overlay
-	rm ${chroot_dir}/etc/make.profile
-	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/make.profile"
+	rm ${chroot_dir}/etc/portage/make.profile
+	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/portage/make.profile"
 }
 
 pre_build_kernel() {
