@@ -125,6 +125,9 @@ post_install_extra_packages() {
 		spawn_chroot "emerge --unmerge ${package}"
 	done
 
+	# remove possible dependencies of excluded
+	spawn_chroot "emerge --depclean"
+	
 	# point /etc/mtab to /proc/mounts
 	spawn "ln -sf /proc/mounts ${chroot_dir}/etc/mtab"
 
