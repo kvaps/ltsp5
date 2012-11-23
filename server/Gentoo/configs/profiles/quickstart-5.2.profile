@@ -1,79 +1,9 @@
-install_mode chroot
+source /etc/ltsp/profiles/quickstart-5.3.profile
 
-if [ "${MAIN_ARCH}" = "x86" ]; then
-	use_linux32
-fi
-
-if [ -z "${BASE}" ]; then
-	BASE="/opt/ltsp"
-fi
-
-if [ -z "${NAME}" ]; then
-	NAME="${ARCH}"
-fi
-
-if [ -z "${CHROOT}" ]; then
-	CHROOT="${BASE}/${NAME}"
-fi
-
-if [ -z "${TIMEZONE}" ]; then
-	TIMEZONE="$(</etc/timezone)"
-fi
-
-chroot_dir $CHROOT
-stage_uri="${STAGE_URI}"
-
-
-# TODO: much of this shell code can go into a pre install or post install script
-#	   seperate from the profile
-
-
-# Skip all this
-skip partition
-skip setup_md_raid
-skip setup_lvm
-skip format_devices
-skip mount_local_partitions
-skip mount_network_shares
-skip install_bootloader
-skip configure_bootloader
-
-tree_type none
 logger sysklogd
-cron none
-rootpw password
-tree_type none
-timezone ${TIMEZONE}
+rcadd ltsp-client-setup boot
+rcadd ltsp-client default
 
-
-mount_bind() {
-	local source="${1}"
-	local dest="${2}"
-
-	spawn "mkdir -p ${source}"
-	spawn "mkdir -p ${dest}"
-	spawn "mount ${source} ${dest} -o bind"
-	echo "${dest}" >> /tmp/install.umount
-}
-
-post_unpack_stage_tarball() {
-		# protecting locale.gen from updating, /etc is set in CONFIG_PROTECT_MASK
-		export CONFIG_PROTECT="/etc/locale.gen"
-
-		if [ -n "$LOCALE" ]; then
-				echo "LANG=${LOCALE}" >> ${chroot_dir}/etc/env.d/02locale
-				grep ${LOCALE} /usr/share/i18n/SUPPORTED > ${chroot_dir}/etc/locale.gen
-		else
-				if [ -f /etc/env.d/02locale ]; then
-					cp /etc/env.d/02locale ${chroot_dir}/etc/env.d/
-				fi
-
-				cat > ${chroot_dir}/etc/locale.gen <<- EOF
-				en_US ISO-8859-1
-				en_US.UTF-8 UTF-8
-				EOF
-		fi
-}
 
 pre_install_portage_tree() {
 	# bind mounting portage and binary package dir
@@ -116,40 +46,6 @@ pre_install_portage_tree() {
 	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/portage/make.profile"
 }
 
-pre_build_kernel() {
-	if [ -n "${KERNEL_CONFIG_URI}" ]; then
-		kernel_config_uri "${KERNEL_CONFIG_URI}"
-	fi
-
-	if [ -n "${KERNEL_SOURCES}" ]; then
- 		kernel_sources "${KERNEL_SOURCES}"
- 	fi
-
-    genkernel_opts --makeopts="${MAKEOPTS}"
-
-	if [ "${CCACHE}" == "true" ]; then
-		spawn_chroot "emerge ccache"
-		mount_bind "/var/tmp/ccache/${ARCH}" "${chroot_dir}/var/tmp/ccache"
-
-		cat >> ${chroot_dir}/etc/portage/make.conf <<- EOF
-		FEATURES="ccache"
-		CCACHE_SIZE="4G"
-		EOF
-
-		genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
-	fi
-}
-
-pre_install_extra_packages() {
-	spawn_chroot "emerge --newuse udev"
-	spawn_chroot "emerge --update --deep world"
-	# emerge python-2.7 to deal with "python_get_implementational_package is not installed" issues
-	# these occur when emerging binary packages which are compiled against a new Python version
-	spawn_chroot "emerge python:2.7"
-}
-
-extra_packages ldm ltsp-client ${PACKAGES}
-
 post_install_extra_packages() {
 	# remove excluded packages
 	for package in ${EXCLUDE}; do
@@ -172,6 +68,3 @@ post_install_extra_packages() {
 	# required in 5.2 clients
 	touch ${chroot_dir}/etc/ltsp_chroot
 }
-
-rcadd ltsp-client-setup boot
-rcadd ltsp-client default

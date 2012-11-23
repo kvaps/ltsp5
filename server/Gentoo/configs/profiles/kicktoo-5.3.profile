@@ -78,12 +78,7 @@ post_unpack_stage_tarball() {
 	cat > ${chroot_dir}/etc/fstab <<- EOF
 	# DO NOT DELETE
 	EOF
-	
-	# making sure ltsp-client 5.2 is not installed
-	cat > ${chroot_dir}/etc/portage/package.mask <<- EOF
-	<net-misc/ltsp-client-5.3
-	EOF
-	
+
 	# linking ltsp profile from overlay
 	rm ${chroot_dir}/etc/portage/make.profile
 	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/portage/make.profile"

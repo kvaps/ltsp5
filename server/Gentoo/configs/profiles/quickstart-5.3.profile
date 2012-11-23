@@ -40,6 +40,7 @@ cron none
 rootpw password
 tree_type none
 timezone ${TIMEZONE}
+extra_packages ldm ltsp-client ${PACKAGES}
 
 
 mount_bind() {
@@ -99,12 +100,7 @@ pre_install_portage_tree() {
 	cat > ${chroot_dir}/etc/fstab <<- EOF
 	# DO NOT DELETE
 	EOF
-	
-	# making sure ltsp-client 5.2 is not installed
-	cat > ${chroot_dir}/etc/portage/package.mask <<- EOF
-	<net-misc/ltsp-client-5.3
-	EOF
-	
+
 	# linking ltsp profile from overlay
 	rm ${chroot_dir}/etc/portage/make.profile
 	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/portage/make.profile"
@@ -141,8 +137,6 @@ pre_install_extra_packages() {
 	# these occur when emerging binary packages which are compiled against a new Python version
 	spawn_chroot "emerge python:2.7"
 }
-
-extra_packages ldm ltsp-client ${PACKAGES}
 
 post_install_extra_packages() {
 	# apply localepurge
