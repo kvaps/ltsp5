@@ -91,9 +91,7 @@ update_kernels() {
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
     # Ensure that the files are readable (LP: #759115) (Dracut initramfs)
-    for filepath in $(find "$tftpboot/$name/"); do
-    	chmod +r "$filepath"
-    done
+    find "$tftpboot/$name/" -maxdepth 1 ! -perm -o=r -exec chmod +r {} \;
 
     # OFW on Mac is lame, they cannot tftp from directories
     if [ -e "$tftpboot/$name/yaboot" ]; then
