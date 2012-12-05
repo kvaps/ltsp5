@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <linux/nbd.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
@@ -233,6 +234,9 @@ enum client_state c_state;
 
 /* Handshake state. */
 enum handshake_state h_state;
+
+/* Function definitions */
+int server_handshake(struct buf *input_buf);
 
 char *handle_to_string(char *handle) {
     static char res[128];
@@ -1180,8 +1184,6 @@ int server_handshake(struct buf *input_buf) {
     }
 
     if (h_state == HS_NS_HELLO_SERVER && input_buf != NULL) {
-        struct nbd_ns_server_init_data *init_data = ((struct nbd_ns_server_init_data *)input_buf->data);
-
         /* If the client is in handshake, he wants to receive the
            data. */
         if (c_state == C_HANDSHAKING) {
