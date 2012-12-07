@@ -1,8 +1,11 @@
-if [ "$BOOTSTRAP" = "debootstrap" ]; then
 case "$MODE" in
     commandline)
         add_option "debootstrap-keyring" "`eval_gettext "use the specified keyring for debootstrap gpg verification"`" "advanced" "true"
         ;;
+esac
+
+if [ "$BOOTSTRAP" = "debootstrap" ]; then
+case "$MODE" in
     configure)
         if [ -n "$option_debootstrap_keyring_value" ]; then
             DEBOOTSTRAP_KEYRING="$option_debootstrap_keyring_value"
