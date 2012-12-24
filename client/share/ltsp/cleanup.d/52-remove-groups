@@ -1,4 +1,4 @@
-getent group | awk -F: '$3>=500 && $3<=60000 { print $1; }' |
+awk -F: '$3>=500 && $3<=60000 { print $1; }' /etc/group |
     while read group; do
         groupdel "$group"
     done
