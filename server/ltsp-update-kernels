@@ -34,14 +34,16 @@
 usage() {
     cat <<EOF
 Usage: $0 [OPTION] [CHROOT...]
-Copies the chroot kernels to the TFTP directory. The TFTP directory
-can be set in /etc/ltsp/ltsp-server.conf using a TFTP_DIR and a
-TFTP_BOOT_DIR. The default TFTP directories are 
-/var/lib/tftpboot/ltsp, /tftpboot/ltsp and /srv/tftp/ltsp.
+
+Copies the boot/ directory from LTSP chroots to the TFTP directories
+in order to make them available to PXE clients. Copying kernels from
+inside NBD images is also supported. CHROOT can be a fullpath or a
+subdirectory of the base directory, and if it's unset, all available
+chroots are processed.
 
 Options:
-  -b, --base=          The LTSP base directory. Defaults to "/opt/ltsp".
-  -h, --help           This message.
+  -b, --base[=PATH]     The LTSP base directory. Defaults to /opt/ltsp if unspecified.
+  -h, --help            Displays the ltsp-update-kernels help message.
 EOF
 }
 

@@ -9,15 +9,25 @@
 
 usage() {
 cat <<EOF
-$0 [OPTION] command
-  -a, --arch                Architecture of the chroot.  Default is arch of the host.
-  -b, --base                Base of ltsp chroot.  Default is /opt/ltsp if unspecified.
-  -c, --mount-package-cache Mount package cache dir from server.
-  -d, --mount-dev           Mount /dev from server.
-  -h, --help                This message.
-  -m, --mount-all           Mount all server dirs mentioned in this message.
-  -p, --mount-proc          Mount /proc from server.
-  -r, --copy-resolv-conf    Copy /etc/resolv.conf from server.
+Usage: $0 [OPTION] command
+
+Chroots into a specified LTSP chroot. Optional arguments can be provided to customize
+the chroot location as well as extra mounts. If present, default arguments will be read
+from the configuration file /etc/ltsp/ltsp-chroot.conf, and overwritten with used
+command line options.
+
+Options:
+  -a, --arch[=ARCH]             Sets the architecture of the target chroot. Defaults vary by distribution.
+  -b, --base[=PATH]             Sets base of target chroot. Defaults to /opt/ltsp if unspecified.
+  -c, --mount-package-cache     If set, mounts the server package directories to the chroot previous
+                                to chrooting. Settings vary by distribution.
+  -d, --mount-dev               If set, mounts the server dev and devpts directories to the chroot
+                                previous to chrooting.
+  -h, --help                    Displays the ltsp-chroot help message.
+  -p, --mount-proc              If set, mounts the server /proc to the chroot previous to chrooting.
+  -m, --mount-all               If set, mounts the /proc, /dev and package directories to the chroot
+                                before chrooting.
+  -r, --copy-resolv-conf        If set, copies the server resolv.conf to the chroot previous to chrooting.
 EOF
 }
 

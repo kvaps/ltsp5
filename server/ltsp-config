@@ -22,21 +22,24 @@
 usage() {
     cat <<EOF
 Usage: $0 TOOL [OPTION]
-Configures certain parts of an LTSP server.
 
-Tools and options:
-  dnsmasq            Configure dnsmasq.
-    --no-proxy-dhcp  Don't enable proxyDHCP mode for detected subnets.
-  isc-dhcp-server    Configure isc-dhcp-server.
-  lts.conf           Create a sample lts.conf.
-  nbd-server         Configure nbd-server.
+Generates or updates configuration files for certain parts of an LTSP server,
+like lts.conf, the DHCP server, nbd-server etc.
 
-Generic options for most tools:
-  -d, --directory=   A directory to search for configuration templates,
-                     in addition to "/usr/share/doc/ltsp-server/examples".
-  -h, --help         This message.
-  -l, --language=    Preferred language for configuration files.
-  -o, --overwrite    Overwrite existing configuration files.
+Options:
+  -d, --directory[=DIR]         A directory to search for configuration templates,
+                                in addition to /usr/share/doc/ltsp-server/examples.
+  -h, --help                    Displays the ltsp-config help message.
+  -l, --language[=LANG]         Preferred language for configuration files.
+                                Support varies by distribution.
+  -o, --overwrite               Overwrite existing configuration files.
+
+Tools:
+  dnsmasq                       Configure dnsmasq.
+      --no-proxy-dhcp           Don't enable proxyDHCP mode for detected subnets.
+  isc-dhcp-server               Configure isc-dhcp-server.
+  lts.conf                      Create a sample lts.conf.
+  nbd-server                    Configure nbd-server.
 EOF
 }
 

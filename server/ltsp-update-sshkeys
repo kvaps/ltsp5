@@ -38,7 +38,7 @@
 
 usage() {
     cat <<EOF
-$0 [OPTION] [host...]
+Usage: $0 [OPTION] [host...]
 
 If any hosts are specified, their SSH keys are exported in a file,
 by default /etc/ltsp/ssh_known_hosts.auto.
@@ -46,12 +46,12 @@ Otherwise, all LTSP chroots are updated to trust the SSH keys of this server
 along with any additional keys in /etc/ltsp/ssh_known_hosts.* files.
 
 Options:
-  -b, --base     Base of ltsp chroot. Default is /opt/ltsp if unspecified.
-  -e, --export   File name to export the hosts SSH keys to (- for stdout).
-                 Default is /etc/ltsp/ssh_known_hosts.auto if unspecified.
-  -h, --help     This message.
-  -p, --port     SSH port for remote servers.
-  -u, --update   Update the chroot SSH keys even if hosts are specified.
+  -b, --base[=PATH]     The LTSP base directory Defaults to /opt/ltsp if unspecified.
+  -e, --export[=FILE]   File name to export the hosts SSH keys to (- for stdout).
+                        Defaults to /etc/ltsp/ssh_known_hosts.auto if unspecified.
+  -h, --help            Displays the ltsp-update-sshkeys help message.
+  -p, --port[=PORT]     SSH port for remote servers.
+  -u, --update          Update the chroot SSH keys even if hosts are specified.
 EOF
 }
 

@@ -30,24 +30,25 @@
 usage() {
     cat <<EOF
 Usage: $0 [OPTION] [CHROOT...]
-Generates an NBD image from an LTSP chroot, to be served by nbd-server.
-Chroot can be a full path or a subdirectory of the LTSP base directory,
-and it defaults to the host architecture if unset.
+
+Generates a compressed squashfs NBD image from an LTSP chroot and exports
+it with nbd-server. Chroot can be a full path or a subdirectory of the LTSP
+base directory, and it defaults to the host architecture if unset.
 
 Options:
-  -b, --base=          The LTSP base directory. Defaults to "/opt/ltsp".
-  -c, --cleanup        Temporarily remove user accounts, logs, caches etc from
-                       the chroot before exporting the image. The chroot arch
-                       is required to be compatible with the server arch.
-  -e, --exclude=       List of dirs/files to exclude from the image.
-                       This is in addition to /etc/ltsp/ltsp-update-image.excludes.
-  -f, --config-nbd     Generate appropriate nbd-server configuration files.
-                       It's automatically set if NFS isn't used or if other LTSP
-                       generated nbd-server configuration files already exist.
-  -h, --help           This message.
-  -m, --no-compress    Don't compress the generated image.
-  -n, --no-backup      Don't backup chroot.img to chroot.img.old.
-  -r, --revert         Swap chroot.img with chroot.img.old and update kernels.
+  -b, --base[=PATH]         The LTSP base directory Defaults to /opt/ltsp if unspecified.
+  -c, --cleanup             Temporarily remove user accounts, logs, caches etc from
+                            the chroot before exporting the image. The chroot arch
+                            is required to be compatible with the server arch.
+  -e, --exclude[=LIST]      List of dirs/files to exclude from the image.
+                            This is in addition to /etc/ltsp/ltsp-update-image.excludes.
+  -f, --config-nbd          Generate appropriate nbd-server configuration files.
+                            It's automatically set if NFS isn't used or if other LTSP
+                            generated nbd-server configuration files already exist.
+  -h, --help                Displays the ltsp-update-image help message.
+  -m, --no-compress         Don't compress the generated image.
+  -n, --no-backup           Don't backup chroot.img to chroot.img.old.
+  -r, --revert              Swap chroot.img with chroot.img.old and update kernels.
 EOF
 }
 
