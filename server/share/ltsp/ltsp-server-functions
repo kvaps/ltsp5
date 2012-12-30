@@ -51,6 +51,10 @@ TFTP_DIRS=${TFTP_DIRS:-"/var/lib/tftpboot /tftpboot /srv/tftp"}
 # Common functions shared by LTSP scripts
 if [ -f /usr/share/ltsp/ltsp-server-common-functions ]; then
     . /usr/share/ltsp/ltsp-server-common-functions
+elif [ -f ../../common/ltsp-common-functions ]; then
+    # Sourcing build env common functions, so help2man can be called for ltsp-build-client
+    # the help2man script is called from /server/man
+    . ../../common/ltsp-common-functions
 fi
 
 # Source distro specific overrides.

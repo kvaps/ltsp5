@@ -82,7 +82,6 @@ kernel_versions() {
 require_root
 
 BOOT=${BOOT:-"/boot"}
-VENDOR=${VENDOR:-"$(detect_vendor)"}
 CHROOT_NAME=${CHROOT_NAME:-"$(detect_arch)"}
 
 # Ensure default values for BOOT_METHODS, CMDLINE_LINUX_DEFAULTS, CMDLINE_NFS 
