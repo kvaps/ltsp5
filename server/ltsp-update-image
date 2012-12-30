@@ -243,9 +243,11 @@ unlock_package_management() {
     fi
 }
 
+# Set an optional MODULES_BASE, so help2man can be called from build env
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 
 # This also sources vendor functions and .conf file settings
-. /usr/share/ltsp/ltsp-server-functions
+. ${MODULES_BASE}/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o "b:ce:fhmnr" \
     -l "base:,cleanup,exclude:,config-nbd,help,no-compress,no-backup,revert" -- "$@")

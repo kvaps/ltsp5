@@ -90,8 +90,11 @@ chroot_release() {
     die "Your distro needs to implement function chroot_release in order to support $0."
 }
 
-# ltsp-server-functions also sources distro specific function overrides
-. /usr/share/ltsp/ltsp-server-functions
+# Set an optional MODULES_BASE, so help2man can be called from build env
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
+
+# This also sources vendor functions and .conf file settings
+. ${MODULES_BASE}/ltsp-server-functions
 
 export BASE=${BASE:-/opt/ltsp}                # LTSP base directory
 

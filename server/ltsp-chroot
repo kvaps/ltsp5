@@ -91,8 +91,11 @@ mount_package_cache() {
     echo "Mounting the package cache is not available for your distribution."
 }
 
+# Set an optional MODULES_BASE, so help2man can be called from build env
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
+
 # This also sources vendor functions and .conf file settings
-. /usr/share/ltsp/ltsp-server-functions
+. ${MODULES_BASE}/ltsp-server-functions
 
 # The command line parameters override the configuration file settings
 if ! args=$(getopt -n "$0" -o +a:b:cdhmpr -l \

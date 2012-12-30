@@ -33,9 +33,6 @@
 #  MA 02110-1301, USA.
 #
 
-# /etc/ltsp/ltsp-update-sshkeys.conf is automatically sourced if it exists
-. /usr/share/ltsp/ltsp-server-functions
-
 usage() {
     cat <<EOF
 Usage: $0 [OPTION] [host...]
@@ -62,6 +59,12 @@ EOF
 # The boot server is always known as "server", and others can be declared in
 # DNS, in CHROOT/etc/hosts.ltsp, or with HOSTS_xx lts.conf directives.
 # LDM_SERVER entries should match whatever was specified in the SSH keys.
+
+# Set an optional MODULES_BASE, so help2man can be called from build env
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
+
+# This also sources vendor functions and .conf file settings
+. ${MODULES_BASE}/ltsp-server-functions
 
 # Parse command line arguments
 ARGS=$(getopt -o b:e:hp:u --long base:,export:,help,port:,update -n $0 -- "$@")
