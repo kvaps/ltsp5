@@ -1,3 +1,22 @@
+[FILES]
+\fI/etc/ltsp/<tool>.conf\fR: Upon execution the tool will read a configuration file
+to override built-in defaults.
+
+Values are NAME="VALUE" pairs, with # representing commented lines. most
+commandline options have an equivalent. an example Debian based system with an
+alternate base location, architecture, and distribution:
+
+ # set alternate default location for ltsp chroot (\-\-base)
+ BASE="/srv/ltsp"
+ # build an amd64 chroot by default (\-\-arch)
+ ARCH="amd64"
+ # build a Debian sid environment (\-\-dist)
+ DIST="sid"
+
+\fI/etc/ltsp/ltsp-server.conf\fR: Each LTSP server tool will read a generic configuration
+file. This file is typically used for setting BASE, TFTP_DIRS and TFTP_BOOT_DIR. These
+settings are overwritten by those set in specific tool configs.
+
 [AVAILABILITY]
 Part of the \fBltsp\fP package and the latest versions are available in source form from 
 \fIhttps://launchpad.net/products/ltsp\fR.
