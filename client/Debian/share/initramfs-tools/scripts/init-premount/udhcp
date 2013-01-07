@@ -238,6 +238,9 @@ fi
 
 export_configuration()
 {
+# Ensure that /run exists, otherwise older versions may fail.
+mkdir -p /run
+
 # dns and router may contain multiple values
 read dns0 dns1 rest_dns <<EOF
 $dns
