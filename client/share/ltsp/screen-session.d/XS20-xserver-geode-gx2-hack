@@ -1,7 +1,7 @@
 # This script forces the geode driver for the AMD Geode GX2
 # It cannot be autodetected by upstream X.org currently.
 
-if [ -z "$XSERVER" ] && [ -n "$(PATH=/sbin:/usr/sbin:/bin:/usr/bin lspci -n |grep 100b:0030)" ]; then
+if [ -z "$XSERVER" ] && [ -d /proc/bus/pci ] && [ -n "$(PATH=/sbin:/usr/sbin:/bin:/usr/bin lspci -n |grep 100b:0030)" ]; then
     XSERVER=geode
     export X_DEVICE_OPTION_01='"AccelMethod" "XAA"'
 fi

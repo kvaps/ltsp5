@@ -2,6 +2,6 @@
 #It'll need to be updated to use the new script structure for xorg modification (to be implemented)
 #For now, it'll only be applied for Intel video cards
 
-if [ -z "$X_VIRTUAL_AUTO" ] && [ -n "$(lspci|grep 'VGA.*Intel')" ]; then
+if [ -z "$X_VIRTUAL_AUTO" ] && [ -d /proc/bus/pci ] && [ -n "$(lspci|grep 'VGA.*Intel')" ]; then
     X_VIRTUAL_AUTO=True
 fi
