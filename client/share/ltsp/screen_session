@@ -36,7 +36,7 @@
 
 case "$1" in
     [0-1][0-9])
-        num="$1"
+        export SCREEN_NUM="$1"
         ;;
     *)
         die "Usage: $0 [01..12]"
@@ -45,7 +45,7 @@ esac
 
 while true; do
     # Wait until this is the active vt before launching the screen script
-    while [ $(fgconsole) -ne "$num" ]; do
+    while [ $(fgconsole) -ne "$SCREEN_NUM" ]; do
         sleep 2
     done
 
@@ -57,7 +57,7 @@ while true; do
     fi
 
     read script args <<EOF
-$(eval echo "\$SCREEN_$num")
+$(eval echo "\$SCREEN_$SCREEN_NUM")
 EOF
 
     # Screen scripts in /etc override those in /usr
@@ -69,7 +69,7 @@ EOF
         fi
     done
     if [ -z "$script_path" ]; then
-        die "Script '$script' for SCREEN_$num was not found"
+        die "Script '$script' for SCREEN_$SCREEN_NUM was not found"
     fi
 
     for script in $(run_parts_list /usr/share/ltsp/screen-session.d/ S); do

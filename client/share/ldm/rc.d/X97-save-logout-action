@@ -1,0 +1,4 @@
+# Check if the user has requested a shutdown or a reboot.
+# Store the result to be processed at the end of the K* cleanup phase.
+xprop -root -notype LTSP_LOGOUT_ACTION | sed -ne 's/^LTSP_LOGOUT_ACTION = "\(.*\)"/\1/p' > /var/run/ltsp-logout-action || true
+xprop -root -remove LTSP_LOGOUT_ACTION
