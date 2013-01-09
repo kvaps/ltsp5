@@ -192,7 +192,7 @@ EOF
         unset SSHFS_HOME
     else
         export SSHFS_HOME=true
-        sshfs -o ${follow_home_symlinks}allow_other,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+        sshfs -o ${follow_home_symlinks}allow_other,nonempty,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
     fi
 
     # Mount other directories
