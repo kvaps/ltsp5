@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.3.8\n"
+"Project-Id-Version: ltsp 5.4.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,7 +280,7 @@ msgstr ""
 msgid "run most or all applications locally"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -418,6 +418,16 @@ msgstr ""
 msgid "       supported values are: %s"
 msgstr ""
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, sh-format
+msgid "Set input device drivers to install"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -547,11 +557,6 @@ msgstr ""
 msgid "set the default base install directory"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
@@ -572,42 +577,42 @@ msgstr ""
 msgid "set the name of the chroot"
 msgstr ""
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr ""
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr ""
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr ""
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr ""
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr ""
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr ""
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""

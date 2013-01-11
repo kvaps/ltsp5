@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:41-0800\n"
 "PO-Revision-Date: 2010-04-05 12:20+0800\n"
 "Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
 "Language-Team: Chinese (simplified) <>\n"
@@ -279,7 +279,7 @@ msgstr "创建镜像，以配合指定文件系统的 NBD"
 msgid "run most or all applications locally"
 msgstr "本地运行大部分甚至全部程序"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -417,6 +417,16 @@ msgstr "错误：不支持的体系结构。检查您的 --arch 参数：%s"
 msgid "       supported values are: %s"
 msgstr "       支持的值有：%s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, fuzzy, sh-format
+msgid "Set input device drivers to install"
+msgstr "设置要安装的内核包。"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -546,11 +556,6 @@ msgstr "错误：--arch %s 被调用，但是体系结构 %s 不被支持"
 msgid "set the default base install directory"
 msgstr "设置默认基本安装目录"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
@@ -571,42 +576,42 @@ msgstr "加载用户指定的配置文件"
 msgid "set the name of the chroot"
 msgstr "设置 chroot 的名称"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "API 错误：需要提供 true 或 false。"
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "显示此帮助信息"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "显示所有可用的命令行选项的帮助。"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "LTSP 构建客户端用法："
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  常规选项："
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  高级选项："
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "通知：LTSP 客户端安装成功完成"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "错误：LTSP 客户端安装非正常结束"

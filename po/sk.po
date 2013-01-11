@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:41-0800\n"
 "PO-Revision-Date: 2011-03-14 20:30+0100\n"
 "Last-Translator: Slavko <linux@slavino.sk>\n"
 "Language-Team: Slovak <nomail>\n"
@@ -280,7 +280,7 @@ msgstr "vytvorí NBD obraz so zadaným súborovým systémom"
 msgid "run most or all applications locally"
 msgstr "spúšťať väčšinu alebo všetky aplikácie lokálne"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -419,6 +419,16 @@ msgstr "CHYBA: nepodporovaná architektúra. Skontrolujte parameter --arch: %s"
 msgid "       supported values are: %s"
 msgstr "       podporované hodnoty sú: %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, fuzzy, sh-format
+msgid "Set input device drivers to install"
+msgstr "nastaví balík jadra na nainštalovanie"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -548,11 +558,6 @@ msgstr "CHYBA: --arch %s volané na nepodporovanej architektúre: %s"
 msgid "set the default base install directory"
 msgstr "nastaví predvolený základný adresár"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
@@ -573,42 +578,42 @@ msgstr "načíta používateľský konfiguračný súbor"
 msgid "set the name of the chroot"
 msgstr "nastaví meno chroot"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "CHYBA API: musíte zadať true alebo false."
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "zobrazí tohoto pomocníka"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "zobrazí pomocníka pre všetky dostupné voľby príkazového riadku"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Použitie skriptu na zostavenie klienta LTSP:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Bežné voľby:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Pokročilé voľby:"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "INFO: Inštalácia klienta LTSP úspešne dokončená"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "CHYBA: Inštalácia klienta LTSP skončila neúspešne"

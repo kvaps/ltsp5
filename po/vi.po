@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:41-0800\n"
 "PO-Revision-Date: 2010-04-05 18:08+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -284,7 +284,7 @@ msgstr "tạo ảnh hệ thống tập tin đưa ra để dùng với NBD"
 msgid "run most or all applications locally"
 msgstr "chạy cục bộ phần lớn hay tất cả các ứng dụng"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -435,6 +435,16 @@ msgstr ""
 msgid "       supported values are: %s"
 msgstr "       các giá trị được hỗ trợ : %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, fuzzy, sh-format
+msgid "Set input device drivers to install"
+msgstr "đặt gói hạt nhân cần cài đặt."
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -565,11 +575,6 @@ msgstr "LỖI: « --arch %s » được gọi trên kiến trúc không được
 msgid "set the default base install directory"
 msgstr "đặt thư mục cài đặt cơ bản mặc định"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
@@ -590,42 +595,42 @@ msgstr "nạp một tập tin cấu hình đặc trưng cho người dùng"
 msgid "set the name of the chroot"
 msgstr "đặt tên của chroot"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "LỖI API: bạn cần phải cung cấp trả lời đúng (true) hay sai (false)."
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "hiển thị trợ giúp này"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "hiển thị trợ giúp về tất cả các tùy chọn dòng lệnh sẵn sàng"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Sử dụng trình khách xây dựng LTSP:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Tùy chọn bình thường:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Tùy chọn cấp cao :"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "chú ý: tiến trình cài đặt trình khách LTSP đã chạy thành công"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "lỗi: tiến trình cài đặt trình khách LTSP đã kết thúc bất thường"

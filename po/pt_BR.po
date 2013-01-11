@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:41-0800\n"
 "PO-Revision-Date: 2007-10-24 02:08-0200\n"
 "Last-Translator: Felipe Augusto van de Wiel (faw) <faw@debian.org>\n"
 "Language-Team: l10n portuguese <debian-l10n-portuguese@lists.debian.org>\n"
@@ -285,7 +285,7 @@ msgstr ""
 msgid "run most or all applications locally"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -425,6 +425,16 @@ msgstr "ERRO: arquitetura não suportada. Confira seu argumento --arch: %s"
 msgid "       supported values are: %s"
 msgstr "       valores suportados são: %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, fuzzy, sh-format
+msgid "Set input device drivers to install"
+msgstr "definir a lista de pacotes de kernel a serem instalados."
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -554,11 +564,6 @@ msgstr "ERRO: --arch %s chamado em uma arquitetura não suportada: %s"
 msgid "set the default base install directory"
 msgstr "Definir o diretório de instalação do sistema básico"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, fuzzy, sh-format
 msgid "enable debug support"
@@ -579,42 +584,42 @@ msgstr "Carregar um arquivo de configuração específico do usuário"
 msgid "set the name of the chroot"
 msgstr "Definir o nome do chroot."
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "ERRO DE API: você precisa informar verdadeiro ou falso."
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, fuzzy, sh-format
 msgid "display this help message"
 msgstr "Exibe esta mensagem de ajuda"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, fuzzy, sh-format
 msgid "display help for all available commandline options"
 msgstr "Exibe ajuda para todas as opções de linha de comando disponíveis"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Uso do LTSP Build Client:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Opções comuns:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Opções avançadas:"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "info: instalação do cliente LTSP finalizada com sucesso"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erro: instalação do cliente LTSP terminou de maneira anormal"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:41-0800\n"
 "PO-Revision-Date: 2010-04-04 22:12+0200\n"
 "Last-Translator: Alkis Georgopoulos <alkisg@gmail.com>\n"
 "Language-Team: Greek\n"
@@ -294,7 +294,7 @@ msgstr ""
 msgid "run most or all applications locally"
 msgstr "εκτέλεση των περισσότερων ή όλων των εφαρμογών τοπικά"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -438,6 +438,16 @@ msgstr ""
 msgid "       supported values are: %s"
 msgstr "       επιτρεπτές τιμές είναι: %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, fuzzy, sh-format
+msgid "Set input device drivers to install"
+msgstr "ορισμός του πακέτου πυρήνα προς εγκατάσταση."
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -569,11 +579,6 @@ msgstr "ΣΦΑΛΜΑ: το --arch %s κλήθηκε σε μη υποστηριζ
 msgid "set the default base install directory"
 msgstr "ορισμός του προεπιλεγμένου βασικού καταλόγου εγκατάστασης"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
@@ -594,42 +599,42 @@ msgstr "φόρτωση ενός αρχείου ρυθμίσεων ορισμέν
 msgid "set the name of the chroot"
 msgstr "ορισμός του ονόματος του εικονικού δίσκου (chroot)"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "ΣΦΑΛΜΑ API: πρέπει να εισάγετε true ή false."
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "εμφάνιση της παρούσης βοήθειας"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "εμφάνιση βοήθειας για όλες τις επιλογές της γραμμής εντολών"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Χρήση του LTSP Build Client:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Συνηθισμένες επιλογές:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Προχωρημένες επιλογές:"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "πληροφορία: επιτυχής ολοκλήρωση της εγκατάστασης πελάτη LTSP"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "σφάλμα: ανώμαλος τερματισμός της εγκατάστασης πελάτη LTSP"

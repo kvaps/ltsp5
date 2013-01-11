@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-19 14:07-0700\n"
+"POT-Creation-Date: 2013-01-11 09:41-0800\n"
 "PO-Revision-Date: 2011-03-19 13:16+0300\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
 "Language-Team: debian-10n-finnish@lists.debian.org\n"
@@ -281,7 +281,7 @@ msgstr "Luo levykuva käytettäväksi annetun tiedostojärjestelmän NBD:n kanss
 msgid "run most or all applications locally"
 msgstr "Aja useimmat tai kaikki ohjelmat paikallisesti"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -425,6 +425,16 @@ msgstr ""
 msgid "       supported values are: %s"
 msgstr "       tuetut arvot ovat: %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
+#, fuzzy, sh-format
+msgid "Set input device drivers to install"
+msgstr "Valitse asennettava ydinpaketti"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
+#, sh-format
+msgid "Set initramfs builder, defaults to genkernel"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
@@ -556,11 +566,6 @@ msgstr "VIRHE: --arch %s kutsui arkkitehtuuria ”%s”, jota ei tueta"
 msgid "set the default base install directory"
 msgstr "Aseta oletushakemisto perusasennukselle"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-tftpdirs:3
-#, sh-format
-msgid "TFTP dirs to update kernel in (space-separated)"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
@@ -581,42 +586,42 @@ msgstr "Lataa käyttäjäkohtainen asetustiedosto"
 msgid "set the name of the chroot"
 msgstr "Aseta chroot-ympäristön nimi"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "API-VIRHE: sinun tulee antaa tosi (true) tai epätosi (false)"
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "Näytä tämä ohjeviesti"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "Näytä kaikkien käytettävissä olevien komentorivivalitsimien ohje"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "LTSP Build Clientin (käännösohjelman) käyttö:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Normaalit valitsimet:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Lisävalitsimet:"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "Info: LTSP-asiakkaan asennus päättyi onnistuneesti"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "Virhe: LTSP-asiakkaan asennus päättyi poikkeavasti"
