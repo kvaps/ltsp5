@@ -45,7 +45,7 @@ case "$1" in
         fi
 
         if [ -x /bin/plymouth ]; then
-            /bin/plymouth quit --retain-splash
+            /bin/plymouth quit --retain-splash || true
         fi
 
         start_screen_sessions || true
