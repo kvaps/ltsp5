@@ -29,7 +29,14 @@ test -n "$LTSP_BOOT" || exit
 if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
     mkdir -p /rofs /cow
     mount -t tmpfs -o mode=0755 tmpfs /cow
-    mount -o move ${rootmnt} /rofs
+    if [ "$LTSP_NBD_TO_RAM" = "true" ]; then
+        umount ${rootmnt}
+        dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
+        nbd-client -d /dev/nbd0
+        mount -o loop /cow/.rofsimage.img /rofs
+    else
+        mount -o move ${rootmnt} /rofs
+    fi
     if modprobe overlayfs; then
         UNION_TYPE=overlayfs
         UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
