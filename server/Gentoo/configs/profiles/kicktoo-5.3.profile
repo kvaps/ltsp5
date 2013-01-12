@@ -64,12 +64,21 @@ mount_bind() {
 }
 
 post_unpack_stage_tarball() {
+	# setting server portage vars
+	local server_pkgdir=$(portageq pkgdir)
+	local server_distdir=$(portageq distdir)
+
 	# bind mounting portage and binary package dir
 	mount_bind "/usr/portage" "${chroot_dir}/usr/portage"
-	mount_bind "/usr/portage/packages/${ARCH}" "${chroot_dir}/usr/portage/packages"
-	
+	mount_bind "${server_pkgdir}/${ARCH}" "${chroot_dir}/usr/portage/packages"
+
 	# bind mounting layman, for overlay packages
 	mount_bind "/var/lib/layman" "${chroot_dir}/var/lib/layman"
+
+	# mount distfiles if at non default location
+	if [ "${server_distdir}" != "/usr/portage/distfiles" ]; then
+		mount_bind ${server_distdir} "${chroot_dir}/usr/portage/distfiles"
+	fi
 
 	cat >> ${chroot_dir}/etc/portage/make.conf <<- EOF
 	source /var/lib/layman/make.conf

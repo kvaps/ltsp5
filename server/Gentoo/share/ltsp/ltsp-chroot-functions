@@ -1,6 +1,9 @@
 # Gentoo-specific function overrides for ltsp-chroot
 
 mount_package_cache() {
+    server_pkgdir=$(portageq pkgdir)
+    server_distdir=$(portageq distdir)
+
     # client arch can be set in client build process
     # useful if chroot name is different from arch
     if [ -f $ROOT/etc/ltsp/arch.conf ]; then
@@ -8,7 +11,11 @@ mount_package_cache() {
     fi
 
     mark_mount --bind /usr/portage "$ROOT/usr/portage"
-    mark_mount --bind "/usr/portage/packages/${ARCH}" "$ROOT/usr/portage/packages"
-    # remove if ltsp ever in portage tree
+    mark_mount --bind "${server_pkgdir}/${ARCH}" "$ROOT/usr/portage/packages"
     mark_mount --bind "/var/lib/layman" "$ROOT/var/lib/layman"
+
+    # mount distfiles if at non default location
+    if [ "${server_distdir}" != "/usr/portage/distfiles" ]; then
+         mark_mount --bind ${server_distdir} "$ROOT/usr/portage/distfiles"
+    fi
 }
