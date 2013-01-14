@@ -168,6 +168,11 @@ read_prompt() {
     read "$@"
 }
 
+translator_credits() {
+    # Display translation credits 
+    eval_gettext "translator-credits"
+}
+
 debug "Started"
 
 # Source tool-specific settings and functions, if they're provided
