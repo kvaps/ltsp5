@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-04-09 09:58+0900\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -201,9 +203,7 @@ msgstr "pin が設定されたディストリビューションからインス�
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr ""
-"注意: sid 用セキュリティリポジトリの APT ソースを無効にします。これは存在しま"
-"せん。"
+msgstr "注意: sid 用セキュリティリポジトリの APT ソースを無効にします。これは存在しません。"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
@@ -228,9 +228,7 @@ msgstr "サーバからパッケージキャッシュディレクトリをマウ
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr ""
-"サーバのディレクトリを chroot のパッケージキャッシュディレクトリとしてマウン"
-"トする"
+msgstr "サーバのディレクトリを chroot のパッケージキャッシュディレクトリとしてマウントする"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
@@ -253,14 +251,14 @@ msgid "set the list of kernel packages to install"
 msgstr "インストールするカーネルパッケージの一覧を設定する"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "インストールするカーネルパッケージを設定する"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "インストールするカーネルパッケージを設定する"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -339,9 +337,7 @@ msgstr "ミラーで使われているコンポーネントを設定する"
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
-msgstr ""
-"指定したディレクトリ内に含まれているすべての .deb ファイルを chroot にインス"
-"トールする"
+msgstr "指定したディレクトリ内に含まれているすべての .deb ファイルを chroot にインストールする"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
@@ -363,9 +359,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
-"注意: デフォルトの dist と components をセキュリティリポジトリのミラーに追加"
-"します:"
+msgstr "注意: デフォルトの dist と components をセキュリティリポジトリのミラーに追加します:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
 #, sh-format
@@ -383,10 +377,10 @@ msgid "Enabling popularity contest..."
 msgstr "popularity contest を有効にしています…"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "インストールに使うディストリビューションを設定する"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -406,7 +400,8 @@ msgstr "外部ミラーを指定する (空白で区切ること)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr "初期インストールの一部としてインストールする追加パッケージ群"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
@@ -415,8 +410,7 @@ msgstr "初期インストールの一部としてインストールする追加
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
-"エラー: 未サポートのアーキテクチャです。--arch の引数を確認してください: %s"
+msgstr "エラー: 未サポートのアーキテクチャです。--arch の引数を確認してください: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
@@ -428,9 +422,9 @@ msgid "       supported values are: %s"
 msgstr "       サポートされている値: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "インストールするカーネルパッケージを設定する"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -463,41 +457,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Quickstart プロファイルへのパス (path)"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Quickstart のデバッグを行う"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "外部コマンドの出力を表示する"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "以下にインストールしています: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"エラー: 未サポートのアーキテクチャです。--arch の引数を確認してください: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "デフォルトの Quickstart プロファイル: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "デフォルトの Quickstart プロファイル: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -627,9 +620,3 @@ msgstr "情報: LTSP クライアントのインストールは無事に完了�
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "エラー: LTSP クライアントのインストールは途中で異常終了しました"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Quickstart サーバからプロファイルを取得する"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "手動での Quickstart: %s"

@@ -8,17 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-04-05 20:41+0400\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Yuri Kozlov <yuray@komyakino.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: ru\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -254,14 +253,14 @@ msgid "set the list of kernel packages to install"
 msgstr "задать список пакетов с ядрами для установки"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "задать пакет ядра для установки."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "задать пакет ядра для установки."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -384,10 +383,10 @@ msgid "Enabling popularity contest..."
 msgstr "Включение участия в подсчёте популярности пакетов..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "задать дистрибутив, используемый для установки"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -407,8 +406,10 @@ msgstr "Настройка расположения зеркал (через п�
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
-msgstr "задать список дополнительных пакетов для установки в начале установки."
+msgid ""
+"list of extra packages to install as part of the initial installation."
+msgstr ""
+"задать список дополнительных пакетов для установки в начале установки."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
@@ -429,9 +430,9 @@ msgid "       supported values are: %s"
 msgstr "       поддерживаемые значения: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "задать пакет ядра для установки."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -464,41 +465,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Путь к профилю Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Отладка Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Показать вывод внешней команды"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Установка в: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"ОШИБКА: неподдерживаемая архитектура. Проверьте аргумент параметра --arch: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Профиль Quickstart по умолчанию: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Профиль Quickstart по умолчанию: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -627,9 +627,3 @@ msgstr "инфо: установка клиента LTSP успешно заве
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "ошибка: установка клиента LTSP завершилась неудачно"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Получить профиль с сервера Quickstart"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Ручной Quickstart: %s"

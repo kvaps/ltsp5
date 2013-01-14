@@ -9,14 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-01-15 12:06+0100\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Jean-Baka Domelevo Entfellner <domelevo@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: fr\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -255,14 +257,14 @@ msgid "set the list of kernel packages to install"
 msgstr "indiquer la liste des paquets de noyau à installer"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "indiquer le paquet de noyau à installer."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "indiquer le paquet de noyau à installer."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -345,12 +347,14 @@ msgstr "sélectionner les composants à utiliser sur le miroir"
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
-msgstr "installer dans le chroot tous les .deb contenu dans le dossier fournit"
+msgstr ""
+"installer dans le chroot tous les .deb contenu dans le dossier fournit"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
-msgstr "charger la préconfiguration debconf dans le chroot après installation"
+msgstr ""
+"charger la préconfiguration debconf dans le chroot après installation"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
 #, sh-format
@@ -389,10 +393,10 @@ msgid "Enabling popularity contest..."
 msgstr "Activation des statistiques d'utilisation de paquets..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "indiquer la distribution à utiliser pour l'installation"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -412,7 +416,8 @@ msgstr "Indiquer d'autres adresses de miroir (séparées par un espace)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr ""
 "liste des paquets supplémentaires à installer lors de l'installation "
 "initiale."
@@ -436,9 +441,9 @@ msgid "       supported values are: %s"
 msgstr "       valeurs possibles : %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "indiquer le paquet de noyau à installer."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -471,41 +476,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Chemin vers le profil Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Déboguer Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Afficher la sortie de la commande externe"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Installation dans: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"Erreur : architecture non supportée. Vérifiez votre paramètre --arch : %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Profil Quickstart par défaut: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Profil Quickstart par défaut: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -635,29 +639,3 @@ msgstr "info : l'installation du client LTSP est terminée."
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erreur : l'installation du client LTSP a échoué."
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Récupérer le profil depuis un serveur Quickstart"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Quickstart manuel: %s"
-
-#~ msgid "set the list of packages to install after base-install is completed."
-#~ msgstr ""
-#~ "indiquer la liste des paquets à installer une fois l'installation de base "
-#~ "(« base-install ») terminée."
-
-#~ msgid "list of packages to install as part of the final installation."
-#~ msgstr "liste des paquets à installer lors de l'installation finale."
-
-#~ msgid "Set the default locale"
-#~ msgstr "Indiquer la langue (« locale ») par défaut"
-
-#~ msgid "Set the mirror location"
-#~ msgstr "Indiquer l'emplacement du miroir"
-
-#~ msgid "Set the distribution to be used for install"
-#~ msgstr "Indiquer la distribution à utiliser pour l'installation"
-
-#~ msgid "The IP of the LTSP Cluster Control Center"
-#~ msgstr "Adresse IP du control-center de LTSP-Cluster"

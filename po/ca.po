@@ -9,14 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2011-03-30 17:48+0200\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Jordà Polo <jorda@ettin.org>\n"
 "Language-Team: Catalan <debian-l10n-catalan@lists.debian.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: ca\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -112,7 +114,8 @@ msgstr "afegeix una rèplica, amb més prioritat que la rèplica predeterminada"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr "afegeix una rèplica, amb menys prioritat que la rèplica predeterminada"
+msgstr ""
+"afegeix una rèplica, amb menys prioritat que la rèplica predeterminada"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
@@ -254,14 +257,14 @@ msgid "set the list of kernel packages to install"
 msgstr "indica la llista de paquets del nucli que s'han d'instal·lar"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "indica el paquet del nucli a instal·lar."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "indica el paquet del nucli a instal·lar."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -388,10 +391,10 @@ msgid "Enabling popularity contest..."
 msgstr "S'està activant el concurs de popularitat..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "estableix la distribució que s'utilitzarà per a la instal·lació"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -412,7 +415,8 @@ msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr ""
 "llista de paquets addicionals a instal·lar com a part de la instal·lació "
 "final."
@@ -437,9 +441,9 @@ msgid "       supported values are: %s"
 msgstr "       els valors permesos són: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "indica el paquet del nucli a instal·lar."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -472,42 +476,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Camí al perfil del Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Depura el Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Mostra sortida d'ordres externes"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "S'està instal·lant a: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"ERROR: l'arquitectura no està suportada. Comproveu el vostre argument --"
-"arch: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Perfil predeterminat del Quickstart: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Perfil predeterminat del Quickstart: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -610,7 +612,8 @@ msgstr "mostra aquest missatge d'ajuda"
 #: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
-msgstr "mostra l'ajuda per a totes les opcions disponibles a la línia d'ordres"
+msgstr ""
+"mostra l'ajuda per a totes les opcions disponibles a la línia d'ordres"
 
 #: ../server/ltsp-build-client:194
 #, sh-format
@@ -636,9 +639,3 @@ msgstr "info: la instal·lació del client LTSP ha finalitzat amb èxit"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "error: la instal·lació del client LTSP no ha acabat correctament"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Obtén el perfil d'un servidor Quickstart"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Quickstart manual: %s"

@@ -7,15 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2011-03-14 20:30+0100\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Slavko <linux@slavino.sk>\n"
 "Language-Team: Slovak <nomail>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -249,14 +250,14 @@ msgid "set the list of kernel packages to install"
 msgstr "nastaví zoznam balíkov jadra na inštaláciu"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "nastaví balík jadra na nainštalovanie"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "nastaví balík jadra na nainštalovanie"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -324,7 +325,8 @@ msgstr "nastaví distribúciu pre backporty"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
 #, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
-msgstr "INFO: pridávam predvolenú distribúciu a komponenty zrkadla backportov:"
+msgstr ""
+"INFO: pridávam predvolenú distribúciu a komponenty zrkadla backportov:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
@@ -376,10 +378,10 @@ msgid "Enabling popularity contest..."
 msgstr "Povoľovanie popularity contest..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "nastaví distribúciu inštalácie"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -399,7 +401,8 @@ msgstr "Nastaví umiestnenia ďalších zrkadiel (oddelené medzerami)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr "zoznam ďalších balíkov, inštalovaných počas počiatočnej inštalácie."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
@@ -420,9 +423,9 @@ msgid "       supported values are: %s"
 msgstr "       podporované hodnoty sú: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "nastaví balík jadra na nainštalovanie"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -455,40 +458,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Cesta k profilu Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Ladiť Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Zobrazí výstup externých príkazov"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Inštalácia do: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
-msgstr "CHYBA: nepodporovaná architektúra. Skontrolujte parameter --arch: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Predvolený profil Quickstart: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Predvolený profil Quickstart: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -617,9 +620,3 @@ msgstr "INFO: Inštalácia klienta LTSP úspešne dokončená"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "CHYBA: Inštalácia klienta LTSP skončila neúspešne"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Získať profil zo servera Quickstart"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Manuálny Quickstart: %s"

@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-04-05 08:17+0200\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Vincenzo Campanella <vinz65@gmail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
-"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: it\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -256,14 +258,14 @@ msgid "set the list of kernel packages to install"
 msgstr "imposta l'elenco dei pacchetti del kernel da installare"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "imposta il pacchetto del kernel da installare."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "imposta il pacchetto del kernel da installare."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -344,7 +346,8 @@ msgstr "imposta i componenti da usare nel mirror"
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
-msgstr "installa in chroot tutti i file .deb contenuti nella directory fornita"
+msgstr ""
+"installa in chroot tutti i file .deb contenuti nella directory fornita"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
@@ -386,10 +389,10 @@ msgid "Enabling popularity contest..."
 msgstr "Abilitazione di popularity-contest in corso..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "imposta la distribuzione da utilizzare per l'installazione"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -409,7 +412,8 @@ msgstr "Imposta percorsi di mirror supplementari (separati da spazi)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr ""
 "elenco di pacchetti supplementari da installare come parte "
 "dell'installazione iniziale."
@@ -433,9 +437,9 @@ msgid "       supported values are: %s"
 msgstr "       i valori supportati sono: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "imposta il pacchetto del kernel da installare."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -468,41 +472,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Percorso del profilo Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Debug Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Mostra l'output del comando esterno"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Installazione in corso in: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"ERRORE: architettura non supportata. Controllare l'argomento --arch: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Profilo Quickstart predefinito: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Profilo Quickstart predefinito: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -537,7 +540,8 @@ msgstr "Nome della distribuzione"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr "ometti forzatamente la compilazione di squashfs (per debian-installer)"
+msgstr ""
+"ometti forzatamente la compilazione di squashfs (per debian-installer)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
 #, sh-format
@@ -605,7 +609,8 @@ msgstr "mostra questo messaggio di aiuto"
 #: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
-msgstr "mostra l'aiuto per tutte le opzioni disponibili della riga di comando"
+msgstr ""
+"mostra l'aiuto per tutte le opzioni disponibili della riga di comando"
 
 #: ../server/ltsp-build-client:194
 #, sh-format
@@ -632,27 +637,3 @@ msgstr ""
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "errore: l'installazione del client LTSP è terminata in modo anormale"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Ottieni il profilo da un server Quickstart"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Quickstart manuale: %s"
-
-#~ msgid "set the list of packages to install after base-install is completed."
-#~ msgstr ""
-#~ "imposta l'elenco di pacchetti da installare dopo che l'installazione di "
-#~ "base è stata completata."
-
-#~ msgid "list of packages to install as part of the final installation."
-#~ msgstr ""
-#~ "elenco dei pacchetti da installare come parte dell'installazione finale."
-
-#~ msgid "Set the default locale"
-#~ msgstr "Imposta la localizzazione predefinita"
-
-#~ msgid "Set the mirror location"
-#~ msgstr "Imposta il percorso del mirror"
-
-#~ msgid "Set the distribution to be used for install"
-#~ msgstr "Imposta la distribuzione da utilizzare per l'installazione"

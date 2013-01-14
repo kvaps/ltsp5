@@ -3,16 +3,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2011-03-19 13:16+0300\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Esko Arajärvi <edu@iki.fi>\n"
 "Language-Team: debian-10n-finnish@lists.debian.org\n"
-"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.6.1\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: fi\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -250,14 +250,14 @@ msgid "set the list of kernel packages to install"
 msgstr "Valitse asennettavien ydinpakettien lista."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "Valitse asennettava ydinpaketti"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "Valitse asennettava ydinpaketti"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -272,7 +272,8 @@ msgstr "Luo ext2-kuva käytettäväksi NBD:n kanssa"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
 #, sh-format
 msgid "create image for use with NBD of the specified filesystem"
-msgstr "Luo levykuva käytettäväksi annetun tiedostojärjestelmän NBD:n kanssa."
+msgstr ""
+"Luo levykuva käytettäväksi annetun tiedostojärjestelmän NBD:n kanssa."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
@@ -323,10 +324,9 @@ msgid "distribution to pull backports from"
 msgstr "Jakelu, jonka paketteja backportsista haetaan"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
-#, fuzzy, sh-format
+#, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
 msgstr ""
-"HUOM: oletusjakelu ja -komponentit lisätään backports-peilipalvelimelle:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
@@ -380,10 +380,10 @@ msgid "Enabling popularity contest..."
 msgstr "Popularity contest otetaan käyttöön..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "Aseta asennuksessa käytettävä jakelu"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -403,7 +403,8 @@ msgstr "Anna lisäpeilien sijainnit (välilyönnein eroteltuna)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr "Luettelo ensiasennuksen osana asennettavista lisäpaketeista."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
@@ -426,9 +427,9 @@ msgid "       supported values are: %s"
 msgstr "       tuetut arvot ovat: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "Valitse asennettava ydinpaketti"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -461,42 +462,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Quickstart-profiilin polku"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Käynnistä Quickstartin virheenjäljitys"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Näytä ulkoisen komennon tuloste"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Asennetaan sijaintiin: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"VIRHE: arkkitehtuuri, jota ei tueta. Tarkista valitsimen --arch argumentti: "
-"%s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Quickstartin oletusprofiili: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Quickstartin oletusprofiili: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -625,9 +624,3 @@ msgstr "Info: LTSP-asiakkaan asennus päättyi onnistuneesti"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "Virhe: LTSP-asiakkaan asennus päättyi poikkeavasti"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Hae profiili Quickstart-palvelimelta"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Manuaalinen Quickstart: %s"

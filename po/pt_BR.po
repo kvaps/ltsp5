@@ -9,14 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2007-10-24 02:08-0200\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Felipe Augusto van de Wiel (faw) <faw@debian.org>\n"
 "Language-Team: l10n portuguese <debian-l10n-portuguese@lists.debian.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -84,23 +86,23 @@ msgstr "manter cache de arquivos de pacotes baixados"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install as part of the final installation"
-msgstr "lista de pacotes para instalar como parte da instalação final."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default locale"
-msgstr "Definir o locale padrão"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the mirror location"
-msgstr "Definir a localização do espelho"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
@@ -145,14 +147,14 @@ msgid "Enabling serial console..."
 msgstr "Habilitando console serial..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-kernel:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel package to install."
-msgstr "definir a lista de pacotes de kernel a serem instalados."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set the i18n langs"
-msgstr "Definir a localização do espelho"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:3
 #, sh-format
@@ -176,22 +178,20 @@ msgid "prompt to set the root password, defaults to disabled"
 msgstr "questionar se deve definir a senha de root, o padrão é desabilitá-la"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel modules packages to install."
-msgstr "definir a lista de pacotes de kernel a serem instalados."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
-"definir a lista de pacotes a serem instalados após a instalação básica "
-"finalizar."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the distribution to be used for install"
-msgstr "Definir a distribuição a ser usada para instalação"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -199,14 +199,15 @@ msgid "distribution to set up apt pinning"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install from the pinned distribution"
-msgstr "lista de pacotes para instalar como parte da instalação final."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr "NOTA: desabilitando fonte APT de segurança para sid. Isto não existe."
+msgstr ""
+"NOTA: desabilitando fonte APT de segurança para sid. Isto não existe."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
@@ -214,9 +215,9 @@ msgid "create squashfs image for use with NBD"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "allow unsigned packages during install"
-msgstr "permitir pacotes não assinados durante a instalação."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
@@ -249,19 +250,19 @@ msgid "done."
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of kernel packages to install"
-msgstr "definir a lista de pacotes de kernel a serem instalados."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "definir a lista de pacotes de kernel a serem instalados."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "definir a lista de pacotes de kernel a serem instalados."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -301,25 +302,25 @@ msgid "do not autodetect apt proxy configuration"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "skip upgrade of installed packages"
-msgstr "manter cache de arquivos de pacotes baixados"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#, fuzzy, sh-format
+#, sh-format
 msgid "a simple webkiosk mode"
-msgstr "um simples modo \"quiosque web\""
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "add a backports mirror"
-msgstr "adicionar um espelho de segurança"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr "lista de pacotes para instalar como parte da instalação final."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:5
 #, sh-format
@@ -327,15 +328,14 @@ msgid "distribution to pull backports from"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
-#, fuzzy, sh-format
+#, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
 msgstr ""
-"NOTA: adicionando dist padrão e components para o espelho de segurança:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the components to be used in mirror"
-msgstr "Definir os componentes a serem usados no espelho"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
@@ -382,10 +382,10 @@ msgid "Enabling popularity contest..."
 msgstr "Habilitando concurso de popularidade..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "Definir a distribuição a ser usada para instalação"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -399,14 +399,15 @@ msgid "Set the number of parallel build processes"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set extra mirror locations (space-separated)"
-msgstr "Definir a localização do espelho"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
-#, fuzzy, sh-format
-msgid "list of extra packages to install as part of the initial installation."
-msgstr "lista de pacotes para instalar como parte da instalação final."
+#, sh-format
+msgid ""
+"list of extra packages to install as part of the initial installation."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
@@ -426,9 +427,9 @@ msgid "       supported values are: %s"
 msgstr "       valores suportados são: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "definir a lista de pacotes de kernel a serem instalados."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -482,9 +483,9 @@ msgid "Using installer: %s"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
-msgstr "ERRO: arquitetura não suportada. Confira seu argumento --arch: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
 #, sh-format
@@ -527,19 +528,19 @@ msgid "Distro name"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr "forçar pular a construção do squashfs (para o debian-installer)."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the security mirror location"
-msgstr "Definir a localização do espelho"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the update mirror location"
-msgstr "Definir a localização do espelho"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
@@ -560,14 +561,14 @@ msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr "ERRO: --arch %s chamado em uma arquitetura não suportada: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-base:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default base install directory"
-msgstr "Definir o diretório de instalação do sistema básico"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable debug support"
-msgstr "Habilitar suporte a depuração"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
@@ -575,14 +576,14 @@ msgid "exclude packages from the initial chroot"
 msgstr "excluir pacotes do chroot inicial"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-load-configuration-file:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "load a user specific configuration file"
-msgstr "Carregar um arquivo de configuração específico do usuário"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the name of the chroot"
-msgstr "Definir o nome do chroot."
+msgstr ""
 
 #: ../server/ltsp-build-client:79
 #, sh-format
@@ -590,14 +591,14 @@ msgid "API ERROR: you need to provide true or false."
 msgstr "ERRO DE API: você precisa informar verdadeiro ou falso."
 
 #: ../server/ltsp-build-client:189
-#, fuzzy, sh-format
+#, sh-format
 msgid "display this help message"
-msgstr "Exibe esta mensagem de ajuda"
+msgstr ""
 
 #: ../server/ltsp-build-client:190
-#, fuzzy, sh-format
+#, sh-format
 msgid "display help for all available commandline options"
-msgstr "Exibe ajuda para todas as opções de linha de comando disponíveis"
+msgstr ""
 
 #: ../server/ltsp-build-client:194
 #, sh-format

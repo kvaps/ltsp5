@@ -7,18 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-04-07 09:27+0100\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Wolfgang Schweer <schweer@cityweb.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Language: German\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
 "X-Poedit-Country: GERMANY\n"
+"Language: de\n"
+"X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -270,14 +270,14 @@ msgid "set the list of kernel packages to install"
 msgstr "Zu installierende Kernel-Pakete angeben."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "Das zu installierende Kernel-Paket angeben"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "Das zu installierende Kernel-Paket angeben"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -292,7 +292,8 @@ msgstr "Ext2-Image für die Nutzung von NBD erzeugen"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
 #, sh-format
 msgid "create image for use with NBD of the specified filesystem"
-msgstr "Vom angegebenen Verzeichnis ein Image für die Nutzung von NBD erzeugen"
+msgstr ""
+"Vom angegebenen Verzeichnis ein Image für die Nutzung von NBD erzeugen"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
@@ -404,10 +405,10 @@ msgid "Enabling popularity contest..."
 msgstr "Ausführen von popularity-contest wird eingerichtet ..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "Zu installierende Distribution angeben"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -427,7 +428,8 @@ msgstr "Zusätzliche Spiegelserver angeben (Leerzeichen als Trenner)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr ""
 "Liste von Paketen, die als Teil der Erstinstallation zu installieren sind."
 
@@ -451,9 +453,9 @@ msgid "       supported values are: %s"
 msgstr "       Zulässige Werte: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "Das zu installierende Kernel-Paket angeben"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -486,42 +488,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Pfad für das Quickstart-Profil"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Quickstart debuggen"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Ausgabe externer Kommandos anzeigen"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Installation erfolgt in: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"FEHLER: Nicht unterstützte Architektur. Bitte den Parameter --arch %s "
-"überprüfen."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Voreingestelltes Quickstart-Profil: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Voreingestelltes Quickstart-Profil: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -654,9 +654,3 @@ msgstr "Info: Die LTSP-Client-Installation wurde erfolgreich abgeschlossen"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "Fehler: Die LTSP-Client-Installation ist fehlgeschlagen"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Profil von einem Quickstart-Server laden"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Manueller Quickstart: %s"

@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2009-11-01 20:51+0100\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
-"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: cs\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -82,23 +84,23 @@ msgstr "ponechat soubory stažených balíků v cache"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install as part of the final installation"
-msgstr "seznam balíků k instalaci jako součást finální instalace."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default locale"
-msgstr "nastavit výchozí locale"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the mirror location"
-msgstr "Nastavit umístění zrcadel"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
@@ -178,16 +180,14 @@ msgstr "nastavit balíky s jadernými moduly, které se mají instalovat."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
-"nastavit seznam balíků, které se mají instalovat po skončení základní "
-"instalace."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the distribution to be used for install"
-msgstr "Nastavit distribuci, která se použije pro instalaci"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -208,14 +208,14 @@ msgstr ""
 "neexistují."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "create squashfs image for use with NBD"
-msgstr "vytvořit squashfs obraz pro použití s NBD."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "allow unsigned packages during install"
-msgstr "povolit během instalace nepodepsané balíky."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
@@ -248,19 +248,19 @@ msgid "done."
 msgstr "hotovo."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the list of kernel packages to install"
-msgstr "vybrat seznam balíků s jádrem, které se mají instalovat."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "vybrat balík s jádrem, který se má instalovat."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "vybrat balík s jádrem, který se má instalovat."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -300,43 +300,40 @@ msgid "do not autodetect apt proxy configuration"
 msgstr "nerozpoznávat nastavení apt proxy automaticky"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "skip upgrade of installed packages"
-msgstr "přeskočit instalaci instalovaných balíků."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#, fuzzy, sh-format
+#, sh-format
 msgid "a simple webkiosk mode"
-msgstr "režim jednoduchého webového kiosku."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "add a backports mirror"
-msgstr "přidat zrcadlo s bezpečnostními aktualizacemi"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "list of packages to install from the backports repositories"
 msgstr ""
-"seznam vypíchnutých balíků, které se mají nainstalovat ze zadané distribuce"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "distribution to pull backports from"
-msgstr "nastavit distribuci, která se použije pro vypichování balíků v apt"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
-#, fuzzy, sh-format
+#, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
 msgstr ""
-"INFO: k zrcadlu s bezpečnostními aktualizacemi se nastavují výchozí "
-"komponenty a distribuce:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the components to be used in mirror"
-msgstr "Nastavit komponenty, které se mají ze zrcadla použít"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
@@ -384,10 +381,10 @@ msgid "Enabling popularity contest..."
 msgstr "Povoluje se popularity-contest..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "Nastavit distribuci, která se použije pro instalaci"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -407,7 +404,8 @@ msgstr "Nastavit umístění dalších zrcadel (oddělené mezerami)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr ""
 "seznam dalších balíků, které se nainstalují jako součást úvodní instalace."
 
@@ -429,9 +427,9 @@ msgid "       supported values are: %s"
 msgstr "       podporované hodnoty jsou: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "vybrat balík s jádrem, který se má instalovat."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -464,40 +462,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Cesta ke Quickstart profilu"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Ladit Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Zobrazit výstup externích programů"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Instaluje se do: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
-msgstr "CHYBA: nepodporovaná architektura. Zkontrolujte argument --arch: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Výchozí profil Quickstartu: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Výchozí profil Quickstartu: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -530,24 +528,24 @@ msgid "Distro name"
 msgstr "Jméno distribuce"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr "přeskočit vytvoření squashfs (pro debian-installer)."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the security mirror location"
-msgstr "Nastavit umístění zrcadla s bezpečnostními aktualizacemi"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the update mirror location"
-msgstr "Nastavit umístění zrcadla s aktualizacemi"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable LTSP-Cluster"
-msgstr "Povolit LTSP-Cluster"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
@@ -563,14 +561,14 @@ msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr "CHYBA: --arch %s spuštěno na nepodporované architektuře: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-base:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the default base install directory"
-msgstr "Nastavit výchozí instalační adresář"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "enable debug support"
-msgstr "Povolit podporu ladění"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
@@ -578,14 +576,14 @@ msgid "exclude packages from the initial chroot"
 msgstr "vyřadit balíky z prvotního chrootu"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-load-configuration-file:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "load a user specific configuration file"
-msgstr "Nahrát specifický konfigurační soubor uživatele"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the name of the chroot"
-msgstr "Nastavit jméno chrootu."
+msgstr ""
 
 #: ../server/ltsp-build-client:79
 #, sh-format
@@ -593,14 +591,14 @@ msgid "API ERROR: you need to provide true or false."
 msgstr "CHYBA API: musíte zadat true nebo false."
 
 #: ../server/ltsp-build-client:189
-#, fuzzy, sh-format
+#, sh-format
 msgid "display this help message"
-msgstr "Zobrazí tuto nápovědu"
+msgstr ""
 
 #: ../server/ltsp-build-client:190
-#, fuzzy, sh-format
+#, sh-format
 msgid "display help for all available commandline options"
-msgstr "Zobrazí nápovědu pro všechny dostupné volby"
+msgstr ""
 
 #: ../server/ltsp-build-client:194
 #, sh-format
@@ -626,9 +624,3 @@ msgstr "info: instalace LTSP klienta skončila úspěšně"
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "chyba: instalace LTSP klienta neočekávaně skončila"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Získat profil z Quickstart serveru"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Ruční Quickstart: %s"

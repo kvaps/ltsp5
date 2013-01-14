@@ -1,21 +1,21 @@
 # Vietnamese translation for LTSP.
 # Copyright © 2010 Free Software Foundation, Inc.
 # Clytie Siddall <clytie@riverland.net.au>, 2008-2010.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-04-05 18:08+0930\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
-"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: LocFactoryEditor 1.8\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: vi\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -106,7 +106,8 @@ msgstr "đặt địa chỉ của máy nhân bản"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr "thêm một máy nhân bản, mà có mức ưu tiên cao hơn máy nhân bản mặc định"
+msgstr ""
+"thêm một máy nhân bản, mà có mức ưu tiên cao hơn máy nhân bản mặc định"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
@@ -253,14 +254,14 @@ msgid "set the list of kernel packages to install"
 msgstr "đặt danh sách các gói hạt nhân cần cài đặt"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "đặt gói hạt nhân cần cài đặt."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "đặt gói hạt nhân cần cài đặt."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -389,10 +390,10 @@ msgstr ""
 "Đang bật chức năng thông báo các gói đã cài đặt (popularity-contest)..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "đặt bản phân phối cần dùng để cài đặt"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -412,7 +413,8 @@ msgstr "Đặt địa chỉ máy nhân bản bổ sung (định giới bằng d�
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr ""
 "danh sách các gói bổ sung cần cài đặt như là phần của tiến trình cài đặt đầu "
 "tiên."
@@ -436,9 +438,9 @@ msgid "       supported values are: %s"
 msgstr "       các giá trị được hỗ trợ : %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "đặt gói hạt nhân cần cài đặt."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -471,41 +473,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Đường dẫn đến hồ sơ Khởi Chạy Nhanh"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Gỡ lỗi Khởi Chạy Nhanh"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Hiện kết xuất lệnh ngoài"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Đang cài đặt vào : %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
-"LỖI: kiến trúc không được hỗ trợ. Hãy kiểm tra lại đối số « --arch »: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Hồ sơ Khởi Chạy Nhanh mặc định: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Hồ sơ Khởi Chạy Nhanh mặc định: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -634,9 +635,3 @@ msgstr "chú ý: tiến trình cài đặt trình khách LTSP đã chạy thành
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "lỗi: tiến trình cài đặt trình khách LTSP đã kết thúc bất thường"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Lấy hồ sơ từ máy phục vụ Khởi Chạy Nhanh"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Khởi Chạy Nhanh bằng tay: %s"

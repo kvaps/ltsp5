@@ -10,15 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:41-0800\n"
-"PO-Revision-Date: 2010-04-05 09:46+0200\n"
+"POT-Creation-Date: 2013-01-11 09:50-0800\n"
+"PO-Revision-Date: 2013-01-13 21:30+0000\n"
 "Last-Translator: José L. Redrejo Rodríguez <jredrejo@debian.org>\n"
 "Language-Team: spanish <es@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
+"Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -212,7 +213,7 @@ msgstr "lista de paquetes a instalar desde la distribución con prioridad"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr "Nota: deshabilitando fuente apt de seguridad para «sid». No existe. "
+msgstr "Nota: deshabilitando fuente apt de seguridad para «sid». No existe."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
@@ -237,7 +238,8 @@ msgstr "monta el directorio de caché de los paquetes del servidor"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr "monta un directorio del servidor como caché de paquetes para el chroot"
+msgstr ""
+"monta un directorio del servidor como caché de paquetes para el chroot"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
@@ -260,14 +262,14 @@ msgid "set the list of kernel packages to install"
 msgstr "establecer la lista de paquetes de núcleo a instalar"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel variant to install"
-msgstr "establecer el paquete del kernel a instalar"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "set the kernel version to install"
-msgstr "establecer el paquete del kernel a instalar"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -282,7 +284,8 @@ msgstr "crear imagen ext2 para usarla con NBD"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
 #, sh-format
 msgid "create image for use with NBD of the specified filesystem"
-msgstr "crear imagen para usarla con NBD del sistema de archivos especificado"
+msgstr ""
+"crear imagen para usarla con NBD del sistema de archivos especificado"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
@@ -394,10 +397,10 @@ msgid "Enabling popularity contest..."
 msgstr "Habilitando el concurso de popularidad ..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, fuzzy, sh-format
+#, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr "establecer la distribución a utilizar para instalar"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -417,7 +420,8 @@ msgstr "Añadir mirror extra (separados por espacios)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "list of extra packages to install as part of the initial installation."
+msgid ""
+"list of extra packages to install as part of the initial installation."
 msgstr "lista de paquetes a instalar como parte de la instalación inicial."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
@@ -438,9 +442,9 @@ msgid "       supported values are: %s"
 msgstr "       los valores posibles son: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
-#, fuzzy, sh-format
+#, sh-format
 msgid "Set input device drivers to install"
-msgstr "establecer el paquete del kernel a instalar"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -473,40 +477,40 @@ msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
-#, fuzzy, sh-format
+#, sh-format
 msgid "Path to installer profile"
-msgstr "Ruta al perfil Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
-#, fuzzy, sh-format
+#, sh-format
 msgid "Debug installer"
-msgstr "Depuración de Quickstart"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
-#, fuzzy, sh-format
+#, sh-format
 msgid "Show installer external command output"
-msgstr "Mostrar la salida de los comandos externos"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
-#, fuzzy, sh-format
+#, sh-format
 msgid "Using installer: %s"
-msgstr "Instalando en: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
-#, fuzzy, sh-format
+#, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
-msgstr "Error: arquitectura inválida. Verifique %s en su argumento --arch."
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
-#, fuzzy, sh-format
+#, sh-format
 msgid "Custom installer profile: %s"
-msgstr "Perfil por defecto de Quickstart: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
-#, fuzzy, sh-format
+#, sh-format
 msgid "Default installer profile: %s"
-msgstr "Perfil por defecto de Quickstart: %s"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -599,7 +603,7 @@ msgstr "establecer el nombre de la jaula o chroot"
 #: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr " Error de API: debe especificar un valor, verdadero o falso."
+msgstr "Error de API: debe especificar un valor, verdadero o falso."
 
 #: ../server/ltsp-build-client:189
 #, sh-format
@@ -636,9 +640,3 @@ msgstr ""
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "error: la instalación del cliente LTSP no finalizó correctamente"
-
-#~ msgid "Get profile from a Quickstart server"
-#~ msgstr "Obtener el perfil desde un servidor Quickstart"
-
-#~ msgid "Manual Quickstart: %s"
-#~ msgstr "Quickstart manual: %s"
