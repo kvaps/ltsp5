@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-11 09:50-0800\n"
-"PO-Revision-Date: 2013-01-13 21:30+0000\n"
-"Last-Translator: Alkis Georgopoulos <alkisg@gmail.com>\n"
+"POT-Creation-Date: 2013-01-14 12:04-0800\n"
+"PO-Revision-Date: 2013-01-14 20:21+0000\n"
+"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
 "Language-Team: Greek\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-14 04:30+0000\n"
+"X-Launchpad-Export-Date: 2013-01-15 04:30+0000\n"
 "X-Generator: Launchpad (build 16420)\n"
 "X-Poedit-Country: GREECE\n"
 "Language: \n"
@@ -265,12 +265,12 @@ msgstr "ορισμός της λίστας των πακέτων πυρήνα π
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
 msgid "set the kernel variant to install"
-msgstr ""
+msgstr "ορισμός του πακέτου πυρήνα προς εγκατάσταση."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
 #, sh-format
 msgid "set the kernel version to install"
-msgstr ""
+msgstr "ορισμός της έκδοσης πυρήνα προς εγκατάσταση."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -299,6 +299,7 @@ msgstr "εκτέλεση των περισσότερων ή όλων των εφ
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
+"χρήση της καθορισμένης κλειδοθήκης για επαλήθευση του debootstrap gpg"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
@@ -370,6 +371,8 @@ msgid ""
 "use eatmydata to speed up build times, at risk of data not getting written "
 "to disk"
 msgstr ""
+"χρήση του eatmydata για επιτάχυνση της μεταγλώττισης, με ρίσκο να μη γραφούν "
+"κάποια δεδομένα στο δίσκο"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
@@ -398,6 +401,7 @@ msgstr "Ενεργοποιείται ο έλεγχος δημοτικότητα�
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
+"ορισμός της προς εγκατάσταση διανομής, με προεπιλογή αυτή του εξυπηρετητή"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -443,12 +447,12 @@ msgstr "       επιτρεπτές τιμές είναι: %s"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
 #, sh-format
 msgid "Set input device drivers to install"
-msgstr ""
+msgstr "Ορισμός των οδηγών συσκευών εισόδου προς εγκατάσταση"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
 msgid "Set initramfs builder, defaults to genkernel"
-msgstr ""
+msgstr "Ορισμός του κατασκευαστή initramfs, με προεπιλογή το genkernel"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
@@ -458,58 +462,62 @@ msgstr "URI επιπέδου 3"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
+msgstr "Ορισμός των οδηγών καρτών γραφικών προς εγκατάσταση"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
 #, sh-format
 msgid "Set kernel sources package, defaults to latest gentoo-sources"
 msgstr ""
+"Ορισμός των πηγαίων πακέτων πυρήνα, με προεπιλογή τα τελευταία gentoo-sources"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
 #, sh-format
 msgid "Set URI of custom kernel config"
-msgstr ""
+msgstr "Ορισμός διεύθυνσης URI για προσαρμοσμένες ρυθμίσεις kernel"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
 msgid "Gentoo installer to use, defaults to kicktoo"
 msgstr ""
+"Εγκαταστάτης του Gentoo που θα χρησιμοποιηθεί, με προεπιλογή το kicktoo"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
 msgid "Path to installer profile"
-msgstr ""
+msgstr "Διαδρομή για το προφίλ εγκατάστασης"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
 msgid "Debug installer"
-msgstr ""
+msgstr "Αποσφαλμάτωση του εγκαταστάτη"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "Εμφάνιση της εξόδου των εξωτερικών εντολών του εγκαταστάτη"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
 #, sh-format
 msgid "Using installer: %s"
-msgstr ""
+msgstr "Με χρήση του εγκαταστάτη: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
 #, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
+"ΣΦΑΛΜΑ: μη υποστηριζόμενος εγκαταστάτης. Ελέγξτε την παράμετρο --installer: "
+"%s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
 #, sh-format
 msgid "Custom installer profile: %s"
-msgstr ""
+msgstr "Προσαρμοσμένο προφίλ εγκατάστασης: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
 #, sh-format
 msgid "Default installer profile: %s"
-msgstr ""
+msgstr "Προεπιλεγμένο προφίλ εγκατάστασης: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -639,3 +647,10 @@ msgstr "πληροφορία: επιτυχής ολοκλήρωση της εγ�
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "σφάλμα: ανώμαλος τερματισμός της εγκατάστασης πελάτη LTSP"
+
+#: ../common/ltsp-common-functions:173
+#, sh-format
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Alkis Georgopoulos https://launchpad.net/~alkisg"
