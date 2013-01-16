@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-14 12:04-0800\n"
-"PO-Revision-Date: 2013-01-14 20:21+0000\n"
-"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
+"PO-Revision-Date: 2013-01-15 12:43+0000\n"
+"Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-15 04:30+0000\n"
+"X-Launchpad-Export-Date: 2013-01-16 04:30+0000\n"
 "X-Generator: Launchpad (build 16420)\n"
 "X-Poedit-Country: GERMANY\n"
 "Language: de\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:50
 #, sh-format
 msgid "Login Error"
-msgstr "Fehler bei der Anmeldung"
+msgstr "Anmeldefehler"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:31
 #: ../server/ALTLinux/configs/ltsp-login.sh:34
@@ -55,7 +55,7 @@ msgstr "Benutzer"
 #: ../server/ALTLinux/configs/ltsp-login.sh:115
 #, sh-format
 msgid "already logged in!"
-msgstr "Bereits angemeldet!"
+msgstr "bereits angemeldet!"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:34
 #: ../server/ALTLinux/configs/ltsp-login.sh:43
@@ -64,7 +64,7 @@ msgstr "Bereits angemeldet!"
 #: ../server/ALTLinux/configs/ltsp-login.sh:117
 #, sh-format
 msgid "Continue"
-msgstr "Weiter"
+msgstr "Fortfahren"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:80
 #: ../server/ALTLinux/configs/ltsp-login.sh:83
@@ -72,7 +72,7 @@ msgstr "Weiter"
 #: ../server/ALTLinux/configs/ltsp-login.sh:103
 #, sh-format
 msgid "Login Warning"
-msgstr "Warnung bei der Anmeldung"
+msgstr "Anmeldewarnung"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:94
 #, sh-format
@@ -663,6 +663,8 @@ msgstr ""
 "  DieB https://launchpad.net/~dieb\n"
 "  Hendrik Knackstedt https://launchpad.net/~hennekn\n"
 "  Jan https://launchpad.net/~jancborchardt-deactivatedaccount\n"
+"  Jan Middelkoop https://launchpad.net/~jan-recreatie-zorg\n"
+"  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
 "  Keruskerfuerst https://launchpad.net/~arminmohring\n"
 "  Wolfgang Schweer https://launchpad.net/~schweer\n"
 "  phobie https://launchpad.net/~phobie"
