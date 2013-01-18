@@ -49,6 +49,7 @@ fi
 locale_set "${LOCALE}"
 kernel_sources gentoo-sources
 kernel_builder genkernel
+initramfs_builder genkernel
 timezone ${TIMEZONE}
 extra_packages ldm ltsp-client ${PACKAGES}
 
@@ -99,6 +100,14 @@ pre_install_initramfs_builder() {
 	fi
 }
 
+post_install_initramfs_builder() {
+	if [ "${initramfs_builder}" == "genkernel" ]; then
+		# add you're own network drivers if needed
+		# eg. "MODULES_NET=\"\${MODULES_NET}\" via-rhine"
+		echo "MODULES_NET=\"\${MODULES_NET}\"" >> "${chroot_dir}/usr/share/genkernel/arch/${MAIN_ARCH}/modules_load"
+	fi
+}
+
 pre_build_kernel() {
 	if [ -n "${KERNEL_CONFIG_URI}" ]; then
 		kernel_config_uri "${KERNEL_CONFIG_URI}"
@@ -118,7 +127,7 @@ pre_build_kernel() {
 }
 
 pre_build_initramfs() {
-	if [ "${INITRAMFS_BUILDER}" == "dracut" ]; then
+	if [ "${initramfs_builder}" == "dracut" ]; then
 		moduledir=$(ls -1r ${chroot_dir}/lib/modules | head -n 1)
 		kernelversion=$(echo ${moduledir} | cut -d "-" -f 1)
 		name="initramfs-dracut-${MAIN_ARCH}-${kernelversion}-gentoo"
