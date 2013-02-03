@@ -22,11 +22,6 @@ case "$MODE" in
             printf "`eval_gettext "       supported values are: %s"`", "i486, i686, amd64"
             exit 1
             ;;
-        esac     
-        ;;
-    finalization)
-        # use to determine client arch later
-        mkdir -p "$ROOT/etc/ltsp"
-        echo "$ARCH" > "$ROOT/etc/ltsp/arch.conf"
+        esac
         ;;
 esac
