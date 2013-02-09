@@ -27,7 +27,6 @@ chroot_dir $CHROOT
 stage_uri "${STAGE_URI}"
 rootpw password
 makeconf_line MAKEOPTS "${MAKEOPTS}"
-makeconf_line DRACUT_MODULES "nbd nfs"
 
 if [ -n "${MIRRORS}" ]; then
 	makeconf_line GENTOO_MIRRORS "${MIRRORS}"
@@ -88,7 +87,7 @@ post_unpack_stage_tarball() {
 
 	# linking ltsp profile from overlay
 	rm ${chroot_dir}/etc/portage/make.profile
-	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/10.0/ltsp/" "${chroot_dir}/etc/portage/make.profile"
+	ln -s "/var/lib/layman/ltsp/profiles/default/linux/${MAIN_ARCH}/13.0/ltsp/" "${chroot_dir}/etc/portage/make.profile"
 }
 
 pre_install_initramfs_builder() {
