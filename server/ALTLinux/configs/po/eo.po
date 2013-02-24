@@ -14,13 +14,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-26 04:30+0000\n"
-"X-Generator: Launchpad (build 16451)\n"
+"X-Launchpad-Export-Date: 2013-02-24 04:30+0000\n"
+"X-Generator: Launchpad (build 16506)\n"
 
 #: ltsp-login.sh:17
 #, sh-format
 msgid "Login Error"
-msgstr ""
+msgstr "Eraro de ensaluto"
 
 #: ltsp-login.sh:20 ltsp-login.sh:28
 #, sh-format
@@ -45,4 +45,4 @@ msgstr ""
 #: ltsp-login.sh:25
 #, sh-format
 msgid "Login Warning"
-msgstr ""
+msgstr "Averto de ensaluto"
