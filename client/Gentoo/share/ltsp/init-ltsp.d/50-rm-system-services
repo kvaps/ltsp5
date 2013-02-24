@@ -50,5 +50,5 @@ nfs                   # Network File System
 fi
 
 for service in $rm_services; do
-    rc-service -e "$service" && rc-update del "$service" default
+    test -f "/etc/runlevels/default/$service" && rc-update del "$service" default
 done
