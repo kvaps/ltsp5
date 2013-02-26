@@ -1,0 +1,7 @@
+case "$MODE" in
+    after-install)
+        # Copy kernel/initrd from client into tftpboot directory
+        ltsp-chroot -a $ARCH /usr/sbin/ltsp-rewrap-latest-kernel
+        /usr/sbin/ltsp-update-kernels
+        ;;
+esac

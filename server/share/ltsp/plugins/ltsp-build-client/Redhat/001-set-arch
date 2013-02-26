@@ -1,0 +1,33 @@
+# Set Architecture for Chroot Install
+# Now sets client architecture based on host
+# Similarly ppc64 assumes you want a ppc chroot.
+# Use ltsp-build-client --arch ppc64  to override.
+
+case "$MODE" in
+    commandline)
+        add_option "arch" "`eval_gettext "set the target architecture"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_arch_value" ]; then
+            ARCH_OPT="$option_arch_value"
+        else
+            # ARCH is not explicitly set by config or command line, get it from the environment
+            ARCH_OPT=$(uname -m | sed -e s/i.86/i386/)
+            # If ppc64 then default to ppc chroot.
+            [ "$ARCH_OPT" == "ppc64" ] && ARCH_OPT=ppc
+        fi
+
+        # Validate the proposed architecture value.
+        case "$ARCH_OPT" in
+            i386|x86_64|ppc|ppc64|ia64|s390|s390x|sparc|sparc64|alpha)
+                ARCH=$ARCH_OPT
+            ;;
+
+            *)
+            printf "`eval_gettext "ERROR: unsupported architecture. Check your --arch argument: %s"`", $ARCH_OPT
+            printf "`eval_gettext "       supported values are: %s"`", "i386 x86_64 ppc ppc64 ia64 s390 s390x sparc sparc64 alpha"
+            exit 1
+            ;;
+        esac      
+        ;;
+esac

@@ -1,3 +1,5 @@
+# Used by Ubuntu and Redhat
+
 case "$MODE" in
     after-install)
         # make sure we use a proper nameserver (LP: #72482)

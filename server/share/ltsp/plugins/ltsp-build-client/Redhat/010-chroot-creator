@@ -1,0 +1,55 @@
+#
+# install a LTSP chroot to /opt/ltsp/$ARCH
+# requires livecd-tools-015 or higher
+# --kickstart <filename.ks> if you want to override any install options or use a different repository
+#
+# Gone but not forgotten
+return
+# 02/22/13 - Mock still in testing
+
+case "$MODE" in
+    commandline)
+        add_option "kickstart" "`eval_gettext "Path to kickstart file"`" "advanced" "true" 
+        add_option "cache"  "`eval_gettext "Path to chroot-creator cache"`" "advanced" "true" 
+        add_option "release"  "`eval_gettext "Release version number"`" "advanced" "true" 
+        add_option "distro"  "`eval_gettext "Distro name"`" "advanced" "true" 
+    ;;
+    configure)
+        if [ -n "$option_kickstart_value" ]; then
+            KICKSTART_OPT="$option_kickstart_value"
+            echo "Manual Kickstart: $KICKSTART_OPT"
+        else
+            if [ -n "$option_release_value" ]; then
+                RELEASE=$option_release_value
+            else
+                RELEASE=$RELEASEDEF
+            fi
+            if [ -n "$option_distro_value" ]; then
+                VENDOR=$option_distro_value
+            else
+                VENDOR=$VENDORDEF
+            fi
+            KICKSTART_OPT="/etc/ltsp/kickstart/$VENDOR/$RELEASE/ltsp-$ARCH.ks"
+            echo "Autoconfigured Kickstart: $KICKSTART_OPT"
+        fi
+
+        if [ ! -e $KICKSTART_OPT ]; then
+            echo "ERROR: $KICKSTART_OPT does not exist."
+            exit 1
+        fi
+
+        if [ -n "$option_cache_value" ]; then
+            CACHEDIR_OPT="--cache=$option_cache_value"
+            echo "Cachedir: $option_cache_value"
+        else
+            unset CACHEDIR_OPT
+        fi
+    ;;
+    install)
+        echo "Installing into $ROOT"
+        # SELINUX NOTE: proper labeling within chroot is currently not possible
+        setarch $ARCH /usr/sbin/chroot-creator \
+           --target=$ROOT $CACHEDIR_OPT \
+           $KICKSTART_OPT
+    ;;
+esac
