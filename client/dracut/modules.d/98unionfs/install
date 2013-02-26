@@ -1,0 +1,14 @@
+#!/bin/sh
+
+dracut_install mount.fuse mount.unionfs unionfs umount 
+dracut_install busybox
+
+if ldd $(which unionfs) |grep -q lib64; then
+    LIBDIR="/lib64"
+else
+    LIBDIR="/lib"
+fi
+
+dracut_install $(ls {/usr,}$LIBDIR/libfuse*.so* 2>/dev/null )
+
+inst_simple "/usr/share/ltsp/init-ltsp.d/00-overlay" "/pre-pivot/07overlay.sh"
