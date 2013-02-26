@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#######################################################
+#
+#    update /etc/exports file, if needed
+#
+#######################################################
+
+[ -f /etc/ltsp/ltsp.conf ] && . /etc/ltsp/ltsp.conf
+[ "$LTSP_DIR" ] || LTSP_DIR=/opt/ltsp
+
+# if there is not a line matching '/opt/ltsp *(ro,no_root_squash,async,no_subtree_check)', add it
+if [ ! "`grep ${LTSP_DIR}[[:space:]]+*[*]\(ro,no_root_squash,async,no_subtree_check\) /etc/exports`" ] ; then
+echo "## LTSP-begin ##
+# export for LTSP version 5
+$LTSP_DIR                 *(ro,no_root_squash,async,no_subtree_check)
+## LTSP-end ## 
+" >> /etc/exports 
+fi
+

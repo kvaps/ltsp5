@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# iSCSI update script for LTSP
+# http://www.ltsp.org
+#
+# 2013, Joshua Trimm <enslaver@enslaver.com>
+#
+# It requires the Linux target framework found at http://stgt.sourceforge.net/
+# 
+
+export BASE=${BASE:-/opt/ltsp}                # LTSP base directory
+MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp} # our modules place
+
+SCRIPT=iscsi-update
+# Source the ltsp server functions for vendor detect
+. ${MODULES_BASE}/ltsp-server-functions
+name=${name:-$(detect_arch)}
+imgdir=$BASE/images
+
+VENDOR=${VENDOR:-"$(detect_vendor)"}          # Linux distribution
+
+if [ ! -f /etc/tgt/targets.conf ]; then
+    echo "No /etc/tgt/targets.conf file found. Please install scsi-target-utils by running: yum install scsi-target-utils"
+    exit 1
+fi
+
+confirm_chroot() {
+    if [ -z $ROOT ]; then
+        echo "ERROR: ROOT is not defined."
+        exit 1
+    fi
+    if [ ! -e $ROOT/bin/true ]; then
+        [ "$1" = "--return-on-fail" ] && return 1
+        echo "ERROR: $ROOT is not a valid chroot."
+        exit 1
+    fi
+    return 0
+}
+
+#DIRS=$(find $BASE -type d -maxdepth 1 -print)
+
+unset update_conf
+tid=0
+tid=$(tgtadm --lld iscsi --op show --mode target|grep Target|wc -l)
+
+for files in $imgdir/*.img ; do
+    tid=$((tid+1))
+    target=$(basename ${files/.*//})
+    echo $target
+    targetname=$(/sbin/iscsi-iname)
+    tgtadm --lld iscsi --op new --mode logicalunit --tid $tid --lun 1 -b $files && update_conf=1
+done
+
+if [ -n "$update_conf" ]; then
+    mkdir -pq /etc/tgt/conf.d
+    grep -v "conf.d/ltsp.conf" /etc/tgt/targets.conf > /etc/tgt/targets.conf.tmp
+    echo "include /etc/tgt/conf.d/*.conf" >> /etc/tgt/targets.conf.tmp
+    mv /etc/tgt/targets.conf.tmp /etc/tgt/targets.conf
+    tgt-admin --dump > /etc/tgt/conf.d/ltsp.conf
+    /sbin/service tgtd restart
+fi
+    
+
+
+
+# Write's the pxelinux.cfg
+ISCSI_TARGET="iqn.2008-0.com.ltsp:server"
+ISCSI_SERVERIP="192.168.67.1"
+
+sed -e "s/{ISCSI-TARGET}/$ISCSI_TARGET/g; s/{ISCSI-SERVERIP}/$ISCSI_SERVERIP/g" << EOF | sudo tee /var/lib/tftpboot/ltsp/i386/pxelinux.cfg/default.iscsi
+
+DEFAULT linux
+ LABEL linux
+ SAY Booting Linux
+ KERNEL vmlinuz.ltsp
+ APPEND rw initrd=initrd.ltsp init=/sbin/init-ltsp selinux=0 netroot=iscsi:@{ISCSI-SERVERIP}::3260::{ISCSI-TARGET} iscsi_initiator={ISCSI-TARGET} ip=eth0:dhcp ifname=eth0 video=LVDS-1:d rdshell 
+
+EOF

@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+
+$origserver="192.168.67.1";
+$orignetwork="192.168.67.0";
+$orignetmask="255.255.255.0";
+$origbroadcast = `/bin/ipcalc -b $orignetwork $orignetmask`;
+
+$config_file = "/etc/ltsp/dhcpd.conf";
+$bkup_file = $config_file . ".ltsp.orig";
+$tmp_file = $config_file . ".ltsp.tmp";
+
+# don't bother to continue unless the target file exists
+$exists = stat ($config_file);
+if (! $exists) {
+        print "\n". $config_file ." not found\n\n";
+        exit;
+}
+
+# open target file
+open (IN, "< $config_file");
+open (OUT, "> $tmp_file");
+
+
+if ( $ARGV[2] ) {
+    $server = $ARGV[0];
+    $network = $ARGV[1];
+    $netmask = $ARGV[2];
+} else {
+    $server="192.168.67.1";
+    $network="192.168.67.0";
+    $netmask="255.255.255.0";
+}
+
+$broadcast = `/bin/ipcalc -b $network $netmask`;
+@orignw = split '\.', $orignetwork;
+@nw = split '\.', $network;
+@nm = split '\.', $netmask;
+$i = 0;
+while ($nm[$i] == "255") {
+    if ($net) {
+        $net = $net . ".";
+        $orignet = $orignet . ".";
+    }
+    $net = $net . $nw[$i];
+    $orignet = $orignet . $orignw[$i];
+    ++$i;
+}
+while (<IN>) {
+    s/$origserver/$server/g;
+    s/$orignetwork/$network/g;
+    s/$orignetmask/$netmask/g;
+    s/$origbroadcast/$broadcast/g;
+    s/$orignet/$net/g;
+    print OUT $_;
+}
+
+# close up the files
+close (IN);
+close (OUT);
+
+# out with the old, in with the new
+rename ($config_file, $bkup_file);
+rename ($tmp_file, $config_file);
+
+exit;
+

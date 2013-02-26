@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# this script changes the default window resize/move behavior to be
+# "box" rather than than "opaque". This saves a ton of bandwidth on
+# diskless clients.
+
+FILE=/usr/share/config/kwinrc
+
+if [ -f $FILE ]
+then
+    perl -i.ltsp -p -e "s/MoveMode=Opaque/MoveMode=Transparent/ " $FILE
+fi

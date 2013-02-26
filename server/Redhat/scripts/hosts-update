@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+
+use NetAddr::IP;
+
+if ( $ARGV[2] ) {
+    $server = $ARGV[0];
+    $network = $ARGV[1];
+    $netmask = $ARGV[2];
+} else {
+    $server="192.168.67.1";
+    $network="192.168.67.0";
+    $netmask="255.255.255.0";
+}
+
+if ( !  `grep "$server	server.ltsp" /etc/hosts` ) {
+    open (HOSTS, ">>/etc/hosts");
+    $ws=1;
+    $ip = new NetAddr::IP "$network/$netmask" ;
+    ++$ip; # skip network address
+    for ($ip ; $ip < $ip->broadcast; $ip++) {
+        ($out, $junk) = split("/", $ip);
+        if ($out eq $server) {
+            print HOSTS "$out	server.ltsp	server\n";
+        } else {
+            $foo = $ws;
+            if ($ws < 100) { $foo = "0" . $ws; }
+            if ($ws < 10) { $foo = "00" . $ws; }
+            print HOSTS "$out 	ws$foo.ltsp	ws$foo\n";
+        }
+        $ws++;
+    }
+}

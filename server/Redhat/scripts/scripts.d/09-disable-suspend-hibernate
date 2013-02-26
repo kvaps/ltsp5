@@ -1,0 +1,10 @@
+#!/bin/bash
+
+      
+gconftool-2 --direct --config-source \
+    xml:readwrite:/etc/gconf/gconf.xml.defaults \
+    --type boot --set /apps/gnome-power-manager/can_suspend 0
+      
+gconftool-2 --direct --config-source \
+    xml:readwrite:/etc/gconf/gconf.xml.defaults \
+    --type boot --set /apps/gnome-power-manager/can_hibernate 0

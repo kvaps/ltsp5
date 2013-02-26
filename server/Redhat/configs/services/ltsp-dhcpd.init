@@ -1,0 +1,156 @@
+#!/bin/sh
+#
+### BEGIN INIT INFO
+# Provides: ltsp-dhcpd
+# Default-Start:
+# Default-Stop: 0 1 6
+# Should-Start:
+# Required-Start: $network
+# Required-Stop:
+# Short-Description: Start and stop the DHCP server
+# Description: dhcpd provides the Dynamic Host Configuration Protocol (DHCP)
+#              server.
+### END INIT INFO
+#
+# The fields below are left around for legacy tools (will remove later).
+#
+# chkconfig: - 98 35
+# description: dhcpd provides the Dynamic Host Configuration Protocol (DHCP) \
+#              server
+# processname: dhcpd
+# config: /etc/ltsp/dhcpd.conf
+# config: /var/lib/dhcpd/dhcpd.leases
+# pidfile: /var/run/dhcpd.pid
+
+. /etc/init.d/functions
+
+RETVAL=0
+
+prog=dhcpd
+dhcpd=/usr/sbin/dhcpd
+lockfile=/var/lock/subsys/ltsp-dhcpd
+pidfile=/var/run/ltsp-dhcpd.pid
+
+[ -f /etc/sysconfig/ltsp-dhcpd ] && . /etc/sysconfig/ltsp-dhcpd
+
+# if the user specified a different config file, make sure we reference it
+findConfig() {
+    for arg in $DHCPDARGS ; do
+        if [ "$found" = 1 ]; then
+            [ -f "$arg" ] && echo "$arg"
+            return
+        fi
+        if [ "$arg" = "-cf" ]; then
+            found=1
+            continue
+        fi
+    done
+    echo "/etc/ltsp/dhcpd.conf"
+}
+
+conf="$(findConfig "$DHCPDARGS")"
+if [ ! "$found" ]; then
+   DHCPDARGS="$DHCPARGS -cf $conf"
+fi
+
+if [ ! -f /var/lib/dhcpd/dhcpd.leases ] ; then
+    mkdir -p /var/lib/dhcpd
+    touch /var/lib/dhcpd/dhcpd.leases
+    [ -x /sbin/restorecon ] && [ -d /selinux ] && /sbin/restorecon /var/lib/dhcp/dhcpd.leases >/dev/null 2>&1
+fi
+
+configtest() {
+    [ -x $dhcpd ] || return 5
+    [ -f $conf ] || return 6
+    $dhcpd -q -t -cf $conf
+    RETVAL=$?
+    return $RETVAL
+}
+
+start() {
+    [ -x $dhcpd ] || return 5
+    [ -f $conf ] || return 6
+
+    pidofproc $prog >/dev/null 2>&1
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && return $RETVAL
+
+    echo -n "Starting ltsp-$prog:"
+    daemon $dhcpd $DHCPDARGS 2>/dev/null
+    RETVAL=$?
+    echo
+    [ $RETVAL = 0 ] && touch $lockfile
+
+    # Ugly Hack!  Live LTSP Server needs something to copy ssh keys into the client chroot *once* after sshd generated its keys on first boot.
+    # Putting this here for now because we have nowhere else to put it at the moment, and it is harmless.
+    if [ -e /etc/ltsp/DELETE-ME-WHEN-DONE-need-to-copy-sshkeys ]; then
+        /usr/sbin/ltsp-update-sshkeys
+        rm -f /etc/ltsp/DELETE-ME-WHEN-DONE-need-to-copy-sshkeys
+    fi
+    return $RETVAL
+}
+
+stop() {
+    pidofproc $prog >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        RETVAL=7
+        return $RETVAL
+    fi
+
+    echo -n "Shutting down ltsp-$prog:"
+    killproc $prog
+    RETVAL=$?
+
+    [ $RETVAL = 0 ] && success || failure
+    echo
+    [ $RETVAL = 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+if [ ! -x $dhcdbd ]; then
+    RETVAL=5
+    exit $RETVAL
+fi
+
+if [ $# -gt 1 ]; then
+    RETVAL=2
+    exit $RETVAL
+fi
+
+case "$1" in
+    start)
+        start
+        RETVAL=$?
+        ;;
+    stop)
+        stop
+        RETVAL=$?
+        ;;
+    restart|force-reload)
+        stop; start
+        RETVAL=$?
+        ;;
+    try-restart|reload)
+        RETVAL=3
+        ;;
+    condrestart)
+        if [ -f $lockfile ]; then
+            stop && start
+            RETVAL=$?
+        fi
+        ;;
+    configtest)
+        configtest
+        RETVAL=$?
+        ;;
+    status)
+        status $dhcpd
+        RETVAL=$?
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|condrestart|configtest|status}"
+        RETVAL=3
+        ;;
+esac
+
+exit $RETVAL

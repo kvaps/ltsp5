@@ -1,0 +1,12 @@
+boot/vmlinuz*
+boot/initrd*
+boot/elf*
+boot/config*
+boot/System.map*
+proc/*
+sys/*
+var/cache/yum/*
+var/cache/mock/*
+tmp/*
+var/cache/ltsp/*
+var/cache/ltsp-localapps/*

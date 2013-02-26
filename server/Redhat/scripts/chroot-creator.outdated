@@ -1,0 +1,142 @@
+#!/usr/bin/python -tt
+#
+# chroot-creator: Install system defined by kickstart file into target chroot
+# Requires: livecd-tools-015 or higher
+#
+# Copyright 2008, Red Hat  Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Library General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, you can find it on the World Wide
+#  Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
+#  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+
+import os
+import sys
+import shutil
+import optparse
+
+import imgcreate
+
+class ChrootCreator(imgcreate.ImageCreator):
+    """Installs a system to a target chroot directory.
+    """
+
+    def __init__(self, ks, name, target = None):
+        """Initialize a ChrootCreator instance.
+        This method takes the same arguments as ImageCreator.__init__() with
+        the addition of:
+
+        target   -- The directory where the chroot is to be installed.
+        """
+        imgcreate.ImageCreator.__init__(self, ks, name)
+
+        # Target path must be defined
+        if target is None:
+            raise imgcreate.CreatorError("--target chroot path must be defined.")
+        # Target path must not already exist
+        if os.path.exists(target):
+            raise imgcreate.CreatorError("--target chroot already exists.")
+
+        self.target = target
+        self.__bindroot = None
+        self._fstype = "auto"
+
+    # --bind mount target chroot upon temp directory
+    def _mount_instroot(self, base_on = None):
+        self.__imgdir = self._mkdtemp()
+
+        imgcreate.fs.makedirs(self.target)
+        # Cannot add to self.__bindmounts because this must be mounted 
+        # before everything is created in _instroot
+        self.__bindroot = imgcreate.fs.BindChrootMount(self.target, self._instroot, "/")
+        print("Mounting %s for chroot installation" % self.__bindroot.src)
+        self.__bindroot.mount()
+
+        # NOTE: This part is LTSP specific
+        # Copy configuration into chroot prior to package installation
+        imgcreate.fs.makedirs(self._instroot + "/etc/sysconfig")
+        imgcreate.fs.makedirs(self._instroot + "/etc/sysconfig/network-scripts")
+        imgcreate.fs.makedirs(self._instroot + "/etc/kernel")
+        imgcreate.fs.makedirs(self._instroot + "/etc/kernel/postinst.d")
+        imgcreate.fs.makedirs(self._instroot + "/etc/dracut.conf.d")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-mkinitrd",self._instroot + "/etc/sysconfig/mkinitrd")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-dracut",self._instroot + "/etc/dracut.conf")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-dracut-skip-first-time",self._instroot + "/etc/dracut.conf.d/skip-first-time.conf")
+        shutil.copyfile("/etc/ltsp/dracut/sysconfig-network",self._instroot + "/etc/sysconfig/network")
+        shutil.copyfile("/etc/ltsp/dracut/ifcfg-eth0",self._instroot + "/etc/sysconfig/network-scripts/ifcfg-eth0")
+        shutil.copyfile("/etc/ltsp/dracut/ltsp-postinst.d",self._instroot + "/etc/kernel/postinst.d/ltsp")
+        os.chmod(self._instroot + "/etc/kernel/postinst.d/ltsp",0755)
+        # Create empty file to mark that this is a LTSP chroot
+        open(self._instroot + "/etc/ltsp_chroot", 'w').write('')
+
+    def _unmount_instroot(self):
+        if not self.__bindroot is None:
+            self.__bindroot.unmount()
+
+def parse_options(args):
+    parser = optparse.OptionParser(usage = "%prog [--name=<name>] [--cachedir=<path>] --target=<target> <kickstart>")
+
+    parser.add_option("-n", "--name", type="string", dest="name",
+                      help="Image name and filesystem label")
+    parser.add_option("-t", "--target", type="string", dest="target",
+                      help="Target directory for chroot")
+    parser.add_option("-c", "--cache", type="string", dest="cachedir",
+                      help="Location of cachedir")
+
+    (options, args) = parser.parse_args()
+
+    if len(args) != 1:
+        parser.print_usage()
+        sys.exit(1)
+
+    return (args[0], options)
+
+def main():
+    (kscfg, options) = parse_options(sys.argv[1:])
+
+    if os.geteuid () != 0:
+        print >> sys.stderr, "You must run chroot-creator as root"
+        return 1
+
+    try:
+        ks = imgcreate.read_kickstart(kscfg)
+    except imgcreate.CreatorError, e:
+        print >> sys.stderr, "Error loading kickstart file '%s' : %s" % (kscfg, e)
+        return 1
+
+    if options.name:
+        name = options.name
+    else:
+        name = imgcreate.build_name(kscfg)
+
+    if options.target:
+        target = options.target
+
+    creator = ChrootCreator(ks, name, target)
+
+    try:
+        creator.mount(None,options.cachedir)
+        creator.install()
+        creator.configure()
+        creator.unmount()
+
+    except imgcreate.CreatorError, e:
+        print >> sys.stderr, "Error creating image : %s" % e
+        return 1
+    finally:
+        creator.cleanup()
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())

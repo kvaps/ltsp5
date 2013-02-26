@@ -1,0 +1,106 @@
+#!/bin/sh
+
+#########################################################
+# automagic configuration for LTSP5 Linux Terminal Server 
+#########################################################
+
+# where to find the scripts:
+BASE=/usr/share/ltsp/
+
+[ -f /etc/ltsp/ltsp-server.conf ] && . /etc/ltsp/ltsp-server.conf
+
+# the device that the terminals will be connecting to:
+if [ "$LTSP_DEV" ]; then
+    DEV=$LTSP_DEV
+else
+    DEV="eth1"
+fi
+
+# default ip, netmask, and network addresses:
+if [ "$LTSP_DEFAULTIP" ]; then
+    DEFAULTIP=$LTSP_DEFAULTIP
+else
+    DEFAULTIP="192.168.67.1"
+fi
+if [ "$LTSP_DEFAULTMASK" ]; then
+    DEFAULTMASK=$LTSP_DEFAULTMASK
+else
+    DEFAULTMASK="255.255.255.0"
+fi
+
+## end of user configuration
+
+#######################################################################
+# do not run unless the sysadmin passes the "-y" flag
+#######################################################################
+if [ "$1" != "-y" ];
+then
+    cat << EOF
+
+WARNING: ltsp-initialize should only be run if you know what you are doing.
+
+This will setup your server to support LTSP thin-clients. If you are not
+supporting LTSP thin-clients, you DO NOT want to run this command.
+
+This command turns on a bunch of daemons, it turns on a dhcp server, it
+turns off firewall rules, mucks around with SELinux, and all sorts of
+awful things that you do not want done to your server (unless, of course,
+you want to support LTSP thin clients).
+
+If you know what you are getting yourself into, re-run this command
+with the "-y" flag and it will do its best to configure your server to
+support LTSP thin-clients
+
+EOF
+    exit 1
+fi
+
+#######################################################################
+# get the network settings, exit if the config files are not found
+#######################################################################
+
+if [ ! -f /etc/sysconfig/network-scripts/ifcfg-$DEV ]; then
+    echo
+    echo "ERROR: File not found: /etc/sysconfig/network-scripts/ifcfg-$DEV"
+    exit 1
+fi
+
+# Source the network configuration
+. /etc/sysconfig/network-scripts/ifcfg-$DEV
+. /etc/sysconfig/network
+
+# if a variable is not known, set it to the default
+[ "$IPADDR" ]    || export IPADDR=$DEFAULTIP
+[ "$NETMASK" ]   || export NETMASK=$DEFAULTMASK
+[ "$GATEWAY" ]   || export GATEWAY=$DEFAULTIP
+[ "$BROADCAST" ] || export `/bin/ipcalc -b $IPADDR $NETMASK`
+[ "$NETWORK" ]   || export `/bin/ipcalc -n $IPADDR $NETMASK`
+
+#######################################################################
+# update various configuration files
+#######################################################################
+
+run-parts $BASE/scripts.d/
+
+
+#######################################################################
+# update the configs that are sensitive to the network settings
+#######################################################################
+
+if [ -x $BASE/scripts.d/hosts-update ]
+then
+    echo running hosts-update
+    $BASE/scripts.d/hosts-update $IPADDR $NETWORK $NETMASK
+else
+    echo WARNING: $BASE/hosts-update not found
+fi
+    
+if [ "$IPADDR" != "$DEFAULTIP" ]
+then
+    if [ -x $BASE/scripts.d/dhcpd-update ]; then
+        echo running dhcpd-update
+        $BASE/scripts.d/dhcpd-update $IPADDR $NETWORK $NETMASK
+    else
+        echo WARNING: $BASE/scripts.d/dhcpd-update not found
+    fi
+fi

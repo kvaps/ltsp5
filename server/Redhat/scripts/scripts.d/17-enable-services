@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd /usr/share/ltsp/chkconfig.d/ || exit 1
+
+for SERVICE in *
+do
+    if [ -x /etc/init.d/$SERVICE -o -f /etc/xinetd.d/$SERVICE ]
+    then
+        /sbin/chkconfig $SERVICE on
+    fi
+done

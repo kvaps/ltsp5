@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# NAT to eth1
+WANIFACE=$(route -n |grep ^0\.0\.0\.0 |awk {'print $8'})
+LANIFACE=eth1
+# Skip if already setup
+iptables-save |grep  -q "A FORWARD -i $LANIFACE -o"
+if [ $? -ne 0 ]; then
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    /sbin/iptables -t nat -A POSTROUTING -o $WANIFACE -j MASQUERADE
+    /sbin/iptables -A FORWARD -i $WANIFACE -o $LANIFACE -m state --state RELATED,ESTABLISHED -j ACCEPT
+    /sbin/iptables -A FORWARD -i $LANIFACE -o $WANIFACE -j ACCEPT
+    echo About to overwrite your default iptables \(firewall\) configuration.
+    echo hit Ctrl\-C if unsure.
+    read stuff
+    iptables-save > /etc/sysconfig/iptables
+    /sbin/service iptables restart
+fi
+
+# Disable "Switch User" option
+gconftool-2 --config-source xml:merged:/etc/gconf/gconf.xml.mandatory --set /desktop/gnome/lockdown/disable_user_switching --type=bool true
+
+# Disable GNOME PackageKit update applet
+rm -f /etc/xdg/autostart/gpk-update-icon.desktop

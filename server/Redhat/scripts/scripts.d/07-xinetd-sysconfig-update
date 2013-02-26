@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+
+$config_file = "/etc/sysconfig/xinetd";
+$bkup_file = $config_file . ".ltsp.orig";
+$tmp_file = $config_file . ".ltsp.tmp";
+
+# don't bother to continue unless the target file exists
+$exists = stat ($config_file);
+if (! $exists) {
+    print "\n". $config_file ." not found\n\n";
+    exit;
+}
+
+# open target file
+open (IN, "< $config_file");
+open (OUT, "> $tmp_file");
+    
+while (<IN>) {
+    s/-loop/-limit/g;
+    if ($_ =~ /EXTRAOPTIONS/ && $_ !~ /-limit/i) {
+        s/"$/ -limit 250"/g;
+    }
+    print OUT $_;
+}
+
+# close up the files
+close (IN);
+close (OUT);
+
+# out with the old, in with the new
+`mv $config_file $bkup_file`;
+`mv $tmp_file $config_file`;
+
+exit;
