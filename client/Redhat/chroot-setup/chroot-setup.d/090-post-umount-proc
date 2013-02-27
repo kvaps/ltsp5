@@ -1,0 +1,3 @@
+#!/bin/sh
+
+umount /proc 2> /dev/null ||:

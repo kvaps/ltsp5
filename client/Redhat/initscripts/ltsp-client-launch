@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# ltsp-client-launch        LTSP Client Launcher
+#
+# description: This launches the LTSP clients defined in /etc/lts.conf
+#              along with sound server and other configured devices.
+#
+
+# Gracefully exit if ltsp_chroot file is not present
+test -f /etc/ltsp_chroot || exit 0
+
+# Make sure LANG is set
+if [ -z "$LANG" ]
+then
+  if [ -f /etc/sysconfig/i18n ]
+  then
+    . /etc/sysconfig/i18n
+    export LANG
+  fi
+fi
+
+if [ -z "$LC_MESSAGES" ]
+then
+  if [ -z "$LC_ALL" ]
+  then
+    LC_MESSAGES=$LANG
+    export LC_MESSAGES
+  fi
+fi
+
+# Grab lts.conf from the same IP address as the mount server.
+# (TODO: This is duplicated from ltsp_config because we don't want to run that entire script at this point.)
+
+# check for NBD devices
+NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/rofs /{print $1}' /proc/mounts)
+if [ -n "$NBD_DEVICES" ]; then
+    for DEVICE in $NBD_DEVICES ; do
+        SERVER=$(pgrep -f -l $DEVICE | awk '{print $3}')
+        test -n "$SERVER" && break
+    done
+else
+    # check for NFS root
+    SERVER=$(sed -ne '/ltsp.*nfs/ { s/^\([^:]*\):.*$/\1/; p; q }' /proc/mounts)
+fi
+
+SERVER="${SERVER:-172.31.100.254}"
+export SERVER
+
+ARCH=$(uname -m)
+[ "$ARCH" = "i586" ] && ARCH=i386
+[ "$ARCH" = "i686" ] && ARCH=i386
+TFTPPATH="/ltsp/$ARCH/lts.conf"
+
+# Attempt to get lts.conf via tftp
+cd /var/run
+(echo "get ${TFTPPATH}"|tftp ${SERVER} >/dev/null 2>&1)
+if [ -s ./lts.conf ];then
+    cp ./lts.conf /etc/lts.conf
+fi
+cd - > /dev/null
+
+# Source function libraries.
+. /usr/share/ltsp/ltsp-init-common
+
+teardown() {
+    killall -g screen_session pulseaudio ldm ltspfsd
+}
+trap "teardown" TERM
+
+# Start Screen Sessions defined in /etc/lts.conf
+for screen in 01 02 03 04 05 06 07 08 09 10 11 12; do
+eval num=\$SCREEN_$screen
+if [ -n "$num" ]; then
+    /usr/share/ltsp/screen_session "$screen" &
+fi
+done
+
+# TODO: Move these into service ltsp-client-setup
+configure_localdev
+configure_swap 
+configure_serial_mouse
+configure_printer
+
+# /dev/dsp must be owned by pulse
+chown pulse /dev/dsp
+start_sound
+configure_sound_volume
+
+while :; do
+    sleep 365d
+done

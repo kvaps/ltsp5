@@ -1,0 +1,72 @@
+#! /bin/sh
+#
+# Author:	Matt Zimmerman <mdz@ubuntu.com>
+#
+### BEGIN INIT INFO
+# Provides:          ltsp-client ltsp-client-core ltsp-client-setup
+# Required-Start:    $remote_fs $network $syslog
+# Should-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 6
+# Short-Description: Script for LTSP client initialization
+# Description:
+### END INIT INFO
+
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="LTSP client"
+NAME=ltsp-client
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Gracefully exit if an LTSP boot was not requested
+grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
+
+# handle localization settings
+if [ -r /etc/default/locale ]; then
+  . /etc/default/locale
+  export LANG LANGUAGE
+elif [ -r /etc/environment ]; then
+  . /etc/environment
+  export LANG LANGUAGE
+fi
+
+. /lib/lsb/init-functions
+. /usr/share/ltsp/ltsp-init-common
+
+case "$1" in
+  start)
+        log_success_msg "Starting LTSP client..."
+
+        if [ -f "/etc/ltsp/getltscfg-cluster.conf" ]; then
+            # Tell the control center that we are booting and get lts.conf
+            eval $(getltscfg-cluster -a -l boot) || true
+        fi
+
+        if [ -x /bin/plymouth ]; then
+            /bin/plymouth quit --retain-splash || true
+        fi
+
+        start_screen_sessions || true
+        start_sound || true
+
+	;;
+  stop)
+    # This means that an LTSP client is shutting down or rebooting.
+    # Try to cleanly close any open network connections.
+    if [ -x /usr/share/ltsp/nbd-disconnect ]; then
+        /usr/share/ltsp/nbd-disconnect &
+    fi
+	;;
+  restart|force-reload)
+    echo "$NAME does not support restarting, reboot your client instead." >&2
+    exit 1
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

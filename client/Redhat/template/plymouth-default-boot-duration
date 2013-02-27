@@ -1,0 +1,11 @@
+0.788:RCkernelparam
+0.789:RChostname
+0.867:RCmountfs
+0.876:RCswap
+0.888:portreserve
+0.895:rsyslog
+0.901:nfslock
+0.928:messagebus
+0.937:haldaemon
+0.990:udev-post
+0.996:local

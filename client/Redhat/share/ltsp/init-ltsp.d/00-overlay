@@ -1,0 +1,123 @@
+#!/bin/sh
+#
+# Overlay filesystem mounting           -*- overlay-module -*-
+#
+#  2013, Joshua Trimm <enslaver@enslaver.com>
+#
+#  Derived from previously modified scripts written by:
+#  2008, Stephane Graber <stgraber@ubuntu.com>
+#  2009, Vagrant Cascadian <vagrant@freegeek.org>
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, you can find it on the World Wide
+#  Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
+#  Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+# The idea is to make this a double script, running from init-ltsp
+# and also be installed to the initramfs using either dracut or
+# initramfs-tools.
+
+#set -x
+
+[ -f /usr/share/ltsp/ltsp-client-vendor-functions ] && . /usr/share/ltsp/ltsp-client-vendor-functions
+
+# On by default
+OVERLAY=${OVERLAY:-Y}
+
+if [ -f /.inside-cow ]; then
+   # Already inside copy-on-write filesystem
+   return
+fi
+
+if [ ! $OVERLAY ]; then
+   # Someone doesnt love me
+   return
+fi
+
+
+
+# Defaults to unionfs if OVERLAY=Y and no OVERLAYFS specified
+OVERLAYFS=${OVERLAYFS:-unionfs}
+
+panic() { echo "Error: $@"; exit 1; }
+
+
+# Try to give us some tmp space in userland
+test ! -w "/tmp" && mount -t tmpfs tmpfs /tmp
+
+[ -f /lib/dracut-lib.sh ] && . /lib/dracut-lib.sh
+[ -d /scripts/local-top ] && [ -n "${rootmnt}" ] && INSIDE_INITRAMFS=1
+[ -f /etc/ltsp_chroot ] && INSIDE_LTSP_INIT=1
+[ -f /lib/dracut-lib.sh ] && INSIDE_DRACUT=1
+
+if modprobe -q overlayfs; then
+    # For kernel overlays
+    if [ "$DETECT_MODULE_INCOMPLETE" ]; then
+    	UNION_TYPE=overlayfs
+    	UNION_OPTS="upperdir=$RAMROOT,lowerdir=$HDROOT"
+    fi
+elif modprobe -q fuse; then
+    # For fuse overlays
+       FUSE_OPT='-o allow_other,use_ino,suid,dev,nonempty'                                                        
+    if [ "$INSIDE_DRACUT" ]; then
+       . /tmp/root.info
+       [ "$OVERLAYFS" = "unionfs" ] && MOUNT_CMD="unionfs"
+       CHROOT_PATH="/tmp/unionfs"
+       UNION_OPT='-ocow,statfs_omit_ro,max_files=32767,chroot=/tmp/unionfs'
+       NEWROOT=${NEWROOT:-/sysroot}
+       OLDROOT="$NEWROOT"
+       mkdir -p $CHROOT_PATH/rofs $CHROOT_PATH/cow /tmp/union /tmp/sysroot
+       mount -t tmpfs tmpfs $CHROOT_PATH/cow
+       mount --move /sysroot /tmp/sysroot
+       mount --rbind /tmp/sysroot $CHROOT_PATH/rofs
+       unionfs $FUSE_OPT $UNION_OPT /cow=RW:/rofs=RO /sysroot
+       echo inside-cow-unionfs > /sysroot/.inside-cow || panic "Something went wrong"
+       [ -e "/proc/cmdline" ] || mount -t proc proc /sysroot/proc
+       cp -a /tmp/net.* /tmp/dhclient.* /sysroot/var/cache/ltsp
+   elif [ "$INSIDE_INITRAMFS" ]; then
+       # This is for initramfs-tools that include the fuse module.
+       # it is incomplete but should be similar to above, just set
+       # NEWROOT to where it mounts the nfsroot
+       NEWROOT="${rootmnt}"
+       . /tmp/root.info
+       [ "$OVERLAYFS" = "unionfs" ] && MOUNT_CMD="unionfs"
+       CHROOT_PATH="/tmp/unionfs"
+       UNION_OPT='-ocow,statfs_omit_ro,max_files=32767,chroot=/tmp/unionfs'
+       NEWROOT=${NEWROOT:-/sysroot}
+       OLDROOT="$NEWROOT"
+       mkdir -p $CHROOT_PATH/rofs $CHROOT_PATH/cow /tmp/union /tmp/sysroot
+       mount -t tmpfs tmpfs $CHROOT_PATH/cow
+       mount --move /sysroot /tmp/sysroot
+       mount --rbind /tmp/sysroot $CHROOT_PATH/rofs
+       unionfs $FUSE_OPT $UNION_OPT /cow=RW:/rofs=RO /sysroot
+       echo inside-cow-initramfs > /sysroot/.inside-cow
+       [ -e "/proc/cmdline" ] || mount -t proc proc /sysroot/proc
+       cp -a /tmp/net.* /tmp/dhclient.* /sysroot/var/cache/ltsp
+   elif [ "$INSIDE_LTSP_INIT" ]; then
+       CHROOT_PATH="/tmp/unionfs"
+       UNION_OPT="-ocow,chroot=$CHROOT_PATH,max_files=32768"
+       UBIN=/usr/bin/unionfs
+       mkdir -p $CHROOT_PATH/rofs $CHROOT_PATH/cow /tmp/union /tmp/sysroot
+       [ -e "/proc/cmdline" ] || mount -t proc proc /proc
+       mount -t tmpfs tmpfs $CHROOT_PATH/cow
+       mount --bind / $CHROOT_PATH/rofs
+       $UBIN $FUSE_OPT $UNION_OPT /cow=RW:/rofs=RO /tmp/union
+       mount -t proc proc /tmp/union/proc
+       echo inside-cow-ltsp-init > /tmp/union/.inside-cow
+       cd /tmp/union
+       mkdir oldroot
+       pivot_root . oldroot
+       init q
+    fi
+fi
