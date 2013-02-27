@@ -1,9 +1,4 @@
 if boolean_is_true "$LOCAL_APPS"; then
-    # Copy back passwd and group
-    for i in passwd group; do
-        [ -e "${LOCALAPPS_CACHE}/${i}" ] && cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
-    done
-
     # Clean up cups config
     [ -r "/etc/cups/client.conf" ] && rm -f /etc/cups/client.conf
 
@@ -16,6 +11,22 @@ if boolean_is_true "$LOCAL_APPS"; then
 
     # Unmount sshfs and remove the mount dir
     if [ -n "$SSHFS_HOME" ]; then
+        if  [ -n "$LDM_USERNAME" ]; then
+            # The user processes need to be terminated before $LDM_HOME gets
+            # unmounted, otherwise they end up writing their data in the local
+            # tmpfs filesystem.
+            # Give them up to 3 seconds to terminate, then kill them.
+            pkill -u "$LDM_USERNAME"
+            i=0
+            while pgrep -u "$LDM_USERNAME" >/dev/null; do
+                if [ "$i" -ge 3 ]; then
+                    pkill -KILL -u "$LDM_USERNAME"
+                    break
+                fi
+                sleep 1
+                i=$(($i+1))
+            done
+        fi
         fusermount -uqz ${LDM_HOME}
         rmdir ${LDM_HOME}
     fi
@@ -32,6 +43,11 @@ if boolean_is_true "$LOCAL_APPS"; then
     fi
 
     rm $LOCALAPPSD_PIDFILE
+
+    # Copy back passwd and group
+    for i in passwd group; do
+        [ -e "${LOCALAPPS_CACHE}/${i}" ] && cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
+    done
 fi
 
 # Clean up remote apps tmpdir
