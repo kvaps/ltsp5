@@ -12,7 +12,8 @@ makeconf_line MAKEOPTS "${MAKEOPTS}"
 locale_set "${LOCALE}"
 kernel_sources "${KERNEL_SOURCES}"
 kernel_builder genkernel
-genkernel_opts --makeopts="${MAKEOPTS}"
+genkernel_kernel_opts --makeopts="${MAKEOPTS}"
+genkernel_initramfs_opts --makeopts="${MAKEOPTS}"
 initramfs_builder "${INITRAMFS_BUILDER}"
 timezone ${TIMEZONE}
 extra_packages ldm ltsp-client ${PACKAGES}
@@ -73,7 +74,8 @@ pre_build_kernel() {
     if [ "${CCACHE}" = "true" ]; then
         spawn_chroot "emerge ccache"
         mount_bind "/var/tmp/ccache/${ARCH}" "${chroot_dir}/var/tmp/ccache"
-        genkernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
+        genkernel_kernel_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
+        genkernel_initramfs_opts --makeopts="${MAKEOPTS}" --kernel-cc="/usr/lib/ccache/bin/gcc" --utils-cc="/usr/lib/ccache/bin/gcc"
     fi
 }
 
