@@ -1,10 +1,10 @@
 case "$MODE" in
-	commandline)
-		add_option "video-cards" "`eval_gettext "Set video card drivers to install"`" "advanced" "true"
-		;;
-	configure)
-		if [ -n "$option_video_cards_value" ] || [ -n "$VIDEO_CARDS" ]; then
-			VIDEO_CARDS="${option_video_cards_value:-$VIDEO_CARDS}"
-		fi
-		;;
+    commandline)
+        add_option "video-cards" "`eval_gettext "Set video card drivers to install"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_video_cards_value" ] || [ -n "$VIDEO_CARDS" ]; then
+            VIDEO_CARDS="${option_video_cards_value:-$VIDEO_CARDS}"
+        fi
+        ;;
 esac
