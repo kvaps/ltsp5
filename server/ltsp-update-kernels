@@ -183,7 +183,7 @@ if [ $# -eq 0 ]; then
     set -- $(
         {
             find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
-                -printf "%f\n"
+                ! -name lost+found -printf "%f\n"
             if [ -d "$BASE/images/" ]; then
                 find "$BASE/images/" -mindepth 1 -maxdepth 1 -type f \
                     -name '*.img' -printf "%f\n" | sed 's/.img$//'
