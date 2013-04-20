@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-04 04:30+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-04-20 04:30+0000\n"
+"X-Generator: Launchpad (build 16567)\n"
 "Language: ru\n"
 
 #: ../server/configs/ALTLinux/ltsp-login.sh:30
@@ -255,12 +255,12 @@ msgstr "задать список пакетов с ядрами для уста
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
 msgid "set the kernel variant to install"
-msgstr ""
+msgstr "выбрать вариант ядра для установки"
 
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:5
 #, sh-format
 msgid "set the kernel version to install"
-msgstr ""
+msgstr "выбрать версию ядра для установки"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -446,7 +446,7 @@ msgstr "Этап 3 URI"
 #: ../server/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
+msgstr "Выбрать драйвер видеокарты для установки"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
 #, sh-format
@@ -456,7 +456,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
 #, sh-format
 msgid "Set URI of custom kernel config"
-msgstr ""
+msgstr "Выбрать URI настроенной конфигурации ядра"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -466,38 +466,40 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
 msgid "Path to installer profile"
-msgstr ""
+msgstr "Путь к профилю программы установки"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
 msgid "Debug installer"
-msgstr ""
+msgstr "Отладка программы установки"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "Показать внешний вывод команд программы установки"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
 #, sh-format
 msgid "Using installer: %s"
-msgstr ""
+msgstr "Использовать программу установки: %s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
 #, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
+"ОШИБКА: неизвестная программа установки. Проверьте ваш аргумент --installer: "
+"%s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
 #, sh-format
 msgid "Custom installer profile: %s"
-msgstr ""
+msgstr "Настраиваемый профиль программы установки: %s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
 #, sh-format
 msgid "Default installer profile: %s"
-msgstr ""
+msgstr "Профиль программы установки по умолчанию"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
