@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ltsp 5.1.91\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-14 12:04-0800\n"
-"PO-Revision-Date: 2013-01-16 15:29+0000\n"
-"Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
+"PO-Revision-Date: 2013-04-27 14:07+0000\n"
+"Last-Translator: Łukasz Wiśniewski <Unknown>\n"
 "Language-Team: Polish <debian-l10n-polish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-20 04:30+0000\n"
-"X-Generator: Launchpad (build 16567)\n"
+"X-Launchpad-Export-Date: 2013-04-28 04:30+0000\n"
+"X-Generator: Launchpad (build 16580)\n"
 "Language: pl\n"
 
 #: ../server/configs/ALTLinux/ltsp-login.sh:30
@@ -259,12 +259,12 @@ msgstr "określ listę pakietów jądra do zainstalowania"
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
 msgid "set the kernel variant to install"
-msgstr ""
+msgstr "ustaw wariant jądra do instalacji"
 
 #: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:5
 #, sh-format
 msgid "set the kernel version to install"
-msgstr ""
+msgstr "ustaw wersję jądra do instalacji"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -317,22 +317,22 @@ msgstr "prosty tryb webkiosk"
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:3
 #, sh-format
 msgid "add a backports mirror"
-msgstr ""
+msgstr "dodaje serwer lustrzany repozytorium backportów"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:4
 #, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr ""
+msgstr "lista pakietów do zainstalowania z repozytoriów backportów"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:5
 #, sh-format
 msgid "distribution to pull backports from"
-msgstr ""
+msgstr "dystrybucja, której backporty należy użyć"
 
 #: ../server/plugins/ltsp-build-client/Debian/015-backports:29
 #, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
-msgstr ""
+msgstr "ZAUWAŻ: dodaję domyślne komponenty do servera backportowego"
 
 #: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
@@ -343,7 +343,7 @@ msgstr "określ komponenty dla źródła pakietów"
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
-msgstr ""
+msgstr "instaluje wszystkie pliki .deb z danego folderu do chroota"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
@@ -362,6 +362,8 @@ msgid ""
 "use eatmydata to speed up build times, at risk of data not getting written "
 "to disk"
 msgstr ""
+"użyj pakietu \"eatmydata\"  aby przyspieszyć budowanie klienta ryzykując "
+"brak zapisu niektórych danych na dysku"
 
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
@@ -390,6 +392,7 @@ msgstr "Włączanie konkursu popularności..."
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
+"ustaw dystrubucję dla instalacji, domyślnie dystrybucja tego komputera"
 
 #: ../server/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
@@ -436,12 +439,12 @@ msgstr "       wspierane wartości to: %s"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
 #, sh-format
 msgid "Set input device drivers to install"
-msgstr ""
+msgstr "ustaw sterowniki urządzeń wejściowych do instalacji"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
 msgid "Set initramfs builder, defaults to genkernel"
-msgstr ""
+msgstr "ustaw kreatora initramfs, domyślnie genkernel"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
@@ -451,58 +454,60 @@ msgstr "URI dla etapu 3"
 #: ../server/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
+msgstr "ustaw sterowniki karty graficznej do instalacji"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
 #, sh-format
 msgid "Set kernel sources package, defaults to latest gentoo-sources"
-msgstr ""
+msgstr "ustaw pakiet źródeł kernela,  domyślnie najnowsze 'gentoo-sources'"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
 #, sh-format
 msgid "Set URI of custom kernel config"
-msgstr ""
+msgstr "ustaw ścieżkę do własnych ustawień kernela"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
 msgid "Gentoo installer to use, defaults to kicktoo"
-msgstr ""
+msgstr "instalator Gentoo którego mam użyć,  domyślnie 'kicktoo'"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
 msgid "Path to installer profile"
-msgstr ""
+msgstr "ścieżka do profilu instalatora"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
 msgid "Debug installer"
-msgstr ""
+msgstr "debuguj instalatora"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "pokaż wyjście komend instalatora"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
 #, sh-format
 msgid "Using installer: %s"
-msgstr ""
+msgstr "Używam następującego instalatora: %s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
 #, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
+"BŁĄD: nieobsługiwany instalator.  Sprawdź argumnent '--installer'  obecnie: "
+"%s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
 #, sh-format
 msgid "Custom installer profile: %s"
-msgstr ""
+msgstr "Własny profil instalatora: %s"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
 #, sh-format
 msgid "Default installer profile: %s"
-msgstr ""
+msgstr "Domyślny profil instalatora: %"
 
 #: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -644,4 +649,5 @@ msgstr ""
 "  Piotr Strębski https://launchpad.net/~strebski\n"
 "  Tomasz Dobrzyński https://launchpad.net/~depresz\n"
 "  Wiktor Wandachowicz https://launchpad.net/~siryes\n"
-"  tymmej https://launchpad.net/~tymmej"
+"  tymmej https://launchpad.net/~tymmej\n"
+"  Łukasz Wiśniewski https://launchpad.net/~fr-luksus"
