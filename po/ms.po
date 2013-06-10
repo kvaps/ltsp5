@@ -8,614 +8,625 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-01-14 12:04-0800\n"
-"PO-Revision-Date: 2013-01-16 15:59+0000\n"
-"Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
+"PO-Revision-Date: 2013-06-09 13:17+0000\n"
+"Last-Translator: abuyop <Unknown>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-20 04:30+0000\n"
-"X-Generator: Launchpad (build 16567)\n"
+"X-Launchpad-Export-Date: 2013-06-10 04:37+0000\n"
+"X-Generator: Launchpad (build 16667)\n"
 
-#: ../server/configs/ALTLinux/ltsp-login.sh:30
-#: ../server/configs/ALTLinux/ltsp-login.sh:33
-#: ../server/configs/ALTLinux/ltsp-login.sh:40
-#: ../server/configs/ALTLinux/ltsp-login.sh:50
+#: ../server/ALTLinux/configs/ltsp-login.sh:30
+#: ../server/ALTLinux/configs/ltsp-login.sh:33
+#: ../server/ALTLinux/configs/ltsp-login.sh:40
+#: ../server/ALTLinux/configs/ltsp-login.sh:50
 #, sh-format
 msgid "Login Error"
-msgstr ""
+msgstr "Ralat Daftar Masuk"
 
-#: ../server/configs/ALTLinux/ltsp-login.sh:31
-#: ../server/configs/ALTLinux/ltsp-login.sh:34
-#: ../server/configs/ALTLinux/ltsp-login.sh:44
-#: ../server/configs/ALTLinux/ltsp-login.sh:52
-#: ../server/configs/ALTLinux/ltsp-login.sh:62
-#: ../server/configs/ALTLinux/ltsp-login.sh:81
-#: ../server/configs/ALTLinux/ltsp-login.sh:84
-#: ../server/configs/ALTLinux/ltsp-login.sh:95
-#: ../server/configs/ALTLinux/ltsp-login.sh:105
-#: ../server/configs/ALTLinux/ltsp-login.sh:115
+#: ../server/ALTLinux/configs/ltsp-login.sh:31
+#: ../server/ALTLinux/configs/ltsp-login.sh:34
+#: ../server/ALTLinux/configs/ltsp-login.sh:44
+#: ../server/ALTLinux/configs/ltsp-login.sh:52
+#: ../server/ALTLinux/configs/ltsp-login.sh:62
+#: ../server/ALTLinux/configs/ltsp-login.sh:81
+#: ../server/ALTLinux/configs/ltsp-login.sh:84
+#: ../server/ALTLinux/configs/ltsp-login.sh:95
+#: ../server/ALTLinux/configs/ltsp-login.sh:105
+#: ../server/ALTLinux/configs/ltsp-login.sh:115
 #, sh-format
 msgid "User"
-msgstr ""
+msgstr "Pengguna"
 
-#: ../server/configs/ALTLinux/ltsp-login.sh:31
-#: ../server/configs/ALTLinux/ltsp-login.sh:34
-#: ../server/configs/ALTLinux/ltsp-login.sh:44
-#: ../server/configs/ALTLinux/ltsp-login.sh:52
-#: ../server/configs/ALTLinux/ltsp-login.sh:62
-#: ../server/configs/ALTLinux/ltsp-login.sh:81
-#: ../server/configs/ALTLinux/ltsp-login.sh:84
-#: ../server/configs/ALTLinux/ltsp-login.sh:95
-#: ../server/configs/ALTLinux/ltsp-login.sh:105
-#: ../server/configs/ALTLinux/ltsp-login.sh:115
+#: ../server/ALTLinux/configs/ltsp-login.sh:31
+#: ../server/ALTLinux/configs/ltsp-login.sh:34
+#: ../server/ALTLinux/configs/ltsp-login.sh:44
+#: ../server/ALTLinux/configs/ltsp-login.sh:52
+#: ../server/ALTLinux/configs/ltsp-login.sh:62
+#: ../server/ALTLinux/configs/ltsp-login.sh:81
+#: ../server/ALTLinux/configs/ltsp-login.sh:84
+#: ../server/ALTLinux/configs/ltsp-login.sh:95
+#: ../server/ALTLinux/configs/ltsp-login.sh:105
+#: ../server/ALTLinux/configs/ltsp-login.sh:115
 #, sh-format
 msgid "already logged in!"
-msgstr ""
+msgstr "sudah daftar masuk!"
 
-#: ../server/configs/ALTLinux/ltsp-login.sh:34
-#: ../server/configs/ALTLinux/ltsp-login.sh:43
-#: ../server/configs/ALTLinux/ltsp-login.sh:84
-#: ../server/configs/ALTLinux/ltsp-login.sh:93
-#: ../server/configs/ALTLinux/ltsp-login.sh:117
+#: ../server/ALTLinux/configs/ltsp-login.sh:34
+#: ../server/ALTLinux/configs/ltsp-login.sh:43
+#: ../server/ALTLinux/configs/ltsp-login.sh:84
+#: ../server/ALTLinux/configs/ltsp-login.sh:93
+#: ../server/ALTLinux/configs/ltsp-login.sh:117
 #, sh-format
 msgid "Continue"
-msgstr ""
+msgstr "Teruskan"
 
-#: ../server/configs/ALTLinux/ltsp-login.sh:80
-#: ../server/configs/ALTLinux/ltsp-login.sh:83
-#: ../server/configs/ALTLinux/ltsp-login.sh:90
-#: ../server/configs/ALTLinux/ltsp-login.sh:103
+#: ../server/ALTLinux/configs/ltsp-login.sh:80
+#: ../server/ALTLinux/configs/ltsp-login.sh:83
+#: ../server/ALTLinux/configs/ltsp-login.sh:90
+#: ../server/ALTLinux/configs/ltsp-login.sh:103
 #, sh-format
 msgid "Login Warning"
-msgstr ""
+msgstr "Amaran Daftar Masuk"
 
-#: ../server/configs/ALTLinux/ltsp-login.sh:94
+#: ../server/ALTLinux/configs/ltsp-login.sh:94
 #, sh-format
 msgid "Cancel"
-msgstr ""
+msgstr "Batal"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
-#: ../server/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
-msgstr ""
+msgstr "simpan cache bagi fail pakej yang sudah dimuat turun"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
-#: ../server/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr ""
+"senaraikan pakej untuk dipasang sebagai sebahagian dari pemasangan akhir"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/010-locales:3
-#: ../server/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#: ../server/plugins/ltsp-build-client/Debian/025-locales:3
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
-msgstr ""
+msgstr "tetapkan lokaliti lalai"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
-msgstr ""
+msgstr "tetapkan lokasi cermin"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr ""
+msgstr "tambah cermin, yang mengambil alih keutamaan cermin lalai"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
-#: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr ""
+msgstr "tambah cermin, yang keutamaannya lebih rendah dari cermin lalai"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
-#: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
-msgstr ""
+msgstr "tambah cermin keselamatan"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/Debian/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
-#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
 #, sh-format
 msgid "set the target architecture"
-msgstr ""
+msgstr "tetapkan senibina sasaran"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
 #, sh-format
 msgid "enable serial console"
-msgstr ""
+msgstr "benarkan konsol serial"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
-#: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
-msgstr ""
+msgstr "Benarkan konsol serial..."
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-kernel:3
 #, sh-format
 msgid "set the kernel package to install."
-msgstr ""
+msgstr "tetapkan pakej kernel untuk dipasang."
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/030-i18n:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
 msgid "Set the i18n langs"
-msgstr ""
+msgstr "Tetapkan bahasa i18n"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:3
 #, sh-format
 msgid "Enable progress reporting"
-msgstr ""
+msgstr "Benarkan laporan kemajuan"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:4
 #, sh-format
 msgid "Print stage times (seconds)"
-msgstr ""
+msgstr "Cetak masa tahap (saat)"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/000-progress:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:5
 #, sh-format
 msgid "Draw progress bar"
-msgstr ""
+msgstr "Lukis palang kemajuan"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
-#: ../server/plugins/ltsp-build-client/Debian/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
-msgstr ""
+msgstr "maklum untuk tetapkan kata laluan root, lalai dilumpuhkan"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr ""
+msgstr "tetapkan pakej modul kernel untuk dipasang."
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
-#: ../server/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
-msgstr ""
+msgstr "tetapkan senarai pakej untuk dipasang selepas base-install selesai"
 
-#: ../server/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #, sh-format
 msgid "set the distribution to be used for install"
-msgstr ""
+msgstr "Tetapkan distribusi yang akan digunakan untuk pemasangan"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
 msgid "distribution to set up apt pinning"
-msgstr ""
+msgstr "distribusi untuk tetapkan pencematan apt"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-apt-pinning:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:4
 #, sh-format
 msgid "list of packages to install from the pinned distribution"
-msgstr ""
+msgstr "senarai pakej untuk pasang dari distribusi tercemat"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
 msgstr ""
+"PERHATIAN: melumpuhkan sumber APT keselamatan untuk sid. Ia tidak wujud."
 
-#: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD"
-msgstr ""
+msgstr "cipta imej squashfs untuk digunakan dengan NBD"
 
-#: ../server/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install"
-msgstr ""
+msgstr "benarkan pakej tidak bertandatanfgan semasa pemasangan"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
-msgstr ""
+msgstr "salin fail Pakej apt dari pelayan"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
 #, sh-format
 msgid "mount package cache dir from server"
-msgstr ""
+msgstr "lekap dir cache pakej dari pelayan"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr ""
+msgstr "lekap direktori pelayan sebagai dir cache pakej chroot"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
 msgid "cache downloaded packages"
-msgstr ""
+msgstr "pajek termuat turun cache"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
 #, sh-format
 msgid "Copying packages"
-msgstr ""
+msgstr "Menyalin pakej"
 
-#: ../server/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
 #, sh-format
 msgid "done."
-msgstr ""
+msgstr "selesai."
 
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
-msgstr ""
+msgstr "tetapkan senarai pakej kernel untuk dipasang"
 
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
 msgid "set the kernel variant to install"
-msgstr ""
+msgstr "tetapkan variasi kernel untuk dipasang"
 
-#: ../server/plugins/ltsp-build-client/Debian/020-kernel-selection:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
 #, sh-format
 msgid "set the kernel version to install"
-msgstr ""
+msgstr "tetapkan versi kernel untuk dipasang"
 
-#: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
-msgstr ""
+msgstr "sertakan kekunci tersenarai dalam keyring apt"
 
-#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:3
 #, sh-format
 msgid "create ext2 image for use with NBD"
-msgstr ""
+msgstr "cipta imej ext2 untuk diguna dengan NBD"
 
-#: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
 #, sh-format
 msgid "create image for use with NBD of the specified filesystem"
-msgstr ""
+msgstr "cipta imej untuk diguna dengan NBD bagi sistem fail yang dinyatakan"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
-#: ../server/plugins/ltsp-build-client/Debian/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr ""
+msgstr "jalan kebanyakan atau semua aplikasi secara setempat"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
-msgstr ""
+msgstr "guna keyring yang dinyatakan untuk pengesahan gpg debootstrap"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
 msgid "use specified http proxy"
-msgstr ""
+msgstr "guna proksi http yang dinyatakan"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-http-proxy:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:4
 #, sh-format
 msgid "do not autodetect apt proxy configuration"
-msgstr ""
+msgstr "jangan kesan-sendiri konfigurasi proksi apt"
 
-#: ../server/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
 #, sh-format
 msgid "skip upgrade of installed packages"
-msgstr ""
+msgstr "langkau penataran pakej terpasang"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
-#: ../server/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
-msgstr ""
+msgstr "merupakan mod webkiosk ringkas"
 
-#: ../server/plugins/ltsp-build-client/Debian/015-backports:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
 #, sh-format
 msgid "add a backports mirror"
-msgstr ""
+msgstr "tambah cermin port belakang"
 
-#: ../server/plugins/ltsp-build-client/Debian/015-backports:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:4
 #, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr ""
+msgstr "senarai pakej untuk dipasang dari repositori port belakang"
 
-#: ../server/plugins/ltsp-build-client/Debian/015-backports:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:5
 #, sh-format
 msgid "distribution to pull backports from"
-msgstr ""
+msgstr "distribusi untuk tarik port belakang"
 
-#: ../server/plugins/ltsp-build-client/Debian/015-backports:29
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
 #, sh-format
 msgid "NOTE: adding default dist and components to backports mirror:"
-msgstr ""
+msgstr "PERHATIAN: menambah dist dan komponen lalai ke cermin port belakang:"
 
-#: ../server/plugins/ltsp-build-client/Debian/001-set-components:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
 msgid "set the components to be used in mirror"
-msgstr ""
+msgstr "tetapkan komponen yang digunakan didalam cermin"
 
-#: ../server/plugins/ltsp-build-client/Debian/035-install-debs:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
 msgstr ""
+"pasang ke chroot semua fail .deb yang terkandung dalam direktori yang "
+"disediakan"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
-msgstr ""
+msgstr "muat penyemaian debconf dalam chroot selepas pemasangan"
 
-#: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
 #, sh-format
 msgid "mounts CDROM before installation"
-msgstr ""
+msgstr "lekap CDROM sebelum pemasangan"
 
-#: ../server/plugins/ltsp-build-client/Debian/080-eatmydata:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/080-eatmydata:3
 #, sh-format
 msgid ""
 "use eatmydata to speed up build times, at risk of data not getting written "
 "to disk"
 msgstr ""
+"guna eatmydata untuk lajukan masa binaan, tetapi risiko data tidak ditulis "
+"ke cakera"
 
-#: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
+msgstr "PERHATIAN: menambah dist dan komponen lalai ke cermin keselamatan:"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
-msgstr ""
+msgstr "guna sources.list pelayan selain dari menjana baru"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
-msgstr ""
+msgstr "benarkan popularity-contest dalam chroot"
 
-#: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
 msgid "Enabling popularity contest..."
-msgstr ""
+msgstr "Membenarkan 'popularity-contest'..."
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/001-set-dist:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
 #, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
+"tetapkan distribusi yang digunakan untuk pemasangan, lalai ke distribusi "
+"yang berjalan"
 
-#: ../server/plugins/ltsp-build-client/common/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
-msgstr ""
+msgstr "singkir chroot LTSP sedia ada jika hadir"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
 msgid "Set the number of parallel build processes"
-msgstr ""
+msgstr "Tetapkan bilangan proses binaan selari"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
 msgid "Set extra mirror locations (space-separated)"
-msgstr ""
+msgstr "Tetapkan lokasi cermin (dipisah-jarak)"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
 msgid ""
 "list of extra packages to install as part of the initial installation."
 msgstr ""
+"senarai pakej tambahan untuk dipasang sebagai sebahagian dari pemasangan "
+"awal."
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:51
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:21
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
-#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
+msgstr "RALAT: senibina tidak disokong. Periksa argumen --arch anda: %s"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:52
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/plugins/ltsp-build-client/Gentoo/001-set-arch:22
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
-#: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #, sh-format
 msgid "       supported values are: %s"
-msgstr ""
+msgstr "       nilai yang disokong ialah: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
 #, sh-format
 msgid "Set input device drivers to install"
-msgstr ""
+msgstr "Tetapkan pemacu perranti input untuk dipasang"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
 msgid "Set initramfs builder, defaults to genkernel"
-msgstr ""
+msgstr "Tetapkan pembina initramfs, lalai pada genkernel"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
-msgstr ""
+msgstr "URI Tahap 3"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
+msgstr "Tetapkan pemacu kad video untuk dipasang"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
 #, sh-format
 msgid "Set kernel sources package, defaults to latest gentoo-sources"
-msgstr ""
+msgstr "Tetapkan pakej sumber kernel, lalai pada gentoo-sources terkini"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
 #, sh-format
 msgid "Set URI of custom kernel config"
-msgstr ""
+msgstr "Tetapkan URI bagi konfig kernel suai"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
 msgid "Gentoo installer to use, defaults to kicktoo"
-msgstr ""
+msgstr "Pemasang Gentoo yang digunakan, lalai pada kicktoo"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
 msgid "Path to installer profile"
-msgstr ""
+msgstr "Laluan ke profil pemasang"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
 msgid "Debug installer"
-msgstr ""
+msgstr "Nyahpepijat pemasang"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "Papar output perintah luaran pemasang"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
 #, sh-format
 msgid "Using installer: %s"
-msgstr ""
+msgstr "Menggunakan pemasang: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
 #, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
-msgstr ""
+msgstr "RALAT: pemasang tidak disokong. Periksa argumen --installer anda: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
 #, sh-format
 msgid "Custom installer profile: %s"
-msgstr ""
+msgstr "Profil pemasang suai: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
 #, sh-format
 msgid "Default installer profile: %s"
-msgstr ""
+msgstr "Profil pemasang lalai: %s"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
 msgid "ERROR: %s does not exist"
-msgstr ""
+msgstr "RALAT: %s tidak wujud"
 
-#: ../server/plugins/ltsp-build-client/Gentoo/010-bootstrap:47
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:47
 #, sh-format
 msgid "Installing into: %s"
-msgstr ""
+msgstr "Memasang kedalam: %s"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
-msgstr ""
+msgstr "Laluan ke fail kickstart"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
-msgstr ""
+msgstr "Laluan ke cache chroot-creator"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
-msgstr ""
+msgstr "Nombor versi keluaran"
 
-#: ../server/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
-msgstr ""
+msgstr "Nama distro"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/095-update-image:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr ""
+msgstr "paksa langkau binaan squashfs (untuk debian-installer)"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
 #, sh-format
 msgid "set the security mirror location"
-msgstr ""
+msgstr "tetapkan lokasi cermin keselamatan"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
 #, sh-format
 msgid "set the update mirror location"
-msgstr ""
+msgstr "tetapkan lokasi cermin kemaskini"
 
-#: ../server/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
 msgid "enable LTSP-Cluster"
-msgstr ""
+msgstr "benarkan LTSp-Cluster"
 
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
 msgid "Load a user specific configuration file"
-msgstr ""
+msgstr "Muat fail konfigurasi khusus pengguna"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:22
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:33
-#: ../server/plugins/ltsp-build-client/common/001-set-arch:44
-#: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:33
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr ""
+msgstr "RALAT: --arch %s dipanggil pada senibina tidak disokong: %s"
 
-#: ../server/plugins/ltsp-build-client/common/010-set-base:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
 msgid "set the default base install directory"
-msgstr ""
+msgstr "tetapkan direktori pemasangan dasar lalai"
 
-#: ../server/plugins/ltsp-build-client/common/000-enable-debug:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
-msgstr ""
+msgstr "benarkan sokongan nyahpepijat"
 
-#: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
 msgid "exclude packages from the initial chroot"
-msgstr ""
+msgstr "asingkan pakej dari chroot awalan"
 
-#: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-load-configuration-file:3
 #, sh-format
 msgid "load a user specific configuration file"
-msgstr ""
+msgstr "muat fail konfigurasi spesifik pengguna"
 
-#: ../server/plugins/ltsp-build-client/common/010-set-chroot:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
 msgid "set the name of the chroot"
-msgstr ""
+msgstr "tetapkan nama chroot"
 
-#: ../server/ltsp-build-client:86
+#: ../server/ltsp-build-client:78
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr ""
+msgstr "RALAT API : anda mesti berikan betul atau salah"
 
-#: ../server/ltsp-build-client:129
+#: ../server/ltsp-build-client:188
 #, sh-format
 msgid "display this help message"
-msgstr ""
+msgstr "papar mesej bantuan ini"
 
-#: ../server/ltsp-build-client:130
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display help for all available commandline options"
-msgstr ""
+msgstr "papar bantuan untuk semua pilihan baris perintah yang tersedia"
 
-#: ../server/ltsp-build-client:134
+#: ../server/ltsp-build-client:193
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr ""
+msgstr "penggunaan Klien Binaan LTSP:"
 
-#: ../server/ltsp-build-client:138
+#: ../server/ltsp-build-client:197
 #, sh-format
 msgid "  Regular options:"
-msgstr ""
+msgstr "  Pilihan biasa:"
 
-#: ../server/ltsp-build-client:142
+#: ../server/ltsp-build-client:201
 #, sh-format
 msgid "  Advanced options:"
-msgstr ""
+msgstr "  Pilihan lanjutan:"
 
-#: ../server/ltsp-build-client:154
+#: ../server/ltsp-build-client:213
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr ""
+msgstr "maklumat: Pemasangan klien LTSP berjaya"
 
-#: ../server/ltsp-build-client:156
+#: ../server/ltsp-build-client:215
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr ""
+msgstr "RALAT: Pemasangan klien LTSP berakhir secara tidak normal"
 
 #: ../common/ltsp-common-functions:173
 #, sh-format
@@ -625,4 +636,5 @@ msgstr ""
 "  Ahmed Noor Kader Mustajir Md Eusoff https://launchpad.net/~sir.ade\n"
 "  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
 "  Steelburn https://launchpad.net/~steelburn\n"
+"  abuyop https://launchpad.net/~abuyop\n"
 "  inashdeen https://launchpad.net/~inashdeen"
