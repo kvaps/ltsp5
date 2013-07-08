@@ -62,7 +62,7 @@ mkdir -p /var/cache/ltsp
 set_lts_var() {
     var=$1
     val=$2
-    [ -z "$var" ] && return
+    [ -z "$var" ] && return 0
     sed -i -e "/$var=/d" ${ltsp_config_env}
     if [ -n "$val" ]; then
         export "$var"="$val"
@@ -74,7 +74,7 @@ set_lts_var() {
 
 # This function will reset the lts.conf params that were previously set
 reset_lts_env() {
-    [ -r "${ltsp_config_env}" ] || return
+    [ -r "${ltsp_config_env}" ] || return 0
     oldifs="${IFS-not set}"
     IFS='='
     while read var val; do
@@ -88,7 +88,7 @@ reset_lts_env() {
 
 # This function sets all vars from cache
 set_lts_from_cache() {
-    [ -r "${ltsp_config_env}" ] || return
+    [ -r "${ltsp_config_env}" ] || return 0
     # Make all vars we are about to set exported
     set -a
     . ${ltsp_config_env}

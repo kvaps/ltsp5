@@ -1,7 +1,7 @@
 # Get NBD_ROOT_HOST, NFS_SERVER and LTSP vars from the kernel command line.
 
 if [ -n "$NBD_ROOT_HOST" ] || [ -n "$NFS_SERVER" ]; then
-    return
+    return 0
 fi
 
 for x in $(cat /proc/cmdline); do

@@ -1,7 +1,7 @@
 write_screen() {
     num=${1:-0}
     #eval screen_hacks=\$screen_hacks_$num
-    [ -z "$screen_hacks" ] && [ -z "$monitor_hacks" ] && [ -z "$display_hacks" ] && return
+    [ -z "$screen_hacks" ] && [ -z "$monitor_hacks" ] && [ -z "$display_hacks" ] && return 0
     echo "Section \"Screen\""
     echo "    Identifier \"Screen${num}\""
     if [ -n "$monitor_hacks" ]; then
@@ -23,7 +23,7 @@ write_screen() {
 write_monitor() {
     num=${1:-0}
     #eval monitor_hacks=\$monitor_hacks_$num
-    [ -z "$monitor_hacks" ] && return
+    [ -z "$monitor_hacks" ] && return 0
     echo "Section \"Monitor\""
     echo "    Identifier \"Monitor${num}\""
 
@@ -37,7 +37,7 @@ write_monitor() {
 write_device() {
     num=${1:-0}
     #eval device_hacks=\$device_hacks_$num
-    [ -z "$device_hacks" ] && return
+    [ -z "$device_hacks" ] && return 0
     echo "Section \"Device\""
     echo "    Identifier \"Device${num}\""
 
@@ -49,7 +49,7 @@ write_device() {
 }
 
 write_module() {
-    [ -z "$module_hacks" ] && return
+    [ -z "$module_hacks" ] && return 0
     echo "Section \"Module\""
 
     for i in ${module_hacks}; do
@@ -60,7 +60,7 @@ write_module() {
 }
 
 write_display() {
-    [ -z "$display_hacks" ] && return
+    [ -z "$display_hacks" ] && return 0
     echo '    SubSection "Display"'
     for x in $display_hacks ; do
         ${x} || true
