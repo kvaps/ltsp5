@@ -34,6 +34,7 @@ start_sound() {
                 -L $PULSE_VOLUME_RESTORE \
                 -L module-rescue-streams \
                 -L "module-native-protocol-unix auth-anonymous=1" \
+                -L module-suspend-on-idle \
                 -n &
                 ;;
             [Ff][Aa][Ll][Ss][Ee]|[Nn]|[Nn][Oo])
