@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-01-14 12:04-0800\n"
-"PO-Revision-Date: 2013-09-16 04:14+0000\n"
+"PO-Revision-Date: 2013-09-16 09:09+0000\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-16 04:30+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2013-09-17 04:30+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
 
 #: ../server/configs/ALTLinux/ltsp-login.sh:30
 #: ../server/configs/ALTLinux/ltsp-login.sh:33
@@ -105,19 +105,19 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr ""
+msgstr "新增一個映射站，而它的優先權高於預設的映射站"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr ""
+msgstr "新增一個映射站，而它的優先權低於預設的映射站"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
-msgstr ""
+msgstr "新增一個安全性更新映射站"
 
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #: ../server/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
@@ -127,19 +127,19 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:3
 #, sh-format
 msgid "set the target architecture"
-msgstr ""
+msgstr "設定目標架構"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/plugins/ltsp-build-client/Debian/010-serial-console:3
 #, sh-format
 msgid "enable serial console"
-msgstr ""
+msgstr "啟動序列埠終端機"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #: ../server/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
-msgstr ""
+msgstr "正在啟動序列埠終端機 ..."
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/040-kernel:3
 #, sh-format
@@ -170,7 +170,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
-msgstr ""
+msgstr "提示設定管理者密碼，預設為關閉"
 
 #: ../server/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
@@ -201,7 +201,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/010-distribution-specific:5
 #, sh-format
 msgid "NOTE: disabling security APT source for sid.  It does not exist."
-msgstr ""
+msgstr "注意：正在取消給 sid 用的 APT 安全性更新來源。它並不存在。"
 
 #: ../server/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
@@ -261,7 +261,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
-msgstr ""
+msgstr "將清單上的金鑰加入 apt 鑰匙圈 (keyring)"
 
 #: ../server/plugins/ltsp-build-client/Debian/035-create-fs-image:3
 #, sh-format
@@ -340,7 +340,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
-msgstr ""
+msgstr "安裝後載入 chroot 中的 debconf"
 
 #: ../server/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
 #, sh-format
@@ -357,7 +357,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
+msgstr "注意：新增預設的版本和分類至安全性更新映射站："
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/015-sources-list:3
 #, sh-format
@@ -367,12 +367,12 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
-msgstr ""
+msgstr "於 chroot 中啟動熱門套件統計 (popularity-contest)"
 
 #: ../server/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
 msgid "Enabling popularity contest..."
-msgstr ""
+msgstr "正在啟動熱門套件統計 ..."
 
 #: ../server/plugins/ltsp-build-client/Ubuntu/001-set-dist:3
 #, sh-format
@@ -407,7 +407,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:51
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
+msgstr "錯誤：不支援的架構。請檢查您的 --arch 參數：%s"
 
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/plugins/ltsp-build-client/Fedora/001-set-arch:31
@@ -416,7 +416,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:52
 #, sh-format
 msgid "       supported values are: %s"
-msgstr ""
+msgstr "       支援的數值為：%s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
 #, sh-format
@@ -542,7 +542,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
 msgid "Load a user specific configuration file"
-msgstr ""
+msgstr "載入使用者指定的設定檔"
 
 #: ../server/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:22
@@ -550,7 +550,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/001-set-arch:44
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr ""
+msgstr "錯誤： --arch %s 選項被呼叫於不支援的架構：%s"
 
 #: ../server/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
@@ -565,7 +565,7 @@ msgstr ""
 #: ../server/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
 msgid "exclude packages from the initial chroot"
-msgstr ""
+msgstr "從初始的 chroot 匯出套件"
 
 #: ../server/plugins/ltsp-build-client/common/001-load-configuration-file:3
 #, sh-format
@@ -580,7 +580,7 @@ msgstr ""
 #: ../server/ltsp-build-client:86
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr ""
+msgstr "API 錯誤：您必須指出真 (true) 或假 (false)。"
 
 #: ../server/ltsp-build-client:129
 #, sh-format
@@ -595,27 +595,27 @@ msgstr ""
 #: ../server/ltsp-build-client:134
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr ""
+msgstr "LTSP 用戶端使用情形："
 
 #: ../server/ltsp-build-client:138
 #, sh-format
 msgid "  Regular options:"
-msgstr ""
+msgstr "  正規選項："
 
 #: ../server/ltsp-build-client:142
 #, sh-format
 msgid "  Advanced options:"
-msgstr ""
+msgstr "  進階選項："
 
 #: ../server/ltsp-build-client:154
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr ""
+msgstr "資訊：LTSP 用戶端成功安裝完畢"
 
 #: ../server/ltsp-build-client:156
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr ""
+msgstr "錯誤：LTSP 用戶端安裝不正常中止"
 
 #: ../common/ltsp-common-functions:173
 #, sh-format
