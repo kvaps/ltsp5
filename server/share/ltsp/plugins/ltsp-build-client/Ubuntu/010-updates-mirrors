@@ -22,6 +22,9 @@ case "$MODE" in
         fi
         ;;
     after-install)
+        if [ -n "$MINT_DIST" ]; then
+            add_mirrors "$MINT_MIRROR $MINT_DIST $MINT_COMPONENTS"
+        fi    
         add_mirrors "$UPDATES_MIRROR $DIST-updates $COMPONENTS"
         add_mirrors "$SECURITY_MIRROR $DIST-security $COMPONENTS"
         ;;

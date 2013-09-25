@@ -101,7 +101,16 @@ detect_vendor() {
         . /etc/sysconfig/ltspdist
         echo "$VENDORDEF"
     else
-        echo $(lsb_release --id --short | tr " " "_")
+        LSB_VENDOR=$(lsb_release --id --short | tr " " "_")
+        if [ "$LSB_VENDOR" = LinuxMint ]; then
+            if [ "$(lsb_release -s -c)" = "debian" ]; then
+                echo "Debian"
+            else
+                echo "Ubuntu"
+            fi
+        else
+            echo "$LSB_VENDOR"
+        fi
     fi
 }
 
