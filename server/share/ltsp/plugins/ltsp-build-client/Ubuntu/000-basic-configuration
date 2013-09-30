@@ -2,7 +2,7 @@ case "$MODE" in
     configure)
         ARCH=${ARCH:-"$(dpkg --print-architecture)"}
         APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
-        if [ -n "$MINT_DIST" ] || ( [ "$LSB_VENDOR" = "LinuxMint" ] && [ -z "$DIST" ] ); then
+        if [ -n "$MINT_DIST" ] || ( [ "$(lsb_release -s -i)" = "LinuxMint" ] && [ "$option_dist_value" = "$(lsb_release -s -c)" ] ); then
             MINT_DIST=${MINT_DIST:-"$(lsb_release -s -c)"}
             DIST=${DIST:-$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")}
             MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
