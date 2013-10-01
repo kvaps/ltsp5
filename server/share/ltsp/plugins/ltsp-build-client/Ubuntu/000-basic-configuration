@@ -7,7 +7,11 @@ case "$MODE" in
             DIST=${DIST:-$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")}
             MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
             MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
-            EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client mint-meta-core"}
+            EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client linuxmint-keyring"}
+            LATE_PACKAGES=${LATE_PACKAGES:-"mint-meta-core mint-artwork-common"}
+            APT_GET_OPTS="$APT_GET_OPTS --force-yes"
+            # requires debootstrap 1.0.30
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --no-check-gpg"
         else
             DIST=${DIST:-"$(lsb_release -s -c)"}
             EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
