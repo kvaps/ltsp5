@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-07 04:30+0000\n"
-"X-Generator: Launchpad (build 16721)\n"
+"X-Launchpad-Export-Date: 2013-10-03 04:30+0000\n"
+"X-Generator: Launchpad (build 16791)\n"
 "Language: it\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -365,6 +365,8 @@ msgid ""
 "use eatmydata to speed up build times, at risk of data not getting written "
 "to disk"
 msgstr ""
+"utilizzare eatmydata per accelerare i tempi di compilazione, con il rischio "
+"di non ottenere la scrittura dei dati sul disco"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
@@ -460,6 +462,8 @@ msgstr ""
 #, sh-format
 msgid "Set kernel sources package, defaults to latest gentoo-sources"
 msgstr ""
+"Impostare il pacchetto dei sorgenti del kernel, in modo predefinito viene "
+"utilizzato gentoo-sources"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
 #, sh-format
@@ -479,12 +483,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
 msgid "Debug installer"
-msgstr ""
+msgstr "Debug del programma d'installazione"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "Mostra l'output del comando esterno del programma d'installazione"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
@@ -643,6 +647,7 @@ msgstr "errore: l'installazione del client LTSP è terminata in modo anormale"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
+"  Federico Pontelli https://launchpad.net/~fpontelli\n"
 "  Giorgio Catanzaro https://launchpad.net/~catanzag\n"
 "  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
 "  Leonardo Corato https://launchpad.net/~leocor\n"
