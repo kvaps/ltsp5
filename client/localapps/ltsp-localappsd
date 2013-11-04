@@ -33,6 +33,10 @@ chown ${LDM_USERNAME} $XAUTHORITY
 [ -n "$LDM_PRINTER_DEFAULT" ] && export CLIENT_ENV="${CLIENT_ENV} PRINTER=${LDM_PRINTER_DEFAULT}"
 [ -n "$LDM_PRINTER_LIST" ] && export CLIENT_ENV="${CLIENT_ENV} PRINTER_LIST=${LDM_PRINTER_LIST}"
 
+run_ltsp_localappsd(){
+        su - ${LDM_USERNAME} -c "LANG=$LANG LANGUAGE=$LANG DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY $CLIENT_ENV ${LTSP_COMMAND}"
+}
+
 # Poll for LTSP_COMMAND changes and execute
 while :; do
     LTSP_COMMAND="$(xatomwait LTSP_COMMAND)"
@@ -60,9 +64,9 @@ while :; do
 
         logit "Executing command as username ${LDM_USERNAME}: ${LTSP_COMMAND} "
         if [ "$LTSP_COMMAND_WAIT" = "true" ]; then
-            su - ${LDM_USERNAME} -c "LANG=$LANG LANGUAGE=$LANG DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY $CLIENT_ENV ${LTSP_COMMAND}"
+            run_ltsp_localappsd
         else
-            su - ${LDM_USERNAME} -c "LANG=$LANG LANGUAGE=$LANG DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY $CLIENT_ENV ${LTSP_COMMAND}" &
+            run_ltsp_localappsd &
         fi
     fi
     reset_xprop LTSP_COMMAND
