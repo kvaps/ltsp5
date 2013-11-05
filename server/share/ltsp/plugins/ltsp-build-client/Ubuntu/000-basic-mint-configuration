@@ -1,0 +1,17 @@
+case "$MODE" in
+    commandline)
+        LSB_RELEASE_C="$(lsb_release -s -c)"
+        LSB_RELEASE_I="$(lsb_release -s -i)"
+        ;;
+    configure)
+        if [ "$LSB_RELEASE_I" = "LinuxMint" ]; then
+            MINT_DIST=${MINT_DIST:-"$LSB_RELEASE_C"}
+        fi
+        if [ -n "$MINT_DIST" ] || ( [ "$LSB_RELEASE_I" = "LinuxMint" ] && [ -z "$option_dist_value" ] ); then
+            MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}
+            MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
+            EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client linuxmint-keyring"}
+            LATE_PACKAGES=${LATE_PACKAGES:-"mint-meta-core mint-artwork-common"}
+            APT_GET_OPTS="$APT_GET_OPTS --force-yes"
+            # requires debootstrap 1.0.30
+            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS --no-check-gpg"
