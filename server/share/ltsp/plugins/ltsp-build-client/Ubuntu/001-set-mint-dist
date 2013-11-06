@@ -5,10 +5,16 @@ case "$MODE" in
         LSB_RELEASE_I="$(lsb_release -s -i)"
         ;;
     configure)
-        if [ -n "$option_mint_dist_value" ] || [ "$LSB_RELEASE_I" = "LinuxMint" ]; then
-            APT_KEYS=${APT_KEYS:-"/usr/share/keyrings/linuxmint-keyring.gpg"}
-            MINT_DIST=${option_mint_dist_value:-"$LSB_RELEASE_C"}
+        if [ -n "$option_mint_dist_value" ]; then
+            MINT_DIST="$option_mint_dist_value"
+        elif [ -z "$MINT_DIST" ] && [ "$LSB_RELEASE_I" = "LinuxMint" ]; then
+            MINT_DIST="$LSB_RELEASE_C"
+        fi
+        if [ -n "$MINT_DIST ] && [ -z "$option_dist_value" ]; then
             DIST=$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")
+        fi
+        if [ -n "$MINT_DIST" ]; then
+            APT_KEYS=${APT_KEYS:-"/usr/share/keyrings/linuxmint-keyring.gpg"}
             MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
             MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
             EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
