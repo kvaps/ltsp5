@@ -12,9 +12,6 @@ case "$MODE" in
             MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
             EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
             LATE_PACKAGES=${LATE_PACKAGES:-"linuxmint-keyring mint-meta-core mint-artwork-common"}
-            APT_GET_OPTS="$APT_GET_OPTS"
-            # requires debootstrap 1.0.30
-            DEBOOTSTRAPOPTS="$DEBOOTSTRAPOPTS"
         fi
         ;;
 esac
