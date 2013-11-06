@@ -6,6 +6,7 @@ case "$MODE" in
         ;;
     configure)
         if [ -n "$option_mint_dist_value" ] || [ "$LSB_RELEASE_I" = "LinuxMint" ]; then
+            APT_KEYS=${APT_KEYS:-"/usr/share/keyrings/linuxmint-keyring.gpg"}
             MINT_DIST=${option_mint_dist_value:-"$LSB_RELEASE_C"}
             DIST=$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")
             MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
