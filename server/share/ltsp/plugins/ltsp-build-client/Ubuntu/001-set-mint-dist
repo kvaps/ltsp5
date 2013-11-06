@@ -18,7 +18,7 @@ case "$MODE" in
         fi
         if [ -n "$MINT_DIST" ]; then
             APT_KEYS=${APT_KEYS:-"/usr/share/keyrings/linuxmint-keyring.gpg"}
-            MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
+            MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}
             MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
             LATE_PACKAGES=${LATE_PACKAGES:-"linuxmint-keyring mint-meta-core mint-artwork-common"}
         fi
