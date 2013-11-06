@@ -10,6 +10,9 @@ case "$MODE" in
         elif [ -z "$MINT_DIST" ] && [ "$LSB_RELEASE_I" = "LinuxMint" ]; then
             MINT_DIST="$LSB_RELEASE_C"
         fi
+        if [ "$MINT_DIST" = "none" ]; then
+            MINT_DIST=""
+        fi
         if [ -n "$MINT_DIST ] && [ -z "$option_dist_value" ]; then
             DIST=$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")
         fi
