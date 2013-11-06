@@ -2,16 +2,8 @@ case "$MODE" in
     configure)
         ARCH=${ARCH:-"$(dpkg --print-architecture)"}
         APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
-        if [ -n "$MINT_DIST" ] || ( [ "$LSB_VENDOR" = "LinuxMint" ] && [ -z "$DIST" ] ); then
-            MINT_DIST=${MINT_DIST:-"$(lsb_release -s -c)"}
-            DIST=${DIST:-$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")}
-            MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
-            MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
-            EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client mint-meta-core"}
-        else
-            DIST=${DIST:-"$(lsb_release -s -c)"}
-            EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
-        fi
+        DIST=${DIST:-"$(lsb_release -s -c)"}
+        EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
         COMPONENTS=${COMPONENTS:-"main restricted universe multiverse"}
         OVERRIDE_EXPORTS=${OVERRIDE_EXPORTS:-"true"}
         export DEBIAN_PRIORITY=critical

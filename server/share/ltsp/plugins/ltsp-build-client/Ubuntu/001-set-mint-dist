@@ -1,0 +1,26 @@
+case "$MODE" in
+    commandline)
+        add_option "mint-dist" "`eval_gettext "set the linuxmint distribution to be used for install, defaults to running distribution"`" "regular" "true"
+        ;;
+    configure)
+        LSB_RELEASE_CODENAME="$(lsb_release --short --codename)"
+        LSB_RELEASE_ID="$(lsb_release --short --id)"
+        if [ -n "$option_mint_dist_value" ]; then
+            MINT_DIST="$option_mint_dist_value"
+        elif [ -z "$MINT_DIST" ] && [ "$LSB_RELEASE_ID" = "LinuxMint" ]; then
+            MINT_DIST="$LSB_RELEASE_CODENAME"
+        fi
+        if [ "$MINT_DIST" = "none" ]; then
+            MINT_DIST=""
+        fi
+        if [ -n "$MINT_DIST ] && [ -z "$option_dist_value" ]; then
+            DIST=$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")
+        fi
+        if [ -n "$MINT_DIST" ]; then
+            APT_KEYS=${APT_KEYS:-"/usr/share/keyrings/linuxmint-keyring.gpg"}
+            MINT_MIRROR=${MINT_MIRROR:-"http://packages.linuxmint.com"}        
+            MINT_COMPONENTS=${MINT_COMPONENTS:-"main upstream import"}
+            LATE_PACKAGES=${LATE_PACKAGES:-"linuxmint-keyring mint-meta-core mint-artwork-common"}
+        fi
+        ;;
+esac
