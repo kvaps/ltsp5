@@ -13,7 +13,7 @@ case "$MODE" in
         if [ "$MINT_DIST" = "none" ]; then
             MINT_DIST=""
         fi
-        if [ -n "$MINT_DIST ] && [ -z "$option_dist_value" ]; then
+        if [ -n "$MINT_DIST" ] && [ -z "$option_dist_value" ]; then
             DIST=$(sed -n 's/base_codename=//p' "/usr/share/mintsources/$MINT_DIST/mintsources.conf")
         fi
         if [ -n "$MINT_DIST" ]; then
