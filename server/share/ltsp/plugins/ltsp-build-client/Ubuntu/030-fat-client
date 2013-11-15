@@ -23,12 +23,6 @@ case "$MODE" in
         FAT_CLIENT_DESKTOPS=${FAT_CLIENT_DESKTOPS:-ubuntu-desktop}
         ;;
 
-    before-install)
-        if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
-            return 0
-        fi
-    ;;
-
     after-install)
         if [ -z "$FAT_CLIENT_DESKTOPS" ]; then
             return 0
