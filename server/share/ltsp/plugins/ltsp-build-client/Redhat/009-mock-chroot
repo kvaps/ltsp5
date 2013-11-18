@@ -37,7 +37,7 @@ case "$MODE" in
    ;;
    after-install)
         $MOCK_CMD --shell "[ -d /etc/ltsp ] || echo LTSP client not installed"
-	$MOCK_CMD --shell "mkdir -p /var/cache/ltsp /var/cache/ltsp-localapps 2>/dev/null"
+	$MOCK_CMD --shell "mkdir -p /var/cache/ltsp 2>/dev/null"
         $MOCK_CMD --copyin /etc/ltsp/dracut/sysconfig-mkinitrd /etc/sysconfig/mkinitrd
         $MOCK_CMD --copyin /etc/ltsp/dracut/ltsp-dracut.conf /etc/dracut.conf.d
         $MOCK_CMD --shell "cp -a /etc/ltsp/dracut/ltsp-dracut.conf /usr/share/ltsp/dracut/sysconfig-dracut"

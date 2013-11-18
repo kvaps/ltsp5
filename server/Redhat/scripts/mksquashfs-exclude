@@ -9,4 +9,3 @@ var/cache/yum/*
 var/cache/mock/*
 tmp/*
 var/cache/ltsp/*
-var/cache/ltsp-localapps/*

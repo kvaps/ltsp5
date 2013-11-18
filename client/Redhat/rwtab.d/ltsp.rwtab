@@ -15,7 +15,7 @@ dirs    /etc/udev/rules.d/
 # LTSP specific
 dirs    /var/cache/ldm/
 dirs    /home
-empty	/var/cache/ltsp-localapps/
+empty	/var/cache/ltsp/
 empty	/root
 files   /etc/lts.conf
 files   /etc/X11/xorg.conf

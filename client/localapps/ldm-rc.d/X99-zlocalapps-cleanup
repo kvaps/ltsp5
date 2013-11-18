@@ -41,14 +41,12 @@ if boolean_is_true "$LOCAL_APPS"; then
         done
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
-
-    rm $LOCALAPPSD_PIDFILE
-
-    # Copy back passwd and group
-    for i in passwd group; do
-        [ -e "${LOCALAPPS_CACHE}/${i}" ] && cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
-    done
 fi
+
+# Copy back passwd, group, shadow and gshadow
+for i in passwd group shadow gshadow; do
+    test -e "/var/cache/ltsp/$i" && cp "/var/cache/ltsp/$i" "/etc/$i"
+done
 
 # Clean up remote apps tmpdir
 if boolean_is_true "${REMOTE_APPS}" && [ -n "${REMOTE_APPS_TMPDIR}" ] ; then

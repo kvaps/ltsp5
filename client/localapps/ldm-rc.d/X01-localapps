@@ -2,180 +2,95 @@
 # The following is a script to set up local apps support on LTSP through LDM
 #
 
-# This hook modifies /etc/group and /etc/passwd directly with user/group
+# This hook modifies /etc/passwd, group, shadow and gshadow with user/group
 # information gathered from the server.
 
 # This will enable us to easily bypass the need for setting up local user
 # authentication, and instead leverage the authentication already set up on
 # the server.
 
-if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
+ssh_run() {
+    ssh -S "$LDM_SOCKET" "$LDM_SERVER" "$@"
+}
 
-    # Set up local uids/gids
+# Return true if the parameter is a valid user or group name.
+# The regex is from `man useradd`, and all of "$1" must match it.
+is_valid_name() {
+    test $(expr match "$1" '[a-z_][a-z0-9_-]*[$]*') -eq ${#1}
+}
 
-    LOCALAPPS_CACHE=/var/cache/ltsp-localapps
-    export LOCALAPPS_CACHE
-    mkdir -p ${LOCALAPPS_CACHE} 2>/dev/null
+# First, set up local uids/gids
+mkdir -p /var/cache/ltsp
 
-    # Copy /etc/passwd and /etc/group to cache if it does not exist (should only happen on first login)
-    for i in passwd group; do
-        if [ ! -e "${LOCALAPPS_CACHE}/${i}" ]; then
-            cp /etc/${i} "${LOCALAPPS_CACHE}/${i}"
-        else
-            cp "${LOCALAPPS_CACHE}/${i}" /etc/${i}
-        fi
-    done
-
-    # Get logged in username if not set
-    [ -z "$LDM_USERNAME" ] && LDM_USERNAME=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} 'echo ${USER}')
-
-    # Get passwd info *just* for that user
-    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent passwd ${LDM_USERNAME}" | sed -e "s/${LDM_USERNAME}/${LDM_USERNAME}/i" >>/etc/passwd
-
-    # Get all group info and copy to COMBINED_GROUP
-    COMBINED_GROUP=${LOCALAPPS_CACHE}/group.combined
-    cp /etc/group ${COMBINED_GROUP}
-    ssh -S ${LDM_SOCKET} ${LDM_SERVER} "/usr/bin/getent group" >> ${COMBINED_GROUP}
-
-    # Get the system groups that the user belongs to, so we can add him back in
-    myGroups=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} /usr/bin/getent group|egrep "[,:]${LDM_USERNAME}(,|$)"|cut -d: -f1| tr '\n' ',' | sed -e 's/,$//g')
-
-    # (/usr/bin/id is only needed because getent evidently does not return groups
-    # added by pam_group (bug in pam_group?)
-
-    myGroups1=$(ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C LANGUAGE=C /usr/bin/id | sed -e 's/^.*groups=//' -e 's/) .*$/)/'|cut -d= -f2|sed -e 's/[0-9]*(//g' -e 's/)//g')
-
-    # concatenate groups from different sources, stripping off prefixed and
-    # trailing commas
-    myGroups=$(echo ${myGroups},${myGroups1} | sed -e 's/^,//g' -e 's/,$//g')
-
-    # Get the user's groups specifically (in case they weren't returned by "getent group")
-    myGroups_quoted=$(echo $myGroups | sed -e "s/^/\\\'/" -e "s/$/\\\'/" -e "s/,/\\\' \\\'/g")
-    ssh -S ${LDM_SOCKET} ${LDM_SERVER} LANG=C eval getent group ${myGroups_quoted} >> ${COMBINED_GROUP}
-    unset myGroups_quoted
-
-    # Now, some groups may have different gids on the server than the client chroot
-    # So, let's prune out all the dups
-    TMPGROUP="${LOCALAPPS_CACHE}/tmpgroup"
-    [ -f "${TMPGROUP}" ] && rm ${TMPGROUP}
-    gnames=""
-    gids=""
-    # those 2 variables are there because if group is rejected because of the gid we need to create this group.
-    dgnames=""
-    ngids=""
-
-    oldifs="${IFS-not set}"
-    IFS=":"
-    while read gname gpass gid gusers; do
-        match=
-        case $gnames in
-            *:"$gname":*|*:"$gname") 
-                # group name present in the list of groups already processed.
-                match=1
-                case $gusers in
-                    "$LDM_USERNAME"|*,"$LDM_USERNAME",*|*,"$LDM_USERNAME"|"$LDM_USERNAME",*) 
-                        dgnames="$dgnames $gname,"
-                        ;;
-                esac
-                ;;
-        esac
-        case $gids in
-            *:"$gid":*|*:"$gid") 
-                # gid present in the list of gids already processed.
-                match=1
-                case $gusers in
-                    "$LDM_USERNAME"|*,"$LDM_USERNAME",*|*,"$LDM_USERNAME"|"$LDM_USERNAME",*) 
-                        ngids="$ngids $gname,"
-                        ;;
-                esac
-                ;;
-        esac
-        if [ -z "$match" ]; then
-            echo "$gname:$gpass:$gid:$gusers" >>${TMPGROUP}
-            gnames="$gnames:$gname"
-            gids="$gids:$gid"
-        fi
-    done < ${COMBINED_GROUP}
-    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
-    # cleanup
-    dgnames=$(echo ${dgnames} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
-    ngids=$(echo ${ngids} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
-    tocreate=""
-    oldifs="${IFS-not set}"
-    IFS=,
-    for e in $ngids; do
-        match=
-        for f in $dgnames; do
-            if [ "$e" = "$f" ]; then
-                match=1
-            fi
-        done
-        if [ -z "$match" ]; then
-            tocreate="$tocreate $e,"
-        fi
-    done
-    tocreate=$(echo ${tocreate} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//' | sed 's/^[[:blank:]]*//g')
-    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
-
-    cp ${TMPGROUP} /etc/group
-    chmod 644 /etc/group
-
-
-    if [ -n "$myGroups" ]; then
-        if [ -w /etc ]; then
-            oldifs="${IFS-not set}"
-            IFS=,
-            for ngroup in $tocreate; do
-                ngroup=$(echo ${ngroup} | sed -e 's/ /\\\ /g') # FIXME: Problem with AD. Space not permited here.
-                groupadd -r ${ngroup}
-            done
-            test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
-            for group in $(echo ${myGroups} | tr ',' '\n' | sort -u); do
-                /usr/sbin/usermod -a -G $group "${LDM_USERNAME}" 2>/dev/null
-            done
-        else
-            # FIXME: maybe add system groups: $tocreate into /etc/group
-            # Read-only /etc cannot use usermod
-            myGroups=$(echo ${myGroups} | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
-            oldifs="${IFS-not set}"
-            IFS=,
-            cp /etc/group $TMPGROUP
-            for group in $myGroups ; do
-                # add user to each group manually
-                line="$(egrep ^${group}: $TMPGROUP | egrep -v [:,]${LDM_USERNAME}'(,|$)' )"
-                if [ -n "$line" ]; then
-                    # add the user to the group
-                    sed -i -e "s/^$line/$line,${LDM_USERNAME}/g" -e 's/:,/:/g' $TMPGROUP
-                fi
-            done
-            cp $TMPGROUP /etc/group
-            test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
-        fi
+# On first login, copy /etc/passwd, group, shadow and gshadow to cache.
+# On subsequent logins, restore them.
+for i in passwd group shadow gshadow; do
+    if [ ! -e "/var/cache/ltsp/$i" ]; then
+        cp "/etc/$i" "/var/cache/ltsp/$i"
+    else
+        cp "/var/cache/ltsp/$i" "/etc/$i"
     fi
+done
 
-    # Now, let's mount the home directory
-    oldifs="${IFS-not set}"
-    IFS=":"
-    export LDM_HOME=""
-    export USER_UID=""
-    export USER_GID=""
-    while read user pass uid gid gecos home shell ; do
-        # First, make the mountpoint
-        LDM_HOME="$home"
-        USER_UID="$uid"
-        USER_GID="$gid"
-        mkdir -p ${LDM_HOME}
-        chown "$USER_UID":"$USER_GID" ${LDM_HOME}
-        if [ -n "${XAUTHORITY_DIR}" ]; then
-            chown "$USER_UID":"$USER_GID" ${XAUTHORITY_DIR}
-        fi
-    done <<EOF
-$(getent passwd "$LDM_USERNAME")
+# Get user information from the server
+IFS=':' read LDM_USERNAME dummy pw_uid pw_gid pw_gecos LDM_HOME pw_shell <<EOF
+$(ssh_run '/usr/bin/getent passwd $(/usr/bin/id -u)')
 EOF
-    test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
 
-    ## Maybe do this:
-    ## export HOME=${LOCALAPPS_CACHE}
+# Get the groups that the user belongs to, and create them locally.
+# groupadd doesn't permit some of the characters used in LDAP, AD etc,
+# so we may have to use a temporary valid group name, and sed afterwards.
+primary_group="$pw_gid"
+sed_list=""
+group_list=""
+while IFS=':' read gr_name dummy gr_gid dummy; do
+    if is_valid_name "$gr_name"; then
+        groupadd_name="$gr_name"
+    else
+        groupadd_name="ltsp_temporary_group_$gr_gid"
+        sed_list="$sed_list
+s:$groupadd_name:$gr_name:"
+    fi
+    if [ "$gr_gid" -le 500 ]; then
+        system_group="--system"
+    else
+        system_group=""
+    fi
+    groupadd --force $system_group --gid "$gr_gid" "$groupadd_name"
+    # Remember the user's primary group name for useradd
+    test "$gr_gid" -eq "$pw_gid" && primary_group="$groupadd_name"
+    group_list="$group_list,$groupadd_name"
+done <<EOF
+$(ssh_run '/usr/bin/getent group $(/usr/bin/id -G)')
+EOF
+group_list=${group_list#,}
+
+# useradd also doesn't permit some of the characters used in LDAP, AD etc
+if is_valid_name "$LDM_USERNAME"; then
+    useradd_name="$LDM_USERNAME"
+else
+    useradd_name="ltsp_temporary_user_$pw_uid"
+    sed_list="$sed_list
+s:$useradd_name:$LDM_USERNAME:"
+fi
+# Note that we want to do name-mapping and not gid-mapping for -g and -G
+useradd -c "$pw_gecos" -d "$LDM_HOME" -g "$primary_group" -G "$group_list" \
+    -M -N --non-unique -s "$pw_shell" -u "$pw_uid" "$useradd_name"
+
+# For any non-valid names encountered, use sed directly
+echo "$sed_list" | while read -r substitution; do
+    test -z "$substitution" && continue
+    sed -e "$substitution" -i /etc/passwd /etc/group /etc/shadow /etc/gshadow
+done
+
+if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
+    # Now, let's mount the home directory
+    # First, make the mountpoint
+    mkdir -p "$LDM_HOME"
+    chown "$pw_uid":"$pw_gid" "$LDM_HOME"
+    if [ -n "$XAUTHORITY_DIR" ]; then
+        chown "$pw_uid":"$pw_gid" "$XAUTHORITY_DIR"
+    fi
 
     if [ -z "$SSH_FOLLOW_SYMLINKS" ]; then
         # By default, don't follow symlinks under $HOME for localapps, as
@@ -192,16 +107,16 @@ EOF
         unset SSHFS_HOME
     else
         export SSHFS_HOME=true
-        sshfs -o ${follow_home_symlinks}allow_other,nonempty,ControlPath=${LDM_SOCKET} ${LDM_SERVER}:${LDM_HOME} ${LDM_HOME}
+        sshfs -o "${follow_home_symlinks}allow_other,nonempty,ControlPath=$LDM_SOCKET" "$LDM_SERVER:$LDM_HOME" "$LDM_HOME"
     fi
 
     # Mount other directories
-    if [ -n "${LOCAL_APPS_EXTRAMOUNTS}" ]; then
+    if [ -n "$LOCAL_APPS_EXTRAMOUNTS" ]; then
         oldifs="${IFS-not set}"
         IFS=","
-        for extradir in ${LOCAL_APPS_EXTRAMOUNTS}; do
-            mkdir -p "${extradir}"
-            sshfs -o "${follow_extra_symlinks}allow_other,nonempty,ControlPath=${LDM_SOCKET}" "${LDM_SERVER}:${extradir}" "${extradir}"
+        for extradir in $LOCAL_APPS_EXTRAMOUNTS; do
+            mkdir -p "$extradir"
+            sshfs -o "${follow_extra_symlinks}allow_other,nonempty,ControlPath=$LDM_SOCKET" "$LDM_SERVER:$extradir" "$extradir"
         done
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
@@ -215,11 +130,10 @@ EOF
     # if cups is installed in the chroot, use LDM_SERVER for printing,
     # unless the user has enabled remote printer browsing via CUPS.
     if [ -d /etc/cups ]; then
-        if [ -n "${CUPS_SERVER}" ]; then
-            echo "ServerName ${CUPS_SERVER}" > /etc/cups/client.conf
+        if [ -n "$CUPS_SERVER" ]; then
+            echo "ServerName $CUPS_SERVER" > /etc/cups/client.conf
         elif ! grep -qsi "^Browsing on" /etc/cups/cupsd.conf; then
-            echo "ServerName ${LDM_SERVER}" > /etc/cups/client.conf
+            echo "ServerName $LDM_SERVER" > /etc/cups/client.conf
         fi
     fi
-
 fi
