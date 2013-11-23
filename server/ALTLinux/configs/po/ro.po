@@ -14,35 +14,35 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-03 04:30+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2013-11-23 04:31+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 
 #: ltsp-login.sh:17
 #, sh-format
 msgid "Login Error"
-msgstr ""
+msgstr "Eroare la autentificare"
 
 #: ltsp-login.sh:20 ltsp-login.sh:28
 #, sh-format
 msgid "Continue"
-msgstr ""
+msgstr "Continuare"
 
 #: ltsp-login.sh:21
 #, sh-format
 msgid "Cancel"
-msgstr ""
+msgstr "Anulare"
 
 #: ltsp-login.sh:22 ltsp-login.sh:29
 #, sh-format
 msgid "User"
-msgstr ""
+msgstr "Utilizator"
 
 #: ltsp-login.sh:22 ltsp-login.sh:29
 #, sh-format
 msgid "already logged in!"
-msgstr ""
+msgstr "deja autentificat!"
 
 #: ltsp-login.sh:25
 #, sh-format
 msgid "Login Warning"
-msgstr ""
+msgstr "Avertizare la autentificare"

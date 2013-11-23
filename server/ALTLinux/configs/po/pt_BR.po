@@ -8,41 +8,41 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-03-07 14:47+0200\n"
-"PO-Revision-Date: 2013-01-13 21:30+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-11-21 22:38+0000\n"
+"Last-Translator: Guilherme Benkenstein <gb@gbti.com.br>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-03 04:30+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2013-11-23 04:31+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 
 #: ltsp-login.sh:17
 #, sh-format
 msgid "Login Error"
-msgstr ""
+msgstr "Erro de login"
 
 #: ltsp-login.sh:20 ltsp-login.sh:28
 #, sh-format
 msgid "Continue"
-msgstr ""
+msgstr "Avançar"
 
 #: ltsp-login.sh:21
 #, sh-format
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: ltsp-login.sh:22 ltsp-login.sh:29
 #, sh-format
 msgid "User"
-msgstr ""
+msgstr "Usuário"
 
 #: ltsp-login.sh:22 ltsp-login.sh:29
 #, sh-format
 msgid "already logged in!"
-msgstr ""
+msgstr "Usuário já está logado!"
 
 #: ltsp-login.sh:25
 #, sh-format
 msgid "Login Warning"
-msgstr ""
+msgstr "Aviso de Login"

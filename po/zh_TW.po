@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-01-14 12:04-0800\n"
-"PO-Revision-Date: 2013-09-16 09:09+0000\n"
+"PO-Revision-Date: 2013-11-16 14:12+0000\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-03 04:30+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2013-11-23 04:31+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -85,7 +85,7 @@ msgstr "保留已下載套件檔的快取"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
-msgstr ""
+msgstr "做為最終安裝中要安裝的套件清單"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
@@ -93,13 +93,13 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
-msgstr ""
+msgstr "設定預設地區"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
-msgstr ""
+msgstr "設定鏡射位置"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
@@ -144,27 +144,27 @@ msgstr "正在啟動序列埠終端機 ..."
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-kernel:3
 #, sh-format
 msgid "set the kernel package to install."
-msgstr ""
+msgstr "設定要安裝的核心套件"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
 msgid "Set the i18n langs"
-msgstr ""
+msgstr "設定 i18n"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:3
 #, sh-format
 msgid "Enable progress reporting"
-msgstr ""
+msgstr "啟用進度報告"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:4
 #, sh-format
 msgid "Print stage times (seconds)"
-msgstr ""
+msgstr "顯示階段時間 (以秒計)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:5
 #, sh-format
 msgid "Draw progress bar"
-msgstr ""
+msgstr "繪出進度列"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
@@ -175,7 +175,7 @@ msgstr "提示設定管理者密碼，預設為關閉"
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr ""
+msgstr "設定要安裝的核心模組套件。"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
@@ -186,7 +186,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #, sh-format
 msgid "set the distribution to be used for install"
-msgstr ""
+msgstr "設定安裝用的發行套件"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
@@ -206,57 +206,57 @@ msgstr "注意：正在取消給 sid 用的 APT 安全性更新來源。它並�
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD"
-msgstr ""
+msgstr "建立 NBD 使用的 squashfs 映像檔"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install"
-msgstr ""
+msgstr "安裝時允許未簽章的套件"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
-msgstr ""
+msgstr "從伺服器複製 apt 套件檔案"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
 #, sh-format
 msgid "mount package cache dir from server"
-msgstr ""
+msgstr "從伺服器掛載套件快取目錄"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr ""
+msgstr "掛載伺服器目錄做為 chroot 套件快取目錄"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
 msgid "cache downloaded packages"
-msgstr ""
+msgstr "快取已下載套件"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
 #, sh-format
 msgid "Copying packages"
-msgstr ""
+msgstr "複製套件"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
 #, sh-format
 msgid "done."
-msgstr ""
+msgstr "完成。"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
-msgstr ""
+msgstr "設定要安裝的核心套件清單"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
 msgid "set the kernel variant to install"
-msgstr ""
+msgstr "設定要安裝的核心變體"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
 #, sh-format
 msgid "set the kernel version to install"
-msgstr ""
+msgstr "設定要安裝的核心版本"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
@@ -266,19 +266,19 @@ msgstr "將清單上的金鑰加入 apt 鑰匙圈 (keyring)"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:3
 #, sh-format
 msgid "create ext2 image for use with NBD"
-msgstr ""
+msgstr "建立 NBD 使用的 ext2 映像檔"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
 #, sh-format
 msgid "create image for use with NBD of the specified filesystem"
-msgstr ""
+msgstr "以指定的檔案系統建立 NBD 使用的映像檔"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr ""
+msgstr "以本機執行大多數應用程式"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
 #, sh-format
@@ -288,17 +288,17 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
 msgid "use specified http proxy"
-msgstr ""
+msgstr "使用指定的 http 代理伺服器"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:4
 #, sh-format
 msgid "do not autodetect apt proxy configuration"
-msgstr ""
+msgstr "不要自動偵測 apt 代理伺服器組態"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
 #, sh-format
 msgid "skip upgrade of installed packages"
-msgstr ""
+msgstr "略過已安裝套件的升級"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
@@ -329,7 +329,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
 msgid "set the components to be used in mirror"
-msgstr ""
+msgstr "設定在鏡像中要使用的元件"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
@@ -345,7 +345,7 @@ msgstr "安裝後載入 chroot 中的 debconf"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
 #, sh-format
 msgid "mounts CDROM before installation"
-msgstr ""
+msgstr "安裝前掛載 CDROM"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/080-eatmydata:3
 #, sh-format
@@ -362,7 +362,7 @@ msgstr "注意：新增預設的版本和分類至安全性更新映射站："
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
-msgstr ""
+msgstr "使用伺服器的 sources.list 代替產生一個"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
@@ -378,13 +378,13 @@ msgstr "正在啟動熱門套件統計 ..."
 #, sh-format
 msgid ""
 "set the distribution to be used for install, defaults to running distribution"
-msgstr ""
+msgstr "設定發行版本用於安裝，預設為執行發行版本"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
-msgstr ""
+msgstr "如果有則清除現有的 LTSP chroot"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
@@ -422,22 +422,22 @@ msgstr "       支援的數值為：%s"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
 #, sh-format
 msgid "Set input device drivers to install"
-msgstr ""
+msgstr "設定要安裝的輸入裝置驅動程式"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
 msgid "Set initramfs builder, defaults to genkernel"
-msgstr ""
+msgstr "設定 initramfs 組建程式，預設值為 genkernel"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
-msgstr ""
+msgstr "階段 3 URI"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
+msgstr "設定要安裝的顯示卡驅動程式"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
 #, sh-format
@@ -452,7 +452,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
 msgid "Gentoo installer to use, defaults to kicktoo"
-msgstr ""
+msgstr "要使用的 Gentoo 安裝程式，預設為 kicktoo"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
@@ -467,13 +467,13 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "顯示安裝程式外部命令輸出"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
 #, sh-format
 msgid "Using installer: %s"
-msgstr ""
+msgstr "使用安裝程式：%s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
 #, sh-format
@@ -493,12 +493,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
 msgid "ERROR: %s does not exist"
-msgstr ""
+msgstr "錯誤：%s 不存在"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:47
 #, sh-format
 msgid "Installing into: %s"
-msgstr ""
+msgstr "安裝到：%s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
@@ -513,17 +513,17 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
-msgstr ""
+msgstr "釋出版本號碼"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
-msgstr ""
+msgstr "發行套件名稱"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr ""
+msgstr "強制略過 squashfs 組建 (用於 debian-installer)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
 #, sh-format
@@ -538,7 +538,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
 msgid "enable LTSP-Cluster"
-msgstr ""
+msgstr "啟用 LTSP-Cluster"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
@@ -576,7 +576,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
 msgid "set the name of the chroot"
-msgstr ""
+msgstr "設定 chroot 名稱"
 
 #: ../server/ltsp-build-client:78
 #, sh-format
@@ -586,7 +586,7 @@ msgstr "API 錯誤：您必須指出真 (true) 或假 (false)。"
 #: ../server/ltsp-build-client:188
 #, sh-format
 msgid "display this help message"
-msgstr ""
+msgstr "顯示這個求助訊息"
 
 #: ../server/ltsp-build-client:189
 #, sh-format
