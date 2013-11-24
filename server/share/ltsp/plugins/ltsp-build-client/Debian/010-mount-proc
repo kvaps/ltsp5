@@ -1,0 +1,8 @@
+# Make sure /sys is mounted in the chroot, to allow modprobe to work
+# as it should.  Avoids problem installing oss-compat on some machines.
+# http://bugs.debian.org/721597
+case "$MODE" in
+    after-install)
+        chroot_mount sys /sys "-t sysfs"
+        ;;
+esac
