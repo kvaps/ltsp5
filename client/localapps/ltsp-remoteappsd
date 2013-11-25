@@ -13,11 +13,15 @@ reset_xprop LTSP_RCOMMAND
 reset_xprop LTSP_RCOMMAND_WAIT
 
 # Poll for LTSP_RCOMMAND changes and execute
-while :; do
-    LTSP_RCOMMAND="$(xatomwait LTSP_RCOMMAND)"
-    [ "$?" != 0 ] && exit 
+xprop -notype -root -spy LTSP_RCOMMAND | while read junk_x junk_y LTSP_RCOMMAND ; do
 
-    LTSP_RCOMMAND=$(echo "${LTSP_RCOMMAND}"|sed -e 's/^LTSP_RCOMMAND = //') 
+    # Strip off leading and trailing double-quotes.
+    LTSP_RCOMMAND=${LTSP_RCOMMAND%\"}
+    LTSP_RCOMMAND=${LTSP_RCOMMAND#\"}
+
+    # If empty, nothing to execute, return to the loop.
+    test -n "${LTSP_RCOMMAND}" || continue
+
     LTSP_RCOMMAND_WAIT=$(xprop -root -notype LTSP_RCOMMAND_WAIT |sed -e 's/^LTSP_RCOMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
     if [ -n "${LTSP_RCOMMAND}" ]; then
         if [ "$LTSP_RCOMMAND_WAIT" = "true" ]; then

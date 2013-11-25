@@ -42,11 +42,15 @@ run_ltsp_localappsd(){
 }
 
 # Poll for LTSP_COMMAND changes and execute
-while :; do
-    LTSP_COMMAND="$(xatomwait LTSP_COMMAND)"
-    [ "$?" != 0 ] && exit 
+xprop -notype -root -spy LTSP_COMMAND | while read junk_x junk_y LTSP_COMMAND ; do
 
-    LTSP_COMMAND=$(echo "${LTSP_COMMAND}"|sed -e 's/^LTSP_COMMAND = //') 
+    # Strip off leading and trailing double-quotes.
+    LTSP_COMMAND=${LTSP_COMMAND%\"}
+    LTSP_COMMAND=${LTSP_COMMAND#\"}
+
+    # If empty, nothing to execute, return to the loop.
+    test -n "${LTSP_COMMAND}" || continue
+
     LTSP_COMMAND_WAIT=$(xprop -root -notype LTSP_COMMAND_WAIT |sed -e 's/^LTSP_COMMAND_WAIT = //' -e 's/^"//' -e 's/"$//')
     if [ -n "${LTSP_COMMAND}" ]; then
         # If LOCAL_APPS_APPS_WHITELIST is defined, reject anything not listed.  Otherwise allow by default.
