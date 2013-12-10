@@ -10,9 +10,9 @@ if [ -z "$NBD_SWAP" ]; then
     # Set reasonable defaults for NBD_SWAP_THRESHOLD (in MB)
     if [ -z "$NBD_SWAP_THRESHOLD" ]; then
         if boolean_is_true "$LTSP_FATCLIENT"; then
-            NBD_SWAP_THRESHOLD=800
+            NBD_SWAP_THRESHOLD=2100
         else
-            NBD_SWAP_THRESHOLD=300
+            NBD_SWAP_THRESHOLD=800
         fi
     fi
     memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
