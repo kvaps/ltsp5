@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-03 04:31+0000\n"
-"X-Generator: Launchpad (build 16856)\n"
+"X-Launchpad-Export-Date: 2013-12-18 04:31+0000\n"
+"X-Generator: Launchpad (build 16869)\n"
 "Language: vi\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -75,71 +75,72 @@ msgstr "Cảnh báo Đăng nhập"
 msgid "Cancel"
 msgstr "Thôi"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
 msgstr "bảo tồn vùng nhớ tạm các tập tin gói đã tải về"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr ""
 "danh sách các gói cần cài đặt như là phần của tiến trình cài đặt cuối cùng"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "đặt miền địa phương mặc định"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
 msgstr "đặt địa chỉ của máy nhân bản"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
 "thêm một máy nhân bản, mà có mức ưu tiên cao hơn máy nhân bản mặc định"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr ""
 "thêm một máy nhân bản, mà có mức ưu tiên thấp hơn máy nhân bản mặc định"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
 msgstr "thêm một máy nhân bản bảo mật"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
 msgstr "đặt kiến trúc đích"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr "bật bàn giao tiếp nối tiếp"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr "Đang bật bàn giao tiếp nối tiếp..."
@@ -169,8 +170,8 @@ msgstr "In ra thời gian chạy giai đoạn"
 msgid "Draw progress bar"
 msgstr "Vẽ thanh tiến hành"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "nhắc đặt mật khẩu người chủ (giá trị mặc định là « bị tắt »)"
@@ -180,8 +181,8 @@ msgstr "nhắc đặt mật khẩu người chủ (giá trị mặc định là 
 msgid "set the kernel modules packages to install."
 msgstr "đặt các gói mô-đun hạt nhân cần cài đặt."
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
@@ -278,6 +279,7 @@ msgstr "tạo ảnh ext2 để dùng với NBD."
 msgid "create image for use with NBD of the specified filesystem"
 msgstr "tạo ảnh hệ thống tập tin đưa ra để dùng với NBD"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
@@ -285,7 +287,7 @@ msgstr "tạo ảnh hệ thống tập tin đưa ra để dùng với NBD"
 msgid "run most or all applications locally"
 msgstr "chạy cục bộ phần lớn hay tất cả các ứng dụng"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -419,20 +421,22 @@ msgstr ""
 "danh sách các gói bổ sung cần cài đặt như là phần của tiến trình cài đặt đầu "
 "tiên."
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 "LỖI: kiến trúc không được hỗ trợ. Hãy kiểm tra lại đối số « --arch »: %s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       các giá trị được hỗ trợ : %s"
@@ -518,21 +522,25 @@ msgstr "LỖI: %s không tồn tại"
 msgid "Installing into: %s"
 msgstr "Đang cài đặt vào : %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
 msgstr "Đường dẫn đến tập tin kickstart"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr "Đường dẫn đến vùng nhớ tạm chroot-creator"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
 msgstr "Số thứ tự phiên bản phát hành"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
@@ -596,47 +604,47 @@ msgstr "nạp một tập tin cấu hình đặc trưng cho người dùng"
 msgid "set the name of the chroot"
 msgstr "đặt tên của chroot"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "LỖI API: bạn cần phải cung cấp trả lời đúng (true) hay sai (false)."
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "hiển thị trợ giúp này"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "hiển thị trợ giúp về tất cả các tùy chọn dòng lệnh sẵn sàng"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Sử dụng trình khách xây dựng LTSP:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Tùy chọn bình thường:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Tùy chọn cấp cao :"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "chú ý: tiến trình cài đặt trình khách LTSP đã chạy thành công"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "lỗi: tiến trình cài đặt trình khách LTSP đã kết thúc bất thường"
 
-#: ../common/ltsp-common-functions:173
+#: ../common/ltsp-common-functions:182
 #, sh-format
 msgid "translator-credits"
 msgstr ""

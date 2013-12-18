@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-03 04:31+0000\n"
-"X-Generator: Launchpad (build 16856)\n"
+"X-Launchpad-Export-Date: 2013-12-18 04:30+0000\n"
+"X-Generator: Launchpad (build 16869)\n"
 "Language: ru\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -77,68 +77,69 @@ msgstr "Предупреждение о входе"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
 msgstr "сохранить кэш скачанных файлов пакетов"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr "задать пакеты для установки в конце установки"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "задать локаль по умолчанию"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
 msgstr "задать расположение зеркала"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr "добавить зеркало с приоритетом выше, чем у зеркала по умолчанию"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr "добавить зеркало с приоритетом ниже, чем у зеркала по умолчанию"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
 msgstr "добавить зеркало безопасности"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
 msgstr "задать архитектуру клиента (target)"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr "включить консоль на последовательном порту"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr "Включение консоли на последовательном порту..."
@@ -168,8 +169,8 @@ msgstr "Показывать длительность этапов (в секу�
 msgid "Draw progress bar"
 msgstr "Отображать индикатор хода работы"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "предлагать задать пароль root, по умолчанию выключен"
@@ -179,8 +180,8 @@ msgstr "предлагать задать пароль root, по умолчан
 msgid "set the kernel modules packages to install."
 msgstr "задать список пакетов модулей ядра для установки."
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr "задать список пакетов для установки после завершения base-install"
@@ -277,6 +278,7 @@ msgstr "создать образ ext2 для использования с NBD"
 msgid "create image for use with NBD of the specified filesystem"
 msgstr "создать образ с указанной файловой системой для использования с NBD"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
@@ -284,7 +286,7 @@ msgstr "создать образ с указанной файловой сис�
 msgid "run most or all applications locally"
 msgstr "запустить все или почти все приложения локально"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -411,20 +413,22 @@ msgid ""
 msgstr ""
 "задать список дополнительных пакетов для установки в начале установки."
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 "ОШИБКА: неподдерживаемая архитектура. Проверьте аргумент параметра --arch: %s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       поддерживаемые значения: %s"
@@ -512,21 +516,25 @@ msgstr "ОШИБКА: %s не существует"
 msgid "Installing into: %s"
 msgstr "Установка в: %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
 msgstr "Путь к файлу kickstart"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr "Путь к кэшу chroot-creator"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
 msgstr "Номер версии выпуска"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
@@ -590,47 +598,47 @@ msgstr "загрузить заданный пользовательский ф�
 msgid "set the name of the chroot"
 msgstr "задать имя chroot"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "ОШИБКА API: вам нужно указать значение true или false."
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "показать эту справку"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "показать справку по всем доступным параметрам командной строки"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Использование LTSP Build Client:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Обычные параметры:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Дополнительные параметры:"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "инфо: установка клиента LTSP успешно завершена"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "ошибка: установка клиента LTSP завершилась неудачно"
 
-#: ../common/ltsp-common-functions:173
+#: ../common/ltsp-common-functions:182
 #, sh-format
 msgid "translator-credits"
 msgstr ""

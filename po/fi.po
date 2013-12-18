@@ -10,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-03 04:30+0000\n"
-"X-Generator: Launchpad (build 16856)\n"
+"X-Launchpad-Export-Date: 2013-12-18 04:30+0000\n"
+"X-Generator: Launchpad (build 16869)\n"
 "Language: fi\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -72,70 +72,71 @@ msgstr "Kirjautumisvaroitus"
 msgid "Cancel"
 msgstr "Keskeytä"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
 msgstr "Varastoi ladatut pakettitiedostot"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr "Luettelo lopullisen asennuksen osana asennettavista paketeista"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "Aseta oletusmaa-asetus"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
 msgstr "Aseta peilipalvelimen sijainti"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr ""
 "Lisää peilipalvelin, joka ohittaa tärkeysjärjestyksessä oletuspeilipalvelimen"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr ""
 "Lisää peilipalvelin, joka on tärkeysjärjestyksessä oletuspeilin jälkeen"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
 msgstr "Lisää turvapeilipalvelin"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
 msgstr "Aseta kohdearkkitehtuuri"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr "Ota sarjakonsoli käyttöön"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr "Sarjakonsolia otetaan käyttöön..."
@@ -165,8 +166,8 @@ msgstr "Tulostusvaiheiden ajat (sekunteina)"
 msgid "Draw progress bar"
 msgstr "Piirrä edistymisen ilmaisin"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "Pyydä asettamaan pääkäyttäjän salasana, oletuksena ei käytössä"
@@ -176,8 +177,8 @@ msgstr "Pyydä asettamaan pääkäyttäjän salasana, oletuksena ei käytössä"
 msgid "set the kernel modules packages to install."
 msgstr "Aseta asennettavien ydinmoduulipakettien luettelo"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr "Luo luettelo perusasennuksen jälkeen asennettavista paketeista"
@@ -275,6 +276,7 @@ msgid "create image for use with NBD of the specified filesystem"
 msgstr ""
 "Luo levykuva käytettäväksi annetun tiedostojärjestelmän NBD:n kanssa."
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
@@ -282,7 +284,7 @@ msgstr ""
 msgid "run most or all applications locally"
 msgstr "Aja useimmat tai kaikki ohjelmat paikallisesti"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
 msgid "use the specified keyring for debootstrap gpg verification"
 msgstr ""
@@ -407,21 +409,23 @@ msgid ""
 "list of extra packages to install as part of the initial installation."
 msgstr "Luettelo ensiasennuksen osana asennettavista lisäpaketeista."
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 "VIRHE: arkkitehtuuri, jota ei tueta. Tarkista valitsimen --arch argumentti: "
 "%s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       tuetut arvot ovat: %s"
@@ -507,21 +511,25 @@ msgstr "VIRHE: ”%s” ei ole olemassa"
 msgid "Installing into: %s"
 msgstr "Asennetaan sijaintiin: %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
 msgstr "kickstart-tiedoston polku"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr "chroot-creator-välimuistin polku"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
 msgstr "Julkaisun versionumero"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
@@ -585,47 +593,47 @@ msgstr "Lataa käyttäjäkohtainen asetustiedosto"
 msgid "set the name of the chroot"
 msgstr "Aseta chroot-ympäristön nimi"
 
-#: ../server/ltsp-build-client:78
+#: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
 msgstr "API-VIRHE: sinun tulee antaa tosi (true) tai epätosi (false)"
 
-#: ../server/ltsp-build-client:188
+#: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
 msgstr "Näytä tämä ohjeviesti"
 
-#: ../server/ltsp-build-client:189
+#: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
 msgstr "Näytä kaikkien käytettävissä olevien komentorivivalitsimien ohje"
 
-#: ../server/ltsp-build-client:193
+#: ../server/ltsp-build-client:194
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "LTSP Build Clientin (käännösohjelman) käyttö:"
 
-#: ../server/ltsp-build-client:197
+#: ../server/ltsp-build-client:200
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Normaalit valitsimet:"
 
-#: ../server/ltsp-build-client:201
+#: ../server/ltsp-build-client:204
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Lisävalitsimet:"
 
-#: ../server/ltsp-build-client:213
+#: ../server/ltsp-build-client:216
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "Info: LTSP-asiakkaan asennus päättyi onnistuneesti"
 
-#: ../server/ltsp-build-client:215
+#: ../server/ltsp-build-client:218
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "Virhe: LTSP-asiakkaan asennus päättyi poikkeavasti"
 
-#: ../common/ltsp-common-functions:173
+#: ../common/ltsp-common-functions:182
 #, sh-format
 msgid "translator-credits"
 msgstr ""
