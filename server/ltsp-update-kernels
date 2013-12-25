@@ -89,6 +89,7 @@ update_kernels() {
     fi
     echo "Updating $tftpdir directories for chroot: $name"
 
+    rm -rf "$tftpboot/$name"
     mkdir -p "$tftpboot/$name"
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
@@ -104,51 +105,6 @@ update_kernels() {
             ln -sf "$TFTP_BOOT_DIR/$name/yaboot.conf" "$tftpdir/yaboot.conf"
         fi
     fi
-
-    # Cleanup old kernels and images from tftpboot directory
-    cleanup_kernels "$name" "$tftpboot" "$chroot"
-}
-
-# distro specific functions
-
-# For all kernels in TFTP, find the kernel $version from vmlinuz-* filename.
-# If the corresponding /opt/ltsp/$name/lib/modules/$version is missing,
-# then delete kernel and images for this version from tftpboot directory.
-# Distros that don't match vmlinuz-* should override this function.
-cleanup_kernels() {
-    local name tftpboot chroot
-    name=$1
-    tftpboot=$2
-    chroot=$3
-
-    # Loop through every vmlinuz-* file
-    for kernelpath in $(find "$tftpboot/$name/" -name 'vmlinuz-*' -o -name 'vmlinux-*'); do
-        kernel=${kernelpath##*/}
-        case $kernel in
-            vmlinuz-*) version=${kernel#vmlinuz-} ;;
-            vmlinux-*) version=${kernel#vmlinux-} ;;
-        esac
-        if [ ! -d "$chroot/lib/modules/$version" ]; then
-            echo "Removing $kernelpath"
-            # Common
-            rm -f "$tftpboot/$name/$kernel"
-            rm -f "$tftpboot/$name/config-$version"
-            rm -f "$tftpboot/$name/System.map-$version"
-            # Fedora
-            rm -f "$tftpboot/$name/initrd-$version.img"
-            rm -f "$tftpboot/$name/initramfs-$version.img"
-            rm -f "$tftpboot/$name/elf-$version.img"
-            rm -f "$tftpboot/$name/wraplinux-nbi-$version.img"
-            rm -f "$tftpboot/$name/aout-$version.img"
-            rm -f "$tftpboot/$name/symvers-$version.gz"
-            # Debian
-            rm -f "$tftpboot/$name/initrd.img-$version"
-            rm -f "$tftpboot/$name/nbi.img-$version"
-            # Ubuntu
-            rm -f "$tftpboot/$name/abi-$version"
-            rm -f "$tftpboot/$name/vmcoreinfo-$version"
-        fi
-    done
 }
 
 # Set an optional MODULES_BASE, so help2man can be called from build env
