@@ -77,6 +77,26 @@ kernel_versions() {
     eval "$orig_flags"
 }
 
+kernel_variants(){
+    variants=""
+    for a in $(LIST_KERNELS="*" kernel_versions); do
+        variants="$variants\n$(echo ${a} | sed -e 's,.*-[0-9]-,,g' -e 's,.*-[0-9][0-9][0-9]-,,g' -e 's,.*-[0-9][0-9]-,,g' -e 's,.*-trunk-,,g')"
+    done
+    echo ${variants} | sort -u
+}
+
+kernel_links(){
+    for variant in $(kernel_variants) ; do
+        newest_variant=$(LIST_KERNELS="$variant" kernel_versions | head -n 1) 
+        if [ -n "$newest_variant" ]; then
+            ln -sf vmlinuz-${newest_variant} /boot/vmlinuz-${variant}
+            if [ -f /boot/initrd.img-${newest_variant} ]; then
+                ln -sf initrd.img-${newest_variant} /boot/initrd.img-${variant}
+            fi
+        fi
+    done
+}
+
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-client-functions
 require_root
@@ -96,6 +116,9 @@ CMDLINE_NBD=${CMDLINE_NBD:-"root=/dev/nbd0 ip=dhcp"}
 boot_method_default=$(echo $BOOT_METHODS | awk '{print $1}')
 cmdline_method_default=$(eval echo '$CMDLINE_'$boot_method_default)
 BOOTPROMPT_OPTS="$CMDLINE_LINUX_DEFAULTS $cmdline_method_default"
+
+# Add symlinks for each kernel variant
+kernel_links
 
 if [ -f /usr/lib/yaboot/yaboot ]; then
     cp -a -v /usr/lib/yaboot/yaboot $BOOT
