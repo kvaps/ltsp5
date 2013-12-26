@@ -290,26 +290,6 @@ EOF
         fi
     done
 
-    memtest_bin='memtest86+.bin memtest86.bin'
-    for memtest in $memtest_bin ; do
-        memtest_name=$(basename $memtest .bin)
-        if [ -f $BOOT/$memtest_name ]; then
-            # prefer memtest86+ and memtest86 without the .bin extension, to
-            # work around bug(s) in pxelinux/memtest86*:
-            # http://bugs.debian.org/546219
-            memtest="$memtest_name"
-        fi
-        if [ -f $BOOT/$memtest ]; then
-            cat > $PXECFG/memtest <<EOF
-# This file is regenerated when update-kernels runs.
-# Do not edit, see /etc/ltsp/update-kernels.conf instead.
-label $memtest_name
-kernel $memtest
-
-EOF
-        fi
-    done
-
 else
     msg "Skipping PXE configuration.  Install the syslinux package if you need it."
 fi
