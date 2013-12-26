@@ -177,7 +177,16 @@ if [ -f $syslinux_dir/pxelinux.0 ]; then
         mkdir $PXECFG
     fi
 
+    if [ ! -f $PXECFG/default ] || [ -n "$(head -n 1 $PXECFG/default | grep '# This file is regenerated when update-kernels runs.')" ]; then
     cat > $PXECFG/default <<EOF
+# This file is editable, and changes will be preserved.
+
+INCLUDE ltsp
+
+EOF
+    fi
+
+    cat > $PXECFG/ltsp <<EOF
 # This file is regenerated when update-kernels runs.
 # Do not edit, see /etc/ltsp/update-kernels.conf instead.
 
@@ -286,7 +295,7 @@ EOF
 
     for file in $pxelinux_include_files ; do
         if [ -f "$PXECFG/$file" ]; then
-            cat "$PXECFG/$file" >> $PXECFG/default
+            cat "$PXECFG/$file" >> $PXECFG/ltsp
         fi
     done
 
