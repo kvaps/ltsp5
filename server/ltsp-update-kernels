@@ -93,10 +93,10 @@ update_kernels() {
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
     # Generate pxelinux.cfg/default symlink if not present.
-    if [ -d "$tftpboot/$name/pxelinux.cfg/ ] && \
-    [ ! -f "$tftpboot/$name/pxelinux.cfg/default" ] && \
-    [ -f "$tftpboot/$name/pxelinux.cfg/ltsp" ]; then
-        ln -sf ltsp "$tftpboot/$name/pxelinux.cfg/default" 
+    if [ -f "$tftpboot/$name/pxelinux.cfg/ltsp" ]; then
+        if [ ! -f "$tftpboot/$name/pxelinux.cfg/default" ]; then
+            ln -sf ltsp "$tftpboot/$name/pxelinux.cfg/default" 
+        fi
     fi
 
     # Ensure that the files are readable (LP: #759115) (Dracut initramfs)
