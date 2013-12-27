@@ -50,7 +50,7 @@ msg() {
 # order that the user may have put in $CHROOT/etc/ltsp/update-kernels.conf.
 # Distros are required to set e.g. KERNEL_PREFIX="vmlinuz-*', KERNEL_SUFFIX="".
 # The * goes where the version is expected to go.
-kernel_versions() {
+kernel_split() {
     local orig_flags kernels arch loop_kernels kernel
     # Save values of flags, and restore them later.
     orig_flags=$(set +o)
@@ -58,31 +58,26 @@ kernel_versions() {
     # Disable glob expansion for this function
     set -f
     for kernel in $(find "/boot/" -type f -name "$KERNEL_PREFIX$KERNEL_SUFFIX" -printf "%f\n"); do
-        # Append a descending number to the version
-        i=1000
+        # Validate the "arch"
         for arch in ${LIST_KERNELS:-*}; do
-            i=$(($i-1))
             case "$kernel" in
                 $KERNEL_PREFIX$arch$KERNEL_SUFFIX)
-                    version_arch=${kernel#${KERNEL_PREFIX%*}}
-                    version_arch=${version_arch%${KERNEL_SUFFIX#*}}
-                    version=${version_arch#$arch}
-                    version=${version_arch%$arch}
-                    echo "$version-$i $version_arch"
+                    echo "$kernel"
                     break 1
                     ;;
             esac
         done
-    done | sort -frV | awk '{ print $2 }'
+    done | sed -n "$KERNEL_NAMES" | sort -frV -k 3,3 -k 4,4
+
     eval "$orig_flags"
 }
 
+kernel_versions(){
+    kernel_split | awk '{print $3$4}'
+}
+
 kernel_variants(){
-    variants=""
-    for a in $(LIST_KERNELS="*" kernel_versions); do
-        variants="$variants\n$(echo ${a} | sed -e 's,.*-[0-9]-,,g' -e 's,.*-[0-9][0-9][0-9]-,,g' -e 's,.*-[0-9][0-9]-,,g' -e 's,.*-trunk-,,g')"
-    done
-    echo ${variants} | sort -u
+    kernel_split | awk '{print $4}' | sort -u
 }
 
 kernel_links(){
@@ -116,6 +111,10 @@ CMDLINE_NBD=${CMDLINE_NBD:-"root=/dev/nbd0 ip=dhcp"}
 boot_method_default=$(echo $BOOT_METHODS | awk '{print $1}')
 cmdline_method_default=$(eval echo '$CMDLINE_'$boot_method_default)
 BOOTPROMPT_OPTS="$CMDLINE_LINUX_DEFAULTS $cmdline_method_default"
+
+# A sed expression that matches all kernels and returns $FILE $NAME $VERSION $FLAVOR
+# Example: ls /boot | sed -n "$KERNEL_NAMES" | sort -frV -k 4,4 -k 3,3
+KERNEL_NAMES=${KERNEL_NAMES:-'s/\(vmlinu[xz]-\)\([^-]*-[^-]*-\)\(.*\)/& \1 \2 \3/p'}
 
 # Add symlinks for each kernel variant
 kernel_links
