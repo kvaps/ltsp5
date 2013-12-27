@@ -82,13 +82,16 @@ kernel_variants(){
 
 kernel_links(){
     for variant in $(kernel_variants) ; do
-        newest_variant=$(LIST_KERNELS="$variant" kernel_versions | head -n 1) 
-        if [ -n "$newest_variant" ]; then
-            ln -sf vmlinuz-${newest_variant} /boot/vmlinuz-${variant}
-            if [ -f /boot/initrd.img-${newest_variant} ]; then
-                ln -sf initrd.img-${newest_variant} /boot/initrd.img-${variant}
+        LIST_KERNELS="$variant" kernel_split | head -n 1 | while read kfile kprefix kversion variant kmisc ; do
+
+            echo $kfile $kprefix $kversion $variant $misc
+            if [ -n "$kfile" ]; then
+                ln -sf "${kfile}" /boot/${kprefix}${variant}
+                if [ -f /boot/initrd.img-${kversion}${variant} ]; then
+                    ln -sf initrd.img-${kversion}${variant} /boot/initrd.img-${variant}
+                fi
             fi
-        fi
+        done
     done
 }
 
