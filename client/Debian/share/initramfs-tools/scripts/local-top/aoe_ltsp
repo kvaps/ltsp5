@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Basic initramfs support for AOE root.
+# To use it just specify "root=/dev/etherd/e0.0" in pxelinux.cfg/default.
+
+set -e
+
+PREREQ=""
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case $1 in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
+grep -qs "root=/dev/etherd/e" /proc/cmdline || exit 0
+
+. /scripts/functions
+
+# Wait for the interfaces to become available
+while ! ip link show >/dev/null 2>&1; do
+    wait_for_udev 1
+done
+
+# For AOE to work, the interfaces need to be up, but don't need IPs
+unset up
+for i in $(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p'); do
+    ip link set dev "$i" up && up=true
+done
+
+if [ -n "$up" ]; then
+    wait_for_udev 1
+    modprobe aoe
+    wait_for_udev 1
+fi
