@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Basic initramfs support for AOE root.
-# To use it just specify "root=/dev/etherd/e0.0" in pxelinux.cfg/default.
+# Basic initramfs support for AoE root.
+# To use it, install and configure the vblade package on the server,
+# and specify "root=/dev/etherd/e0.0" as a kernel parameter for the client.
 
 set -e
 
@@ -19,22 +20,29 @@ case $1 in
         ;;
 esac
 
+# If an AoE root device wasn't specified, exit
 grep -qs "root=/dev/etherd/e" /proc/cmdline || exit 0
-
 . /scripts/functions
 
-# Wait for the interfaces to become available
+# Wait for network interfaces to become available
 while ! ip link show >/dev/null 2>&1; do
     wait_for_udev 1
 done
 
-# For AOE to work, the interfaces need to be up, but don't need IPs
+# For AoE to work, interfaces need to be up, but don't need IPs
 unset up
 for i in $(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p'); do
-    ip link set dev "$i" up && up=true
+    if ip link set dev "$i" up; then
+         up=true
+    fi
 done
 
+# Wait up to 4 seconds for interfaces to become "up" before modprobing aoe
 if [ -n "$up" ]; then
+    for i in 1 2 3 4; do
+        ip -oneline link show up | grep -vw lo | grep -q LOWER_UP && break
+        sleep 1
+    done
     wait_for_udev 1
     modprobe aoe
     wait_for_udev 1
