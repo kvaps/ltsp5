@@ -83,8 +83,6 @@ kernel_variants(){
 kernel_links(){
     for variant in $(kernel_variants) ; do
         LIST_KERNELS="$variant" kernel_split | head -n 1 | while read kfile kprefix kversion variant kmisc ; do
-
-            echo $kfile $kprefix $kversion $variant $misc
             if [ -n "$kfile" ]; then
                 ln -sf "${kfile}" /boot/${kprefix}${variant}
                 if [ -f /boot/initrd.img-${kversion}${variant} ]; then
