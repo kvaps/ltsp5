@@ -20,9 +20,12 @@ case "$RUNLEVEL" in
 esac
 
 disconnect() {
+    # Stop trapping
+    trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
+
     echo "$message" >&2
     nbd-client -d /dev/nbd0
-    echo $key > /proc/sysrq-trigger
+    echo "$key" > /proc/sysrq-trigger
 }
 
 # Disconnect swap nbd devices first
@@ -46,7 +49,7 @@ while read device etc; do
 done < /proc/swaps
 
 # If we're not using an nbd root, exit
-grep -qw "nbdroot" /proc/cmdline || exit 0
+grep -q "root=/dev/nbd." /proc/cmdline || exit 0
 
 trap "disconnect" 0 HUP INT QUIT KILL SEGV PIPE TERM
 sync
