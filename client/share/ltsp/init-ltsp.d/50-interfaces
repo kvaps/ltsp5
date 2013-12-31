@@ -6,6 +6,6 @@ auto lo
 iface lo inet loopback
 
 auto $DEVICE
-iface $DEVICE inet manual
+iface $DEVICE inet ${NET_DEVICE_METHOD:-"manual"}
 EOF
 fi
