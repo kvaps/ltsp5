@@ -3,7 +3,7 @@ case "$MODE" in
         ARCH=${ARCH:-"$(dpkg --print-architecture)"}
         APT_GET_OPTS=${APT_GET_OPTS:-"-y"}
         DIST=${DIST:-"$(lsb_release -s -c)"}
-        MIRROR=${MIRROR:-"http://cdn.debian.net/debian"}
+        MIRROR=${MIRROR:-"http://http.debian.net/debian"}
         COMPONENTS=${COMPONENTS:-"main"}
         EARLY_PACKAGES=${EARLY_PACKAGES:-"ltsp-client"}
         DEBOOTSTRAPOPTS=${DEBOOTSTRAPOPTS:-"--variant=minbase"}
