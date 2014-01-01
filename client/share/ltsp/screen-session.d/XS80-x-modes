@@ -1,31 +1,31 @@
 # if X_MODE_* are set and xrandr is disabled, generate a Display subsection
 # with the defined modes
 
-modes=
-modelines=
+unset modes
+unset modelines
 
 if boolean_is_true "$XRANDR_DISABLE"; then
-  for s in "$X_MODE_0" "$X_MODE_1" "$X_MODE_2"; do
-    read -r mode modeline <<EOF
-`printf '%s' "$s"`
+    while read -r mode modeline ; do
+        test -n "$mode" || continue
+        modes="${modes} \"${mode}\" "
+        test -n "$modeline" || continue
+        if [ -z "${modelines}" ]; then
+            modelines="        Modeline \"${mode}\" ${modeline}"
+        else
+            modelines="${modelines}
+        Modeline \"${mode}\" ${modeline}"
+        fi
+    done <<EOF
+$(env | sort | sed -n 's/^X_MODE_[0-9]=//p')
 EOF
-    test -n "$mode" || continue
-    CONFIGURE_X="True"
-    modes="$modes \"$mode\""
-    test -n "$modeline" || continue
-    modelines=`cat <<EOF
-"$mode" $modeline
-$modelines
-EOF`
-  done
 
-  if test -n "$modes"; then
-    eval "set_x_modes() { printf '        Modes %s\\n' '$modes'; }"
-    display_hacks="$display_hacks set_x_modes"
-  fi
-  if test -n "$modelines"; then
-    xorg_conf_src=`printf '%s\n' "$modelines" | sed 's/.*/        Modeline &/'`
-    eval "set_x_modelines() { printf '%s\n' '$xorg_conf_src'; }"
-    monitor_hacks="$monitor_hacks set_x_modelines"
-  fi
+    if [ -n "$modes" ]; then
+        set_x_modes() { printf '        Modes %s\n' "${modes}"; }
+        CONFIGURE_X="True"
+        display_hacks="$display_hacks set_x_modes"
+    fi
+    if [ -n "$modelines" ]; then
+        set_x_modelines() { printf '%s\n' "${modelines}" ; }
+        monitor_hacks="$monitor_hacks set_x_modelines"
+    fi
 fi
