@@ -29,9 +29,9 @@ fi
 if [ -n "$DNS_SERVER" ] || [ -n "$SEARCH_DOMAIN" ]; then
     # Deal with resolvconf
     if [ -x /sbin/resolvconf ] && ( [ -L /etc/resolv.conf ] || [ -e /var/lib/resolvconf/convert ] ); then
-        mkdir -p /run/resolvconf/interface/
+        mkdir -p /etc/resolvconf/resolv.conf.d/
         resolv_method=resolvconf
-        resolv=/run/resolvconf/interface/LTSP
+        resolv=/etc/resolvconf/resolv.conf.d/base
     else
         resolv_method=static
         resolv=/etc/resolv.conf
