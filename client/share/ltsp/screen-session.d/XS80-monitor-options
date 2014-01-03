@@ -2,18 +2,10 @@
 # using the X_MONITOR_OPTION_01 .. X_MONITOR_OPTION_10 lts.conf vars
 #
 
-if [ -n "$(env|awk -F = '/^X_MONITOR_OPTION_(0[1-9]|10)=/{print $2}')" ]; then
+mon_options=$(env | sort -V | sed -n 's/^X_MONITOR_OPTION_[0-9]*=/        Option /p')
+
+if [ -n "$mon_options" ]; then
     monitor_hacks="$monitor_hacks set_mon_options"
-
-    # Auto-set CONFIGURE_X
     CONFIGURE_X="True"
-
-    set_mon_options() {
-        for i in 01 02 03 04 05 06 07 08 09 10; do
-            eval X_MONITOR_OPTION="\$X_MONITOR_OPTION_$i"
-            if [ -n "${X_MONITOR_OPTION}" ]; then
-                echo "        Option ${X_MONITOR_OPTION}"
-            fi
-        done
-    }
+    set_mon_options() { echo "$mon_options"; }
 fi

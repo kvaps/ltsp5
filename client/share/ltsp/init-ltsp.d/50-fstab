@@ -24,4 +24,4 @@ if [ -n "$NFS_HOME" ]; then
 fi
 
 # Put FSTAB_0 to FSTAB_9 lts.conf options to fstab
-env | sed -n '/^FSTAB_[0-9]=/s///p' >> /etc/fstab
+env | sort -V | sed -n 's/^FSTAB_[0-9]*=//p' >> /etc/fstab

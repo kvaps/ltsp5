@@ -16,7 +16,7 @@ if boolean_is_true "$XRANDR_DISABLE"; then
         Modeline \"${mode}\" ${modeline}"
         fi
     done <<EOF
-$(env | sort | sed -n 's/^X_MODE_[0-9]=//p')
+$(env | sort -V | sed -n 's/^X_MODE_[0-9]*=//p')
 EOF
 
     if [ -n "$modes" ]; then

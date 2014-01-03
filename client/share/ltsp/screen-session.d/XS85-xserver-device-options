@@ -3,20 +3,10 @@
 # or the older X_DEVICE_OPTION_01 .. X_DEVICE_OPTION_10 lts.conf vars
 #
 
-if [ -n "$(env|awk -F = '/^X_(DEVICE_)?OPTION_(0[1-9]|10)=/{print $2}')" ]; then
+dev_options=$(env | sort -V | sed -n 's/^X_OPTION_[0-9]*=/        Option /p')
+
+if [ -n "$dev_options" ]; then
     device_hacks="$device_hacks set_dev_options"
     CONFIGURE_X="True"
-
-    set_dev_options() {
-        for i in 01 02 03 04 05 06 07 08 09 10; do
-            eval X_DEVICE_OPTION="\$X_OPTION_$i"
-            if [ -z "${X_DEVICE_OPTION}" ]; then
-                # backwards compatibility for ltsp 4.x
-                eval X_DEVICE_OPTION="\$X_DEVICE_OPTION_$i"
-            fi
-            if [ -n "${X_DEVICE_OPTION}" ]; then
-                echo "        Option ${X_DEVICE_OPTION}"
-            fi
-        done
-    }
+    set_dev_options() { echo "$dev_options"; }
 fi
