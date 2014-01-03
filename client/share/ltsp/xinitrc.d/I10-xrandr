@@ -88,8 +88,9 @@ done
 
 [ -n "${XRANDR_ARGS}" ] && ${XRANDR} ${XRANDR_ARGS}
 
-# XRANDR_COMMAND_[0-9] can be a bit less complex and allows defining new modes
-env | sed -n '/^XRANDR_COMMAND_[0-9]=/s///p' | while read command; do
+# XRANDR_COMMAND_n can be a bit less complex and allows defining new modes
+env | sort -V | sed -n 's/^XRANDR_COMMAND_[0-9]*=//p' |
+while read command; do
     # Remove possible "xrandr" in front of the command
     command=${command#xrandr}
     xrandr $command
