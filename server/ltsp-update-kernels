@@ -89,6 +89,11 @@ update_kernels() {
     fi
     echo "Updating $tftpdir directories for chroot: $name"
 
+    # Source distro-specific variables from the chroot
+    unset KERNEL_NAMES INITRD_NAME
+    if [ -f "$chroot/etc/ltsp/update-kernels.conf" ]; then
+        . "$chroot/etc/ltsp/update-kernels.conf"
+    fi
     mkdir -p "$tftpboot/$name"
     cp -a "$chroot/boot/." "$tftpboot/$name/"
 
@@ -122,6 +127,42 @@ update_kernels() {
 
     # Cleanup old kernels and images from tftpboot directory
     cleanup_kernels "$name" "$tftpboot" "$chroot"
+
+    link_kernel_flavors "$tftpboot/$name"
+}
+
+# Create symlinks for each kernel flavor in the tftp dir.
+# It requires that the distro-specific $KERNEL_NAMES and $INITRD_NAME variables
+# are declared in $CHROOT/etc/ltsp/update-kernels.conf.
+link_kernel_flavors() {
+    local tftpname last_flavor file name version flavor initrd
+
+    tftpname=$1
+    if [ ! -d "$tftpname" ]; then
+        echo "Directory $tftpname does not exist"
+        return 1
+    fi
+
+    # Those defaults should work on debian-based distros, but shouldn't hurt
+    # elsewhere because they wouldn't match actual files and they'd be ignored.
+    KERNEL_NAMES=${KERNEL_NAMES:-'s/\(vmlinu[xz]-\)\([^-]*-[^-]*-\)\(.*\)/& \1 \2 \3/p'}
+    INITRD_NAME=${INITRD_NAME:-'s/vmlinu[xz]/initrd.img/p'}
+
+    last_flavor=
+    find "$tftpname" -mindepth 1 -maxdepth 1 -type f -printf "%f\n" \
+    | sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3 \
+    | while read file name version flavor; do
+        if [ "$flavor" != "$last_flavor" ]; then
+            initrd=$(echo "$file" | sed -n "$INITRD_NAME")
+            if [ ! -e "$tftpname/$initrd" ]; then
+                echo "Ignoring $file because the matching $initrd doesn't exist" >&2
+                continue
+            fi
+            ln -sf "$file" "$tftpname/$name$flavor"
+            ln -sf "$initrd" "$tftpname/$(echo "$name$flavor" | sed -n "$INITRD_NAME")"
+            last_flavor=$flavor
+        fi
+    done
 }
 
 # distro specific functions

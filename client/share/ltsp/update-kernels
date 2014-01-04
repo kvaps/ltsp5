@@ -67,7 +67,7 @@ kernel_split() {
                     ;;
             esac
         done
-    done | sed -n "$KERNEL_NAMES" | sort -frV -k 3,3 -k 4,4
+    done | sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3
 
     eval "$orig_flags"
 }
@@ -80,19 +80,6 @@ kernel_variants(){
     kernel_split | awk '{print $4}' | sort -u
 }
 
-kernel_links(){
-    for variant in $(kernel_variants) ; do
-        LIST_KERNELS="$variant" kernel_split | head -n 1 | while read kfile kprefix kversion variant kmisc ; do
-            if [ -n "$kfile" ]; then
-                ln -sf "${kfile}" /boot/${kprefix}${variant}
-                if [ -f /boot/initrd.img-${kversion}${variant} ]; then
-                    ln -sf initrd.img-${kversion}${variant} /boot/initrd.img-${variant}
-                fi
-            fi
-        done
-    done
-}
-
 # This also sources vendor functions and .conf file settings
 . /usr/share/ltsp/ltsp-client-functions
 require_root
@@ -103,10 +90,11 @@ CHROOT_NAME=${CHROOT_NAME:-"$(detect_arch)"}
 # Ensure default values for BOOT_METHODS, CMDLINE_LINUX_DEFAULTS, CMDLINE_NFS 
 # and CMDLINE_NBD. Distros *should* ship an /etc/ltsp/update-kernels.conf with
 # appropriate values for their distro.
-BOOT_METHODS=${BOOT_METHODS:-"NFS NBD"}
+BOOT_METHODS=${BOOT_METHODS:-"NFS NBD AOE"}
 CMDLINE_LINUX_DEFAULTS=${CMDLINE_LINUX_DEFAULTS:-"ro init=/sbin/init-ltsp"}
 CMDLINE_NFS=${CMDLINE_NFS:-"root=/dev/nfs ip=dhcp"}
-CMDLINE_NBD=${CMDLINE_NBD:-"root=/dev/nbd0 ip=dhcp"}
+CMDLINE_NBD=${CMDLINE_NBD:-"root=/dev/nbd0"}
+CMDLINE_AOE=${CMDLINE_AOE:-"root=/dev/etherd/e0.0"}
 
 # Set a default BOOTPROMPT_OPTS using the first defined in BOOT_METHODS
 boot_method_default=$(echo $BOOT_METHODS | awk '{print $1}')
@@ -114,11 +102,8 @@ cmdline_method_default=$(eval echo '$CMDLINE_'$boot_method_default)
 BOOTPROMPT_OPTS="$CMDLINE_LINUX_DEFAULTS $cmdline_method_default"
 
 # A sed expression that matches all kernels and returns $FILE $NAME $VERSION $FLAVOR
-# Example: ls /boot | sed -n "$KERNEL_NAMES" | sort -frV -k 4,4 -k 3,3
+# Example: ls /boot | sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3
 KERNEL_NAMES=${KERNEL_NAMES:-'s/\(vmlinu[xz]-\)\([^-]*-[^-]*-\)\(.*\)/& \1 \2 \3/p'}
-
-# Add symlinks for each kernel variant
-kernel_links
 
 if [ -f /usr/lib/yaboot/yaboot ]; then
     cp -a -v /usr/lib/yaboot/yaboot $BOOT
