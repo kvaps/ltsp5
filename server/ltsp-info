@@ -34,6 +34,7 @@ Options:
   -n, --no-server-info          Do not display server information.
   -v, --verbose                 Display more information, such as including the contents
                                 of detected files.
+      --version                 Output version information and exit.
 EOF
 }
 
@@ -103,6 +104,7 @@ for opt in $@ ; do
         --help|-h) usage; exit 0 ;;
         --no-server-info|-n) server_info="false" ;;
         --verbose|-v) verbose="true" ;;
+        --version) ltsp_version; exit 0 ;;
     esac
 done
 

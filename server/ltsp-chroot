@@ -28,6 +28,7 @@ Options:
   -m, --mount-all               If set, mounts the /proc, /dev and package directories to the chroot
                                 before chrooting.
   -r, --copy-resolv-conf        If set, copies the server resolv.conf to the chroot previous to chrooting.
+      --version                 Output version information and exit.
 EOF
 }
 
@@ -99,7 +100,7 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 
 # The command line parameters override the configuration file settings
 if ! args=$(getopt -n "$0" -o +a:b:cdhmpr -l \
-    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf' -- "$@"); then
+    'arch:,base:,mount-package-cache,mount-dev,help,mount-all,mount-proc,copy-resolv-conf,version' -- "$@"); then
     exit 1
 fi
 eval "set -- $args"
@@ -113,6 +114,7 @@ while true; do
         -m|--mount-all) MOUNT_ALL=true ;;
         -p|--mount-proc) MOUNT_PROC=true ;;
         -r|--copy-resolv-conf) COPY_RESOLV_CONF=true ;;
+        --version) ltsp_version; exit 0 ;;
         --) shift; break ;;
         *) die "$0: Internal error!" ;;
     esac

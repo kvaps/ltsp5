@@ -188,6 +188,7 @@ detect_latest_kernel() {
 # Add commandline option to handle --help
 add_option "help" "`eval_gettext "display this help message"`" "regular" "false"
 add_option "extra-help" "`eval_gettext "display help for all available commandline options"`" "regular" "false"
+add_option "version" "`eval_gettext "output version information and exit"`" "regular" "false"
 
 # Print usage information.
 usage() {
@@ -246,6 +247,11 @@ if [ -n "$option_help_value" ] || [ -n "$option_extra_help_value" ]; then
         ADVANCED_HELP="true"
     fi
     usage
+    exit 0
+fi
+
+if [ -n "$option_version_value" ]; then
+    ltsp_version
     exit 0
 fi
 

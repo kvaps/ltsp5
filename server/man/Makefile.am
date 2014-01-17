@@ -1,7 +1,7 @@
 dist_man_MANS = ltsp-chroot.8 ltsp-config.8 ltsp-info.1 \
 	ltsp-update-image.8 ltsp-update-kernels.8 ltsp-update-sshkeys.8 \
 	ltsp-build-client.8
-H2M_COMMON_FLAGS = -N --version-string=$(VERSION) --include="include/common.h2m"
+H2M_COMMON_FLAGS = -N --include="include/common.h2m"
 
 ltsp-build-client.8: ../ltsp-build-client
 	MODULES_BASE="../share/ltsp" $(HELP2MAN) -o ltsp-build-client.8 \

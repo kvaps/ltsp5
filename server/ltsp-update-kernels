@@ -44,6 +44,7 @@ chroots are processed.
 Options:
   -b, --base[=PATH]     The LTSP base directory. Defaults to /opt/ltsp if unspecified.
   -h, --help            Displays the ltsp-update-kernels help message.
+      --version         Output version information and exit.
 EOF
 }
 
@@ -214,7 +215,7 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 . ${MODULES_BASE}/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o b:h \
-    -l "base:,help" -- "$@")
+    -l "base:,help,version" -- "$@")
 then
     exit 1
 fi
@@ -223,6 +224,7 @@ while true ; do
     case "$1" in
         -b|--base) shift; BASE=$1 ;;
         -h|--help) usage; exit 0 ;;
+        --version) ltsp_version; exit 0 ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
     esac

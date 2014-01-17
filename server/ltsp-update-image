@@ -49,6 +49,7 @@ Options:
   -m, --no-compress         Don't compress the generated image.
   -n, --no-backup           Don't backup chroot.img to chroot.img.old.
   -r, --revert              Swap chroot.img with chroot.img.old and update kernels.
+      --version             Output version information and exit.
 EOF
 }
 
@@ -250,7 +251,7 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 . ${MODULES_BASE}/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o "b:ce:fhmnr" \
-    -l "base:,cleanup,exclude:,config-nbd,help,no-compress,no-backup,revert" -- "$@")
+    -l "base:,cleanup,exclude:,config-nbd,help,no-compress,no-backup,revert,version" -- "$@")
 then
     exit 1
 fi
@@ -265,6 +266,7 @@ while true ; do
         -m|--no-compress) NO_COMPRESS=true ;;
         -n|--no-backup) NO_BACKUP=true ;;
         -r|--revert) REVERT=$1 ;;
+        --version) ltsp_version; exit 0 ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
     esac

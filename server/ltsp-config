@@ -33,6 +33,7 @@ Options:
   -l, --language[=LANG]         Preferred language for configuration files.
                                 Support varies by distribution.
   -o, --overwrite               Overwrite existing configuration files.
+      --version                 Output version information and exit.
 
 Tools:
   dnsmasq                       Configure dnsmasq.
@@ -251,7 +252,7 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 . ${MODULES_BASE}/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o "d:hl:o" \
-    -l directory,help,language,overwrite,no-proxy-dhcp -- "$@")
+    -l directory,help,language,overwrite,no-proxy-dhcp,version -- "$@")
 then
     exit 1
 fi
@@ -265,6 +266,7 @@ while true ; do
         # specified it.
         -l|--language) shift; LANGUAGE=$1 ;;
         -o|--overwrite) OVERWRITE=true ;;
+        --version) ltsp_version; exit 0 ;;
         --no-proxy-dhcp) NO_PROXY_DHCP=true ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;

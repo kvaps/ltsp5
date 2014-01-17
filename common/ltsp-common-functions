@@ -8,6 +8,15 @@ else
     sourced_ltsp_common_functions=true
 fi
 
+# All tools should support the standard --version option, see
+# http://www.gnu.org/prep/standards/html_node/_002d_002dversion.html
+ltsp_version()
+{
+    # Distributions should replace the version mentioned here with the actual
+    # version mentioned in the changelog, using `sed` in their packaging code.
+    echo "$ltsp_tool 1.0"
+}
+
 warn()
 {
     echo "$@" >&2
