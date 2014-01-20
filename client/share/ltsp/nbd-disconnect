@@ -7,11 +7,11 @@
 case "$RUNLEVEL" in
     0)
         key="o"
-        message="Shutting down NOW."
+        command="poweroff -f"
         ;;
     6)
         key="b"
-        message="Rebooting NOW."
+        command="reboot"
         ;;
     *)
         echo "nbd-disconnect should only be called by initscripts on reboot/shutdown." >&2
@@ -23,8 +23,13 @@ disconnect() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
 
-    echo "$message" >&2
+    # ltsp-client-core.upstart needs "console output" to show stderr
+    echo "nbd-disconnect executing: $command" >&2
+    # Cache the command in order to use it after nbd-client disconnects
+    $command --version >/dev/null 2>&1
     nbd-client -d "$root"
+    $command
+    # Hopefully this should never be reached
     echo "$key" > /proc/sysrq-trigger
 }
 
