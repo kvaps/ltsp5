@@ -47,24 +47,18 @@ grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
 bring_up_interfaces()
 {
 # Wait for the interfaces to become available
-# TODO: Find a better way. Setting PREREQs="udev", accessing /proc/net/dev,
-# calling ifconfig or ipconfig... something better than calling sleep
-while ! ip link show > /dev/null 2>&1; do
-    sleep 1
-done
-sleep 1
+wait_for_udev 10
 
 interfaces=${interface:-$(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')}
 if [ -z "$interfaces" ]; then
-    echo "No interfaces found! Aborting..."    1>&2
-    exit 1
+    panic "No interfaces found! Aborting..."
 fi
 
 # Bring up the interface(s)
 for i in $interfaces; do
     ip link set $i up
 done
-sleep 1
+wait_for_udev 1
 }
 
 # Analyze whatever information was provided in the kernel command line
@@ -280,6 +274,13 @@ sed -n "/[^=]*=[' ]*$/!s/.*/export &/p" "/run/net-$interface.conf" > /conf/param
 
 # Main
 [ "$xtrace" = "udhcp" ] && set -x    # Provide a kernel parameter to enable tracing
+. /scripts/functions
+# wait_for_udev() doesn't exist in older versions of initramfs-tools
+if ! type wait_for_udev >/dev/null 2>&1; then
+    wait_for_udev() {
+        sleep 1
+    }
+fi
 bring_up_interfaces
 process_kernel_parameters
 if dhcp_needed; then
