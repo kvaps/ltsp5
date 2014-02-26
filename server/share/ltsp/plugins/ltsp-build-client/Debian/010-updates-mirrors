@@ -1,0 +1,16 @@
+case "$MODE" in
+    commandline)
+        add_option "updates-mirror" "`eval_gettext "set the update mirror location"`" "advanced" "true"
+        ;;
+    configure)
+        if [ -n "$option_updates_mirror_value" ]; then
+            UPDATES_MIRROR="$option_updates_mirror_value"
+        fi
+        UPDATES_MIRROR=${UPDATES_MIRROR:-"$MIRROR"}
+        ;;
+    after-install)
+        if [ "$UPDATES_MIRROR" != "none" ]; then
+            add_mirrors "$UPDATES_MIRROR $DIST-updates $COMPONENTS"
+        fi
+        ;;
+esac
