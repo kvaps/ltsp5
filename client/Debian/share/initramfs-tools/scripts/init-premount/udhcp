@@ -46,19 +46,41 @@ grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
 
 bring_up_interfaces()
 {
-# Wait for the interfaces to become available
-wait_for_udev 10
+    local i
 
-interfaces=${interface:-$(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')}
-if [ -z "$interfaces" ]; then
-    panic "No interfaces found! Aborting..."
-fi
+    # Wait for the network interfaces to become available
+    i=0
+    while i=$(($i+1)); do
+        interfaces=$(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')
+        if [ -n "$interfaces" ]; then
+            break
+        elif [ $i -ge 10 ]; then
+            # After a while, give a shell to the user in case he can fix it
+            panic "No network interfaces found"
+            i=0
+        else
+            sleep 1
+        fi
+    done
 
-# Bring up the interface(s)
-for i in $interfaces; do
-    ip link set $i up
-done
-wait_for_udev 1
+    # Bring up the interface(s). $interface is set with BOOTIF.
+    for i in ${interface:-$interfaces}; do
+        ip link set dev $i up
+    done
+
+    # Wait for a network interface to be up
+    i=0
+    while i=$(($i+1)); do
+        if ip -oneline link show up | grep -vw lo | grep -q LOWER_UP; then
+            break
+        elif [ $i -ge 4 ]; then
+            # After a while, give a shell to the user in case he can fix it
+            panic "No network interfaces are up"
+            i=0
+        else
+            sleep 1
+        fi
+    done
 }
 
 # Analyze whatever information was provided in the kernel command line
@@ -275,12 +297,6 @@ sed -n "/[^=]*=[' ]*$/!s/.*/export &/p" "/run/net-$interface.conf" > /conf/param
 # Main
 [ "$xtrace" = "udhcp" ] && set -x    # Provide a kernel parameter to enable tracing
 . /scripts/functions
-# wait_for_udev() doesn't exist in older versions of initramfs-tools
-if ! type wait_for_udev >/dev/null 2>&1; then
-    wait_for_udev() {
-        sleep 1
-    }
-fi
 bring_up_interfaces
 process_kernel_parameters
 if dhcp_needed; then

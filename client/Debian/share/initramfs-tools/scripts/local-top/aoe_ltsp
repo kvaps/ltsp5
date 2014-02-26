@@ -24,26 +24,38 @@ esac
 grep -qs "root=/dev/etherd/e" /proc/cmdline || exit 0
 . /scripts/functions
 
-# Wait for network interfaces to become available
-while ! ip link show >/dev/null 2>&1; do
-    wait_for_udev 1
-done
-
-# For AoE to work, interfaces need to be up, but don't need IPs
-unset up
-for i in $(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p'); do
-    if ip link set dev "$i" up; then
-         up=true
+# Wait for the network interfaces to become available
+i=0
+while i=$(($i+1)); do
+    interfaces=$(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')
+    if [ -n "$interfaces" ]; then
+        break
+    elif [ $i -ge 10 ]; then
+        # After a while, give a shell to the user in case he can fix it
+        panic "No network interfaces found"
+        i=0
+    else
+        sleep 1
     fi
 done
 
-# Wait up to 4 seconds for interfaces to become "up" before modprobing aoe
-if [ -n "$up" ]; then
-    for i in 1 2 3 4; do
-        ip -oneline link show up | grep -vw lo | grep -q LOWER_UP && break
+# For AoE to work, interfaces need to be up, but don't need IPs
+for i in $interfaces; do
+    ip link set dev "$i" up
+done
+
+# Wait for a network interface to be up
+i=0
+while i=$(($i+1)); do
+    if ip -oneline link show up | grep -vw lo | grep -q LOWER_UP; then
+        break
+    elif [ $i -ge 4 ]; then
+        # After a while, give a shell to the user in case he can fix it
+        panic "No network interfaces are up"
+        i=0
+    else
         sleep 1
-    done
-    wait_for_udev 1
-    modprobe aoe
-    wait_for_udev 1
-fi
+    fi
+done
+modprobe aoe
+udevadm settle || true
