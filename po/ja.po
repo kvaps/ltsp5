@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-25 04:31+0000\n"
-"X-Generator: Launchpad (build 16914)\n"
+"X-Launchpad-Export-Date: 2014-03-01 04:30+0000\n"
+"X-Generator: Launchpad (build 16948)\n"
 "Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -76,69 +76,69 @@ msgstr "ログインの警告"
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
 msgstr "ダウンロード済みパッケージファイルのキャッシュを保持する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr "インストール作業の最後で、インストールしたパッケージを表示する"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "デフォルトのロケールを設定する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
 msgstr "ミラーを指定する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr "デフォルトのミラーより優先するミラーを追加する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr "デフォルトのミラーよりも低い優先度でミラーを追加する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
 msgstr "セキュリティリポジトリのミラーを追加する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #, sh-format
 msgid "set the target architecture"
 msgstr "対象のアーキテクチャを設定する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr "シリアルコンソールを有効にする"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr "シリアルコンソールを有効にしています…"
@@ -169,8 +169,8 @@ msgstr "経過時間を出力する (秒)"
 msgid "Draw progress bar"
 msgstr "プログレスバーを表示する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr "root パスワードの設定を要求する。デフォルトでは無効"
@@ -180,8 +180,8 @@ msgstr "root パスワードの設定を要求する。デフォルトでは無�
 msgid "set the kernel modules packages to install."
 msgstr "インストールするカーネルモジュールパッケージを設定する"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr "ベースインストールの完了後にインストールするパッケージ一覧を設定する"
@@ -384,8 +384,8 @@ msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
 msgstr "もしあれば、既存の LTSP chroot を完全に削除する"
@@ -406,21 +406,21 @@ msgid ""
 "list of extra packages to install as part of the initial installation."
 msgstr "初期インストールの一部としてインストールする追加パッケージ群"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr "エラー: 未サポートのアーキテクチャです。--arch の引数を確認してください: %s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       サポートされている値: %s"
@@ -506,26 +506,26 @@ msgstr "エラー: %s は存在しません"
 msgid "Installing into: %s"
 msgstr "以下にインストールしています: %s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #, sh-format
 msgid "Path to kickstart file"
 msgstr "kickstart ファイルへのパス (path)"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr "chroot-creator キャッシュへのパス (path)"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #, sh-format
 msgid "Release version number"
 msgstr "リリースバージョン番号"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #, sh-format
 msgid "Distro name"
 msgstr "ディストリビューション名"
