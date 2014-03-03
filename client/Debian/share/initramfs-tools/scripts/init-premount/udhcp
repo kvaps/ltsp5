@@ -73,7 +73,7 @@ bring_up_interfaces()
     while i=$(($i+1)); do
         if ip -oneline link show up | grep -vw lo | grep -q LOWER_UP; then
             break
-        elif [ $i -ge 4 ]; then
+        elif [ $i -ge 10 ]; then
             # After a while, give a shell to the user in case he can fix it
             panic "No network interfaces are up"
             i=0
