@@ -46,15 +46,14 @@ grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
 
 bring_up_interfaces()
 {
-    local i
+    local i j
 
-    # Wait for the network interfaces to become available
+    # Wait for a network interface to become available
     i=0
     while i=$(($i+1)); do
-        interfaces=$(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')
-        if [ -n "$interfaces" ]; then
+        if [ -n "$(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')" ]; then
             break
-        elif [ $i -ge 10 ]; then
+        elif [ $i -ge 30 ]; then
             # After a while, give a shell to the user in case he can fix it
             panic "No network interfaces found"
             i=0
@@ -63,17 +62,18 @@ bring_up_interfaces()
         fi
     done
 
-    # Bring up the interface(s). $interface is set with BOOTIF.
-    for i in ${interface:-$interfaces}; do
-        ip link set dev $i up
-    done
-
     # Wait for a network interface to be up
     i=0
     while i=$(($i+1)); do
+        # Bring up the interfaces. Note that more interfaces may become
+        # available progressively, so `ip link show` needs to be re-run.
+        for j in $(ip -oneline link show | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p'); do
+            ip link set dev $j up
+        done
+        # Check if an interface is up
         if ip -oneline link show up | grep -vw lo | grep -q LOWER_UP; then
             break
-        elif [ $i -ge 10 ]; then
+        elif [ $i -ge 30 ]; then
             # After a while, give a shell to the user in case he can fix it
             panic "No network interfaces are up"
             i=0
@@ -169,9 +169,12 @@ do_dhcp()
 {
 hostname_param=${hostname:+"-h $hostname"}
 ip_param=${ip:+"-r $ip"}
-# If a specific interface wasn't provided, try all of them
-# TODO: it would be nice if we could prefer the interface with the connected cable, though
-interfaces=${interface:-$interfaces}
+# If a specific interface wasn't provided, try all of the connected ones
+if [ -n "$interface" ]; then
+    interfaces=$interface
+else
+    interfaces=$(ip -oneline link show | grep LOWER_UP | sed -n '/ether/s/[0-9 :]*\([^:]*\).*/\1/p')
+fi
 
 # Clear screen when quiet to dampen some noise
 [ "$quiet" = "y" ] && clear
