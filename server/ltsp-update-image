@@ -265,7 +265,7 @@ while true ; do
         -h|--help) usage; exit 0 ;;
         -m|--no-compress) NO_COMPRESS=true ;;
         -n|--no-backup) NO_BACKUP=true ;;
-        -r|--revert) REVERT=$1 ;;
+        -r|--revert) REVERT=true ;;
         --version) ltsp_version; exit 0 ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
