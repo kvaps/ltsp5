@@ -24,8 +24,13 @@ case $MODE in
         done
         
         if [ -n "$LOCALE" ]; then
-            export LANG=$(echo "$LOCALE" | awk '{print $1}')
-            echo "$LOCALE" >> $ROOT/etc/locale.gen
+            export LANG=$(echo "$LOCALE" | awk '{print $1}' | sed -e 's,.utf8,.UTF-8,g')
+            LOCALE_ENCODING=$(echo "$LOCALE" | awk '{print $2}') 
+            if [ -z "$LOCALE_ENCODING" ] && [ -f $ROOT/usr/share/i18n/SUPPORTED ]; then
+                grep ^"$LANG " $ROOT/usr/share/i18n/SUPPORTED >> $ROOT/etc/locale.gen
+            else
+            	echo "$LANG $LOCALE_ENCODING" >> $ROOT/etc/locale.gen
+            fi
             echo "LANG=$LANG" >> $ROOT/etc/default/locale
         fi
 
