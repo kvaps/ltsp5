@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-03-09 04:30+0000\n"
-"X-Generator: Launchpad (build 16948)\n"
+"X-Launchpad-Export-Date: 2014-05-30 04:30+0000\n"
+"X-Generator: Launchpad (build 17023)\n"
 "Language: fr\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -78,69 +78,69 @@ msgstr "Alerte de connexion"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
 msgstr "garder en cache les paquets téléchargés"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
 msgstr "liste des paquets à installer lors de l'installation finale"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "indiquer les paramètres régionaux (« locale ») par défaut"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
 msgstr "indiquer l'emplacement du miroir"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
 msgstr "ajouter un miroir, prioritaire sur le miroir par défaut"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
 msgstr "ajouter un miroir, sur lequel le miroir par défaut sera prioritaire"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #, sh-format
 msgid "add a security mirror"
 msgstr "ajouter un miroir sécurité"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #, sh-format
 msgid "set the target architecture"
 msgstr "Indiquer l'architecture cible"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #, sh-format
 msgid "enable serial console"
 msgstr "activer la console série"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
 msgstr "Activation de la console série..."
@@ -170,8 +170,8 @@ msgstr "Afficher le temps des différentes étapes (en secondes)"
 msgid "Draw progress bar"
 msgstr "Afficher une barre de progression"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr ""
@@ -182,8 +182,8 @@ msgstr ""
 msgid "set the kernel modules packages to install."
 msgstr "Indiquer la liste des modules de noyau à installer."
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
@@ -284,10 +284,10 @@ msgstr ""
 "créer une image pour utilisation avec NBD utilisant le système de fichiers "
 "specifié"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #, sh-format
 msgid "run most or all applications locally"
 msgstr "exécuter toutes les applications ou presque localement"
@@ -400,8 +400,8 @@ msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
 msgstr "purger le chroot LTSP s'il en existe un"
@@ -424,22 +424,22 @@ msgstr ""
 "liste des paquets supplémentaires à installer lors de l'installation "
 "initiale."
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 "Erreur : architecture non supportée. Vérifiez votre paramètre --arch : %s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       valeurs possibles : %s"
@@ -560,6 +560,7 @@ msgstr ""
 msgid "set the security mirror location"
 msgstr "indiquer l'emplacement du miroir de sécurité"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
 #, sh-format
 msgid "set the update mirror location"
@@ -575,10 +576,10 @@ msgstr "activer LTSP-Cluster"
 msgid "Load a user specific configuration file"
 msgstr "Charger un fichier de configuration propre à l'utilisateur"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:33
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr "Erreur : --arch %s appelé avec une architecture non supportée : %s"
@@ -623,32 +624,32 @@ msgstr "afficher ce message d'aide"
 msgid "display help for all available commandline options"
 msgstr "afficher l'aide pour toutes les options en ligne de commande"
 
-#: ../server/ltsp-build-client:194
+#: ../server/ltsp-build-client:195
 #, sh-format
 msgid "LTSP Build Client usage:"
 msgstr "Utilisation du client de construction LTSP :"
 
-#: ../server/ltsp-build-client:200
+#: ../server/ltsp-build-client:201
 #, sh-format
 msgid "  Regular options:"
 msgstr "  Options ordinaires :"
 
-#: ../server/ltsp-build-client:204
+#: ../server/ltsp-build-client:205
 #, sh-format
 msgid "  Advanced options:"
 msgstr "  Options avancées :"
 
-#: ../server/ltsp-build-client:216
+#: ../server/ltsp-build-client:217
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
 msgstr "info : l'installation du client LTSP est terminée."
 
-#: ../server/ltsp-build-client:218
+#: ../server/ltsp-build-client:219
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erreur : l'installation du client LTSP a échoué."
 
-#: ../common/ltsp-common-functions:182
+#: ../common/ltsp-common-functions:191
 #, sh-format
 msgid "translator-credits"
 msgstr ""
