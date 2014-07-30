@@ -136,4 +136,11 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
             echo "ServerName $LDM_SERVER" > /etc/cups/client.conf
         fi
     fi
+    # set user's password from tmp file created in ssh connection.
+    if [ -e /var/cache/ltsp/shadow.sed ]; then
+        sed -f /var/cache/ltsp/shadow.sed -i /etc/shadow
+    fi
 fi
+# remove unconditionally the shadow.sed file
+rm -f /var/cache/ltsp/shadow.sed
+
