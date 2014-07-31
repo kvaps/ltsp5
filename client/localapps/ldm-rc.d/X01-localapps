@@ -143,4 +143,3 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
 fi
 # remove unconditionally the shadow.sed file
 rm -f /var/cache/ltsp/shadow.sed
-
