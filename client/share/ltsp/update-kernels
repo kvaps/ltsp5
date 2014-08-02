@@ -138,19 +138,29 @@ else
 fi
 
 syslinux_dir=/usr/lib/syslinux
-if [ -f $syslinux_dir/pxelinux.0 ]; then
+pxelinux_dir=/usr/lib/PXELINUX
+test -d "$pxelinux_dir" || pxelinux_dir="$syslinux_dir"
+syslinux_modules_dir=/usr/lib/syslinux/modules/bios
+test -d "$syslinux_modules_dir" || syslinux_modules_dir="$syslinux_dir"
+
+if [ -f $pxelinux_dir/pxelinux.0 ]; then
     PXECFG=$BOOT/pxelinux.cfg
-    cp $syslinux_dir/pxelinux.0 $BOOT
+    cp $pxelinux_dir/pxelinux.0 $BOOT
 
     # copy over variant with extended support for gPXE
-    if [ -f "$syslinux_dir/gpxelinux.0" ]; then
-        cp $syslinux_dir/gpxelinux.0 $BOOT
+    if [ -f "$pxelinux_dir/gpxelinux.0" ]; then
+        cp $pxelinux_dir/gpxelinux.0 $BOOT
+    fi
+
+    # Needed by recent versions of pxelinux.
+    if [ -f "$syslinux_modules_dir/ldlinux.c32" ]; then
+        cp $syslinux_modules_dir/ldlinux.c32 $BOOT
     fi
 
     # copy the PXELINUX_DEFAULT helper program if installed, such as menu or
     # vesamenu
-    if [ -f "$syslinux_dir/$PXELINUX_DEFAULT.c32" ]; then
-        cp "$syslinux_dir/$PXELINUX_DEFAULT.c32" $BOOT
+    if [ -f "$syslinux_modules_dir/$PXELINUX_DEFAULT.c32" ]; then
+        cp "$syslinux_modules_dir/$PXELINUX_DEFAULT.c32" $BOOT
         case $PXELINUX_DEFAULT in
             # set a timeout, otherwise the menu will wait indefinitely
             menu|vesamenu) TIMEOUT=${TIMEOUT:-"50"} ;;
@@ -196,8 +206,8 @@ EOF
     done
 
     if boolean_is_true "$IFCPU64" ; then
-        if [ -f "$syslinux_dir/ifcpu64.c32" ]; then
-            cp "$syslinux_dir/ifcpu64.c32" $BOOT
+        if [ -f "$syslinux_modules_dir/ifcpu64.c32" ]; then
+            cp "$syslinux_modules_dir/ifcpu64.c32" $BOOT
         fi
         for method in $BOOT_METHODS ; do
             pxelinux_include_files="$pxelinux_include_files ltsp-ifcpu64-$method"
