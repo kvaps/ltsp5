@@ -51,6 +51,6 @@ chown ${KIOSKUSER} ${TMPDIR}
 # Edit passwd homedir entry for programs that look it up from there
 sed -i -e '\|'${KIOSKUSER}'|s|[^:]*\(:[^:]*\)$|'$TMPDIR'\1|' /etc/passwd
 
-su - ${KIOSKUSER} -c "XINITRC_DAEMON=${XINITRC_DAEMON} KIOSK_WM=${KIOSK_WM} xinit $xinitrc /usr/share/ltsp/kioskSession ${KIOSK_EXE} ${KIOSK_OPTIONS} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br" >/dev/null
+su - ${KIOSKUSER} -c "XINITRC_DAEMON=${XINITRC_DAEMON} KIOSK_WM=${KIOSK_WM} KIOSK_OPTIONS=${KIOSK_OPTIONS} xinit $xinitrc /usr/share/ltsp/kioskSession ${KIOSK_EXE} -- ${DISPLAY} vt${TTY} ${X_ARGS} -br" >/dev/null
 
 rm -rf ${TMPDIR}
