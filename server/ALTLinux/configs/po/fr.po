@@ -14,13 +14,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-05-30 04:31+0000\n"
-"X-Generator: Launchpad (build 17023)\n"
+"X-Launchpad-Export-Date: 2014-08-07 04:31+0000\n"
+"X-Generator: Launchpad (build 17147)\n"
 
 #: ltsp-login.sh:17
 #, sh-format
 msgid "Login Error"
-msgstr ""
+msgstr "Erreur d'authentification"
 
 #: ltsp-login.sh:20 ltsp-login.sh:28
 #, sh-format
@@ -45,4 +45,4 @@ msgstr "déjà connecté !"
 #: ltsp-login.sh:25
 #, sh-format
 msgid "Login Warning"
-msgstr ""
+msgstr "Alerte d'authentification"
