@@ -74,5 +74,6 @@ for x in $(echo ${ltsp_vars}); do
 
     if [ -n "$var" ] && [ -n "$value" ]; then
         export "$var"="$value"
+        echo "$var"="$value"
     fi
-done
+done >> /var/cache/ltsp/ltsp_config
