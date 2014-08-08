@@ -9,7 +9,7 @@ if [ -n "$SERVER" ]; then
     fileonly=${filename##*/}
     pathonly=${filename%$fileonly}
     lts_conf_temp=$(mktemp)
-    tftp "$SERVER" -c get ${pathonly:-/ltsp/i386/}${LTSCONF:-"lts.conf"} $lts_conf_temp >/dev/null
+    tftp "$SERVER" -c get ${pathonly:-/ltsp/$(detect_arch)/}${LTSCONF:-"lts.conf"} $lts_conf_temp >/dev/null
     # only overwrite lts.conf if it has non-zero size.
     if [ -s "$lts_conf_temp" ]; then
         mv "$lts_conf_temp" /etc/lts.conf
