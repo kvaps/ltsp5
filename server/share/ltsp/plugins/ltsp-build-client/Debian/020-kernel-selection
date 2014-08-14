@@ -25,6 +25,9 @@ case "$MODE" in
                     ;;
             esac
             case $ARCH in
+                armhf)
+                    KERNEL_VARIANT="armmp"
+                    ;;
                 i386|kfreebsd-i386)
                     KERNEL_VARIANT="486"
                     ;;
