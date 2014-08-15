@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-14 04:31+0000\n"
+"X-Launchpad-Export-Date: 2014-08-15 04:31+0000\n"
 "X-Generator: Launchpad (build 17156)\n"
 "Language: \n"
 
@@ -691,7 +691,8 @@ msgstr ""
 "  Rafael Neri https://launchpad.net/~rafepel\n"
 "  Renato Krause https://launchpad.net/~renatokrause\n"
 "  Sebastião Luiz Guerra https://launchpad.net/~sebastiao-luiz-guerra\n"
-"  Tiago Hillebrandt https://launchpad.net/~tiagohillebrandt"
+"  Tiago Hillebrandt https://launchpad.net/~tiagohillebrandt\n"
+"  Vinicius Almeida https://launchpad.net/~vinicius-algo"
 
 #, sh-format
 #~ msgid "NOTE: disabling security APT source for sid.  It does not exist."

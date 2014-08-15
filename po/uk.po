@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-14 04:31+0000\n"
+"X-Launchpad-Export-Date: 2014-08-15 04:31+0000\n"
 "X-Generator: Launchpad (build 17156)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -682,6 +682,7 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
+"  Stuartlittle1970@gmail.com https://launchpad.net/~stuartlittle1970\n"
 "  Yuri Chornoivan https://launchpad.net/~yurchor-gmail\n"
 "  yurchor https://launchpad.net/~yurchor-deactivatedaccount"
 
