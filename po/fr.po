@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: ltsp 5.1.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-13 21:04-0700\n"
-"PO-Revision-Date: 2013-11-23 12:33+0000\n"
-"Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
+"PO-Revision-Date: 2014-08-29 15:20+0000\n"
+"Last-Translator: Stéphane Graber <stgraber@stgraber.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-15 04:30+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"X-Launchpad-Export-Date: 2014-08-30 04:30+0000\n"
+"X-Generator: Launchpad (build 17176)\n"
 "Language: fr\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -26,7 +26,7 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:50
 #, sh-format
 msgid "Login Error"
-msgstr "Erreur de connexion"
+msgstr "Erreur d'authentification"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:31
 #: ../server/ALTLinux/configs/ltsp-login.sh:34
@@ -71,7 +71,7 @@ msgstr "Continuer"
 #: ../server/ALTLinux/configs/ltsp-login.sh:103
 #, sh-format
 msgid "Login Warning"
-msgstr "Alerte de connexion"
+msgstr "Alerte d'authentification"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:94
 #, sh-format
@@ -81,7 +81,7 @@ msgstr "Annuler"
 #: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr "erreur d'API : vous devez indiquer « true » ou « false »."
+msgstr "Erreur d'API: vous devez indiquer true (vrai) ou false (faux)."
 
 #: ../server/ltsp-build-client:189
 #, sh-format
@@ -101,27 +101,27 @@ msgstr ""
 #: ../server/ltsp-build-client:195
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr "Utilisation du client de construction LTSP :"
+msgstr "Usage pour la construction du client LTSP:"
 
 #: ../server/ltsp-build-client:201
 #, sh-format
 msgid "  Regular options:"
-msgstr "  Options ordinaires :"
+msgstr "  Options ordinaires:"
 
 #: ../server/ltsp-build-client:205
 #, sh-format
 msgid "  Advanced options:"
-msgstr "  Options avancées :"
+msgstr "  Options avancées:"
 
 #: ../server/ltsp-build-client:217
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr "info : l'installation du client LTSP est terminée."
+msgstr "info: l'installation du client LTSP est terminée avec succès."
 
 #: ../server/ltsp-build-client:219
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr "erreur : l'installation du client LTSP a échoué."
+msgstr "erreur: l'installation du client LTSP a échoué."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
@@ -155,7 +155,7 @@ msgstr "Indiquer l'architecture cible"
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
-"Erreur : architecture non supportée. Vérifiez votre paramètre --arch : %s"
+"Erreur: architecture non supportée. Vérifiez votre paramètre --arch: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
@@ -165,7 +165,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
-msgstr "       valeurs possibles : %s"
+msgstr "       valeurs possibles: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
@@ -195,11 +195,13 @@ msgstr "Nom de la distribution"
 #, sh-format
 msgid "Set kernel sources package, defaults to latest gentoo-sources"
 msgstr ""
+"Définir les paquets sources du noyau, par défaut la dernière sources de "
+"gentoo"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
 #, sh-format
 msgid "Set URI of custom kernel config"
-msgstr ""
+msgstr "Définir l'URI de configuration personnalisée du noyau"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
@@ -210,48 +212,49 @@ msgstr "purger le chroot LTSP s'il en existe un"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
+msgstr "Définir le pilote de la carte vidéo à installer"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
 msgid "Gentoo installer to use, defaults to kicktoo"
-msgstr ""
+msgstr "Installeur Gentoo à utiliser, par défaut kicktoo"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
 msgid "Path to installer profile"
-msgstr ""
+msgstr "Chemin du profil à installer"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
 msgid "Debug installer"
-msgstr ""
+msgstr "Déboguer l'installateur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:6
 #, sh-format
 msgid "Show installer external command output"
-msgstr ""
+msgstr "Montrer les commandes de sortie externe de l'installeur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:22
 #, sh-format
 msgid "Using installer: %s"
-msgstr ""
+msgstr "Utilisation de l'installeur: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:16
 #, sh-format
 msgid "ERROR: unsupported installer. Check your --installer argument: %s"
 msgstr ""
+"Erreur: installeur non-supporté. Vérifiez vos -- argument installeur: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:27
 #, sh-format
 msgid "Custom installer profile: %s"
-msgstr ""
+msgstr "Profil personnalisé d'installeur: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:30
 #, sh-format
 msgid "Default installer profile: %s"
-msgstr ""
+msgstr "Profil par défaut d'installeur: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
@@ -279,7 +282,7 @@ msgstr "Indiquer d'autres adresses de miroir (séparées par un espace)"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #, sh-format
 msgid "set the default locale"
-msgstr "indiquer les paramètres régionaux (« locale ») par défaut"
+msgstr "configurer les paramètres régionaux par défaut"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
@@ -345,7 +348,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr "Erreur : --arch %s appelé avec une architecture non supportée : %s"
+msgstr "Erreur: --arch %s appelé avec une architecture non supportée: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
@@ -392,7 +395,7 @@ msgstr "indiquer l'emplacement du miroir"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr "ajouter un miroir, prioritaire sur le miroir par défaut"
+msgstr "ajouter un miroir, qui sera prioritaire sur le miroir par défaut"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
@@ -404,7 +407,7 @@ msgstr "ajouter un miroir, sur lequel le miroir par défaut sera prioritaire"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
-msgstr "ajouter un miroir sécurité"
+msgstr "ajouter un miroir de sécurité"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
@@ -431,7 +434,7 @@ msgstr "Afficher une barre de progression"
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr "Indiquer la liste des modules de noyau à installer."
+msgstr "indiquer la liste des modules de noyau à installer."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
@@ -460,8 +463,8 @@ msgstr "liste des paquets à installer lors de l'installation finale"
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
 msgstr ""
-"indiquer la liste des paquets à installer une fois l'installation de base "
-"(« base-install ») achevée"
+"donner la liste des paquets à installer une fois l'installation de base "
+"terminée"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
@@ -496,7 +499,9 @@ msgstr "monter le répertoire de cache des paquets depuis le serveur"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr "monter un dossier du serveur comme cache de paquet pour le chroot"
+msgstr ""
+"monter un dossier du serveur comme répertoire de cache de paquet pour le "
+"chroot"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
@@ -512,8 +517,8 @@ msgstr "ne pas détecter automatiquement la configuration du proxy apt"
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
 msgstr ""
-"Note : ajout des distributions et des composants par défaut au miroir "
-"sécurité :"
+"NOTE: ajout des distributions et des composants par défaut au miroir "
+"sécurité:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/080-eatmydata:3
 #, sh-format
@@ -521,6 +526,8 @@ msgid ""
 "use eatmydata to speed up build times, at risk of data not getting written "
 "to disk"
 msgstr ""
+"utiliser eatmydata pour accélérer le temps de construction, au risque de ne "
+"pas avoir les données écrites sur le disque"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
