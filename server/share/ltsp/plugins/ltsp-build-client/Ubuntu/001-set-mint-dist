@@ -23,4 +23,25 @@ case "$MODE" in
             LATE_PACKAGES=${LATE_PACKAGES:-"linuxmint-keyring mint-meta-core mint-artwork-common ldm-mint-theme"}
         fi
         ;;
+    after-install)
+        if [ -n "$MINT_DIST" ]; then
+            cat << EOF > $ROOT/etc/apt/apt.conf.d/00recommends || true
+APT::Install-Recommends "false";
+Aptitude::Recommends-Important "false";
+EOF
+            cat << EOF > $ROOT/etc/apt/preferences.d/official-package-repositories.pref || true
+Package: *
+Pin: release o=linuxmint
+Pin-Priority: 700
+
+Package: *
+Pin: origin packages.linuxmint.com
+Pin-Priority: 700
+
+Package: *
+Pin: release o=Ubuntu
+Pin-Priority: 500
+EOF
+        fi
+        ;;
 esac
