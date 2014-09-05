@@ -191,8 +191,8 @@ if [ -f $pxelinux_dir/pxelinux.0 ]; then
     rm -f $PXECFG/ltsp* $PXECFG/default
 
     cat > $PXECFG/ltsp <<EOF
-# This file is regenerated when update-kernels runs.
-# Do not edit, see /etc/ltsp/update-kernels.conf instead.
+# This file is regenerated when update-kernels runs.  Do not edit
+# directly, edit the client's /etc/ltsp/update-kernels.conf instead.
 
 default ${PXELINUX_DEFAULT:-"ltsp-$boot_method_default"}
 ontimeout ${ONTIMEOUT:-"ltsp-$boot_method_default"}
