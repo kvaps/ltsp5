@@ -35,9 +35,9 @@ fi
 export XINITRC_DAEMON="${XINITRC_DAEMON-True}"
 
 # If no parameters were passed, set some reasonable defaults.
-if [ $# -eq 0 ]; then
-    RDP_OPTIONS=${RDP_OPTIONS:--f -u ''}
-    RDP_SERVER=${RDP_SERVER:-server}
+if [ -z "$*" ]; then
+    RDP_OPTIONS=${RDP_OPTIONS:-"-f -u ''"}
+    RDP_SERVER=${RDP_SERVER:-"server"}
 fi
 
 COMMAND="$basename $* $RDP_OPTIONS $RDP_SERVER"
