@@ -43,4 +43,4 @@ fi
 COMMAND="$basename $* $RDP_OPTIONS $RDP_SERVER"
 
 # The following logic is described at the top of xinitrc.
-exec xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" $X_ARGS >/dev/null
+exec xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" -nolisten tcp $X_ARGS >/dev/null
