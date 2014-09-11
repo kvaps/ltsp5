@@ -34,9 +34,7 @@ if boolean_is_true "${KIOSK_DAEMON:-"False"}"; then
     export XINITRC_DAEMON="True"
 fi
 
-if [ -x /usr/share/ltsp/xinitrc ]; then
-    xinitrc=/usr/share/ltsp/xinitrc
-fi
+xinitrc=/usr/share/ltsp/xinitrc
 
 KIOSKUSER=${KIOSKUSER:-"ltspkiosk"}
 if [ -z "$(getent passwd ${KIOSKUSER})" ]; then

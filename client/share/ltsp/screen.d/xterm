@@ -13,11 +13,7 @@ export HOME="${HOME:-/root}" USER="${USER:-root}"
 COMMAND="xterm $*"
 
 # The following logic is described at the top of xinitrc.
-if [ -x /usr/share/ltsp/xinitrc ]; then
-    xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" $X_ARGS >/dev/null
-else
-    eval "xinit $COMMAND -- $DISPLAY vt${TTY} $X_ARGS >/dev/null"
-fi
+xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" $X_ARGS >/dev/null
 
 if [ $? -ne 0 ]; then
     echo "Xserver failed, falling back to a text shell" >&2

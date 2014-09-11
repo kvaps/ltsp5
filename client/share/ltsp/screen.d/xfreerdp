@@ -43,8 +43,4 @@ fi
 COMMAND="$basename $* $RDP_OPTIONS $RDP_SERVER"
 
 # The following logic is described at the top of xinitrc.
-if [ -x /usr/share/ltsp/xinitrc ]; then
-    exec xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" $X_ARGS >/dev/null
-else
-    eval "exec xinit $COMMAND -- $DISPLAY vt${TTY} $X_ARGS >/dev/null"
-fi
+exec xinit /usr/share/ltsp/xinitrc "$COMMAND" -- "$DISPLAY" "vt${TTY}" $X_ARGS >/dev/null
