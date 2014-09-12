@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-17 04:30+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"X-Launchpad-Export-Date: 2014-09-12 04:31+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 "Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -123,10 +123,10 @@ msgstr "info: instalação do cliente LTSP finalizada com sucesso"
 msgid "error: LTSP client installation ended abnormally"
 msgstr "erro: instalação do cliente LTSP terminou de maneira anormal"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #, sh-format
 msgid "run most or all applications locally"
 msgstr "rodar a maioria ou todas aplicações locais"
@@ -136,31 +136,31 @@ msgstr "rodar a maioria ou todas aplicações locais"
 msgid "Release version number (el6,fc18,fc19) * Not working yet"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
 #, sh-format
 msgid "set the target architecture"
 msgstr "definir a arquitetura alvo"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr "ERRO: arquitetura não suportada. Confira seu argumento --arch: %s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
@@ -201,8 +201,8 @@ msgstr ""
 msgid "Set URI of custom kernel config"
 msgstr "Definir URI da configuração personalizada do kernel"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
 msgstr "remover LTSP chroot existente caso presente"
@@ -274,10 +274,10 @@ msgstr "Defina o número de processos de construção paralelos"
 msgid "Set extra mirror locations (space-separated)"
 msgstr "Definir localização dos espelhos extras (separado por espaço)"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "defina a localização padrão"
@@ -304,8 +304,8 @@ msgstr "URI de estágio 3"
 msgid "Set input device drivers to install"
 msgstr "Definir os drivers a instalar para os dispositivos de entrada"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
 msgstr "um simples modo de quiosque"
@@ -325,8 +325,8 @@ msgstr "forçar pular a compilação do squashfs (para o instalador do Debian)"
 msgid "set the security mirror location"
 msgstr "defina a localização do espelho de segurança"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
 #, sh-format
 msgid "set the update mirror location"
 msgstr "defina a localização do espelho de atualização"
