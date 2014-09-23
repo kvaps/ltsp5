@@ -9,4 +9,6 @@ case "$(cat /var/run/ltsp-logout-action)" in
         HALT)
             exec poweroff
             ;;
+	*) rm -f /var/run/ltsp-logout-action
+            ;;
 esac
