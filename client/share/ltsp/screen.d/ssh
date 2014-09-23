@@ -20,7 +20,7 @@ unset SSH_ARGS
 if [ -n "$1" ]; then
     SSH_ARGS=$*
 else
-    SSH_HOST=${SSH_HOST:-${SERVER}}
+    SSH_HOST=${SSH_HOST:-"server"}
 fi
 SSH_ARGS="$SSH_ARGS $SSH_HOST"
 
