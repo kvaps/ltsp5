@@ -17,7 +17,7 @@
 #
 
 unset SSH_ARGS
-if [ $# -ge 1 ]; then
+if [ -n "$1" ]; then
     SSH_ARGS=$*
 else
     SSH_HOST=${SSH_HOST:-${SERVER}}

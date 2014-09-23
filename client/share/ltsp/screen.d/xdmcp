@@ -16,7 +16,7 @@
 
 XDM_SERVER=${XDM_SERVER:-${SERVER}}
 
-if [ $# -lt 1 ]; then
+if [ -z "$1" ]; then
     X_ARGS="$X_ARGS -query ${XDM_SERVER}"
 else
     X_ARGS="$X_ARGS $*"
