@@ -11,12 +11,20 @@ if [ -z "$HOSTNAME" ]; then
     HOSTNAME="$HOSTNAME_BASE$HOSTNAME_EXTRA"
 fi
 
+if [ -z "$SEARCH_DOMAIN" ] && [ -n "$DNSDOMAIN" ]; then
+    SEARCH_DOMAIN="$DNSDOMAIN"
+fi
+
+if [ -n "$SEARCH_DOMAIN" ]; then
+    HOSTNAME_DOMAIN="${HOSTNAME}.${SEARCH_DOMAIN}"
+fi
+
 hostname "$HOSTNAME"
 echo "$HOSTNAME" > /etc/hostname
 
 cat <<EOF > /etc/hosts
 127.0.0.1 localhost
-127.0.0.2 $HOSTNAME
+127.0.0.2 $HOSTNAME_DOMAIN $HOSTNAME
 $SERVER ${SERVER_NAME:-"server"}
 
 # The following lines are desirable for IPv6 capable hosts
