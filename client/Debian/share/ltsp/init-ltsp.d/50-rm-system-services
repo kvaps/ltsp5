@@ -90,6 +90,6 @@ done
 
 if [ -x /bin/systemctl ]; then
    for service in $rm_services ; do
-       systemctl disable "$service"
+       systemctl --quiet disable "$service"
    done
 fi
