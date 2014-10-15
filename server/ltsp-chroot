@@ -128,4 +128,9 @@ require_root
 
 trap "post_chroot" 0 HUP INT QUIT KILL SEGV PIPE TERM
 pre_chroot
+
+# Unset temporary directory variables to avoid problems when directory
+# is missing inside the chroot. https://bugs.debian.org/765443
+unset TMPDIR TEMP TEMPDIR TMP
+
 LTSP_HANDLE_DAEMONS=false chroot "$ROOT" "$@"
