@@ -52,6 +52,7 @@ avahi-daemon          # mDNS/DNS-SD daemon
 bluetooth             # Bluetooth daemon
 brltty                # Braille terminal driver
 cups                  # CUPS Printing spooler and server
+cups-browsed          # CUPS browse daemon
 kerneloops            # Collects and submits kernel crash signatures
 network-manager       # Network connection manager
 ufw                   # Uncomplicated Firewall
