@@ -5,7 +5,7 @@ case "$MODE" in
     configure)
         if [ -n "$option_eatmydata_value" ]; then
             # load libeatmydata
-            libeatmydata=/usr/lib/libeatmydata/libeatmydata.so
+            libeatmydata=libeatmydata.so
             if [ -n "$LD_PRELOAD" ]; then
                 export LD_PRELOAD="$libeatmydata $LD_PRELOAD"
             else
