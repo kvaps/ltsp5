@@ -339,7 +339,7 @@ EOF
         $BOOT/uInitrd${version:+-"$version"}
 
 else
-    msg "Skipping ARM configuration.  Install the flash-kernel package if you need it."
+    msg "Skipping ARM configuration.  Install the u-boot-tools package if you need it."
 fi
 
 
