@@ -332,12 +332,12 @@ setenv bootargs \${bootargs} $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$boot
 
 # Compatibility variables for versions of u-boot without standardized
 # variable names.
-test -z \${fdtfile} && setenv fdtfile \${fdt_file}
-test -z \${fdt_addr_r} && setenv fdt_addr_r \${fdtaddr}
-test -z \${fdt_addr_r} && setenv fdt_addr_r \${fdt_addr}
-test -z \${kernel_addr_r} && setenv kernel_addr_r \${loadaddr}
-test -z \${ramdisk_addr_r} && setenv ramdisk_addr_r \${ramdiskaddr}
-test -z \${ramdisk_addr_r} && setenv ramdisk_addr_r \${rdaddr}
+test -z "\${fdtfile}" && setenv fdtfile \${fdt_file}
+test -z "\${fdt_addr_r}" && setenv fdt_addr_r \${fdtaddr}
+test -z "\${fdt_addr_r}" && setenv fdt_addr_r \${fdt_addr}
+test -z "\${kernel_addr_r}" && setenv kernel_addr_r \${loadaddr}
+test -z "\${ramdisk_addr_r}" && setenv ramdisk_addr_r \${ramdiskaddr}
+test -z "\${ramdisk_addr_r}" && setenv ramdisk_addr_r \${rdaddr}
 
 tftpboot \${kernel_addr_r} \${serverip}:${kernel_file} \\
 && tftpboot \${fdt_addr_r} \${serverip}:${fdt_dir}\${fdtfile} \\
