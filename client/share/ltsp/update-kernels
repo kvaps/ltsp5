@@ -348,6 +348,14 @@ EOF
 
         mkimage -A arm -O Linux -T script -C none -a 0x0 -e 0x0 \
             -n 'LTSP boot script' -d $BOOT/boot.ltsp $BOOT/boot.scr
+	
+        # Copy .dtb files to boot dir.
+        dtb_dirs="/usr/lib/linux-image-${version}/"
+        for dtb_dir in $dtb_dirs ; do
+            if [ -d "${dtb_dir}" ]; then
+                cp -r ${dtb_dir}/. $BOOT/dtbs-${version}/
+            fi
+        done
 
     else
         msg "Skipping ARM configuration.  Install the u-boot-tools package if you need it."
