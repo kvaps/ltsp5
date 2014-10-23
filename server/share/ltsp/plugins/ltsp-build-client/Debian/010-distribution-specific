@@ -1,7 +1,7 @@
 case "$MODE" in
     before-install)
         case "$DIST" in
-            sid)
+            sid|unstable)
                 echo "`eval_gettext "NOTE: disabling security and updates APT sources for sid.  They do not exist."`"
                 SECURITY_MIRROR=none
                 UPDATES_MIRROR=none
