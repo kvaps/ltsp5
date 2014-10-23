@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-23 04:30+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2014-10-23 04:30+0000\n"
+"X-Generator: Launchpad (build 17203)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -93,7 +93,7 @@ msgstr "papar bantuan untuk semua pilihan baris perintah yang tersedia"
 #: ../server/ltsp-build-client:191
 #, sh-format
 msgid "output version information and exit"
-msgstr ""
+msgstr "output maklumat versi dan keluar"
 
 #: ../server/ltsp-build-client:195
 #, sh-format
@@ -483,6 +483,8 @@ msgstr ""
 msgid ""
 "NOTE: disabling security and updates APT sources for sid.  They do not exist."
 msgstr ""
+"PERHATIAN: melumpuhkan keselamatan dan kemaskini sumber APTuntuk sid. Ia "
+"tidak wujud."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
 #, sh-format
