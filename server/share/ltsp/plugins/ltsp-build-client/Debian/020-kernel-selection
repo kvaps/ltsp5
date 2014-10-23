@@ -40,7 +40,7 @@ case "$MODE" in
                 alpha)
                     KERNEL_VARIANT="alpha-generic"
                     ;;
-                powerpc|amd64) 
+                amd64|arm64|powerpc*|s390*|sparc64)
                     KERNEL_VARIANT="$ARCH"
                     ;;
                 *)
