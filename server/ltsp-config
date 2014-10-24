@@ -56,7 +56,7 @@ replace_line() {
     test -f "$file" || die "File not found: $file"
 
     if grep -q "$match" "$file"; then
-        sed "s/$match/$replace/" -i "$file"
+        sed "s%$match%$replace%" -i "$file"
     else
         printf "$replace\n" >> "$file"
     fi
