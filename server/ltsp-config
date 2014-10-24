@@ -41,6 +41,7 @@ Tools:
   isc-dhcp-server               Configure isc-dhcp-server.
   lts.conf                      Create a sample lts.conf.
   nbd-server                    Configure nbd-server.
+  nfs                           Configure nfs exports.
 EOF
 }
 
@@ -238,6 +239,20 @@ THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
     fi
 }
 
+config_nfs() {
+    local nfs_exports nfs_line
+    for cfg in /etc/exports /etc/exports.d/*.exports ; do
+        if [ -f "${cfg}" ] && grep -q "^${BASE}" "${cfg}" ; then
+            # Already configured, do nothing
+            return 0
+        fi
+    done
+    nfs_exports=/etc/exports
+    nfs_line="${BASE} *(ro,no_root_squash,async,no_subtree_check)" 
+    replace_line "^{BASE}.*" "${nfs_line}" "${nfs_exports}"
+    service nfs-kernel-server restart
+}
+
 # distro specific functions
 
 # Keeping this separate function to clearly show it can be distro specific. 
@@ -275,7 +290,7 @@ while true ; do
 done
 
 case "$1" in
-    dnsmasq|isc-dhcp-server|lts.conf|nbd-server)
+    dnsmasq|isc-dhcp-server|lts.conf|nbd-server|nfs)
         config_function=$(echo "config_$1" | tr -c "[a-z\n]" "_")
         ;;
     *) die "$(usage)" ;;
