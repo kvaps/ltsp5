@@ -1,0 +1,5 @@
+# Disable suspend and hibernate on LTSP clients
+
+if [ -f /usr/share/polkit-1/actions/org.freedesktop.upower.policy ]; then
+    sed 's,<allow_active>yes</allow_active>,<allow_active>no</allow_active>,' -i /usr/share/polkit-1/actions/org.freedesktop.upower.policy
+fi
