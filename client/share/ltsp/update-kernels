@@ -59,6 +59,9 @@ kernel_split() {
     set -f
     for kernel in $(find "/boot/" -type f -name "$KERNEL_PREFIX$KERNEL_SUFFIX" -printf "%f\n"); do
         # Validate the "arch"
+        if [ "${LIST_KERNELS}" = "ALL" ]; then
+            LIST_KERNELS="*"
+        fi
         for arch in ${LIST_KERNELS:-*}; do
             case "$kernel" in
                 $KERNEL_PREFIX$arch$KERNEL_SUFFIX)
@@ -73,7 +76,9 @@ kernel_split() {
 }
 
 kernel_versions(){
-    kernel_split | awk '{print $3$4}'
+    for arch in ${LIST_KERNELS:-"ALL"} ; do
+        LIST_KERNELS="$arch" kernel_split | awk '{print $3$4}'
+    done
 }
 
 kernel_variants(){
@@ -205,7 +210,7 @@ EOF
         pxelinux_include_files="$pxelinux_include_files ltsp-$method"
         # Get the preferred default kernel, preferred 32-bit kernel, or any 
         # kernel.
-        version=$(LIST_KERNELS="$LIST_KERNELS_DEFAULT $LIST_KERNELS_32 *" kernel_versions | head -n 1)
+        version=$(LIST_KERNELS="$LIST_KERNELS_DEFAULT $LIST_KERNELS_32 ALL" kernel_versions | head -n 1)
     	cat > $PXECFG/ltsp-$method <<EOF
 # This file is regenerated when update-kernels runs.
 # Do not edit, see /etc/ltsp/update-kernels.conf instead.
@@ -250,7 +255,7 @@ EOF
                     32) list_kernels="$LIST_KERNELS_32" ;;
                 esac
                 # only return the newest kernel of appropriate type.
-                version=$(LIST_KERNELS="$list_kernels *" kernel_versions | head -n 1)
+                version=$(LIST_KERNELS="$list_kernels ALL" kernel_versions | head -n 1)
             	cat >> $PXECFG/ltsp-ifcpu64-$method <<EOF
 
 label ltsp-$method-$type
@@ -313,7 +318,7 @@ if [ "$(detect_arch)" = "armhf" ] || [ "$(detect_arch)" = "armel" ]; then
     if which mkimage >/dev/null; then
         # Generate a boot script for use with versions of u-boot
         # supporting bootz.
-        version=$(LIST_KERNELS="$LIST_KERNELS_DEFAULT $LIST_KERNELS_ARM *" kernel_versions | head -n 1)
+        version=$(LIST_KERNELS="$LIST_KERNELS_DEFAULT $LIST_KERNELS_ARM ALL" kernel_versions | head -n 1)
         kernel_file="/ltsp/${CHROOT_NAME}/vmlinuz-${version}"
         initrd_file="/ltsp/${CHROOT_NAME}/initrd.img-${version}"
         fdt_dir="/ltsp/${CHROOT_NAME}/dtbs-${version}/"
