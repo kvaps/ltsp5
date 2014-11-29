@@ -67,7 +67,7 @@ kernel_split() {
                     ;;
             esac
         done
-    done | sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3
+    done | sed -n "$KERNEL_NAMES" | sort -k 4,4V -k 3,3rV
 
     eval "$orig_flags"
 }
@@ -102,7 +102,7 @@ cmdline_method_default=$(eval echo '$CMDLINE_'$boot_method_default)
 BOOTPROMPT_OPTS="$CMDLINE_LINUX_DEFAULTS $cmdline_method_default"
 
 # A sed expression that matches all kernels and returns $FILE $NAME $VERSION $FLAVOR
-# Example: ls /boot | sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3
+# Example: ls /boot | sed -n "$KERNEL_NAMES" | sort -k 4,4V -k 3,3rV
 KERNEL_NAMES=${KERNEL_NAMES:-'s/\(vmlinu[xz]-\)\([^-]*-[^-]*-\)\(.*\)/& \1 \2 \3/p'}
 
 if [ -f /usr/lib/yaboot/yaboot ]; then

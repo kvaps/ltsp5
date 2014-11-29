@@ -151,7 +151,7 @@ link_kernel_flavors() {
 
     last_flavor=
     find "$tftpname" -mindepth 1 -maxdepth 1 -type f -printf "%f\n" \
-    | sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3 \
+    | sed -n "$KERNEL_NAMES" | sort -k 4,4V -k 3,3rV \
     | while read file name version flavor; do
         if [ "$flavor" != "$last_flavor" ]; then
             initrd=$(echo "$file" | sed -n "$INITRD_NAME")

@@ -14,7 +14,7 @@ INITRD_NAME=${INITRD_NAME:-'s/vmlinu[xz]/initrd.img/p'}
 
 read file name version flavor <<EOF
 $(find "/boot/" -mindepth 1 -maxdepth 1 -type f -printf "%f\n" |
-    sed -n "$KERNEL_NAMES" | sort -V -k 4,4  | sort -r -k 3,3)
+    sed -n "$KERNEL_NAMES" | sort -k 4,4V -k 3,3rV)
 EOF
 initrd=$(echo "$file" | sed -n "$INITRD_NAME")
 
