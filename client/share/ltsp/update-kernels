@@ -352,7 +352,8 @@ tftpboot \${kernel_addr_r} \${serverip}:${kernel_file} \\
 EOF
 
         mkimage -A arm -O Linux -T script -C none -a 0x0 -e 0x0 \
-            -n 'LTSP boot script' -d $BOOT/boot.ltsp $BOOT/boot.scr
+            -n 'LTSP boot script' -d $BOOT/boot.ltsp $BOOT/boot.scr \
+            > /dev/null
 	
         # Copy .dtb files to boot dir.
         dtb_dirs="/usr/lib/linux-image-${version}/"
