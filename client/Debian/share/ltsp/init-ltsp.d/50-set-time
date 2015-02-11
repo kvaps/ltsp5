@@ -17,5 +17,5 @@ if [ -n "$TIMESERVER" ]; then
     echo "server ${TIMESERVER}" >>/etc/ntp.conf
 
     # Modify /etc/default/ntpdate
-    sed -i -e 's/^NTPSERVERS=".*"/NTPSERVER="'$TIMESERVER'"/' /etc/default/ntpdate
+    sed -i -e 's/^NTPSERVERS=".*"/NTPSERVERS="'$TIMESERVER'"/' /etc/default/ntpdate
 fi
