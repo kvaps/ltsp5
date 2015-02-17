@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-12-07 04:30+0000\n"
-"X-Generator: Launchpad (build 17274)\n"
+"X-Launchpad-Export-Date: 2015-02-17 04:31+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
 "Language: \n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -466,7 +466,7 @@ msgstr "シリアルコンソールを有効にする"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
-msgstr "シリアルコンソールを有効にしています…"
+msgstr "シリアルコンソールを有効にしています..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
@@ -576,7 +576,7 @@ msgstr "chroot 内で popularity-contest を有効にする"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
 msgid "Enabling popularity contest..."
-msgstr "popularity contest を有効にしています…"
+msgstr "popularity contest を有効にしています..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
@@ -655,6 +655,7 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Hideki Yamane https://launchpad.net/~henrich\n"
 "  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
+"  Shushi Kurose https://launchpad.net/~kuromabo\n"
 "  yossi https://launchpad.net/~ykuroda"
 
 #, sh-format

@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-12-07 04:30+0000\n"
-"X-Generator: Launchpad (build 17274)\n"
+"X-Launchpad-Export-Date: 2015-02-17 04:30+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
 "Language: fr\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -576,7 +576,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
-msgstr "télécharger les fichiers « Packages » d'APT depuis le serveur"
+msgstr "copier les fichiers de paquets APT depuis le serveur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
@@ -635,9 +635,7 @@ msgstr "terminé."
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
-msgstr ""
-"utiliser les serveurs mentionnés dans sources.list et ne pas générer de "
-"nouvelle liste"
+msgstr "utiliser le sources.list des serveurs au lieu d'en générer un"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
