@@ -23,6 +23,7 @@ esac
 # make sure all our modules are there
 manual_add_modules nbd
 manual_add_modules squashfs
+manual_add_modules overlay
 manual_add_modules overlayfs
 manual_add_modules aufs
 auto_add_modules net

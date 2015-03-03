@@ -37,7 +37,11 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
     else
         mount -o move ${rootmnt} /rofs
     fi
-    if modprobe overlayfs; then
+    if modprobe overlay; then
+        UNION_TYPE=overlay
+        UNION_OPTS="upperdir=/cow/up,lowerdir=/rofs,workdir=/cow/work"
+        mkdir -p /cow/up /cow/work
+    elif modprobe overlayfs; then
         UNION_TYPE=overlayfs
         UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
     elif modprobe aufs; then
