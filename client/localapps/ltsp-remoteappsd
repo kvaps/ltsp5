@@ -6,7 +6,7 @@ fi
 
 # Initialize LTSP_RCOMMAND as blank
 reset_xprop(){
-    xprop -root -f $1 8s -set $1 ""
+    xprop -root -f $1 8u -set $1 ""
 }
 
 reset_xprop LTSP_RCOMMAND

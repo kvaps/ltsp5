@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 TryExec=ltsp-localapps
-Exec=sh -c 'xprop -root -f LTSP_LOGOUT_ACTION 8s -set LTSP_LOGOUT_ACTION REBOOT && gnome-session-quit --logout'
+Exec=sh -c 'xprop -root -f LTSP_LOGOUT_ACTION 8u -set LTSP_LOGOUT_ACTION REBOOT && gnome-session-quit --logout'
 TryExec=gnome-session-quit
 Name=Restart
 Name[fr]=Redémarrer

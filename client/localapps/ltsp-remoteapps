@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = "--wait" ]; then
-    xprop -root -f LTSP_RCOMMAND_WAIT 8s -set LTSP_RCOMMAND_WAIT "true"
+    xprop -root -f LTSP_RCOMMAND_WAIT 8u -set LTSP_RCOMMAND_WAIT "true"
     shift
 fi
 
@@ -14,4 +14,4 @@ for i in "$@"; do
     ARGS="$ARGS $i"
 done
 
-xprop -root -f LTSP_RCOMMAND 8s -set LTSP_RCOMMAND "$CMD $ARGS"
+xprop -root -f LTSP_RCOMMAND 8u -set LTSP_RCOMMAND "$CMD $ARGS"
