@@ -1,0 +1,8 @@
+# `su -` reads the user PATH from /etc/login.defs instead of /etc/environment.
+# That way it's missing /sbin, and upstart doesn't start in fat clients.
+# Work around it by copying the PATH from /etc/environment to /etc/login.defs.
+
+envpath=$(. /etc/environment 2>/dev/null && echo "$PATH")
+if [ -n "$envpath" ] && grep -qs '^ENV_PATH' /etc/login.defs; then
+     sed "s,^ENV_PATH.*,ENV_PATH\tPATH=$envpath," -i /etc/login.defs
+fi
