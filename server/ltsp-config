@@ -161,13 +161,13 @@ config_isc_dhcp_server() {
 }
 
 config_lts_conf() {
-    local default tftpdir conf
+    local default tftpdir
 
     default=$(default_chroot)
     for tftpdir in $TFTP_DIRS ; do
-        conf="$tftpdir/$TFTP_BOOT_DIR/$default/lts.conf"
-        if [ -d "${conf%/*}" ]; then
-            install_example "lts.conf" "$conf"
+        if [ -d "$tftpdir/$TFTP_BOOT_DIR" ]; then
+            mkdir -p "$tftpdir/$TFTP_BOOT_DIR/$default"
+            install_example "lts.conf" "$tftpdir/$TFTP_BOOT_DIR/$default/lts.conf"
         fi
     done
 }
