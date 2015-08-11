@@ -133,6 +133,14 @@ EOF
             while read nodev filesystem; do
                 filesystem=${filesystem:-$nodev}
                 case "$filesystem" in
+                    overlay) 
+                        union_type=overlay
+                        union_opts="upperdir=$cu_cow/up,lowerdir=$cu_rofs,workdir=$cu_cow/work"
+                        mkdir -p ${cu_cow}/up
+                        mkdir -p ${cu_cow}/work
+                        # We prefer overlay to others, so break when found
+                        break
+                        ;;
                     overlayfs) 
                         union_type=overlayfs
                         union_opts="upperdir=$cu_cow,lowerdir=$cu_rofs"
@@ -161,6 +169,25 @@ EOF
                     *)
                     mkdir -p "$cu_cow${point%/}"
                     mark_mount -t "$union_type" -o "dirs=$cu_cow${point%/}=rw:$cu_rofs${point%/}=ro" "$union_type" "$cu_chroot${point%/}"
+                    ;;
+                esac
+            done <<EOF
+$(get_mounts "$chroot")
+EOF
+	fi
+	if [ "overlay" = "$union_type" ]; then
+            # overlay doesn't handle sub-mounts, so mount each needed sub-mount
+            # directly. If we do not mount the sub-mounts directly, systems 
+            # with a separate /boot partition end up with no kernels for 
+            # network boot.
+            while IFS= read -r point; do
+                case "$point" in
+                    "$cu_rofs"*|/) 
+                    ;;
+                    *)
+                    mkdir -p "$cu_cow${point%/}/up"
+                    mkdir -p "$cu_cow${point%/}/work"
+                    mark_mount -t "$union_type" -o "upperdir=$cu_cow${point%/}/up,lowerdir=$cu_rofs${point%/},workdir=$cu_cow${point%/}/work" "$union_type" "$cu_chroot${point%/}"
                     ;;
                 esac
             done <<EOF
