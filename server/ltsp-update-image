@@ -63,6 +63,9 @@ trap_cleanup() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     umount_marked
+    rmdir "$cu_chroot"
+    rmdir "$cu_cow"
+    rmdir "$cu_rofs"
     rmdir "$cu_base"
     unlock_package_management
     eval "$orig_flags"
@@ -92,71 +95,79 @@ get_mounts() {
     done < /proc/mounts | sort -u
 }
 
-# Create a COW view of the chroot and run ltsp-cleanup in it.
+# Create a temporary copy of the chroot and run ltsp-cleanup in it.
 run_cleanup() {
-    # Global variables defined here: cu_base, cu_chroot
-    local chroot cu_lower cu_upper cu_work module union_type junk union_opts \
-        submounts submount
+    local chroot name point
     chroot=$1
+    name=$2
 
     if [ ! -x "$chroot/usr/share/ltsp/ltsp-cleanup" ]; then
-        die "Script $chroot/usr/share/ltsp/ltsp-cleanup does not exist, cannot cleanup the chroot."
+        warn "Script $chroot/usr/share/ltsp/ltsp-cleanup does not exist, cannot cleanup the chroot."
+        return 0
     fi
     lock_package_management
     cu_base=$(mktemp -d)
-    trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
-    # Overlayfs misbehaves when $cu_base is in the same file system as
-    # $cu_lower, so we use a tmpfs.
-    mark_mount -t tmpfs -o mode=0755 tmpfs "$cu_base"
-    cu_lower="$cu_base/lower"
-    cu_upper="$cu_base/upper"
-    cu_work="$cu_base/work"
-    cu_chroot="$cu_base/chroot"
-    mkdir "$cu_lower"
-    mkdir "$cu_upper"
-    mkdir "$cu_work"
+    cu_rofs="$cu_base/rofs"
+    cu_cow="$cu_base/cow"
+    cu_chroot="$cu_base/$name"
+    mkdir "$cu_rofs"
+    mkdir "$cu_cow"
     mkdir "$cu_chroot"
-
-    # Get submounts before creating additional ones
-    submounts=$(get_mounts "$chroot" | grep -v '^/$' || true)
-    mark_mount --bind "$chroot" "$cu_lower"
-    # '' is to check if one of them is already loaded in order to prefer it.
-    # overlay was called overlayfs in Ubuntu before it got upstreamed.
-    for module in '' overlay overlayfs aufs; do
-        if [ -n "$module" ]; then
-            modprobe -q "$module" || true
-        fi
-        # Read /proc/modules once, but check for all the supported modules
-        while read union_type junk; do
-            case "$union_type" in
-                overlay)
-                    union_opts="workdir=$cu_work,upperdir=$cu_upper,lowerdir=$cu_lower"
-                    ;;
-                overlayfs)
-                    union_opts="upperdir=$cu_upper,lowerdir=$cu_lower"
-                    ;;
-                aufs)
-                    union_opts="dirs=$cu_upper=rw:$cu_lower=ro"
-                    ;;
-            esac
-            if [ -n "$union_opts" ]; then
-                break 2
-            fi
-        done </proc/modules
-    done
-    test -n "$union_opts" || die "No overlay or aufs support detected"
-    mark_mount -t "$union_type" -o "$union_opts" "$union_type" "$cu_chroot"
-    # We also want to bind-mount whatever submounts the chroot has, e.g. /boot.
-    # Ideally we'd do that under the overlay, so that those dirs would be
-    # part of the temporary COW filesystem. But overlayfs doesn't allow that.
-    # So we compromise by bind-mounting them read-only on top of the overlay.
-    while IFS= read -r submount; do
-        test -n "$submount" || continue
-        mark_mount --bind "$chroot${submount%/}" "$cu_chroot${submount%/}"
-        mount -o remount,ro,bind "$cu_chroot${submount%/}"
+    trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
+    while IFS= read -r point; do
+        mark_mount --bind "$chroot${point%/}" "$cu_rofs${point%/}"
     done <<EOF
-$submounts
+$(get_mounts "$chroot")
 EOF
+    mark_mount -t tmpfs -o mode=0755 tmpfs "$cu_cow"
+
+    # If this is the first time that run_cleanup() is called,
+    # ensure that the overlayfs or aufs module are loaded.
+    if [ -z "$union_type" ]; then
+        # '' is to check if some of them is already loaded
+        for module in '' overlayfs aufs; do
+            if [ -n "$module" ]; then
+                modprobe "$module" || true
+            fi
+            # detect which unionfs to use
+            while read nodev filesystem; do
+                filesystem=${filesystem:-$nodev}
+                case "$filesystem" in
+                    overlayfs) 
+                        union_type=overlayfs
+                        union_opts="upperdir=$cu_cow,lowerdir=$cu_rofs"
+                        # We prefer overlayfs to aufs, so break when found
+                        break
+                        ;;
+                    aufs) 
+                        union_type=aufs
+                        union_opts="dirs=$cu_cow=rw:$cu_rofs=ro"
+                        ;;
+                esac
+            done < /proc/filesystems
+            test -n "$union_type" && break
+        done
+        test -n "$union_type" || die "No overlayfs or aufs support detected"
+        mark_mount -t "$union_type" -o "$union_opts" "$union_type" "$cu_chroot"
+        if [ "aufs" = "$union_type" ]; then
+            # Aufs doesn't handle sub-mounts, so mount each needed sub-mount
+            # directly. If we do not mount the sub-mounts directly, systems 
+            # with a separate /boot partition end up with no kernels for 
+            # network boot.
+            while IFS= read -r point; do
+                case "$point" in
+                    "$cu_rofs"*|/) 
+                    ;;
+                    *)
+                    mkdir -p "$cu_cow${point%/}"
+                    mark_mount -t "$union_type" -o "dirs=$cu_cow${point%/}=rw:$cu_rofs${point%/}=ro" "$union_type" "$cu_chroot${point%/}"
+                    ;;
+                esac
+            done <<EOF
+$(get_mounts "$chroot")
+EOF
+	fi
+    fi
     chroot "$cu_chroot" /usr/share/ltsp/ltsp-cleanup --yes
 }
 
@@ -192,8 +203,8 @@ generate_image() {
     else
         cu_chroot=$chroot
         if [ "$CLEANUP" = true ]; then
-            # run_cleanup sets cu_chroot=$cu_base/chroot for mksquashfs
-            run_cleanup "$chroot"
+            # run_cleanup sets cu_chroot=$cu_base/$name for mksquashfs
+            run_cleanup "$chroot" "$name"
         fi
 
         test -f /etc/ltsp/ltsp-update-image.excludes && EXCLUDE_FILE="/etc/ltsp/ltsp-update-image.excludes"
