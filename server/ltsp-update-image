@@ -125,7 +125,7 @@ EOF
     # ensure that the overlayfs or aufs module are loaded.
     if [ -z "$union_type" ]; then
         # '' is to check if some of them is already loaded
-        for module in '' overlayfs aufs; do
+        for module in '' overlay overlayfs aufs; do
             if [ -n "$module" ]; then
                 modprobe "$module" || true
             fi
