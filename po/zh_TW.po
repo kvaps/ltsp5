@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-30 04:30+0000\n"
-"X-Generator: Launchpad (build 17532)\n"
+"X-Launchpad-Export-Date: 2015-08-15 04:30+0000\n"
+"X-Generator: Launchpad (build 17686)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -120,8 +120,8 @@ msgstr "資訊：LTSP 用戶端成功安裝完畢"
 msgid "error: LTSP client installation ended abnormally"
 msgstr "錯誤：LTSP 用戶端安裝不正常中止"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
@@ -133,56 +133,56 @@ msgstr "以本機執行大多數應用程式"
 msgid "Release version number (el6,fc18,fc19) * Not working yet"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #, sh-format
 msgid "set the target architecture"
 msgstr "設定目標架構"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr "錯誤：不支援的架構。請檢查您的 --arch 參數：%s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       支援的數值為：%s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
 msgstr "釋出版本號碼"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #, sh-format
 msgid "Distro name"
 msgstr "發行套件名稱"
@@ -197,8 +197,8 @@ msgstr ""
 msgid "Set URI of custom kernel config"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
 msgstr "如果有則清除現有的 LTSP chroot"
