@@ -6,8 +6,7 @@ YACC=bison
 LIBS=-lfl -lpopt
 ##LIBS=-lfl -ll -lpopt
 YFLAGS=-v -d
-LDFLAGS=
-CCFLAGS=-W -Wall $(CFLAGS)
+CCFLAGS=-W -Wall $(CFLAGS) $(CPPFLAGS)
 
 getltscfg:	getltscfg.o		\
 		parser.tab.o		\
