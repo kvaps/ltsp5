@@ -21,6 +21,8 @@ PATH=/bin:$PATH; export PATH
 if [ -z "${KIOSK_EXE}" ]; then
     if [ -x "/usr/bin/firefox" ]; then
         KIOSK_EXE=/usr/bin/firefox
+    elif [ -x "/usr/bin/chromium" ]; then
+        KIOSK_EXE=/usr/bin/chromium
     elif [ -x "/usr/bin/google-chrome" ]; then
         KIOSK_EXE=/usr/bin/google-chrome
     elif [ -x "/usr/bin/opera" ]; then

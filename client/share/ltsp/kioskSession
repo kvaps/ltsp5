@@ -11,9 +11,9 @@ KIOSK_USER_STARTUP="${HOME}/.kiosk-startup"
 mkdir -p ${KIOSK_USER_STARTUP}
 
 case $KIOSK_EXE in
-    *firefox|*iceweasel) 
+    *firefox|*iceweasel|*chromium|*google-chrome) 
         if [ -x /usr/bin/devilspie ]; then
-            # set up devilspie for fullscreen firefox
+            # set up devilspie for fullscreen browser
             ln -s /usr/bin/devilspie ${KIOSK_USER_STARTUP}/10-devilspie
             mkdir -p ${HOME}/.devilspie
             echo "(if (matches (window_name) \"$(basename ${KIOSK_EXE})\") (undecorate) (fullscreen))" > ${HOME}/.devilspie/default.ds
