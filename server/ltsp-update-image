@@ -63,10 +63,7 @@ trap_cleanup() {
     # Stop trapping
     trap - 0 HUP INT QUIT KILL SEGV PIPE TERM
     umount_marked
-    rmdir "$cu_chroot"
-    rmdir "$cu_cow"
-    rmdir "$cu_rofs"
-    rmdir "$cu_base"
+    rmdir "$cowbase"
     unlock_package_management
     eval "$orig_flags"
 }
@@ -77,7 +74,8 @@ get_mounts() {
     local chroot mounts src system point type rest excluded found_chroot
     chroot=$1
 
-    excluded=",${EXCLUDED_MOUNTS:-/home},"
+    # Provide an environment variable to exclude some submounts
+    excluded=",${EXCLUDED_MOUNTS},"
     echo "$chroot"
     while read system point type rest; do
         case "$excluded" in
@@ -95,107 +93,71 @@ get_mounts() {
     done < /proc/mounts | sort -u
 }
 
-# Create a temporary copy of the chroot and run ltsp-cleanup in it.
+# Create a COW view of the chroot and run ltsp-cleanup in it.
 run_cleanup() {
-    local chroot name point
+    # Global variables defined here: cowbase, cowroot
+    local chroot modules module cowtmp submount
     chroot=$1
-    name=$2
 
     if [ ! -x "$chroot/usr/share/ltsp/ltsp-cleanup" ]; then
-        warn "Script $chroot/usr/share/ltsp/ltsp-cleanup does not exist, cannot cleanup the chroot."
-        return 0
+        die "Script $chroot/usr/share/ltsp/ltsp-cleanup does not exist, cannot cleanup the chroot."
     fi
+    # To be less intrusive, we prefer modules that are already loaded.
+    # If none is, then we try to load them in the following order.
+    # overlay was called overlayfs in Ubuntu before it got upstreamed,
+    # and it used a different mounting syntax.
+    modules=""
+    for module in overlay overlayfs aufs; do
+        if [ -d "/sys/module/$module" ]; then
+            modules="$module $modules"
+        else
+            modules="$modules $module"
+        fi
+    done
+    for module in $modules; do
+        modprobe -q "$module" || true
+        # In e.g. Ubuntu 15.10, `modprobe overlayfs` succeeds for compatibility,
+        # but overlay is loaded instead, and it's using the new syntax.
+        test -d "/sys/module/$module" && break
+    done
+    test -d "/sys/module/$module" || die "No overlay or aufs support detected"
+
     lock_package_management
-    cu_base=$(mktemp -d)
-    cu_rofs="$cu_base/rofs"
-    cu_cow="$cu_base/cow"
-    cu_chroot="$cu_base/$name"
-    mkdir "$cu_rofs"
-    mkdir "$cu_cow"
-    mkdir "$cu_chroot"
+    cowbase=$(mktemp -d)
     trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
-    while IFS= read -r point; do
-        mark_mount --bind "$chroot${point%/}" "$cu_rofs${point%/}"
+    # Overlayfs misbehaves when $cowroot is in the same file system as
+    # $chroot, so we use a tmpfs. It's also easier to clean it up afterwards.
+    mark_mount -t tmpfs -o mode=0755 tmpfs "$cowbase"
+    cowroot=$cowbase/root
+    mkdir "$cowroot"
+    cowtmp=$cowbase/tmp
+    mkdir "$cowtmp"
+
+    # We also want to bind-mount whatever submounts the chroot has, e.g. /boot.
+    # Here's what a `mount` command output will look like afterwards:
+    # tmpfs on /tmp/tmp.EYFLkg6dYu type tmpfs (rw,relatime,mode=755)
+    # overlay on /tmp/tmp.EYFLkg6dYu/chroot type overlay (rw,relatime,lowerdir=/,upperdir=/tmp/tmp.EYFLkg6dYu/tmp/.up,workdir=/tmp/tmp.EYFLkg6dYu/tmp/.work)
+    # overlay on /tmp/tmp.EYFLkg6dYu/chroot/boot type overlay (rw,relatime,lowerdir=/boot,upperdir=/tmp/tmp.EYFLkg6dYu/tmp/boot/.up,workdir=/tmp/tmp.EYFLkg6dYu/tmp/boot/.work)
+    while IFS= read -r submount; do
+        case "$module" in
+            overlay)
+                mkdir -p "$cowtmp${submount%/}/.work"
+                mkdir -p "$cowtmp${submount%/}/.upper"
+                mark_mount -t overlay -o "lowerdir=$submount,upperdir=$cowtmp${submount%/}/.upper,workdir=$cowtmp${submount%/}/.work" overlay "$cowroot${submount%/}"
+                ;;
+            overlayfs)
+                mkdir -p "$cowtmp${submount%/}/.upper"
+                mark_mount -t overlayfs -o "lowerdir=$submount,upperdir=$cowtmp${submount%/}/.upper" overlayfs "$cowroot${submount%/}"
+                ;;
+            aufs)
+                mkdir -p $cowtmp${submount%/}
+                mark_mount -t aufs -o "dirs=$cowtmp${submount%/}=rw:$submount=ro" aufs "$cowroot${submount%/}"
+                ;;
+            esac
     done <<EOF
 $(get_mounts "$chroot")
 EOF
-    mark_mount -t tmpfs -o mode=0755 tmpfs "$cu_cow"
-
-    # If this is the first time that run_cleanup() is called,
-    # ensure that the overlayfs or aufs module are loaded.
-    if [ -z "$union_type" ]; then
-        # '' is to check if some of them is already loaded
-        for module in '' overlay overlayfs aufs; do
-            if [ -n "$module" ]; then
-                modprobe "$module" || true
-            fi
-            # detect which unionfs to use
-            while read nodev filesystem; do
-                filesystem=${filesystem:-$nodev}
-                case "$filesystem" in
-                    overlay) 
-                        union_type=overlay
-                        union_opts="upperdir=$cu_cow/up,lowerdir=$cu_rofs,workdir=$cu_cow/work"
-                        mkdir -p ${cu_cow}/up
-                        mkdir -p ${cu_cow}/work
-                        # We prefer overlay to others, so break when found
-                        break
-                        ;;
-                    overlayfs) 
-                        union_type=overlayfs
-                        union_opts="upperdir=$cu_cow,lowerdir=$cu_rofs"
-                        # We prefer overlayfs to aufs, so break when found
-                        break
-                        ;;
-                    aufs) 
-                        union_type=aufs
-                        union_opts="dirs=$cu_cow=rw:$cu_rofs=ro"
-                        ;;
-                esac
-            done < /proc/filesystems
-            test -n "$union_type" && break
-        done
-        test -n "$union_type" || die "No overlayfs or aufs support detected"
-        mark_mount -t "$union_type" -o "$union_opts" "$union_type" "$cu_chroot"
-        if [ "aufs" = "$union_type" ]; then
-            # Aufs doesn't handle sub-mounts, so mount each needed sub-mount
-            # directly. If we do not mount the sub-mounts directly, systems 
-            # with a separate /boot partition end up with no kernels for 
-            # network boot.
-            while IFS= read -r point; do
-                case "$point" in
-                    "$cu_rofs"*|/) 
-                    ;;
-                    *)
-                    mkdir -p "$cu_cow${point%/}"
-                    mark_mount -t "$union_type" -o "dirs=$cu_cow${point%/}=rw:$cu_rofs${point%/}=ro" "$union_type" "$cu_chroot${point%/}"
-                    ;;
-                esac
-            done <<EOF
-$(get_mounts "$chroot")
-EOF
-	fi
-	if [ "overlay" = "$union_type" ]; then
-            # overlay doesn't handle sub-mounts, so mount each needed sub-mount
-            # directly. If we do not mount the sub-mounts directly, systems 
-            # with a separate /boot partition end up with no kernels for 
-            # network boot.
-            while IFS= read -r point; do
-                case "$point" in
-                    "$cu_rofs"*|/) 
-                    ;;
-                    *)
-                    mkdir -p "$cu_cow${point%/}/up"
-                    mkdir -p "$cu_cow${point%/}/work"
-                    mark_mount -t "$union_type" -o "upperdir=$cu_cow${point%/}/up,lowerdir=$cu_rofs${point%/},workdir=$cu_cow${point%/}/work" "$union_type" "$cu_chroot${point%/}"
-                    ;;
-                esac
-            done <<EOF
-$(get_mounts "$chroot")
-EOF
-	fi
-    fi
-    chroot "$cu_chroot" /usr/share/ltsp/ltsp-cleanup --yes
+    chroot "$cowroot" /usr/share/ltsp/ltsp-cleanup --yes
 }
 
 generate_image() {
@@ -228,16 +190,17 @@ generate_image() {
         fi
         echo "Reverted to $imgdir/$name.img.old, please reboot your clients."
     else
-        cu_chroot=$chroot
         if [ "$CLEANUP" = true ]; then
-            # run_cleanup sets cu_chroot=$cu_base/$name for mksquashfs
-            run_cleanup "$chroot" "$name"
+            # run_cleanup sets cowroot=$(mktemp -d)/root for mksquashfs
+            run_cleanup "$chroot"
+        else
+            cowroot=$chroot
         fi
 
         test -f /etc/ltsp/ltsp-update-image.excludes && EXCLUDE_FILE="/etc/ltsp/ltsp-update-image.excludes"
         test -x /usr/bin/nice && nice=nice || unset nice
         test -x /usr/bin/ionice && /usr/bin/ionice -c3 true 2>/dev/null && ionice=ionice || unset ionice
-        if ! $nice $ionice mksquashfs "$cu_chroot" "$imgdir/$name.img.tmp" \
+        if ! $nice $ionice mksquashfs "$cowroot" "$imgdir/$name.img.tmp" \
             -no-recovery -noappend -wildcards ${EXCLUDE_FILE:+-ef "$EXCLUDE_FILE"} \
             ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports}
         then
@@ -252,7 +215,7 @@ generate_image() {
 
     PREFER_NBD_IMAGE="$REVERT" ltsp-update-kernels ${BASE:+-b "$BASE"} "$name"
 
-    if [ "$cu_chroot" != "$chroot" ] && [ "$REVERT" != true ]; then
+    if [ "$cowroot" != "$chroot" ] && [ "$REVERT" != true ]; then
         trap_cleanup
     fi
 }
