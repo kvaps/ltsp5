@@ -74,7 +74,7 @@ configure_sound_volume() {
                     # should be on or off, and VOLUME is used for volumes
                     # where the value should be a number representing a 
                     # percentage
-                    channel_name=$(echo ${channel}|sed -e s/^\'// -e s/\'.*$// -e 's/ -//g' -e 's/ [(].*[)]//' -e 's/\//_/g' -e 's/ /_/g' -e 's/-/_/g' |tr [a-z] [A-Z])
+                    channel_name=$(echo ${channel}|sed -e s/^\'// -e s/\'.*$// -e 's/ -//g' -e 's/ [(].*[)]//' -e 's/\//_/g' -e 's/ /_/g' -e 's/-/_/g' | awk '{ print toupper($0) }')
                     if [ -n "$(echo $line|grep volume)" ]; then
                         eval channel_vol="\$${channel_name}_VOLUME"
                         if [ "${channel_name}" = "MIC" ]; then 

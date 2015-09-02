@@ -16,7 +16,7 @@ ssh_run() {
 # Return true if the parameter is a valid user or group name.
 # The regex is from `man useradd`, and all of "$1" must match it.
 is_valid_name() {
-    test $(expr match "$1" '[a-z_][a-z0-9_-]*[$]*') -eq ${#1}
+    test $(expr match "$1" '[[:lower:]_][[:lower:][:digit:]_-]*[$]*') -eq ${#1}
 }
 
 # First, set up local uids/gids

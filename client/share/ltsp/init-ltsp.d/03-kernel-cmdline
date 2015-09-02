@@ -15,7 +15,9 @@ for x in $(cat /proc/cmdline); do
             nfs=true
             ;;
         ltsp.*=*)
-            ltsp_vars="${ltsp_vars} ${x#ltsp.}"
+            # Separate ltsp_vars with newlines without creating blank lines
+            ltsp_vars="${ltsp_vars:+$ltsp_vars
+}${x#ltsp.}"
             ;;
     esac
 done
@@ -68,12 +70,12 @@ elif [ -n "$nfs" ]; then
 fi >> /var/cache/ltsp/ltsp_config
 
 # export LTSP variables
-for x in $(echo ${ltsp_vars}); do
-    var=$(echo ${x} | cut -d= -f1 | tr '[a-z]' '[A-Z]')
-    value=$(echo ${x} | cut -d= -f2)
-
-    if [ -n "$var" ] && [ -n "$value" ]; then
-        export "$var"="$value"
-        echo "$var"="$value"
-    fi
-done >> /var/cache/ltsp/ltsp_config
+while IFS="=" read var value; do
+    test -z "$var" && continue
+    # Uppercase the variable
+    var=$(echo "$var" | awk '{ print toupper($0) }')
+    export "$var=$value"
+    echo "$var=$value"    
+done >> /var/cache/ltsp/ltsp_config <<EOF
+$ltsp_vars
+EOF

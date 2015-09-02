@@ -305,7 +305,7 @@ done
 
 case "$1" in
     dnsmasq|isc-dhcp-server|lts.conf|nbd-server|nfs)
-        config_function=$(echo "config_$1" | tr -c "[a-z\n]" "_")
+        config_function=$(echo "config_$1" | tr -c "[[:alpha:]\n]" "_")
         ;;
     *) die "$(usage)" ;;
 esac

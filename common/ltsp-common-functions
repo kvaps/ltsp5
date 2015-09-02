@@ -101,7 +101,7 @@ run_parts_list() {
     test $# -ge 1 || die "ERROR: Usage: run_parts_list <dir>"
     if [ -d "$1" ]; then
         find -L "$1" -mindepth 1 -maxdepth 1 -type f -name "$2*" |
-            sed -n '/.*\/[0-9a-zA-Z_\-]\{1,\}$/p' | sort -n
+            sed -n '/.*\/[[:alnum:]_\-]\{1,\}$/p' | sort -n
     fi
 }
 
