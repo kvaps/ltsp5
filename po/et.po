@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-08-13 21:04-0700\n"
-"PO-Revision-Date: 2013-01-16 15:49+0000\n"
-"Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
+"PO-Revision-Date: 2015-09-01 19:36+0000\n"
+"Last-Translator: Lauri Võsandi <lauri.vosandi@gmail.com>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-08-15 04:30+0000\n"
-"X-Generator: Launchpad (build 17686)\n"
+"X-Launchpad-Export-Date: 2015-09-02 04:30+0000\n"
+"X-Generator: Launchpad (build 17706)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -23,7 +23,7 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:50
 #, sh-format
 msgid "Login Error"
-msgstr ""
+msgstr "Viga sisselogimisel"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:31
 #: ../server/ALTLinux/configs/ltsp-login.sh:34
@@ -37,7 +37,7 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:115
 #, sh-format
 msgid "User"
-msgstr ""
+msgstr "Kasutaja"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:31
 #: ../server/ALTLinux/configs/ltsp-login.sh:34
@@ -51,7 +51,7 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:115
 #, sh-format
 msgid "already logged in!"
-msgstr ""
+msgstr "on juba sisselogitud!"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:34
 #: ../server/ALTLinux/configs/ltsp-login.sh:43
@@ -60,7 +60,7 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:117
 #, sh-format
 msgid "Continue"
-msgstr ""
+msgstr "Jätka"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:80
 #: ../server/ALTLinux/configs/ltsp-login.sh:83
@@ -68,57 +68,57 @@ msgstr ""
 #: ../server/ALTLinux/configs/ltsp-login.sh:103
 #, sh-format
 msgid "Login Warning"
-msgstr ""
+msgstr "Sisselogimise hoiatus"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:94
 #, sh-format
 msgid "Cancel"
-msgstr ""
+msgstr "Loobu"
 
 #: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr ""
+msgstr "API VIGA: määrama peab true või false"
 
 #: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
-msgstr ""
+msgstr "näita seda abisõnumit"
 
 #: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
-msgstr ""
+msgstr "näita abiteavet kõigi võimalike käsurea valikute kohta"
 
 #: ../server/ltsp-build-client:191
 #, sh-format
 msgid "output version information and exit"
-msgstr ""
+msgstr "kuva versiooni info ning välju"
 
 #: ../server/ltsp-build-client:195
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr ""
+msgstr "LTSP terminali tarkvara koostamise valikud:"
 
 #: ../server/ltsp-build-client:201
 #, sh-format
 msgid "  Regular options:"
-msgstr ""
+msgstr "  Tavalised valikud:"
 
 #: ../server/ltsp-build-client:205
 #, sh-format
 msgid "  Advanced options:"
-msgstr ""
+msgstr "  Täpsemad valikud:"
 
 #: ../server/ltsp-build-client:217
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr ""
+msgstr "teave: LTSP terminali tarkvara paigaldus edukalt lõpetatud"
 
 #: ../server/ltsp-build-client:219
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr ""
+msgstr "viga: LTSP terminali tarkvara paigaldus ebaõnnestus"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
@@ -126,12 +126,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr ""
+msgstr "käita enamikke või kõiki rakendusi kohalikult"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/009-mock-chroot:10
 #, sh-format
 msgid "Release version number (el6,fc18,fc19) * Not working yet"
-msgstr ""
+msgstr "Väljalaske versiooninumber (el6,fc18,fc19) * Ei tööta veel"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
@@ -142,7 +142,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
 #, sh-format
 msgid "set the target architecture"
-msgstr ""
+msgstr "määra sihtarhitektuur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
@@ -151,7 +151,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
+msgstr "VIGA: toetamata arhitektuur. Kontrolli --arch argumendi väärtust: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
@@ -161,25 +161,25 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
 #, sh-format
 msgid "       supported values are: %s"
-msgstr ""
+msgstr "       toetatud väärtused on: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
-msgstr ""
+msgstr "Kickstart faili asukoht"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #, sh-format
 msgid "Path to chroot-creator cache"
-msgstr ""
+msgstr "chroot-creator puhvri asukoht"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #, sh-format
 msgid "Release version number"
-msgstr ""
+msgstr "Väljalaske versiooni number"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
@@ -302,7 +302,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
-msgstr ""
+msgstr "lihtne webkiosk režiim"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
@@ -651,4 +651,5 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
+"  Lauri Võsandi https://launchpad.net/~v6sa\n"
 "  pheinsal https://launchpad.net/~usverk"
