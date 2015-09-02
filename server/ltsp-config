@@ -78,6 +78,15 @@ replace_arch() {
     fi
 }
 
+# Check if a file exists and return error if --overwrite is not specified
+check_overwrite() {
+    if [ "$OVERWRITE" != "true" ] && [ -f "$1" ]; then
+        warn "File $1 exists but --overwrite was not specified."
+        return 1;
+    fi
+    return 0;
+}
+
 # Copy a file from /usr/share/doc/ltsp-server/examples/$1 to $2,
 # uncompressing it if necessary.
 install_example() {
@@ -85,8 +94,8 @@ install_example() {
     src=$1
     dst=$2
 
-    if [ "$OVERWRITE" != "true" ] && [ -f "$dst" ]; then
-        die "File $dst exists and --overwrite was not specified, aborting"
+    if ! check_overwrite $dst; then
+        die "Aborting"
     fi
     dstdir=${dst%/*}
     if [ ! -d "$dstdir" ]; then
@@ -173,34 +182,38 @@ config_lts_conf() {
 }
 
 config_nbd_server() {
-    local restart_nbd image name
+    local restart_nbd image name conf
 
-    if [ ! -f "/etc/nbd-server/config" ]; then
+    conf="/etc/nbd-server/config"
+    # Only create if not already present, otherwise may cause issues
+    # on upgrade of nbd-server package.
+    if [ ! -f "${conf}" ]; then
         # If user/group nbd exist, use them
         nbd_user=$(getent passwd nbd | cut -d : -f 1)
         nbd_user=${nbd_user:-nobody}
         nbd_group=$(getent group nbd | cut -d : -f 1)
         nbd_group=${nbd_group:-nogroup}
-        cat > "/etc/nbd-server/config" <<EOF
+        cat > "$conf" <<EOF
 [generic]
 user = $nbd_user
 group = $nbd_group
 includedir = /etc/nbd-server/conf.d
 EOF
-        echo "Created /etc/nbd-server/config"
+        echo "Created $conf"
         restart_nbd=true
     fi
 
     mkdir -p "/etc/nbd-server/conf.d"
-    if [ ! -f "/etc/nbd-server/conf.d/swap.conf" ]; then
-        cat > "/etc/nbd-server/conf.d/swap.conf" <<EOF
+    conf="/etc/nbd-server/conf.d/swap.conf"
+    if check_overwrite $conf; then
+        cat > "$conf" <<EOF
 [swap]
 exportname = /tmp/nbd-swap/%s
 prerun = nbdswapd %s
 postrun = rm -f %s
 authfile = /etc/ltsp/nbd-server.allow
 EOF
-        echo "Created /etc/nbd-server/conf.d/swap.conf"
+        echo "Created $conf"
         restart_nbd=true
     fi
 
@@ -208,21 +221,22 @@ EOF
         name=${image##*/}
         name=${name%.*}
          # Configuration file upgrade, remove it e.g. in 2015.
-        if [ -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
-            if [ "$(sed -n '1s/\[ltsp_\(.*\)\]/\1/p' "/etc/nbd-server/conf.d/ltsp_$name.conf")" = "$name" ]; then
-                echo "Removing old configuration file /etc/nbd-server/conf.d/ltsp_$name.conf in order to upgrade it"
-                rm -f "/etc/nbd-server/conf.d/ltsp_$name.conf"
+        conf="/etc/nbd-server/conf.d/ltsp_$name.conf"
+        if [ -f "$conf" ]; then
+            if [ "$(sed -n '1s/\[ltsp_\(.*\)\]/\1/p' "$conf")" = "$name" ]; then
+                echo "Removing old configuration file $conf in order to upgrade it"
+                rm -f "$conf"
             fi
         fi
 
-        if [ ! -f "/etc/nbd-server/conf.d/ltsp_$name.conf" ]; then
-            cat >"/etc/nbd-server/conf.d/ltsp_$name.conf" <<EOF
+        if check_overwrite $conf; then
+            cat >"$conf" <<EOF
 [$BASE/$name]
 exportname = $image
 readonly = true
 authfile = /etc/ltsp/nbd-server.allow
 EOF
-            echo "Created /etc/nbd-server/conf.d/ltsp_$name.conf"
+            echo "Created $conf"
             restart_nbd=true
         fi
     done
