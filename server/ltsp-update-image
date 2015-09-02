@@ -133,7 +133,7 @@ run_cleanup() {
     cowtmp=$cowbase/tmp
     mkdir "$cowtmp"
 
-    # We also want to bind-mount whatever submounts the chroot has, e.g. /boot.
+    # We also want to mount whatever submounts the chroot has, e.g. /boot.
     # Here's what a `mount` command output will look like afterwards:
     # tmpfs on /tmp/tmp.EYFLkg6dYu type tmpfs (rw,relatime,mode=755)
     # overlay on /tmp/tmp.EYFLkg6dYu/chroot type overlay (rw,relatime,lowerdir=/,upperdir=/tmp/tmp.EYFLkg6dYu/tmp/.up,workdir=/tmp/tmp.EYFLkg6dYu/tmp/.work)
