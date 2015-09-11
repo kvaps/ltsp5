@@ -1,5 +1,5 @@
 # Delete all old log files
 find /var/log/ -type f -name '*.old' -o -name '*.1' -o -name '*.gz' -delete
 
-# Empty the rest
-find /var/log/ -type f -exec truncate -s 0 {} +
+# Empty the rest. But avoid using `truncate` on overlayfs (LP: #1494660).
+find /var/log/ -type f -exec tee {} + </dev/null
