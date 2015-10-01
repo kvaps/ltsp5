@@ -121,21 +121,13 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
 
-    # /etc/cups is usually not shipped by the cups-client package, so attempt
-    # to create it (it might fail if bind mounts are used).
-    if [ ! -d /etc/cups ]; then
-        mkdir /etc/cups || true
-    fi
+    # If CUPS can't resolve ServerName, it rejects the connection, see e.g.
+    # https://bugs.debian.org/530027. So we use an IP address instead.
+    mkdir -p /etc/cups
+    CUPS_SERVER=${CUPS_SERVER:-$LDM_SERVER}
+    CUPS_SERVER=$({ getent hosts "$CUPS_SERVER" || echo "$CUPS_SERVER";} | awk '{ print $1 }')
+    echo "ServerName $CUPS_SERVER" > /etc/cups/client.conf
 
-    # if cups is installed in the chroot, use LDM_SERVER for printing,
-    # unless the user has enabled remote printer browsing via CUPS.
-    if [ -d /etc/cups ]; then
-        if [ -n "$CUPS_SERVER" ]; then
-            echo "ServerName $CUPS_SERVER" > /etc/cups/client.conf
-        elif ! grep -qsi "^Browsing on" /etc/cups/cupsd.conf; then
-            echo "ServerName $LDM_SERVER" > /etc/cups/client.conf
-        fi
-    fi
     # set user's password from tmp file created in ssh connection.
     if [ -e /var/cache/ltsp/shadow.sed ]; then
         sed -f /var/cache/ltsp/shadow.sed -i /etc/shadow
