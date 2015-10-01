@@ -123,10 +123,11 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
 
     # If CUPS can't resolve ServerName, it rejects the connection, see e.g.
     # https://bugs.debian.org/530027. So we use an IP address instead.
-    mkdir -p /etc/cups
-    CUPS_SERVER=${CUPS_SERVER:-$LDM_SERVER}
-    CUPS_SERVER=$({ getent hosts "$CUPS_SERVER" || echo "$CUPS_SERVER";} | awk '{ print $1 }')
-    echo "ServerName $CUPS_SERVER" > /etc/cups/client.conf
+    if mkdir -p /etc/cups; then
+        CUPS_SERVER=${CUPS_SERVER:-$LDM_SERVER}
+        CUPS_SERVER=$({ getent hosts "$CUPS_SERVER" || echo "$CUPS_SERVER";} | awk '{ print $1 }')
+        echo "ServerName $CUPS_SERVER" > /etc/cups/client.conf
+    fi & # Background it in case the DNS lookup takes a long time
 
     # set user's password from tmp file created in ssh connection.
     if [ -e /var/cache/ltsp/shadow.sed ]; then
