@@ -184,25 +184,6 @@ config_lts_conf() {
 config_nbd_server() {
     local restart_nbd image name conf
 
-    conf="/etc/nbd-server/config"
-    # Only create if not already present, otherwise may cause issues
-    # on upgrade of nbd-server package.
-    if [ ! -f "${conf}" ]; then
-        # If user/group nbd exist, use them
-        nbd_user=$(getent passwd nbd | cut -d : -f 1)
-        nbd_user=${nbd_user:-nobody}
-        nbd_group=$(getent group nbd | cut -d : -f 1)
-        nbd_group=${nbd_group:-nogroup}
-        cat > "$conf" <<EOF
-[generic]
-user = $nbd_user
-group = $nbd_group
-includedir = /etc/nbd-server/conf.d
-EOF
-        echo "Created $conf"
-        restart_nbd=true
-    fi
-
     mkdir -p "/etc/nbd-server/conf.d"
     conf="/etc/nbd-server/conf.d/swap.conf"
     if check_overwrite $conf; then
