@@ -228,7 +228,7 @@ EOF
             warn "For nbd-server to re-read its configuration, you need to manually run:
     service nbd-server restart
 THIS WILL DISCONNECT ALL RUNNING CLIENTS (they'll need to be rebooted)."
-        elif ! service nbd-server start; then
+        elif ! { service nbd-server-stop && service nbd-server start;}; then
             warn "Failed to start nbd-server."
         fi
     fi
