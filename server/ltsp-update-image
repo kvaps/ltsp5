@@ -293,4 +293,4 @@ for chroot in "$@"; do
     generate_image "$chroot"
 done
 
-ltsp-config nbd-server
+ltsp-config --quiet nbd-server

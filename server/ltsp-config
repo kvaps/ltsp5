@@ -34,6 +34,7 @@ Options:
                                 Support varies by distribution.
   -o, --overwrite               Overwrite existing configuration files.
       --version                 Output version information and exit.
+  -q, --quiet                   Do not issue overwrite warnings
 
 Tools:
   dnsmasq                       Configure dnsmasq.
@@ -81,10 +82,12 @@ replace_arch() {
 # Check if a file exists and return error if --overwrite is not specified
 check_overwrite() {
     if [ "$OVERWRITE" != "true" ] && [ -f "$1" ]; then
-        warn "File $1 exists but --overwrite was not specified."
-        return 1;
+        if [ "$QUIET" != "true" ]; then
+            warn "File $1 exists but --overwrite was not specified."
+        fi
+        return 1
     fi
-    return 0;
+    return 0
 }
 
 # Copy a file from /usr/share/doc/ltsp-server/examples/$1 to $2,
@@ -261,8 +264,8 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 # This also sources vendor functions and .conf file settings
 . ${MODULES_BASE}/ltsp-server-functions
 
-if ! args=$(getopt -n "$0" -o "d:hl:o" \
-    -l directory,help,language,overwrite,no-proxy-dhcp,version -- "$@")
+if ! args=$(getopt -n "$0" -o "d:hl:oq" \
+    -l directory,help,language,overwrite,no-proxy-dhcp,version,quiet -- "$@")
 then
     exit 1
 fi
@@ -278,6 +281,7 @@ while true ; do
         -o|--overwrite) OVERWRITE=true ;;
         --version) ltsp_version; exit 0 ;;
         --no-proxy-dhcp) NO_PROXY_DHCP=true ;;
+        -q|--quiet) QUIET=true ;;
         --) shift ; break ;;
         *) die "$0: Internal error!" ;;
     esac
