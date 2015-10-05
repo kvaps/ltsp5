@@ -1,6 +1,0 @@
-# Prevent systemd from running ifdown on shutdown, hanging LTSP clients
-
-if [ -f /lib/systemd/system/ifup@.service ]; then
-    sed 's,^ExecStop=/sbin/ifdown,# Commented by LTSP: &,' \
-        -i /lib/systemd/system/ifup@.service
-fi
