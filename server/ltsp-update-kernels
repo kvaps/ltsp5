@@ -114,7 +114,7 @@ update_kernels() {
     fi
 
     # Ensure that the files are readable (LP: #759115) (Dracut initramfs)
-    find "$tftpboot/$name/" -maxdepth 1 ! -perm -o=r -exec chmod +r {} \;
+    find "$tftpboot/$name/" -maxdepth 1 ! -perm -o=r -exec chmod a+r {} \;
 
     # OFW on Mac is lame, they cannot tftp from directories
     if [ -e "$tftpboot/$name/yaboot" ]; then
