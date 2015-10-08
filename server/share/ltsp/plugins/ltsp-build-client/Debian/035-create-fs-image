@@ -34,12 +34,6 @@ case "$MODE" in
             mount -o loop $FS_IMAGE_FILE.new $ROOT
         fi
     ;;
-    install) 
-        if [ -n "$FS_IMAGE_TYPE" ]; then
-            mkdir -p $ROOT/etc/ltsp/
-            echo BOOTPROMPT_OPTS=\'quiet ro root=/dev/nbd0 init=/sbin/init-ltsp\' > $ROOT/etc/ltsp/update-kernels.conf
-        fi
-    ;;
     finalization)
         if [ -n "$FS_IMAGE_TYPE" ]; then
             # add $ROOT to list of files to be unmounted.  done in finalization
