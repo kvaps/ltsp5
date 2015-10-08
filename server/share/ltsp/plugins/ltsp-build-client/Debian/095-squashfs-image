@@ -1,12 +1,20 @@
 case "$MODE" in
     commandline)
         add_option "squashfs-image" "`eval_gettext "create squashfs image for use with NBD"`" "advanced" "false"
+        add_option "no-squashfs-image" "`eval_gettext "skip squashfs image creation"`" "advanced" "false"	
         ;;
     configure)
         if [ -n "$option_squashfs_image_value" ]; then
             # set an environment variable we can pick up later
             SQUASHFS_IMAGE="True"
         fi
+        if [ -n "$option_no_squashfs_image_value" ]; then
+            # set an environment variable we can pick up later
+            SQUASHFS_IMAGE="False"
+        fi
+        if [ -z "$SQUASHFS_IMAGE" ]; then
+	    SQUASHFS_IMAGE="True"
+        fi	    
         ;;
     install)
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
