@@ -16,12 +16,6 @@ case "$MODE" in
 	    SQUASHFS_IMAGE="True"
         fi	    
         ;;
-    install)
-        if [ "True" = "$SQUASHFS_IMAGE" ]; then
-            mkdir -p $ROOT/etc/ltsp/
-            echo BOOTPROMPT_OPTS=\'quiet ro root=/dev/nbd0 init=/sbin/init-ltsp\' > $ROOT/etc/ltsp/update-kernels.conf
-        fi
-    ;;
     finalization)
         if [ "True" = "$SQUASHFS_IMAGE" ]; then
             DEBIAN_OLD_FRONTEND=$DEBIAN_FRONTEND
