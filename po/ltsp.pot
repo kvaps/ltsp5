@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.5.2\n"
+"Project-Id-Version: ltsp 5.5.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-13 21:04-0700\n"
+"POT-Creation-Date: 2015-10-10 14:58-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -559,11 +559,6 @@ msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
-#, sh-format
-msgid "mounts CDROM before installation"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
@@ -577,6 +572,11 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:4
+#, sh-format
+msgid "skip squashfs image creation"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
