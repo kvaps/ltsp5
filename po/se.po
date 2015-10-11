@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-13 21:04-0700\n"
+"POT-Creation-Date: 2015-10-10 14:58-0700\n"
 "PO-Revision-Date: 2013-01-16 15:57+0000\n"
 "Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
 "Language-Team: Northern Sami <se@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-10-09 04:30+0000\n"
+"X-Launchpad-Export-Date: 2015-10-11 04:30+0000\n"
 "X-Generator: Launchpad (build 17802)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -120,10 +120,10 @@ msgstr ""
 msgid "error: LTSP client installation ended abnormally"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #, sh-format
 msgid "run most or all applications locally"
 msgstr ""
@@ -133,32 +133,32 @@ msgstr ""
 msgid "Release version number (el6,fc18,fc19) * Not working yet"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
 #, sh-format
 msgid "set the target architecture"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr ""
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
 msgstr ""
@@ -269,10 +269,10 @@ msgstr ""
 msgid "Set extra mirror locations (space-separated)"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr ""
@@ -298,8 +298,8 @@ msgstr ""
 msgid "Set input device drivers to install"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
 msgstr ""
@@ -319,8 +319,8 @@ msgstr ""
 msgid "set the security mirror location"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
 #, sh-format
 msgid "set the update mirror location"
 msgstr ""
@@ -332,10 +332,10 @@ msgid ""
 "distribution"
 msgstr ""
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:33
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr ""
@@ -560,11 +560,6 @@ msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
-#, sh-format
-msgid "mounts CDROM before installation"
-msgstr ""
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
@@ -578,6 +573,11 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:4
+#, sh-format
+msgid "skip squashfs image creation"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3

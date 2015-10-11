@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-13 21:04-0700\n"
+"POT-Creation-Date: 2015-10-10 14:58-0700\n"
 "PO-Revision-Date: 2014-05-30 15:49+0000\n"
 "Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
 "Language-Team: Chinese (simplified) <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-10-09 04:30+0000\n"
+"X-Launchpad-Export-Date: 2015-10-11 04:30+0000\n"
 "X-Generator: Launchpad (build 17802)\n"
 "Language: zh_CN\n"
 
@@ -121,10 +121,10 @@ msgstr "通知：LTSP 客户端安装成功完成"
 msgid "error: LTSP client installation ended abnormally"
 msgstr "错误：LTSP 客户端安装非正常结束"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
 #, sh-format
 msgid "run most or all applications locally"
 msgstr "本地运行大部分甚至全部程序"
@@ -134,32 +134,32 @@ msgstr "本地运行大部分甚至全部程序"
 msgid "Release version number (el6,fc18,fc19) * Not working yet"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
 #, sh-format
 msgid "set the target architecture"
 msgstr "设置目标体系结构"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr "错误：不支持的体系结构。检查您的 --arch 参数：%s"
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       支持的值有：%s"
@@ -270,10 +270,10 @@ msgstr "设置并行构建进程的数目"
 msgid "Set extra mirror locations (space-separated)"
 msgstr "设置额外的镜像地址 (用空格分隔)"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
 #, sh-format
 msgid "set the default locale"
 msgstr "设置默认区域"
@@ -299,8 +299,8 @@ msgstr "3 段 URI"
 msgid "Set input device drivers to install"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
 msgstr "简单的 webkiosk 模式"
@@ -320,8 +320,8 @@ msgstr "强制跳过构建 squashfs (由 debian-installer 使用)"
 msgid "set the security mirror location"
 msgstr "设置安全镜像的地址"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
 #, sh-format
 msgid "set the update mirror location"
 msgstr "设置升级镜像的地址"
@@ -333,10 +333,10 @@ msgid ""
 "distribution"
 msgstr ""
 
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:33
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
 msgstr "错误：--arch %s 被调用，但是体系结构 %s 不被支持"
@@ -561,11 +561,6 @@ msgid ""
 "set the distribution to be used for install, defaults to running distribution"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/099-mount-cdrom:5
-#, sh-format
-msgid "mounts CDROM before installation"
-msgstr "安装前挂载 CDROM"
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
@@ -580,6 +575,11 @@ msgstr "正在启用流行度调查..."
 #, sh-format
 msgid "create squashfs image for use with NBD"
 msgstr "创建 squashfs 镜像，以配合 NBD"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:4
+#, sh-format
+msgid "skip squashfs image creation"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
 #, sh-format
@@ -664,6 +664,10 @@ msgstr ""
 "  fpoint https://launchpad.net/~fpoint\n"
 "  laichaochao https://launchpad.net/~laichaochao\n"
 "  snowdream https://launchpad.net/~yanghui"
+
+#, sh-format
+#~ msgid "mounts CDROM before installation"
+#~ msgstr "安装前挂载 CDROM"
 
 #, sh-format
 #~ msgid "NOTE: disabling security APT source for sid.  It does not exist."
