@@ -1,0 +1,6 @@
+# Export the client MAC address to the environment
+
+# The boot interface name was stored in ltsp_config from the initramfs
+test -n "$DEVICE" || return 0
+
+set_lts_var LTSP_CLIENT_MAC "$(ip link show eth0 | awk '/ether/ { print toupper($2) }')"
