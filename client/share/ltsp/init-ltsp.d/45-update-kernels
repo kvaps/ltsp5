@@ -1,0 +1,45 @@
+# Some devices can't PXE boot, they need a local kernel and initrd.
+# Provide a method to automatically update those local copies.
+
+# We decide to update to a newer kernel when the old one has been removed.
+# Checking "modules.order" is safer than checking the dir, which might be empty.
+# We're doing this test first because a missing modules dir deserves a warning.
+test -e "/lib/modules/$(uname -r)/modules.order" && return 0
+log "The modules dir does not exist for the active kernel $(uname -r)"
+
+# KERNEL_DEVICE can be set as e.g. ltsp.kernel_device=/dev/mmcblk0p1 in cmdline,
+# or as e.g. KERNEL_DEVICE=/dev/disk/by-label/LTSP in lts.conf.
+test -e "$KERNEL_DEVICE" || return 0
+
+# Test that a symlink exists to the new kernel that we'll copy.
+KERNEL_NAME=${KERNEL_NAME:-vmlinuz}
+test -e "/boot/$KERNEL_NAME" || return 0
+INITRD_NAME=${INITRD_NAME:-initrd.img}
+test -e "/boot/$INITRD_NAME" || return 0
+
+log "Trying to update $KERNEL_NAME and $INITRD_NAME in $KERNEL_DEVICE"
+mntdir=$(mktemp -d)
+if mount "$KERNEL_DEVICE" "$mntdir"; then
+    KERNEL_DIR=${KERNEL_DIR:-boot}
+    target_dir=$(find "$mntdir" -maxdepth 1 -type d -iname "$KERNEL_DIR")
+    target_dir=${target_dir:-$mntdir}
+    if [ ! -e "$target_dir/$KERNEL_NAME" ] || [ ! -e "$target_dir/$INITRD_NAME" ]; then
+        log "$target_dir/$KERNEL_NAME not found, not updating kernels"
+    else
+        # Copying might take a long time and might be interrupted,
+        # so copy them with a temporary name first and rename them afterwards.
+        cp "/boot/$KERNEL_NAME" "$target_dir/$KERNEL_NAME.new" &&
+        cp "/boot/$INITRD_NAME" "$target_dir/$INITRD_NAME.new" &&
+        mv "$target_dir/$KERNEL_NAME.new" "$target_dir/$KERNEL_NAME" &&
+        mv "$target_dir/$INITRD_NAME.new" "$target_dir/$INITRD_NAME" &&
+        copied_kernel=true
+    fi
+    sync; umount "$mntdir"; sync
+fi
+rmdir "$mntdir"
+if [ -n "$copied_kernel" ]; then
+    log "Successfully updated the local kernel, rebooting in 10 seconds..."
+    # Plain reboot might not work so early in the boot process.
+    # Also allow cancelling the reboot with Ctrl+C.
+    sleep 10 && reboot -fp
+fi
