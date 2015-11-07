@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-10-21 04:30+0000\n"
-"X-Generator: Launchpad (build 17812)\n"
+"X-Launchpad-Export-Date: 2015-11-07 04:30+0000\n"
+"X-Generator: Launchpad (build 17838)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -93,7 +93,7 @@ msgstr ""
 #: ../server/ltsp-build-client:191
 #, sh-format
 msgid "output version information and exit"
-msgstr ""
+msgstr "輸出版本資訊並離開"
 
 #: ../server/ltsp-build-client:195
 #, sh-format
@@ -652,7 +652,8 @@ msgstr ""
 "Launchpad Contributions:\n"
 "  Chao-Hsiung Liao https://launchpad.net/~j-h-liau\n"
 "  Cheng-Wei Chien https://launchpad.net/~cwchien\n"
-"  Jim McQuillan https://launchpad.net/~jam-mcquil"
+"  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
+"  Rockworld https://launchpad.net/~rockrock2222222"
 
 #, sh-format
 #~ msgid "NOTE: disabling security APT source for sid.  It does not exist."
