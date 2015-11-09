@@ -1,0 +1,48 @@
+# Interlingua translation for ltsp
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the ltsp package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ltsp\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-03-07 14:47+0200\n"
+"PO-Revision-Date: 2015-11-08 05:06+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Interlingua <ia@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-11-09 04:30+0000\n"
+"X-Generator: Launchpad (build 17838)\n"
+
+#: ltsp-login.sh:17
+#, sh-format
+msgid "Login Error"
+msgstr "Error de connexion"
+
+#: ltsp-login.sh:20 ltsp-login.sh:28
+#, sh-format
+msgid "Continue"
+msgstr "Continuar"
+
+#: ltsp-login.sh:21
+#, sh-format
+msgid "Cancel"
+msgstr "Cancellar"
+
+#: ltsp-login.sh:22 ltsp-login.sh:29
+#, sh-format
+msgid "User"
+msgstr "Usator"
+
+#: ltsp-login.sh:22 ltsp-login.sh:29
+#, sh-format
+msgid "already logged in!"
+msgstr "jam connexe!"
+
+#: ltsp-login.sh:25
+#, sh-format
+msgid "Login Warning"
+msgstr "Advertimento del connexion"
