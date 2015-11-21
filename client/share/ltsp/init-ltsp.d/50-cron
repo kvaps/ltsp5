@@ -6,4 +6,4 @@ fi
 if [ -n "$SHUTDOWN_TIME" ] ; then
     echo $SHUTDOWN_TIME | awk -F : '{print $2" "$1" * * * root test ! -S \"$(ls -1 /var/run/ldm_socket_* | head -1)\" && PATH=\$PATH:/sbin/ poweroff || echo HALT > /var/run/ltsp-logout-action" }' >> $CRON_FILE
 fi
-env | sort -V | sed -n 's/^CRONTAB_[0-9]*=//p' >> "$CRON_FILE"
+env | sort -V | sed -n 's/^CRONTAB_[^=]*=//p' >> "$CRON_FILE"

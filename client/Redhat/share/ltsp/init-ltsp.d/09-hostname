@@ -30,4 +30,4 @@ EOF
 if [ -f /etc/hosts.ltsp ]; then
     cat /etc/hosts.ltsp >> /etc/hosts
 fi
-env | sed -n '/^HOSTS_[0-9][0-9]=/s///p' >> /etc/hosts
+env | sort -V | sed -n 's/^HOSTS_[^=]*=//p' >> /etc/hosts

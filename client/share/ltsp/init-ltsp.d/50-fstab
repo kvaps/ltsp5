@@ -23,5 +23,5 @@ if [ -n "$NFS_HOME" ]; then
     echo "$NFS_HOME $mntpt         nfs     $NFS_HOME_OPTIONS        0       0" >> /etc/fstab
 fi
 
-# Put FSTAB_0 to FSTAB_9 lts.conf options to fstab
-env | sort -V | sed -n 's/^FSTAB_[0-9]*=//p' >> /etc/fstab
+# Put FSTAB_* lts.conf options to fstab
+env | sort -V | sed -n 's/^FSTAB_[^=]*=//p' >> /etc/fstab

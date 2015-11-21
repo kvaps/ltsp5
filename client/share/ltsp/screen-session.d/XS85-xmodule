@@ -1,8 +1,6 @@
-# This script sets Xserver module options for the specified driver
-# using the X_MODULE_01 .. X_MODULE_10 lts.conf vars
-#
+# This script sets Xserver module options using the X_MODULE_* lts.conf vars
 
-xmodules=$(env | sort -V | sed -n 's/^X_MODULE_[0-9]*=/        Load /p')
+xmodules=$(env | sort -V | sed -n 's/^X_MODULE_[^=]*=/        Load /p')
 
 if [ -n "$xmodules" ]; then
     module_hacks="$module_hacks set_xmodules"

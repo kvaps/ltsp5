@@ -1,8 +1,6 @@
-# This script sets monitor options 
-# using the X_MONITOR_OPTION_01 .. X_MONITOR_OPTION_10 lts.conf vars
-#
+# This script sets monitor options using the X_MONITOR_OPTION_* lts.conf vars
 
-mon_options=$(env | sort -V | sed -n 's/^X_MONITOR_OPTION_[0-9]*=/        Option /p')
+mon_options=$(env | sort -V | sed -n 's/^X_MONITOR_OPTION_[^=]*=/        Option /p')
 
 if [ -n "$mon_options" ]; then
     monitor_hacks="$monitor_hacks set_mon_options"

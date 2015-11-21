@@ -1,5 +1,5 @@
 # Load extra modules here, in case they affect other plugins
-env | sort -V | sed -n 's/^MODULE_[0-9]*=//p' | 
+env | sort -V | sed -n 's/^MODULE_[^=]*=//p' | 
 while read -r module; do
     modprobe $module
 done
