@@ -303,6 +303,17 @@ EOF
         done
     fi
 
+    if [ -f "$BOOT/memtest86+.bin" ]; then
+        pxelinux_include_files="$pxelinux_include_files memtest"
+        cat > $PXECFG/memtest <<EOF
+# This file is regenerated when update-kernels runs.
+# Do not edit, see /etc/ltsp/update-kernels.conf instead.
+label memtest86+.bin
+menu label Memory test
+linux memtest86+.bin
+EOF
+    fi
+
     for file in $pxelinux_include_files ; do
         if [ -f "$PXECFG/$file" ]; then
             cat "$PXECFG/$file" >> $PXECFG/ltsp
