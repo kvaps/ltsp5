@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-11-07 04:30+0000\n"
-"X-Generator: Launchpad (build 17838)\n"
+"X-Launchpad-Export-Date: 2015-11-27 04:30+0000\n"
+"X-Generator: Launchpad (build 17850)\n"
 "Language: pl\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
@@ -498,6 +498,7 @@ msgstr "zamontuj katalog podręczny plików pakietów z serwera"
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
 msgstr ""
+"montuje katalog serwera jako katalog chroot pamięci podręcznej pakietu."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
