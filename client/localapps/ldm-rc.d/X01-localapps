@@ -101,13 +101,18 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
         follow_home_symlinks="follow_symlinks,"
         follow_extra_symlinks="follow_symlinks,"
     fi
+    # SSHFS hardlinks break gnome-keyring, see
+    # https://bugzilla.gnome.org/show_bug.cgi?id=730587
+    if boolean_is_true "${SSH_DISABLE_HARDLINK:-True}"; then
+        disable_hardlink="disable_hardlink,"
+    fi
     # If the user's home directory is not located in the root cow device, assume
     # that it has already been mounted with other means, e.g. with FSTAB_x.
     if [ "$(stat -c %m "$LDM_HOME")" != "/" ]; then
         unset SSHFS_HOME
     else
         export SSHFS_HOME=true
-        sshfs -o "${follow_home_symlinks}allow_other,nonempty,ControlPath=$LDM_SOCKET" "$LDM_SERVER:$LDM_HOME" "$LDM_HOME"
+        sshfs -o "${follow_home_symlinks}${disable_hardlink}allow_other,nonempty,ControlPath=$LDM_SOCKET" "$LDM_SERVER:$LDM_HOME" "$LDM_HOME"
     fi
 
     # Mount other directories
@@ -116,7 +121,7 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
         IFS=","
         for extradir in $LOCAL_APPS_EXTRAMOUNTS; do
             mkdir -p "$extradir"
-            sshfs -o "${follow_extra_symlinks}allow_other,nonempty,ControlPath=$LDM_SOCKET" "$LDM_SERVER:$extradir" "$extradir"
+            sshfs -o "${follow_extra_symlinks}${disable_hardlink}allow_other,nonempty,ControlPath=$LDM_SOCKET" "$LDM_SERVER:$extradir" "$extradir"
         done
         test "$oldifs" = "not set" && unset IFS || IFS="$oldifs"
     fi
