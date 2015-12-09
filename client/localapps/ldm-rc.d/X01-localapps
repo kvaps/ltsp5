@@ -103,7 +103,10 @@ if boolean_is_true "$LOCAL_APPS" || boolean_is_true "$LTSP_FATCLIENT"; then
     fi
     # SSHFS hardlinks break gnome-keyring, see
     # https://bugzilla.gnome.org/show_bug.cgi?id=730587
-    if boolean_is_true "${SSH_DISABLE_HARDLINK:-True}"; then
+    if boolean_is_true "${SSH_DISABLE_HARDLINK:-True}" &&
+        [ "$({ echo 2.5; sshfs -V 2>&1 | awk '/SSHFS version/ { print $3 }';} |
+        sort -V | head -n 1)" = "2.5" ]
+    then
         disable_hardlink="disable_hardlink,"
     fi
     # If the user's home directory is not located in the root cow device, assume
