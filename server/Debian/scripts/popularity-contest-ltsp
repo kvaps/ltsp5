@@ -13,7 +13,7 @@ BASE="/opt/ltsp"
 for base in $BASE ; do
     if [ -d "$BASE" ]; then
         # find all the top-level directories in $BASE
-        for dir in $(find $BASE -maxdepth 1 -type d) ; do
+        for dir in $(find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images); do
             # only do the following if popularity-contest is installed, 
             # /bin/true exists and returns true (in case of architecture mis-match),
             # and chroot is available

@@ -201,7 +201,7 @@ EOF
         restart_nbd=true
     fi
 
-    for image in $(find "$BASE/images/" -type f -name '*.img'); do
+    for image in $(find -L "$BASE/images/" -type f -name '*.img'); do
         name=${image##*/}
         name=${name%.*}
          # Configuration file upgrade, remove it e.g. in 2015.

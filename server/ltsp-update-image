@@ -284,7 +284,7 @@ fi
 
 # Chroots can be specified in the command line. If not, update all of them.
 if [ $# -eq 0 ]; then
-    set -- $(find "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
+    set -- $(find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
         ! -name lost+found -printf "%f\n")
 fi
 test $# -gt 0 || die "No chroots found in $BASE"

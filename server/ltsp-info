@@ -39,7 +39,7 @@ EOF
 }
 
 find_chroots() {
-    find $BASE -mindepth 1 -maxdepth 1 -type d
+    find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images
 }
 
 find_lts_conf() {
@@ -60,7 +60,7 @@ find_lts_conf() {
 
 find_images() {
     if [ -d "$BASE/images" ]; then
-        for image in $(find $BASE/images/ -type f -name '*.img' ); do
+        for image in $(find -L "$BASE/images/" -type f -name '*.img'); do
             echo found image: $image
             if [ "$verbose" = "true" ] && [ -x /usr/bin/file ]; then
                 file $image 
