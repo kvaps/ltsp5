@@ -28,11 +28,17 @@ case "$MODE" in
                 armhf)
                     KERNEL_VARIANT="armmp"
                     ;;
-                i386|kfreebsd-i386)
-                    KERNEL_VARIANT="486"
+                i386)
+                    case $DIST in
+                      squeeze|wheezy) KERNEL_VARIANT="486" ;;
+                      *) KERNEL_VARIANT="586" ;;
+                    esac
                     ;;
                 kfreebsd-amd64)
                     KERNEL_VARIANT="amd64"
+                    ;;
+                kfreebsd-i386)
+                    KERNEL_VARIANT="486"
                     ;;
                 sparc) # only 64 bit kernel is supported in Debian Lenny+
                     KERNEL_VARIANT="sparc64"
