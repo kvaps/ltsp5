@@ -26,6 +26,7 @@ manual_add_modules squashfs
 manual_add_modules overlay
 manual_add_modules overlayfs
 manual_add_modules aufs
+manual_add_modules aoe
 auto_add_modules net
 
 # Copy across the binaries
