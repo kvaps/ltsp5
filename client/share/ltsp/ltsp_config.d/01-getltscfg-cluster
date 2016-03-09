@@ -1,6 +1,6 @@
 # Get ltsp-cluster config
 if [ -f /var/cache/getltscfg-cluster/lts.conf ]; then
     eval $(getltscfg -a -c /var/cache/getltscfg-cluster/lts.conf) || true
-    eval $(getltscfg -a -c /var/cache/getltscfg-cluster/lts.conf |grep -v export >> ${ltsp_config_env}) || true
+    eval $(getltscfg -a -c /var/cache/getltscfg-cluster/lts.conf |grep -va ^export >> ${ltsp_config_env}) || true
 fi
 
