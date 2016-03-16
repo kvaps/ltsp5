@@ -87,7 +87,7 @@ get_mounts() {
             *) continue ;;
         esac
         case "$point/" in
-            $chroot/|/dev/*|/proc/*|/run/*|/sys/*) continue ;;
+            $chroot/|/dev/*|/proc/*|/run/*|/sys/*|/tmp/*) continue ;;
             ${chroot%/}/*) echo "$point" ;;
         esac
     done < /proc/mounts | sort -u
