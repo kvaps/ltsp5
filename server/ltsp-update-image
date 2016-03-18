@@ -127,7 +127,7 @@ run_cleanup() {
     trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
     # Overlayfs misbehaves when $cowroot is in the same file system as
     # $chroot, so we use a tmpfs. It's also easier to clean it up afterwards.
-    mark_mount -t tmpfs -o mode=0755 tmpfs "$cowbase"
+    mark_mount -t tmpfs -o mode=0700 tmpfs "$cowbase"
     cowroot=$cowbase/root
     mkdir "$cowroot"
     cowtmp=$cowbase/tmp
