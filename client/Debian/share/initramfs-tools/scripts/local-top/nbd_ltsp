@@ -21,3 +21,8 @@ if [ "$ROOT" = /dev/nbd0 ] && [ -z "$FSTYPE" ]; then
         echo "FSTYPE='$FSTYPE'" > /conf/param.conf
     fi
 fi
+
+# Disable resume on LTSP clients to avoid 5 sec delay
+if grep -qs "init=/sbin/init-ltsp" /proc/cmdline; then
+    echo "resume=" >> /conf/param.conf
+fi
