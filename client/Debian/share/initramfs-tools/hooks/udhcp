@@ -1,10 +1,8 @@
 #!/bin/sh -e
 # initramfs hook for udhcpc
 
-MINKVER="2.6.17"
 PREREQ=""
 
-# Output pre-requisites
 prereqs()
 {
     echo "$PREREQ"
@@ -13,10 +11,9 @@ prereqs()
 case "$1" in
     prereqs)
         prereqs
-    exit 0
-    ;;
+        exit 0
+        ;;
 esac
-
 
 . /usr/share/initramfs-tools/hook-functions
 

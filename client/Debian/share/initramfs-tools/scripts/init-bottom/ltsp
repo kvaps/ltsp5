@@ -7,6 +7,20 @@
 # The second is to pass "init=/sbin/init-ltsp", which will execute the scripts
 # in the real system and chain to /sbin/init after that.
 
+PREREQ=""
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case "$1" in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
 for x in $(cat /proc/cmdline); do
     case "$x" in
         init=/sbin/init-ltsp)
@@ -54,7 +68,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
     mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
     for dir in /rofs /cow ; do
         mkdir -p ${rootmnt}${dir}
-    	mount -o move ${dir} ${rootmnt}${dir}
+        mount -o move ${dir} ${rootmnt}${dir}
     done
 fi
 

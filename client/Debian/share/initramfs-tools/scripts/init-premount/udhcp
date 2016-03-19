@@ -33,12 +33,11 @@ prereqs()
     echo "$PREREQ"
 }
 
-case $1 in
-# get pre-requisites
-prereqs)
-    prereqs
-    exit 0
-    ;;
+case "$1" in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
 esac
 
 # Exit if an LTSP boot was not requested

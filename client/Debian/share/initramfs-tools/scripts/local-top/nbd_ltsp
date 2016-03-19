@@ -1,5 +1,19 @@
 #!/bin/sh
 
+PREREQ="nbd"
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case "$1" in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
 # Work around LP bug #696435
 if [ "$ROOT" = /dev/nbd0 ] && [ -z "$FSTYPE" ]; then
     FSTYPE=$(blkid -s TYPE -o value "${ROOT}")

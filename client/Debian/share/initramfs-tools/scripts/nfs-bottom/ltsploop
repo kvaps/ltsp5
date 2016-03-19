@@ -9,6 +9,20 @@
 # Also needs a dummy /opt/ltsp/images/sbin/init-ltsp to be an executable file
 # to work around a bug/feature in initramfs-tools's nfs mount checks...
 
+PREREQ=""
+
+prereqs()
+{
+    echo "$PREREQ"
+}
+
+case "$1" in
+    prereqs)
+        prereqs
+        exit 0
+        ;;
+esac
+
 for x in $(cat /proc/cmdline); do
     case "$x" in
         ltsploop=*)
