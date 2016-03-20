@@ -1,13 +1,13 @@
 # Remove some system services that don't make sense in live sessions.
 # The user can add more items by declaring space separated RM_SYSTEM_SERVICES
-# or RM_THIN_SYSTEM_SERVICES lists in lts.conf. The RM_THIN_SYSTEM_SERVICES list
-# is ignored by fat clients.
+# or RM_THIN_SYSTEM_SERVICES lists in lts.conf.
+# The RM_THIN_SYSTEM_SERVICES list is ignored by fat clients.
 # KEEP_SYSTEM_SERVICES is a space separated whitelist of services.
 
 allowed_services() {
-    local service description
+    local service
 
-    echo "$@" | while read service description; do
+    echo "$@" | sed 's/#.*//' | while read service; do
         case " $KEEP_SYSTEM_SERVICES " in
             *" $service "*)
                 ;;
@@ -19,17 +19,23 @@ allowed_services() {
 }
 
 # $RM_SYSTEM_SERVICES are removed for all clients
-rm_services="$RM_SYSTEM_SERVICES $(allowed_services "
+rm_services="$(allowed_services "$RM_SYSTEM_SERVICES
 alsa-restore          # Restore sound card(s') mixer state(s)
 alsa-store            # Save sound card(s') mixer state(s)
+dnsmasq               # A lightweight DHCP and caching DNS server
 exim4                 # exim4 Mail Transport Agent
 grub-common           # Record successful boot for GRUB
 lightdm               # Light Display Manager
+lvm2-lvmetad          # LVM2 metadata daemon
+mdadm                 # MD monitoring daemon
 ModemManager          # Modem manager
 modemmanager          # Modem manager (older versions)
 nbd-client            # Network Block Device client (we use nbd-disconnect)
+nbd-server            # Network Block Device server
 plymouth-stop         # Hide the splash screen
 rfkill-store          # Store software rfkill state
+shared-folders        # Shared folders service
+ssh                   # OpenSSH server
 tty2                  # Getty
 tty3                  # Getty
 tty4                  # Getty
@@ -39,11 +45,13 @@ unattended-upgrades   # Check if unattended upgrades are being applied
 urandom               # Save and restore random seed between restarts
 ureadahead            # Read required files in advance
 ureadahead-other      # Read required files in advance for other mountpoints
+x2goserver            # X2Go daemon responsible for post-session clean-ups
 ")"
 
 # $RM_THIN_SYSTEM_SERVICES are removed for thin clients
 if ! boolean_is_true "$LTSP_FATCLIENT"; then
-    rm_services="$rm_services $RM_THIN_SYSTEM_SERVICES $(allowed_services "
+    rm_services="$rm_services $(allowed_services "$RM_THIN_SYSTEM_SERVICES
+accounts-daemon       # Accounts Service
 acpid                 # ACPI daemon
 apparmor              # AppArmor initialization
 apport                # Automatic crash report generation
@@ -51,23 +59,34 @@ atd                   # Deferred execution scheduler
 avahi-daemon          # mDNS/DNS-SD daemon
 bluetooth             # Bluetooth daemon
 brltty                # Braille terminal driver
+cgmanager             # Cgroup management daemon
 cups                  # CUPS Printing spooler and server
 cups-browsed          # CUPS browse daemon
 kerneloops            # Collects and submits kernel crash signatures
 network-manager       # Network connection manager
+NetworkManager        # Network Manager
+NetworkManager-wait-online        # Network Manager Wait Online
+NetworkManager-script-dispatcher  # Network Manager Script Dispatcher Service
+polkitd               # Authenticate and Authorize Users to Run Privileged Tasks
+systemd-logind        # Login Service
+teamviewerd           # TeamViewer remote control daemon
 ufw                   # Uncomplicated Firewall
 upstart-socket-bridge # Bridge socket events into upstart
+virtualbox            # VirtualBox Linux kernel module
+vboxweb               # VirtualBox Web Service
+whoopsie              # crash report submission daemon
+wpa_supplicant        # WPA supplicant
 ")"
 
     # For low RAM thin clients, disable whatever isn't essential for booting
-    memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
-    memtotal=$(($memtotal / 1024))
-    RM_RAM_THRESHOLD=${RM_RAM_THRESHOLD:-128}
+    memtotal=$(awk '/^MemTotal:/ { print int($2/1024) }' /proc/meminfo)
+    RM_RAM_THRESHOLD=${RM_RAM_THRESHOLD:-200}
     if [ "$memtotal" -le "$RM_RAM_THRESHOLD" ]; then
-        rm_services="$rm_services $RM_LOW_RAM_SERVICES $(allowed_services "
+        rm_services="$rm_services $(allowed_services "$RM_LOW_RAM_SERVICES
 anacron               # anac(h)ronistic cron
-dbus                  # D-Bus system message bus
+#dbus                  # D-Bus system message bus - systemd depends on it
 cron                  # Regular background program processing daemon
+getty@                # Getty on %I
 rsyslog               # System logging daemon
 tty1                  # Getty
 upstart-udev-bridge   # Bridge udev events into upstart
@@ -78,18 +97,22 @@ fi
 # We don't need NFS-related services if we're not using nfs
 if ! grep -q nfs /etc/fstab; then
     rm_services="$rm_services $(allowed_services "
+gssd                  # rpcsec_gss daemon
 idmapd                # NFSv4 id <-> name mapper
+nfs-blkmap            # pNFS block layout mapping daemon
+nfs-kernel-server     # Kernel NFS server support
+nfs-mountd            # NFS Mount Daemon
+nfs-server            # NFS server and services
+nfs-utils             # NFS server and client services
 portmap               # RPC portmapper replacement
+rpc-svcgssd           # RPC security service for NFS server
+rpcbind               # RPC portmapper replacement
 rpcbind-boot          # RPC portmapper replacement
+run-rpc_pipefs        # RPC Pipe File System
+statd                 # NSM status monitor
 ")"
 fi
 
 for service in $rm_services; do
-    rm -f /etc/rc?.d/???"$service" "/etc/init.d/$service" "/etc/init/$service.conf"
+    rm -f /etc/rc?.d/???"$service" "/etc/init.d/$service" "/etc/init/$service.conf" "/lib/systemd/system/$service."* "/etc/systemd/system/$service."*
 done
-
-if [ -x /bin/systemctl ]; then
-   for service in $rm_services ; do
-       systemctl --quiet disable "$service"
-   done
-fi

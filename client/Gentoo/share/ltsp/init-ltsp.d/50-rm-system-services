@@ -1,13 +1,13 @@
 # Remove some system services that don't make sense in live sessions.
 # The user can add more items by declaring space separated RM_SYSTEM_SERVICES
-# or RM_THIN_SYSTEM_SERVICES lists in lts.conf. The RM_THIN_SYSTEM_SERVICES list
-# is ignored by fat clients.
+# or RM_THIN_SYSTEM_SERVICES lists in lts.conf.
+# The RM_THIN_SYSTEM_SERVICES list is ignored by fat clients.
 # KEEP_SYSTEM_SERVICES is a space separated whitelist of services.
 
 allowed_services() {
-    local service description
+    local service
 
-    echo "$@" | while read service description; do
+    echo "$@" | sed 's/#.*//' | while read service; do
         case " $KEEP_SYSTEM_SERVICES " in
             *" $service "*)
                 ;;
@@ -19,24 +19,23 @@ allowed_services() {
 }
 
 # $RM_SYSTEM_SERVICES are removed for all clients
-rm_services="$RM_SYSTEM_SERVICES $(allowed_services "
+rm_services="$(allowed_services "$RM_SYSTEM_SERVICES
 syslog-ng             # Syslog-ng logging daemon
 xdm                   # X.Org Display Manager
 ")"
 
 # $RM_THIN_SYSTEM_SERVICES are removed for thin clients
 if ! boolean_is_true "$LTSP_FATCLIENT"; then
-    rm_services="$rm_services $RM_THIN_SYSTEM_SERVICES $(allowed_services "
+    rm_services="$rm_services $(allowed_services "$RM_THIN_SYSTEM_SERVICES
 cups                  # CUPS Printing spooler and server
 NetworkManager        # Network connection manager
 ")"
 
     # For low RAM thin clients, disable whatever isn't essential for booting
-    memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
-    memtotal=$(($memtotal / 1024))
+    memtotal=$(awk '/^MemTotal:/ { print int($2/1024) }' /proc/meminfo)
     RM_RAM_THRESHOLD=${RM_RAM_THRESHOLD:-128}
     if [ "$memtotal" -le "$RM_RAM_THRESHOLD" ]; then
-        rm_services="$rm_services $RM_LOW_RAM_SERVICES $(allowed_services "
+        rm_services="$rm_services $(allowed_services "$RM_LOW_RAM_SERVICES
 uptimed               # Uptime Daemon
 ")"
     fi

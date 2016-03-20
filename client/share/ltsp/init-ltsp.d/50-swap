@@ -15,8 +15,8 @@ if [ -z "$NBD_SWAP" ]; then
             NBD_SWAP_THRESHOLD=800
         fi
     fi
-    memtotal=$(sed -n 's/MemTotal: *\([0-9]*\) .*/\1/p' /proc/meminfo)
-    if [ "$memtotal" -lt $((1024*$NBD_SWAP_THRESHOLD)) ]; then
+    memtotal=$(awk '/^MemTotal:/ { print int($2/1024) }' /proc/meminfo)
+    if [ "$memtotal" -lt "$NBD_SWAP_THRESHOLD" ]; then
         NBD_SWAP=true
     fi
 fi
