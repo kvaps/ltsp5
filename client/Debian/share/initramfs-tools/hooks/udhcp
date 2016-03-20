@@ -19,5 +19,13 @@ esac
 
 # Copy across the binaries
 if [ -x /sbin/udhcpc ]; then
-    copy_exec /sbin/udhcpc /sbin
+    # udhcpc is usually a symlink to /bin/busybox (-static),
+    # but recent initramfs-tools versions copy busybox (-initramfs) instead,
+    # which doesn't contain the udhcpc applet, and symlink udhcpc, breaking it.
+    # So explicitly copy /bin/busybox, bypassing that broken symlinking logic.
+    if [ -L /sbin/udhcpc ]; then
+        copy_exec "$(readlink /sbin/udhcpc)" /sbin/udhcpc
+    else
+        copy_exec /sbin/udhcpc /sbin
+    fi
 fi
