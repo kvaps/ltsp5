@@ -1,3 +1,4 @@
+unset swap_devices
 if boolean_is_true "$USE_LOCAL_SWAP" ; then
     # Enable local swap partition if found on local disk
     for part in `sfdisk -l 2>/dev/null | awk '/ 82 / { print $1}'`; do
@@ -5,8 +6,8 @@ if boolean_is_true "$USE_LOCAL_SWAP" ; then
     done
 fi
 
-# Set NBD_SWAP=true by default for clients with RAM < NBD_SWAP_THRESHOLD
-if [ -z "$NBD_SWAP" ]; then
+# If no local swap was found, default to NBD_SWAP=true for low-RAM clients
+if [ -z "$swap_devices" ] && [ -z "$NBD_SWAP" ]; then
     # Set reasonable defaults for NBD_SWAP_THRESHOLD (in MB)
     if [ -z "$NBD_SWAP_THRESHOLD" ]; then
         if boolean_is_true "$LTSP_FATCLIENT"; then
