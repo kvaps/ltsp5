@@ -27,7 +27,7 @@ if boolean_is_true "$NBD_SWAP" ; then
     modprobe nbd
     # Detect first unused nbd device, skip nbd0
     for num in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-        ret=
+        ret=0
         nbd-client -c /dev/nbd${num} > /dev/null || ret="$?"
         [ "$ret" -eq 1 ] && break
     done
