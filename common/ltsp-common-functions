@@ -19,7 +19,7 @@ ltsp_version()
 
 warn()
 {
-    echo "$@" >&2
+    printf "%s\n" "$*" >&2
 }
 
 die() {
@@ -29,8 +29,11 @@ die() {
 
 log()
 {
-    if [ -x /usr/bin/logger ]; then
+    if [ -x /usr/bin/logger ] && [ -e /dev/log ]; then
         logger -s -t "${0##/}" "$*"
+    elif [ -w /dev/kmsg ]; then
+        warn "${0##/}: $*" 2>>/dev/kmsg
+        warn "${0##/}: $*"
     else
         warn "${0##/}: $*"
     fi
