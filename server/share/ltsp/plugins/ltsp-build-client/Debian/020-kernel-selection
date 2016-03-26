@@ -31,7 +31,8 @@ case "$MODE" in
                 i386)
                     case $DIST in
                       squeeze|wheezy) KERNEL_VARIANT="486" ;;
-                      *) KERNEL_VARIANT="586" ;;
+                      jessie) KERNEL_VARIANT="586" ;;
+                      *) KERNEL_VARIANT="686" ;;
                     esac
                     ;;
                 kfreebsd-amd64)
