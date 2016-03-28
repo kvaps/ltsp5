@@ -21,7 +21,7 @@ NAME=ltsp-client
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Gracefully exit if an LTSP boot was not requested
-grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
+grep -qs "init=/sbin/init-ltsp" /proc/cmdline || exit 0
 
 # handle localization settings
 if [ -r /etc/default/locale ]; then

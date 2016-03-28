@@ -41,7 +41,7 @@ case "$1" in
 esac
 
 # Exit if an LTSP boot was not requested
-grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
+grep -qs "init=/sbin/init-ltsp" /proc/cmdline || exit 0
 . /scripts/functions
 
 bring_up_interfaces()

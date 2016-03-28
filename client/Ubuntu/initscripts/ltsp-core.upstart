@@ -9,7 +9,7 @@ start on ((filesystem
 stop on starting rc RUNLEVEL=[06]
 
 pre-start script
-    grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
+    grep -qs "init=/sbin/init-ltsp" /proc/cmdline || exit 0
 
     # Make sure the locales are set
     if [ -r /etc/default/locale ]; then
@@ -32,7 +32,7 @@ pre-start script
 end script
 
 post-stop script
-    grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
+    grep -qs "init=/sbin/init-ltsp" /proc/cmdline || exit 0
 
     if [ -x /usr/share/ltsp/nbd-disconnect ]; then
         /usr/share/ltsp/nbd-disconnect&
