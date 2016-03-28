@@ -35,8 +35,9 @@ for x in $(cat /proc/cmdline); do
 done
 
 test -n "$ltsploop" || exit 0
-ltsploopfs=${ltsploopfs:-"squashfs"}
+. /scripts/functions
 
+ltsploopfs=${ltsploopfs:-"squashfs"}
 [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
 
 if [ -f "${rootmnt}/${ltsploop}" ]; then

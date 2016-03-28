@@ -42,6 +42,7 @@ esac
 
 # Exit if an LTSP boot was not requested
 grep -Eqsw "init=/sbin/init-ltsp|ltsp" /proc/cmdline || exit 0
+. /scripts/functions
 
 bring_up_interfaces()
 {

@@ -36,6 +36,7 @@ for x in $(cat /proc/cmdline); do
 done
 
 test -n "$LTSP_BOOT" || exit
+. /scripts/functions
 
 [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
 [ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
@@ -62,7 +63,6 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         UNION_TYPE=aufs
         UNION_OPTS="dirs=/cow=rw:/rofs=ro"
     else
-        . /scripts/functions
         panic "Could not load neither overlayfs nor aufs."
     fi
     mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
