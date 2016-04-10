@@ -22,7 +22,9 @@ allowed_services() {
 rm_services="$(allowed_services "$RM_SYSTEM_SERVICES
 alsa-restore          # Restore sound card(s') mixer state(s)
 alsa-store            # Save sound card(s') mixer state(s)
+apt-daily             # Daily apt activities
 dnsmasq               # A lightweight DHCP and caching DNS server
+dphys-swapfile        # Autogenerate and use a swap file
 exim4                 # exim4 Mail Transport Agent
 grub-common           # Record successful boot for GRUB
 lightdm               # Light Display Manager
