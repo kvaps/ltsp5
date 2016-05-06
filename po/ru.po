@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: ltsp 5.2.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-10 14:58-0700\n"
-"PO-Revision-Date: 2015-08-15 08:27+0000\n"
-"Last-Translator: Jim McQuillan <jam@mcquil.com>\n"
+"PO-Revision-Date: 2016-05-05 18:44+0000\n"
+"Last-Translator: fignya <ayngif@gmail.com>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-17 04:30+0000\n"
+"X-Launchpad-Export-Date: 2016-05-06 04:30+0000\n"
 "X-Generator: Launchpad (build 17995)\n"
 "Language: ru\n"
 
@@ -95,7 +95,7 @@ msgstr "показать справку по всем доступным пар�
 #: ../server/ltsp-build-client:191
 #, sh-format
 msgid "output version information and exit"
-msgstr ""
+msgstr "вывести информацию о версии и выйти"
 
 #: ../server/ltsp-build-client:195
 #, sh-format
@@ -105,7 +105,7 @@ msgstr "Использование LTSP Build Client:"
 #: ../server/ltsp-build-client:201
 #, sh-format
 msgid "  Regular options:"
-msgstr "  Обычные параметры:"
+msgstr "  Стандартные параметры:"
 
 #: ../server/ltsp-build-client:205
 #, sh-format
@@ -115,12 +115,12 @@ msgstr "  Дополнительные параметры:"
 #: ../server/ltsp-build-client:217
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr "инфо: установка клиента LTSP успешно завершена"
+msgstr "информация: установка клиента LTSP успешно завершена"
 
 #: ../server/ltsp-build-client:219
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr "ошибка: установка клиента LTSP завершилась неудачно"
+msgstr "ошибка: установка клиента LTSP завершена некорректно"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
@@ -403,7 +403,7 @@ msgstr "добавить зеркало с приоритетом ниже, че
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
-msgstr "добавить зеркало безопасности"
+msgstr "добавить безопасное зеркало"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
@@ -435,7 +435,7 @@ msgstr "задать список пакетов модулей ядра для 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
-msgstr "сохранить кэш скачанных файлов пакетов"
+msgstr "сохранить кэш загруженных файлов пакетов"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
@@ -598,7 +598,7 @@ msgstr "не обновлять установленные пакеты"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
 msgid "cache downloaded packages"
-msgstr "кэш скачанных файлов пакетов"
+msgstr "кэш загруженных файлов пакетов"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
 #, sh-format
@@ -667,6 +667,7 @@ msgstr ""
 "  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
 "  Yuri Kozlov https://launchpad.net/~kozlov-y\n"
 "  Yuri Kozlov https://launchpad.net/~ykozlov\n"
+"  fignya https://launchpad.net/~ayngif\n"
 "  ilia https://launchpad.net/~ilia"
 
 #, sh-format
