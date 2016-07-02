@@ -6,8 +6,11 @@
 # servers have problems with it. Finally, if $filename isn't set, we want to
 # default to "/ltsp/i386/lts.conf".
 if [ -n "$SERVER" ]; then
-    fileonly=${filename##*/}
-    pathonly=${filename%$fileonly}
+    # Prefer the kernel path from /proc/cmdline over $filename from DHCP
+    boot_image=$(sed -n 's/.*BOOT_IMAGE=\([^[:space:]]*\).*/\1/p' /proc/cmdline)
+    boot_image=${boot_image:-$filename}
+    fileonly=${boot_image##*/}
+    pathonly=${boot_image%$fileonly}
     lts_conf_temp=$(mktemp)
     tftp "$SERVER" -c get ${pathonly:-/ltsp/$(detect_arch)/}${LTSCONF:-"lts.conf"} $lts_conf_temp >/dev/null
     # only overwrite lts.conf if it has non-zero size.
