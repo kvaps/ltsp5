@@ -10,7 +10,9 @@ case "$MODE" in
     after-install)
             # add keys to the apt keyring
             for key in $APT_KEYS ; do
-                cat $key | chroot $ROOT apt-key add -
+                # This requires the files to be in binary gpg format
+                # rather than ASCII-armored text.
+                cp $key $ROOT/etc/apt/trusted.gpg.d/ltsp-$(basename ${key%%.gpg}).gpg
             done
             ;;
 esac
