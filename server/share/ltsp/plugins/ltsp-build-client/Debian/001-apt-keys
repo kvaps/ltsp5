@@ -10,18 +10,9 @@ case "$MODE" in
     after-install)
             # add keys to the apt keyring
             for key in $APT_KEYS ; do
-                if grep -q 'BEGIN PGP PUBLIC KEY BLOCK' "$key" ; then
-                    # Convert from ASCII-armored key to binary gpg key
-                    tmpdir=$(mktemp -d)
-                    keyname=$(basename $key)
-                    tmpkey=$tmpdir/$keyname
-                    awk '/^$/{ x = 1; } /^[^=-]/{ if (x) { print $0; } ; }' $key | base64 -d > $tmpkey
-                    cp $tmpkey $ROOT/etc/apt/trusted.gpg.d/ltsp-${keyname}.gpg
-                    rm $tmpkey
-                    rmdir $tmpdir
-                else
-                    cp $key $ROOT/etc/apt/trusted.gpg.d/ltsp-$(basename ${key%%.gpg}).gpg
-                fi
+                # Ensure ASCII-armored key is converted to a binary
+                # gpg key by passing through "gpg --dearmor"
+                gpg --dearmor < $key > $ROOT/etc/apt/trusted.gpg.d/ltsp-${key%%.gpg}.gpg
             done
             ;;
 esac
