@@ -12,7 +12,7 @@ case "$MODE" in
 			echo require --pin-dist when using --pin-packages
 			exit 1
 		fi
-        	PIN_PACKAGES="$option_pin_packages_value"
+        	PIN_PACKAGES="$(echo $option_pin_packages_value | tr ',' ' ')"
         fi
         ;;
     after-install)
