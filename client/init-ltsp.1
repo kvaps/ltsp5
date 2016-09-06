@@ -1,0 +1,31 @@
+.TH "init-ltsp" "1" "20160905" "Vagrant Cascadian" ""
+.SH "NAME"
+init-ltsp \(em init wrapper to configure LTSP
+.SH "DESCRIPTION"
+.PP 
+\fBinit-ltsp\fR is run very early in the boot process of an LTSP
+system as the init process, configuring the system for LTSP and then
+handing off booting of the system to the real init(1). The bulk of the
+logic is implemented in shell fragments in
+/usr/share/ltsp/init-ltsp.d/. Variables configured typically include
+values set from lts.conf(5), or from the kernel commandline.
+
+.SH "EXAMPLE"
+.PP 
+A typical invocation of \fBinit-ltsp\fR from the kernel commandline
+might look like:
+
+init=/sbin/init-ltsp quiet root=/dev/nbd0
+.SH "SEE ALSO"
+.PP 
+init(1), lts.conf(5)
+.SH "AVAILABILITY"
+.PP 
+\fBinit-ltsp\fR is part of \fBltsp\fP package and the latest versions
+are available in source form from
+\fIhttps://launchpad.net/products/ltsp\fR.
+.SH "AUTHOR"
+.PP 
+Copyright 2016 Vagrant Cascadian <vagrant@debian.org>, distributed
+under the terms of the GNU General Public License version 2 or any
+later version.
