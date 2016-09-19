@@ -19,7 +19,7 @@ case "$MODE" in
 	if [ -n "$PIN_DIST" ]; then
 		cat << EOF > $ROOT/etc/apt/preferences
 Package: *
-Pin: release a=$PIN_DIST
+Pin: release n=$PIN_DIST
 Pin-Priority: 101
 EOF
 	        if [ -n "$PIN_PACKAGES" ]; then
