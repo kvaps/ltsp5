@@ -12,7 +12,7 @@ case "$MODE" in
             for key in $APT_KEYS ; do
                 # Ensure ASCII-armored key is converted to a binary
                 # gpg key by passing through "gpg --dearmor"
-                gpg --dearmor < $key > $ROOT/etc/apt/trusted.gpg.d/ltsp-${key%%.gpg}.gpg
+                gpg --dearmor < $key > $ROOT/etc/apt/trusted.gpg.d/ltsp-$(basename ${key%%.gpg}).gpg
             done
             ;;
 esac
