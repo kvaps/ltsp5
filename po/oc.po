@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-10 04:30+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
+"X-Launchpad-Export-Date: 2016-09-27 04:30+0000\n"
+"X-Generator: Launchpad (build 18204)\n"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -93,7 +93,7 @@ msgstr ""
 #: ../server/ltsp-build-client:191
 #, sh-format
 msgid "output version information and exit"
-msgstr ""
+msgstr "afichar las informacions de version e quitar"
 
 #: ../server/ltsp-build-client:195
 #, sh-format
@@ -167,7 +167,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #, sh-format
 msgid "Path to kickstart file"
-msgstr ""
+msgstr "Camin cap al fichièr kickstart"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
@@ -216,7 +216,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:4
 #, sh-format
 msgid "Path to installer profile"
-msgstr ""
+msgstr "Camin del perfil d'installar"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:5
 #, sh-format
@@ -302,12 +302,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
-msgstr ""
+msgstr "un mòde de quiòsque web simplificat"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
 msgid "enable LTSP-Cluster"
-msgstr ""
+msgstr "activar LTSP-Cluster"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
@@ -353,7 +353,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
 msgid "exclude packages from the initial chroot"
-msgstr ""
+msgstr "exclure de paquets del chroot inicial"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
@@ -429,7 +429,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
-msgstr ""
+msgstr "gardar en cache los paquets telecargats"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
@@ -517,12 +517,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
 #, sh-format
 msgid "add a backports mirror"
-msgstr ""
+msgstr "apondre un miralh de backports"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:4
 #, sh-format
 msgid "list of packages to install from the backports repositories"
-msgstr ""
+msgstr "lista dels paquets d'installar dempuèi los backports"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:5
 #, sh-format
@@ -613,7 +613,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
-msgstr ""
+msgstr "indicar la lista dels paquets de nucli d'installar"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
