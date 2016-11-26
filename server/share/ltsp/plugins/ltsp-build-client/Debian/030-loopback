@@ -1,6 +1,7 @@
 case "$MODE" in
     finalization)
-	    # create default loopback entry 
+        # create default loopback entry
+        mkdir -p $ROOT/etc/network/
         cat <<EOF > $ROOT/etc/network/interfaces
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
