@@ -10,5 +10,9 @@ case $MODE in
                 chmod --reference $dir "$ROOT/$dir"
             fi
         done
+        # Ensure /tmp within the chroot has proper permissions
+        # https://bugs.debian.org/840667
+        mkdir -p "$ROOT/tmp"
+        chmod 1777 "$ROOT/tmp"
         ;;
 esac
