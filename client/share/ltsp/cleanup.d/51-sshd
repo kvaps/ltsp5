@@ -1,5 +1,4 @@
 # Regenerate sshd keys
 if [ -x /usr/sbin/sshd ] && [ -x /usr/bin/ssh-keygen ]; then
     rm -f /etc/ssh/ssh_host_*
-    ssh-keygen -A
 fi
