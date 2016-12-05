@@ -12,6 +12,7 @@
 #        Warren Togami <wtogami@redhat.com>
 #        Gideon Romm <ltsp@symbio-technologies.com>
 #  2011, Gideon Romm <ltsp@symbio-technologies.com>
+#  2016, Alkis Georgopoulos <alkisg@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -106,6 +107,22 @@ process_lts_conf() {
     set +f
 }
 
+# Allows defining per-screen directives, e.g. if SCREEN_NUM=07,
+# then the global lts.conf variable SCREEN_07_LDM_USERNAME=xxx
+# gets renamed locally for this script to LDM_USERNAME=xxx.
+per_screen_directives() {
+    local var value
+
+    test -n "$SCREEN_NUM" || return 0
+    while IFS="=" read var value; do
+        test -n "$var" || continue
+        export "${var#SCREEN_${SCREEN_NUM}_}=$value"
+        unset "$var"
+    done <<EOF
+$(env | grep SCREEN_${SCREEN_NUM}_)
+EOF
+}
+
 if [ ! -r "${ltsp_config_env}" ]; then
     process_lts_conf
 else 
@@ -116,3 +133,4 @@ else
         set_lts_from_cache
     fi
 fi
+per_screen_directives

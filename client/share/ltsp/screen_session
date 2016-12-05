@@ -37,6 +37,8 @@
 case "$1" in
     [0-1][0-9])
         export SCREEN_NUM="$1"
+        # ltsp_config did call per_screen_directives, but SCREEN_NUM wasn't set
+        per_screen_directives
         ;;
     *)
         die "Usage: $0 [01..12]"
@@ -45,7 +47,7 @@ esac
 
 while true; do
     # Wait until this is the active vt before launching the screen script
-    while [ $(fgconsole) -ne "$SCREEN_NUM" ]; do
+    while boolean_is_true "${WAIT_FGCONSOLE:-True}" && [ $(fgconsole) -ne "$SCREEN_NUM" ]; do
         sleep 2
     done
 
@@ -75,7 +77,7 @@ EOF
     for script in $(run_parts_list /usr/share/ltsp/screen-session.d/ S); do
         . "$script"
     done
-    "$script_path" "$args"
+    "$script_path" $args
     for script in $(run_parts_list /usr/share/ltsp/screen-session.d/ K); do
         . "$script"
     done

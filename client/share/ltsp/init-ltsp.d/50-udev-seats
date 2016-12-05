@@ -1,0 +1,24 @@
+# Provide a way to create udev rules that match hardware to seats.
+# Example lts.conf directives:
+# SCREEN_07="ldm -seat seat-1"
+# SCREEN_07_WAIT_FGCONSOLE=False
+# SCREEN_08="ldm -seat seat0"
+# UDEV_SEAT_1_GRAPHICS="*/pci*/*/0000:01:00.0*"
+# UDEV_SEAT_1_SOUND="*/sound/card1*"
+# UDEV_SEAT_1_EVEN_USB_PORTS="*/usb?/?-[2,4,6,8,10,12,14,16,18]/*"
+# "1" is mapped to "seat-1", the rest ("GRAPHICS" etc) is ignored.
+# You can check the hardware assigned to each seat with e.g.
+# loginctl seat-status seat0
+
+seat_rules=$(env | grep ^UDEV_SEAT_)
+if [ -z  "$seat_rules" ]; then
+    # Delete our rules file in case an ltsp-pnp server contains it
+    rm -f /etc/udev/rules.d/72-ltsp-seats.rules
+    return 0
+fi
+
+echo "$seat_rules" | while IFS="=" read var value; do
+    seat=${var#UDEV_SEAT_}
+    seat=${seat%%_*}
+    echo "TAG==\"seat\", DEVPATH==\"$value\", ENV{ID_SEAT}=\"seat-$seat\""
+done >/etc/udev/rules.d/72-ltsp-seats.rules
