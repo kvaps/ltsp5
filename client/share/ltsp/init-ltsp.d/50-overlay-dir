@@ -1,0 +1,5 @@
+OVERLAY_DIR=${OVERLAY_DIR:-"/etc/ltsp/overlay-dir"}
+if [ -d "${OVERLAY_DIR}" ]; then
+    tar --directory=${OVERLAY_DIR} --create . | \
+        tar --directory=/ --extract
+fi
