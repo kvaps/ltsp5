@@ -12,6 +12,8 @@ case "$MODE" in
 
         if [ -n "$option_fat_client_desktop_value" ]; then
             FAT_CLIENT_DESKTOPS="$(echo $option_fat_client_desktop_value | tr ',' ' ')"
+        fi
+        if [ -n "$FAT_CLIENT_DESKTOPS" ]; then
             EARLY_PACKAGES="$EARLY_PACKAGES $FAT_CLIENT_DESKTOPS"
         fi
         ;;
