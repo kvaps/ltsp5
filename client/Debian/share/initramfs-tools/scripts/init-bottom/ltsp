@@ -24,37 +24,69 @@ grep -qs "init=/sbin/init-ltsp" /proc/cmdline || exit 0
 
 [ -z "${rootmnt}" ] && panic "rootmnt unknown in init-bottom"
 [ -d "${rootmnt}/proc" ] || panic "rootmnt not mounted in init-bottom"
-# mount writeable filesystems if / is not already mounted writeable.
-if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
-    mkdir -p /rofs /cow
-    mount -t tmpfs -o mode=0755 tmpfs /cow
-    if [ "$LTSP_NBD_TO_RAM" = "true" ]; then
-        umount ${rootmnt}
-        dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
-        nbd-client -d /dev/nbd0
-        mount -o loop /cow/.rofsimage.img /rofs
-    else
-        mount -o move ${rootmnt} /rofs
-    fi
-    if modprobe overlay; then
-        UNION_TYPE=overlay
-        UNION_OPTS="upperdir=/cow/up,lowerdir=/rofs,workdir=/cow/work"
-        mkdir -p /cow/up /cow/work
-    elif modprobe overlayfs; then
-        UNION_TYPE=overlayfs
-        UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
-    elif modprobe aufs; then
-        UNION_TYPE=aufs
-        UNION_OPTS="dirs=/cow=rw:/rofs=ro"
-    else
-        panic "Could not load neither overlayfs nor aufs."
-    fi
-    mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
-    for dir in /rofs /cow ; do
-        mkdir -p ${rootmnt}${dir}
-        mount -o move ${dir} ${rootmnt}${dir}
-    done
-fi
+#
+# TODO: Make option to select overlay
+#
+## mount writeable filesystems if / is not already mounted writeable.
+#if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
+#    mkdir -p /rofs /cow
+#    mount -t tmpfs -o mode=0755 tmpfs /cow
+#    if [ "$LTSP_NBD_TO_RAM" = "true" ]; then
+#        umount ${rootmnt}
+#        dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
+#        nbd-client -d /dev/nbd0
+#        mount -o loop /cow/.rofsimage.img /rofs
+#    else
+#        mount -o move ${rootmnt} /rofs
+#    fi
+#    if modprobe overlay; then
+#        UNION_TYPE=overlay
+#        UNION_OPTS="upperdir=/cow/up,lowerdir=/rofs,workdir=/cow/work"
+#        mkdir -p /cow/up /cow/work
+#    elif modprobe overlayfs; then
+#        UNION_TYPE=overlayfs
+#        UNION_OPTS="upperdir=/cow,lowerdir=/rofs"
+#    elif modprobe aufs; then
+#        UNION_TYPE=aufs
+#        UNION_OPTS="dirs=/cow=rw:/rofs=ro"
+#    else
+#        panic "Could not load neither overlayfs nor aufs."
+#    fi
+#    mount -t ${UNION_TYPE} -o ${UNION_OPTS} ${UNION_TYPE} ${rootmnt}
+#    for dir in /rofs /cow ; do
+#        mkdir -p ${rootmnt}${dir}
+#        mount -o move ${dir} ${rootmnt}${dir}
+#    done
+#fi
+
+mkdir -p "/rofs"
+mount -o move "${rootmnt}" "/rofs"
+mount -t tmpfs tmpfs "${rootmnt}"
+mkdir -p "${rootmnt}/rofs"
+mount -o move "/rofs" "${rootmnt}/rofs"
+
+
+for dir in $(find "${rootmnt}/rofs" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;); do
+    mkdir -p "${rootmnt}/${dir}"
+    mount -o bind "${rootmnt}/rofs/${dir}" "${rootmnt}/${dir}"
+done
+
+for dir in \
+    "/etc" \
+    "/lib/systemd/system" \
+    "/tmp" \
+    "/var/cache" \
+    "/var/crash" \
+    "/var/lib/systemd" \
+    "/var/lib/ureadahead" \
+    "/var/log"
+do
+    echo "Moving ${dir} to tmpfs"
+    $(cat /proc/mounts | awk '$2 == "/dev/shm" {print "umount " $2}') #umount
+    mount -t tmpfs tmpfs "${rootmnt}${dir}"
+
+    find "${rootmnt}/rofs${dir}" -mindepth 1 -maxdepth 1 -exec cp -a {} "${rootmnt}${dir}" \;
+done
 
 # Copy networking configuration to the root file system
 mkdir -p "$rootmnt/var/cache/ltsp/"
