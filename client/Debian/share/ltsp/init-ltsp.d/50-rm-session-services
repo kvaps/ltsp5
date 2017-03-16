@@ -1,17 +1,27 @@
-# For fat clients, remove some autostart items that don't make sense in live
-# sessions. The user can add more items by declaring a space separated
-# RM_SESSION_SERVICES list in lts.conf.
+# Remove some autostarted services that we don't want in fat clients sessions.
+# RM_SESSION_SERVICES and KEEP_SESSION_SERVICES are space separated lists that
+# can be used in lts.conf to remove or keep autostarted items.
 
-# For readability, include the comment line from service.desktop.
+allowed_services() {
+    local service
 
-# Notify about new hardware drivers available for the system
-RM_SESSION_SERVICES="$RM_SESSION_SERVICES jockey-gtk jockey-kde"
+    echo "$@" | sed 's/#.*//' | while read service; do
+        case " $KEEP_SESSION_SERVICES " in
+            *" $service "*)
+                ;;
+            *)
+                echo -n " $service"
+                ;;
+        esac
+    done
+}
 
-# Check for available updates automatically
-RM_SESSION_SERVICES="$RM_SESSION_SERVICES update-notifier"
+rm_services="$(allowed_services "$RM_SESSION_SERVICES
+at-spi-dbus-bus         # AT-SPI D-Bus Bus
+gnome-software-service  # GNOME Software
+update-notifier         # Check for available updates automatically
+")"
 
-for file in $RM_SESSION_SERVICES; do
-    if [ -f "/etc/xdg/autostart/$file.desktop" ]; then
-        rm -f "/etc/xdg/autostart/$file.desktop"
-    fi
+for service in $rm_services; do
+    rm -f "/etc/xdg/autostart/$service.desktop" "/usr/share/upstart/xdg/autostart/$service.desktop"
 done

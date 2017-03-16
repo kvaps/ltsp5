@@ -7,7 +7,7 @@ test -f /proc/meminfo || return 0
 if [ -n "$(find /usr/share/xsessions/ ! -name Xsession.desktop -name '*.desktop' 2>/dev/null)" ]; then
     # Don't set LTSP_FATCLIENT for low-RAM clients booting from a fat chroot
     memtotal=$(awk '/^MemTotal:/ { print int($2/1024) }' /proc/meminfo)
-    FAT_RAM_THRESHOLD=${FAT_RAM_THRESHOLD:-300}
+    FAT_RAM_THRESHOLD=${FAT_RAM_THRESHOLD:-400}
     if [ "$memtotal" -ge "$FAT_RAM_THRESHOLD" ]; then
         set_lts_var LTSP_FATCLIENT True
     fi

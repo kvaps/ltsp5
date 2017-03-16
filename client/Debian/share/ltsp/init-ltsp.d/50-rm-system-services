@@ -59,6 +59,7 @@ apparmor              # AppArmor initialization
 apport                # Automatic crash report generation
 atd                   # Deferred execution scheduler
 avahi-daemon          # mDNS/DNS-SD daemon
+binfmt-support        # Support for extra binary formats
 bluetooth             # Bluetooth daemon
 brltty                # Braille terminal driver
 cgmanager             # Cgroup management daemon
