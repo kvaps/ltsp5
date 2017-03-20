@@ -4,7 +4,7 @@ arch=$(detect_arch)
 tftppath="/ltsp/${arch}/lts.conf"
 lts_conf_temp=$(mktemp)
 
-tftp "$SERVER" -c get ${tftppath} $lts_conf_temp >/dev/null
+tftp -m binary "$SERVER" -c get ${tftppath} $lts_conf_temp >/dev/null
 
 # or if tftp gives a buffer overflow error, use curl
 # https://bugs.gentoo.org/show_bug.cgi?id=357083
