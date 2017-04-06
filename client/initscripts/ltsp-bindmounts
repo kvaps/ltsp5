@@ -2,12 +2,10 @@
 
 set -e
 
-# Gracefully exit if ltsp_chroot file is not present
-test -f /etc/ltsp_chroot || exit 0
-
 bind_mounts () {
     # set defaults
     test -z "$tmpfs_dir" && tmpfs_dir=/var/lib/ltsp-client-setup
+    mkdir -p "$tmpfs_dir"
     mount -t tmpfs -o mode=0755 tmpfs $tmpfs_dir
     bind_missing=""
     # preserve directory structure
@@ -64,7 +62,10 @@ copy_dirs="/root /home /etc/rsyslog.d /etc/cups /media /etc/cron.d /etc/udev/rul
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf /etc/passwd /etc/group /etc/localtime" 
 
-. /usr/share/ltsp/ltsp-init-common
+if [ -f /etc/lts.conf ] && [ -x /usr/bin/getltscfg ]; then
+    # get defaults from lts.conf
+    eval $(/usr/bin/getltscfg -a)
+fi
 
 # override variables if configured via lts.conf or ltsp_config
 [ -n "$LTSP_RW_DIRS" ] && rw_dirs="$LTSP_RW_DIRS"
