@@ -55,11 +55,11 @@ bind_unmounts() {
 # tmpfs/bind directories that get mounted with only directory structure
 # preserved
 
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hald /var/cache/ltsp /var/lib/urandom"
+rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hald /var/cache/ltsp /var/lib/urandom /var/cache /var/crash"
 
 # tmpfs/bind directories that get mounted with directory structure and data
 # copied
-copy_dirs="/root /home /etc/rsyslog.d /etc/cups /media /etc/cron.d /etc/udev/rules.d"
+copy_dirs="/root /home /etc/rsyslog.d /etc/cups /media /etc/cron.d /etc/udev/rules.d /etc/systemd/system /lib/systemd/system /var/lib/ureadahead"
 
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf /etc/passwd /etc/group /etc/localtime" 
