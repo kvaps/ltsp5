@@ -1,4 +1,13 @@
 if [ -z "$HOSTNAME" ]; then
+    for n in $DNS_SERVER; do
+        HOSTNAME="$(dig @$n -x $IPV4ADDR +short | awk -F "." '{print $1}')"
+        if [ ! -z "$HOSTNAME" ]; then
+            break
+        fi
+    done
+fi
+
+if [ -z "$HOSTNAME" ]; then
     HOSTNAME_BASE=${HOSTNAME_BASE:-ltsp}
     case "$HOSTNAME_EXTRA" in
         mac)
