@@ -53,14 +53,14 @@ bind_unmounts() {
 # tmpfs/bind directories that get mounted with only directory structure
 # preserved
 
-rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /etc/console-setup /var/lib/pulse /var/lib/dbus /var/cache/hald /var/cache/ltsp /var/lib/urandom /var/cache /var/crash"
+rw_dirs="/etc/console-setup /tmp /var/cache /var/cache/hald /var/cache/ltsp /var/crash /var/lib/dbus /var/lib/pulse /var/lib/urandom /var/lib/xkb /var/log /var/spool /var/tmp"
 
 # tmpfs/bind directories that get mounted with directory structure and data
 # copied
-copy_dirs="/root /home /etc/rsyslog.d /etc/cups /media /etc/cron.d /etc/udev/rules.d /etc/systemd/system /lib/systemd/system /var/lib/ureadahead"
+copy_dirs="/etc/cron.d /etc/cron.daily /etc/cron.hourly /etc/cron.monthly /etc/cron.weekly /etc/cups /etc/init /etc/init.d /etc/rc0.d /etc/rc1.d /etc/rc2.d /etc/rc3.d /etc/rc4.d /etc/rc5.d /etc/rc6.d /etc/rcS.d /etc/resolvconf /etc/rsyslog.d /etc/systemd/system /etc/udev/rules.d /etc/update-motd.d /home /lib/systemd/system /media /root /var/lib/ureadahead"
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/network/interfaces /etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf /etc/passwd /etc/group /etc/localtime" 
+bindfiles="/etc/crontab /etc/fstab /etc/group /etc/hostname /etc/hosts /etc/localtime /etc/network/interfaces /etc/passwd /etc/rc.local /etc/resolvconf /etc/resolv.conf /etc/syslog.conf /etc/X11/xorg.conf"
 
 if [ -f /etc/lts.conf ] && [ -x /usr/bin/getltscfg ]; then
     # get defaults from lts.conf
