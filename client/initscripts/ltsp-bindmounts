@@ -57,10 +57,10 @@ rw_dirs="/etc/console-setup /tmp /var/cache /var/cache/hald /var/cache/ltsp /var
 
 # tmpfs/bind directories that get mounted with directory structure and data
 # copied
-copy_dirs="/etc/cron.d /etc/cron.daily /etc/cron.hourly /etc/cron.monthly /etc/cron.weekly /etc/cups /etc/init /etc/init.d /etc/rc0.d /etc/rc1.d /etc/rc2.d /etc/rc3.d /etc/rc4.d /etc/rc5.d /etc/rc6.d /etc/rcS.d /etc/resolvconf /etc/rsyslog.d /etc/systemd/system /etc/udev/rules.d /etc/update-motd.d /home /lib/systemd/system /media /root /var/lib/ureadahead"
+copy_dirs="/etc/cron.d /etc/cron.daily /etc/cron.hourly /etc/cron.monthly /etc/cron.weekly /etc/cups /etc/default /etc/init /etc/init.d /etc/rc0.d /etc/rc1.d /etc/rc2.d /etc/rc3.d /etc/rc4.d /etc/rc5.d /etc/rc6.d /etc/rcS.d /etc/resolvconf /etc/rsyslog.d /etc/systemd/system /etc/udev/rules.d /etc/update-motd.d /home /lib/systemd/system /media /root /var/lib/ureadahead"
 
 # tmpfs/bind files that mounted on top of other files
-bindfiles="/etc/crontab /etc/fstab /etc/group /etc/hostname /etc/hosts /etc/localtime /etc/network/interfaces /etc/passwd /etc/rc.local /etc/resolvconf /etc/resolv.conf /etc/syslog.conf /etc/X11/xorg.conf"
+bindfiles="/etc/crontab /etc/fstab /etc/group /etc/hostname /etc/hosts /etc/localtime /etc/login.defs /etc/network/interfaces /etc/ntp.conf /etc/passwd /etc/rc.local /etc/resolvconf /etc/resolv.conf /etc/syslog.conf /etc/X11/xorg.conf"
 
 if [ -f /etc/lts.conf ] && [ -x /usr/bin/getltscfg ]; then
     # get defaults from lts.conf
