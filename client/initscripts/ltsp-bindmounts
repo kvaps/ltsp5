@@ -53,7 +53,7 @@ bind_unmounts() {
 # tmpfs/bind directories that get mounted with only directory structure
 # preserved
 
-rw_dirs="/etc/console-setup /tmp /var/cache /var/cache/hald /var/cache/ltsp /var/crash /var/lib/dbus /var/lib/pulse /var/lib/urandom /var/lib/xkb /var/log /var/spool /var/tmp"
+rw_dirs="/etc/console-setup /tmp /var/cache /var/cache/hald /var/cache/ltsp /var/crash /var/lib/dbus /var/lib/dhcp /var/lib/ntp /var/lib/ntpdate /var/lib/pulse /var/lib/urandom /var/lib/xkb /var/log /var/spool /var/tmp"
 
 # tmpfs/bind directories that get mounted with directory structure and data
 # copied
