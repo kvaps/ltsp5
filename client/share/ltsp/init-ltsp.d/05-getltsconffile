@@ -22,4 +22,4 @@ if [ -n "$SERVER" ]; then
 fi
 
 # Get the lts.conf vars into the environment
-. /usr/share/ltsp/ltsp_config
+eval $(getltscfg -a)
