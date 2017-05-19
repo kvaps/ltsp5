@@ -1,24 +1,11 @@
 #!/bin/sh
 
 # Disable services we don't want
-for service in ConsoleKit avahi-daemon crond cups exim gpm iptables ip6tables \
-    iscsid kudzu lvm2-monitor mcstrans mdmonitor nfs NetworkManager named\
-    pcscd rpcbind rpcgssd rpcidmapd rpcsvcgssd; do
-    if [ ! -e /etc/init.d/$service ]; then
-        continue
-    fi
-    #echo "Disabling Service: $service"
-    /sbin/chkconfig $service off
-done
+systemctl mask display-manager.service
+systemctl disable smartd.service
 
 # Enable services we do want
-for service in haldaemon messagebus rsyslog udev-post ltsp-core ; do
-    if [ ! -e /etc/init.d/$service ]; then
-        continue
-    fi
-    #echo "Enabling Service: $service"
-    /sbin/chkconfig $service on
-done
+/sbin/chkconfig ltsp-core on
 
 # Setup readonly-root Mode
 #sed -i 's/READONLY=no/READONLY=yes/' /etc/sysconfig/readonly-root
