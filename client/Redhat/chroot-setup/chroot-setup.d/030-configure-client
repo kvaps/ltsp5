@@ -26,32 +26,14 @@ done
 # Set ltsp-launch-client as DM
 #echo "DISPLAYMANAGER=/usr/sbin/ltsp-client-launch" > /etc/sysconfig/desktop
 
-# Link /etc/mtab to /proc/mounts
-# This is not perfect, but it enables fuse mounts to work.
-rm -f /etc/mtab
-ln -sf ../proc/mounts /etc/mtab
+# Link /etc/mtab to /proc/self/mounts
+ln -sf ../proc/self/mounts /etc/mtab
 
 # Files to silence warning messages
 touch /etc/alsa/asound.state
 touch /etc/asound.state
 
-# Silence /etc/mtab rwtab error message during bootup
-sed -i 's/^files[[:space:]]\/etc\/mtab//' /etc/rwtab
-
-# Silence /etc/mtab* removal errors
-sed -i 's/^rm -f \/etc\/mtab/#rm -f \/etc\/mtab/' /etc/rc.d/rc.sysinit
-
-# Silence local filesystems mount errors during bootup
-sed -i '/^sysfs/d' /etc/fstab
-sed -i '/sysroot/d' /etc/mtab
-sed -i '/unionfs/d' /etc/mtab
-
 # F10+: install default boot-duration so plymouth can guess the startup progress bar better
 if [ -e /var/lib/plymouth/boot-duration ]; then
     cp /usr/share/ltsp/template/plymouth-default-boot-duration /var/lib/plymouth/boot-duration
 fi
-
-# Allow clean shutdown to complete when rootfs is mounted on a nbd or iscsi block device
-sed -i 's/^kill_all $"Sending all processes/#kill_all $"Sending all processes/' /etc/init.d/halt
-sed -i 's/sleep 2/#sleep 2/' /etc/init.d/halt
-sed -i 's/^rm -f/#rm -f/' /etc/init.d/halt
