@@ -5,8 +5,8 @@ if [ -n "$SYSLOG_HOST" ]; then
         touch $syslog_conf
     fi
     if [ -f "$syslog_conf" ]; then
-        cat <<EOF > "$syslog_conf"
-*.* @${SYSLOG_HOST:-$SERVER}
-EOF
+	for loghost in ${SYSLOG_HOST:-$SERVER}; do
+	    echo "*.* @${loghost}"
+	done > "$syslog_conf"
     fi
 fi
