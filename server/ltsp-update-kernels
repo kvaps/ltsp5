@@ -193,6 +193,7 @@ cleanup_kernels() {
             rm -f "$tftpboot/$name/System.map-$version"
             rm -rf "$tftpboot/$name/dtbs-$version/"
             # Fedora
+            rm -f "$tftpboot/$name/.vmlinuz-$version.hmac"
             rm -f "$tftpboot/$name/initrd-$version.img"
             rm -f "$tftpboot/$name/initramfs-$version.img"
             rm -f "$tftpboot/$name/elf-$version.img"
