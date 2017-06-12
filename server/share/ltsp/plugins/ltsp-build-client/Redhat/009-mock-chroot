@@ -1,60 +1,38 @@
 #!/bin/bash
-#
-# New mock chroot builder for testing
-#
 
 set -x
 
 case "$MODE" in
     commandline)
-        add_option "release"  "`eval_gettext "Release version number (el6,fc18,fc19) * Not working yet"`" "advanced" "true"
+        add_option "release"  "`eval_gettext "Release version number"`" "advanced" "true"
     ;;
     configure)
         /usr/sbin/usermod -a -G mock nobody
-        BUILD=${BUILD:-i686}
+        BUILD=${BUILD:-x86_64}
         ARCH=${ARCH:-$(echo $BUILD | sed -e s/i.86/i386/)}
-	MOCK_CMD="setarch $BUILD /usr/bin/mock -r ltsp-$ARCH --target=$BUILD --configdir=/etc/ltsp/mock --arch=$BUILD"
+        MOCK_CMD="setarch $BUILD /usr/bin/mock -r ltsp-$ARCH --target=$BUILD --configdir=/etc/ltsp/mock --arch=$BUILD"
     ;;
     install)
-        # --shell interactive
-        # --chroot non-interactive
-
-        $MOCK_CMD --init 
-        $MOCK_CMD --shell touch /etc/ltsp_chroot
-        $MOCK_CMD --chroot rm /var/lib/rpm/__db*
-
-        $MOCK_CMD --install yum yum-metadata-parser
-	
-#         $MOCK_CMD --chroot rpm --rebuilddb
-        $MOCK_CMD  --install ltsp-client ltsp-release kernel.thinclient.i686 kernel-headers.thinclient nbd mkelfimage ldm ltspfsd ldminfod wraplinux nfs fuse busybox kernel-headers.thinclient kernel-firmware.thinclient syslinux nfs-utils shadow-utils alsa-utils alsa-plugins-pulseaudio atk audit-libs audit-libs-python basesystem bash bind-libs bind-utils bitmap-fonts bzip2-libs cairo chkconfig coreutils cpio cpp cracklib cracklib-dicts cups-libs cyrus-sasl-lib db4 dbus device-mapper diffutils dmraid e2fsprogs e2fsprogs-libs pulseaudio-esound-compat elfutils-libelf ethtool expat filesystem findutils fontconfig freetype fuse-sshfs fuse-unionfs gawk gdbm glib2 glibc-common gnutls grep gzip hpijs hwdata info initscripts iproute iputils kpartx krb5-libs less libacl libattr libcap libdmx libdrm libexif libfontenc libgcc libgcrypt libgpg-error libICE libieee1284 libjpeg libpng libsane-hpaio libselinux libselinux-python libsemanage libsepol libSM libstdc++ libtiff libusb libuser libX11 libXau libXaw libXdmcp libXext libXfont libXft libXi libXinerama libxkbfile libxml2 libxml2-python libXmu libXpm libXrandr libXrender libXt libXtstlibXv libXxf86dga libXxf86misc libXxf86vm lockdev lvm2 MAKEDEV mcstrans mesa-libGL mingetty module-init-tools nbdnc ncurses neon net-snmp-libs net-tools openldap openssh-clients pam passwd pcre perl popt rpcbind plymouth-plugin-solar procps psmisc pulseaudio-utils pulseaudio-module-x11 python python-urlgrabber readline rpmrpm-libs rpm-python sane-backends sane-backends-libs sed setup shadow-utils sqlite system-release rsyslog ystem-config-firewall-tui tar tftp time ttmkfdir tzdata udev util-linux-ng which xkeyboard-configxorg-x11-drivers xorg-x11-fonts-100dpi xorg-x11-server-utils xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-xkb-utils xorg-x11-xinit xterm ypbind yp-tools yum-metadata-parser zlib 
-
-        $MOCK_CMD --remove remove mpage sox hplip numactl isdn4k-utils coolkey ql2100-firmware ql2200-firmware ql23xx-firmware ql2400-firmware ql2500-firmware xsane xsane-gimp planner icedtea-web java-1.7.0-openjdk linux-atm aspell-* gnome-user-docs evolution-help desktop-backgrounds-basic desktop-backgrounds-extras minicom dos2unix finger ftp jwhois rsh telnet system-config-rootpassword system-config-services policycoreutils-gui NetworkManager NetworkManager-gnome gphoto2 gphoto2 kudzu libFS python-sqlite2 system-config-display xorg-x11-xfs
-
-        $MOCK_CMD --install dracut dracut-network dracut-tools dracut-kernel plymouth 
-        $MOCK_CMD --shell "depmod -am 2.6.32-279.22.1.el6.thinclient.i686 -F /boot/System.map-2.6.32-279.22.1.el6.thinclient.i686"
-#       $MOCK_CMD --shell yum groupinstall 'iSCSI Storage Client'
-        $MOCK_CMD --shell "mkdir -p /etc/sysconfig/network-scripts"
-   ;;
-   after-install)
+        $MOCK_CMD --scrub=all
+        $MOCK_CMD --init
+        $MOCK_CMD --shell "touch /etc/ltsp_chroot"
+        $MOCK_CMD --shell "yum group install 'X Window System'"
+        $MOCK_CMD --install ltsp-client ldm ldminfod nbd ltspfs tftp dracut-tools xterm x2goclient freerdp fuse-sshfs busybox xterm pulseaudio e2fsprogs pulseaudio xorg-x11-fonts firefox dbus-x11 evince telnet nfs-utils GConf2
+    ;;
+    after-install)
         $MOCK_CMD --shell "[ -d /etc/ltsp ] || echo LTSP client not installed"
-	$MOCK_CMD --shell "mkdir -p /var/cache/ltsp 2>/dev/null"
-        $MOCK_CMD --copyin /etc/ltsp/dracut/sysconfig-mkinitrd /etc/sysconfig/mkinitrd
-        $MOCK_CMD --copyin /etc/ltsp/dracut/ltsp-dracut.conf /etc/dracut.conf.d
-        $MOCK_CMD --shell "cp -a /etc/ltsp/dracut/ltsp-dracut.conf /usr/share/ltsp/dracut/sysconfig-dracut"
-        $MOCK_CMD --copyin /etc/ltsp/dracut/sysconfig-dracut-skip-first-time /etc/dracut.conf.d/skip-first-time.conf
+        $MOCK_CMD --copyin /etc/ltsp/dracut/ltsp-dracut.conf /etc/dracut.conf.d/ltsp-dracut.conf
         $MOCK_CMD --copyin /etc/ltsp/dracut/sysconfig-network /etc/sysconfig/network
         $MOCK_CMD --copyin /etc/ltsp/dracut/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
         $MOCK_CMD --copyin /etc/ltsp/dracut/ltsp-postinst.d /etc/kernel/postinst.d/ltsp
         $MOCK_CMD --shell "chmod 0755 /etc/kernel/postinst.d/ltsp"
-
-        # TODO: Customize user defined cache dir
-           mv $BASE/mock/$ARCH/root $ROOT
-           ln -s $ROOT $BASE/mock/$ARCH/root
-           cp $ROOT/etc/skel/.bash* $ROOT/root/
-           cat << EOF >> $ROOT/root/.bashrc
+        $MOCK_CMD --copyin /etc/adjtime /etc/adjtime
+        $MOCK_CMD --copyin /etc/vconsole.conf /etc/vconsole.conf
+        mv $BASE/mock/$ARCH/root $ROOT
+        ln -s $ROOT $BASE/mock/$ARCH/root
+        cp $ROOT/etc/skel/.bash* $ROOT/root/
+        cat << EOF >> $ROOT/root/.bashrc
 PS1="<LTSP $ARCH> [\u@\h \W]\\\\$ "
 EOF
-
     ;;
-
 esac

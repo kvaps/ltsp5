@@ -10,5 +10,10 @@ case "$MODE" in
         setarch $ARCH $CHROOTEXEC $ROOT rpm --import /etc/pki/rpm-gpg/* > /dev/null 2>&1 ||:
         # Remove db4 locks again because we don't need them in the image
         rm -rf $ROOT/var/lib/rpm/__db*
+        # Cleanup possible yum.conf mixup
+        if [ -f $ROOT/etc/yum.conf.rpmnew ]; then
+            mv -f $ROOT/etc/yum.conf.rpmnew $ROOT/etc/yum.conf
+            rm -f $ROOT/etc/yum/yum.conf
+        fi
         ;;
 esac
