@@ -19,8 +19,3 @@ ln -sf ../proc/self/mounts /etc/mtab
 # Files to silence warning messages
 touch /etc/alsa/asound.state
 touch /etc/asound.state
-
-# F10+: install default boot-duration so plymouth can guess the startup progress bar better
-if [ -e /var/lib/plymouth/boot-duration ]; then
-    cp /usr/share/ltsp/template/plymouth-default-boot-duration /var/lib/plymouth/boot-duration
-fi
