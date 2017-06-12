@@ -1,3 +1,4 @@
+HOSTNAME=${HOSTNAME%% *}
 if [ -z "$HOSTNAME" ]; then
     HOSTNAME_BASE=${HOSTNAME_BASE:-ltsp}
     case "$HOSTNAME_EXTRA" in
