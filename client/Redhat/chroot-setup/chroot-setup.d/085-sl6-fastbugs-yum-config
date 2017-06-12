@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Install SL6 "fastbugs" repo config if Scientific Linux 6 and not yet installed
-# Not needed for CentOS 6
-if [ -f /etc/yum.repos.d/sl.repo ] && [ ! -f /etc/yum.repos.d/sl-other.repo ]; then
-    cp /usr/share/ltsp/template/sl-other.repo /etc/yum.repos.d/sl-other.repo
-fi
