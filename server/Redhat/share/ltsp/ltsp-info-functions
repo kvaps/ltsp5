@@ -1,7 +1,6 @@
-
 server_packages() {
     echo server packages:
-    COLUMNS=200 rpm -ql 'ltsp*' 'ldm*' | awk '/ltsp|ldm/{print $1,$2,$3}'
+    COLUMNS=200 rpm -qa | sort | awk '/ltsp|ldm/{print $1}'
     echo
 }
 
@@ -9,15 +8,7 @@ chroot_packages() {
     chroot=$1
     if [ -f $chroot/var/lib/rpm/Packages ]; then
         echo "packages in chroot: $chroot"
-        COLUMNS=200 rpm --root=$chroot -ql 'ltsp*' 'ldm*' | awk '/ltsp-client|ldm|ltspfs/{print $1,$2,$3}'
-        echo
-    fi
-}
-
-chroot_release() {
-    if [ -x $chroot/usr/bin/lsb_release ]; then
-        echo "chroot information: $chroot"
-        ROOT=$chroot ltsp-chroot lsb_release --all
+        COLUMNS=200 rpm --root=$chroot -qa | sort | awk '/ltsp-client|ldm|ltspfs/{print $1}'
         echo
     fi
 }
