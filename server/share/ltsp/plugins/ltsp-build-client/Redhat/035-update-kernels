@@ -1,8 +1,5 @@
 case "$MODE" in
     finalization)
-        echo "*************************************************************************************************************"
-        echo "KNOWN BUG: \"Skipping invalid chroot\" warnings below are harmless.  livecd-creator bug introduced in SL-6.1."
-        echo "*************************************************************************************************************"
         /usr/sbin/ltsp-update-kernels
         ;;
 esac
