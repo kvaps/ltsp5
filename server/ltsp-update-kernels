@@ -85,7 +85,7 @@ update_kernels() {
         fi
     fi
     if [ -z "$chroot" ]; then
-        echo "Skipping invalid chroot: $name"
+        [ "$name" = "mock" ] || echo "Skipping invalid chroot: $name"
         continue
     fi
     echo "Updating $tftpdir directories for chroot: $name"
