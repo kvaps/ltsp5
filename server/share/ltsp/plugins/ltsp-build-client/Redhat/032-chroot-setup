@@ -1,8 +1,9 @@
 case "$MODE" in
     after-install)
         # Disable services we don't want
+        ltsp-chroot -a $ARCH systemctl disable sshd.service
+        ltsp-chroot -a $ARCH systemctl disable smartd.service
         ltsp-chroot -a $ARCH systemctl mask display-manager.service
-        ltsp-chroot -a $ARCH systemctl mask smartd.service
         # Enable services we do want
         ltsp-chroot -a $ARCH /sbin/chkconfig ltsp-core on
         ;;
