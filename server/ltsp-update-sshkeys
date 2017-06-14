@@ -92,7 +92,7 @@ if [ $# -gt 0 ]; then
         EXPORT="${EXPORT:-/etc/ltsp/ssh_known_hosts.auto}"
     fi
     # We want the stderr of ssh-keyscan, but not its annoying "server info"
-    ssh-keyscan -t dsa,rsa,ecdsa ${PORT:+-p $PORT} "$@" 2>&1 >"$EXPORT" |
+    ssh-keyscan -t dsa,rsa,ecdsa,ed25519 ${PORT:+-p $PORT} "$@" 2>&1 >"$EXPORT" |
         grep -v ^# >&2
 else
     UPDATE=1
