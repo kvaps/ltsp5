@@ -26,7 +26,6 @@ case "$MODE" in
         $MOCK_CMD --copyin /etc/ltsp/dracut/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
         $MOCK_CMD --copyin /etc/adjtime /etc/adjtime
         $MOCK_CMD --copyin /etc/vconsole.conf /etc/vconsole.conf
-        $MOCK_CMD --shell "ln -sf /dev/null /etc/udev/rules.d/80-net-name-slot.rules"
         mv $BASE/mock/$ARCH/root $ROOT
         ln -s $ROOT $BASE/mock/$ARCH/root
         cp $ROOT/etc/skel/.bash* $ROOT/root/
