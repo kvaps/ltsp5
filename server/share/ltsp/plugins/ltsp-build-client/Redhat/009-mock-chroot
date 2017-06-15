@@ -17,7 +17,7 @@ case "$MODE" in
         $MOCK_CMD --init
         $MOCK_CMD --shell "touch /etc/ltsp_chroot"
         $MOCK_CMD --shell "yum group install 'X Window System'"
-        $MOCK_CMD --install ltsp-client ltspfs ldm nbd tftp fuse-sshfs nfs-utils dracut-tools e2fsprogs busybox pulseaudio xterm xorg-x11-fonts dbus-x11 GConf2 telnet x2goclient freerdp firefox evince
+        $MOCK_CMD --install ltsp-client pulseaudio xterm xorg-x11-fonts dbus-x11 GConf2 telnet x2goclient freerdp firefox evince
     ;;
     after-install)
         $MOCK_CMD --shell "[ -d /etc/ltsp ] || echo LTSP client not installed"
