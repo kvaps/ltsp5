@@ -1,36 +1,31 @@
-#!/bin/bash
+#!/bin/sh
 
 set -x
 
-case "$MODE" in
+case "${MODE}" in
     commandline)
         add_option "release"  "`eval_gettext "Release version number"`" "advanced" "true"
-    ;;
+        ;;
     configure)
-        /usr/sbin/usermod -a -G mock nobody
         BUILD=${BUILD:-x86_64}
-        ARCH=${ARCH:-$(echo $BUILD | sed -e s/i.86/i386/)}
-        MOCK_CMD="setarch $BUILD /usr/bin/mock -r ltsp-$ARCH --target=$BUILD --configdir=/etc/ltsp/mock --arch=$BUILD"
-    ;;
+        ARCH=${ARCH:-$(echo ${BUILD} | sed -e s/i.86/i386/)}
+        ;;
     install)
-        $MOCK_CMD --scrub=all
-        $MOCK_CMD --init
-        $MOCK_CMD --shell "touch /etc/ltsp_chroot"
-        $MOCK_CMD --shell "yum group install 'X Window System'"
-        $MOCK_CMD --install ltsp-client pulseaudio xterm xorg-x11-fonts dbus-x11 GConf2 telnet x2goclient freerdp firefox evince
-    ;;
+        mkdir -p ${ROOT}/etc
+        cp -a /etc/yum* ${ROOT}/etc/
+        touch ${ROOT}/etc/ltsp_chroot
+        YUM_CMD="setarch ${ARCH} yum --installroot ${ROOT} --assumeyes --releasever=7"
+        ${YUM_CMD} group install Core "X Window System"
+        ${YUM_CMD} install ltsp-client telnet x2goclient freerdp firefox evince
+        ;;
     after-install)
-        $MOCK_CMD --shell "[ -d /etc/ltsp ] || echo LTSP client not installed"
-        $MOCK_CMD --copyin /etc/ltsp/dracut/ltsp-dracut.conf /etc/dracut.conf.d/ltsp-dracut.conf
-        $MOCK_CMD --copyin /etc/ltsp/dracut/sysconfig-network /etc/sysconfig/network
-        $MOCK_CMD --copyin /etc/ltsp/dracut/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
-        $MOCK_CMD --copyin /etc/adjtime /etc/adjtime
-        $MOCK_CMD --copyin /etc/vconsole.conf /etc/vconsole.conf
-        mv $BASE/mock/$ARCH/root $ROOT
-        ln -s $ROOT $BASE/mock/$ARCH/root
-        cp $ROOT/etc/skel/.bash* $ROOT/root/
-        cat << EOF >> $ROOT/root/.bashrc
-PS1="<LTSP $ARCH> [\u@\h \W]\\\\$ "
+        cp -f /etc/ltsp/dracut/ltsp-dracut.conf ${ROOT}/etc/dracut.conf.d/ltsp-dracut.conf
+        cp -f /etc/ltsp/dracut/sysconfig-network ${ROOT}/etc/sysconfig/network
+        cp -f /etc/ltsp/dracut/ifcfg-eth0 ${ROOT}/etc/sysconfig/network-scripts/ifcfg-eth0
+        cp -f /etc/adjtime ${ROOT}/etc/adjtime
+        cp -f /etc/vconsole.conf ${ROOT}/etc/vconsole.conf
+        cat >> ${ROOT}/root/.bashrc << EOF
+PS1="<LTSP ${ARCH}> [\u@\h \W]\\\\$ "
 EOF
-    ;;
+        ;;
 esac

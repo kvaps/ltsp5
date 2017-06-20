@@ -21,11 +21,12 @@ case "$MODE" in
 
         if [ -f "/etc/ltsp/fat-client-groups" ]; then
            # Install the packages
-           while read line; do
+          YUM_CMD="setarch ${ARCH} yum --installroot ${ROOT} --assumeyes --releasever=7"
+          while read line; do
               echo installing "$line"
-              $MOCK_CMD --shell yum groupinstall \'$line\'
+              ${YUM_CMD} group install \'$line\'
            done < /etc/ltsp/fat-client-groups
-           $MOCK_CMD --shell yum remove NetworkManager PackageKit gdm
+           ${YUM_CMD} remove NetworkManager PackageKit gdm
         fi
     ;;
 esac
