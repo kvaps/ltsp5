@@ -30,6 +30,9 @@ var/log/*.1
 var/log/*.gz
 var/log/*.old
 var/mail/*
+var/spool/cron/atjobs/*
+var/spool/cron/atspool/*
+var/spool/cron/crontabs/*
 var/spool/squid3/*
 var/tmp/.*
 var/tmp/*
