@@ -15,7 +15,7 @@ case "${MODE}" in
         cp -a /etc/yum* ${ROOT}/etc/
         touch ${ROOT}/etc/ltsp_chroot
         YUM_CMD="setarch ${ARCH} yum --installroot ${ROOT} --assumeyes --releasever=7"
-        ${YUM_CMD} group install Core "X Window System"
+        ${YUM_CMD} group install Base "X Window System"
         ${YUM_CMD} install ltsp-client telnet x2goclient freerdp firefox evince
         ;;
     after-install)
