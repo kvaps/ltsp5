@@ -33,6 +33,18 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
         nbd-client -d /dev/nbd0
         mount -o loop /cow/.rofsimage.img /rofs
+    elif [ "$LTSP_NBD_TO_HDD" = "true" ]; then
+        umount ${rootmnt}
+
+        #TODO: mkfs options
+        sh
+
+        mkdir /data
+        mount "$LTSP_DATA_DRIVE" /data
+
+        dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
+        nbd-client -d /dev/nbd0
+        mount -o loop /cow/.rofsimage.img /rofs
     else
         mount -o move ${rootmnt} /rofs
     fi
