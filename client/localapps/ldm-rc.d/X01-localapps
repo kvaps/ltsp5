@@ -23,11 +23,11 @@ is_valid_name() {
 mkdir -p /var/cache/ltsp
 
 # On first login, copy /etc/passwd, group, shadow and gshadow to cache.
-# On subsequent logins, restore them.
+# On subsequent logins, restore them, unless there's a multiseat user logged in.
 for i in passwd group shadow gshadow; do
     if [ ! -e "/var/cache/ltsp/$i" ]; then
         cp "/etc/$i" "/var/cache/ltsp/$i"
-    else
+    elif [ "$(pgrep -cf "/usr/share/ldm/ldm-script xsession")" -lt 2 ]; then
         cp "/var/cache/ltsp/$i" "/etc/$i"
     fi
 done
