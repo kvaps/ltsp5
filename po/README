@@ -1,0 +1,21 @@
+Translations workflow
+=====================
+LTSP is translated online on launchpad:
+https://translations.launchpad.net/ltsp
+
+Due to a misconfiguration, we rely on "Series" to have translatable subprojects for LTSP and LDM:
+https://translations.launchpad.net/ltsp/ltsp/+translations
+https://translations.launchpad.net/ltsp/ldm/+translations
+
+As that page says,
+> Automatic synchronization: Translations are imported with every update from branch lp:ltsp,
+> and exported daily to branch lp:~ltsp-upstream/ltsp/ltsp-translations.
+
+Unfortunately launchpad currently only supports synchronization with bzr branches, but LTSP is maintained in git. So:
+ * The LTSP code is at https://code.launchpad.net/~ltsp-upstream/ltsp/+git/ltsp.
+ * At StringFreeze, we should push an updated po/ltsp.pot, and give translators enough time to translate it.
+ * All the LTSP code, including ltsp.pot, is automatically mirrored in bzr format at https://code.launchpad.net/~ltsp-upstream/ltsp/ltsp.
+ * Launchpad pulls ltsp.pot from there and allows translators to translate it online.
+ * When there are new translations, it daily pushes the updated .po files at https://code.launchpad.net/~ltsp-upstream/ltsp/ltsp-translations
+ * Before release, we should manually pull po/*.po from ltsp-translations and push them to the upstream git repository.
+ * We have configured launchpad to only read *.pot and ignore *.po, so we shouldn't commit any new .po files sent e.g. by email. We should instruct translators to use launchpad instead. Also the translator credits are kept there internally in launchpad, and exposed in a special string called "translator-credits" which can be shown in about dialogs etc.
