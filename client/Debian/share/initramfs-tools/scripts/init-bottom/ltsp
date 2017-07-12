@@ -35,16 +35,38 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         mount -o loop /cow/.rofsimage.img /rofs
     elif [ "$LTSP_NBD_TO_HDD" = "true" ]; then
         umount ${rootmnt}
+        mkdir -p /data
 
-        #TODO: mkfs options
-        sh
+        if ! mount "$LTSP_DATA_DRIVE" /data; then
+            # Check if drive is empty
+            until [ $(wipefs "$LTSP_DATA_DRIVE" -p | wc -l) == "0" ]; do
+                echo
+                echo "Error: We can not prepare $LTSP_DATA_DRIVE device,"
+                echo "because some signatures founded on it:"
+                echo
+                wipefs "$LTSP_DATA_DRIVE"
+                echo "Type the following command for remove any signatures from it:"
+                echo
+                echo "    # wipefs -a $LTSP_DATA_DRIVE"
+                echo
+                echo "Be careful, any data will be loss!"
+                read
+                sh
+            done
+            mkfs.ext4 "$LTSP_DATA_DRIVE"
+            mount "$LTSP_DATA_DRIVE" /data
+        fi
 
-        mkdir /data
-        mount "$LTSP_DATA_DRIVE" /data
+        # Check if cached image is actual
+        if [ ! -f /data/.rofsimage.img ] || dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img | grep -q differ; then
+            echo "Downloading new image"
+            rm -f /data/.rofsimage.img
+            dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
+        fi
 
-        dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
         nbd-client -d /dev/nbd0
-        mount -o loop /cow/.rofsimage.img /rofs
+        mount -o remount,ro "$LTSP_DATA_DRIVE"
+        mount -o loop /data/.rofsimage.img /rofs
     else
         mount -o move ${rootmnt} /rofs
     fi
