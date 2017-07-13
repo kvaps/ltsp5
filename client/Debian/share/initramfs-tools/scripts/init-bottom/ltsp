@@ -90,7 +90,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         mkdir -p ${rootmnt}${dir}
         mount -o move ${dir} ${rootmnt}${dir}
     done
-    if [ "${LTSP_MOUNT_DATA_DRIVE:-true}" = "true" ]; then
+    if [ "${LTSP_MOUNT_DATA_DRIVE:-true}" != "true" ]; then
         mount -o move /data ${rootmnt}/data
     fi
 fi
