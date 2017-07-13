@@ -33,7 +33,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
         nbd-client -d /dev/nbd0
         mount -o loop /cow/.rofsimage.img /rofs
-    elif [ "$LTSP_NBD_TO_HDD" = "true" ]; then
+    elif [ "$LTSP_NBD_TO_DRIVE" = "true" ]; then
         umount ${rootmnt}
         mkdir -p /data
 
@@ -65,7 +65,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         fi
 
         nbd-client -d /dev/nbd0
-        mount -o remount,ro "$LTSP_DATA_DRIVE"
+        mount -o remount,ro /data
         mount -o loop /data/.rofsimage.img /rofs
     else
         mount -o move ${rootmnt} /rofs
@@ -88,10 +88,6 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         mkdir -p ${rootmnt}${dir}
         mount -o move ${dir} ${rootmnt}${dir}
     done
-    if [ "$LTSP_NBD_TO_HDD" = "true" ]; then
-        mount -o move /data ${rootmnt}/data
-    fi
-
 fi
 
 # Copy networking configuration to the root file system
