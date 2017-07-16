@@ -57,8 +57,11 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
             mount "$LTSP_DATA_DRIVE" /data
         fi
 
-        # Check if cached image is actual
-        if [ ! -f /data/.rofsimage.img ] || dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img | grep -q differ; then
+        # Checks if cached image is actual
+        if [ ! -f /data/.rofsimage.img ] ||
+           [ "$(losetup /dev/loop0 /data/.rofsimage.img; blockdev --getsz /dev/loop0; losetup -d /dev/loop0)" != "$(blockdev --getsz /dev/nbd0)" ] ||
+           dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img 2> /dev/null | grep -q differ
+        then
             echo "Downloading new image"
             rm -f /data/.rofsimage.img
             dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
