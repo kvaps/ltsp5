@@ -239,16 +239,7 @@ BASE=${BASE%/}
 
 # Chroots can be specified in the command line. If not, update all of them.
 if [ $# -eq 0 ]; then
-    set -- $(
-        {
-            find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
-                ! -name lost+found -printf "%f\n"
-            if [ -d "$BASE/images/" ]; then
-                find -L "$BASE/images/" -mindepth 1 -maxdepth 1 -type f \
-                    -name '*.img' -printf "%f\n" | sed 's/.img$//'
-            fi
-        } | sort -u
-    )
+    set -- $(list_chroots)
 fi
 test $# -gt 0 || die "No chroots found in $BASE"
 

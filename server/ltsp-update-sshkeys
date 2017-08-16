@@ -102,7 +102,7 @@ fi
 if [ -n "$UPDATE" ]; then
     if [ -z "$CHROOTS" ]; then
         BASE=${BASE:-"/opt/ltsp"}
-        CHROOTS=$(find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images)
+        CHROOTS=$(list_chroots nfs)
     fi
     for chroot in $CHROOTS; do
         test -x "$chroot/bin/true" || continue
