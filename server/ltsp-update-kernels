@@ -73,7 +73,7 @@ update_kernels() {
     unset chroot
     if [ -x "$BASE/$name/bin/true" ] && [ "$PREFER_NBD_IMAGE" != true ]; then
         chroot="$BASE/$name"
-    elif [ -f "$BASE/images/$name.img" ]; then
+    elif [ -e "$BASE/images/$name.img" ]; then
         if [ -z "$mnt" ]; then
             mnt=$(mktemp -d)
             trap "trap_cleanup" 0 HUP INT QUIT KILL SEGV PIPE TERM
