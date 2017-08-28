@@ -1,0 +1,1 @@
+sh -c "$(env | sort -V | sed -n 's/^PREINIT_[^=]*=//p')"
