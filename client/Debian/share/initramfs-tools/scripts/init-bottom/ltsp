@@ -68,9 +68,6 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         fi
 
         nbd-client -d /dev/nbd0
-        if [ "${LTSP_MOUNT_DATA_DRIVE:-true}" = "true" ]; then
-            mount -o move /data ${rootmnt}/data
-        fi
         mount -o loop /data/.rofsimage.img /rofs
     else
         mount -o move ${rootmnt} /rofs
@@ -93,7 +90,8 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
         mkdir -p ${rootmnt}${dir}
         mount -o move ${dir} ${rootmnt}${dir}
     done
-    if [ "${LTSP_MOUNT_DATA_DRIVE:-true}" != "true" ]; then
+    if [ "${LTSP_MOUNT_DATA_DRIVE:-true}" = "true" ]; then
+        mkdir -p ${rootmnt}/data
         mount -o move /data ${rootmnt}/data
     fi
 fi
