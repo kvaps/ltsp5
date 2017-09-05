@@ -16,17 +16,17 @@ case "$MODE" in
 
     after-install)
         if [ ! "$FAT_CLIENT" ]; then
-           return 0
+            return 0
         fi
 
         if [ -f "/etc/ltsp/fat-client-groups" ]; then
-           # Install the packages
-          YUM_CMD="setarch ${ARCH} yum --installroot ${ROOT} --assumeyes --releasever=7"
-          while read line; do
-              echo installing "$line"
-              ${YUM_CMD} group install \'$line\'
-           done < /etc/ltsp/fat-client-groups
-           ${YUM_CMD} remove NetworkManager PackageKit gdm
+            # Install the packages
+            YUM_CMD="setarch ${ARCH} yum --installroot ${ROOT} --assumeyes --releasever=7"
+            while read group; do
+                echo Installing "$group"
+                ${YUM_CMD} group install "$group"
+            done < /etc/ltsp/fat-client-groups
+            ${YUM_CMD} remove NetworkManager ModemManager PackageKit
         fi
     ;;
 esac
