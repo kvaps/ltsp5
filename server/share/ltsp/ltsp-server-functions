@@ -15,8 +15,8 @@ list_chroots() {
         if [ "${chroot_types#*,nbd,}" != "$chroot_types" ] &&
             [ -d "$BASE/images/" ]
         then
-            find -L "$BASE/images/" -mindepth 1 -maxdepth 1 -type f -o -type b \
-                -name '*.img' -printf "%f\n" | sed 's/.img$//'
+            find -L "$BASE/images/" -mindepth 1 -maxdepth 1 -name '*.img' \
+                \( -type f -o -type b \) -printf "%f\n" | sed 's/.img$//'
         fi
     fi | sort -u
 }

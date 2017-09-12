@@ -185,11 +185,11 @@ config_lts_conf() {
 }
 
 config_nbd_server() {
-    local restart_nbd image name conf
+    local restart_nbd name conf
 
     mkdir -p "/etc/nbd-server/conf.d"
     conf="/etc/nbd-server/conf.d/swap.conf"
-    if check_overwrite $conf; then
+    if check_overwrite "$conf"; then
         cat > "$conf" <<EOF
 [swap]
 exportname = /tmp/nbd-swap/%s
@@ -201,22 +201,12 @@ EOF
         restart_nbd=true
     fi
 
-    for image in $(list_chroots nbd); do
-        name=${image##*/}
-        name=${name%.*}
-         # Configuration file upgrade, remove it e.g. in 2015.
+    for name in $(list_chroots nbd); do
         conf="/etc/nbd-server/conf.d/ltsp_$name.conf"
-        if [ -f "$conf" ]; then
-            if [ "$(sed -n '1s/\[ltsp_\(.*\)\]/\1/p' "$conf")" = "$name" ]; then
-                echo "Removing old configuration file $conf in order to upgrade it"
-                rm -f "$conf"
-            fi
-        fi
-
-        if check_overwrite $conf; then
+        if check_overwrite "$conf"; then
             cat >"$conf" <<EOF
 [$BASE/$name]
-exportname = $image
+exportname = $BASE/images/$name.img
 readonly = true
 authfile = /etc/ltsp/nbd-server.allow
 EOF
