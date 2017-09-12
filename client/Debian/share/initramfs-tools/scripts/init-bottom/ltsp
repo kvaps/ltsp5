@@ -57,19 +57,29 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
             mount "$LTSP_DATA_DRIVE" /data
         fi
 
-        if [ ! -f /data/.rofsimage.img ] || [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ]; then
+        # Checks for offline update
+        if [ -f /data/.rofsimage.img.new ]; then
+            # Install offline update
+            echo -e "\033[1;32m\nApplying new image...\n\033[0m"
+            mv /data/.rofsimage.img.new /data/.rofsimage.img
 
-            # Check if cached image is actual
-            if [ ! -f /data/.rofsimage.img ] ||
-               [ "$(losetup /dev/loop0 /data/.rofsimage.img; blockdev --getsz /dev/loop0; losetup -d /dev/loop0)" != "$(blockdev --getsz /dev/nbd0)" ] ||
-               dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img 2> /dev/null | grep -q differ
-            then
-                echo "Downloading new image"
-                rm -f /data/.rofsimage.img
-                dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
-            fi
+        # Checks for online update
+        elif [ ! -f /data/.rofsimage.img ] || (
+             [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ] && (
+             [ "$(losetup /dev/loop0 /data/.rofsimage.img; blockdev --getsz /dev/loop0; losetup -d /dev/loop0)" != "$(blockdev --getsz /dev/nbd0)" ] ||
+             dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img 2> /dev/null | grep -q differ ))
+        then
+            # Install online update
+            echo -e "\033[1;32m\nDownloading new image...\n\033[0m"
+            rm -f /data/.rofsimage.img
+            dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
 
-       fi
+        # Message when image is actual
+        elif [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ]; then
+            echo -e "\033[1;32m\nImage is actual\n\033[0m"
+        else
+            echo -e "\033[1;32m\nNo offline update found\n\033[0m"
+        fi
 
         nbd-client -d /dev/nbd0
         mount -o loop /data/.rofsimage.img /rofs
