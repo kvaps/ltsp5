@@ -20,6 +20,7 @@ case "${MODE}" in
         ;;
     after-install)
         cp -f /etc/ltsp/dracut/ltsp-dracut.conf ${ROOT}/etc/dracut.conf.d/ltsp-dracut.conf
+        touch ${ROOT}/etc/sysconfig/network
         cp -f /etc/adjtime ${ROOT}/etc/adjtime
         cp -f /etc/vconsole.conf ${ROOT}/etc/vconsole.conf
         cat >> ${ROOT}/root/.bashrc << EOF
