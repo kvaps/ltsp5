@@ -65,9 +65,13 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
 
         # Checks for online update
         elif [ ! -f /data/.rofsimage.img ] || (
-             [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ] && (
-             [ "$(losetup /dev/loop0 /data/.rofsimage.img; blockdev --getsz /dev/loop0; losetup -d /dev/loop0)" != "$(blockdev --getsz /dev/nbd0)" ] ||
-             dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img 2> /dev/null | grep -q differ ))
+                 [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ] && (
+                 [ "$(losetup /dev/loop0 /data/.rofsimage.img; blockdev --getsz /dev/loop0; losetup -d /dev/loop0)" != "$(blockdev --getsz /dev/nbd0)" ] ||
+                 dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img 2> /dev/null | grep -q differ )
+             ) || (
+                 [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" != "true" ] && 
+                 [ "$(mount -o loop /data/.rofsimage.img /rofs; stat -c %F "/rofs/lib/modules/$(uname -r)"; umount /rofs)" != "directory" ]
+             )
         then
             # Install online update
             echo -e "\033[1;32m\nDownloading new image...\n\033[0m"
