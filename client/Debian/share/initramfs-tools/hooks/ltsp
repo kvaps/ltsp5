@@ -34,6 +34,7 @@ copy_exec /sbin/blkid /sbin
 copy_exec /sbin/wipefs /sbin
 copy_exec /sbin/mkfs.ext4 /sbin
 copy_exec /sbin/fsck.ext4 /sbin
+copy_exec /usr/bin/pv /sbin || true
 
 # Cleanup empty ROOT= string if written in conf/param.conf
 if [ -e "$DESTDIR/conf/param.conf" ]; then

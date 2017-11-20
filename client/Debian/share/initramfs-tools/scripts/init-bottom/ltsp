@@ -12,6 +12,53 @@ prereqs()
     echo "$PREREQ"
 }
 
+image_differ()
+{
+    [ "$(blockdev --getsz "$1")" != "$(losetup /dev/loop0 "$2"; blockdev --getsz /dev/loop0; losetup -d /dev/loop0)" ] ||
+    dd if="$1" bs=512 count=1 2>/dev/null | cmp "$2" 2> /dev/null | grep -q differ
+}
+
+image_download()
+{
+    while image_differ "$1" "$2"; do
+        echo -e "\033[1;32m\nDownloading new image...\n\033[0m"
+        rm -f "$2"
+        if [ -x /sbin/pv ]
+        then pv "$1" | dd of="$2" bs=1024k
+        else dd if="$1" of="$2" bs=1024k
+        fi
+    done
+}
+
+check_drive_empty()
+{
+    until [ $(wipefs "$1" -p | wc -l) == "0" ]; do
+        echo
+        echo "Error: We can not prepare $LTSP_DATA_DRIVE device,"
+        echo "because some signatures founded on it:"
+        echo
+        wipefs "$LTSP_DATA_DRIVE"
+        echo "Type the following command for remove any signatures from it:"
+        echo
+        echo "    # wipefs -a $LTSP_DATA_DRIVE"
+        echo
+        echo "Be careful, any data will be loss!"
+        read
+        sh
+    done
+}
+
+update_required()
+{
+    (
+        [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ] &&
+        image_differ /dev/nbd0 
+    ) || (
+        [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" != "true" ] &&
+        [ "$(mount -o loop "/data/.rofsimage.img" /rofs; stat -c %F "/rofs/lib/modules/$(uname -r)"; umount /rofs)" != "directory" ]
+    )
+}
+
 case "$1" in
     prereqs)
         prereqs
@@ -30,15 +77,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
     mount -t tmpfs -o mode=0755 tmpfs /cow
     if [ "$LTSP_NBD_TO_RAM" = "true" ]; then
         umount ${rootmnt}
-        while
-            [ "$(blockdev --getsz "/data/.rofsimage")" != "$(blockdev --getsz /dev/nbd0)" ] ||
-            dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp "/data/.rofsimage" 2> /dev/null | grep -q differ
-        do
-            echo -e "\033[1;32m\nDownloading image...\n\033[0m"
-            rm -f /data/.rofsimage.img
-            dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
-        done
-
+        image_download /dev/nbd0 /cow/.rofsimage.img
         nbd-client -d /dev/nbd0
         mount -o loop /cow/.rofsimage.img /rofs
     elif [ "$LTSP_NBD_TO_DRIVE" = "true" ]; then
@@ -47,20 +86,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
 
         if ! mount "$LTSP_DATA_DRIVE" /data; then
             # Check if drive is empty
-            until [ $(wipefs "$LTSP_DATA_DRIVE" -p | wc -l) == "0" ]; do
-                echo
-                echo "Error: We can not prepare $LTSP_DATA_DRIVE device,"
-                echo "because some signatures founded on it:"
-                echo
-                wipefs "$LTSP_DATA_DRIVE"
-                echo "Type the following command for remove any signatures from it:"
-                echo
-                echo "    # wipefs -a $LTSP_DATA_DRIVE"
-                echo
-                echo "Be careful, any data will be loss!"
-                read
-                sh
-            done
+            check_drive_empty "$LTSP_DATA_DRIVE"
             mkfs.ext4 "$LTSP_DATA_DRIVE"
             mount "$LTSP_DATA_DRIVE" /data
         fi
@@ -72,24 +98,9 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
             mv /data/.rofsimage.img.new /data/.rofsimage.img
 
         # Checks for online update
-        elif [ ! -f /data/.rofsimage.img ] || (
-                 [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ] && (
-                 [ "$(blockdev --getsz /data/.rofsimage.img)" != "$(blockdev --getsz /dev/nbd0)" ] ||
-                 dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp /data/.rofsimage.img 2> /dev/null | grep -q differ )
-             ) || (
-                 [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" != "true" ] && 
-                 [ "$(mount -o loop /data/.rofsimage.img /rofs; stat -c %F "/rofs/lib/modules/$(uname -r)"; umount /rofs)" != "directory" ]
-             )
-        then
-            # Install online update
-            while
-                [ "$(blockdev --getsz "/data/.rofsimage")" != "$(blockdev --getsz /dev/nbd0)" ] ||
-                dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp "/data/.rofsimage" 2> /dev/null | grep -q differ
-            do
-                echo -e "\033[1;32m\nDownloading new image...\n\033[0m"
-                rm -f /data/.rofsimage.img
-                dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
-            done
+        elif [ ! -f /data/.rofsimage.img ] || update_required; then
+        # Install online update
+        image_download /dev/nbd0 /data/.rofsimage.img
 
         # Message when image is actual
         elif [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ]; then
