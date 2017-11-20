@@ -30,7 +30,15 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
     mount -t tmpfs -o mode=0755 tmpfs /cow
     if [ "$LTSP_NBD_TO_RAM" = "true" ]; then
         umount ${rootmnt}
-        dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
+        while
+            [ "$(blockdev --getsz "/data/.rofsimage")" != "$(blockdev --getsz /dev/nbd0)" ] ||
+            dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp "/data/.rofsimage" 2> /dev/null | grep -q differ
+        do
+            echo -e "\033[1;32m\nDownloading image...\n\033[0m"
+            rm -f /data/.rofsimage.img
+            dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
+        done
+
         nbd-client -d /dev/nbd0
         mount -o loop /cow/.rofsimage.img /rofs
     elif [ "$LTSP_NBD_TO_DRIVE" = "true" ]; then
@@ -74,9 +82,14 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
              )
         then
             # Install online update
-            echo -e "\033[1;32m\nDownloading new image...\n\033[0m"
-            rm -f /data/.rofsimage.img
-            dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
+            while
+                [ "$(blockdev --getsz "/data/.rofsimage")" != "$(blockdev --getsz /dev/nbd0)" ] ||
+                dd if=/dev/nbd0 bs=512 count=1 2>/dev/null | cmp "/data/.rofsimage" 2> /dev/null | grep -q differ
+            do
+                echo -e "\033[1;32m\nDownloading new image...\n\033[0m"
+                rm -f /data/.rofsimage.img
+                dd if=/dev/nbd0 of=/data/.rofsimage.img bs=1024k
+            done
 
         # Message when image is actual
         elif [ "${LTSP_NBD_TO_DRIVE_AUTOREFRESH:-true}" = "true" ]; then
