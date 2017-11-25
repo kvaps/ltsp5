@@ -245,7 +245,7 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 . ${MODULES_BASE}/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o "b:ce:fhmnr" \
-    -l "base:,cleanup,exclude:,config-nbd,help,no-compress,no-backup,revert,version" -- "$@")
+    -l "base:,cleanup,exclude:,compression:,config-nbd,help,no-compress,no-backup,revert,version" -- "$@")
 then
     exit 1
 fi
