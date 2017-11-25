@@ -40,6 +40,9 @@ Options:
   -c, --cleanup             Temporarily remove user accounts, logs, caches etc from
                             the chroot before exporting the image. The chroot arch
                             is required to be compatible with the server arch.
+      --compression[=TYPE]  Compress the resulting image with TYPE
+                            (gzip, lzo, xz, lz4). If unspecified, use
+                            mksquashfs default.
   -e, --exclude[=LIST]      List of dirs/files to exclude from the image.
                             This is in addition to /etc/ltsp/ltsp-update-image.excludes.
   -f, --config-nbd          Generate appropriate nbd-server configuration files.
@@ -202,7 +205,8 @@ generate_image() {
         test -x /usr/bin/ionice && /usr/bin/ionice -c3 true 2>/dev/null && ionice=ionice || unset ionice
         if ! $nice $ionice mksquashfs "$cowroot" "$imgdir/$name.img.tmp" \
             -no-recovery -noappend -wildcards ${EXCLUDE_FILE:+-ef "$EXCLUDE_FILE"} \
-            ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports}
+            ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports} \
+            ${COMPRESSION:+-comp $COMPRESSION}
         then
             rm -f "$imgdir/$name.img.tmp"
             die "mksquashfs failed to build the LTSP image, exiting"
@@ -250,6 +254,7 @@ while true ; do
     case "$1" in
         -b|--base) shift; BASE=$1 ;;
         -c|--cleanup) CLEANUP=true ;;
+        --compression) shift; COMPRESSION="$1" ;;
         -e|--exclude) shift; EXCLUDE=$1 ;;
         -f|--config-nbd) CONFIG_NBD=true ;;
         -h|--help) usage; exit 0 ;;
