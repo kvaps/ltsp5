@@ -3,7 +3,8 @@ case "$MODE" in
         # Set default timezone to that of server Bug #126443
         if [ -f /etc/timezone ]; then
             cp /etc/timezone $ROOT/etc/timezone
-            chroot $ROOT dpkg-reconfigure tzdata
+            read TIMEZONE < /etc/timezone
+            ln -sf /usr/share/zoneinfo/"$TIMEZONE" /etc/localtime
         fi
         ;;
 esac
