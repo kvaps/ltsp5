@@ -16,6 +16,13 @@ if [ -n "$TIMESERVER" ]; then
     fi
     echo "server ${TIMESERVER}" >>/etc/ntp.conf
 
+    # Configure timesyncd
+    timesyncd_conf_dir=/run/systemd/timesyncd.conf.d
+    timesyncd_conf=${timesyncd_conf_dir}/50-ltsp.conf
+    mkdir -p ${timesyncd_conf_dir}
+    echo '[Time]' > ${timesyncd_conf}
+    echo "NTP=${TIMESERVER}" >> ${timesyncd_conf}
+
     # Modify /etc/default/ntpdate
     sed -i -e 's/^NTPSERVERS=".*"/NTPSERVERS="'$TIMESERVER'"/' /etc/default/ntpdate
 fi
