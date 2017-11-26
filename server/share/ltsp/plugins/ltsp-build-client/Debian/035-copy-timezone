@@ -4,7 +4,9 @@ case "$MODE" in
         if [ -f /etc/timezone ]; then
             cp /etc/timezone $ROOT/etc/timezone
             read TIMEZONE < /etc/timezone
-            ln -sf /usr/share/zoneinfo/"$TIMEZONE" $ROOT/etc/localtime
+            if [ -n "$TIMEZONE" ] && [ -e $ROOT/usr/share/zoneinfo/"$TIMEZONE" ]; then
+                ln -sf /usr/share/zoneinfo/"$TIMEZONE" $ROOT/etc/localtime
+            fi
         fi
         ;;
 esac
