@@ -12,7 +12,7 @@ if [ -n "$TIMESERVER" ]; then
 
     # Modify /etc/ntp.conf
     if [ -f "/etc/ntp.conf" ]; then
-        sed -i -e '/^server/d' /etc/ntp.conf
+        sed -i -e '/^server/d' -e '/^pool/d' /etc/ntp.conf
     fi
     echo "server ${TIMESERVER}" >>/etc/ntp.conf
 
