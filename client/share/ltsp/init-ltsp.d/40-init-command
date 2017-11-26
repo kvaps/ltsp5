@@ -1,2 +1,2 @@
-env | sort -V | sed -n 's/^INIT_COMMAND_[^=]*=//p' > /var/cache/ltsp/init-commands
-. /var/cache/ltsp/init-commands
+env | sort -V | sed -n 's/^INIT_COMMAND_[^=]*=//p' > /run/ltsp/init-commands
+. /run/ltsp/init-commands

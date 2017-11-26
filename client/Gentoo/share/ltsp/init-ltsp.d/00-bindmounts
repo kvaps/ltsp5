@@ -11,7 +11,7 @@ tmpfs_size=10m
 rw_dirs="/var/lib/xkb /var/log /var/spool /var/tmp /tmp /run /var/lib/pulse /var/lib/dbus"
 
 # tmpfs/bind directions that get mounted with directory structure and data copied
-copy_dirs="/root /home /etc/conf.d /etc/cron.d /etc/runlevels /etc/udev/rules.d /var/cache/ltsp"
+copy_dirs="/root /home /etc/conf.d /etc/cron.d /etc/runlevels /etc/udev/rules.d /run/ltsp"
 
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/passwd /etc/group /etc/localtime /etc/lts.conf /etc/mtab"

@@ -84,7 +84,7 @@ elif modprobe -q fuse; then
        unionfs $FUSE_OPT $UNION_OPT /cow=RW:/rofs=RO /sysroot
        echo inside-cow-unionfs > /sysroot/.inside-cow || panic "Something went wrong"
        [ -e "/proc/cmdline" ] || mount -t proc proc /sysroot/proc
-       cp -a /tmp/net.* /tmp/dhclient.* /sysroot/var/cache/ltsp
+       cp -a /tmp/net.* /tmp/dhclient.* /sysroot/run/ltsp
    elif [ "$INSIDE_INITRAMFS" ]; then
        # This is for initramfs-tools that include the fuse module.
        # it is incomplete but should be similar to above, just set
@@ -103,7 +103,7 @@ elif modprobe -q fuse; then
        unionfs $FUSE_OPT $UNION_OPT /cow=RW:/rofs=RO /sysroot
        echo inside-cow-initramfs > /sysroot/.inside-cow
        [ -e "/proc/cmdline" ] || mount -t proc proc /sysroot/proc
-       cp -a /tmp/net.* /tmp/dhclient.* /sysroot/var/cache/ltsp
+       cp -a /tmp/net.* /tmp/dhclient.* /sysroot/run/ltsp
    elif [ "$INSIDE_LTSP_INIT" ]; then
        CHROOT_PATH="/tmp/unionfs"
        UNION_OPT="-ocow,chroot=$CHROOT_PATH,max_files=32768"

@@ -3,7 +3,7 @@
 # Copy back passwd, group, shadow and gshadow, except for multiseat systems
 if [ "$(pgrep -cf "/usr/share/ldm/ldm-script xsession")" -eq 0 ]; then
     for i in passwd group shadow gshadow; do
-        test -e "/var/cache/ltsp/$i" && cp "/var/cache/ltsp/$i" "/etc/$i"
+        test -e "/run/ltsp/$i" && cp "/run/ltsp/$i" "/etc/$i"
     done
 fi
 if boolean_is_true "$LOCAL_APPS"; then

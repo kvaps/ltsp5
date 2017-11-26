@@ -17,7 +17,7 @@ bind_mounts ()
     [ -z "$tmpfs_dir" ] && tmpfs_dir=/var/lib/ltsp-client-setup
     [ -z "$rw_dirs" ] && rw_dirs="/var/cache/man /var/lib/xkb /var/lock /var/run /var/log /var/spool /var/tmp /tmp /var/lib/nfs"
     [ -z "$copy_dirs" ] && copy_dirs="/etc/net/ifaces"
-    [ -z "$temp_copy_dirs" ] && temp_copy_dirs="/var/cache/ltspconf"
+    [ -z "$temp_copy_dirs" ] && temp_copy_dirs="/run/ltspconf"
     [ -z "$bindfiles" ] && bindfiles="/etc/hostname /etc/hosts /etc/nbd-client /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/X11/xorg.conf /etc/X11/xinit/Xkbmap"
     mount -t tmpfs -o mode=0755,size=${tmpfs_size:-4m} tmpfs $tmpfs_dir
     # preserve directory structure

@@ -67,7 +67,7 @@ if [ -n "$nbd" ]; then
 elif [ -n "$nfs" ]; then
     export NFS_SERVER="$netsrv"
     echo "NFS_SERVER=$NFS_SERVER"
-fi >> /var/cache/ltsp/ltsp_config
+fi >> /run/ltsp/ltsp_config
 
 # export LTSP variables
 while IFS="=" read var value; do
@@ -76,6 +76,6 @@ while IFS="=" read var value; do
     var=$(echo "$var" | awk '{ print toupper($0) }')
     export "$var=$value"
     echo "$var=$value"    
-done >> /var/cache/ltsp/ltsp_config <<EOF
+done >> /run/ltsp/ltsp_config <<EOF
 $ltsp_vars
 EOF
