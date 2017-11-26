@@ -6,7 +6,7 @@ DOMAIN=ltsp
 POFILES=$(wildcard *.po)
 MOFILES=$(patsubst %.po,%.mo,$(POFILES))
 LINGUAS=$(basename $(POFILES))
-GETTEXTFILES=$(shell find ../server ../common/ltsp-common-functions -type f)
+GETTEXTFILES=$(shell find ../server ../common/ltsp-common-functions -type f | LC_ALL=C sort)
 POTFILE=$(DOMAIN).pot
 DESTDIR=/
 
