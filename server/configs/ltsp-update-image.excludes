@@ -3,6 +3,11 @@ etc/epoptes/server.key
 etc/mysql/debian.cnf
 etc/NetworkManager/system-connections/*
 etc/udev/rules.d/??-persistent-*.rules
+etc/.bzr/
+etc/.etckeeper
+etc/.git/
+etc/.hg/
+etc/_darcs
 home/*
 lost+found/*
 media/*
