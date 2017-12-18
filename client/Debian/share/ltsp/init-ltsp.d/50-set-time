@@ -1,7 +1,7 @@
 # This file is sourced
 
 if [ -n "$TIMEZONE" ] && [ -e "/usr/share/zoneinfo/$TIMEZONE" ]; then
-    cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
+    ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
 fi
 
 if [ -n "$TIMESERVER" ]; then
@@ -12,9 +12,16 @@ if [ -n "$TIMESERVER" ]; then
 
     # Modify /etc/ntp.conf
     if [ -f "/etc/ntp.conf" ]; then
-        sed -i -e '/^server/d' /etc/ntp.conf
+        sed -i -e '/^server/d' -e '/^pool/d' /etc/ntp.conf
     fi
     echo "server ${TIMESERVER}" >>/etc/ntp.conf
+
+    # Configure timesyncd
+    timesyncd_conf_dir=/run/systemd/timesyncd.conf.d
+    timesyncd_conf=${timesyncd_conf_dir}/50-ltsp.conf
+    mkdir -p ${timesyncd_conf_dir}
+    echo '[Time]' > ${timesyncd_conf}
+    echo "NTP=${TIMESERVER}" >> ${timesyncd_conf}
 
     # Modify /etc/default/ntpdate
     sed -i -e 's/^NTPSERVERS=".*"/NTPSERVERS="'$TIMESERVER'"/' /etc/default/ntpdate

@@ -1,9 +1,11 @@
 # Just in case someone hits ctrl-alt-backspace, let's cleanup some thing here
 
-# Copy back passwd, group, shadow and gshadow
-for i in passwd group shadow gshadow; do
-    test -e "/var/cache/ltsp/$i" && cp "/var/cache/ltsp/$i" "/etc/$i"
-done
+# Copy back passwd, group, shadow and gshadow, except for multiseat systems
+if [ "$(pgrep -cf "/usr/share/ldm/ldm-script xsession")" -eq 0 ]; then
+    for i in passwd group shadow gshadow; do
+        test -e "/run/ltsp/$i" && cp "/run/ltsp/$i" "/etc/$i"
+    done
+fi
 if boolean_is_true "$LOCAL_APPS"; then
     # Clean up cups config
     [ -r "/etc/cups/client.conf" ] && rm -f /etc/cups/client.conf

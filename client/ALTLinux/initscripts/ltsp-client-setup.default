@@ -20,7 +20,7 @@ copy_dirs="/etc/net/ifaces /etc/X11/lib /etc/X11/lib_nvidia"
 
 # tmpfs/bind directories that are mounted and copied, but then unmounted after
 # ltsp-client-setup finishes
-temp_copy_dirs="/var/cache/ltspconf"
+temp_copy_dirs="/run/ltspconf"
 
 # tmpfs/bind files that mounted on top of other files
 bindfiles="/etc/hostname /etc/hosts /etc/syslog.conf /etc/fstab /etc/resolv.conf /etc/HOSTNAME /etc/issue /etc/issue.net /etc/X11/xinit/Xkbmap"

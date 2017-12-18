@@ -1,5 +1,5 @@
 
-
+CC ?= cc
 LEX=flex
 YACC=bison
 
@@ -11,7 +11,7 @@ CCFLAGS=-W -Wall $(CFLAGS) $(CPPFLAGS)
 getltscfg:	getltscfg.o		\
 		parser.tab.o		\
 		lexer.o
-	cc -o getltscfg getltscfg.o	\
+	$(CC) -o getltscfg getltscfg.o	\
 			parser.tab.o	\
 			lexer.o		\
 			$(LIBS)		\
@@ -19,13 +19,13 @@ getltscfg:	getltscfg.o		\
 
 getltscfg.o:	getltscfg.c		\
 		getltscfg.h
-	cc -c getltscfg.c $(CCFLAGS) -o getltscfg.o
+	$(CC) -c getltscfg.c $(CCFLAGS) -o getltscfg.o
 
 parser.tab.o:	parser.tab.c
-	cc -c parser.tab.c $(CCFLAGS) -o parser.tab.o
+	$(CC) -c parser.tab.c $(CCFLAGS) -o parser.tab.o
 
 lexer.o:	lexer.c parser.tab.c
-	cc -c lexer.c $(CCFLAGS) -o lexer.o
+	$(CC) -c lexer.c $(CCFLAGS) -o lexer.o
 
 parser.tab.c:	parser.y		\
 		getltscfg.h

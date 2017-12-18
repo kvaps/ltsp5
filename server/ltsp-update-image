@@ -40,6 +40,9 @@ Options:
   -c, --cleanup             Temporarily remove user accounts, logs, caches etc from
                             the chroot before exporting the image. The chroot arch
                             is required to be compatible with the server arch.
+      --compression[=TYPE]  Compress the resulting image with TYPE
+                            (gzip, lzo, xz, lz4). If unspecified, use
+                            mksquashfs default.
   -e, --exclude[=LIST]      List of dirs/files to exclude from the image.
                             This is in addition to /etc/ltsp/ltsp-update-image.excludes.
   -f, --config-nbd          Generate appropriate nbd-server configuration files.
@@ -202,7 +205,8 @@ generate_image() {
         test -x /usr/bin/ionice && /usr/bin/ionice -c3 true 2>/dev/null && ionice=ionice || unset ionice
         if ! $nice $ionice mksquashfs "$cowroot" "$imgdir/$name.img.tmp" \
             -no-recovery -noappend -wildcards ${EXCLUDE_FILE:+-ef "$EXCLUDE_FILE"} \
-            ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports}
+            ${EXCLUDE:+-e "$EXCLUDE"} ${NO_COMPRESS:+-noF -noD -noI -no-exports} \
+            ${COMPRESSION:+-comp $COMPRESSION}
         then
             rm -f "$imgdir/$name.img.tmp"
             die "mksquashfs failed to build the LTSP image, exiting"
@@ -241,7 +245,7 @@ MODULES_BASE=${MODULES_BASE:-/usr/share/ltsp}
 . ${MODULES_BASE}/ltsp-server-functions
 
 if ! args=$(getopt -n "$0" -o "b:ce:fhmnr" \
-    -l "base:,cleanup,exclude:,config-nbd,help,no-compress,no-backup,revert,version" -- "$@")
+    -l "base:,cleanup,exclude:,compression:,config-nbd,help,no-compress,no-backup,revert,version" -- "$@")
 then
     exit 1
 fi
@@ -250,6 +254,7 @@ while true ; do
     case "$1" in
         -b|--base) shift; BASE=$1 ;;
         -c|--cleanup) CLEANUP=true ;;
+        --compression) shift; COMPRESSION="$1" ;;
         -e|--exclude) shift; EXCLUDE=$1 ;;
         -f|--config-nbd) CONFIG_NBD=true ;;
         -h|--help) usage; exit 0 ;;
@@ -284,8 +289,7 @@ fi
 
 # Chroots can be specified in the command line. If not, update all of them.
 if [ $# -eq 0 ]; then
-    set -- $(find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images \
-        ! -name lost+found -printf "%f\n")
+    set -- $(list_chroots nfs)
 fi
 test $# -gt 0 || die "No chroots found in $BASE"
 

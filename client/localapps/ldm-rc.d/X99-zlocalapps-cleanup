@@ -43,10 +43,12 @@ if boolean_is_true "$LOCAL_APPS"; then
     fi
 fi
 
-# Copy back passwd, group, shadow and gshadow
-for i in passwd group shadow gshadow; do
-    test -e "/var/cache/ltsp/$i" && cp "/var/cache/ltsp/$i" "/etc/$i"
-done
+# Copy back passwd, group, shadow and gshadow, except for multiseat systems
+if [ "$(pgrep -cf "/usr/share/ldm/ldm-script xsession")" -eq 0 ]; then
+    for i in passwd group shadow gshadow; do
+        test -e "/run/ltsp/$i" && cp "/run/ltsp/$i" "/etc/$i"
+    done
+fi
 
 # Clean up remote apps tmpdir
 if boolean_is_true "${REMOTE_APPS}" && [ -n "${REMOTE_APPS_TMPDIR}" ] ; then

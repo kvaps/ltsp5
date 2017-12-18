@@ -1,8 +1,8 @@
-# Source /var/cache/ltsp/ltsp_config
-if [ -f /var/cache/ltsp/ltsp_config ]; then
+# Source /run/ltsp/ltsp_config
+if [ -f /run/ltsp/ltsp_config ]; then
     set -a
-    . /var/cache/ltsp/ltsp_config
+    . /run/ltsp/ltsp_config
     set +a
-    cat /var/cache/ltsp/ltsp_config >> ${ltsp_config_env} || true
+    cat /run/ltsp/ltsp_config >> ${ltsp_config_env} || true
 fi
 

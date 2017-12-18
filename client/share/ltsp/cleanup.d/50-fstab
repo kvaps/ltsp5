@@ -1,0 +1,4 @@
+# Invalid /etc/fstab entries can cause boot failures (LP: #1673401).
+
+echo '# UNCONFIGURED FSTAB FOR BASE SYSTEM' > /etc/fstab
+

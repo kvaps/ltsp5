@@ -115,8 +115,8 @@ if [ ! -f "$cache_info" ]; then
     ! touch $cache_info && exit 1
     echo INTERFACE_MAC=$(ifconfig | grep ${INTERFACE} | cut -f11 -d" ") > $cache_info
     echo INTERFACE_IP=$(ifconfig ${INTERFACE} | grep inet | cut -f2 -d":" | cut -f1 -d" ") >> $cache_info
-    if [ -f /var/cache/ltsp/ltsp_config ]; then
-        . /var/cache/ltsp/ltsp_config
+    if [ -f /run/ltsp/ltsp_config ]; then
+        . /run/ltsp/ltsp_config
     fi
     echo ROOT_SRV=$NBD_ROOT_HOST >> $cache_info
 fi

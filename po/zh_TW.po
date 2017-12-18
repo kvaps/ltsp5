@@ -7,15 +7,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-10-10 14:58-0700\n"
+"POT-Creation-Date: 2017-11-25 19:13-0800\n"
 "PO-Revision-Date: 2015-11-07 14:20+0000\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-03-24 04:30+0000\n"
-"X-Generator: Launchpad (build 18334)\n"
+"X-Launchpad-Export-Date: 2017-11-27 04:30+0000\n"
+"X-Generator: Launchpad (build 18509)\n"
+
+#: ../common/ltsp-common-functions:194
+#, sh-format
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Chao-Hsiung Liao https://launchpad.net/~j-h-liau\n"
+"  Cheng-Wei Chien https://launchpad.net/~cwchien\n"
+"  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
+"  Rockworld https://launchpad.net/~rockrock2222222"
 
 #: ../server/ALTLinux/configs/ltsp-login.sh:30
 #: ../server/ALTLinux/configs/ltsp-login.sh:33
@@ -120,93 +130,383 @@ msgstr "資訊：LTSP 用戶端成功安裝完畢"
 msgid "error: LTSP client installation ended abnormally"
 msgstr "錯誤：LTSP 用戶端安裝不正常中止"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:3
+#, sh-format
+msgid "Enable progress reporting"
+msgstr "啟用進度報告"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:4
+#, sh-format
+msgid "Print stage times (seconds)"
+msgstr "顯示階段時間 (以秒計)"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:5
+#, sh-format
+msgid "Draw progress bar"
+msgstr "繪出進度列"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
+#, sh-format
+msgid "set the target architecture"
+msgstr "設定目標架構"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
+#, sh-format
+msgid "set the distribution to be used for install"
+msgstr "設定安裝用的發行套件"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
+#, sh-format
+msgid "set the default locale"
+msgstr "設定預設地區"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#, sh-format
+msgid "set the mirror location"
+msgstr "設定鏡射位置"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
+#, sh-format
+msgid "add a mirror, which takes priority over the default mirror"
+msgstr "新增一個映射站，而它的優先權高於預設的映射站"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
+#, sh-format
+msgid "add a mirror, with lower priority than the default mirror"
+msgstr "新增一個映射站，而它的優先權低於預設的映射站"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
+#, sh-format
+msgid "add a security mirror"
+msgstr "新增一個安全性更新映射站"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
+#, sh-format
+msgid "set the list of packages to install after base-install is completed"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
+#, sh-format
+msgid "Set the i18n langs"
+msgstr "設定 i18n"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-kernel:3
+#, sh-format
+msgid "set the kernel package to install."
+msgstr "設定要安裝的核心套件"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
+#, sh-format
+msgid "enable serial console"
+msgstr "啟動序列埠終端機"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
+#, sh-format
+msgid "Enabling serial console..."
+msgstr "正在啟動序列埠終端機 ..."
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
+#, sh-format
+msgid "set the kernel modules packages to install."
+msgstr "設定要安裝的核心模組套件。"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
+#, sh-format
+msgid "list of packages to install as part of the final installation"
+msgstr "做為最終安裝中要安裝的套件清單"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
+#, sh-format
+msgid "keep cache of downloaded package files"
+msgstr "保留已下載套件檔的快取"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
+#, sh-format
+msgid "prompt to set the root password, defaults to disabled"
+msgstr "提示設定管理者密碼，預設為關閉"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
+#, sh-format
+msgid "include the listed keys in the apt keyring"
+msgstr "將清單上的金鑰加入 apt 鑰匙圈 (keyring)"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
+#, sh-format
+msgid "allow unsigned packages during install"
+msgstr "安裝時允許未簽章的套件"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
+#, sh-format
+msgid "set the components to be used in mirror"
+msgstr "設定在鏡像中要使用的元件"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
+#, sh-format
+msgid ""
+"set the distribution to be used for install, defaults to running distribution"
+msgstr "設定發行版本用於安裝，預設為執行發行版本"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
+#, sh-format
+msgid "distribution to set up apt pinning"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:4
+#, sh-format
+msgid "list of packages to install from the pinned distribution"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
+#, sh-format
+msgid "load debconf seeding in the chroot after install"
+msgstr "安裝後載入 chroot 中的 debconf"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
+#, sh-format
+msgid "use the specified keyring for debootstrap gpg verification"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-distribution-specific:5
+#, sh-format
+msgid ""
+"NOTE: disabling security and updates APT sources for sid.  They do not exist."
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
+#, sh-format
+msgid "enable popularity-contest in the chroot"
+msgstr "於 chroot 中啟動熱門套件統計 (popularity-contest)"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:12
+#, sh-format
+msgid "Enabling popularity contest..."
+msgstr "正在啟動熱門套件統計 ..."
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
+#, sh-format
+msgid "use specified http proxy"
+msgstr "使用指定的 http 代理伺服器"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:4
+#, sh-format
+msgid "do not autodetect apt proxy configuration"
+msgstr "不要自動偵測 apt 代理伺服器組態"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
+#, sh-format
+msgid "set the update mirror location"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
+#, sh-format
+msgid "NOTE: adding default dist and components to security mirror:"
+msgstr "注意：新增預設的版本和分類至安全性更新映射站："
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
+#, sh-format
+msgid "add a backports mirror"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:4
+#, sh-format
+msgid "list of packages to install from the backports repositories"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:5
+#, sh-format
+msgid "distribution to pull backports from"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
+#, sh-format
+msgid "NOTE: adding default dist and components to backports mirror:"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
+#, sh-format
+msgid "use the servers sources.list instead of generating one"
+msgstr "使用伺服器的 sources.list 代替產生一個"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
+#, sh-format
+msgid "set the list of kernel packages to install"
+msgstr "設定要安裝的核心套件清單"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
+#, sh-format
+msgid "set the kernel variant to install"
+msgstr "設定要安裝的核心變體"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
+#, sh-format
+msgid "set the kernel version to install"
+msgstr "設定要安裝的核心版本"
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client:5
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
 msgstr "以本機執行大多數應用程式"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/009-mock-chroot:10
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
 #, sh-format
-msgid "Release version number (el6,fc18,fc19) * Not working yet"
+msgid "skip upgrade of installed packages"
+msgstr "略過已安裝套件的升級"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:3
+#, sh-format
+msgid "create ext2 image for use with NBD"
+msgstr "建立 NBD 使用的 ext2 映像檔"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
+#, sh-format
+msgid "create image for use with NBD of the specified filesystem"
+msgstr "以指定的檔案系統建立 NBD 使用的映像檔"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
+#, sh-format
+msgid ""
+"install to the chroot all the .deb files contained in the provided directory"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:4
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:8
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:9
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #, sh-format
-msgid "set the target architecture"
-msgstr "設定目標架構"
+msgid "a simple webkiosk mode"
+msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
+#, sh-format
+msgid "cache downloaded packages"
+msgstr "快取已下載套件"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
+#, sh-format
+msgid "Copying packages"
+msgstr "複製套件"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
+#, sh-format
+msgid "done."
+msgstr "完成。"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
+#, sh-format
+msgid "copy apt Packages files from server"
+msgstr "從伺服器複製 apt 套件檔案"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
+#, sh-format
+msgid "mount package cache dir from server"
+msgstr "從伺服器掛載套件快取目錄"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
+#, sh-format
+msgid "mount a server directory as the chroot package cache dir"
+msgstr "掛載伺服器目錄做為 chroot 套件快取目錄"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/080-eatmydata:3
+#, sh-format
+msgid ""
+"use eatmydata to speed up build times, at risk of data not getting written "
+"to disk"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
+#, sh-format
+msgid "create squashfs image for use with NBD"
+msgstr "建立 NBD 使用的 squashfs 映像檔"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:4
+#, sh-format
+msgid "skip squashfs image creation"
+msgstr ""
+
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:27
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
 msgstr "錯誤：不支援的架構。請檢查您的 --arch 參數：%s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:17
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:28
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #, sh-format
 msgid "       supported values are: %s"
 msgstr "       支援的數值為：%s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #, sh-format
 msgid "Path to kickstart file"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #, sh-format
 msgid "Path to chroot-creator cache"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #, sh-format
 msgid "Release version number"
 msgstr "釋出版本號碼"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #, sh-format
 msgid "Distro name"
 msgstr "發行套件名稱"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
-msgid "Set kernel sources package, defaults to latest gentoo-sources"
+msgid "Set the number of parallel build processes"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
-msgid "Set URI of custom kernel config"
+msgid "Set extra mirror locations (space-separated)"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
-msgid "purge existing LTSP chroot if present"
-msgstr "如果有則清除現有的 LTSP chroot"
+msgid ""
+"list of extra packages to install as part of the initial installation."
+msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
-msgid "Set video card drivers to install"
-msgstr "設定要安裝的顯示卡驅動程式"
+msgid "Stage 3 URI"
+msgstr "階段 3 URI"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -259,49 +559,65 @@ msgstr "錯誤：%s 不存在"
 msgid "Installing into: %s"
 msgstr "安裝到：%s"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
-msgid "Set the number of parallel build processes"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
-#, sh-format
-msgid "Set extra mirror locations (space-separated)"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:5
-#, sh-format
-msgid "set the default locale"
-msgstr "設定預設地區"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
-#, sh-format
-msgid ""
-"list of extra packages to install as part of the initial installation."
-msgstr ""
+msgid "purge existing LTSP chroot if present"
+msgstr "如果有則清除現有的 LTSP chroot"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
 msgid "Set initramfs builder, defaults to genkernel"
 msgstr "設定 initramfs 組建程式，預設值為 genkernel"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:3
 #, sh-format
-msgid "Stage 3 URI"
-msgstr "階段 3 URI"
+msgid "Set kernel sources package, defaults to latest gentoo-sources"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-kernel-options:4
+#, sh-format
+msgid "Set URI of custom kernel config"
+msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-input-devices:3
 #, sh-format
 msgid "Set input device drivers to install"
 msgstr "設定要安裝的輸入裝置驅動程式"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
+#: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
-msgid "a simple webkiosk mode"
+msgid "Set video card drivers to install"
+msgstr "設定要安裝的顯示卡驅動程式"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/009-mock-chroot:10
+#, sh-format
+msgid "Release version number (el6,fc18,fc19) * Not working yet"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
+#, sh-format
+msgid "Load a user specific configuration file"
+msgstr "載入使用者指定的設定檔"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:33
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
+#, sh-format
+msgid "ERROR: --arch %s called on unsupported arch: %s"
+msgstr "錯誤： --arch %s 選項被呼叫於不支援的架構：%s"
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/001-set-mint-dist:3
+#, sh-format
+msgid ""
+"set the linuxmint distribution to be used for install, defaults to running "
+"distribution"
+msgstr ""
+
+#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
+#, sh-format
+msgid "set the security mirror location"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
@@ -314,55 +630,9 @@ msgstr "啟用 LTSP-Cluster"
 msgid "force to skip the squashfs build (for debian-installer)"
 msgstr "強制略過 squashfs 組建 (用於 debian-installer)"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
-#, sh-format
-msgid "set the security mirror location"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
-#, sh-format
-msgid "set the update mirror location"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/001-set-mint-dist:3
-#, sh-format
-msgid ""
-"set the linuxmint distribution to be used for install, defaults to running "
-"distribution"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:33
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
-#, sh-format
-msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr "錯誤： --arch %s 選項被呼叫於不支援的架構：%s"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
-#, sh-format
-msgid "Load a user specific configuration file"
-msgstr "載入使用者指定的設定檔"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
-#, sh-format
-msgid "set the name of the chroot"
-msgstr "設定 chroot 名稱"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
-#, sh-format
-msgid "exclude packages from the initial chroot"
-msgstr "從初始的 chroot 匯出套件"
-
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-base:3
-#, sh-format
-msgid "set the default base install directory"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-load-configuration-file:3
@@ -370,290 +640,20 @@ msgstr ""
 msgid "load a user specific configuration file"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-kernel:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
-msgid "set the kernel package to install."
-msgstr "設定要安裝的核心套件"
+msgid "exclude packages from the initial chroot"
+msgstr "從初始的 chroot 匯出套件"
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
-msgid "set the mirror location"
-msgstr "設定鏡射位置"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
-#, sh-format
-msgid "add a mirror, which takes priority over the default mirror"
-msgstr "新增一個映射站，而它的優先權高於預設的映射站"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
-#, sh-format
-msgid "add a mirror, with lower priority than the default mirror"
-msgstr "新增一個映射站，而它的優先權低於預設的映射站"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
-#, sh-format
-msgid "add a security mirror"
-msgstr "新增一個安全性更新映射站"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
-#, sh-format
-msgid "prompt to set the root password, defaults to disabled"
-msgstr "提示設定管理者密碼，預設為關閉"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:3
-#, sh-format
-msgid "Enable progress reporting"
-msgstr "啟用進度報告"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:4
-#, sh-format
-msgid "Print stage times (seconds)"
-msgstr "顯示階段時間 (以秒計)"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:5
-#, sh-format
-msgid "Draw progress bar"
-msgstr "繪出進度列"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
-#, sh-format
-msgid "set the kernel modules packages to install."
-msgstr "設定要安裝的核心模組套件。"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
-#, sh-format
-msgid "keep cache of downloaded package files"
-msgstr "保留已下載套件檔的快取"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
-#, sh-format
-msgid "Set the i18n langs"
-msgstr "設定 i18n"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
-#, sh-format
-msgid "set the distribution to be used for install"
-msgstr "設定安裝用的發行套件"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
-#, sh-format
-msgid "list of packages to install as part of the final installation"
-msgstr "做為最終安裝中要安裝的套件清單"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
-#, sh-format
-msgid "set the list of packages to install after base-install is completed"
+msgid "set the default base install directory"
 msgstr ""
 
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
+#: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
-msgid "enable serial console"
-msgstr "啟動序列埠終端機"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
-#, sh-format
-msgid "Enabling serial console..."
-msgstr "正在啟動序列埠終端機 ..."
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
-#, sh-format
-msgid ""
-"install to the chroot all the .deb files contained in the provided directory"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-distribution-specific:5
-#, sh-format
-msgid ""
-"NOTE: disabling security and updates APT sources for sid.  They do not exist."
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
-#, sh-format
-msgid "mount package cache dir from server"
-msgstr "從伺服器掛載套件快取目錄"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
-#, sh-format
-msgid "mount a server directory as the chroot package cache dir"
-msgstr "掛載伺服器目錄做為 chroot 套件快取目錄"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
-#, sh-format
-msgid "use specified http proxy"
-msgstr "使用指定的 http 代理伺服器"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:4
-#, sh-format
-msgid "do not autodetect apt proxy configuration"
-msgstr "不要自動偵測 apt 代理伺服器組態"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
-#, sh-format
-msgid "NOTE: adding default dist and components to security mirror:"
-msgstr "注意：新增預設的版本和分類至安全性更新映射站："
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/080-eatmydata:3
-#, sh-format
-msgid ""
-"use eatmydata to speed up build times, at risk of data not getting written "
-"to disk"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
-#, sh-format
-msgid "include the listed keys in the apt keyring"
-msgstr "將清單上的金鑰加入 apt 鑰匙圈 (keyring)"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
-#, sh-format
-msgid "add a backports mirror"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:4
-#, sh-format
-msgid "list of packages to install from the backports repositories"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:5
-#, sh-format
-msgid "distribution to pull backports from"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:29
-#, sh-format
-msgid "NOTE: adding default dist and components to backports mirror:"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:3
-#, sh-format
-msgid "create ext2 image for use with NBD"
-msgstr "建立 NBD 使用的 ext2 映像檔"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
-#, sh-format
-msgid "create image for use with NBD of the specified filesystem"
-msgstr "以指定的檔案系統建立 NBD 使用的映像檔"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
-#, sh-format
-msgid "copy apt Packages files from server"
-msgstr "從伺服器複製 apt 套件檔案"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
-#, sh-format
-msgid "load debconf seeding in the chroot after install"
-msgstr "安裝後載入 chroot 中的 debconf"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
-#, sh-format
-msgid ""
-"set the distribution to be used for install, defaults to running distribution"
-msgstr "設定發行版本用於安裝，預設為執行發行版本"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
-#, sh-format
-msgid "enable popularity-contest in the chroot"
-msgstr "於 chroot 中啟動熱門套件統計 (popularity-contest)"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:12
-#, sh-format
-msgid "Enabling popularity contest..."
-msgstr "正在啟動熱門套件統計 ..."
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
-#, sh-format
-msgid "create squashfs image for use with NBD"
-msgstr "建立 NBD 使用的 squashfs 映像檔"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:4
-#, sh-format
-msgid "skip squashfs image creation"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
-#, sh-format
-msgid "skip upgrade of installed packages"
-msgstr "略過已安裝套件的升級"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
-#, sh-format
-msgid "cache downloaded packages"
-msgstr "快取已下載套件"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
-#, sh-format
-msgid "Copying packages"
-msgstr "複製套件"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
-#, sh-format
-msgid "done."
-msgstr "完成。"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
-#, sh-format
-msgid "use the servers sources.list instead of generating one"
-msgstr "使用伺服器的 sources.list 代替產生一個"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
-#, sh-format
-msgid "set the components to be used in mirror"
-msgstr "設定在鏡像中要使用的元件"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
-#, sh-format
-msgid "set the list of kernel packages to install"
-msgstr "設定要安裝的核心套件清單"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
-#, sh-format
-msgid "set the kernel variant to install"
-msgstr "設定要安裝的核心變體"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:5
-#, sh-format
-msgid "set the kernel version to install"
-msgstr "設定要安裝的核心版本"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
-#, sh-format
-msgid "use the specified keyring for debootstrap gpg verification"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
-#, sh-format
-msgid "allow unsigned packages during install"
-msgstr "安裝時允許未簽章的套件"
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
-#, sh-format
-msgid "distribution to set up apt pinning"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:4
-#, sh-format
-msgid "list of packages to install from the pinned distribution"
-msgstr ""
-
-#: ../common/ltsp-common-functions:191
-#, sh-format
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Chao-Hsiung Liao https://launchpad.net/~j-h-liau\n"
-"  Cheng-Wei Chien https://launchpad.net/~cwchien\n"
-"  Jim McQuillan https://launchpad.net/~jam-mcquil\n"
-"  Rockworld https://launchpad.net/~rockrock2222222"
+msgid "set the name of the chroot"
+msgstr "設定 chroot 名稱"
 
 #, sh-format
 #~ msgid "NOTE: disabling security APT source for sid.  It does not exist."

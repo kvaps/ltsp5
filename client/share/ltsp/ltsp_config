@@ -47,16 +47,16 @@
 (PATH="" boolean_is_true True 2>/dev/null) || . /usr/share/ltsp/ltsp-client-functions || true
 
 # Once lts.conf params are processed, they should all be stored
-# in a quickly source-able file: /var/cache/ltsp/ltsp_config_env
+# in a quickly source-able file: /run/ltsp/ltsp_config_env
 # If this file does not exist, it means we need to process lts.conf
 # If it does exist, we can either just source it, OR if we are asked
 # to process lts.conf again, we should read in all the environemnt
 # variables that were set last time and unset them before processing the
 # lts.conf again
-ltsp_config_env=/var/cache/ltsp/ltsp_config_env
+ltsp_config_env=/run/ltsp/ltsp_config_env
 
 # Make sure cache dir exists
-mkdir -p /var/cache/ltsp
+mkdir -p /run/ltsp
 
 # This function will set the lts.conf var and will be used by ltsp_config.d/
 # scripts

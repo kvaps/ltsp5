@@ -102,14 +102,14 @@ fi
 if [ -n "$UPDATE" ]; then
     if [ -z "$CHROOTS" ]; then
         BASE=${BASE:-"/opt/ltsp"}
-        CHROOTS=$(find -L "$BASE/" -mindepth 1 -maxdepth 1 -type d ! -name images)
+        CHROOTS=$(list_chroots nfs)
     fi
     for chroot in $CHROOTS; do
-        test -x "$chroot/bin/true" || continue
-        mkdir -p "$chroot/etc/ssh"
+        test -x "$BASE/$chroot/bin/true" || continue
+        mkdir -p "$BASE/$chroot/etc/ssh"
         # Do the work once; next times, use cp
         if [ -z "$firstfile" ]; then
-            firstfile="$chroot/etc/ssh/ssh_known_hosts"
+            firstfile="$BASE/$chroot/etc/ssh/ssh_known_hosts"
             echo '# ssh keys for LTSP' > "$firstfile"
             for key in $(find /etc/ssh/ -type f -name 'ssh_host_*_key.pub'); do
                 sed 's/^/server /' "$key" >> "$firstfile"
@@ -118,7 +118,7 @@ if [ -n "$UPDATE" ]; then
                 cat "$file" >> "$firstfile"
             done
         else
-            cp "$firstfile" "$chroot/etc/ssh/ssh_known_hosts"
+            cp "$firstfile" "$BASE/$chroot/etc/ssh/ssh_known_hosts"
         fi
     done
     if [ -z "$firstfile" ]; then
