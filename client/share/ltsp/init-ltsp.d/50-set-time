@@ -1,6 +1,10 @@
 # Set up timezone
 if [ -n "$TIMEZONE" ] && [ -e "/usr/share/zoneinfo/$TIMEZONE" ]; then
-    cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
+    if [ -L /etc/localtime ]; then
+        ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
+    else
+        cp /usr/share/zoneinfo/$TIMEZONE /etc/localtime 2>/dev/null
+    fi
 fi
 
 # Set timeserver to $SERVER if set to autodetect
