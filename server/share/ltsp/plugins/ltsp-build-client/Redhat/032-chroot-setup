@@ -6,5 +6,7 @@ case "$MODE" in
         ltsp-chroot -a $ARCH systemctl mask display-manager.service
         # Enable services we do want
         ltsp-chroot -a $ARCH /sbin/chkconfig ltsp-core on
+        # Graphical mode is started by ltsp, not by systemd
+        ltsp-chroot -a $ARCH systemctl set-default multi-user.target
         ;;
 esac
