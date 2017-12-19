@@ -24,4 +24,5 @@ for dir in /media /mnt; do
 done
 
 # Save network config files
+mkdir -p /run/ltsp
 mv /tmp/net.* /tmp/dhclient.* /run/ltsp
