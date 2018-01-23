@@ -324,6 +324,13 @@ else
     msg "Skipping PXE configuration.  Install the syslinux package if you need it."
 fi
 
+syslinux_efi_arch="$(file `readlink -f /bin/sh` | grep -o '[0-9]\+-bit' | cut -d- -f1)"
+syslinux_efi_dir="/usr/lib/SYSLINUX.EFI/efi${syslinux_efi_arch}"
+if [ -f $syslinux_efi_dir/syslinux.efi ]; then
+    cp $syslinux_efi_dir/syslinux.efi $BOOT
+else
+    msg "Skipping EFI configuration.  Install the syslinux-efi package if you need it."
+fi
 
 if [ "$(detect_arch)" = "armhf" ] || [ "$(detect_arch)" = "armel" ]; then
     if which mkimage >/dev/null; then
