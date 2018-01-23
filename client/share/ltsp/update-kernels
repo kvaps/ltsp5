@@ -144,6 +144,7 @@ fi
 
 syslinux_dir=/usr/lib/syslinux
 pxelinux_dir=/usr/lib/PXELINUX
+
 test -d "$pxelinux_dir" || pxelinux_dir="$syslinux_dir"
 syslinux_modules_dir=/usr/lib/syslinux/modules/bios
 test -d "$syslinux_modules_dir" || syslinux_modules_dir="$syslinux_dir"
@@ -151,6 +152,11 @@ test -d "$syslinux_modules_dir" || syslinux_modules_dir="$syslinux_dir"
 if [ -f $pxelinux_dir/pxelinux.0 ]; then
     PXECFG=$BOOT/pxelinux.cfg
     cp $pxelinux_dir/pxelinux.0 $BOOT
+
+    # copy over variant with http and ftp support
+    if [ -f "$pxelinux_dir/lpxelinux.0" ]; then
+        cp $pxelinux_dir/lpxelinux.0 $BOOT
+    fi
 
     # copy over variant with extended support for gPXE
     if [ -f "$pxelinux_dir/gpxelinux.0" ]; then
@@ -217,8 +223,8 @@ EOF
 
 label ltsp-$method
 menu label LTSP, using $method
-kernel vmlinuz${version:+-"$version"}
-append ro initrd=initrd.img${version:+-"$version"} $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+kernel ${SERVER_PREFIX}vmlinuz${version:+-"$version"}
+append ro initrd=${SERVER_PREFIX}initrd.img${version:+-"$version"} $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
@@ -261,8 +267,8 @@ EOF
 label ltsp-$method-$type
 menu hide
 menu label LTSP, using $method, with Linux $version
-kernel vmlinuz-$version
-append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+kernel ${SERVER_PREFIX}vmlinuz-$version
+append ro initrd=${SERVER_PREFIX}initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
@@ -291,8 +297,8 @@ EOF
 
 label ltsp-$method-$version
 menu label LTSP, using $method, with Linux $version
-kernel vmlinuz-$version
-append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
+kernel ${SERVER_PREFIX}vmlinuz-$version
+append ro initrd=${SERVER_PREFIX}initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
 ipappend ${IPAPPEND:-2}
 
 EOF
@@ -310,7 +316,7 @@ EOF
 # Do not edit, see /etc/ltsp/update-kernels.conf instead.
 label memtest86+.bin
 menu label Memory test
-linux memtest86+.bin
+linux ${SERVER_PREFIX}memtest86+.bin
 EOF
     fi
 
