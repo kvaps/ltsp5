@@ -22,7 +22,7 @@ if [ -z "$swap_devices" ] && [ -z "$NBD_SWAP" ]; then
     fi
 fi
 
-if boolean_is_true "$NBD_SWAP" ; then
+if boolean_is_true "$NBD_SWAP" && [ -x /sbin/nbd-client ]; then
     NBD_SWAP_HOST=${NBD_SWAP_HOST:-"$SERVER"}
     modprobe nbd
     # Detect first unused nbd device, skip nbd0

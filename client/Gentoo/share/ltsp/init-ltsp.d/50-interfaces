@@ -1,0 +1,7 @@
+# Ensure that "net" service is considered active, without actually destroying
+# the connection that the initramfs has already set up.
+
+if ln -s net.lo /etc/init.d/net.$DEVICE; then
+    rc-update add net.$DEVICE default
+fi
+echo "config_$DEVICE=\"noop\"" >> /etc/conf.d/net

@@ -6,7 +6,9 @@ if [ -z "$HOSTNAME" ]; then
             HOSTNAME_EXTRA=$(ip link show $DEVICE | awk '/ether/{print $2}' | tr ':' '-')
             ;;
         ip|"")
-            HOSTNAME_EXTRA=$(echo "$IPV4ADDR.$IPV4NETMASK" | awk -F "." '{ print (($1%(256-$5)*256+$2%(256-$6))*256+$3%(256-$7))*256+$4%(256-$8) }')
+            HOSTNAME_EXTRA=$(ip -oneline -family inet address show dev $DEVICE |
+                sed 's/.* \([0-9.]*\)\/\([0-9]*\) .*/\1.\2/' |
+                awk -F "." '{ print (2**24*$1+2**16*$2+2**8*$3+$4)%(2**(32-$5)) }')
             ;;
     esac
     HOSTNAME="$HOSTNAME_BASE$HOSTNAME_EXTRA"

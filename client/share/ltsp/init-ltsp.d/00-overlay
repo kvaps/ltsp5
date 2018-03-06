@@ -1,0 +1,23 @@
+# If the root file system is read-only, create a tmpfs overlay over it.
+# Tested over NBD and NFSv3, but it currently has issues over NFSv4:
+# https://bugzilla.kernel.org/show_bug.cgi?id=199013
+
+# Bail out if we're not needed or if there's no overlay support.
+test -w / && return 0
+grep -qs overlay /proc/filesystems || modprobe overlay
+grep -qs overlay /proc/filesystems || return 0
+warn "The root file system isn't writeable, activating 00-overlay."
+
+# We want an existing mount point for the tmpfs outside of /run,
+# otherwise switch_root can't move the /run mount as it's in use.
+# The tmpfs mount and contents will be hidden anyway after switch_root.
+for base in /mnt /media /cdrom /var/lib/ltsp-client-setup /root; do
+    mountpoint -q "$base" || break
+done
+
+mkdir -p "$base"
+mount -t tmpfs tmpfs "$base"
+mkdir -p $base/work $base/up $base/merged
+mount -t overlay -o "lowerdir=/,workdir=$base/work,upperdir=$base/up" overlay "$base/merged"
+
+exec switch_root $base$d/merged /sbin/init-ltsp "$@"

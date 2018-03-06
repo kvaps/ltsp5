@@ -8,6 +8,9 @@ scriptsdir="/usr/share/ltsp/init-ltsp.d"
 mountpoint -q /sys || mount -t sysfs -o nodev,noexec,nosuid sysfs /sys
 mountpoint -q /proc || mount -t proc -o nodev,noexec,nosuid proc /proc
 
+# Workaround Gentoo's genkernel initramfs not mounting /run:
+mountpoint -q /run || mount -t tmpfs -o "noexec,nosuid,size=10%,mode=0755" tmpfs /run
+
 # Provide an ltsp.break=<script-name> kernel parameter which will offer a shell
 # right before sourcing that script.
 for x in $(cat /proc/cmdline); do

@@ -6,3 +6,6 @@ for netfile in /run/ltsp/net-*.conf /run/net-*.conf ; do
         . "$netfile"
     fi  
 done
+
+# Ensure the $DEVICE variable exists as some scripts rely on it.
+test -n "$DEVICE" || DEVICE=$(ip route get 192.168.67.0 | sed -n 's/.*dev *\([^ ]*\) *src .*/\1/p')
