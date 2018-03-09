@@ -13,6 +13,6 @@ if [ "$TIMESERVER" = "auto" ]; then
 fi
 
 # Set up timeserver
-if [ -n "$TIMESERVER" ]; then
+if [ -n "$TIMESERVER" ] && type ntpdate > /dev/null 2>&1; then
     ntpdate -p 1 $TIMESERVER && hwclock --systohc --${HWCLOCK:-"utc"} --noadjfile || true
 fi
