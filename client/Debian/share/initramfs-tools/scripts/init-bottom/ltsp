@@ -29,6 +29,7 @@ if ! chroot ${rootmnt} /usr/bin/test -w "/" ; then
     mkdir -p /rofs /cow
     mount -t tmpfs -o mode=0755 tmpfs /cow
     if [ "$LTSP_NBD_TO_RAM" = "true" ]; then
+        modprobe loop
         umount ${rootmnt}
         dd if=/dev/nbd0 of=/cow/.rofsimage.img bs=1024k
         nbd-client -d /dev/nbd0
