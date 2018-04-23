@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ltsp 5.5.10\n"
+"Project-Id-Version: ltsp 5.18.04\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-25 19:13-0800\n"
+"POT-Creation-Date: 2018-04-23 16:15-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -471,6 +471,7 @@ msgid "Path to chroot-creator cache"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
+#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/009-mock-chroot:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #, sh-format
 msgid "Release version number"
@@ -582,11 +583,6 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/030-set-video-cards:3
 #, sh-format
 msgid "Set video card drivers to install"
-msgstr ""
-
-#: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/009-mock-chroot:10
-#, sh-format
-msgid "Release version number (el6,fc18,fc19) * Not working yet"
 msgstr ""
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
