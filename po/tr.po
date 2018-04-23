@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: ltsp\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2017-11-25 19:13-0800\n"
-"PO-Revision-Date: 2017-11-19 09:18+0000\n"
-"Last-Translator: Angel Spy <melissadilara@yahoo.com>\n"
+"PO-Revision-Date: 2017-12-06 08:01+0000\n"
+"Last-Translator: meda <ademcal@yahoo.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2017-11-27 04:30+0000\n"
-"X-Generator: Launchpad (build 18509)\n"
+"X-Launchpad-Export-Date: 2017-12-07 04:30+0000\n"
+"X-Generator: Launchpad (build 18511)\n"
 
 #: ../common/ltsp-common-functions:194
 #, sh-format
@@ -89,22 +89,22 @@ msgstr "Giriş Uyarısı"
 #: ../server/ALTLinux/configs/ltsp-login.sh:94
 #, sh-format
 msgid "Cancel"
-msgstr ""
+msgstr "İptal et"
 
 #: ../server/ltsp-build-client:79
 #, sh-format
 msgid "API ERROR: you need to provide true or false."
-msgstr ""
+msgstr "API HATASI: duğru veya yanlış olarak onaylamalısınız"
 
 #: ../server/ltsp-build-client:189
 #, sh-format
 msgid "display this help message"
-msgstr ""
+msgstr "bu yardım iletisini göster"
 
 #: ../server/ltsp-build-client:190
 #, sh-format
 msgid "display help for all available commandline options"
-msgstr ""
+msgstr "tüm kullanılabilir komut satırı seçenekleri için yardımı göster"
 
 #: ../server/ltsp-build-client:191
 #, sh-format
@@ -114,42 +114,42 @@ msgstr "sürüm bilgisini görüntüle ve çık"
 #: ../server/ltsp-build-client:195
 #, sh-format
 msgid "LTSP Build Client usage:"
-msgstr ""
+msgstr "LTSP Yapı İstemcisi kullanımı:"
 
 #: ../server/ltsp-build-client:201
 #, sh-format
 msgid "  Regular options:"
-msgstr ""
+msgstr "  Düzenli seçenekler:"
 
 #: ../server/ltsp-build-client:205
 #, sh-format
 msgid "  Advanced options:"
-msgstr ""
+msgstr "  Gelişmiş seçenekler:"
 
 #: ../server/ltsp-build-client:217
 #, sh-format
 msgid "info: LTSP client installation completed successfully"
-msgstr ""
+msgstr "bilgi: LTSP istemcisinin kurulumu başarıyla tamamlandı"
 
 #: ../server/ltsp-build-client:219
 #, sh-format
 msgid "error: LTSP client installation ended abnormally"
-msgstr ""
+msgstr "hata: LTSP istemcisinin kurulumu beklenmedik bir şekilde sonlandı"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:3
 #, sh-format
 msgid "Enable progress reporting"
-msgstr ""
+msgstr "İlerleme raporlamasını etkinleştir"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:4
 #, sh-format
 msgid "Print stage times (seconds)"
-msgstr ""
+msgstr "Aşama zamanlarını yazdır (saniye)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/000-progress:5
 #, sh-format
 msgid "Draw progress bar"
-msgstr ""
+msgstr "İlerleme çubuğu çiz"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-arch:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-arch:3
@@ -160,12 +160,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:3
 #, sh-format
 msgid "set the target architecture"
-msgstr ""
+msgstr "hedef mimariyi ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/001-set-dist:3
 #, sh-format
 msgid "set the distribution to be used for install"
-msgstr ""
+msgstr "kurulum için kullanılan dağıtımı ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/010-locales:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/025-locales:3
@@ -173,97 +173,98 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/025-locales:3
 #, sh-format
 msgid "set the default locale"
-msgstr ""
+msgstr "öntanımlı konumu ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:3
 #, sh-format
 msgid "set the mirror location"
-msgstr ""
+msgstr "yansının konumunu ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:4
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:4
 #, sh-format
 msgid "add a mirror, which takes priority over the default mirror"
-msgstr ""
+msgstr "öntanımlı yansıdan önceliği alan yansıyı ekle"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:5
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-manage-mirror:5
 #, sh-format
 msgid "add a mirror, with lower priority than the default mirror"
-msgstr ""
+msgstr "öntanımlı yansıdan daha az önceliğe sahip yansı ekle"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/011-manage-mirror:6
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:3
 #, sh-format
 msgid "add a security mirror"
-msgstr ""
+msgstr "güvenlik yansısı ekle"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-early-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-early-packages:3
 #, sh-format
 msgid "set the list of packages to install after base-install is completed"
-msgstr ""
+msgstr "temel-kurulum bittikten sonra kurulacak paketlerin listesine bak"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/030-i18n:3
 #, sh-format
 msgid "Set the i18n langs"
-msgstr ""
+msgstr "i18n dillerini ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-kernel:3
 #, sh-format
 msgid "set the kernel package to install."
-msgstr ""
+msgstr "Kurmak için çekirdek paketini ayarla."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:3
 #, sh-format
 msgid "enable serial console"
-msgstr ""
+msgstr "seri konsolu etkinleştir"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/040-serial-console:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-serial-console:12
 #, sh-format
 msgid "Enabling serial console..."
-msgstr ""
+msgstr "Seri konsol etkinleştiriliyor..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/041-kernel-modules:3
 #, sh-format
 msgid "set the kernel modules packages to install."
-msgstr ""
+msgstr "kurulacak çekirdek modül paketlerini belirleyin"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/050-late-packages:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/030-late-packages:3
 #, sh-format
 msgid "list of packages to install as part of the final installation"
-msgstr ""
+msgstr "Son yüklemede bulunmasını istediğiniz paketlerin listesi"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/090-clean-package-cache:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/090-clean-package-cache:3
 #, sh-format
 msgid "keep cache of downloaded package files"
-msgstr ""
+msgstr "indirilmiş paketlerin önbelleklerini sakla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/ALTLinux/095-rootpass:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-rootpass:3
 #, sh-format
 msgid "prompt to set the root password, defaults to disabled"
 msgstr ""
+"root şifresini oluşturmak, öntanımlıları devredışı bırakmak için beni uyar"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-apt-keys:3
 #, sh-format
 msgid "include the listed keys in the apt keyring"
-msgstr ""
+msgstr "listelenen anahtarları apt anahtarlığında kullan"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-accept-unsigned-packages:3
 #, sh-format
 msgid "allow unsigned packages during install"
-msgstr ""
+msgstr "kurulum boyunca imzasız paketlere izin ver"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-components:3
 #, sh-format
 msgid "set the components to be used in mirror"
-msgstr ""
+msgstr "Yansıda kullanılacak bileşenleri ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/001-set-dist:3
 #, sh-format
@@ -276,17 +277,17 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:3
 #, sh-format
 msgid "distribution to set up apt pinning"
-msgstr ""
+msgstr "apt bağlantısının yapılacağı dağıtım"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-apt-pinning:4
 #, sh-format
 msgid "list of packages to install from the pinned distribution"
-msgstr ""
+msgstr "Bağlanmış dağıtımdan yüklenecek paketlerin listesi"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debconf-seeds:3
 #, sh-format
 msgid "load debconf seeding in the chroot after install"
-msgstr ""
+msgstr "yüklemeden sonra chroot'u besleyen debconf'u yükle"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-debootstrap:3
 #, sh-format
@@ -304,33 +305,33 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:3
 #, sh-format
 msgid "enable popularity-contest in the chroot"
-msgstr ""
+msgstr "chroot'ta popülerlik değerlendirmesini etkinleştir"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-enable-popcon:12
 #, sh-format
 msgid "Enabling popularity contest..."
-msgstr ""
+msgstr "Popülerlik değerlendirmesi etkinleştiriliyor..."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:3
 #, sh-format
 msgid "use specified http proxy"
-msgstr ""
+msgstr "belirtilen http vekilini kullan"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-http-proxy:4
 #, sh-format
 msgid "do not autodetect apt proxy configuration"
-msgstr ""
+msgstr "apt vekil yapılandırmasını otomatik algılama"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/010-updates-mirrors:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:4
 #, sh-format
 msgid "set the update mirror location"
-msgstr ""
+msgstr "güncelleştirme yansısının konumunu ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/013-security-mirror:16
 #, sh-format
 msgid "NOTE: adding default dist and components to security mirror:"
-msgstr ""
+msgstr "Not:Öntanımlı dağıtım ve bileşenleri güvenlik yansısına ekleniyor:"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-backports:3
 #, sh-format
@@ -356,12 +357,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/015-sources-list:3
 #, sh-format
 msgid "use the servers sources.list instead of generating one"
-msgstr ""
+msgstr "yenisini yapmaktansa varolan sources.list sunucularını kullan"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:3
 #, sh-format
 msgid "set the list of kernel packages to install"
-msgstr ""
+msgstr "kurulum için çekirdek paketlerinin listesini ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/020-kernel-selection:4
 #, sh-format
@@ -379,64 +380,64 @@ msgstr "kurulacak çekirdek sürümünü belirle"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-fat-client:6
 #, sh-format
 msgid "run most or all applications locally"
-msgstr ""
+msgstr "çoğu ya da tüm uygulamayı yerel olarak çalıştır"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-apt-get-upgrade:3
 #, sh-format
 msgid "skip upgrade of installed packages"
-msgstr ""
+msgstr "yüklenmiş paketlerin güncellemesini atla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:3
 #, sh-format
 msgid "create ext2 image for use with NBD"
-msgstr ""
+msgstr "NBD ile kullanmak için ext2 görüntüsü oluştur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-create-fs-image:4
 #, sh-format
 msgid "create image for use with NBD of the specified filesystem"
-msgstr ""
+msgstr "Belirtilen dosya sistemli NBD ile kullanılacak görüntüyü oluştur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-install-debs:3
 #, sh-format
 msgid ""
 "install to the chroot all the .deb files contained in the provided directory"
-msgstr ""
+msgstr "sağlanan klasördeki tüm .deb dosyalarını chroot alanına kurun"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/035-kiosk:7
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/030-kiosk:7
 #, sh-format
 msgid "a simple webkiosk mode"
-msgstr ""
+msgstr "basit bir webbüfe (webkiosk) durumu"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:3
 #, sh-format
 msgid "cache downloaded packages"
-msgstr ""
+msgstr "indirilen paketleri önbelleğe al"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:13
 #, sh-format
 msgid "Copying packages"
-msgstr ""
+msgstr "Paketler kopyalanıyor"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-cache:24
 #, sh-format
 msgid "done."
-msgstr ""
+msgstr "tamamlandı."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-copy-package-lists:3
 #, sh-format
 msgid "copy apt Packages files from server"
-msgstr ""
+msgstr "sunucudan apt paketlerini kopyala"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:3
 #, sh-format
 msgid "mount package cache dir from server"
-msgstr ""
+msgstr "Sunucudaki paket önbellek dizinini bağla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/040-mount-package-cache:4
 #, sh-format
 msgid "mount a server directory as the chroot package cache dir"
-msgstr ""
+msgstr "Chroot paket önbelleği dizinini bir sunucu dizini olarak bağla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/080-eatmydata:3
 #, sh-format
@@ -450,12 +451,12 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:3
 #, sh-format
 msgid "create squashfs image for use with NBD"
-msgstr ""
+msgstr "NBD ile kullanmak için squashfs kalıbı oluştur"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Debian/095-squashfs-image:4
 #, sh-format
 msgid "skip squashfs image creation"
-msgstr ""
+msgstr "squashfs imaj oluşturumunu atla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:30
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:21
@@ -464,7 +465,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:51
 #, sh-format
 msgid "ERROR: unsupported architecture. Check your --arch argument: %s"
-msgstr ""
+msgstr "HATA: desteklenmeyen mimari. --arch değişkenini  kontrol edin: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/001-set-arch:31
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/001-set-arch:22
@@ -474,52 +475,54 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:52
 #, sh-format
 msgid "       supported values are: %s"
-msgstr ""
+msgstr "       desteklenen değerler: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:9
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:12
 #, sh-format
 msgid "Path to kickstart file"
-msgstr ""
+msgstr "kickstart dosyasının konumu"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:10
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:13
 #, sh-format
 msgid "Path to chroot-creator cache"
-msgstr ""
+msgstr "chroot-oluşturucu önbelleğinin yeri"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:11
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:14
 #, sh-format
 msgid "Release version number"
-msgstr ""
+msgstr "Yayın sürüm numarası"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Fedora/010-chroot-creator:12
 #: ../server/share/ltsp/plugins/ltsp-build-client/Redhat/010-chroot-creator:15
 #, sh-format
 msgid "Distro name"
-msgstr ""
+msgstr "Dağıtım adı"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:3
 #, sh-format
 msgid "Set the number of parallel build processes"
-msgstr ""
+msgstr "eşzamanlı yapı işlemlerinin sayısını ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:4
 #, sh-format
 msgid "Set extra mirror locations (space-separated)"
-msgstr ""
+msgstr "Fazladan yansı konumları ayarla (alan-ayrılmış)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/000-basic-configuration:6
 #, sh-format
 msgid ""
 "list of extra packages to install as part of the initial installation."
 msgstr ""
+"başlangıç kurulumunun bir bölümü olarak kurmak için fazladan paketlerin "
+"listesi."
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/002-set-stage-file:3
 #, sh-format
 msgid "Stage 3 URI"
-msgstr ""
+msgstr "3. aşama URI"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:3
 #, sh-format
@@ -566,18 +569,18 @@ msgstr "Öntanımlı kurucu profili: %s"
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:34
 #, sh-format
 msgid "ERROR: %s does not exist"
-msgstr ""
+msgstr "HATA: %s yok"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/010-bootstrap:47
 #, sh-format
 msgid "Installing into: %s"
-msgstr ""
+msgstr "Yükleme yeri: %s"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-rootpath:3
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/020-rootpath:3
 #, sh-format
 msgid "purge existing LTSP chroot if present"
-msgstr ""
+msgstr "Varsa, mevcut LSTP chroot'unu temizle"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Gentoo/020-set-initramfs-options:3
 #, sh-format
@@ -614,7 +617,7 @@ msgstr "Yayın sürüm numarası (el6,fc18,fc19) * Henüz çalışmıyor"
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-load-configuration-file:3
 #, sh-format
 msgid "Load a user specific configuration file"
-msgstr ""
+msgstr "Kullanıcının belirlediği yapılandırma dosyasını yükle"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/SUSE_LINUX/001-set-arch:21
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:22
@@ -622,7 +625,7 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-arch:44
 #, sh-format
 msgid "ERROR: --arch %s called on unsupported arch: %s"
-msgstr ""
+msgstr "HATA: --arch %s, desteklenmeyen mimaride %s çağırıldı"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/001-set-mint-dist:3
 #, sh-format
@@ -636,39 +639,39 @@ msgstr ""
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/010-updates-mirrors:3
 #, sh-format
 msgid "set the security mirror location"
-msgstr ""
+msgstr "güvenlik yansısının konumunu ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/019-ltsp-cluster:3
 #, sh-format
 msgid "enable LTSP-Cluster"
-msgstr ""
+msgstr "LTSP-Cluster etkinleştir"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/Ubuntu/095-update-image:3
 #, sh-format
 msgid "force to skip the squashfs build (for debian-installer)"
-msgstr ""
+msgstr "squashfs yapısını atlamaya zorla (debian yükleyicisi için)"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/000-enable-debug:3
 #, sh-format
 msgid "enable debug support"
-msgstr ""
+msgstr "hata ayıklama desteğini etkinleştir"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-load-configuration-file:3
 #, sh-format
 msgid "load a user specific configuration file"
-msgstr ""
+msgstr "kullanıcıya özel bir yapılandırma dosyası yükleyin"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/001-set-exclude:3
 #, sh-format
 msgid "exclude packages from the initial chroot"
-msgstr ""
+msgstr "paketleri ilk chroot'dan hariç tut"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-base:3
 #, sh-format
 msgid "set the default base install directory"
-msgstr ""
+msgstr "öntanımlı temel kurulum dizinini ayarla"
 
 #: ../server/share/ltsp/plugins/ltsp-build-client/common/010-set-chroot:3
 #, sh-format
 msgid "set the name of the chroot"
-msgstr ""
+msgstr "chroot adını ayarla"
