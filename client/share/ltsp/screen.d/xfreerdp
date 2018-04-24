@@ -36,8 +36,16 @@ export XINITRC_DAEMON="${XINITRC_DAEMON-True}"
 
 # If no parameters were passed, set some reasonable defaults.
 if [ -z "$*" ]; then
-    RDP_OPTIONS=${RDP_OPTIONS:-"-f -u ''"}
-    RDP_SERVER=${RDP_SERVER:-"server"}
+	case $basename in
+		rdesktop)
+			RDP_OPTIONS=${RDP_OPTIONS:-"-f -u ''"}
+			RDP_SERVER=${RDP_SERVER:-"server"}
+			;;
+		*)
+			RDP_OPTIONS=${RDP_OPTIONS:-"/f"}
+			RDP_SERVER=/v:${RDP_SERVER:-"server"}
+			;;
+	esac
 fi
 
 COMMAND="$basename $* $RDP_OPTIONS $RDP_SERVER"
