@@ -1,0 +1,6 @@
+# Restore possible changes of `ltsp-config dnsmasq --enable-dns`
+
+if [ -f /etc/systemd/resolved.conf.d/ltsp.conf ]; then
+    rm -f /etc/systemd/resolved.conf.d/ltsp.conf
+    ln -sf ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+fi
