@@ -32,7 +32,7 @@ fi
 # (TODO: This is duplicated from ltsp_config because we don't want to run that entire script at this point.)
 
 # check for NBD devices
-NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/rofs /{print $1}' /proc/mounts)
+NBD_DEVICES=$(awk '/^\/dev\/nbd.* \/ /||/^\/dev\/nbd.* \/run/initramfs/rofs /{print $1}' /proc/mounts)
 if [ -n "$NBD_DEVICES" ]; then
     for DEVICE in $NBD_DEVICES ; do
         SERVER=$(pgrep -f -l $DEVICE | awk '{print $3}')

@@ -10,7 +10,7 @@ else
     test -f /proc/mounts && while read MOUNTED_DEVICE MOUNTPOINT FSTYPE OPTIONS PASS1 PASS2; do
         case $MOUNTED_DEVICE in
             /dev/nbd[0-9]*)
-                if [ "$MOUNTPOINT" = "/" ] || [ "${MOUNTPOINT%/rofs}" != "${MOUNTPOINT}" ]; then
+                if [ "$MOUNTPOINT" = "/" ] || [ "${MOUNTPOINT%/run/initramfs/rofs}" != "${MOUNTPOINT}" ]; then
                     # check for NBD devices
                     pid=$(nbd-client -c $MOUNTED_DEVICE)
 
@@ -36,7 +36,7 @@ else
                 ;;
             *)
                 if [ "${FSTYPE#nfs}" != "${FSTYPE}" ]; then
-                    if [ "$MOUNTPOINT" = "/" ] || [ "${MOUNTPOINT%/rofs}" != "${MOUNTPOINT}" ]; then
+                    if [ "$MOUNTPOINT" = "/" ] || [ "${MOUNTPOINT%/run/initramfs/rofs}" != "${MOUNTPOINT}" ]; then
                         # NFS root
                         server=${MOUNTED_DEVICE%%:*}
                         echo NFS_SERVER=${server} >> /run/ltsp/ltsp_config
