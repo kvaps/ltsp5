@@ -53,11 +53,6 @@ case "$1" in
 
 	;;
   stop)
-    # This means that an LTSP client is shutting down or rebooting.
-    # Try to cleanly close any open network connections.
-    if [ -x /usr/share/ltsp/nbd-disconnect ]; then
-        /usr/share/ltsp/nbd-disconnect &
-    fi
 	;;
   restart|force-reload)
     echo "$NAME does not support restarting, reboot your client instead." >&2

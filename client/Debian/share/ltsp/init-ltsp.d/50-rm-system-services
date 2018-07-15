@@ -32,7 +32,7 @@ lvm2-lvmetad          # LVM2 metadata daemon
 mdadm                 # MD monitoring daemon
 ModemManager          # Modem manager
 modemmanager          # Modem manager (older versions)
-nbd-client            # Network Block Device client (we use nbd-disconnect)
+nbd-client            # Network Block Device client
 nbd-server            # Network Block Device server
 plymouth-stop         # Hide the splash screen
 rfkill-store          # Store software rfkill state
