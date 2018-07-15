@@ -1,7 +1,3 @@
-#!/bin/sh
-
-set -x
-
 case "${MODE}" in
     commandline)
         add_option "release"  "`eval_gettext "Release version number"`" "advanced" "true"
