@@ -1,0 +1,34 @@
+# Only run under systemd
+test -x /lib/systemd/systemd-shutdown || return 0
+test "$(ps --no-headers -o comm 1)" = "systemd" || return 0
+
+# On Debian-based systems, don't ifdown the interfaces on shutdown
+if grep -qs ^ExecStop /lib/systemd/system/ifup@.service; then
+    sed '/ExecStop/d' -i /lib/systemd/system/ifup@.service
+fi
+
+# Overwrite systemd-shutdown with our own
+cat > /lib/systemd/systemd-shutdown <<EOF
+#!/bin/sh
+# Work around https://github.com/NetworkBlockDevice/nbd/issues/51
+
+exec 2>/dev/console
+
+# Verbs from systemd/shutdown.c
+case "\$1" in
+    reboot) command="reboot -f" ;;
+    poweroff) command="poweroff -f" ;;
+    halt) command="halt -f" ;;
+    *) echo "Unknown option: \$0 \$1" >&2; exit 1 ;;
+esac
+sync
+# Kill all user processes, including ssh sockets
+pkill --inverse --uid 0
+swapoff -a
+# Cache the command before disconnecting nbd
+\$command --help >/dev/null 2>&1
+for nbd in \$(awk '/nbd/ { print \$NF }' < /proc/partitions | sort -rV); do
+    nbd-client -d "/dev/\$nbd"
+done
+\$command
+EOF
