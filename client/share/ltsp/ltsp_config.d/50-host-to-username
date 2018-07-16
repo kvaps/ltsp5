@@ -1,0 +1,18 @@
+# Provide a way to map HOSTNAME to LDM_USERNAME (LP: #1781774).
+# For example, HOST_TO_USERNAME="pc/guest" in lts.conf, would allow "pc01"
+# to autologin with LDM_USERNAME="guest01" without specify it in lts.conf.
+
+test -n "$HOST_TO_USERNAME" || return 0
+
+if [ -z "$HOSTNAME" ]; then
+    # Disable LDM_GUESTLOGIN and LDM_AUTOLOGIN on unknown clients.
+    test -n "$LDM_AUTOLOGIN" && set_lts_var LDM_AUTOLOGIN ""
+    test -n "$LDM_GUESTLOGIN" && set_lts_var LDM_GUESTLOGIN ""
+elif [ -z "$LDM_USERNAME" ]; then
+    case "$HOSTNAME" in
+        "${HOST_TO_USERNAME%/*}"[0-9]*)
+            set_lts_var LDM_USERNAME "$(echo "$HOSTNAME" | sed "s/$HOST_TO_USERNAME/")"
+            test -z "$LDM_PASSWORD" && set_lts_var LDM_PASSWORD "$LDM_USERNAME"
+            ;;
+    esac
+fi
