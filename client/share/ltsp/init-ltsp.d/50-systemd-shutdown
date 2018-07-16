@@ -1,6 +1,5 @@
 # Only run under systemd
 test -x /lib/systemd/systemd-shutdown || return 0
-test "$(ps --no-headers -o comm 1)" = "systemd" || return 0
 
 # On Debian-based systems, don't ifdown the interfaces on shutdown
 if grep -qs ^ExecStop /lib/systemd/system/ifup@.service; then
