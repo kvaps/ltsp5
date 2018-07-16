@@ -2,4 +2,5 @@
 find /var/log/ -type f -name '*.old' -o -name '*.1' -o -name '*.gz' -delete
 
 # Empty the rest. But avoid using `truncate` on overlayfs (LP: #1494660).
-find /var/log/ -type f -exec tee {} + </dev/null
+# Also avoid systemd journal directories (LP: #1781820).
+find /var/log/ -type f ! -path '/var/log/journal/*' -exec tee {} + </dev/null

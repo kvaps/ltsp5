@@ -36,6 +36,7 @@ var/lib/sudo/*
 var/log/*.1
 var/log/*.gz
 var/log/*.old
+var/log/journal/*
 var/mail/*
 var/spool/cron/atjobs/*
 var/spool/cron/atspool/*
