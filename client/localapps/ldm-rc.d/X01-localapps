@@ -33,7 +33,7 @@ for i in passwd group shadow gshadow; do
 done
 
 # Get user information from the server
-IFS=':' read LDM_USERNAME dummy pw_uid pw_gid pw_gecos LDM_HOME pw_shell <<EOF
+IFS=':' read -r LDM_USERNAME dummy pw_uid pw_gid pw_gecos LDM_HOME pw_shell <<EOF
 $(ssh_run '/usr/bin/getent passwd $(/usr/bin/id -u)')
 EOF
 
@@ -43,7 +43,7 @@ EOF
 primary_group="$pw_gid"
 sed_list=""
 group_list=""
-while IFS=':' read gr_name dummy gr_gid dummy; do
+while IFS=':' read -r gr_name dummy gr_gid dummy; do
     if is_valid_name "$gr_name"; then
         groupadd_name="$gr_name"
     else
