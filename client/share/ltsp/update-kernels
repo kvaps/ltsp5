@@ -219,7 +219,7 @@ label ltsp-$method
 menu label LTSP, using $method
 kernel vmlinuz${version:+-"$version"}
 append ro initrd=initrd.img${version:+-"$version"} $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
-ipappend ${IPAPPEND:-2}
+ipappend ${IPAPPEND:-3}
 
 EOF
 
@@ -263,7 +263,7 @@ menu hide
 menu label LTSP, using $method, with Linux $version
 kernel vmlinuz-$version
 append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
-ipappend ${IPAPPEND:-2}
+ipappend ${IPAPPEND:-3}
 
 EOF
             done
@@ -293,7 +293,7 @@ label ltsp-$method-$version
 menu label LTSP, using $method, with Linux $version
 kernel vmlinuz-$version
 append ro initrd=initrd.img-$version $CMDLINE_LINUX_DEFAULT $(eval echo '$CMDLINE_'$method)
-ipappend ${IPAPPEND:-2}
+ipappend ${IPAPPEND:-3}
 
 EOF
             done
