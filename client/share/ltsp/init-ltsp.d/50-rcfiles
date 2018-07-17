@@ -1,4 +1,13 @@
-# Sample rc.local may end with "exit 0", remove it if it's in the last line
-[ -f /etc/rc.local ] && sed '${/^exit 0$/d;}' -i /etc/rc.local
+rcfiles=$(env | sort -V | sed -n 's/^RCFILE_[^=]*=//p')
+test -n "$rcfiles" || return 0
 
-env | sort -V | sed -n 's/^RCFILE_[^=]*=//p' >> /etc/rc.local
+if [ -x /etc/rc.local ]; then
+    # Some older rc.local samples ended with "exit 0", remove it
+    sed '${/^exit 0$/d;}' -i /etc/rc.local
+else
+    # In recent distributions, it's not shipped at all
+    printf '#!/bin/sh\n\n' > /etc/rc.local
+    chmod +x /etc/rc.local
+fi
+
+printf "%s\n" "$rcfiles" >> /etc/rc.local
