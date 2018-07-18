@@ -25,6 +25,7 @@ alsa-store            # Save sound card(s') mixer state(s)
 apt-daily             # Daily apt activities
 dnsmasq               # A lightweight DHCP and caching DNS server
 dphys-swapfile        # Autogenerate and use a swap file
+epoptes               # Computer lab monitoring tool
 exim4                 # exim4 Mail Transport Agent
 grub-common           # Record successful boot for GRUB
 lightdm               # Light Display Manager
